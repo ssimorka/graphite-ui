@@ -346,6 +346,12 @@ function findLayoutNeighbors(layout, col, row, colSpan, rowSpan, excludeIdx) {
   });
 }
 
+// Overshooting ease — settles past 1 then back, for a playful "pop" feel.
+function easeOutBack(t) {
+  const c1 = 1.70158, c3 = c1 + 1;
+  return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+}
+
 function buildLayout(assetsReady) {
   const COLS = 12, ROWS = 10;
   const occupied = Array.from({length: ROWS}, () => new Array(COLS).fill(false));
@@ -527,6 +533,16 @@ export default function LeWittGenerator() {
   const [layout, setLayout] = useState(() => buildLayout(false));
   const COLS=12, ROWS=10;
 
+  // Per-cell pop-in animation state: cellIndex -> { start, duration } (performance.now()-based)
+  const animStartsRef = useRef(new Map());
+  const rafRef = useRef(null);
+  // Rendered tile bitmaps keyed by cell object identity, so unchanged cells
+  // aren't re-rendered (and re-randomized) on every animation frame.
+  const tileCacheRef = useRef(new WeakMap());
+
+  const ANIM_DURATION = 420;
+  const ANIM_STAGGER = 260;
+
   useEffect(() => {
     let loaded = 0;
     const onLoad = () => { loaded++; if (loaded===2) { setAssetsReady(true); setLayout(buildLayout(true)); } };
@@ -549,27 +565,61 @@ export default function LeWittGenerator() {
     const uW=Math.floor(W/COLS), uH=Math.floor(H/ROWS); // unit cell size
     ctx.fillStyle="#111"; ctx.fillRect(0,0,W,H);
 
-    layout.forEach((cell) => {
+    const now = performance.now();
+    let stillAnimating = false;
+
+    layout.forEach((cell, idx) => {
       const { col, row, colSpan, rowSpan, kind, bg, fg, fn } = cell;
       const pw = uW * colSpan;
       const ph = uH * rowSpan;
       const px = col * uW;
       const py = row * uH;
 
-      const off = document.createElement("canvas");
-      off.width = pw; off.height = ph;
-      const oCtx = off.getContext("2d");
+      // Cache the rendered tile bitmap per cell object — many STANDARD pattern
+      // functions use Math.random() internally, so re-rendering on every
+      // animation frame would make the pattern reroll instead of holding
+      // still while it scales/fades into place.
+      let off = tileCacheRef.current.get(cell);
+      if (!off || off.width !== pw || off.height !== ph) {
+        off = document.createElement("canvas");
+        off.width = pw; off.height = ph;
+        const oCtx = off.getContext("2d");
 
-      if (kind==="eye" && assetRefs.eye) {
-        drawHalftoneAsset(oCtx,pw,ph,assetRefs.eye,bg,fg);
-      } else if (kind==="mouth" && assetRefs.mouth) {
-        drawHalftoneAsset(oCtx,pw,ph,assetRefs.mouth,bg,fg);
-      } else if (typeof STANDARD[fn] === "function") {
-        STANDARD[fn](oCtx,pw,ph,bg,fg);
-      } else {
-        STANDARD[Math.floor(Math.random()*STANDARD.length)](oCtx,pw,ph,bg,fg);
+        if (kind==="eye" && assetRefs.eye) {
+          drawHalftoneAsset(oCtx,pw,ph,assetRefs.eye,bg,fg);
+        } else if (kind==="mouth" && assetRefs.mouth) {
+          drawHalftoneAsset(oCtx,pw,ph,assetRefs.mouth,bg,fg);
+        } else if (typeof STANDARD[fn] === "function") {
+          STANDARD[fn](oCtx,pw,ph,bg,fg);
+        } else {
+          STANDARD[Math.floor(Math.random()*STANDARD.length)](oCtx,pw,ph,bg,fg);
+        }
+        tileCacheRef.current.set(cell, off);
       }
-      ctx.drawImage(off,px,py,pw,ph);
+
+      // Pop-in animation: scale + fade a freshly (re)generated tile into place.
+      const anim = animStartsRef.current.get(idx);
+      let t = 1;
+      if (anim) {
+        const raw = (now - anim.start) / anim.duration;
+        if (raw < 1) stillAnimating = true;
+        t = Math.min(1, Math.max(0, raw));
+      }
+      const eased = easeOutBack(t);
+      const scale = 0.5 + 0.5 * eased;
+      const alpha = Math.min(1, t * 1.6);
+      const cx = px + pw / 2, cy = py + ph / 2;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(px, py, pw, ph);
+      ctx.clip();
+      ctx.globalAlpha = alpha;
+      ctx.translate(cx, cy);
+      ctx.scale(scale, scale);
+      ctx.translate(-pw / 2, -ph / 2);
+      ctx.drawImage(off, 0, 0, pw, ph);
+      ctx.restore();
     });
 
     // Draw seams
@@ -578,15 +628,44 @@ export default function LeWittGenerator() {
       const px=col*uW, py=row*uH, pw=uW*colSpan, ph=uH*rowSpan;
       ctx.strokeRect(px,py,pw,ph);
     });
+
+    return stillAnimating;
   }, [layout, assetsReady]);
 
-  useEffect(() => { draw(); }, [draw]);
+  useEffect(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    const tick = () => {
+      const stillAnimating = draw();
+      rafRef.current = stillAnimating ? requestAnimationFrame(tick) : null;
+    };
+    tick();
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+  }, [draw]);
 
   const [showGuide, setShowGuide] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
-  const regenerate = () => { setShowSplash(false); setLayout(buildLayout(assetsReady)); };
+
+  const regenerate = () => {
+    setShowSplash(false);
+    const newLayout = buildLayout(assetsReady);
+    setLayout(newLayout);
+
+    // Ripple the pop-in outward from a random origin tile for a fun reveal.
+    const now = performance.now();
+    const originIdx = Math.floor(Math.random() * newLayout.length);
+    const origin = newLayout[originIdx];
+    const maxDist = Math.hypot(COLS, ROWS);
+    const anims = new Map();
+    newLayout.forEach((cell, idx) => {
+      const dist = Math.hypot(cell.col - origin.col, cell.row - origin.row);
+      const delay = (dist / maxDist) * ANIM_STAGGER + Math.random() * 60;
+      anims.set(idx, { start: now + delay, duration: ANIM_DURATION });
+    });
+    animStartsRef.current = anims;
+  };
 
   const regenerateCell = (cellIdx) => {
+    animStartsRef.current.set(cellIdx, { start: performance.now(), duration: ANIM_DURATION });
     setLayout(prev => {
       const next = [...prev];
       const cell = next[cellIdx];
