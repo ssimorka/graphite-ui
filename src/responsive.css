@@ -1,0 +1,57 @@
+.gui-app {
+  padding: 20px;
+}
+
+.gui-modal-overlay {
+  padding: 24px 16px;
+}
+
+.gui-modal-card {
+  padding: 28px 24px;
+}
+
+.gui-footer {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gui-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.gui-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 680px) {
+  .gui-about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gui-tiles-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gui-app {
+    padding: 12px;
+  }
+
+  .gui-modal-overlay {
+    padding: 12px 8px;
+  }
+
+  .gui-modal-card {
+    padding: 18px 14px;
+  }
+
+  .gui-tiles-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

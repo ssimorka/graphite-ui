@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import "./responsive.css";
 
 // 60/30/10 palette: grayscale / purple / teal
 // Weighted color pool: 60% gray, 30% purple, 10% teal
@@ -550,7 +551,7 @@ export default function LeWittGenerator() {
   };
 
   return (
-    <div style={{background:"#1A1A1A",minHeight:"100vh",color:"#EFEFEF",fontFamily:"monospace",padding:20}}>
+    <div className="gui-app" style={{background:"#1A1A1A",minHeight:"100vh",color:"#EFEFEF",fontFamily:"monospace"}}>
       <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14,flexWrap:"wrap"}}>
         <span style={{fontSize:10,opacity:.4,letterSpacing:2,textTransform:"uppercase"}}>Graphite UI Kit</span>
         <button onClick={()=>setShowGuide(true)} style={{
@@ -603,7 +604,7 @@ export default function LeWittGenerator() {
         )}
       </div>
 
-      <div style={{
+      <div className="gui-footer" style={{
         marginTop:12,
         borderTop:"1px solid #2A2A2A",
         paddingTop:10,
@@ -624,14 +625,14 @@ export default function LeWittGenerator() {
 
       {/* Pattern Guide Modal */}
       {showGuide && (
-        <div style={{
+        <div className="gui-modal-overlay" style={{
           position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",
           zIndex:1000,display:"flex",alignItems:"flex-start",justifyContent:"center",
-          padding:"24px 16px",overflowY:"auto",
+          overflowY:"auto",
         }} onClick={()=>setShowGuide(false)}>
-          <div onClick={e=>e.stopPropagation()} style={{
+          <div className="gui-modal-card" onClick={e=>e.stopPropagation()} style={{
             background:"#1A1A1A",border:"1px solid #2A2A2A",borderRadius:4,
-            width:"100%",maxWidth:860,padding:"28px 24px",
+            width:"100%",maxWidth:860,
           }}>
             {/* Modal header */}
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",borderBottom:"1px solid #2A2A2A",paddingBottom:16,marginBottom:28}}>
@@ -650,7 +651,7 @@ export default function LeWittGenerator() {
             {/* 00 About */}
             <div style={{marginBottom:36,paddingBottom:36,borderBottom:"1px solid #2A2A2A"}}>
               <div style={{fontSize:9,letterSpacing:"0.2em",color:"#1DE9B6",textTransform:"uppercase",marginBottom:16}}>00 — About</div>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:28}}>
+              <div className="gui-about-grid">
                 <div>
                   <p style={{fontSize:11,color:"#EFEFEF",lineHeight:1.7,margin:"0 0 12px"}}>
                     Graphite UI is an exploration into generative UI, a system where design outputs are produced by rules, not by hand.
@@ -741,7 +742,7 @@ export default function LeWittGenerator() {
             <div style={{marginBottom:36}}>
               <div style={{fontSize:9,letterSpacing:"0.2em",color:"#1DE9B6",textTransform:"uppercase",marginBottom:4}}>03 — Tile Types</div>
               <p style={{fontSize:10,color:"#888888",lineHeight:1.6,margin:"0 0 16px"}}>Variable cell sizes. Panels span across multiple grid units, creating visual hierarchy and breaking the monotony of a uniform grid.</p>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:12}}>
+              <div className="gui-tiles-grid">
                 {GUIDE_TILES.map((tile,i)=>(
                   <div key={tile.id}>
                     <div style={{border:"1px solid #2A2A2A",overflow:"hidden",marginBottom:5,aspectRatio:"1/1"}}>
