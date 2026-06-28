@@ -313,9 +313,43 @@ const STANDARD = [
 // Each cell: { col, row, colSpan, colSpan, fn, kind, bg, fg }
 // We fill a 12x10 occupied grid, picking spans randomly
 
+// Neighbor-aware color pick: avoid the 60/30/10-weighted pool colliding
+// with an adjacent panel's background to prevent same-color clustering.
+function pickColorAvoiding(neighbors) {
+  const neighborBgs = new Set(neighbors.map(n => n.bg));
+  const pool = COLORS.filter(col => !neighborBgs.has(col));
+  return pick(pool.length ? pool : COLORS);
+}
+
+// Neighbor-awareness: avoid placing the same tile type (by pattern
+// function) next to itself.
+function pickFnAvoiding(neighbors) {
+  const neighborFns = new Set(
+    neighbors.filter(n => n.kind === "standard" && n.fn >= 0).map(n => STANDARD[n.fn])
+  );
+  const pool = STANDARD.map((_, i) => i).filter(i => !neighborFns.has(STANDARD[i]));
+  return pick(pool.length ? pool : STANDARD.map((_, i) => i));
+}
+
+// Finds cells in a built layout whose bounding box shares an edge with
+// the given (col,row,colSpan,rowSpan) box — used to re-check neighbors
+// when a single cell is reshuffled in place.
+function findLayoutNeighbors(layout, col, row, colSpan, rowSpan, excludeIdx) {
+  const aLeft = col, aRight = col + colSpan, aTop = row, aBottom = row + rowSpan;
+  return layout.filter((other, i) => {
+    if (i === excludeIdx) return false;
+    const bLeft = other.col, bRight = other.col + other.colSpan;
+    const bTop = other.row, bBottom = other.row + other.rowSpan;
+    const horizontallyAdjacent = (aRight === bLeft || bRight === aLeft) && aTop < bBottom && bTop < aBottom;
+    const verticallyAdjacent = (aBottom === bTop || bBottom === aTop) && aLeft < bRight && bLeft < aRight;
+    return horizontallyAdjacent || verticallyAdjacent;
+  });
+}
+
 function buildLayout(assetsReady) {
   const COLS = 12, ROWS = 10;
   const occupied = Array.from({length: ROWS}, () => new Array(COLS).fill(false));
+  const cellGrid = Array.from({length: ROWS}, () => new Array(COLS).fill(null));
   const cells = [];
 
   // Possible spans [colSpan, rowSpan] with weights
@@ -362,18 +396,31 @@ function buildLayout(assetsReady) {
     return true;
   };
 
-  const markOccupied = (r, c, rSpan, cSpan) => {
+  const markOccupied = (r, c, rSpan, cSpan, cell) => {
     for (let dr=0; dr<rSpan; dr++)
-      for (let dc=0; dc<cSpan; dc++)
+      for (let dc=0; dc<cSpan; dc++) {
         occupied[r+dr][c+dc] = true;
+        cellGrid[r+dr][c+dc] = cell;
+      }
+  };
+
+  // Neighbor-awareness: gather already-placed cells touching the top/left
+  // edge of this cell's bounding box (the only neighbors known yet, since
+  // we fill row-major and haven't reached the right/bottom side).
+  const getNeighbors = (r, c, rSpan, cSpan) => {
+    const seen = new Set();
+    const neighbors = [];
+    const add = (cell) => {
+      if (cell && !seen.has(cell)) { seen.add(cell); neighbors.push(cell); }
+    };
+    if (r > 0) for (let dc=0; dc<cSpan; dc++) add(cellGrid[r-1][c+dc]);
+    if (c > 0) for (let dr=0; dr<rSpan; dr++) add(cellGrid[r+dr][c-1]);
+    return neighbors;
   };
 
   for (let r=0; r<ROWS; r++) {
     for (let c=0; c<COLS; c++) {
       if (occupied[r][c]) continue;
-
-      const bg = pick(COLORS);
-      const fg = contrastPair(bg);
 
       // Place asset if this exact cell is a target
       let kind = "standard";
@@ -385,8 +432,12 @@ function buildLayout(assetsReady) {
         const bigSpans = [[2,2],[3,2],[2,3],[3,1],[2,1],[1,2]];
         const freeSpans = bigSpans.filter(([cs,rs]) => isFree(r,c,rs,cs));
         const [cSpan, rSpan] = freeSpans.length ? pick(freeSpans) : [1,1];
-        markOccupied(r, c, rSpan, cSpan);
-        cells.push({ col:c, row:r, colSpan:cSpan, rowSpan:rSpan, kind, bg, fg, fn:-1 });
+        const neighbors = getNeighbors(r, c, rSpan, cSpan);
+        const bg = pickColorAvoiding(neighbors);
+        const fg = contrastPair(bg);
+        const cell = { col:c, row:r, colSpan:cSpan, rowSpan:rSpan, kind, bg, fg, fn:-1 };
+        markOccupied(r, c, rSpan, cSpan, cell);
+        cells.push(cell);
         continue;
       }
 
@@ -396,9 +447,13 @@ function buildLayout(assetsReady) {
         ? pick(validSpans)
         : [1,1];
 
-      let fn = Math.floor(Math.random() * STANDARD.length);
-      markOccupied(r, c, rSpan, cSpan);
-      cells.push({ col:c, row:r, colSpan:cSpan, rowSpan:rSpan, kind:"standard", bg, fg, fn });
+      const neighbors = getNeighbors(r, c, rSpan, cSpan);
+      const bg = pickColorAvoiding(neighbors);
+      const fg = contrastPair(bg);
+      const fn = pickFnAvoiding(neighbors);
+      const cell = { col:c, row:r, colSpan:cSpan, rowSpan:rSpan, kind:"standard", bg, fg, fn };
+      markOccupied(r, c, rSpan, cSpan, cell);
+      cells.push(cell);
     }
   }
   return cells;
@@ -535,9 +590,10 @@ export default function LeWittGenerator() {
     setLayout(prev => {
       const next = [...prev];
       const cell = next[cellIdx];
-      const bg = pick(COLORS);
+      const neighbors = findLayoutNeighbors(prev, cell.col, cell.row, cell.colSpan, cell.rowSpan, cellIdx);
+      const bg = pickColorAvoiding(neighbors);
       const fg = contrastPair(bg);
-      const fn = Math.floor(Math.random() * STANDARD.length);
+      const fn = pickFnAvoiding(neighbors);
       next[cellIdx] = { ...cell, bg, fg, fn, kind: "standard" };
       return next;
     });
