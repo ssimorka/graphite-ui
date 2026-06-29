@@ -789,7 +789,7 @@ export default function LeWittGenerator() {
               <div className="gui-about-grid">
                 <div>
                   <p style={{fontSize:11,color:"#EFEFEF",lineHeight:1.7,margin:"0 0 12px"}}>
-                    Graphite UI is an exploration into generative UI, a system where design outputs are produced by rules, not by hand.
+                    Graphite UI: Patterns is the first module of a generative design system. It explores the rules and components an AI could use to assemble interfaces from context. Starting with a visual language that generates itself.
                   </p>
                   <p style={{fontSize:11,color:"#A8A8A8",lineHeight:1.7,margin:0}}>
                     Every composition is built from a set of 20 tile types, drawn from <a href="https://www.momat.go.jp/en/magazine/033" target="_blank" rel="noopener noreferrer" style={{color:"#1DE9B6",textDecoration:"underline",textUnderlineOffset:3}}>Sol LeWitt's systematic approach</a> to art-making. The same logic that governed his wall drawings, define the rules, let the system execute, drives the grid here.
