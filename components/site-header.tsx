@@ -21,11 +21,14 @@ import { ColorPickerPopover } from '@/components/color-picker'
 // Root-relative anchors rather than bare hashes: the header is shared with
 // routed pages like /system/color, where `#system` would resolve against the
 // current path and scroll nowhere.
+//
+// Docs sits last, after the in-page anchors: the first three scroll the
+// landing page, this one leaves it.
 const NAV_ITEMS = [
   { href: '/#system', label: 'System' },
-  { href: '/system/color', label: 'Color' },
   { href: '/#patterns', label: 'Patterns' },
   { href: '/#faq', label: 'FAQ' },
+  { href: '/system/color', label: 'Docs' },
 ]
 
 export function SiteHeader() {
