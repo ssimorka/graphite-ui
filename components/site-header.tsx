@@ -18,10 +18,14 @@ import { Asleep, Light } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 
+// Root-relative anchors rather than bare hashes: the header is shared with
+// routed pages like /system/color, where `#system` would resolve against the
+// current path and scroll nowhere.
 const NAV_ITEMS = [
-  { href: '#system', label: 'System' },
-  { href: '#patterns', label: 'Patterns' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/#system', label: 'System' },
+  { href: '/system/color', label: 'Color' },
+  { href: '/#patterns', label: 'Patterns' },
+  { href: '/#faq', label: 'FAQ' },
 ]
 
 export function SiteHeader() {
@@ -40,7 +44,7 @@ export function SiteHeader() {
         onClick={() => setIsSideNavExpanded((v) => !v)}
         isActive={isSideNavExpanded}
       />
-      <HeaderName href="#" prefix="">
+      <HeaderName href="/" prefix="">
         Graphite UI
       </HeaderName>
       <HeaderNavigation aria-label="Graphite UI">
