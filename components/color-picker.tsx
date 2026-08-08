@@ -7,7 +7,7 @@ import {
   useCallback,
   type CSSProperties,
 } from 'react'
-import { Dropdown, Toggle } from '@carbon/react'
+import { Dropdown } from '@carbon/react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
 
@@ -182,9 +182,17 @@ export function ColorPickerPopover({
 }) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState(value || '#0f62fe')
-  const { level, setLevel, autoFix, setAutoFix } = useTheme()
+  const { level, setLevel, lightBundle, darkBundle } = useTheme()
   const popoverRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  // Both themes are checked on every generation; report the combined result
+  // rather than asking the visitor to trust it.
+  const contrastChecks = [lightBundle, darkBundle].flatMap((b) =>
+    b ? Object.values(b.contrast) : [],
+  )
+  const checkedPairs = contrastChecks.length
+  const failingPairs = contrastChecks.filter((c) => !c.passes).length
 
   const activeHex = HEX_RE.test(input.trim())
     ? normalizeHex(input)
@@ -318,13 +326,17 @@ export function ColorPickerPopover({
                 setLevel((selectedItem as ContrastLevel) ?? 'AA')
               }
             />
-            <Toggle
-              id="autofix-toggle"
-              size="sm"
-              labelText="Auto-fix on-colors"
-              toggled={autoFix}
-              onToggle={(checked) => setAutoFix(checked)}
-            />
+            {/* Was an "Auto-fix on-colors" toggle. The fix is real but has
+                never been observed to fire — a sweep of 96 hues across both
+                themes and both levels produced no failing pairing — so the
+                control read as a choice the visitor didn't have. Reporting the
+                verified result says the true thing and is worth more. */}
+            <p className="source-contrast">
+              <span aria-hidden="true">{failingPairs === 0 ? '\u2713' : '\u26a0'}</span>
+              {failingPairs === 0
+                ? `Contrast verified \u00b7 ${checkedPairs} pairings pass ${level}`
+                : `${failingPairs} of ${checkedPairs} pairings below ${level}`}
+            </p>
           </div>
 
           {/* Surprise me — the primary action of the popover, so it closes

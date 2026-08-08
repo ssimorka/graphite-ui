@@ -59,7 +59,6 @@ export function SystemExplorer({ embedded = false }: { embedded?: boolean }) {
     lightBundle,
     darkBundle,
     level,
-    autoFix,
     theme,
     setTheme,
   } = useTheme()
@@ -86,7 +85,7 @@ export function SystemExplorer({ embedded = false }: { embedded?: boolean }) {
     }
   }
   const buildFallback = (mode: 'light' | 'dark') => {
-    const t = buildTheme(mode, ramps, level, autoFix)
+    const t = buildTheme(mode, ramps, level)
     return { ...t, states: buildStates(t.tokens, ramps, mode) }
   }
   const light = (lightBundle ?? buildFallback('light')) as unknown as Built

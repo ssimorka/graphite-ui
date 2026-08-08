@@ -32,12 +32,10 @@ type ThemeContextValue = {
   setSourceHex: (hex: string) => void
   lightBundle: ColorBundle | null
   darkBundle: ColorBundle | null
-  // The Studio's two generation controls. They change what the engine emits,
-  // so they live here rather than in one view: every surface stays in sync.
+  // The generation control. It changes what the engine emits, so it lives here
+  // rather than in one view: every surface stays in sync.
   level: ContrastLevel
   setLevel: (level: ContrastLevel) => void
-  autoFix: boolean
-  setAutoFix: (on: boolean) => void
   ramps: ReturnType<typeof makeRamps> | null
 }
 
@@ -51,8 +49,6 @@ const ThemeContext = createContext<ThemeContextValue>({
   darkBundle: null,
   level: 'AA',
   setLevel: () => {},
-  autoFix: true,
-  setAutoFix: () => {},
   ramps: null,
 })
 
@@ -60,54 +56,75 @@ export function useTheme() {
   return useContext(ThemeContext)
 }
 
-function carbonVarsFor(theme: ReturnType<typeof buildTheme>, states: ReturnType<typeof buildStates>) {
-  const t = theme.tokens
-  return {
-    '--cds-background': t.background.hex,
-    '--cds-layer': t.surface.hex,
-    '--cds-layer-01': t.surface.hex,
-    '--cds-layer-02': t.surfaceVariant.hex,
-    '--cds-layer-accent': t.surfaceVariant.hex,
-    '--cds-layer-accent-01': t.surfaceVariant.hex,
-    '--cds-field': t.surfaceVariant.hex,
-    '--cds-field-01': t.surfaceVariant.hex,
-    '--cds-field-02': t.surfaceVariant.hex,
-    '--cds-border-subtle': t.outline.hex,
-    '--cds-border-subtle-00': t.outline.hex,
-    '--cds-border-subtle-01': t.outline.hex,
-    '--cds-border-subtle-02': t.outline.hex,
-    '--cds-border-strong': t.outline.hex,
-    '--cds-border-strong-01': t.outline.hex,
-    '--cds-border-interactive': t.primary.hex,
-    '--cds-text-primary': t.onBackground.hex,
-    '--cds-text-secondary': t.onSurfaceVariant.hex,
-    '--cds-icon-primary': t.onBackground.hex,
-    '--cds-icon-secondary': t.onSurfaceVariant.hex,
-    '--cds-icon-interactive': t.primary.hex,
-    '--cds-interactive': t.primary.hex,
-    '--cds-link-primary': t.primary.hex,
-    '--cds-link-primary-hover': states.primary.hover.hex,
-    '--cds-focus': states.focus.hex,
-    '--cds-focus-inset': states.focus.hex,
-    '--cds-button-primary': states.primary.base.hex,
-    '--cds-button-primary-hover': states.primary.hover.hex,
-    '--cds-button-primary-active': states.primary.pressed.hex,
-    '--cds-text-on-color': t.onPrimary.hex,
-    '--cds-icon-on-color': t.onPrimary.hex,
-    '--cds-background-selected': t.primaryContainer.hex,
-    '--cds-background-hover': t.surfaceVariant.hex,
-    '--cds-layer-selected': t.primaryContainer.hex,
-    '--cds-layer-selected-01': t.primaryContainer.hex,
-    '--cds-layer-hover': t.surfaceVariant.hex,
-    '--cds-layer-hover-01': t.surfaceVariant.hex,
-    // Tags default to Carbon's fixed blue palette, which reads as a foreign
-    // color once the rest of the page is generated. Bind them to the accent.
-    '--cds-tag-background-blue': t.primaryContainer.hex,
-    '--cds-tag-color-blue': t.onPrimaryContainer.hex,
-    '--cds-tag-hover-blue': states.primary.hover.hex,
-    '--cds-tag-background-gray': t.surfaceVariant.hex,
-    '--cds-tag-color-gray': t.onSurfaceVariant.hex,
-  }
+type BuiltTheme = ReturnType<typeof buildTheme>
+type BuiltStates = ReturnType<typeof buildStates>
+type Tokens = BuiltTheme['tokens']
+
+// Every Carbon variable the generated theme drives, as [variable, resolver].
+//
+// A list rather than an object literal so the count is derivable: the site copy
+// quotes this number in several places, and stating it by hand is how it came
+// to read 33 while the map had grown to 42.
+const CARBON_VAR_BINDINGS: readonly [
+  string,
+  (t: Tokens, s: BuiltStates) => string,
+][] = [
+  ['--cds-background', (t) => t.background.hex],
+  ['--cds-layer', (t) => t.surface.hex],
+  ['--cds-layer-01', (t) => t.surface.hex],
+  ['--cds-layer-02', (t) => t.surfaceVariant.hex],
+  ['--cds-layer-accent', (t) => t.surfaceVariant.hex],
+  ['--cds-layer-accent-01', (t) => t.surfaceVariant.hex],
+  ['--cds-field', (t) => t.surfaceVariant.hex],
+  ['--cds-field-01', (t) => t.surfaceVariant.hex],
+  ['--cds-field-02', (t) => t.surfaceVariant.hex],
+  ['--cds-border-subtle', (t) => t.outline.hex],
+  ['--cds-border-subtle-00', (t) => t.outline.hex],
+  ['--cds-border-subtle-01', (t) => t.outline.hex],
+  ['--cds-border-subtle-02', (t) => t.outline.hex],
+  ['--cds-border-strong', (t) => t.outline.hex],
+  ['--cds-border-strong-01', (t) => t.outline.hex],
+  ['--cds-border-interactive', (t) => t.primary.hex],
+  ['--cds-text-primary', (t) => t.onBackground.hex],
+  ['--cds-text-secondary', (t) => t.onSurfaceVariant.hex],
+  ['--cds-icon-primary', (t) => t.onBackground.hex],
+  ['--cds-icon-secondary', (t) => t.onSurfaceVariant.hex],
+  ['--cds-icon-interactive', (t) => t.primary.hex],
+  ['--cds-interactive', (t) => t.primary.hex],
+  ['--cds-link-primary', (t) => t.primary.hex],
+  ['--cds-link-primary-hover', (_t, s) => s.primary.hover.hex],
+  ['--cds-focus', (_t, s) => s.focus.hex],
+  ['--cds-focus-inset', (_t, s) => s.focus.hex],
+  ['--cds-button-primary', (_t, s) => s.primary.base.hex],
+  ['--cds-button-primary-hover', (_t, s) => s.primary.hover.hex],
+  ['--cds-button-primary-active', (_t, s) => s.primary.pressed.hex],
+  ['--cds-text-on-color', (t) => t.onPrimary.hex],
+  ['--cds-icon-on-color', (t) => t.onPrimary.hex],
+  ['--cds-background-selected', (t) => t.primaryContainer.hex],
+  ['--cds-background-hover', (t) => t.surfaceVariant.hex],
+  ['--cds-layer-selected', (t) => t.primaryContainer.hex],
+  ['--cds-layer-selected-01', (t) => t.primaryContainer.hex],
+  ['--cds-layer-hover', (t) => t.surfaceVariant.hex],
+  ['--cds-layer-hover-01', (t) => t.surfaceVariant.hex],
+  // Tags default to Carbon's fixed blue palette, which reads as a foreign
+  // color once the rest of the page is generated. Bind them to the accent.
+  ['--cds-tag-background-blue', (t) => t.primaryContainer.hex],
+  ['--cds-tag-color-blue', (t) => t.onPrimaryContainer.hex],
+  ['--cds-tag-hover-blue', (_t, s) => s.primary.hover.hex],
+  ['--cds-tag-background-gray', (t) => t.surfaceVariant.hex],
+  ['--cds-tag-color-gray', (t) => t.onSurfaceVariant.hex],
+]
+
+/** How many Carbon variables a generated theme maps. Quote this, never a literal. */
+export const CARBON_VAR_COUNT = CARBON_VAR_BINDINGS.length
+
+function carbonVarsFor(theme: BuiltTheme, states: BuiltStates) {
+  return Object.fromEntries(
+    CARBON_VAR_BINDINGS.map(([name, resolve]) => [
+      name,
+      resolve(theme.tokens, states),
+    ]),
+  )
 }
 
 const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
@@ -122,7 +139,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<CarbonTheme>('g100')
   const [sourceHex, setSourceHexRaw] = useState(COVER_SOURCE_HEX)
   const [level, setLevel] = useState<ContrastLevel>('AA')
-  const [autoFix, setAutoFix] = useState(true)
 
   const setSourceHex = (hex: string) => {
     if (HEX_RE.test(hex.trim())) setSourceHexRaw(normalizeHex(hex))
@@ -132,12 +148,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const ramps = useMemo(() => (sourceHex ? makeRamps(sourceHex) : null), [sourceHex])
 
   const light = useMemo(
-    () => (ramps ? buildTheme('light', ramps, level, autoFix) : null),
-    [ramps, level, autoFix],
+    () => (ramps ? buildTheme('light', ramps, level) : null),
+    [ramps, level],
   )
   const dark = useMemo(
-    () => (ramps ? buildTheme('dark', ramps, level, autoFix) : null),
-    [ramps, level, autoFix],
+    () => (ramps ? buildTheme('dark', ramps, level) : null),
+    [ramps, level],
   )
   const lightStates = useMemo(() => (ramps && light ? buildStates(light.tokens, ramps, 'light') : null), [ramps, light])
   const darkStates = useMemo(() => (ramps && dark ? buildStates(dark.tokens, ramps, 'dark') : null), [ramps, dark])
@@ -192,8 +208,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         darkBundle,
         level,
         setLevel,
-        autoFix,
-        setAutoFix,
         ramps,
       }}>
       <GlobalTheme theme={theme}>{children}</GlobalTheme>

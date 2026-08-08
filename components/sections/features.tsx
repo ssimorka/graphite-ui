@@ -10,6 +10,7 @@ import {
   Moon,
 } from '@carbon/icons-react'
 import { Reveal } from '@/components/reveal'
+import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 
 const FEATURES = [
   {
@@ -30,7 +31,7 @@ const FEATURES = [
   {
     icon: Api,
     title: 'Drop-in variables',
-    body: 'Thirty-three CSS custom properties map onto your existing component library. Point your build at the output and existing UI repaints untouched.',
+    body: `${CARBON_VAR_COUNT} CSS custom properties map onto your existing component library. Point your build at the output and existing UI repaints untouched.`,
   },
   {
     icon: GridIcon,

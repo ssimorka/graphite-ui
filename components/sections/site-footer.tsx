@@ -1,6 +1,7 @@
 'use client'
 
 import { Grid, Column } from '@carbon/react'
+import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 
 export function SiteFooter() {
   return (
@@ -9,7 +10,7 @@ export function SiteFooter() {
         <Column sm={4} md={8} lg={16}>
           <div className="footer__bar">
             <p className="footer__stats">
-              3 ramps · 33 tokens · WCAG AA/AAA · 20 patterns
+              3 ramps · {CARBON_VAR_COUNT} variables · WCAG AA/AAA · 20 patterns
             </p>
             <div className="footer__credit">
               <span className="footer__credit-label">Built by</span>
