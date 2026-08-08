@@ -10,7 +10,7 @@ import {
   TableCell,
   Tag,
 } from '@carbon/react'
-import { contrastRatio, TONE_STOPS } from '@/lib/color.js'
+import { contrastRatio, TONE_STOPS, STATUS_NAMES } from '@/lib/color.js'
 
 // Display-only weight labels for the primitives grid, dark to light, in step
 // order rather than by value, so they line up with each ramp's ten stops
@@ -192,11 +192,25 @@ export function RampRow({
 type Token = { hex: string; ramp: string; tone: number }
 type Check = { ratio: number; passes: boolean; level: string; fixed?: boolean }
 
+// The engine emits sixteen status roles alongside the eleven core ones. This
+// table is the landing page's proof that pairings are checked, not a reference
+// — the full set is documented at /system/color — so status is filtered out
+// here rather than tripling the table's height with four more hue families.
+const STATUS_ROLE_NAMES = new Set(
+  (STATUS_NAMES as string[]).flatMap((name) => {
+    const Cap = name[0].toUpperCase() + name.slice(1)
+    return [name, `on${Cap}`, `${name}Container`, `on${Cap}Container`]
+  }),
+)
+
 export function SemanticTable({
   theme,
 }: {
   theme: { tokens: Record<string, Token>; contrast: Record<string, Check> }
 }) {
+  const rows = Object.entries(theme.tokens).filter(
+    ([role]) => !STATUS_ROLE_NAMES.has(role),
+  )
   return (
     <div className="studio-table">
       <Table size="lg">
@@ -210,7 +224,7 @@ export function SemanticTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(theme.tokens).map(([role, t]) => {
+          {rows.map(([role, t]) => {
             const c = theme.contrast[role]
             return (
               <TableRow key={role}>
