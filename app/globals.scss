@@ -748,16 +748,15 @@ body {
   border-top: 1px solid var(--cds-border-subtle);
 }
 
-// Carbon paints the "on" state with the fixed success green, which reads as a
-// foreign color in a page whose every other accent is generated. Bind it to
-// the source instead — scoped to the toggle so pass/fail tags keep using green
-// and red for their actual semantic meaning.
-.cds--toggle__switch--checked {
-  background-color: var(--cds-interactive) !important;
-
-  &::before {
-    background-color: var(--cds-text-on-color) !important;
-  }
+// Verified-contrast readout that replaced the auto-fix toggle. Deliberately
+// not colored green on its own: the tick carries the state, so the line still
+// reads correctly for anyone who cannot separate the hue from the text.
+.source-contrast {
+  @include type.type-style('label-01');
+  display: flex;
+  align-items: baseline;
+  gap: spacing.$spacing-02;
+  color: var(--cds-text-secondary);
 }
 
 // Centre the labels in both tab strips.

@@ -2,6 +2,7 @@
 
 import { Grid, Column, Accordion, AccordionItem } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
+import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 
 const FAQS = [
   {
@@ -14,7 +15,7 @@ const FAQS = [
   },
   {
     q: 'Does it work with my existing components?',
-    a: 'Yes. Graphite UI exports thirty-three CSS custom properties, plus raw CSS and JSON for everything else. This entire site is themed through that mapping; try the color control in the header.',
+    a: `Yes. Graphite UI exports ${CARBON_VAR_COUNT} CSS custom properties, plus raw CSS and JSON for everything else. This entire site is themed through that mapping; try the color control in the header.`,
   },
   {
     q: 'Can I control the output, or is it fully automatic?',

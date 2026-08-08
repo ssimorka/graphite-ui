@@ -2,6 +2,7 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
+import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 
 // A wall of invented customer logos says nothing. These are the system's real
 // dimensions — more honest, and more useful to a design lead deciding whether
@@ -9,7 +10,7 @@ import { Reveal } from '@/components/reveal'
 const FACTS = [
   { value: '20', label: 'Tile types' },
   { value: '3', label: 'Perceptual ramps' },
-  { value: '33', label: 'Mapped variables' },
+  { value: String(CARBON_VAR_COUNT), label: 'Mapped variables' },
   { value: '2', label: 'Themes, auto-paired' },
   { value: 'AA', label: 'WCAG floor' },
   { value: '1', label: 'Input' },
