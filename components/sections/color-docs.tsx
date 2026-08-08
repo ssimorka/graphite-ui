@@ -319,7 +319,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 8, offset: 1 }}>
             <Reveal>
-              <p className="section__eyebrow">System</p>
+              <p className="section__eyebrow">Docs</p>
               <h1 className="section__title docpage__title">Color</h1>
               <p className="section__subtitle docpage__lede">
                 Graphite UI&rsquo;s color system turns a single source color into
