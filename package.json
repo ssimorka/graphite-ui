@@ -1,23 +1,25 @@
 {
-  "name": "graphite-ui",
+  "name": "carbon-starter",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
+    "@carbon/icons-react": "^11.82.0",
+    "@carbon/react": "^1.109.0",
+    "next": "^16.2.9",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-is": "^19.2.7"
   },
   "devDependencies": {
+    "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
-    "oxlint": "^1.69.0",
-    "vite": "^8.1.0"
+    "sass": "^1.100.0",
+    "typescript": "^6.0.3"
   }
 }

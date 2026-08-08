@@ -1,0 +1,1248 @@
+// Carbon Design System global styles.
+// @carbon/react forwards @carbon/styles: this single use statement brings in
+// the CSS reset, IBM Plex fonts (from IBM's Akamai CDN), the grid, the type
+// scale, component styles, and theme CSS custom properties.
+@use '@carbon/react' with (
+  $use-akamai-cdn: true
+);
+
+// Emit CSS custom properties for every theme zone (.cds--white, .cds--g10,
+// .cds--g90, .cds--g100) so `<Theme theme="...">` and zone classes can switch
+// themes at runtime.
+@use '@carbon/react/scss/theme';
+@use '@carbon/react/scss/themes';
+@use '@carbon/react/scss/zone';
+
+// Carbon foundations for custom layout styles.
+@use '@carbon/react/scss/spacing' as spacing;
+@use '@carbon/react/scss/type' as type;
+@use '@carbon/react/scss/breakpoint' as breakpoint;
+
+// Root theme switching: the ThemeProvider toggles .cds--white / .cds--g100 on
+// <html>. The :root.cds--* selectors out-rank the zone classes so the toggle
+// always wins.
+:root,
+:root.cds--white {
+  @include theme.theme(themes.$white);
+}
+
+:root.cds--g100 {
+  @include theme.theme(themes.$g100);
+}
+
+html,
+body {
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
+}
+
+// Smooth repaint when the source colour changes, limited to the page shell.
+//
+// A universal `* { transition: background-color }` looks tempting here, but it
+// strands elements whose colour comes from a custom property: when the token
+// vars are rewritten, the in-flight transition never resolves and components
+// keep painting their previous value. Carbon's primary button would sit on the
+// old blue while `--cds-button-primary` already read the new hue. Scoping the
+// transition to the shell keeps the page-level cross-fade and lets every
+// token-driven component repaint immediately and correctly.
+html,
+body,
+.cds--white,
+.cds--g100 {
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+// Applied by ThemeProvider for one frame while token variables are rewritten.
+// See the comment there for why this is required rather than cosmetic.
+.is-retheming,
+.is-retheming *,
+.is-retheming *::before,
+.is-retheming *::after {
+  transition: none !important;
+}
+
+body {
+  // Contain decorative bleed (glows, offset float cards) without creating a
+  // nested scroll container. `clip` avoids the height:100% scroll trap.
+  overflow-x: clip;
+}
+
+// Offset fixed Carbon UI Shell header.
+.page-main {
+  margin-top: 3rem; // height of .cds--header
+  background: var(--cds-background);
+}
+
+// ---------------------------------------------------------------------------
+// Header source-color control
+// ---------------------------------------------------------------------------
+.site-header__source {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  background: var(--cds-button-primary);
+  transition: background 240ms ease;
+
+  &:hover {
+    background: var(--cds-button-primary-hover);
+  }
+
+  &:active {
+    background: var(--cds-button-primary-active);
+  }
+}
+
+.site-header__source-wrap {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.site-header__source-trigger {
+  display: flex;
+  align-items: center;
+  gap: spacing.$spacing-03;
+  height: 100%;
+  min-width: 44px;
+  padding: 0 spacing.$spacing-05;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+// Carbon sizes side-nav links for a dense product shell; on a marketing page
+// reached by thumb they need a full touch target. Carbon's own rule qualifies
+// the class with `a`, so this has to match that specificity to win.
+.cds--side-nav a.cds--header__menu-item {
+  min-height: 48px;
+}
+
+.site-header__source-label {
+  display: none;
+
+  @include breakpoint.breakpoint(lg) {
+    display: block;
+    @include type.type-style('label-01');
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--cds-text-on-color);
+  }
+}
+
+.site-header__source-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--cds-text-on-color, #fff);
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+// ---------------------------------------------------------------------------
+// Canvas toolbar — Regenerate / Export, carried over from the pattern tool
+// ---------------------------------------------------------------------------
+.canvas-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing.$spacing-03;
+  margin-top: spacing.$spacing-03;
+}
+
+.canvas-toolbar__hint {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cds-text-secondary);
+}
+
+.canvas-toolbar__actions {
+  display: flex;
+  gap: spacing.$spacing-02;
+
+  // Carbon's `sm` buttons are 32px tall, which is under a comfortable touch
+  // target. Keep the compact desktop look but grow them on touch-sized
+  // viewports.
+  @media (max-width: 671px) {
+    .cds--btn {
+      min-height: 44px;
+    }
+  }
+
+  // Two full-height Carbon buttons don't fit beside each other under ~360px
+  // of usable width; splitting them 50/50 keeps both labels readable instead
+  // of letting the second one clip.
+  @media (max-width: 419px) {
+    width: 100%;
+
+    .cds--btn {
+      flex: 1;
+    }
+  }
+}
+
+.hero__canvas {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  overflow: hidden;
+}
+
+// ---------------------------------------------------------------------------
+// Generative art + kit cover splash
+// ---------------------------------------------------------------------------
+.art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.art__cover {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: block;
+  animation: cover-in 320ms ease both;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cds-focus);
+    outline-offset: -2px;
+  }
+
+  // Reveal the prompt on hover/focus so the cover reads as interactive
+  // without covering the artwork it is introducing.
+  &:hover .art__cover-hint,
+  &:focus-visible .art__cover-hint {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.art__cover-hint {
+  position: absolute;
+  left: 50%;
+  bottom: spacing.$spacing-06;
+  transform: translate(-50%, spacing.$spacing-03);
+  padding: spacing.$spacing-03 spacing.$spacing-05;
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+}
+
+@keyframes cover-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Scroll-reveal motion primitive
+// ---------------------------------------------------------------------------
+.reveal {
+  opacity: 0;
+  transform: translateY(spacing.$spacing-06);
+  transition:
+    opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+
+  &.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shared section scaffolding
+// ---------------------------------------------------------------------------
+.section {
+  position: relative;
+  padding: spacing.$spacing-08 0;
+  border-bottom: 1px solid var(--cds-border-subtle-01);
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-10 0;
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    padding: spacing.$spacing-12 0;
+  }
+}
+
+.section__eyebrow {
+  @include type.type-style('label-01');
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cds-text-secondary);
+  margin-bottom: spacing.$spacing-04;
+
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$spacing-03;
+
+  &::before {
+    content: '';
+    width: spacing.$spacing-05;
+    height: 1px;
+    background: var(--cds-border-interactive);
+  }
+}
+
+.section__title {
+  @include type.type-style('fluid-heading-05', true);
+  max-width: 32rem;
+  text-wrap: balance;
+}
+
+.section__subtitle {
+  @include type.type-style('body-02');
+  margin-top: spacing.$spacing-05;
+  margin-bottom: spacing.$spacing-08;
+  max-width: 40rem;
+  color: var(--cds-text-secondary);
+  text-wrap: pretty;
+}
+
+// ---------------------------------------------------------------------------
+// Hero
+// ---------------------------------------------------------------------------
+.hero {
+  // Parallax inputs set from JS.
+  --sy: 0; // scroll progress (px past hero top)
+  --px: 0; // pointer x offset, -0.5..0.5
+  --py: 0; // pointer y offset, -0.5..0.5
+  position: relative;
+  overflow: hidden;
+  padding: spacing.$spacing-07 0 spacing.$spacing-07;
+  background: var(--cds-background);
+  border-bottom: 1px solid var(--cds-border-subtle-01);
+  isolation: isolate;
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-10 0 spacing.$spacing-09;
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    padding: spacing.$spacing-12 0 spacing.$spacing-10;
+  }
+}
+
+// Cursor-responsive lighting.
+.hero__spotlight {
+  --mx: 50%;
+  --my: 30%;
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(
+    40rem 40rem at var(--mx) var(--my),
+    color-mix(in srgb, var(--cds-interactive) 22%, transparent),
+    transparent 60%
+  );
+  transition: background 120ms linear;
+  pointer-events: none;
+  // Drifts up faster than the page for depth.
+  transform: translate3d(
+    calc(var(--px) * -1.5rem),
+    calc(var(--sy) * -0.25px + var(--py) * -1.5rem),
+    0
+  );
+  will-change: transform;
+}
+
+// Subtle grid backdrop with radial fade.
+.hero__grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3rem 3rem;
+  mask-image: radial-gradient(60rem 40rem at 50% 0%, #000 30%, transparent 75%);
+  pointer-events: none;
+  // Slow downward drift on scroll + slight counter-pointer sway.
+  transform: translate3d(
+    calc(var(--px) * 0.75rem),
+    calc(var(--sy) * 0.12px + var(--py) * 0.75rem),
+    0
+  );
+  will-change: transform;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero__eyebrow {
+  display: inline-flex !important;
+  align-items: center;
+  gap: spacing.$spacing-03;
+  margin-bottom: spacing.$spacing-05;
+
+  .cds--tag__label {
+    display: inline-flex;
+    align-items: center;
+    gap: spacing.$spacing-02;
+  }
+
+  @include breakpoint.breakpoint(md) {
+    margin-bottom: spacing.$spacing-06;
+  }
+}
+
+.hero__eyebrow-icon {
+  flex-shrink: 0;
+  display: block;
+}
+
+.hero__title {
+  @include type.type-style('fluid-heading-06', true);
+  text-wrap: balance;
+  max-width: 20ch;
+}
+
+.hero__subtitle {
+  @include type.type-style('fluid-paragraph-01', true);
+  margin-top: spacing.$spacing-05;
+  max-width: 42rem;
+  color: var(--cds-text-secondary);
+  text-wrap: pretty;
+
+  @include breakpoint.breakpoint(md) {
+    margin-top: spacing.$spacing-06;
+  }
+}
+
+// Product preview
+.hero__preview {
+  position: relative;
+  margin-top: spacing.$spacing-07;
+  animation: hero-rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @include breakpoint.breakpoint(md) {
+    margin-top: spacing.$spacing-10;
+  }
+}
+
+.hero__preview-frame {
+  position: relative;
+  // Frame eases upward slower than the page + gentle pointer tilt.
+  transform: translate3d(
+    calc(var(--px) * 0.5rem),
+    calc(var(--sy) * -0.05px + var(--py) * 0.4rem),
+    0
+  );
+  will-change: transform;
+  border: 1px solid var(--cds-border-subtle-02);
+  background: var(--cds-layer-01);
+  padding: spacing.$spacing-03;
+  box-shadow: 0 spacing.$spacing-08 spacing.$spacing-12
+    color-mix(in srgb, #000 45%, transparent);
+  overflow: hidden;
+
+  &::after {
+    // top sheen
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--cds-interactive) 10%, transparent),
+      transparent 30%
+    );
+    pointer-events: none;
+  }
+}
+
+.hero__preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(spacing.$spacing-07) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__preview {
+    animation: none;
+  }
+  // Neutralize all parallax transforms.
+  .hero__spotlight,
+  .hero__grid-lines {
+    transform: none;
+    transition: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Trusted by
+// ---------------------------------------------------------------------------
+.trusted {
+  padding: spacing.$spacing-08 0;
+  border-bottom: 1px solid var(--cds-border-subtle-01);
+  background: var(--cds-layer-01);
+}
+
+.trusted__label {
+  @include type.type-style('label-01');
+  text-align: center;
+  color: var(--cds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: spacing.$spacing-06;
+}
+
+.trusted__logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: spacing.$spacing-07 spacing.$spacing-10;
+
+  // Below this, the flex-wrap + wide desktop gap leaves an orphaned,
+  // off-center item on its own row. A fixed 2-column grid keeps every
+  // row even instead of reflowing organically.
+  @media (max-width: 671px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    gap: spacing.$spacing-06 spacing.$spacing-05;
+  }
+}
+
+.trusted__logo {
+  @include type.type-style('fluid-heading-03', true);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--cds-text-secondary);
+  opacity: 0.65;
+  transition: opacity 200ms ease, color 200ms ease;
+
+  &:hover {
+    opacity: 1;
+    color: var(--cds-text-primary);
+  }
+}
+
+// System-fact strip that replaced the invented logo wall.
+.trusted__fact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: spacing.$spacing-02;
+  text-align: center;
+}
+
+.trusted__fact-value {
+  @include type.type-style('fluid-heading-03', true);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+}
+
+.trusted__fact-label {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cds-text-secondary);
+}
+
+// ---------------------------------------------------------------------------
+// System explorer — ramps & contrast views
+// ---------------------------------------------------------------------------
+.ramp-stack {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-06;
+  padding: spacing.$spacing-06;
+  background: var(--cds-layer-01);
+}
+
+.ramp__label {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cds-text-secondary);
+  margin-bottom: spacing.$spacing-03;
+}
+
+// Fixed-width swatches (repeat(n, 1fr) won't shrink past their min-content)
+// overflow the column at narrow widths. Scrolling the grid and its weight
+// labels together, instead of letting an ancestor clip them, keeps every
+// stop reachable and keeps the two rows in sync while swiping.
+.ramp__scroll {
+  overflow-x: auto;
+  padding-bottom: spacing.$spacing-02;
+}
+
+.ramp__grid,
+.ramp__weights {
+  display: grid;
+  gap: spacing.$spacing-03;
+  min-width: min-content;
+}
+
+.ramp__weights {
+  margin-top: spacing.$spacing-02;
+
+  span {
+    text-align: center;
+    @include type.type-style('label-01');
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    color: var(--cds-text-secondary);
+  }
+}
+
+// Swatches are buttons: the hex sits on the colour, auto-flipped to whichever
+// of black or white reads better against it.
+.ramp-swatch {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  min-width: 56px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: spacing.$spacing-02;
+  font: inherit;
+  cursor: pointer;
+
+  span {
+    @include type.type-style('label-01');
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cds-focus);
+    outline-offset: 2px;
+  }
+}
+
+.ramp-stack__hint {
+  @include type.type-style('label-01');
+  color: var(--cds-text-secondary);
+}
+
+// ---------------------------------------------------------------------------
+// Studio panel — semantic tokens, interaction states, generation controls
+// ---------------------------------------------------------------------------
+.studio-panel {
+  background: var(--cds-layer-01);
+  padding: spacing.$spacing-05;
+}
+
+.studio-panel__heading {
+  @include type.type-style('heading-compact-01');
+  margin: spacing.$spacing-06 0 spacing.$spacing-04;
+}
+
+.studio-table {
+  overflow-x: auto;
+}
+
+.studio-swatch {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--cds-border-subtle);
+}
+
+.states-matrix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing.$spacing-05;
+}
+
+.states-matrix__item {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-02;
+  width: 88px;
+  text-align: center;
+}
+
+.states-matrix__chip {
+  display: block;
+  width: 88px;
+  height: 56px;
+  border: 1px solid var(--cds-border-subtle);
+}
+
+.states-matrix__name {
+  @include type.type-style('label-01');
+  color: var(--cds-text-primary);
+}
+
+.states-matrix__tone {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+}
+
+// Generation controls inside the source-colour popover.
+.source-controls {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-04;
+  margin-top: spacing.$spacing-05;
+  padding-top: spacing.$spacing-04;
+  border-top: 1px solid var(--cds-border-subtle);
+}
+
+// Carbon paints the "on" state with the fixed success green, which reads as a
+// foreign colour in a page whose every other accent is generated. Bind it to
+// the source instead — scoped to the toggle so pass/fail tags keep using green
+// and red for their actual semantic meaning.
+.cds--toggle__switch--checked {
+  background-color: var(--cds-interactive) !important;
+
+  &::before {
+    background-color: var(--cds-text-on-color) !important;
+  }
+}
+
+// Centre the labels in both tab strips.
+.cds--content-switcher-btn {
+  justify-content: center;
+  text-align: center;
+}
+
+.cds--tabs__nav-link,
+.cds--tabs__nav-item {
+  .cds--tabs__nav-item-label-wrapper {
+    width: 100%;
+  }
+
+  .cds--tabs__nav-item-label {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.studio-toast {
+  position: fixed;
+  bottom: spacing.$spacing-06;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9500;
+  padding: spacing.$spacing-03 spacing.$spacing-05;
+  background: var(--cds-layer-inverse, #393939);
+  color: var(--cds-text-inverse, #fff);
+  @include type.type-style('body-compact-01');
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+// ---------------------------------------------------------------------------
+// Pattern guide
+// ---------------------------------------------------------------------------
+.guide__heading {
+  @include type.type-style('heading-03');
+  margin-top: spacing.$spacing-09;
+  margin-bottom: spacing.$spacing-03;
+}
+
+.guide__lede {
+  @include type.type-style('body-01');
+  color: var(--cds-text-secondary);
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-05;
+}
+
+.ratio-bar {
+  display: flex;
+  height: 2.5rem;
+  overflow: hidden;
+}
+
+.ratio-bar__seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &--neutral {
+    flex: 6;
+    background: var(--cds-layer-03);
+    color: var(--cds-text-primary);
+  }
+
+  &--accent {
+    flex: 3;
+    background: var(--cds-interactive);
+    color: var(--cds-text-on-color);
+  }
+
+  // Colours come from the live onSurface / surface tokens, set inline.
+  &--pop {
+    flex: 1;
+  }
+}
+
+.span-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: spacing.$spacing-06;
+}
+
+.span-list__item {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-03;
+}
+
+.span-list__box {
+  display: block;
+  background: var(--cds-interactive);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 44px 44px;
+  border: 1px solid var(--cds-border-subtle-01);
+}
+
+.span-list__label {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cds-text-secondary);
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: spacing.$spacing-05;
+
+  @include breakpoint.breakpoint(md) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.tile-grid__canvas {
+  aspect-ratio: 1;
+  border: 1px solid var(--cds-border-subtle-01);
+  overflow: hidden;
+  margin-bottom: spacing.$spacing-03;
+}
+
+.tile-grid__label {
+  @include type.type-style('label-01');
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cds-text-secondary);
+  display: flex;
+  gap: spacing.$spacing-02;
+}
+
+.tile-grid__num {
+  color: var(--cds-interactive);
+}
+
+// ---------------------------------------------------------------------------
+// Features
+// ---------------------------------------------------------------------------
+.feature-grid {
+  margin-top: spacing.$spacing-03;
+  row-gap: spacing.$spacing-05;
+}
+
+.feature-card {
+  height: 100%;
+  padding: spacing.$spacing-06;
+  background: var(--cds-layer-01);
+  border: 1px solid var(--cds-border-subtle-01);
+  transition:
+    transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 240ms ease,
+    box-shadow 240ms ease;
+
+  &:hover {
+    transform: translateY(calc(-1 * spacing.$spacing-03));
+    border-color: var(--cds-border-interactive);
+    box-shadow: 0 spacing.$spacing-06 spacing.$spacing-09
+      color-mix(in srgb, #000 35%, transparent);
+  }
+}
+
+.feature-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: spacing.$spacing-09;
+  height: spacing.$spacing-09;
+  margin-bottom: spacing.$spacing-06;
+  color: var(--cds-interactive);
+  background: color-mix(in srgb, var(--cds-interactive) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cds-interactive) 30%, transparent);
+}
+
+.feature-card__title {
+  @include type.type-style('heading-03');
+  margin-bottom: spacing.$spacing-04;
+}
+
+.feature-card__body {
+  @include type.type-style('body-01');
+  color: var(--cds-text-secondary);
+}
+
+// ---------------------------------------------------------------------------
+// Product showcase
+// ---------------------------------------------------------------------------
+.section--showcase {
+  background: var(--cds-layer-01);
+}
+
+.showcase__switcher {
+  max-width: 22rem;
+  margin: 0 auto spacing.$spacing-07;
+}
+
+.showcase__stage {
+  position: relative;
+  isolation: isolate;
+}
+
+.showcase__glow {
+  position: absolute;
+  inset: -10% -5% 0;
+  z-index: -1;
+  background: radial-gradient(
+    50% 60% at 50% 0%,
+    color-mix(in srgb, var(--cds-interactive) 30%, transparent),
+    transparent 70%
+  );
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.showcase__frame {
+  border: 1px solid var(--cds-border-subtle-02);
+  background: var(--cds-background);
+  padding: spacing.$spacing-03;
+  box-shadow: 0 spacing.$spacing-08 spacing.$spacing-12
+    color-mix(in srgb, #000 45%, transparent);
+  overflow: hidden;
+  animation: fade-swap 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.showcase__img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.showcase__caption {
+  margin-top: spacing.$spacing-07;
+  text-align: center;
+}
+
+.showcase__caption-title {
+  @include type.type-style('heading-04');
+  margin-bottom: spacing.$spacing-03;
+}
+
+.showcase__caption-body {
+  @include type.type-style('body-02');
+  color: var(--cds-text-secondary);
+  max-width: 40rem;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+@keyframes fade-swap {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase__frame {
+    animation: none;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Benefits
+// ---------------------------------------------------------------------------
+.benefit-grid {
+  row-gap: spacing.$spacing-07;
+}
+
+.benefit {
+  height: 100%;
+  padding-top: spacing.$spacing-05;
+  border-top: 2px solid var(--cds-border-interactive);
+}
+
+.benefit__icon {
+  display: inline-flex;
+  color: var(--cds-interactive);
+  margin-bottom: spacing.$spacing-05;
+}
+
+.benefit__stat {
+  @include type.type-style('fluid-heading-04', true);
+  letter-spacing: -0.02em;
+}
+
+.benefit__title {
+  @include type.type-style('heading-03');
+  margin-top: spacing.$spacing-03;
+  margin-bottom: spacing.$spacing-03;
+}
+
+.benefit__body {
+  @include type.type-style('body-01');
+  color: var(--cds-text-secondary);
+}
+
+// ---------------------------------------------------------------------------
+// FAQ
+// ---------------------------------------------------------------------------
+.section--faq {
+  row-gap: spacing.$spacing-07;
+}
+
+.faq__accordion {
+  margin-top: spacing.$spacing-02;
+}
+
+.faq__answer {
+  @include type.type-style('body-02');
+  color: var(--cds-text-secondary);
+  max-width: 44rem;
+}
+
+// ---------------------------------------------------------------------------
+// Final CTA
+// ---------------------------------------------------------------------------
+.cta {
+  position: relative;
+  overflow: hidden;
+  padding: spacing.$spacing-09 0;
+  background: var(--cds-background);
+  border-bottom: 1px solid var(--cds-border-subtle-01);
+  isolation: isolate;
+
+  @include breakpoint.breakpoint(md) {
+    padding: spacing.$spacing-12 0;
+  }
+}
+
+.cta__glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    40rem 26rem at 50% 120%,
+    color-mix(in srgb, var(--cds-interactive) 32%, transparent),
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.cta__inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta__title {
+  @include type.type-style('fluid-heading-05', true);
+  text-wrap: balance;
+  max-width: 20ch;
+}
+
+.cta__subtitle {
+  @include type.type-style('body-02');
+  color: var(--cds-text-secondary);
+  margin-top: spacing.$spacing-05;
+  max-width: 36rem;
+  text-wrap: pretty;
+}
+
+.cta__form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: spacing.$spacing-05;
+  width: 100%;
+  max-width: 30rem;
+  margin-top: spacing.$spacing-07;
+}
+
+.cta__fields {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-04;
+  width: 100%;
+  text-align: left;
+}
+
+.cta__form > .cds--btn {
+  // Full-bleed on phones so the primary action is unmissable and easy to
+  // hit; right-aligned to the field edge once there is room for it.
+  width: 100%;
+  justify-content: space-between;
+
+  @include breakpoint.breakpoint(md) {
+    width: auto;
+    align-self: flex-end;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+.footer {
+  padding: spacing.$spacing-06 0;
+  border-top: 1px solid var(--cds-border-subtle-01);
+  background: var(--cds-background);
+}
+
+.footer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: spacing.$spacing-03;
+
+  // The two halves can't sit on one line at phone widths; stacking them
+  // deliberately (rather than letting space-between strand the credit) keeps
+  // the wrapped stat line and the attribution left-aligned to each other.
+  @media (max-width: 671px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: spacing.$spacing-04;
+  }
+}
+
+.footer__stats {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0;
+
+  // At the tracked-out desktop spacing this line overshoots a phone's content
+  // width by a few px and orphans the last word. Tightening the tracking keeps
+  // it on one line rather than wrapping a single word.
+  @media (max-width: 671px) {
+    letter-spacing: 0.1em;
+  }
+}
+
+.footer__credit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.footer__credit-label {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.footer__credit a {
+  display: inline-flex;
+  align-items: center;
+  // Invisible padding expands the tap target to ~44px without shifting
+  // surrounding layout (offset by the matching negative margin).
+  padding: 13px;
+  margin: -13px;
+}
+
+.footer__credit-logo {
+  height: 18px;
+  width: auto;
+  display: block;
+  opacity: 0.9;
+}
+
+// The source mark is a solid white PNG, made for a permanently dark page.
+// This site's light theme needs it inverted to stay legible.
+:root.cds--white .footer__credit-logo {
+  filter: invert(1);
+}
