@@ -12,7 +12,7 @@ import {
   Tag,
 } from '@carbon/react'
 import { Checkmark, Close, ArrowRight } from '@carbon/icons-react'
-import { useTheme } from '@/components/theme-provider'
+import { useTheme, CARBON_VAR_COUNT } from '@/components/theme-provider'
 import { weightLabelFor } from '@/components/studio'
 import { Reveal } from '@/components/reveal'
 
@@ -43,12 +43,12 @@ const PIPELINE = [
   {
     step: 'Primitives',
     detail:
-      'Three tonal ramps — accent, neutral, neutral variant — at ten stops each. Raw color, no meaning.',
+      'Three tonal ramps from the source — accent, neutral, neutral variant — plus four status ramps at fixed hues, ten stops each.',
   },
   {
     step: 'Semantic tokens',
     detail:
-      'Eleven roles per theme, each mapped to a ramp tone and verified against its contrast target.',
+      'Twenty-seven roles per theme, each mapped to a ramp tone and verified against its contrast target.',
   },
   {
     step: 'Interaction states',
@@ -58,7 +58,7 @@ const PIPELINE = [
   {
     step: 'Component bindings',
     detail:
-      'Forty-two CSS variables the component library consumes, so a token change repaints real UI.',
+      `${CARBON_VAR_COUNT} CSS variables the component library consumes, so a token change repaints real UI.`,
   },
 ]
 
@@ -77,6 +77,11 @@ const RAMPS = [
     name: 'Neutral',
     chroma: '4% of source',
     use: 'Page backgrounds, primary surfaces, primary text',
+  },
+  {
+    name: 'Error / Warning / Success / Info',
+    chroma: 'Source chroma, clamped 0.10–0.20',
+    use: 'Status and feedback. Hue is fixed per status, not derived',
   },
 ]
 
@@ -128,6 +133,29 @@ const ROLE_GROUPS = [
       { name: 'onPrimaryContainer', purpose: 'Content on primaryContainer' },
     ],
   },
+  {
+    title: 'Status and feedback',
+    note: 'Hue is fixed per status so red still reads as error whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer — a low-emphasis fill for banners, rows, and tags.',
+    roles: [
+      { name: 'error', purpose: 'Errors, destructive actions, invalid input' },
+      { name: 'onError', purpose: 'Content on an error fill' },
+      { name: 'errorContainer', purpose: 'Low-emphasis error fill — banners, rows' },
+      { name: 'onErrorContainer', purpose: 'Content on errorContainer' },
+      { name: 'warning', purpose: 'Warnings, risky but permitted actions' },
+      { name: 'onWarning', purpose: 'Content on a warning fill' },
+      { name: 'warningContainer', purpose: 'Low-emphasis warning fill' },
+      { name: 'onWarningContainer', purpose: 'Content on warningContainer' },
+      { name: 'success', purpose: 'Confirmation, completion, valid input' },
+      { name: 'onSuccess', purpose: 'Content on a success fill' },
+      { name: 'successContainer', purpose: 'Low-emphasis success fill' },
+      { name: 'onSuccessContainer', purpose: 'Content on successContainer' },
+      { name: 'info', purpose: 'Neutral information, tips, in-progress states' },
+      { name: 'onInfo', purpose: 'Content on an info fill' },
+      { name: 'infoContainer', purpose: 'Low-emphasis info fill' },
+      { name: 'onInfoContainer', purpose: 'Content on infoContainer' },
+    ],
+  },
+
 ]
 
 // Documented as gaps rather than quietly omitted: a designer hitting one of
@@ -145,13 +173,6 @@ const GAPS = [
     state: 'No distinct link role. Links bind to primary.',
     today:
       'Rely on underline plus primary for link affordance. Do not introduce a separate link color.',
-  },
-  {
-    need: 'Status and feedback',
-    state:
-      'Not generated. The component library’s built-in status colors are fixed values that do not track the source color.',
-    today:
-      'Treat as [Status/Feedback Token] — undefined. Do not borrow accent or neutral tones as ad-hoc status colors.',
   },
   {
     need: 'Overlay, scrim, elevation',
@@ -214,6 +235,14 @@ const CONTRAST_ROWS = [
   { role: 'onSurfaceVariant', against: 'surfaceVariant' },
   { role: 'onBackground', against: 'background' },
   { role: 'outline', against: 'surface' },
+  { role: 'onError', against: 'error' },
+  { role: 'onErrorContainer', against: 'errorContainer' },
+  { role: 'onWarning', against: 'warning' },
+  { role: 'onWarningContainer', against: 'warningContainer' },
+  { role: 'onSuccess', against: 'success' },
+  { role: 'onSuccessContainer', against: 'successContainer' },
+  { role: 'onInfo', against: 'info' },
+  { role: 'onInfoContainer', against: 'infoContainer' },
 ]
 
 const DOS = [
@@ -221,14 +250,14 @@ const DOS = [
   'Respect on pairings. onSurface belongs on surface; onPrimary belongs on primary.',
   'Use outline and surfaceVariant for depth, since the system has no elevation shading.',
   'Check the contrast table when you change the source color, especially at AAA.',
-  'Pair color with a second signal for any state or status meaning.',
+  'Pair color with a second signal for any state or status meaning — status hue can collide with the source.',
   'Design in both themes before handing off.',
 ]
 
 const DONTS = [
   'Don’t apply raw hex values to components. A hex is a snapshot of one source color in one theme.',
   'Don’t reference primitives directly. accent 40 is a color without meaning.',
-  'Don’t invent status colors from the accent or neutral ramps.',
+  'Don’t invent status colors from the accent or neutral ramps — use the status roles.',
   'Don’t use primaryContainer as a general surface — it makes everything look selected.',
   'Don’t nest three or more surface levels. There is no third value to resolve to.',
   'Don’t build hover or selected states by changing opacity. States are tone shifts on the ramp.',
@@ -240,6 +269,7 @@ const SELECTION_ORDER = [
   'Content? onX, matching whatever it sits on.',
   'Border? outline — or primary and the focus ring if it indicates interaction.',
   'Action? primary + onPrimary for full emphasis, primaryContainer + onPrimaryContainer for low emphasis.',
+  'Communicating status? error, warning, success, or info — with their containers for low-emphasis fills.',
   'Interactive state? The state token for that role, never a manually adjusted value.',
   'No match? The role is missing from the system. Flag it rather than working around it.',
 ]
@@ -293,9 +323,10 @@ export function ColorDocs() {
               <h1 className="section__title docpage__title">Color</h1>
               <p className="section__subtitle docpage__lede">
                 Graphite UI&rsquo;s color system turns a single source color into
-                a complete, accessible interface palette — three tonal ramps,
-                eleven semantic roles per theme, a full set of interaction
-                states, and the component bindings that connect them to real UI.
+                a complete, accessible interface palette — three tonal ramps
+                plus four status ramps, twenty-seven semantic roles per theme, a
+                full set of interaction states, and the component bindings that
+                connect them to real UI.
               </p>
               <p className="docpage__body">
                 Designers do not pick colors one at a time. They pick a source
@@ -441,7 +472,7 @@ export function ColorDocs() {
             <Reveal>
               <h2 className="doc-heading">Color roles</h2>
               <p className="docpage__body">
-                Eleven roles, generated per theme. The <code>on</code>{' '}
+                Twenty-seven roles, generated per theme. The <code>on</code>{' '}
                 prefix is the system&rsquo;s core convention:{' '}
                 <strong>
                   <code>onX</code> is the content color guaranteed to be legible
@@ -579,7 +610,7 @@ export function ColorDocs() {
               <p className="docpage__body">
                 Light and dark are generated simultaneously from the same source
                 color. They are not two palettes maintained in parallel — they
-                are two mappings of the same three ramps. The role name is the
+                are two mappings of the same ramps. The role name is the
                 constant; only the tone it resolves to changes.
               </p>
               <div className="doc-table">
@@ -746,9 +777,11 @@ export function ColorDocs() {
               </ul>
 
               <p className="doc-callout">
-                Error, warning, and success states have no generated colors.
-                Communicate them with icons, text, and layout, and treat the
-                color as <code>[Status/Feedback Token]</code> — pending.
+                Error, warning, and success are roles, not states. A field that
+                fails validation takes <code>error</code> for its border and
+                message; it does not get an &ldquo;error hover.&rdquo; Status
+                roles and interaction states compose — a destructive button
+                still hovers and presses along its own ramp.
               </p>
             </Reveal>
           </Column>
@@ -763,8 +796,8 @@ export function ColorDocs() {
               <h2 className="doc-heading">Accessibility</h2>
               <p className="docpage__body">
                 Accessibility is enforced at generation time, not checked
-                afterward. Six pairings are verified in both themes before a
-                theme is emitted. If one were to miss its target, the auto-fix
+                afterward. Fourteen pairings are verified in both themes before
+                a theme is emitted. If one were to miss its target, the auto-fix
                 walks the same ramp to the nearest tone that clears it —
                 preserving hue while correcting lightness.
               </p>
@@ -856,10 +889,13 @@ export function ColorDocs() {
                 reasons. <strong>The source color is user-chosen</strong> — you
                 cannot assume the accent is blue, or warm, or dark, so any
                 meaning attached to a specific hue will be wrong for some
-                sources. And <strong>there are no status colors</strong>, so
-                meaning that depends on &ldquo;the red one&rdquo; has nothing to
-                bind to. Always pair color with a second signal: an icon, a
-                label, a change of weight, a position, or a border.
+                sources. And <strong>status hue can collide with the source</strong>:
+                because status hues are fixed, a source color sitting on one of
+                them resolves <code>primary</code> and that status to nearly the
+                same value. A red brand makes <code>primary</code> and{' '}
+                <code>error</code> near-identical. Always pair color with a
+                second signal: an icon, a label, a change of weight, a position,
+                or a border.
               </p>
 
               <h3 className="doc-subheading">Light and dark parity</h3>
@@ -937,7 +973,7 @@ export function ColorDocs() {
               </ol>
 
               <h3 className="doc-subheading">Complete reference</h3>
-              <p className="doc-reference-label">Semantic roles — 11 per theme</p>
+              <p className="doc-reference-label">Semantic roles — 27 per theme</p>
               <p className="doc-chips">
                 {[
                   'primary',
@@ -951,6 +987,22 @@ export function ColorDocs() {
                   'outline',
                   'background',
                   'onBackground',
+                  'error',
+                  'onError',
+                  'errorContainer',
+                  'onErrorContainer',
+                  'warning',
+                  'onWarning',
+                  'warningContainer',
+                  'onWarningContainer',
+                  'success',
+                  'onSuccess',
+                  'successContainer',
+                  'onSuccessContainer',
+                  'info',
+                  'onInfo',
+                  'infoContainer',
+                  'onInfoContainer',
                 ].map((name) => (
                   <code key={name}>{name}</code>
                 ))}
@@ -971,7 +1023,7 @@ export function ColorDocs() {
                 ))}
               </p>
               <p className="doc-reference-label">
-                Primitives — 3 ramps × 10 stops
+                Primitives — 7 ramps × 10 stops
               </p>
               <p className="docpage__body">
                 Exported for reference and tooling. Available to inspect and

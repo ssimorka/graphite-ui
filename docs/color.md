@@ -1,6 +1,6 @@
 # Color
 
-Graphite UI's color system turns a single source color into a complete, accessible interface palette — three tonal ramps, eleven semantic roles per theme, a full set of interaction states, and the component bindings that connect them to real UI.
+Graphite UI's color system turns a single source color into a complete, accessible interface palette — three tonal ramps plus four status ramps, twenty-seven semantic roles per theme, a full set of interaction states, and the component bindings that connect them to real UI.
 
 Designers do not pick colors one at a time. They pick a **source color**, and the system derives everything else: what a page background is, what text sits on it, what a primary button looks like when pressed, and what contrast ratio each of those pairings achieves. Every value in the interface traces back to that one input.
 
@@ -21,7 +21,7 @@ Semantic tokens         11 roles per theme (meaning, contrast-verified)
       ↓
 Interaction states      hover / pressed / selected / disabled / focus
       ↓
-Component bindings      42 CSS variables consumed by the component library
+Component bindings      51 CSS variables consumed by the component library
 ```
 
 ### 1. The source color
@@ -40,6 +40,8 @@ The source color's hue is held constant while lightness sweeps from dark to ligh
 | **Neutral variant** | 12% of source | Secondary surfaces, borders, supporting text |
 | **Neutral** | 4% of source | Page backgrounds, primary surfaces, primary text |
 
+Four further ramps carry status. They are built with the same machinery but are **not derived from the source hue** — see [Status and feedback](#status-and-feedback).
+
 The neutrals are not gray. They carry a trace of the source hue, which is what makes a generated theme read as one family rather than "brand color applied to a gray UI."
 
 Each ramp exposes **ten stops** at tones `10, 20, 30, 40, 50, 60, 70, 80, 90, 98`, labelled in the UI as weights `900` (darkest) through `050` (lightest). Two behaviors are worth knowing:
@@ -53,13 +55,13 @@ Chroma is also clamped per tone to whatever the sRGB gamut actually allows. Near
 
 ### 3. Semantic tokens
 
-This is the layer you design with. Each theme maps the eleven roles onto specific ramp tones. The mapping differs per theme; the role names do not.
+This is the layer you design with. Each theme maps the twenty-seven roles onto specific ramp tones. The mapping differs per theme; the role names do not.
 
 The `on` prefix is the system's core convention: **`onX` is the content color guaranteed to be legible on `X`.** `onSurface` is what you put on `surface`. That pairing is not a suggestion — it is verified by contrast check at generation time.
 
 ### 4. Component bindings
 
-Semantic tokens are stamped onto 42 CSS custom properties that the component library consumes (`--cds-text-primary`, `--cds-button-primary`, `--cds-border-subtle`, and so on). This is the layer that makes a token change repaint real components.
+Semantic tokens are stamped onto 51 CSS custom properties that the component library consumes (`--cds-text-primary`, `--cds-button-primary`, `--cds-border-subtle`, and so on). This is the layer that makes a token change repaint real components.
 
 Designers do not usually touch this layer, but it explains an important constraint: several component variables share one semantic token. `--cds-text-primary` and `--cds-icon-primary` both resolve to `onBackground`, so **text and icons are the same color by construction.** If you need an icon that differs from body text, that is a system change, not a design choice you can make in a file.
 
@@ -76,7 +78,7 @@ The provenance variables are worth knowing about. Every token is auditable back 
 
 ## Color roles
 
-Eleven roles, generated per theme. Values below are from the default source `#5e44aa` — they illustrate the structure, they are not fixed system colors. Change the source and every hex changes; the roles and their relationships do not.
+Twenty-seven roles, generated per theme. Values below are from the default source `#5e44aa` — they illustrate the structure, they are not fixed system colors. Change the source and every hex changes; the roles and their relationships do not.
 
 ### Surfaces and backgrounds
 
@@ -125,6 +127,25 @@ The pairing rule is strict: `onPrimary` goes on `primary`; `onPrimaryContainer` 
 
 `primary` inverts direction between themes — dark accent on light, light accent on dark — which is why hard-coding a brand hex breaks in one theme or the other.
 
+### Status and feedback
+
+Four statuses, each with the same four-role shape as the primary family: a base, its on-color, a container, and the container's on-color.
+
+| Role | Purpose | Light | Dark |
+|---|---|---|---|
+| `error` | Errors, destructive actions, invalid input | `error 40` · `#880c06` | `error 80` · `#ffa192` |
+| `warning` | Warnings, risky but permitted actions | `warning 40` · `#733300` | `warning 80` · `#ffa570` |
+| `success` | Confirmation, completion, valid input | `success 40` · `#00572f` | `success 80` · `#5adb91` |
+| `info` | Neutral information, tips, in-progress states | `info 40` · `#00478a` | `info 80` · `#8fc1ff` |
+
+Each also has `on<Status>`, `<status>Container`, and `on<Status>Container`, at the same tones the primary family uses — so a status fill and an accent fill behave identically, and only the hue says which is which.
+
+**Hue is fixed; chroma is not.** Status has to stay recognizable — red must read as error whatever the source color is — so each status hue is pinned to an anchor rather than derived from the input. Chroma still tracks the source, clamped to 0.10–0.20, so statuses carry the same intensity as the rest of the system. A near-gray source still yields a legible red rather than a gray one; a neon source doesn't produce a garish one.
+
+**The collision case.** Because the hues are fixed, a source color sitting on a status hue collapses the distinction: a red brand resolves `primary` and `error` to nearly the same value. Nothing in the system can prevent this, which is the strongest argument for the rule below — never let color alone carry the meaning.
+
+Containers work exactly like `primaryContainer`: a low-emphasis fill for banners, table rows, and tags, with its on-color for the text inside.
+
 ### Roles the system does not currently define
 
 These are real gaps, not omissions from this page. Documenting them honestly is more useful than implying coverage that does not exist.
@@ -133,7 +154,6 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 |---|---|---|
 | **Secondary actions** | No `secondary` role is generated. | Build secondary buttons from `outline` (border) + `primary` (label) on a transparent or `surface` fill. Keep it consistent across the product. |
 | **Links** | No distinct link role. Links bind to `primary`, with hover bound to the primary hover state. | Rely on underline plus `primary` for link affordance. Do not introduce a separate link color. |
-| **Status / feedback** — error, warning, success, info | **Not generated by the system.** The component library's built-in status colors are fixed values that do not track the source color, and will read as foreign next to a generated theme. | Treat as `[Status/Feedback Token]` — undefined. Do not use accent or neutral tones as ad-hoc status colors. |
 | **Overlay / scrim / elevation** | No overlay, scrim, or elevation token. The system has no shading-based elevation model. | Express elevation with `outline` and `surfaceVariant`. Modal scrims currently have no system value. |
 
 ---
@@ -169,7 +189,7 @@ Two practical rules follow:
 
 ## Themes
 
-Graphite UI generates **light and dark simultaneously** from the same source color. They are not two separate palettes that a designer maintains in parallel — they are two mappings of the same three ramps.
+Graphite UI generates **light and dark simultaneously** from the same source color. They are not two separate palettes that a designer maintains in parallel — they are two mappings of the same ramps.
 
 The role name is the constant. `onSurface` means "primary content on a default surface" in both themes; only the tone it resolves to changes:
 
@@ -220,7 +240,7 @@ Notes on each:
 - **Disabled leaves the accent ramp entirely.** Both the fill and its content drop to Neutral. This is the one state where the element deliberately loses its brand color: disabled elements should not compete for attention. The disabled pairing is intentionally low-contrast and is **not** contrast-checked — it is exempt under WCAG, and it must never be the only signal that a control is unavailable.
 - **Focus is a separate ring token, not a fill change.** It does not replace the base color; it draws a ring around the element in its own accent tone, so a focused button is still recognizably a button in its current state. Focus stacks with hover, pressed, and selected.
 
-**Error, warning, and success states have no generated colors.** Communicate them with icons, text, and layout, and treat the color as `[Status/Feedback Token]` — pending.
+**Error, warning, and success are roles, not states.** A field that fails validation takes `error` for its border and message; it does not get an "error hover." The two compose — a destructive button still hovers and presses along its own ramp.
 
 ---
 
@@ -230,7 +250,7 @@ Accessibility is enforced at generation time, not checked afterward. Every `on` 
 
 ### What the system guarantees
 
-Six pairings are checked on every generation, in both themes:
+Fourteen pairings are checked on every generation, in both themes:
 
 | Pairing | Target |
 |---|---|
@@ -240,6 +260,10 @@ Six pairings are checked on every generation, in both themes:
 | `onSurfaceVariant` on `surfaceVariant` | 4.5:1 / 7:1 |
 | `onBackground` on `background` | 4.5:1 / 7:1 |
 | `outline` on `surface` | 3:1 (non-text UI) |
+| `onError` on `error`, `onErrorContainer` on `errorContainer` | 4.5:1 / 7:1 |
+| `onWarning` on `warning`, `onWarningContainer` on `warningContainer` | 4.5:1 / 7:1 |
+| `onSuccess` on `success`, `onSuccessContainer` on `successContainer` | 4.5:1 / 7:1 |
+| `onInfo` on `info`, `onInfoContainer` on `infoContainer` | 4.5:1 / 7:1 |
 
 If a pairing were to miss its target, the auto-fix walks the same ramp to the nearest tone that clears it, preserving hue while correcting lightness. In practice the mapping is conservative enough that the fix rarely has anything to do — the default tone assignments clear their targets by wide margins.
 
@@ -263,7 +287,7 @@ Every interactive element needs a visible focus indicator. Use the focus ring to
 This applies with unusual force here, for two system-specific reasons:
 
 1. **The source color is user-chosen.** You cannot assume the accent is blue, or warm, or dark. Any meaning you attach to a specific hue will be wrong for some source colors.
-2. **There are no status colors.** Error, warning, and success have no generated values at all, so meaning that depends on "the red one" has nothing to bind to.
+2. **Status hue can collide with the source.** Status hues are fixed, so a source color sitting on one of them resolves `primary` and that status to nearly the same value — a red brand makes `primary` and `error` near-identical. Hue alone cannot carry the distinction.
 
 Always pair color with a second signal: an icon, a label, a change of weight, a position, or a border.
 
@@ -289,7 +313,7 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 - **Don't apply raw hex values to components.** A hex is a snapshot of one source color in one theme. It will be wrong the moment either changes.
 - **Don't reference primitives directly.** `accent 40` is a color without meaning. If you find yourself wanting a specific ramp stop, the role you need is either missing from the system or you are reaching for the wrong one — raise it rather than hard-coding around it.
-- **Don't invent status colors from the accent or neutral ramps.** A red-ish accent does not make an error color, and a green tone borrowed from a component library will not track the source color — it reads as a foreign color pasted onto a generated theme.
+- **Don't invent status colors from the accent or neutral ramps.** Use `error`, `warning`, `success`, and `info`. A red-ish accent does not make an error color, and a green borrowed from a component library will not track the source — it reads as a foreign color pasted onto a generated theme.
 - **Don't use `primaryContainer` as a general surface.** It signals accent or selection. Used as a card background it makes everything look selected.
 - **Don't nest three or more surface levels.** There is no third value to resolve to.
 - **Don't rely on color alone** for state, status, or selection.
@@ -318,15 +342,19 @@ Work down this order. Stop at the first match.
 
 ### Complete token reference
 
-**Semantic roles** — 11 per theme:
+**Semantic roles** — 27 per theme:
 
 `primary` · `onPrimary` · `primaryContainer` · `onPrimaryContainer` · `surface` · `onSurface` · `surfaceVariant` · `onSurfaceVariant` · `outline` · `background` · `onBackground`
+
+Status, each with the same four-role shape:
+
+`error` · `onError` · `errorContainer` · `onErrorContainer` · `warning` · `onWarning` · `warningContainer` · `onWarningContainer` · `success` · `onSuccess` · `successContainer` · `onSuccessContainer` · `info` · `onInfo` · `infoContainer` · `onInfoContainer`
 
 **Interaction states** — 6 per theme:
 
 `primary` (base) · `primary-hover` · `primary-pressed` · `primary-selected` · `primary-disabled` (+ `primary-disabled-content`) · `focus-ring`
 
-**Primitives** — 3 ramps × 10 stops, exported for reference and tooling. Available to inspect and copy; not for direct use in designs.
+**Primitives** — 7 ramps × 10 stops, exported for reference and tooling. Available to inspect and copy; not for direct use in designs.
 
 ### Using tokens in Figma
 
@@ -343,16 +371,12 @@ The engine's output is CSS and JSON. There is no published Figma library shippin
 
 Points where the system's current shape limits what can be documented or designed. Listed for the system owner, not as guidance for designers using it today.
 
-**1. Status and feedback colors are the largest gap.** No product ships without error, warning, success, and info states, and there is currently nothing for a designer to use. The fixed status colors inherited from the component library actively clash with generated themes. A generated status family — derived hues held at fixed semantic angles, run through the same contrast checks — would close this.
+**1. No secondary or tertiary action role.** Every interface needs a second tier of action. Right now designers assemble one from `outline` and `primary` by convention, which means it will be assembled differently in different files. A `secondary` / `onSecondary` pair, or a documented low-emphasis pattern, would make it consistent.
 
-**2. No secondary or tertiary action role.** Every interface needs a second tier of action. Right now designers assemble one from `outline` and `primary` by convention, which means it will be assembled differently in different files. A `secondary` / `onSecondary` pair, or a documented low-emphasis pattern, would make it consistent.
+**2. No overlay, scrim, or elevation token.** Modals, drawers, popovers, and menus all need a scrim and a way to read as raised. With `background` and `surface` sharing a value, there is currently no system answer for either.
 
-**3. No overlay, scrim, or elevation token.** Modals, drawers, popovers, and menus all need a scrim and a way to read as raised. With `background` and `surface` sharing a value, there is currently no system answer for either.
+**3. Text hierarchy is two levels.** Primary and secondary only. Dense interfaces typically want a third, quieter tier for timestamps, counts, and metadata — a `onSurfaceDim` or equivalent.
 
-**4. Text hierarchy is two levels.** Primary and secondary only. Dense interfaces typically want a third, quieter tier for timestamps, counts, and metadata — a `onSurfaceDim` or equivalent.
+**4. `outline` covers subtle and strong borders with one value.** A divider inside a card and the border defining that card currently look identical. A second border tone would let containment and separation read differently.
 
-**5. `outline` covers subtle and strong borders with one value.** A divider inside a card and the border defining that card currently look identical. A second border tone would let containment and separation read differently.
-
-**6. The auto-fix mechanism has never been observed to fire.** A sweep across 96 hues × both themes × both contrast levels produced no failing pairing, so the control has no visible effect. It is correct, just inert. Worth either removing from the interface or reframing it as a guarantee ("contrast verified") rather than a toggle.
-
-**7. Site copy undercounts the mapped variables.** Four places in the marketing copy state "thirty-three CSS custom properties" / "33 mapped variables"; the theme provider currently maps 42. Worth correcting, and worth deriving the number from the map rather than restating it by hand.
+**5. The auto-fix mechanism has never been observed to fire.** A sweep of 292 source colors × both themes × both contrast levels — 16,352 checks, status roles included — produced no failing pairing, so it has never had anything to correct. It is correct, just inert. The interface no longer offers it as a toggle; it reports the verified result instead. Worth revisiting only if a future role lands closer to its target.

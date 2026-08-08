@@ -31,11 +31,18 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
   double-quotes/semicolons, against the codebase's actual style (single
   quotes, no semicolons). Always run with
   `--no-semi --single-quote` explicitly.
-- **`--cds-support-success` is Carbon's fixed green**, not a generated
-  token. Any UI that should track the user's source color must bind to
-  `--cds-interactive` / `--cds-button-primary` (or the real semantic
-  token, e.g. `onSurface`) instead — several early passes accidentally
-  left "success green" chrome that read as a foreign color.
+- **`--cds-support-*` are now generated**, bound to the `error` /
+  `warning` / `success` / `info` roles. This used to be Carbon's fixed
+  green and was a standing trap — several early passes left "success
+  green" chrome that read as a foreign color. Status hue is pinned per
+  status (so red still reads as error whatever the source is) while
+  chroma tracks the source, clamped 0.10–0.20. Chrome that should
+  track the source but carries no status meaning still belongs on
+  `--cds-interactive` / `--cds-button-primary`.
+- **A source color on a status hue collapses the two.** A red source
+  resolves `primary` and `error` to nearly the same value. Inherent to
+  pinning hue; don't treat it as a bug, and never let color alone carry
+  status meaning in the UI.
 
 ## Architecture notes
 
