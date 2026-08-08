@@ -15,12 +15,12 @@ const FEATURES = [
   {
     icon: ColorPalette,
     title: 'Perceptual ramps',
-    body: 'Your source colour is resolved in OKLab and sampled at fixed tone stops. Steps read as evenly spaced at any hue: no muddy midtones, no blown-out highs.',
+    body: 'Your source color is resolved in OKLab and sampled at fixed tone stops. Steps read as evenly spaced at any hue: no muddy midtones, no blown-out highs.',
   },
   {
     icon: Types,
     title: 'Semantic tokens',
-    body: 'Ramps resolve into named roles: surface, on-surface, primary, outline. You design against meaning, not hex values, so a colour change never means a find-and-replace.',
+    body: 'Ramps resolve into named roles: surface, on-surface, primary, outline. You design against meaning, not hex values, so a color change never means a find-and-replace.',
   },
   {
     icon: Accessibility,
@@ -35,7 +35,7 @@ const FEATURES = [
   {
     icon: GridIcon,
     title: 'Generative patterns',
-    body: 'Twenty tile types on a variable-span grid with neighbour-aware colour and layout. Brand imagery that composes itself, exportable at print resolution.',
+    body: 'Twenty tile types on a variable-span grid with neighbour-aware color and layout. Brand imagery that composes itself, exportable at print resolution.',
   },
   {
     icon: Moon,
@@ -55,7 +55,7 @@ export function Features() {
               Everything downstream of one decision
             </h2>
             <p className="section__subtitle">
-              Pick a colour. Graphite UI derives the ramps, the tokens, the
+              Pick a color. Graphite UI derives the ramps, the tokens, the
               contrast pairings, and the patterns, then keeps them in sync
               every time you change your mind. Color is the first foundation;
               the same model extends to layout and components as they ship.

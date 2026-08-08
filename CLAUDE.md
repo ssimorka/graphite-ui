@@ -1,7 +1,7 @@
 # Graphite UI (helix) — working notes
 
 Next.js 16 App Router landing page for "Graphite UI" (originally scaffolded as
-"Helix," fully rebranded). Themed live off Carbon Design System via a colour
+"Helix," fully rebranded). Themed live off Carbon Design System via a color
 engine ported from `carbon-token-studio`.
 
 ## Dev server
@@ -32,10 +32,10 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
   quotes, no semicolons). Always run with
   `--no-semi --single-quote` explicitly.
 - **`--cds-support-success` is Carbon's fixed green**, not a generated
-  token. Any UI that should track the user's source colour must bind to
+  token. Any UI that should track the user's source color must bind to
   `--cds-interactive` / `--cds-button-primary` (or the real semantic
   token, e.g. `onSurface`) instead — several early passes accidentally
-  left "success green" chrome that read as a foreign colour.
+  left "success green" chrome that read as a foreign color.
 
 ## Architecture notes
 
@@ -44,7 +44,7 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
   `autoFix`. It computes `lightBundle`/`darkBundle` (tokens + contrast +
   states) via `lib/color.js` and stamps ~33 `--cds-*` CSS vars onto
   `<html>` on every change.
-- `COVER_SOURCE_HEX` (`#5e44aa`) is the seeded default source colour,
+- `COVER_SOURCE_HEX` (`#5e44aa`) is the seeded default source color,
   sampled from the kit cover image's dominant hue bucket — not
   arbitrary, and should stay in sync with `public/graphite/cover.jpg` if
   that image ever changes.

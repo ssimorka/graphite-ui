@@ -26,7 +26,7 @@ export function FinalCta() {
           <Reveal>
             <div className="cta__inner">
               <h2 className="cta__title" id="cta-title">
-                Pick a colour. Take the system.
+                Pick a color. Take the system.
               </h2>
               <p className="cta__subtitle">
                 Tell us your email and what you&rsquo;re building, and we&rsquo;ll

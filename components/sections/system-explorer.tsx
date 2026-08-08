@@ -34,13 +34,13 @@ const VIEWS = [
     key: 'composition',
     label: 'Composition',
     title: 'A grid that assembles itself',
-    body: 'Twenty tile types laid out on a 12×10 unit grid with variable spans. Neighbouring panels negotiate colour and pattern so nothing clusters. Select a panel to reroll it, or regenerate the whole composition.',
+    body: 'Twenty tile types laid out on a 12×10 unit grid with variable spans. Neighbouring panels negotiate color and pattern so nothing clusters. Select a panel to reroll it, or regenerate the whole composition.',
   },
   {
     key: 'ramps',
     label: 'Ramps',
     title: 'Three ramps from one input',
-    body: 'Your source colour is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp plus two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
+    body: 'Your source color is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp plus two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
   },
   {
     key: 'contrast',
@@ -134,7 +134,7 @@ export function SystemExplorer({ embedded = false }: { embedded?: boolean }) {
               )}
               <p className="ramp-stack__hint">
                 Select any swatch to copy its hex. The outlined stop is where
-                your source colour landed.
+                your source color landed.
               </p>
             </div>
           )}

@@ -305,7 +305,7 @@ export function ColorPickerPopover({
           </div>
 
           {/* Generation controls. They shape what the engine emits from this
-              colour, so they belong with the colour rather than in one view. */}
+              color, so they belong with the color rather than in one view. */}
           <div className="source-controls">
             <Dropdown
               id="level-select"

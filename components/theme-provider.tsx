@@ -101,7 +101,7 @@ function carbonVarsFor(theme: ReturnType<typeof buildTheme>, states: ReturnType<
     '--cds-layer-hover': t.surfaceVariant.hex,
     '--cds-layer-hover-01': t.surfaceVariant.hex,
     // Tags default to Carbon's fixed blue palette, which reads as a foreign
-    // colour once the rest of the page is generated. Bind them to the accent.
+    // color once the rest of the page is generated. Bind them to the accent.
     '--cds-tag-background-blue': t.primaryContainer.hex,
     '--cds-tag-color-blue': t.onPrimaryContainer.hex,
     '--cds-tag-hover-blue': states.primary.hover.hex,
@@ -115,7 +115,7 @@ const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
 // Sampled from the Graphite UI Kit cover: bucketing every chromatic pixel by
 // hue puts ~60% in the purple range, averaging this value. Seeding the source
 // with it means the whole system matches the cover on first open, before the
-// visitor has touched the colour control.
+// visitor has touched the color control.
 export const COVER_SOURCE_HEX = '#5e44aa'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -150,7 +150,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // Transitions are suppressed for the duration of the write. A CSS transition
   // on `background-color` whose value comes from a custom property does not
   // resolve when that property is rewritten — the element strands on its
-  // previous colour indefinitely. Carbon ships such a transition on every
+  // previous color indefinitely. Carbon ships such a transition on every
   // button, so without this the primary button keeps painting the old hue while
   // its token already reads the new one. Killing transitions for one frame
   // makes every token-driven surface repaint atomically and correctly.

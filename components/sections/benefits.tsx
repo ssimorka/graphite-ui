@@ -8,7 +8,7 @@ const BENEFITS = [
   {
     icon: Time,
     stat: 'Minutes',
-    title: 'From brand colour to shipped theme',
+    title: 'From brand color to shipped theme',
     body: 'Skip the week of swatch spreadsheets and contrast spot-checks. Paste a hex, review the output, hand engineering a token file.',
   },
   {
@@ -21,7 +21,7 @@ const BENEFITS = [
     icon: Renew,
     stat: 'Zero',
     title: 'Rework when the brand changes',
-    body: 'Rebranding is one input away. Every ramp, token, theme, and pattern regenerates from the new colour in a single pass.',
+    body: 'Rebranding is one input away. Every ramp, token, theme, and pattern regenerates from the new color in a single pass.',
   },
   {
     icon: Bot,

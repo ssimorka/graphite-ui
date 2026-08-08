@@ -36,10 +36,10 @@ body {
   color: var(--cds-text-primary);
 }
 
-// Smooth repaint when the source colour changes, limited to the page shell.
+// Smooth repaint when the source color changes, limited to the page shell.
 //
 // A universal `* { transition: background-color }` looks tempting here, but it
-// strands elements whose colour comes from a custom property: when the token
+// strands elements whose color comes from a custom property: when the token
 // vars are rewritten, the in-flight transition never resolves and components
 // keep painting their previous value. Carbon's primary button would sit on the
 // old blue while `--cds-button-primary` already read the new hue. Scoping the
@@ -653,7 +653,7 @@ body {
   }
 }
 
-// Swatches are buttons: the hex sits on the colour, auto-flipped to whichever
+// Swatches are buttons: the hex sits on the color, auto-flipped to whichever
 // of black or white reads better against it.
 .ramp-swatch {
   aspect-ratio: 1 / 1;
@@ -738,7 +738,7 @@ body {
   color: var(--cds-text-secondary);
 }
 
-// Generation controls inside the source-colour popover.
+// Generation controls inside the source-color popover.
 .source-controls {
   display: flex;
   flex-direction: column;
@@ -749,7 +749,7 @@ body {
 }
 
 // Carbon paints the "on" state with the fixed success green, which reads as a
-// foreign colour in a page whose every other accent is generated. Bind it to
+// foreign color in a page whose every other accent is generated. Bind it to
 // the source instead — scoped to the toggle so pass/fail tags keep using green
 // and red for their actual semantic meaning.
 .cds--toggle__switch--checked {
@@ -836,7 +836,7 @@ body {
     color: var(--cds-text-on-color);
   }
 
-  // Colours come from the live onSurface / surface tokens, set inline.
+  // Colors come from the live onSurface / surface tokens, set inline.
   &--pop {
     flex: 1;
   }

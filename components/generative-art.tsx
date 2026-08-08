@@ -301,7 +301,7 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// Palette construction follows Carbon Token Studio's rules: colours are only
+// Palette construction follows Carbon Token Studio's rules: colors are only
 // ever sampled at the canonical TONE_STOPS, never at invented tones, and only
 // from the three generated ramps — no off-system hues. The 60/30/10 weighting
 // is expressed as six neutral stops, three accent stops, and one neutral-variant
@@ -447,7 +447,7 @@ const SPECIMENS: { name: string; fn?: P; asset?: 'eye' | 'mouth' }[] = [
   { name: 'V stripes', fn: pVStripes },
   { name: 'Concentric circles', fn: pConcentricCircles },
   { name: 'Crosshatch', fn: pCrosshatch },
-  { name: 'Colour block', fn: pSolid },
+  { name: 'Color block', fn: pSolid },
   { name: 'Wave lines', fn: pWaveLines },
   { name: 'Dot grid', fn: pDotGrid },
   { name: 'Letterform', fn: pLetterform },

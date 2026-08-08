@@ -5,7 +5,7 @@ import { Reveal } from '@/components/reveal'
 
 const FAQS = [
   {
-    q: 'What exactly do I get from one colour?',
+    q: 'What exactly do I get from one color?',
     a: 'Three perceptual ramps (accent, neutral, neutral variant), a set of semantic tokens for light and dark, a WCAG contrast report for every pairing, and a generative pattern library, all derived from the single hex you provide.',
   },
   {
@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: 'Does it work with my existing components?',
-    a: 'Yes. Graphite UI exports thirty-three CSS custom properties, plus raw CSS and JSON for everything else. This entire site is themed through that mapping; try the colour control in the header.',
+    a: 'Yes. Graphite UI exports thirty-three CSS custom properties, plus raw CSS and JSON for everything else. This entire site is themed through that mapping; try the color control in the header.',
   },
   {
     q: 'Can I control the output, or is it fully automatic?',
@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: 'Is the engine really open source?',
-    a: 'Yes. The colour engine and pattern library are MIT licensed, including commercial use. Nothing about the core is gated.',
+    a: 'Yes. The color engine and pattern library are MIT licensed, including commercial use. Nothing about the core is gated.',
   },
 ]
 

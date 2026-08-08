@@ -18,7 +18,7 @@ const SPANS: { label: string; cols: number; rows: number }[] = [
 export function PatternGuide() {
   const { sourceHex, theme, lightBundle, darkBundle } = useTheme()
   const isDark = theme === 'g100'
-  // The 10% band is the composition's on-surface colour, so read the real
+  // The 10% band is the composition's on-surface color, so read the real
   // token rather than aliasing it through a Carbon variable.
   const bundle =
     (isDark ? darkBundle : lightBundle) ??
@@ -43,15 +43,15 @@ export function PatternGuide() {
         </Column>
       </Grid>
 
-      {/* Colour rhythm */}
+      {/* Color rhythm */}
       <Grid>
         <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
           <Reveal>
-            <h3 className="guide__heading">Colour rhythm · 60 / 30 / 10</h3>
+            <h3 className="guide__heading">Color rhythm · 60 / 30 / 10</h3>
             <p className="guide__lede">
               Sixty percent neutrals, thirty percent accent, ten percent a
               vivid complement. Adjacent panels check their neighbours so no
-              colour clusters.
+              color clusters.
             </p>
             <div className="ratio-bar" role="img" aria-label="Sixty percent neutral, thirty percent accent, ten percent complement">
               <span className="ratio-bar__seg ratio-bar__seg--neutral"><span>60% Neutral</span></span>
@@ -101,7 +101,7 @@ export function PatternGuide() {
           <Reveal>
             <h3 className="guide__heading">Tile library</h3>
             <p className="guide__lede">
-              All twenty types, rendered live from your source colour.
+              All twenty types, rendered live from your source color.
             </p>
             <ol className="tile-grid">
               {PATTERN_NAMES.map((name, i) => (
