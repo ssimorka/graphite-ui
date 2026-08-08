@@ -30,8 +30,7 @@ export function FinalCta() {
               </h2>
               <p className="cta__subtitle">
                 Tell us your email and what you&rsquo;re building, and we&rsquo;ll
-                reply with the kit, the token exports, and a five-minute setup
-                guide tailored to your stack.
+                reply with the kit, the token exports.
               </p>
               <form
                 className="cta__form"
