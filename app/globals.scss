@@ -1246,3 +1246,356 @@ body {
 :root.cds--white .footer__credit-logo {
   filter: invert(1);
 }
+
+// ---------------------------------------------------------------------------
+// System documentation pages (/system/*)
+// ---------------------------------------------------------------------------
+// Long-form reading, so the measure is capped well below the grid column width
+// and vertical rhythm is set by the prose rather than by section padding.
+.docpage {
+  display: block;
+}
+
+.docpage__intro {
+  padding-bottom: spacing.$spacing-07;
+}
+
+.docpage__title {
+  margin-bottom: spacing.$spacing-05;
+}
+
+.docpage__lede {
+  margin-bottom: spacing.$spacing-06;
+}
+
+.docpage__body {
+  @include type.type-style('body-01');
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-05;
+  color: var(--cds-text-secondary);
+  text-wrap: pretty;
+
+  strong {
+    color: var(--cds-text-primary);
+    font-weight: 600;
+  }
+}
+
+// Sticky so the reader keeps their place through a long page. Static below lg,
+// where Carbon stacks the columns and a sticky block would sit in the flow.
+.docpage__toc {
+  border-left: 1px solid var(--cds-border-subtle);
+  padding-left: spacing.$spacing-05;
+
+  @include breakpoint.breakpoint(lg) {
+    position: sticky;
+    top: calc(3rem + #{spacing.$spacing-06});
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: spacing.$spacing-03;
+  }
+
+  a {
+    @include type.type-style('body-compact-01');
+    color: var(--cds-text-secondary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--cds-link-primary-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+.docpage__toc-label {
+  @include type.type-style('label-01');
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cds-text-primary);
+  margin-bottom: spacing.$spacing-04;
+}
+
+.doc-heading {
+  @include type.type-style('fluid-heading-04', true);
+  margin-bottom: spacing.$spacing-05;
+  scroll-margin-top: 4rem; // fixed header + breathing room for anchor jumps
+}
+
+.doc-subheading {
+  @include type.type-style('heading-03');
+  margin-top: spacing.$spacing-08;
+  margin-bottom: spacing.$spacing-04;
+}
+
+.doc-group {
+  margin-bottom: spacing.$spacing-07;
+}
+
+// Pipeline: numbered layers, source color through component bindings.
+.doc-pipeline {
+  list-style: none;
+  margin: spacing.$spacing-06 0 spacing.$spacing-08;
+  border-top: 1px solid var(--cds-border-subtle);
+}
+
+.doc-pipeline__step {
+  display: flex;
+  gap: spacing.$spacing-05;
+  padding: spacing.$spacing-05 0;
+  border-bottom: 1px solid var(--cds-border-subtle);
+}
+
+.doc-pipeline__index {
+  @include type.type-style('label-01');
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cds-background-selected);
+  color: var(--cds-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.doc-pipeline__body {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-02;
+}
+
+.doc-pipeline__name {
+  @include type.type-style('heading-compact-01');
+  color: var(--cds-text-primary);
+}
+
+.doc-pipeline__detail {
+  @include type.type-style('body-01');
+  color: var(--cds-text-secondary);
+  max-width: 40rem;
+}
+
+.doc-table {
+  overflow-x: auto;
+  margin-bottom: spacing.$spacing-05;
+
+  code {
+    @include type.type-style('code-01');
+    color: var(--cds-text-primary);
+  }
+}
+
+// Swatch + hex + provenance, the repeated cell shape across every table here.
+.doc-value {
+  display: inline-flex;
+  align-items: center;
+  gap: spacing.$spacing-03;
+}
+
+.doc-value__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-value__hex {
+  @include type.type-style('code-01');
+  color: var(--cds-text-primary);
+  text-transform: uppercase;
+}
+
+.doc-value__meta {
+  @include type.type-style('label-01');
+  color: var(--cds-text-secondary);
+  white-space: nowrap;
+}
+
+.doc-swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+  border: 1px solid var(--cds-border-subtle);
+}
+
+.doc-swatch--md {
+  width: 32px;
+  height: 32px;
+}
+
+.doc-swatch--sm {
+  width: 20px;
+  height: 20px;
+}
+
+.doc-note {
+  @include type.type-style('label-01');
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-06;
+  color: var(--cds-text-secondary);
+}
+
+// Pulled out of the prose: the rule a reader should leave the section with.
+//
+// layer-02 (surfaceVariant), not layer-01: layer-01 resolves to `surface`,
+// which is the same value as the page background in both themes, so a callout
+// filled with it reads as a border floating on nothing. This page documents
+// that rule — a region that must read as distinct takes the variant — so it
+// should follow it.
+.doc-callout {
+  @include type.type-style('body-01');
+  max-width: 44rem;
+  margin: spacing.$spacing-06 0;
+  padding: spacing.$spacing-05;
+  background: var(--cds-layer-02);
+  border-left: 3px solid var(--cds-border-interactive);
+  color: var(--cds-text-secondary);
+
+  strong,
+  code {
+    color: var(--cds-text-primary);
+  }
+}
+
+.doc-list,
+.doc-ordered {
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-06;
+  padding-left: spacing.$spacing-05;
+
+  li {
+    @include type.type-style('body-01');
+    color: var(--cds-text-secondary);
+    margin-bottom: spacing.$spacing-04;
+    padding-left: spacing.$spacing-03;
+
+    strong {
+      color: var(--cds-text-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.doc-list {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    position: relative;
+    padding-left: spacing.$spacing-05;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: spacing.$spacing-03;
+      height: 1px;
+      background: var(--cds-border-interactive);
+    }
+  }
+}
+
+.doc-ordered {
+  list-style: decimal;
+
+  li::marker {
+    color: var(--cds-text-secondary);
+  }
+}
+
+.doc-rules {
+  display: grid;
+  gap: spacing.$spacing-06;
+
+  @include breakpoint.breakpoint(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.doc-rules__col {
+  background: var(--cds-layer-02);
+  padding: spacing.$spacing-05;
+  border-top: 3px solid var(--cds-border-subtle);
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    @include type.type-style('body-01');
+    color: var(--cds-text-secondary);
+    padding: spacing.$spacing-04 0;
+    border-bottom: 1px solid var(--cds-border-subtle);
+
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+// Do/Don't are distinguished by icon and label, not by color alone — the same
+// rule this page gives its readers.
+.doc-rules__col--do {
+  border-top-color: var(--cds-border-interactive);
+}
+
+.doc-rules__label {
+  @include type.type-style('heading-compact-01');
+  display: flex;
+  align-items: center;
+  gap: spacing.$spacing-03;
+  margin-bottom: spacing.$spacing-03;
+  color: var(--cds-text-primary);
+}
+
+.doc-reference-label {
+  @include type.type-style('label-01');
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cds-text-secondary);
+  margin-top: spacing.$spacing-06;
+  margin-bottom: spacing.$spacing-04;
+}
+
+.doc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: spacing.$spacing-03;
+  margin-bottom: spacing.$spacing-05;
+
+  code {
+    @include type.type-style('code-01');
+    padding: spacing.$spacing-02 spacing.$spacing-03;
+    background: var(--cds-layer-02);
+    border: 1px solid var(--cds-border-subtle);
+    color: var(--cds-text-primary);
+  }
+}
+
+.doc-footer-link {
+  margin-top: spacing.$spacing-08;
+
+  a {
+    @include type.type-style('body-compact-01');
+    display: inline-flex;
+    align-items: center;
+    gap: spacing.$spacing-03;
+    color: var(--cds-link-primary);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--cds-link-primary-hover);
+      text-decoration: underline;
+    }
+  }
+}
+
+// Inline code in running prose.
+.docpage__body code,
+.doc-callout code,
+.doc-list code {
+  @include type.type-style('code-01');
+  color: var(--cds-text-primary);
+}
