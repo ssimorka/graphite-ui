@@ -1,10 +1,10 @@
 {
-  "name": "carbon-starter",
+  "name": "graphite-ui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start"
   },
   "dependencies": {
