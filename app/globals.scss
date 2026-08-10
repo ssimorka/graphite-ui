@@ -1333,6 +1333,56 @@ body {
   margin-bottom: spacing.$spacing-07;
 }
 
+// "In short" gloss opening each section. Sits above the prose and reads as a
+// separate register — a newcomer can follow just these top to bottom.
+.doc-summary {
+  @include type.type-style('body-02');
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$spacing-03;
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-06;
+  padding: spacing.$spacing-05;
+  background: var(--cds-layer-02);
+  border-left: 3px solid var(--cds-border-interactive);
+  color: var(--cds-text-primary);
+}
+
+.doc-summary__label {
+  @include type.type-style('label-01');
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cds-text-secondary);
+}
+
+.doc-glossary {
+  max-width: 44rem;
+  margin-bottom: spacing.$spacing-06;
+  border-top: 1px solid var(--cds-border-subtle);
+}
+
+.doc-glossary__item {
+  display: grid;
+  gap: spacing.$spacing-02;
+  padding: spacing.$spacing-05 0;
+  border-bottom: 1px solid var(--cds-border-subtle);
+
+  @include breakpoint.breakpoint(md) {
+    grid-template-columns: 12rem 1fr;
+    gap: spacing.$spacing-05;
+  }
+
+  dt {
+    @include type.type-style('heading-compact-01');
+    color: var(--cds-text-primary);
+  }
+
+  dd {
+    @include type.type-style('body-01');
+    color: var(--cds-text-secondary);
+  }
+}
+
 // Pipeline: numbered layers, source color through component bindings.
 .doc-pipeline {
   list-style: none;

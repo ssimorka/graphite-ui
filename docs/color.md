@@ -1,50 +1,52 @@
 # Color
 
-Graphite UI's color system turns a single source color into a complete, accessible interface palette — three tonal ramps plus four status ramps, twenty-seven semantic roles per theme, a full set of interaction states, and the component bindings that connect them to real UI.
+Pick one color. Graphite UI builds the whole palette from it — every background, text color, border, button, and status color, in both light and dark, each pair checked to make sure the text on it is readable.
 
-Designers do not pick colors one at a time. They pick a **source color**, and the system derives everything else: what a page background is, what text sits on it, what a primary button looks like when pressed, and what contrast ratio each of those pairings achieves. Every value in the interface traces back to that one input.
+The important idea is this: **you choose what a color is for, not what it is.** You say "this is the page background" or "this is a button", and the system decides the actual value. So when the source color changes, everything updates together and stays readable — and nobody has to go and edit components.
 
-The system is generative rather than hand-authored. That has a practical consequence for how you work: **you assign roles, not values.** A component references `primary` or `onSurfaceVariant`; the engine decides what hex that resolves to in the current theme. Change the source color and the entire interface repaints, coherently, without a single component being edited.
+> **New to design systems?** Read the **In short** line at the top of each section and skip the rest — that path covers the whole model. The [glossary](#glossary) explains every term used here.
 
 ---
 
 ## How color works
 
-Color moves through four layers. Each layer takes the one above it and adds a decision.
+> **In short:** one color goes in. The system turns it into a set of named colors that each have a job, then wires those into the components you build with.
+
+It happens in five steps. Each one takes the result of the step above and adds a decision.
 
 ```
-Source color            one hex, chosen by the designer
+Your color              one color, chosen by the designer
       ↓
-Primitives              3 tonal ramps × 10 stops (raw color, no meaning)
+Raw shades              7 strips × 10 shades (no meaning attached)
       ↓
-Semantic tokens         11 roles per theme (meaning, contrast-verified)
+Named colors            27 jobs per theme (meaning, readability-checked)
       ↓
-Interaction states      hover / pressed / selected / disabled / focus
+States                  hover / pressed / selected / disabled / focus
       ↓
-Component bindings      51 CSS variables consumed by the component library
+Wired into components   51 variables the component library reads
 ```
 
 ### 1. The source color
 
 One hex value. The engine reads three properties from it in OKLab space — hue, chroma, and lightness (`tone`) — and uses them to construct everything downstream. The default source shipped with the kit is `#5e44aa`.
 
-OKLab matters here for one reason: it is perceptually uniform. A step of 10 tone looks like the same size step at the dark end of a ramp as it does at the light end. Ramps built in HSL or raw RGB do not behave that way, which is why hand-built palettes tend to bunch up in the midtones and flatten out at the extremes.
+The calculations run in **OKLab**, a way of describing color built to match how eyes actually work. Its useful property: equal steps in the numbers look like equal steps to a person — going from tone 30 to 40 looks like the same size jump as going from 80 to 90. Older color models, the ones behind HSL and hex codes, do not behave that way. That is why hand-picked palettes so often bunch up in the middle and flatten out at the ends.
 
 ### 2. Primitives — three ramps
 
 The source color's hue is held constant while lightness sweeps from dark to light. Chroma is scaled to produce three parallel ramps:
 
-| Ramp | Chroma | Role in the system |
+| Ramp | Intensity | What it is for |
 |---|---|---|
-| **Accent** | Full (source chroma) | Brand color, interactive elements, focus |
-| **Neutral variant** | 12% of source | Secondary surfaces, borders, supporting text |
-| **Neutral** | 4% of source | Page backgrounds, primary surfaces, primary text |
+| **Accent** | Same as your color | Brand color, interactive elements, focus |
+| **Neutral variant** | Barely tinted | Secondary surfaces, borders, supporting text |
+| **Neutral** | Almost gray | Page backgrounds, primary surfaces, primary text |
 
 Four further ramps carry status. They are built with the same machinery but are **not derived from the source hue** — see [Status and feedback](#status-and-feedback).
 
 The neutrals are not gray. They carry a trace of the source hue, which is what makes a generated theme read as one family rather than "brand color applied to a gray UI."
 
-Each ramp exposes **ten stops** at tones `10, 20, 30, 40, 50, 60, 70, 80, 90, 98`, labelled in the UI as weights `900` (darkest) through `050` (lightest). Two behaviors are worth knowing:
+Each ramp exposes **ten stops** at tones `10, 20, 30, 40, 50, 60, 70, 80, 90, 98`, labeled in the UI as weights `900` (darkest) through `050` (lightest). Two behaviors are worth knowing:
 
 - **The ramp is continuous.** The ten stops are what you see in the primitives grid, but the underlying function resolves any tone from 0 to 100. Semantic roles and interaction states routinely land between named stops.
 - **The source color is pinned.** Your exact hex appears in the Accent ramp at its true tone, replacing the nearest stop rather than being added alongside it. The ramp stays ten stops wide regardless of what you feed it, and your brand color survives generation unchanged.
@@ -77,6 +79,8 @@ The provenance variables are worth knowing about. Every token is auditable back 
 ---
 
 ## Color roles
+
+> **In short:** every color in the interface has a job — page background, body text, button fill, error message. You pick the job; the system picks the value.
 
 Twenty-seven roles, generated per theme. Values below are from the default source `#5e44aa` — they illustrate the structure, they are not fixed system colors. Change the source and every hex changes; the roles and their relationships do not.
 
@@ -160,6 +164,8 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 
 ## Color hierarchy
 
+> **In short:** what makes one thing look like it sits on top of another. Here that comes from borders and tinted areas, not from shadows or shading.
+
 Because `background` and `surface` resolve to the same value, Graphite UI does not build depth by stacking progressively lighter or darker planes. Hierarchy comes from three other mechanisms:
 
 **1. Containment, via `outline`.** A card is a card because it has a border, not because it is a different shade than the page. This is the primary means of separating a container from its ground.
@@ -188,6 +194,8 @@ Two practical rules follow:
 ---
 
 ## Themes
+
+> **In short:** light and dark are built at the same time from the same color. The names stay the same in both; only the values change.
 
 Graphite UI generates **light and dark simultaneously** from the same source color. They are not two separate palettes that a designer maintains in parallel — they are two mappings of the same ramps.
 
@@ -220,6 +228,10 @@ The level applies to the whole theme, not per-token. Switching to AAA regenerate
 
 ## Interaction states
 
+> **In short:** how colors change when you hover over something, click it, tab to it, or when it is switched off.
+
+A hovered button does not get a different color — it gets the same color, a few steps along its own ramp. That keeps it recognizably the same button and keeps the label readable.
+
 States are **tone shifts along the same ramp as the base token**, not opacity overlays or separate color values. This keeps a hovered button the same color family as a resting one, and keeps its contrast intact.
 
 Direction depends on theme: states go **darker in light mode, lighter in dark mode** — always away from the background, so emphasis increases rather than washes out.
@@ -245,6 +257,10 @@ Notes on each:
 ---
 
 ## Accessibility
+
+> **In short:** text has to stand out enough from whatever is behind it to be readable. The system checks this before it hands you a palette, rather than leaving you to test afterwards.
+
+The measure is a **contrast ratio**, written like 4.5:1 — the bigger the number, the easier the text is to read.
 
 Accessibility is enforced at generation time, not checked afterward. Every `on` role is verified against the surface it names before the theme is emitted.
 
@@ -299,6 +315,8 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 ## Usage
 
+> **In short:** the short version of everything above.
+
 ### Do
 
 - **Do assign roles, not values.** Reach for `primary`, `onSurfaceVariant`, `outline` — never the hex they currently resolve to.
@@ -323,6 +341,8 @@ Both themes are generated from the same ramps with the same targets, so a design
 ---
 
 ## Tokens
+
+> **In short:** how to find the right named color for what you are building.
 
 ### Naming
 
@@ -364,6 +384,28 @@ The engine's output is CSS and JSON. There is no published Figma library shippin
 - Use a **variable mode per theme** (Light / Dark) so a single design switches themes the way the product does.
 - Import primitives as a **separate, locked collection**. Keep them visible for reference and hidden from the picker, so designers select roles rather than stops.
 - Regenerate rather than edit. If the source color changes, re-import from the JSON export instead of hand-adjusting values, or the file will drift from the product.
+
+---
+
+## Glossary
+
+> **In short:** every term this page uses, in plain English. Ordered the way you meet them, so it reads as a recap of the whole model.
+
+| Term | What it means |
+|---|---|
+| **Source color** | The one color you choose. Everything else is calculated from it. |
+| **Hue** | Which color it is — red, green, blue. Changing hue turns a red into an orange. |
+| **Chroma** | How intense the color is. High chroma is vivid; zero chroma is gray. |
+| **Tone** | How light or dark, from 0 (black) to 100 (white). Tone 40 is dark; tone 90 is pale. |
+| **Ramp** | One hue laid out from dark to light — the same color at ten tones, like a paint strip. |
+| **OKLab** | The color model the math runs in. Equal steps in numbers look like equal steps to the eye. |
+| **Primitive** | A raw color on a ramp, with no job attached. Useful to look at, never to build with. |
+| **Token / role** | A named color with a job — "page background", "button fill". You build with these. |
+| **On-color** | The text or icon color that goes on top of another. `onSurface` goes on `surface`, and is guaranteed readable there. |
+| **Container** | A quieter version of a color, for filling an area rather than drawing attention. |
+| **Theme** | Light or dark. Same role names in both; different values behind them. |
+| **Contrast ratio** | How different two colors are in lightness, written like 4.5:1. Higher is easier to read. |
+| **AA / AAA** | Two accessibility bars from the WCAG standard. AA is the common legal minimum; AAA is stricter. |
 
 ---
 

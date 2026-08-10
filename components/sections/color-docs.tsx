@@ -12,6 +12,7 @@ import {
   Tag,
 } from '@carbon/react'
 import { Checkmark, Close, ArrowRight } from '@carbon/icons-react'
+import type { ReactNode } from 'react'
 import { useTheme, CARBON_VAR_COUNT } from '@/components/theme-provider'
 import { weightLabelFor } from '@/components/studio'
 import { Reveal } from '@/components/reveal'
@@ -33,54 +34,56 @@ const TOC = [
   { href: '#accessibility', label: 'Accessibility' },
   { href: '#usage', label: 'Usage' },
   { href: '#tokens', label: 'Tokens' },
+  { href: '#glossary', label: 'Glossary' },
 ]
 
 const PIPELINE = [
   {
-    step: 'Source color',
-    detail: 'One hex. The engine reads its hue, chroma, and tone in OKLab.',
+    step: 'Your color',
+    detail:
+      'One color. The system reads three things from it: which color it is, how intense, and how light.',
   },
   {
-    step: 'Primitives',
+    step: 'Raw shades',
     detail:
-      'Three tonal ramps from the source — accent, neutral, neutral variant — plus four status ramps at fixed hues, ten stops each.',
+      'Seven strips of ten shades each, dark to light. Three built from your color, four fixed ones for error, warning, success, and info.',
   },
   {
-    step: 'Semantic tokens',
+    step: 'Named colors',
     detail:
-      'Twenty-seven roles per theme, each mapped to a ramp tone and verified against its contrast target.',
+      'Twenty-seven jobs — page background, body text, button fill — each given a shade, each checked for readability.',
   },
   {
-    step: 'Interaction states',
+    step: 'States',
     detail:
-      'Hover, pressed, selected, and disabled as tone shifts along the same ramp, plus a focus ring.',
+      'What each of those looks like on hover, on click, when selected, when switched off, and when focused.',
   },
   {
-    step: 'Component bindings',
+    step: 'Wired into components',
     detail:
-      `${CARBON_VAR_COUNT} CSS variables the component library consumes, so a token change repaints real UI.`,
+      `${CARBON_VAR_COUNT} variables the component library reads, so changing a color actually repaints the product.`,
   },
 ]
 
 const RAMPS = [
   {
     name: 'Accent',
-    chroma: 'Full source chroma',
+    chroma: 'Same as your color',
     use: 'Brand color, interactive elements, focus',
   },
   {
     name: 'Neutral variant',
-    chroma: '12% of source',
+    chroma: 'Barely tinted',
     use: 'Secondary surfaces, borders, supporting text',
   },
   {
     name: 'Neutral',
-    chroma: '4% of source',
+    chroma: 'Almost gray',
     use: 'Page backgrounds, primary surfaces, primary text',
   },
   {
     name: 'Error / Warning / Success / Info',
-    chroma: 'Source chroma, clamped 0.10–0.20',
+    chroma: 'Tracks your color, within limits',
     use: 'Status and feedback. Hue is fixed per status, not derived',
   },
 ]
@@ -274,8 +277,89 @@ const SELECTION_ORDER = [
   'No match? The role is missing from the system. Flag it rather than working around it.',
 ]
 
+// Plain-language definitions for every term the page cannot avoid using.
+// Ordered as a reader meets them, not alphabetically — this is meant to be
+// readable top to bottom, and it doubles as a recap of the whole model.
+const GLOSSARY = [
+  {
+    term: 'Source color',
+    plain:
+      'The one color you choose. Everything else on this page is calculated from it.',
+  },
+  {
+    term: 'Hue',
+    plain:
+      'Which color it is — red, green, blue. Changing hue turns a red into an orange.',
+  },
+  {
+    term: 'Chroma',
+    plain:
+      'How intense the color is. High chroma is vivid; zero chroma is gray.',
+  },
+  {
+    term: 'Tone',
+    plain:
+      'How light or dark the color is, from 0 (black) to 100 (white). Tone 40 is dark; tone 90 is pale.',
+  },
+  {
+    term: 'Ramp',
+    plain:
+      'One hue laid out from dark to light — the same color at ten different tones, like a paint strip.',
+  },
+  {
+    term: 'OKLab',
+    plain:
+      'The color model the math runs in. Its useful property: equal steps in numbers look like equal steps to the eye.',
+  },
+  {
+    term: 'Primitive',
+    plain:
+      'A raw color on a ramp, with no job attached. Useful to look at, never to build with.',
+  },
+  {
+    term: 'Token / role',
+    plain:
+      'A named color with a job — “page background”, “button fill”. You build with these.',
+  },
+  {
+    term: 'On-color',
+    plain:
+      'The text or icon color that goes on top of another. onSurface is what you put on surface, and it is guaranteed to be readable there.',
+  },
+  {
+    term: 'Container',
+    plain:
+      'A quieter version of a color, for filling an area rather than drawing attention — a tinted banner rather than a solid button.',
+  },
+  {
+    term: 'Theme',
+    plain:
+      'Light or dark. Same role names in both; different values behind them.',
+  },
+  {
+    term: 'Contrast ratio',
+    plain:
+      'How different two colors are in lightness, written like 4.5:1. Higher means easier to read. Below about 4.5:1, small text gets hard for many people.',
+  },
+  {
+    term: 'AA / AAA',
+    plain:
+      'Two accessibility bars from the WCAG standard. AA is the common legal minimum; AAA is stricter.',
+  },
+]
+
 function toneLabel(tone: number) {
   return weightLabelFor(tone) ?? String(Math.round(tone))
+}
+
+/** One-line plain-English gloss opening a section, for readers skimming. */
+function InShort({ children }: { children: ReactNode }) {
+  return (
+    <p className="doc-summary">
+      <span className="doc-summary__label">In short</span>
+      <span>{children}</span>
+    </p>
+  )
 }
 
 function Swatch({ hex, size = 'md' }: { hex: string; size?: 'md' | 'sm' }) {
@@ -322,21 +406,25 @@ export function ColorDocs() {
               <p className="section__eyebrow">Docs</p>
               <h1 className="section__title docpage__title">Color</h1>
               <p className="section__subtitle docpage__lede">
-                Graphite UI&rsquo;s color system turns a single source color into
-                a complete, accessible interface palette — three tonal ramps
-                plus four status ramps, twenty-seven semantic roles per theme, a
-                full set of interaction states, and the component bindings that
-                connect them to real UI.
+                Pick one color. Graphite UI builds the whole palette from it —
+                every background, text color, border, button, and status color,
+                in both light and dark, each pair checked to make sure the text
+                on it is readable.
               </p>
               <p className="docpage__body">
-                Designers do not pick colors one at a time. They pick a source
-                color, and the system derives everything else. That has a
-                practical consequence for how you work:{' '}
-                <strong>you assign roles, not values.</strong> A component
-                references <code>primary</code> or <code>onSurfaceVariant</code>;
-                the engine decides what hex that resolves to in the current
-                theme. Change the source color and the entire interface
-                repaints, coherently, without a single component being edited.
+                The important idea is this:{' '}
+                <strong>you choose what a color is for, not what it is.</strong>{' '}
+                You say &ldquo;this is the page background&rdquo; or &ldquo;this
+                is a button&rdquo;, and the system decides the actual value. So
+                when the source color changes, everything updates together and
+                stays readable — and nobody has to go and edit components.
+              </p>
+              <p className="docpage__body">
+                New to design systems? Read the{' '}
+                <strong>In short</strong> line at the top of each section and
+                skip the rest — that path covers the whole model. The{' '}
+                <a href="#glossary">glossary</a> explains every term this page
+                uses.
               </p>
               <p className="doc-note">
                 Every value on this page is live. It reflects the source color
@@ -368,9 +456,14 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">How color works</h2>
+              <InShort>
+                One color goes in. The system turns it into a set of named
+                colors that each have a job, then wires those into the
+                components you build with.
+              </InShort>
               <p className="docpage__body">
-                Color moves through five layers. Each takes the one above it and
-                adds a decision.
+                It happens in five steps. Each one takes the result of the step
+                above and adds a decision.
               </p>
 
               <ol className="doc-pipeline">
@@ -385,28 +478,34 @@ export function ColorDocs() {
                 ))}
               </ol>
 
-              <h3 className="doc-subheading">Why OKLab</h3>
+              <h3 className="doc-subheading">Why the math matters</h3>
               <p className="docpage__body">
-                The engine works in OKLab because it is perceptually uniform: a
-                step of 10 tone looks like the same size step at the dark end of
-                a ramp as at the light end. Ramps built in HSL or raw RGB do not
-                behave that way, which is why hand-built palettes tend to bunch
-                up in the midtones and flatten out at the extremes.
+                The calculations run in <strong>OKLab</strong>, a way of
+                describing color built to match how eyes actually work. Its
+                useful property: equal steps in the numbers look like equal
+                steps to a person. Going from tone 30 to 40 looks like the same
+                size jump as going from 80 to 90.
+              </p>
+              <p className="docpage__body">
+                Older color models — the ones behind HSL and hex codes — do not
+                behave that way. That is why hand-picked palettes so often bunch
+                up in the middle and flatten out at the light and dark ends.
               </p>
 
-              <h3 className="doc-subheading">Primitives — three ramps</h3>
+              <h3 className="doc-subheading">Step 2: the ramps</h3>
               <p className="docpage__body">
-                The source color&rsquo;s hue is held constant while lightness
-                sweeps from dark to light. Chroma is scaled to produce three
-                parallel ramps:
+                A <strong>ramp</strong> is one color laid out from dark to
+                light, like a paint strip. The system keeps your color&rsquo;s
+                hue and varies how light it is, then repeats that at three
+                levels of intensity:
               </p>
               <div className="doc-table">
                 <Table size="lg">
                   <TableHead>
                     <TableRow>
                       <TableHeader>Ramp</TableHeader>
-                      <TableHeader>Chroma</TableHeader>
-                      <TableHeader>Role in the system</TableHeader>
+                      <TableHeader>Intensity</TableHeader>
+                      <TableHeader>What it is for</TableHeader>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -423,41 +522,33 @@ export function ColorDocs() {
                 </Table>
               </div>
               <p className="docpage__body">
-                The neutrals are not gray — they carry a trace of the source
-                hue, which is what makes a generated theme read as one family
-                rather than a brand color applied to a gray UI. Each ramp
-                exposes ten stops at tones 10 through 98, labelled 900 (darkest)
-                through 050 (lightest).
+                The two neutrals are not quite gray — they keep a trace of your
+                color. That trace is what makes the finished interface look like
+                one family instead of a brand color dropped onto a gray page.
+                Each ramp gives you ten steps, labeled 900 (darkest) through
+                050 (lightest).
               </p>
               <p className="docpage__body">
-                Two behaviors are worth knowing.{' '}
-                <strong>The ramp is continuous</strong> — the ten stops are what
-                the primitives grid shows, but the underlying function resolves
-                any tone from 0 to 100, and semantic roles routinely land
-                between named stops.{' '}
-                <strong>The source color is pinned</strong> — your exact hex
-                appears in the accent ramp at its true tone, replacing the
-                nearest stop rather than being added alongside it, so the ramp
-                stays ten stops wide and your brand color survives generation
-                unchanged.
+                Two things worth knowing.{' '}
+                <strong>The ten steps are just the ones shown</strong> — the
+                system can produce any shade in between, and often does.{' '}
+                <strong>Your exact color is kept</strong> — it appears on the
+                accent ramp unchanged, taking the place of whichever step it
+                sits closest to. Your brand color survives intact.
               </p>
               <p className="doc-callout">
-                Primitives carry no meaning. <code>accent 40</code>{' '}
-                is a color, not &ldquo;the button color.&rdquo; Never reference
-                a primitive directly in a design.
+                These raw colors have no meaning attached. Something like{' '}
+                <code>accent 40</code> is just a shade — it is not &ldquo;the
+                button color.&rdquo; Never reach for one directly in a design;
+                use the named roles in the next section instead.
               </p>
 
-              <h3 className="doc-subheading">Export</h3>
+              <h3 className="doc-subheading">What you get out</h3>
               <p className="docpage__body">
-                The system exports CSS custom properties prefixed{' '}
-                <code>--cts-</code> in kebab-case, scoped to{' '}
-                <code>:root, [data-theme=&quot;light&quot;]</code> and{' '}
-                <code>[data-theme=&quot;dark&quot;]</code>, plus JSON containing
-                the source, all three ramps, and both themes. Every token ships
-                with two companion variables recording where it came from —{' '}
-                <code>--cts-primary-ramp</code> and{' '}
-                <code>--cts-primary-tone</code>{' '}
-                — so &ldquo;why is this color this color&rdquo; always has an
+                Two files. CSS for engineers to point a build at, and JSON for
+                tooling and design files. Alongside each color the export
+                records <em>where it came from</em> — which ramp, which step —
+                so &ldquo;why is this color this color?&rdquo; always has an
                 answer.
               </p>
             </Reveal>
@@ -471,15 +562,23 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Color roles</h2>
+              <InShort>
+                Every color in the interface has a job — page background, body
+                text, button fill, error message. You pick the job; the system
+                picks the value.
+              </InShort>
               <p className="docpage__body">
-                Twenty-seven roles, generated per theme. The <code>on</code>{' '}
-                prefix is the system&rsquo;s core convention:{' '}
-                <strong>
-                  <code>onX</code> is the content color guaranteed to be legible
-                  on <code>X</code>
-                </strong>
-                . That pairing is not a suggestion — it is verified by contrast
-                check at generation time.
+                There are twenty-seven of these jobs, and each theme fills them
+                in. One naming rule explains most of the list: a name starting
+                with <code>on</code> is what goes <em>on top of</em> something
+                else. <code>onSurface</code> is the text color for anything
+                sitting on <code>surface</code>. That pairing is not a
+                suggestion — the system measures it and guarantees it is
+                readable.
+              </p>
+              <p className="docpage__body">
+                The roles are grouped below by what they are for. You will use a
+                handful of them constantly and most of the rest rarely.
               </p>
 
               {ROLE_GROUPS.map((group) => (
@@ -557,6 +656,11 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Color hierarchy</h2>
+              <InShort>
+                What makes one thing look like it sits on top of another. In
+                this system that comes from borders and tinted areas, not from
+                shadows or shading.
+              </InShort>
               <p className="docpage__body">
                 Because <code>background</code> and <code>surface</code> resolve
                 to the same value, Graphite UI does not build depth by stacking
@@ -607,11 +711,15 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Themes</h2>
+              <InShort>
+                Light and dark are built at the same time from the same color.
+                The names stay the same in both; only the values change.
+              </InShort>
               <p className="docpage__body">
-                Light and dark are generated simultaneously from the same source
-                color. They are not two palettes maintained in parallel — they
-                are two mappings of the same ramps. The role name is the
-                constant; only the tone it resolves to changes.
+                You do not maintain two palettes. There is one set of names, and
+                each theme fills them differently — <code>onSurface</code> means
+                &ldquo;main text on a panel&rdquo; in both, and it comes out
+                near-black in light and near-white in dark.
               </p>
               <div className="doc-table">
                 <Table size="lg">
@@ -676,14 +784,20 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Interaction states</h2>
+              <InShort>
+                How colors change when you hover over something, click it, tab
+                to it, or when it is switched off.
+              </InShort>
               <p className="docpage__body">
-                States are <strong>tone shifts along the same ramp as the base
-                token</strong>, not opacity overlays or separate color values.
-                This keeps a hovered button in the same color family as a
-                resting one, and keeps its contrast intact. Direction depends on
-                theme: states go darker in light mode and lighter in dark mode —
-                always away from the background, so emphasis increases rather
-                than washes out.
+                A hovered button does not get a different color — it gets the
+                same color, a few steps along its own ramp. That keeps it
+                recognizably the same button and keeps the label readable.
+              </p>
+              <p className="docpage__body">
+                Which direction depends on the theme: steps go{' '}
+                <strong>darker in light mode and lighter in dark mode</strong>,
+                always away from the background, so the button gets more
+                prominent rather than fading into the page.
               </p>
               <div className="doc-table">
                 <Table size="lg">
@@ -794,12 +908,18 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Accessibility</h2>
+              <InShort>
+                Text has to stand out enough from whatever is behind it to be
+                readable. The system checks this before it hands you a palette,
+                rather than leaving you to test afterwards.
+              </InShort>
               <p className="docpage__body">
-                Accessibility is enforced at generation time, not checked
-                afterward. Fourteen pairings are verified in both themes before
-                a theme is emitted. If one were to miss its target, the auto-fix
-                walks the same ramp to the nearest tone that clears it —
-                preserving hue while correcting lightness.
+                The measure is a <strong>contrast ratio</strong>, written like
+                4.5:1 — the bigger the number, the easier the text is to read.
+                Fourteen pairings are checked in both themes every time a
+                palette is generated. If one ever fell short, the system nudges
+                that color along its own ramp until it passes, keeping the hue
+                and changing only how light it is.
               </p>
               <div className="doc-table">
                 <Table size="lg">
@@ -918,6 +1038,9 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Usage</h2>
+              <InShort>
+                The short version of everything above.
+              </InShort>
               <div className="doc-rules">
                 <div className="doc-rules__col doc-rules__col--do">
                   <p className="doc-rules__label">
@@ -951,6 +1074,9 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Tokens</h2>
+              <InShort>
+                How to find the right named color for what you are building.
+              </InShort>
 
               <h3 className="doc-subheading">Naming</h3>
               <p className="docpage__body">
@@ -1058,6 +1184,30 @@ export function ColorDocs() {
                   values, or the file will drift from the product.
                 </li>
               </ul>
+
+            </Reveal>
+          </Column>
+        </Grid>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      <section className="section" id="glossary">
+        <Grid>
+          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+            <Reveal>
+              <h2 className="doc-heading">Glossary</h2>
+              <InShort>
+                Every term this page uses, in plain English. Ordered the way you
+                meet them, so it reads as a recap of the whole model.
+              </InShort>
+              <dl className="doc-glossary">
+                {GLOSSARY.map((entry) => (
+                  <div key={entry.term} className="doc-glossary__item">
+                    <dt>{entry.term}</dt>
+                    <dd>{entry.plain}</dd>
+                  </div>
+                ))}
+              </dl>
 
               <p className="doc-footer-link">
                 <a href="/#system">
