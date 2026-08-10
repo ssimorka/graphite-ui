@@ -356,7 +356,7 @@ function toneLabel(tone: number) {
 }
 
 /** One-line plain-English gloss opening a section, for readers skimming. */
-function InShort({ children }: { children: ReactNode }) {
+export function InShort({ children }: { children: ReactNode }) {
   return (
     <p className="doc-summary">
       <span className="doc-summary__label">In short</span>
