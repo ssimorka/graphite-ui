@@ -399,12 +399,12 @@ export function ColorDocs() {
 
   return (
     <article className="docpage">
-      <section className="section docpage__intro">
+      <section className="section docpage__intro" id="docs">
         <Grid>
           <Column sm={4} md={8} lg={{ span: 8, offset: 1 }}>
             <Reveal>
               <p className="section__eyebrow">Docs</p>
-              <h1 className="section__title docpage__title">Color</h1>
+              <h2 className="section__title docpage__title">Color</h2>
               <p className="section__subtitle docpage__lede">
                 Pick one color. Graphite UI builds the whole palette from it:
                 every background, text color, border, button, and status color,
@@ -448,7 +448,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">How color works</h2>
+              <h3 className="doc-heading">How color works</h3>
               <InShort>
                 One color goes in. The system turns it into a set of named
                 colors that each have a job, then wires those into the
@@ -471,7 +471,7 @@ export function ColorDocs() {
                 ))}
               </ol>
 
-              <h3 className="doc-subheading">Why the math matters</h3>
+              <h4 className="doc-subheading">Why the math matters</h4>
               <p className="docpage__body">
                 The calculations run in <strong>OKLab</strong>, a way of
                 describing color built to match how eyes actually work. Its
@@ -485,7 +485,7 @@ export function ColorDocs() {
                 up in the middle and flatten out at the light and dark ends.
               </p>
 
-              <h3 className="doc-subheading">Step 2: the ramps</h3>
+              <h4 className="doc-subheading">Step 2: the ramps</h4>
               <p className="docpage__body">
                 A <strong>ramp</strong> is one color laid out from dark to
                 light, like a paint strip. The system keeps your color&rsquo;s
@@ -537,7 +537,7 @@ export function ColorDocs() {
                 use the named roles in the next section instead.
               </p>
 
-              <h3 className="doc-subheading">What you get out</h3>
+              <h4 className="doc-subheading">What you get out</h4>
               <p className="docpage__body">
                 Two files. CSS for engineers to point a build at, and JSON for
                 tooling and design files. Alongside each color the export
@@ -555,7 +555,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Color roles</h2>
+              <h3 className="doc-heading">Color roles</h3>
               <InShort>
                 Every color in the interface has a job: page background, body
                 text, button fill, error message. You pick the job; the system
@@ -577,7 +577,7 @@ export function ColorDocs() {
 
               {ROLE_GROUPS.map((group) => (
                 <div key={group.title} className="doc-group">
-                  <h3 className="doc-subheading">{group.title}</h3>
+                  <h4 className="doc-subheading">{group.title}</h4>
                   <div className="doc-table">
                     <Table size="lg">
                       <TableHead>
@@ -610,9 +610,9 @@ export function ColorDocs() {
                 </div>
               ))}
 
-              <h3 className="doc-subheading">
+              <h4 className="doc-subheading">
                 Roles the system does not currently define
-              </h3>
+              </h4>
               <p className="docpage__body">
                 These are real gaps, not omissions from this page. If you need
                 one of them, the answer is not to improvise a value.
@@ -649,7 +649,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Color hierarchy</h2>
+              <h3 className="doc-heading">Color hierarchy</h3>
               <InShort>
                 What makes one thing look like it sits on top of another. In
                 this system that comes from borders and tinted areas, not from
@@ -704,7 +704,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Themes</h2>
+              <h3 className="doc-heading">Themes</h3>
               <InShort>
                 Light and dark are built at the same time from the same color.
                 The names stay the same in both; only the values change.
@@ -761,7 +761,7 @@ export function ColorDocs() {
                 user picks, without a designer re-checking anything.
               </p>
 
-              <h3 className="doc-subheading">Contrast levels</h3>
+              <h4 className="doc-subheading">Contrast levels</h4>
               <p className="docpage__body">
                 Themes generate at one of two targets, applied to the whole
                 theme rather than per token: <strong>AA</strong> (4.5:1 text,
@@ -778,7 +778,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Interaction states</h2>
+              <h3 className="doc-heading">Interaction states</h3>
               <InShort>
                 How colors change when you hover over something, click it, tab
                 to it, or when it is switched off.
@@ -902,7 +902,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Accessibility</h2>
+              <h3 className="doc-heading">Accessibility</h3>
               <InShort>
                 Text has to stand out enough from whatever is behind it to be
                 readable. The system checks this before it hands you a palette,
@@ -965,7 +965,7 @@ export function ColorDocs() {
                 </Table>
               </div>
 
-              <h3 className="doc-subheading">What the system does not guarantee</h3>
+              <h4 className="doc-subheading">What the system does not guarantee</h4>
               <p className="docpage__body">
                 The guarantee covers <strong>defined pairings only</strong>.
                 Everything outside that list is your responsibility.
@@ -990,7 +990,7 @@ export function ColorDocs() {
                 <li>Disabled states, which are exempt by design.</li>
               </ul>
 
-              <h3 className="doc-subheading">Focus indicators</h3>
+              <h4 className="doc-subheading">Focus indicators</h4>
               <p className="docpage__body">
                 Every interactive element needs a visible focus indicator. Use
                 the focus ring token, which is generated per theme specifically
@@ -999,7 +999,7 @@ export function ColorDocs() {
                 keyboard users never trigger hover.
               </p>
 
-              <h3 className="doc-subheading">Do not rely on color alone</h3>
+              <h4 className="doc-subheading">Do not rely on color alone</h4>
               <p className="docpage__body">
                 This applies with unusual force here, for two system-specific
                 reasons. <strong>The source color is user-chosen.</strong> You
@@ -1014,7 +1014,7 @@ export function ColorDocs() {
                 or a border.
               </p>
 
-              <h3 className="doc-subheading">Light and dark parity</h3>
+              <h4 className="doc-subheading">Light and dark parity</h4>
               <p className="docpage__body">
                 Both themes are generated from the same ramps against the same
                 targets, so a design that passes in one passes in the other. But
@@ -1033,7 +1033,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Usage</h2>
+              <h3 className="doc-heading">Usage</h3>
               <div className="doc-rules">
                 <div className="doc-rules__col doc-rules__col--do">
                   <p className="doc-rules__label">
@@ -1066,12 +1066,12 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Tokens</h2>
+              <h3 className="doc-heading">Tokens</h3>
               <InShort>
                 How to find the right named color for what you are building.
               </InShort>
 
-              <h3 className="doc-subheading">Naming</h3>
+              <h4 className="doc-subheading">Naming</h4>
               <p className="docpage__body">
                 Tokens use camelCase in JSON and JS (
                 <code>onSurfaceVariant</code>), kebab-case in CSS with the{' '}
@@ -1081,7 +1081,7 @@ export function ColorDocs() {
                 <code>--cts-on-surface-variant-tone</code>.
               </p>
 
-              <h3 className="doc-subheading">Choosing a token</h3>
+              <h4 className="doc-subheading">Choosing a token</h4>
               <p className="docpage__body">
                 Work down this order and stop at the first match.
               </p>
@@ -1091,7 +1091,7 @@ export function ColorDocs() {
                 ))}
               </ol>
 
-              <h3 className="doc-subheading">Complete reference</h3>
+              <h4 className="doc-subheading">Complete reference</h4>
               <p className="doc-reference-label">Semantic roles: 27 per theme</p>
               <p className="doc-chips">
                 {[
@@ -1149,7 +1149,7 @@ export function ColorDocs() {
                 copy; not for direct use in designs.
               </p>
 
-              <h3 className="doc-subheading">Using tokens in Figma</h3>
+              <h4 className="doc-subheading">Using tokens in Figma</h4>
               <p className="docpage__body">
                 The engine&rsquo;s output is CSS and JSON. There is no published
                 Figma library shipping with it today, so the Figma side is a
@@ -1188,7 +1188,7 @@ export function ColorDocs() {
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
-              <h2 className="doc-heading">Glossary</h2>
+              <h3 className="doc-heading">Glossary</h3>
               <dl className="doc-glossary">
                 {GLOSSARY.map((entry) => (
                   <div key={entry.term} className="doc-glossary__item">

@@ -18,8 +18,8 @@ import { Asleep, Light } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 
-// Root-relative anchors rather than bare hashes: the header is shared with
-// routed pages like /system/color, where `#system` would resolve against the
+// Root-relative anchors rather than bare hashes, so these keep working from
+// any future routed page, where a bare `#system` would resolve against the
 // current path and scroll nowhere.
 //
 // Docs sits last, after the in-page anchors: the first three scroll the
@@ -28,7 +28,7 @@ const NAV_ITEMS = [
   { href: '/#system', label: 'System' },
   { href: '/#patterns', label: 'Patterns' },
   { href: '/#faq', label: 'FAQ' },
-  { href: '/system/color', label: 'Docs' },
+  { href: '/#docs', label: 'Docs' },
 ]
 
 export function SiteHeader() {

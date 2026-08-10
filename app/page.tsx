@@ -4,6 +4,7 @@ import { Features } from '@/components/sections/features'
 import { PatternGuide } from '@/components/sections/pattern-guide'
 import { Benefits } from '@/components/sections/benefits'
 import { Faq } from '@/components/sections/faq'
+import { ColorDocs } from '@/components/sections/color-docs'
 import { FinalCta } from '@/components/sections/final-cta'
 import { SiteFooter } from '@/components/sections/site-footer'
 
@@ -18,6 +19,7 @@ export default function Page() {
       <PatternGuide />
       <Benefits />
       <Faq />
+      <ColorDocs />
       <FinalCta />
       <SiteFooter />
     </main>
