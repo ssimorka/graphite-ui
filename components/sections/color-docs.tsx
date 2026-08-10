@@ -34,10 +34,10 @@ const TOC = [
   { href: '#accessibility', label: 'Accessibility' },
   { href: '#usage', label: 'Usage' },
   { href: '#tokens', label: 'Tokens' },
-  { href: '#glossary', label: 'Glossary' },
-  // Pattern reference is a sibling section on this page, not part of ColorDocs,
-  // so it is listed by hand rather than derived.
+  // Pattern reference and Glossary are sibling sections on this page rather
+  // than part of ColorDocs, so they are listed by hand in page order.
   { href: '#patterns', label: 'Pattern reference' },
+  { href: '#glossary', label: 'Glossary' },
 ]
 
 const PIPELINE = [
@@ -1186,7 +1186,17 @@ export function ColorDocs() {
         </Grid>
       </section>
 
-      {/* ---------------------------------------------------------------- */}
+    </article>
+  )
+}
+
+/**
+ * The glossary closes the docs page, after Pattern reference, so it is a
+ * separate export rather than the last section of ColorDocs.
+ */
+export function ColorGlossary() {
+  return (
+    <article className="docpage">
       <section className="section" id="glossary">
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>

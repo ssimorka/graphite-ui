@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { ColorDocs } from '@/components/sections/color-docs'
+import { ColorDocs, ColorGlossary } from '@/components/sections/color-docs'
 import { PatternGuide } from '@/components/sections/pattern-guide'
 import { SiteFooter } from '@/components/sections/site-footer'
 
@@ -14,6 +14,7 @@ export default function DocsPage() {
     <main id="main-content" className="page-main">
       <ColorDocs />
       <PatternGuide />
+      <ColorGlossary />
       <SiteFooter />
     </main>
   )
