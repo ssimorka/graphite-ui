@@ -194,7 +194,7 @@ type Check = { ratio: number; passes: boolean; level: string; fixed?: boolean }
 
 // The engine emits sixteen status roles alongside the eleven core ones. This
 // table is the landing page's proof that pairings are checked, not a reference
-// — the full set is documented at /system/color — so status is filtered out
+// — the full set is documented at /docs — so status is filtered out
 // here rather than tripling the table's height with four more hue families.
 const STATUS_ROLE_NAMES = new Set(
   (STATUS_NAMES as string[]).flatMap((name) => {

@@ -34,6 +34,9 @@ const TOC = [
   { href: '#accessibility', label: 'Accessibility' },
   { href: '#usage', label: 'Usage' },
   { href: '#tokens', label: 'Tokens' },
+  // Pattern reference and Glossary are sibling sections on this page rather
+  // than part of ColorDocs, so they are listed by hand in page order.
+  { href: '#patterns', label: 'Pattern reference' },
   { href: '#glossary', label: 'Glossary' },
 ]
 
@@ -1183,7 +1186,17 @@ export function ColorDocs() {
         </Grid>
       </section>
 
-      {/* ---------------------------------------------------------------- */}
+    </article>
+  )
+}
+
+/**
+ * The glossary closes the docs page, after Pattern reference, so it is a
+ * separate export rather than the last section of ColorDocs.
+ */
+export function ColorGlossary() {
+  return (
+    <article className="docpage">
       <section className="section" id="glossary">
         <Grid>
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
@@ -1200,7 +1213,7 @@ export function ColorDocs() {
 
               <p className="doc-footer-link">
                 <a href="/#system">
-                  Explore the live system
+                  Explore the live system on the home page
                   <ArrowRight size={16} />
                 </a>
               </p>
