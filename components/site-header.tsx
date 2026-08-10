@@ -22,11 +22,11 @@ import { ColorPickerPopover } from '@/components/color-picker'
 // so a bare `#system` would resolve against whichever page you are on and
 // scroll nowhere.
 //
-// Docs sits last, after the in-page anchors: the first three scroll the
-// landing page, this one leaves it.
+// Docs sits last, after the in-page anchors: the first two scroll the landing
+// page, this one leaves it. Patterns is not listed separately because it lives
+// inside the docs page.
 const NAV_ITEMS = [
   { href: '/#system', label: 'System' },
-  { href: '/docs#patterns', label: 'Patterns' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/docs', label: 'Docs' },
 ]
