@@ -4,8 +4,6 @@ Pick one color. Graphite UI builds the whole palette from it — every backgroun
 
 The important idea is this: **you choose what a color is for, not what it is.** You say "this is the page background" or "this is a button", and the system decides the actual value. So when the source color changes, everything updates together and stays readable — and nobody has to go and edit components.
 
-> **New to design systems?** Read the **In short** line at the top of each section and skip the rest — that path covers the whole model. The [glossary](#glossary) explains every term used here.
-
 ---
 
 ## How color works
@@ -315,8 +313,6 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 ## Usage
 
-> **In short:** the short version of everything above.
-
 ### Do
 
 - **Do assign roles, not values.** Reach for `primary`, `onSurfaceVariant`, `outline` — never the hex they currently resolve to.
@@ -389,7 +385,7 @@ The engine's output is CSS and JSON. There is no published Figma library shippin
 
 ## Glossary
 
-> **In short:** every term this page uses, in plain English. Ordered the way you meet them, so it reads as a recap of the whole model.
+Every term this page uses, in plain English. Ordered the way you meet them.
 
 | Term | What it means |
 |---|---|

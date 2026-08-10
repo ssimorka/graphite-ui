@@ -419,13 +419,6 @@ export function ColorDocs() {
                 when the source color changes, everything updates together and
                 stays readable — and nobody has to go and edit components.
               </p>
-              <p className="docpage__body">
-                New to design systems? Read the{' '}
-                <strong>In short</strong> line at the top of each section and
-                skip the rest — that path covers the whole model. The{' '}
-                <a href="#glossary">glossary</a> explains every term this page
-                uses.
-              </p>
               <p className="doc-note">
                 Every value on this page is live. It reflects the source color
                 set in the header right now — change it and these tables
@@ -1038,9 +1031,6 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Usage</h2>
-              <InShort>
-                The short version of everything above.
-              </InShort>
               <div className="doc-rules">
                 <div className="doc-rules__col doc-rules__col--do">
                   <p className="doc-rules__label">
@@ -1196,10 +1186,6 @@ export function ColorDocs() {
           <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
             <Reveal>
               <h2 className="doc-heading">Glossary</h2>
-              <InShort>
-                Every term this page uses, in plain English. Ordered the way you
-                meet them, so it reads as a recap of the whole model.
-              </InShort>
               <dl className="doc-glossary">
                 {GLOSSARY.map((entry) => (
                   <div key={entry.term} className="doc-glossary__item">
