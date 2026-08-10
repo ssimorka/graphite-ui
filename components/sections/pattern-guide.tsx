@@ -2,6 +2,7 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
+import { InShort } from '@/components/sections/color-docs'
 import { PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
@@ -30,14 +31,17 @@ export function PatternGuide() {
   return (
     <section className="section section--guide" id="patterns">
       <Grid>
-        <Column sm={4} md={8} lg={16}>
+        <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
           <Reveal>
-            <p className="section__eyebrow">Pattern reference</p>
-            <h2 className="section__title">Twenty tiles, one rulebook</h2>
-            <p className="section__subtitle">
-              Every composition draws from the same fixed library. Define the
-              rules, let the system execute: the logic behind Sol LeWitt&rsquo;s
-              wall drawings, applied to interface surfaces.
+            <h2 className="doc-heading">Pattern reference</h2>
+            <InShort>
+              Twenty tiles, one rulebook. Every composition draws from the same
+              fixed library, so patterns stay recognizable however they are
+              combined.
+            </InShort>
+            <p className="docpage__body">
+              Define the rules, let the system execute: the logic behind Sol
+              LeWitt&rsquo;s wall drawings, applied to interface surfaces.
             </p>
           </Reveal>
         </Column>
@@ -47,8 +51,8 @@ export function PatternGuide() {
       <Grid>
         <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
           <Reveal>
-            <h3 className="guide__heading">Color rhythm · 60 / 30 / 10</h3>
-            <p className="guide__lede">
+            <h3 className="doc-subheading">Color rhythm · 60 / 30 / 10</h3>
+            <p className="docpage__body">
               Sixty percent neutrals, thirty percent accent, ten percent a
               vivid complement. Adjacent panels check their neighbours so no
               color clusters.
@@ -74,8 +78,8 @@ export function PatternGuide() {
       <Grid>
         <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
           <Reveal>
-            <h3 className="guide__heading">Span definitions</h3>
-            <p className="guide__lede">
+            <h3 className="doc-subheading">Span definitions</h3>
+            <p className="docpage__body">
               Larger cells act as anchors. Image panels always land on a large
               span, distributed across horizontal zones so no region dominates.
             </p>
@@ -99,8 +103,8 @@ export function PatternGuide() {
       <Grid>
         <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
           <Reveal>
-            <h3 className="guide__heading">Tile library</h3>
-            <p className="guide__lede">
+            <h3 className="doc-subheading">Tile library</h3>
+            <p className="docpage__body">
               All twenty types, rendered live from your source color.
             </p>
             <ol className="tile-grid">
