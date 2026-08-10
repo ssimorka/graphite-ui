@@ -35,6 +35,9 @@ const TOC = [
   { href: '#usage', label: 'Usage' },
   { href: '#tokens', label: 'Tokens' },
   { href: '#glossary', label: 'Glossary' },
+  // Pattern reference is a sibling section on this page, not part of ColorDocs,
+  // so it is listed by hand rather than derived.
+  { href: '#patterns', label: 'Pattern reference' },
 ]
 
 const PIPELINE = [
@@ -1200,7 +1203,7 @@ export function ColorDocs() {
 
               <p className="doc-footer-link">
                 <a href="/#system">
-                  Explore the live system
+                  Explore the live system on the home page
                   <ArrowRight size={16} />
                 </a>
               </p>

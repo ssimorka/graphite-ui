@@ -1,7 +1,6 @@
 import { Hero } from '@/components/sections/hero'
 import { TrustedBy } from '@/components/sections/trusted-by'
 import { Features } from '@/components/sections/features'
-import { PatternGuide } from '@/components/sections/pattern-guide'
 import { Benefits } from '@/components/sections/benefits'
 import { Faq } from '@/components/sections/faq'
 import { FinalCta } from '@/components/sections/final-cta'
@@ -15,7 +14,6 @@ export default function Page() {
       <Hero />
       <TrustedBy />
       <Features />
-      <PatternGuide />
       <Benefits />
       <Faq />
       <FinalCta />
