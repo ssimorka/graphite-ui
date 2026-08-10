@@ -3,7 +3,7 @@ import { ColorDocs } from '@/components/sections/color-docs'
 import { SiteFooter } from '@/components/sections/site-footer'
 
 export const metadata: Metadata = {
-  title: 'Color — Graphite UI System',
+  title: 'Color · Graphite UI System',
   description:
     'How the Graphite UI color system works: three perceptual ramps from one source color, eleven semantic roles per theme, contrast-checked pairings, interaction states, and the tokens designers build with.',
 }

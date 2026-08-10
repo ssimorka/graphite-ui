@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://www.graphite-ui.com'),
   title: 'Graphite UI: One color. A whole design system.',
   description:
-    'Graphite UI is a structured design system built from one input: a source color. It generates the color foundations first — perceptual ramps, semantic tokens, contrast-checked pairings, and a pattern library — with layout, components, and typography built to follow the same system as it grows.',
+    'Graphite UI is a structured design system built from one input: a source color. It generates the color foundations first (perceptual ramps, semantic tokens, contrast-checked pairings, and a pattern library), with layout, components, and typography built to follow the same system as it grows.',
   // Carried over from the previous graphite-ui.com build so the live domain
   // keeps its existing favicon and touch icon after the framework swap.
   icons: {

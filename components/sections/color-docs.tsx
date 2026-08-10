@@ -51,7 +51,7 @@ const PIPELINE = [
   {
     step: 'Named colors',
     detail:
-      'Twenty-seven jobs — page background, body text, button fill — each given a shade, each checked for readability.',
+      'Twenty-seven jobs, such as page background, body text, and button fill. Each gets a shade, and each is checked for readability.',
   },
   {
     step: 'States',
@@ -94,15 +94,15 @@ const ROLE_GROUPS = [
     note: 'background and surface resolve to the same value in both themes. Layers are separated by borders and surface variants, not by shading.',
     roles: [
       { name: 'background', purpose: 'The page itself' },
-      { name: 'surface', purpose: 'Default container — cards, panels, sheets' },
+      { name: 'surface', purpose: 'Default container: cards, panels, sheets' },
       {
         name: 'surfaceVariant',
-        purpose: 'Secondary surface — fields, hover fills, selected rows, tags',
+        purpose: 'Secondary surface: fields, hover fills, selected rows, tags',
       },
     ],
   },
   {
-    title: 'Content — text and icons',
+    title: 'Content: text and icons',
     note: 'Text hierarchy is two levels, not three. Icons follow text: primary icons take onBackground, secondary icons take onSurfaceVariant.',
     roles: [
       { name: 'onBackground', purpose: 'Primary text and primary icons' },
@@ -131,18 +131,18 @@ const ROLE_GROUPS = [
       { name: 'onPrimary', purpose: 'Content on a primary fill' },
       {
         name: 'primaryContainer',
-        purpose: 'Low-emphasis accent fill — selected rows, tags',
+        purpose: 'Low-emphasis accent fill: selected rows, tags',
       },
       { name: 'onPrimaryContainer', purpose: 'Content on primaryContainer' },
     ],
   },
   {
     title: 'Status and feedback',
-    note: 'Hue is fixed per status so red still reads as error whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer — a low-emphasis fill for banners, rows, and tags.',
+    note: 'Hue is fixed per status so red still reads as error whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer: a low-emphasis fill for banners, rows, and tags.',
     roles: [
       { name: 'error', purpose: 'Errors, destructive actions, invalid input' },
       { name: 'onError', purpose: 'Content on an error fill' },
-      { name: 'errorContainer', purpose: 'Low-emphasis error fill — banners, rows' },
+      { name: 'errorContainer', purpose: 'Low-emphasis error fill: banners, rows' },
       { name: 'onErrorContainer', purpose: 'Content on errorContainer' },
       { name: 'warning', purpose: 'Warnings, risky but permitted actions' },
       { name: 'onWarning', purpose: 'Content on a warning fill' },
@@ -249,19 +249,19 @@ const CONTRAST_ROWS = [
 ]
 
 const DOS = [
-  'Assign roles, not values — reach for primary or onSurfaceVariant, never the hex they currently resolve to.',
+  'Assign roles, not values. Reach for primary or onSurfaceVariant, never the hex they currently resolve to.',
   'Respect on pairings. onSurface belongs on surface; onPrimary belongs on primary.',
   'Use outline and surfaceVariant for depth, since the system has no elevation shading.',
   'Check the contrast table when you change the source color, especially at AAA.',
-  'Pair color with a second signal for any state or status meaning — status hue can collide with the source.',
+  'Pair color with a second signal for any state or status meaning, because status hue can collide with the source.',
   'Design in both themes before handing off.',
 ]
 
 const DONTS = [
   'Don’t apply raw hex values to components. A hex is a snapshot of one source color in one theme.',
   'Don’t reference primitives directly. accent 40 is a color without meaning.',
-  'Don’t invent status colors from the accent or neutral ramps — use the status roles.',
-  'Don’t use primaryContainer as a general surface — it makes everything look selected.',
+  'Don’t invent status colors from the accent or neutral ramps. Use the status roles.',
+  'Don’t use primaryContainer as a general surface, because it makes everything look selected.',
   'Don’t nest three or more surface levels. There is no third value to resolve to.',
   'Don’t build hover or selected states by changing opacity. States are tone shifts on the ramp.',
 ]
@@ -270,9 +270,9 @@ const SELECTION_ORDER = [
   'What is the element? A ground, a container, content, a border, or an action.',
   'Ground or container? background for the page, surface for a container, surfaceVariant for a field or distinct region.',
   'Content? onX, matching whatever it sits on.',
-  'Border? outline — or primary and the focus ring if it indicates interaction.',
+  'Border? outline, or primary and the focus ring if it indicates interaction.',
   'Action? primary + onPrimary for full emphasis, primaryContainer + onPrimaryContainer for low emphasis.',
-  'Communicating status? error, warning, success, or info — with their containers for low-emphasis fills.',
+  'Communicating status? error, warning, success, or info, with their containers for low-emphasis fills.',
   'Interactive state? The state token for that role, never a manually adjusted value.',
   'No match? The role is missing from the system. Flag it rather than working around it.',
 ]
@@ -289,7 +289,7 @@ const GLOSSARY = [
   {
     term: 'Hue',
     plain:
-      'Which color it is — red, green, blue. Changing hue turns a red into an orange.',
+      'Which color it is: red, green, blue. Changing hue turns a red into an orange.',
   },
   {
     term: 'Chroma',
@@ -304,7 +304,7 @@ const GLOSSARY = [
   {
     term: 'Ramp',
     plain:
-      'One hue laid out from dark to light — the same color at ten different tones, like a paint strip.',
+      'One hue laid out from dark to light: the same color at ten different tones, like a paint strip.',
   },
   {
     term: 'OKLab',
@@ -319,7 +319,7 @@ const GLOSSARY = [
   {
     term: 'Token / role',
     plain:
-      'A named color with a job — “page background”, “button fill”. You build with these.',
+      'A named color with a job, such as “page background” or “button fill”. You build with these.',
   },
   {
     term: 'On-color',
@@ -329,7 +329,7 @@ const GLOSSARY = [
   {
     term: 'Container',
     plain:
-      'A quieter version of a color, for filling an area rather than drawing attention — a tinted banner rather than a solid button.',
+      'A quieter version of a color, for filling an area rather than drawing attention. Think tinted banner rather than solid button.',
   },
   {
     term: 'Theme',
@@ -406,7 +406,7 @@ export function ColorDocs() {
               <p className="section__eyebrow">Docs</p>
               <h1 className="section__title docpage__title">Color</h1>
               <p className="section__subtitle docpage__lede">
-                Pick one color. Graphite UI builds the whole palette from it —
+                Pick one color. Graphite UI builds the whole palette from it:
                 every background, text color, border, button, and status color,
                 in both light and dark, each pair checked to make sure the text
                 on it is readable.
@@ -417,11 +417,11 @@ export function ColorDocs() {
                 You say &ldquo;this is the page background&rdquo; or &ldquo;this
                 is a button&rdquo;, and the system decides the actual value. So
                 when the source color changes, everything updates together and
-                stays readable — and nobody has to go and edit components.
+                stays readable, and nobody has to go and edit components.
               </p>
               <p className="doc-note">
                 Every value on this page is live. It reflects the source color
-                set in the header right now — change it and these tables
+                set in the header right now. Change it and these tables
                 re-resolve.
               </p>
             </Reveal>
@@ -480,7 +480,7 @@ export function ColorDocs() {
                 size jump as going from 80 to 90.
               </p>
               <p className="docpage__body">
-                Older color models — the ones behind HSL and hex codes — do not
+                Older color models (the ones behind HSL and hex codes) do not
                 behave that way. That is why hand-picked palettes so often bunch
                 up in the middle and flatten out at the light and dark ends.
               </p>
@@ -515,23 +515,24 @@ export function ColorDocs() {
                 </Table>
               </div>
               <p className="docpage__body">
-                The two neutrals are not quite gray — they keep a trace of your
-                color. That trace is what makes the finished interface look like
-                one family instead of a brand color dropped onto a gray page.
+                The two neutrals are not quite gray. They keep a trace of your
+                color, and that trace is what makes the finished interface look
+                like one family instead of a brand color dropped onto a gray
+                page.
                 Each ramp gives you ten steps, labeled 900 (darkest) through
                 050 (lightest).
               </p>
               <p className="docpage__body">
                 Two things worth knowing.{' '}
-                <strong>The ten steps are just the ones shown</strong> — the
+                <strong>The ten steps are just the ones shown.</strong> The
                 system can produce any shade in between, and often does.{' '}
-                <strong>Your exact color is kept</strong> — it appears on the
+                <strong>Your exact color is kept.</strong> It appears on the
                 accent ramp unchanged, taking the place of whichever step it
                 sits closest to. Your brand color survives intact.
               </p>
               <p className="doc-callout">
                 These raw colors have no meaning attached. Something like{' '}
-                <code>accent 40</code> is just a shade — it is not &ldquo;the
+                <code>accent 40</code> is just a shade. It is not &ldquo;the
                 button color.&rdquo; Never reach for one directly in a design;
                 use the named roles in the next section instead.
               </p>
@@ -540,7 +541,7 @@ export function ColorDocs() {
               <p className="docpage__body">
                 Two files. CSS for engineers to point a build at, and JSON for
                 tooling and design files. Alongside each color the export
-                records <em>where it came from</em> — which ramp, which step —
+                records <em>where it came from</em>, which ramp and which step,
                 so &ldquo;why is this color this color?&rdquo; always has an
                 answer.
               </p>
@@ -556,7 +557,7 @@ export function ColorDocs() {
             <Reveal>
               <h2 className="doc-heading">Color roles</h2>
               <InShort>
-                Every color in the interface has a job — page background, body
+                Every color in the interface has a job: page background, body
                 text, button fill, error message. You pick the job; the system
                 picks the value.
               </InShort>
@@ -566,7 +567,7 @@ export function ColorDocs() {
                 with <code>on</code> is what goes <em>on top of</em> something
                 else. <code>onSurface</code> is the text color for anything
                 sitting on <code>surface</code>. That pairing is not a
-                suggestion — the system measures it and guarantees it is
+                suggestion. The system measures it and guarantees it is
                 readable.
               </p>
               <p className="docpage__body">
@@ -687,10 +688,10 @@ export function ColorDocs() {
               </div>
               <p className="doc-callout">
                 Two rules follow. <strong>Do not nest more than two surface
-                levels</strong> — with one surface value and one variant, a
+                levels.</strong> With one surface value and one variant, a
                 third level has nothing to resolve to.{' '}
-                <strong><code>primaryContainer</code> is not a surface</strong> —
-                it signals accent state, so a card using it reads as selected,
+                <strong><code>primaryContainer</code> is not a surface.</strong>{' '}
+                It signals accent state, so a card using it reads as selected,
                 not elevated.
               </p>
             </Reveal>
@@ -710,7 +711,7 @@ export function ColorDocs() {
               </InShort>
               <p className="docpage__body">
                 You do not maintain two palettes. There is one set of names, and
-                each theme fills them differently — <code>onSurface</code> means
+                each theme fills them differently. <code>onSurface</code> means
                 &ldquo;main text on a panel&rdquo; in both, and it comes out
                 near-black in light and near-white in dark.
               </p>
@@ -748,9 +749,10 @@ export function ColorDocs() {
                   light and dark are near-mirror images across the ramp
                 </strong>
                 , with content and ground swapping ends and accent inverting
-                with them. Hierarchy survives because the relationships survive —
-                secondary content stays one perceptual step from primary content
-                in both themes, even though the absolute values are opposite.
+                with them. Hierarchy survives because the relationships
+                survive: secondary content stays one perceptual step from
+                primary content in both themes, even though the absolute values
+                are opposite.
               </p>
               <p className="doc-callout">
                 This is the concrete reason to use semantic tokens rather than
@@ -782,7 +784,7 @@ export function ColorDocs() {
                 to it, or when it is switched off.
               </InShort>
               <p className="docpage__body">
-                A hovered button does not get a different color — it gets the
+                A hovered button does not get a different color. It gets the
                 same color, a few steps along its own ramp. That keeps it
                 recognizably the same button and keeps the label readable.
               </p>
@@ -859,8 +861,8 @@ export function ColorDocs() {
                 <li>
                   <strong>Hover and selected share a tone.</strong> They are
                   visually identical by design; selection is distinguished by
-                  persistence and supporting affordances — a check, a bold
-                  label, a left border — not by color alone.
+                  persistence and supporting affordances (a check, a bold
+                  label, a left border), not by color alone.
                 </li>
                 <li>
                   <strong>Pressed is twice the hover shift,</strong> a clearly
@@ -872,7 +874,7 @@ export function ColorDocs() {
                   Both the fill and its content drop to neutral. This is the one
                   state where an element deliberately loses its brand color. The
                   pairing is intentionally low-contrast and is not
-                  contrast-checked — it is exempt under WCAG, and it must never
+                  contrast-checked. It is exempt under WCAG, and it must never
                   be the only signal that a control is unavailable.
                 </li>
                 <li>
@@ -887,7 +889,7 @@ export function ColorDocs() {
                 Error, warning, and success are roles, not states. A field that
                 fails validation takes <code>error</code> for its border and
                 message; it does not get an &ldquo;error hover.&rdquo; Status
-                roles and interaction states compose — a destructive button
+                roles and interaction states compose: a destructive button
                 still hovers and presses along its own ramp.
               </p>
             </Reveal>
@@ -908,7 +910,7 @@ export function ColorDocs() {
               </InShort>
               <p className="docpage__body">
                 The measure is a <strong>contrast ratio</strong>, written like
-                4.5:1 — the bigger the number, the easier the text is to read.
+                4.5:1. The bigger the number, the easier the text is to read.
                 Fourteen pairings are checked in both themes every time a
                 palette is generated. If one ever fell short, the system nudges
                 that color along its own ramp until it passes, keeping the hue
@@ -975,9 +977,10 @@ export function ColorDocs() {
                   and usually fine, but verify it.
                 </li>
                 <li>
-                  Any cross-pairing you invent — <code>onPrimaryContainer</code>{' '}
-                  on <code>surface</code>, <code>primary</code> as body text,{' '}
-                  <code>outline</code> as text — is unchecked and likely to fail.
+                  Any cross-pairing you invent is unchecked and likely to
+                  fail: <code>onPrimaryContainer</code> on <code>surface</code>,{' '}
+                  <code>primary</code> as body text, <code>outline</code> as
+                  text.
                 </li>
                 <li>
                   Text over images, gradients, or generated patterns. No token
@@ -990,8 +993,8 @@ export function ColorDocs() {
               <h3 className="doc-subheading">Focus indicators</h3>
               <p className="docpage__body">
                 Every interactive element needs a visible focus indicator. Use
-                the focus ring token — it is generated per theme specifically to
-                stay visible against both grounds. Never remove focus outlines,
+                the focus ring token, which is generated per theme specifically
+                to stay visible against both grounds. Never remove focus outlines,
                 and never let the hover treatment double as the focus state;
                 keyboard users never trigger hover.
               </p>
@@ -999,7 +1002,7 @@ export function ColorDocs() {
               <h3 className="doc-subheading">Do not rely on color alone</h3>
               <p className="docpage__body">
                 This applies with unusual force here, for two system-specific
-                reasons. <strong>The source color is user-chosen</strong> — you
+                reasons. <strong>The source color is user-chosen.</strong> You
                 cannot assume the accent is blue, or warm, or dark, so any
                 meaning attached to a specific hue will be wrong for some
                 sources. And <strong>status hue can collide with the source</strong>:
@@ -1015,7 +1018,7 @@ export function ColorDocs() {
               <p className="docpage__body">
                 Both themes are generated from the same ramps against the same
                 targets, so a design that passes in one passes in the other. But
-                check both before shipping — anything built outside the token
+                check both before shipping. Anything built outside the token
                 system (illustrations, screenshots, images with baked-in
                 backgrounds, hard-coded hexes) will not follow the theme, and
                 dark mode is where that shows up first.
@@ -1089,7 +1092,7 @@ export function ColorDocs() {
               </ol>
 
               <h3 className="doc-subheading">Complete reference</h3>
-              <p className="doc-reference-label">Semantic roles — 27 per theme</p>
+              <p className="doc-reference-label">Semantic roles: 27 per theme</p>
               <p className="doc-chips">
                 {[
                   'primary',
@@ -1124,7 +1127,7 @@ export function ColorDocs() {
                 ))}
               </p>
               <p className="doc-reference-label">
-                Interaction states — 6 per theme
+                Interaction states: 6 per theme
               </p>
               <p className="doc-chips">
                 {[
@@ -1139,7 +1142,7 @@ export function ColorDocs() {
                 ))}
               </p>
               <p className="doc-reference-label">
-                Primitives — 7 ramps × 10 stops
+                Primitives: 7 ramps × 10 stops
               </p>
               <p className="docpage__body">
                 Exported for reference and tooling. Available to inspect and
@@ -1164,7 +1167,7 @@ export function ColorDocs() {
                   design switches themes the way the product does.
                 </li>
                 <li>
-                  Import primitives as a separate, locked collection — visible
+                  Import primitives as a separate, locked collection: visible
                   for reference, hidden from the picker, so designers select
                   roles rather than stops.
                 </li>
