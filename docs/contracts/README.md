@@ -26,11 +26,11 @@ This is a solo-maintainer model. It doesn't require review gates, just a fixed p
 - Carbon's `--cds-*` variables are still stamped (55 of them) as a **compatibility layer**, so Carbon's own components keep picking up generated values. They are not the canonical surface and cannot express the full set — Graphite's own components read `--graphite-*` only.
 - State resolution: discrete **tone-step** moves on the ramp (not opacity). Direction preserves WCAG contrast — darker in light themes, lighter in dark.
 - Contrast is enforced at generation time, not audited after.
-- Output per theme pass: **33 `--graphite-*` variables** (canonical) and **55 `--cds-*` variables** (Carbon compatibility), light and dark generated together.
+- Output per theme pass: **33 `--graphite-*` color variables** (canonical) and **55 `--cds-*` variables** (Carbon compatibility), light and dark generated together. A further **16 `--graphite-space-*` / `--graphite-density-*` variables** are declared statically in `app/globals.scss`; spacing does not vary by theme, so it is not part of the generated pass.
 
 **Confirmed gap — Wave 0, build before touching components that need it:**
 
-- **No spacing/layout token scale of our own** (issue #41). Carbon's `$spacing-01…13` is imported and used throughout, but it is SCSS only — there are no `--cds-spacing-*` custom properties, nothing is generated from the source hex, and no density/padding tokens exist. Card and Table density have nothing to bind to, and because the scale is compile-time the drift check cannot see it at all.
+- **Spacing is a runtime scale now** (issue #41). `--graphite-space-01…13` and three semantic `--graphite-density-*` steps are declared in `app/globals.scss`, interpolated from Carbon's `$spacing-*` so the numbers cannot fall out of step. Components bind to the density steps rather than raw steps. The drift check covers them, so rule 4 is no longer color-only. What is still *not* done: the scale is Carbon's numbers under Graphite names, not a scale generated from anything — spacing has no ramp to sample, so this may simply be the right answer.
 - **Status roles are complete** (issue #42). `danger`, `warning`, `success`, and `info` each resolve base, `on*`, `*Container`, and `on*Container`, and all four sets now emit under `--graphite-*`. The `on*Container` text tokens have no Carbon equivalent — Carbon ships one per-status text token (`text-error`) and no slot for text on a container fill — so they exist only in the Graphite namespace.
 
 Where a component needs something from the gap list, its contract is marked **[blocked on Wave 0]** rather than guessing a value.

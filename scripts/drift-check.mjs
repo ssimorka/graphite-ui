@@ -25,6 +25,7 @@ import { pathToFileURL } from 'node:url'
 const ROOT = process.cwd()
 const CONTRACTS_DIR = 'docs/contracts'
 const ENGINE = 'lib/color.js'
+const STYLESHEET = 'app/globals.scss'
 const IMPL_DIRS = ['components/ui', 'components', 'app']
 const PROBE_HEX = '#5e44aa'
 
@@ -106,7 +107,23 @@ async function readTokenModel() {
   }
   for (const role of Object.keys(theme.tokens)) bind(role, `--graphite-${kebab(role)}`)
   for (const v of PRIMARY_STATE_VARS) bind('primary', v)
+  const space = readSpacingVars()
+  for (const v of space.spacing) bind('spacing', v)
+  for (const v of space.density) bind('density', v)
   return { roleToVars, varToRole }
+}
+
+// Spacing is not generated — it has no ramp to sample — so its variables are
+// declared statically in the stylesheet rather than produced by the engine.
+// Read the declarations (not var() references) so the check covers spacing too
+// and rule 4 is not silently color-only.
+function readSpacingVars() {
+  const src = fs.readFileSync(path.join(ROOT, STYLESHEET), 'utf8')
+  const decls = (re) => [...new Set(src.match(re) || [])]
+  return {
+    spacing: decls(/--graphite-space-\d{2}(?=\s*:)/g),
+    density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
+  }
 }
 
 // ------------------------------------------------------------ implementation
@@ -193,7 +210,7 @@ for (const c of contracts) {
 
 const plural = (n, s) => `${n} ${s}${n === 1 ? '' : 's'}`
 console.log(`drift-check: ${plural(contracts.length, 'contract')}, ` +
-  `${plural(roleToVars.size, 'role')}, ${plural(varToRole.size, 'emitted variable')}`)
+  `${plural(roleToVars.size, 'role')}, ${plural(varToRole.size, 'declared variable')}`)
 console.log(`  ${checked} implemented and checked, ${pending} awaiting implementation`)
 if (warnings.length) { console.log('\nwarnings:'); for (const w of warnings) console.log(`  ! ${w}`) }
 if (errors.length) {
