@@ -5,7 +5,7 @@
 // errors this clears in theme-provider.tsx). Shapes here mirror what the
 // functions actually return — keep them in sync if color.js changes.
 
-export type StatusName = 'error' | 'warning' | 'success' | 'info'
+export type StatusName = 'danger' | 'warning' | 'success' | 'info'
 export type RampName = 'accent' | 'neutral' | 'neutralVariant' | StatusName
 export type ThemeMode = 'light' | 'dark'
 export type ContrastLevel = 'AA' | 'AAA'
@@ -73,10 +73,10 @@ export interface ThemeTokens extends Record<string, Token> {
   outline: Token
   background: Token
   onBackground: Token
-  error: Token
-  onError: Token
-  errorContainer: Token
-  onErrorContainer: Token
+  danger: Token
+  onDanger: Token
+  dangerContainer: Token
+  onDangerContainer: Token
   warning: Token
   onWarning: Token
   warningContainer: Token
