@@ -22,16 +22,23 @@ This is a solo-maintainer model. It doesn't require review gates, just a fixed p
 ## Token structure reference (current, confirmed)
 
 - Source: one hex input, resolved in **OKLab**, sampled at fixed tone stops into a perceptual ramp.
-- Semantic roles currently live: **surface, on-surface, primary, outline**.
+- Semantic roles currently live: **19 roles bound to CSS variables** — `background`, `surface`, `surfaceVariant`, `onBackground`, `onSurfaceVariant`, `onPrimary`, `primary`, `primaryContainer`, `onPrimaryContainer`, `outline`, `focus`, `error`, `errorContainer`, `onErrorContainer`, `warning`, `success`, `successContainer`, `onSuccessContainer`, `info`. The mapping lives in `CARBON_VAR_BINDINGS` in `components/theme-provider.tsx`.
+- **`onSurface` is defined in the engine but bound to nothing** — see the gap list below.
 - State resolution: discrete **tone-step** moves on the ramp (not opacity). Direction preserves WCAG contrast — darker in light themes, lighter in dark.
 - Contrast is enforced at generation time, not audited after.
 - Output: 51 CSS variables per theme pass, light and dark generated together.
 
-**Confirmed gap — Wave 0 below, build before touching components that need it:**
-- No formalized **spacing/layout token scale** yet (needed by Card, Item, Table, Dialog, and most layout-bearing components).
-- No **status color roles** yet — success, warning, danger equivalents to primary/on-surface/outline (needed by Alert, Badge status variants, form validation states on Field).
+**Confirmed gap — Wave 0, build before touching components that need it:**
 
-Every contract below references only tokens confirmed to exist. Where a component needs something from the gap list, it's marked **[blocked on Wave 0]** rather than guessing a value.
+- **`on-surface` has no CSS variable binding** (issue #44). Ten contracts declare it as their text color. The engine defines the role (`lib/color.js`, neutral tone 10 light / 90 dark) but never stamps it. The bound text roles are `onBackground` (`--cds-text-primary`) and `onSurfaceVariant` (`--cds-text-secondary`). Blocks every Wave 1 primitive.
+- **No spacing/layout token scale of our own** (issue #41). Carbon's `$spacing-01…13` is imported and used throughout, but it is SCSS only — there are no `--cds-spacing-*` custom properties, nothing is generated from the source hex, and no density/padding tokens exist. Card and Table density have nothing to bind to, and because the scale is compile-time the drift check cannot see it at all.
+- **Status roles are built but incomplete** (issue #42). `error`, `warning`, `success`, and `info` are generated with pinned hues and stamped to `--cds-support-*`. However only `error` and `success` have container/on- pairs, so warning and info have no background/text pair to sit on. Note the engine says `error` where the contracts say `danger`, and has an `info` role the contracts do not mention.
+
+Where a component needs something from the gap list, its contract is marked **[blocked on Wave 0]** rather than guessing a value.
+
+### Reconciliation note
+
+The gap list above was rewritten on 2026-08-19 after checking the source document against the codebase. As originally written it claimed spacing and status roles were both entirely absent; status roles in fact largely exist, and the `on-surface` binding gap was not known. The governance model puts the contract above the implementation, but that does not license the contract to be wrong about what the implementation contains — where the two disagreed on plain fact, fact won.
 
 ---
 
