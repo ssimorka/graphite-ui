@@ -1,6 +1,6 @@
 ---
 component: Item
-version: 1.0.0
+version: 1.1.0
 wave: 4
 slots:
   - name: Leading
@@ -18,6 +18,8 @@ props:
   - name: density
     values: [compact, default]
 tokens:
+  - name: density
+    usage: Row density steps. Resolves to `--graphite-density-*`.
   - name: on-surface
     usage: Title.
   - name: surface

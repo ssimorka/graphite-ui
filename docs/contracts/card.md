@@ -1,6 +1,6 @@
 ---
 component: Card
-version: 1.0.0
+version: 1.1.0
 wave: 4
 slots:
   - name: Header
@@ -13,9 +13,9 @@ slots:
 props:
   - name: padding density
     values: [compact, default, spacious]
-    blocked_on: Wave 0
-    interim: Ship default only until spacing tokens exist.
 tokens:
+  - name: density
+    usage: Padding density steps. Resolves to `--graphite-density-*`.
   - name: surface
     usage: Background.
   - name: outline
@@ -28,7 +28,7 @@ prohibitions:
 
 ### Card
 - **Slots:** Header (optional), body (required), footer (optional, typically holds Button).
-- **Props:** padding density (compact, default, spacious) **[blocked on Wave 0 spacing scale — ship default only until spacing tokens exist]**.
+- **Props:** padding density (compact, default, spacious).
 - **Tokens:** `surface` background, `outline` border or shadow-equivalent edge.
 - **Composition rules:** Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons.
 - **Prohibitions:** No nested Cards. If content needs visual grouping inside a Card, use Separator, not a second Card.

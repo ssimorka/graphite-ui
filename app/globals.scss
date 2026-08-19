@@ -30,6 +30,40 @@
   @include theme.theme(themes.$g100);
 }
 
+// ---------- Graphite spacing scale ----------
+//
+// Spacing is the one part of the token system that is not generated: it does
+// not respond to the source color, so there is no ramp to sample. What it was
+// missing is a runtime surface. Carbon's $spacing-* are Sass variables
+// resolved at compile time, so nothing could read them at runtime and the
+// drift check could not see them at all.
+//
+// Values are interpolated from Carbon's scale rather than restated, so the two
+// cannot fall out of step. Graphite owns the names, Carbon owns the numbers —
+// the same split as color.
+:root {
+  --graphite-space-01: #{spacing.$spacing-01};
+  --graphite-space-02: #{spacing.$spacing-02};
+  --graphite-space-03: #{spacing.$spacing-03};
+  --graphite-space-04: #{spacing.$spacing-04};
+  --graphite-space-05: #{spacing.$spacing-05};
+  --graphite-space-06: #{spacing.$spacing-06};
+  --graphite-space-07: #{spacing.$spacing-07};
+  --graphite-space-08: #{spacing.$spacing-08};
+  --graphite-space-09: #{spacing.$spacing-09};
+  --graphite-space-10: #{spacing.$spacing-10};
+  --graphite-space-11: #{spacing.$spacing-11};
+  --graphite-space-12: #{spacing.$spacing-12};
+  --graphite-space-13: #{spacing.$spacing-13};
+
+  // Semantic density steps. Components bind here rather than reaching for a
+  // raw step, so Card's compact/default/spacious and Table's and Item's
+  // compact/default all move together from one edit.
+  --graphite-density-compact: var(--graphite-space-03);
+  --graphite-density-default: var(--graphite-space-05);
+  --graphite-density-spacious: var(--graphite-space-06);
+}
+
 html,
 body {
   background: var(--cds-background);
