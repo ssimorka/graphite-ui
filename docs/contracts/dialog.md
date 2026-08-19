@@ -1,0 +1,41 @@
+---
+component: Dialog
+version: 1.0.0
+wave: 5
+slots:
+  - name: Title
+    required: true
+  - name: Body
+    required: true
+  - name: Footer actions
+    required: false
+    notes: Typically Button.
+props:
+  - name: size
+    values: [sm, md, lg]
+  - name: dismissible
+    values: boolean
+tokens:
+  - name: surface
+    usage: Elevated tone-step.
+  - name: scrim
+    usage: Full-screen scrim at a defined opacity over the base surface.
+composition_rules:
+  - inherited_from: Wave 5 shared Overlay base
+    rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
+  - Always traps focus, always returns focus to the trigger on close.
+  - Footer follows Button's one-primary-action rule, same as Card.
+prohibitions:
+  - No Dialog opened from within another Dialog — stack depth of one.
+---
+
+> **Shared Wave 5 overlay base** — quoted from the source document, applies to all five Wave 5 overlay components:
+>
+> All five below share one base pattern: a `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component). Define that shared base once as an internal "Overlay" contract, then each component below only needs to declare what's different.
+
+### Dialog
+- **Slots:** Title (required), body (required), footer actions (optional, typically Button).
+- **Props:** size (sm, md, lg), dismissible (boolean).
+- **Tokens:** Elevated `surface`, full-screen scrim at a defined opacity over the base surface.
+- **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's one-primary-action rule, same as Card.
+- **Prohibitions:** No Dialog opened from within another Dialog — stack depth of one.
