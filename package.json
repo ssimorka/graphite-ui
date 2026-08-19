@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "start": "next start"
+    "start": "next start",
+    "drift-check": "node scripts/drift-check.mjs"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.82.0",
