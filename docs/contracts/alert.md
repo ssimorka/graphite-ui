@@ -1,6 +1,6 @@
 ---
 component: Alert
-version: 1.0.0
+version: 1.1.0
 wave: 5
 slots:
   - name: Icon
@@ -12,7 +12,7 @@ slots:
 props:
   - name: variant
     values: [informational]
-    blocked_values: [success, warning, danger]
+    blocked_values: [success, warning, error]
     blocked_on: Wave 0
 tokens:
   - name: surface
@@ -35,7 +35,7 @@ prohibitions:
 
 ### Alert
 - **Slots:** Icon (optional), title (optional), body (required).
-- **Props:** variant (informational now; success/warning/danger **[blocked on Wave 0]**).
+- **Props:** variant (informational now; success/warning/error **[blocked on Wave 0]**).
 - **Tokens:** `surface` background, `on-surface` text, `outline` edge for the informational variant.
 - **Composition rules:** Not a toast — Alert is inline and persistent until dismissed or the condition changes. Toast is a Tier 2 component with its own timing contract.
 - **Prohibitions:** No status-colored Alert variants until Wave 0 ships — ship informational only, same constraint as Badge.
