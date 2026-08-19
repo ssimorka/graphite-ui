@@ -22,17 +22,16 @@ This is a solo-maintainer model. It doesn't require review gates, just a fixed p
 ## Token structure reference (current, confirmed)
 
 - Source: one hex input, resolved in **OKLab**, sampled at fixed tone stops into a perceptual ramp.
-- Semantic roles currently live: **19 roles bound to CSS variables** — `background`, `surface`, `surfaceVariant`, `onBackground`, `onSurfaceVariant`, `onPrimary`, `primary`, `primaryContainer`, `onPrimaryContainer`, `outline`, `focus`, `error`, `errorContainer`, `onErrorContainer`, `warning`, `success`, `successContainer`, `onSuccessContainer`, `info`. The mapping lives in `CARBON_VAR_BINDINGS` in `components/theme-provider.tsx`.
-- **`onSurface` is defined in the engine but bound to nothing** — see the gap list below.
+- Semantic roles: the engine generates **27 roles**, every one emitted as a `--graphite-*` CSS variable, plus 6 interaction-state variables — 33 in total. Names are kebab-case and match the vocabulary these contracts use, so `on-surface` in a contract is `--graphite-on-surface` in the CSS.
+- Carbon's `--cds-*` variables are still stamped (55 of them) as a **compatibility layer**, so Carbon's own components keep picking up generated values. They are not the canonical surface and cannot express the full set — Graphite's own components read `--graphite-*` only.
 - State resolution: discrete **tone-step** moves on the ramp (not opacity). Direction preserves WCAG contrast — darker in light themes, lighter in dark.
 - Contrast is enforced at generation time, not audited after.
-- Output: 51 CSS variables per theme pass, light and dark generated together.
+- Output per theme pass: **33 `--graphite-*` variables** (canonical) and **55 `--cds-*` variables** (Carbon compatibility), light and dark generated together.
 
 **Confirmed gap — Wave 0, build before touching components that need it:**
 
-- **`on-surface` has no CSS variable binding** (issue #44). Ten contracts declare it as their text color. The engine defines the role (`lib/color.js`, neutral tone 10 light / 90 dark) but never stamps it. The bound text roles are `onBackground` (`--cds-text-primary`) and `onSurfaceVariant` (`--cds-text-secondary`). Blocks every Wave 1 primitive.
 - **No spacing/layout token scale of our own** (issue #41). Carbon's `$spacing-01…13` is imported and used throughout, but it is SCSS only — there are no `--cds-spacing-*` custom properties, nothing is generated from the source hex, and no density/padding tokens exist. Card and Table density have nothing to bind to, and because the scale is compile-time the drift check cannot see it at all.
-- **Status roles: complete except for on-container text** (issue #42). `danger`, `warning`, `success`, and `info` are generated with pinned hues. Each resolves four tokens — base, `on*`, `*Container`, `on*Container`. Base colors bind to `--cds-support-*`; all four containers now bind to `--cds-notification-background-*`. **The `on*Container` text tokens are generated but bound to nothing**: Carbon offers exactly one per-status text token (`text-error`) and no per-status slot for text on a container fill, so there is nowhere in its namespace to put them. This is the first place the contracts want a token surface Carbon does not have.
+- **Status roles are complete** (issue #42). `danger`, `warning`, `success`, and `info` each resolve base, `on*`, `*Container`, and `on*Container`, and all four sets now emit under `--graphite-*`. The `on*Container` text tokens have no Carbon equivalent — Carbon ships one per-status text token (`text-error`) and no slot for text on a container fill — so they exist only in the Graphite namespace.
 
 Where a component needs something from the gap list, its contract is marked **[blocked on Wave 0]** rather than guessing a value.
 

@@ -2,25 +2,53 @@
 // Drift check — governance rule 4.
 //
 // Reads each contract's declared token roles and verifies the component's
-// actual code references only CSS variables backed by those roles, nothing
+// actual code references only the CSS variables those roles produce, nothing
 // else. Exits non-zero on mismatch so it can gate a build.
 //
-// Three namespaces are in play and the script reconciles them:
-//   contract frontmatter  on-surface, primary, outline   (kebab)
-//   color engine roles    onSurface, primary, outline    (camel, lib/color.js)
-//   stamped CSS vars      --cds-text-primary, ...        (Carbon)
-// The role -> var mapping is read from CARBON_VAR_BINDINGS rather than
-// hardcoded here, so the engine stays the single source of truth.
+// The authority is lib/color.js itself: this imports the engine and asks it
+// what it generates, rather than parsing a binding table out of a .tsx file.
+// A role the engine does not produce cannot be declared by a contract, and a
+// variable the engine does not emit cannot be referenced by a component.
+//
+//   contract frontmatter  on-surface        (kebab)
+//   engine role key       onSurface         (camel)
+//   emitted CSS variable  --graphite-on-surface
+//
+// --cds-* is Carbon's compatibility layer, not ours. Components may still
+// reference it while Carbon components are in use, so it warns rather than
+// fails.
 
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 const ROOT = process.cwd()
 const CONTRACTS_DIR = 'docs/contracts'
-const BINDINGS_FILE = 'components/theme-provider.tsx'
+const ENGINE = 'lib/color.js'
 const IMPL_DIRS = ['components/ui', 'components', 'app']
+const PROBE_HEX = '#5e44aa'
 
 const camel = (s) => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+
+// Interaction states belong to the primary role rather than being roles of
+// their own, so a contract declaring `primary` may reference them.
+const PRIMARY_STATE_VARS = [
+  '--graphite-primary-hover',
+  '--graphite-primary-pressed',
+  '--graphite-primary-selected',
+  '--graphite-primary-disabled',
+  '--graphite-primary-disabled-content',
+  '--graphite-focus',
+]
+
+// Roles a contract may declare that the engine does not produce yet, by
+// design. Each is tracked by open work; they warn rather than fail the build.
+const PENDING_ROLES = new Map([
+  ['status role', 'issue #42 — status container text'],
+  ['overlay surface', 'Wave 5 — shared overlay surface token not defined yet'],
+  ['scrim', 'Wave 5 — Dialog scrim opacity not defined yet'],
+])
 
 // ---------------------------------------------------------------- contracts
 const frontmatter = (t) => (t.match(/^---\r?\n([\s\S]*?)\r?\n---/) || [, ''])[1]
@@ -30,7 +58,6 @@ const scalar = (fm, key) => {
   return m ? m[1].trim() : null
 }
 
-// Lines indented under a top-level key, up to the next top-level key.
 const block = (fm, key) => {
   const lines = fm.split(/\r?\n/)
   const i = lines.findIndex((l) => new RegExp(`^${key}:`).test(l))
@@ -59,28 +86,26 @@ function readContracts() {
         file, slug: file.replace(/\.md$/, ''),
         component: scalar(fm, 'component'),
         version: scalar(fm, 'version'),
-        wave: scalar(fm, 'wave'),
         roles, inherits,
       }
     })
 }
 
-// ----------------------------------------------------------------- bindings
-// Parse CARBON_VAR_BINDINGS: ['--cds-x', (t) => t.role.hex]
-// `primary.base` / `primary.hover` collapse to the `primary` role.
-function readBindings() {
-  const src = fs.readFileSync(path.join(ROOT, BINDINGS_FILE), 'utf8')
-  const re = /\['(--cds-[a-z0-9-]+)',\s*\(_?\w+(?:,\s*\w+)?\)\s*=>\s*\w+\.([A-Za-z][A-Za-z0-9.]*)/g
+// ------------------------------------------------------------------- engine
+// Ask the engine what it generates. Role -> the variables that role emits.
+async function readTokenModel() {
+  const mod = await import(pathToFileURL(path.join(ROOT, ENGINE)).href)
+  const ramps = mod.makeRamps(PROBE_HEX)
+  const theme = mod.buildTheme('light', ramps, 'AA', true)
   const roleToVars = new Map()
   const varToRole = new Map()
-  let m
-  while ((m = re.exec(src))) {
-    const cssVar = m[1]
-    const role = m[2].replace(/\.hex$/, '').split('.')[0]
+  const bind = (role, v) => {
     if (!roleToVars.has(role)) roleToVars.set(role, new Set())
-    roleToVars.get(role).add(cssVar)
-    varToRole.set(cssVar, role)
+    roleToVars.get(role).add(v)
+    varToRole.set(v, role)
   }
+  for (const role of Object.keys(theme.tokens)) bind(role, `--graphite-${kebab(role)}`)
+  for (const v of PRIMARY_STATE_VARS) bind('primary', v)
   return { roleToVars, varToRole }
 }
 
@@ -96,33 +121,26 @@ function findImpl(slug) {
       for (const e of fs.readdirSync(cur, { withFileTypes: true })) {
         const p = path.join(cur, e.name)
         if (e.isDirectory()) stack.push(p)
-        else if (names.includes(e.name)) return path.relative(ROOT, p).split(path.sep).join("/")
+        else if (names.includes(e.name)) return path.relative(ROOT, p).split(path.sep).join('/')
       }
     }
   }
   return null
 }
 
-const varsUsedIn = (rel) => {
+const scan = (rel) => {
   const src = fs.readFileSync(path.join(ROOT, rel), 'utf8')
-  return new Set(src.match(/--cds-[a-z0-9-]+/g) || [])
+  return {
+    graphite: new Set(src.match(/--graphite-[a-z0-9-]+/g) || []),
+    cds: new Set(src.match(/--cds-[a-z0-9-]+/g) || []),
+  }
 }
-
-// Roles a contract may declare that are not bound yet *by design*. Each is
-// tracked by open work; they warn rather than fail the build, so the check can
-// gate CI today instead of after Wave 0 and Wave 5 land.
-const PENDING_ROLES = new Map([
-  ["status role", "issue #42 — status color roles (Wave 0)"],
-  ["overlay surface", "Wave 5 — shared overlay surface token not defined yet"],
-  ["scrim", "Wave 5 — Dialog scrim opacity not defined yet"],
-])
 
 // --------------------------------------------------------------------- main
 const contracts = readContracts()
-const { roleToVars, varToRole } = readBindings()
+const { roleToVars, varToRole } = await readTokenModel()
 const byComponent = new Map(contracts.map((c) => [c.component, c]))
 
-// Declared roles, following `inherited_from: <Component>` one level up.
 function declaredRoles(c, seen = new Set()) {
   const out = new Set(c.roles.map(camel))
   for (const parentName of c.inherits) {
@@ -145,27 +163,29 @@ for (const c of contracts) {
   for (const r of roles) for (const v of roleToVars.get(r) || []) allowed.add(v)
 
   for (const r of roles) {
-    if (!roleToVars.has(r)) {
-      const pending = PENDING_ROLES.get(r)
-      if (pending) warnings.push(`${c.file}: role "${r}" is unbound — expected, ${pending}`)
-      else errors.push(`${c.file}: declares role "${r}" — no CSS variable is bound to it in ${BINDINGS_FILE}`)
-    }
+    if (roleToVars.has(r)) continue
+    const why = PENDING_ROLES.get(r)
+    if (why) warnings.push(`${c.file}: role "${r}" not generated yet — expected, ${why}`)
+    else errors.push(`${c.file}: declares role "${r}", which ${ENGINE} does not generate`)
   }
 
   const impl = findImpl(c.slug)
   if (!impl) { pending++; continue }
   checked++
 
-  const used = varsUsedIn(impl)
-  for (const v of used) {
-    if (!varToRole.has(v)) errors.push(`${impl}: uses ${v}, which ${BINDINGS_FILE} never stamps`)
+  const used = scan(impl)
+  for (const v of used.graphite) {
+    if (!varToRole.has(v)) errors.push(`${impl}: uses ${v}, which the engine never emits`)
     else if (!allowed.has(v)) {
       errors.push(`${impl}: uses ${v} (role "${varToRole.get(v)}"), not declared in ${c.file}`)
     }
   }
+  for (const v of used.cds) {
+    warnings.push(`${impl}: uses Carbon's ${v} — prefer the --graphite-* equivalent`)
+  }
   for (const r of roles) {
     const vars = roleToVars.get(r)
-    if (vars && ![...vars].some((v) => used.has(v))) {
+    if (vars && ![...vars].some((v) => used.graphite.has(v))) {
       warnings.push(`${c.file}: declares role "${r}" but ${impl} never references it`)
     }
   }
@@ -173,7 +193,7 @@ for (const c of contracts) {
 
 const plural = (n, s) => `${n} ${s}${n === 1 ? '' : 's'}`
 console.log(`drift-check: ${plural(contracts.length, 'contract')}, ` +
-  `${plural(roleToVars.size, 'bound role')}, ${plural(varToRole.size, 'CSS variable')}`)
+  `${plural(roleToVars.size, 'role')}, ${plural(varToRole.size, 'emitted variable')}`)
 console.log(`  ${checked} implemented and checked, ${pending} awaiting implementation`)
 if (warnings.length) { console.log('\nwarnings:'); for (const w of warnings) console.log(`  ! ${w}`) }
 if (errors.length) {

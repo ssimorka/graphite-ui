@@ -140,6 +140,38 @@ const CARBON_VAR_BINDINGS: readonly [
 /** How many Carbon variables a generated theme maps. Quote this, never a literal. */
 export const CARBON_VAR_COUNT = CARBON_VAR_BINDINGS.length
 
+// ---------- Graphite namespace ----------
+//
+// Carbon's variables are a compatibility layer: they exist so Carbon's own
+// components pick up generated values, and their names and shape are Carbon's.
+// They cannot express the full generated set — there is no Carbon slot for
+// text on a status container, for instance — so seven roles were computed and
+// dropped on every pass.
+//
+// --graphite-* carries everything, and is what Graphite's own components read.
+// Derived from the token keys rather than hand-listed, so it cannot drift from
+// what the engine actually produces.
+
+const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+
+export const graphiteVarName = (role: string) => `--graphite-${kebab(role)}`
+
+function graphiteVarsFor(theme: BuiltTheme, states: BuiltStates) {
+  const out: Record<string, string> = {}
+  for (const [role, token] of Object.entries(theme.tokens)) {
+    out[graphiteVarName(role)] = (token as { hex: string }).hex
+  }
+  // Interaction states are tone references on the same ramp, not separate
+  // roles, so they live alongside rather than inside the token map.
+  out['--graphite-primary-hover'] = states.primary.hover.hex
+  out['--graphite-primary-pressed'] = states.primary.pressed.hex
+  out['--graphite-primary-selected'] = states.primary.selected.hex
+  out['--graphite-primary-disabled'] = states.primary.disabled.hex
+  out['--graphite-primary-disabled-content'] = states.primary.disabled.content.hex
+  out['--graphite-focus'] = states.focus.hex
+  return out
+}
+
 function carbonVarsFor(theme: BuiltTheme, states: BuiltStates) {
   return Object.fromEntries(
     CARBON_VAR_BINDINGS.map(([name, resolve]) => [
@@ -203,7 +235,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const activeStates = theme === 'white' ? lightStates : darkStates
 
     if (sourceHex && activeTheme && activeStates) {
-      const vars = carbonVarsFor(activeTheme, activeStates)
+      const vars = {
+        ...carbonVarsFor(activeTheme, activeStates),
+        ...graphiteVarsFor(activeTheme, activeStates),
+      }
       for (const [prop, value] of Object.entries(vars)) {
         root.style.setProperty(prop, value)
       }
