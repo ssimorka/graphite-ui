@@ -125,6 +125,16 @@ const CARBON_VAR_BINDINGS: readonly [
   ['--cds-tag-color-red', (t) => t.onDangerContainer.hex],
   ['--cds-tag-background-green', (t) => t.successContainer.hex],
   ['--cds-tag-color-green', (t) => t.onSuccessContainer.hex],
+  // Container fills for all four statuses. Carbon's notification backgrounds
+  // are the only slot it offers that covers every status — there is no yellow
+  // or orange tag — so warning and info reach their container here rather than
+  // through the tag palette. Note Carbon has no matching per-status *text*
+  // token (only text-error), so onWarningContainer and onInfoContainer are
+  // generated but stay unbound. See docs/contracts/README.md.
+  ['--cds-notification-background-error', (t) => t.dangerContainer.hex],
+  ['--cds-notification-background-warning', (t) => t.warningContainer.hex],
+  ['--cds-notification-background-success', (t) => t.successContainer.hex],
+  ['--cds-notification-background-info', (t) => t.infoContainer.hex],
 ]
 
 /** How many Carbon variables a generated theme maps. Quote this, never a literal. */
