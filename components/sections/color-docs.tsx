@@ -49,7 +49,7 @@ const PIPELINE = [
   {
     step: 'Raw shades',
     detail:
-      'Seven strips of ten shades each, dark to light. Three built from your color, four fixed ones for error, warning, success, and info.',
+      'Seven strips of ten shades each, dark to light. Three built from your color, four fixed ones for danger, warning, success, and info.',
   },
   {
     step: 'Named colors',
@@ -141,12 +141,12 @@ const ROLE_GROUPS = [
   },
   {
     title: 'Status and feedback',
-    note: 'Hue is fixed per status so red still reads as error whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer: a low-emphasis fill for banners, rows, and tags.',
+    note: 'Hue is fixed per status so red still reads as danger whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer: a low-emphasis fill for banners, rows, and tags.',
     roles: [
-      { name: 'error', purpose: 'Errors, destructive actions, invalid input' },
-      { name: 'onError', purpose: 'Content on an error fill' },
-      { name: 'errorContainer', purpose: 'Low-emphasis error fill: banners, rows' },
-      { name: 'onErrorContainer', purpose: 'Content on errorContainer' },
+      { name: 'danger', purpose: 'Errors, destructive actions, invalid input' },
+      { name: 'onDanger', purpose: 'Content on a danger fill' },
+      { name: 'dangerContainer', purpose: 'Low-emphasis danger fill: banners, rows' },
+      { name: 'onDangerContainer', purpose: 'Content on dangerContainer' },
       { name: 'warning', purpose: 'Warnings, risky but permitted actions' },
       { name: 'onWarning', purpose: 'Content on a warning fill' },
       { name: 'warningContainer', purpose: 'Low-emphasis warning fill' },
@@ -241,8 +241,8 @@ const CONTRAST_ROWS = [
   { role: 'onSurfaceVariant', against: 'surfaceVariant' },
   { role: 'onBackground', against: 'background' },
   { role: 'outline', against: 'surface' },
-  { role: 'onError', against: 'error' },
-  { role: 'onErrorContainer', against: 'errorContainer' },
+  { role: 'onDanger', against: 'danger' },
+  { role: 'onDangerContainer', against: 'dangerContainer' },
   { role: 'onWarning', against: 'warning' },
   { role: 'onWarningContainer', against: 'warningContainer' },
   { role: 'onSuccess', against: 'success' },
@@ -275,7 +275,7 @@ const SELECTION_ORDER = [
   'Content? onX, matching whatever it sits on.',
   'Border? outline, or primary and the focus ring if it indicates interaction.',
   'Action? primary + onPrimary for full emphasis, primaryContainer + onPrimaryContainer for low emphasis.',
-  'Communicating status? error, warning, success, or info, with their containers for low-emphasis fills.',
+  'Communicating status? danger, warning, success, or info, with their containers for low-emphasis fills.',
   'Interactive state? The state token for that role, never a manually adjusted value.',
   'No match? The role is missing from the system. Flag it rather than working around it.',
 ]
@@ -889,9 +889,9 @@ export function ColorDocs() {
               </ul>
 
               <p className="doc-callout">
-                Error, warning, and success are roles, not states. A field that
-                fails validation takes <code>error</code> for its border and
-                message; it does not get an &ldquo;error hover.&rdquo; Status
+                Danger, warning, and success are roles, not states. A field that
+                fails validation takes <code>danger</code> for its border and
+                message; it does not get a &ldquo;danger hover.&rdquo; Status
                 roles and interaction states compose: a destructive button
                 still hovers and presses along its own ramp.
               </p>
@@ -1012,7 +1012,7 @@ export function ColorDocs() {
                 because status hues are fixed, a source color sitting on one of
                 them resolves <code>primary</code> and that status to nearly the
                 same value. A red brand makes <code>primary</code> and{' '}
-                <code>error</code> near-identical. Always pair color with a
+                <code>danger</code> near-identical. Always pair color with a
                 second signal: an icon, a label, a change of weight, a position,
                 or a border.
               </p>
@@ -1109,10 +1109,10 @@ export function ColorDocs() {
                   'outline',
                   'background',
                   'onBackground',
-                  'error',
-                  'onError',
-                  'errorContainer',
-                  'onErrorContainer',
+                  'danger',
+                  'onDanger',
+                  'dangerContainer',
+                  'onDangerContainer',
                   'warning',
                   'onWarning',
                   'warningContainer',

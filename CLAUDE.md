@@ -23,24 +23,23 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
   at any tested input. Confirmed correct behavior, not a bug — but don't
   assume the toggle does something visible without retesting the actual
   input hex.
-- **`tsc --noEmit` reports 39 pre-existing errors in `theme-provider.tsx`.**
-  All stem from `lib/color.js` being untyped JS (return types infer as
-  `{}`). Not introduced by any session's changes — expected baseline.
-  A `lib/color.d.ts` would clear them if ever worth doing.
+- **`tsc --noEmit` is clean (0 errors).** This note previously recorded 39
+  pre-existing errors from `lib/color.js` being untyped; `lib/color.d.ts`
+  now exists and clears them. Verified 2026-08-19.
 - **Prettier has no project config.** Running it directly reformats to
   double-quotes/semicolons, against the codebase's actual style (single
   quotes, no semicolons). Always run with
   `--no-semi --single-quote` explicitly.
-- **`--cds-support-*` are now generated**, bound to the `error` /
+- **`--cds-support-*` are now generated**, bound to the `danger` /
   `warning` / `success` / `info` roles. This used to be Carbon's fixed
   green and was a standing trap — several early passes left "success
   green" chrome that read as a foreign color. Status hue is pinned per
-  status (so red still reads as error whatever the source is) while
+  status (so red still reads as danger whatever the source is) while
   chroma tracks the source, clamped 0.10–0.20. Chrome that should
   track the source but carries no status meaning still belongs on
   `--cds-interactive` / `--cds-button-primary`.
 - **A source color on a status hue collapses the two.** A red source
-  resolves `primary` and `error` to nearly the same value. Inherent to
+  resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
   status meaning in the UI.
 

@@ -116,13 +116,13 @@ const CARBON_VAR_BINDINGS: readonly [
   // Carbon's support colors are fixed values that read as foreign next to a
   // generated theme — the reason earlier passes kept leaving a stray "success
   // green" in the chrome. They now resolve to the generated status ramps.
-  ['--cds-support-error', (t) => t.error.hex],
+  ['--cds-support-error', (t) => t.danger.hex],
   ['--cds-support-warning', (t) => t.warning.hex],
   ['--cds-support-success', (t) => t.success.hex],
   ['--cds-support-info', (t) => t.info.hex],
-  ['--cds-text-error', (t) => t.error.hex],
-  ['--cds-tag-background-red', (t) => t.errorContainer.hex],
-  ['--cds-tag-color-red', (t) => t.onErrorContainer.hex],
+  ['--cds-text-error', (t) => t.danger.hex],
+  ['--cds-tag-background-red', (t) => t.dangerContainer.hex],
+  ['--cds-tag-color-red', (t) => t.onDangerContainer.hex],
   ['--cds-tag-background-green', (t) => t.successContainer.hex],
   ['--cds-tag-color-green', (t) => t.onSuccessContainer.hex],
 ]
