@@ -1,6 +1,6 @@
 ---
 component: Avatar
-version: 1.0.0
+version: 1.1.0
 wave: 1
 slots:
   - name: Image
@@ -20,6 +20,8 @@ tokens:
     usage: Fallback background.
   - name: on-surface
     usage: Fallback initials text.
+  - name: spacing
+    usage: Size steps for sm, md, and lg.
 composition_rules:
   - Image failure always falls back to initials, never to a broken image icon or blank circle.
 prohibitions:
@@ -29,6 +31,6 @@ prohibitions:
 ### Avatar
 - **Slots:** Image (optional), initials fallback (required if no image), status dot (optional).
 - **Props:** size (sm, md, lg), shape (circle, square).
-- **Tokens:** `surface` for the fallback background, `on-surface` for fallback initials text.
+- **Tokens:** `surface` for the fallback background, `on-surface` for fallback initials text; the spacing scale for the size steps.
 - **Composition rules:** Image failure always falls back to initials, never to a broken image icon or blank circle.
 - **Prohibitions:** No status dot without an accessible label describing the status (not color alone).

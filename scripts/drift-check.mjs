@@ -109,6 +109,7 @@ async function readTokenModel() {
   const space = readSpacingVars()
   for (const v of space.spacing) bind('spacing', v)
   for (const v of space.density) bind('density', v)
+  for (const v of space.motion) bind('motion', v)
   return { roleToVars, varToRole }
 }
 
@@ -122,6 +123,7 @@ function readSpacingVars() {
   return {
     spacing: decls(/--graphite-space-\d{2}(?=\s*:)/g),
     density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
+    motion: decls(/--graphite-motion-[a-z-]+(?=\s*:)/g),
   }
 }
 
@@ -145,7 +147,12 @@ function findImpl(slug) {
 }
 
 const scan = (rel) => {
-  const src = fs.readFileSync(path.join(ROOT, rel), 'utf8')
+  // A component's styles are part of its code, so the co-located module counts.
+  const sheet = rel.replace(/\.(tsx|jsx|ts)$/, '.module.scss')
+  const sheetAbs = path.join(ROOT, sheet)
+  const src =
+    fs.readFileSync(path.join(ROOT, rel), 'utf8') +
+    (fs.existsSync(sheetAbs) ? '\n' + fs.readFileSync(sheetAbs, 'utf8') : '')
   return {
     graphite: new Set(src.match(/--graphite-[a-z0-9-]+/g) || []),
     cds: new Set(src.match(/--cds-[a-z0-9-]+/g) || []),

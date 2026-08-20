@@ -1,0 +1,41 @@
+// Badge — docs/contracts/badge.md
+//
+// Every variant draws from a generated role. There are no hex values in this
+// file, which is the whole point of the prohibition.
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--graphite-space-06);
+  padding: 0 var(--graphite-space-02);
+  border-radius: var(--graphite-space-06);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: var(--graphite-space-06);
+  white-space: nowrap;
+}
+
+.neutral {
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+}
+
+.primary {
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+.danger {
+  background: var(--graphite-danger-container);
+  color: var(--graphite-on-danger-container);
+}
+
+.warning {
+  background: var(--graphite-warning-container);
+  color: var(--graphite-on-warning-container);
+}
+
+.success {
+  background: var(--graphite-success-container);
+  color: var(--graphite-on-success-container);
+}
