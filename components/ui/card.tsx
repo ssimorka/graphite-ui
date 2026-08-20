@@ -2,6 +2,7 @@
 
 import { createContext, useContext } from 'react'
 import type { ReactNode } from 'react'
+import { ButtonGroup } from './button'
 import styles from './card.module.scss'
 
 // Presence of this context means we are already inside a Card.
@@ -12,9 +13,8 @@ type CardProps = {
   body: ReactNode
   header?: ReactNode
   /**
-   * Typically holds Button. Per the Button contract's "one primary action per
-   * group" rule, a footer may not carry two primary buttons — that one cannot
-   * be enforced here until Button lands in this set.
+   * Typically holds Button. Wrapped in a ButtonGroup, so the "one primary
+   * action per group" rule holds here whether or not the caller remembers it.
    */
   footer?: ReactNode
   density?: 'compact' | 'default' | 'spacious'
@@ -38,7 +38,11 @@ export function Card({ body, header, footer, density = 'default' }: CardProps) {
       <section className={`${styles.card} ${styles[density]}`}>
         {header ? <div className={styles.header}>{header}</div> : null}
         <div className={styles.body}>{body}</div>
-        {footer ? <div className={styles.footer}>{footer}</div> : null}
+        {footer ? (
+          <div className={styles.footer}>
+            <ButtonGroup>{footer}</ButtonGroup>
+          </div>
+        ) : null}
       </section>
     </InsideCard.Provider>
   )

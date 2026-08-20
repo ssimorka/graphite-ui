@@ -1,7 +1,7 @@
 // Component gallery. Uses the same --graphite-* tokens the components do, so
 // the page itself is a specimen rather than a differently-styled frame.
 .page {
-  max-width: 60rem;
+  max-width: 46rem;
   margin: 0 auto;
   padding: var(--graphite-space-09) var(--graphite-space-05);
 }
@@ -60,6 +60,9 @@
   flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--graphite-space-05);
+  // An open Popover is absolutely positioned; without room the specimen below
+  // would sit under it.
+  min-height: var(--graphite-space-08);
 }
 
 .stack {
@@ -67,7 +70,21 @@
   flex-direction: column;
   gap: var(--graphite-space-04);
   width: 100%;
-  max-width: 26rem;
+  max-width: 34rem;
+}
+
+// A captioned cell, so size and shape variants can be compared rather than
+// guessed at.
+.swatch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-02);
+}
+
+.swatchLabel {
+  font-size: 0.6875rem;
+  color: var(--graphite-on-surface-variant);
 }
 
 .note {

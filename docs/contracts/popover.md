@@ -1,6 +1,6 @@
 ---
 component: Popover
-version: 1.2.0
+version: 1.3.0
 wave: 5
 slots:
   - name: Trigger
@@ -13,6 +13,9 @@ props:
   - name: modal
     values: boolean
     notes: Whether it traps focus.
+  - name: defaultOpen
+    values: boolean
+    notes: Starts open. For documentation surfaces that need to show the open state; dismissal still comes from the shared Overlay base.
 tokens:
   - name: surface-elevated
     usage: The shared overlay surface — surface at an elevated tone step.
@@ -34,7 +37,7 @@ prohibitions:
 
 ### Popover
 - **Slots:** Trigger (required), content (required, can include interactive elements).
-- **Props:** placement, modal (boolean — whether it traps focus).
+- **Props:** placement, modal (boolean — whether it traps focus), defaultOpen (boolean — starts open, for documentation surfaces).
 - **Tokens:** `surface-elevated`, `outline` edge; the spacing scale for padding, radius and trigger offset.
 - **Composition rules:** Inherits the shared Overlay dismiss pattern exactly — no custom close behavior per instance.
 - **Prohibitions:** No Popover nested inside another Popover.

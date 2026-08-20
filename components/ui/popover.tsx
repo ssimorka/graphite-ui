@@ -15,6 +15,8 @@ type PopoverProps = {
   placement?: 'top' | 'bottom' | 'left' | 'right'
   /** Modal popovers trap focus. Non-modal ones do not. */
   modal?: boolean
+  /** Starts open. For documentation surfaces that need to show the open state. */
+  defaultOpen?: boolean
 }
 
 export function Popover({
@@ -22,9 +24,10 @@ export function Popover({
   children,
   placement = 'bottom',
   modal = false,
+  defaultOpen = false,
 }: PopoverProps) {
   const id = useId()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(defaultOpen)
   const nested = useContext(InsidePopover)
 
   // Prohibition enforced, not described. Note this fires when the inner

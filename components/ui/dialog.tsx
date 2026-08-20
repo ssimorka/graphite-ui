@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useId } from 'react'
 import type { ReactNode } from 'react'
+import { ButtonGroup } from './button'
 import { useOverlay } from './overlay'
 import styles from './dialog.module.scss'
 
@@ -13,7 +14,7 @@ type DialogProps = {
   onClose: () => void
   title: string
   body: ReactNode
-  /** Typically Button. Follows the one-primary-action rule, same as Card. */
+  /** Typically Button. Wrapped in a ButtonGroup, same as Card's footer. */
   footer?: ReactNode
   size?: 'sm' | 'md' | 'lg'
   /** When false, Escape and the scrim no longer dismiss it. */
@@ -70,7 +71,11 @@ export function Dialog({
             {title}
           </h2>
           <div className={styles.body}>{body}</div>
-          {footer ? <div className={styles.footer}>{footer}</div> : null}
+          {footer ? (
+            <div className={styles.footer}>
+              <ButtonGroup>{footer}</ButtonGroup>
+            </div>
+          ) : null}
         </div>
       </div>
     </InsideDialog.Provider>
