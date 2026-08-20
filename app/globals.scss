@@ -62,6 +62,12 @@
   --graphite-density-compact: var(--graphite-space-03);
   --graphite-density-default: var(--graphite-space-05);
   --graphite-density-spacious: var(--graphite-space-06);
+
+  // Motion. Progress's indeterminate sweep is specified here rather than in
+  // the component so Spinner (Tier 2) reuses the same value and the two cannot
+  // drift into different motion languages, as its contract requires.
+  --graphite-motion-indeterminate: 1400ms;
+  --graphite-motion-indeterminate-ease: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 html,

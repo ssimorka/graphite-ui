@@ -1,0 +1,27 @@
+// Typography — docs/contracts/typography.md
+//
+// No margins here. Vertical rhythm belongs to the layout that composes these,
+// so a heading does not carry spacing that fights its container.
+.typography {
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+// The one permitted color override: text sitting on a filled primary surface.
+// `surface` reads near-white in light themes and near-black in dark ones, which
+// is the correct contrast against `primary` in both directions.
+.inverted {
+  color: var(--graphite-surface);
+}
+
+.display { font-size: 3rem; line-height: 1.1; letter-spacing: -0.02em; }
+.heading-1 { font-size: 2.25rem; line-height: 1.15; letter-spacing: -0.015em; }
+.heading-2 { font-size: 1.75rem; line-height: 1.2; }
+.heading-3 { font-size: 1.375rem; line-height: 1.25; }
+.heading-4 { font-size: 1.125rem; line-height: 1.3; }
+.body { font-size: 1rem; line-height: 1.5; }
+.caption { font-size: 0.8125rem; line-height: 1.4; }
+
+.regular { font-weight: 400; }
+.medium { font-weight: 500; }
+.semibold { font-weight: 600; }
