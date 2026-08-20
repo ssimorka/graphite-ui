@@ -1,6 +1,6 @@
 ---
 component: Radio Group
-version: 1.0.0
+version: 1.1.0
 wave: 2
 slots:
   - name: Option label
@@ -18,6 +18,10 @@ tokens:
     usage: Fill. Same as Checkbox.
   - name: outline
     usage: Border. Same as Checkbox.
+  - name: on-surface
+    usage: Group label text.
+  - name: spacing
+    usage: Control size and the gap between options.
 composition_rules:
   - Exactly one option selected at a time within a group is enforced by the component, not left to implementation.
 prohibitions:
@@ -27,6 +31,6 @@ prohibitions:
 ### Radio Group
 - **Slots:** One label per option (required), group label (required).
 - **Props:** orientation (vertical, horizontal), disabled (per-option or group-level).
-- **Tokens:** Same as Checkbox — `primary` fill, `outline` border.
+- **Tokens:** Same as Checkbox — `primary` fill, `outline` border — plus `on-surface` for the group label and the spacing scale for control size and option gaps.
 - **Composition rules:** Exactly one option selected at a time within a group is enforced by the component, not left to implementation.
 - **Prohibitions:** No radio group rendered without a group-level label — individual option labels aren't sufficient for screen readers.

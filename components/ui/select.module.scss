@@ -1,0 +1,67 @@
+// Select — docs/contracts/select.md
+//
+// The closed trigger takes Input's treatment. The open menu is the browser's
+// until Wave 5 lands an overlay surface, which is the soft dependency the
+// contract calls out.
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  width: 100%;
+}
+
+.wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-02);
+}
+
+.wrap:focus-within {
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}
+
+.errored,
+.errored:focus-within {
+  border-color: var(--graphite-danger);
+  box-shadow: 0 0 0 1px var(--graphite-danger);
+}
+
+.select {
+  appearance: none;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  padding: 0 var(--graphite-space-08) 0 var(--graphite-space-04);
+  cursor: pointer;
+}
+
+.select:focus {
+  outline: none;
+}
+
+.select:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.chevron {
+  position: absolute;
+  right: var(--graphite-space-04);
+  width: 0.45rem;
+  height: 0.45rem;
+  border: solid var(--graphite-on-surface);
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-25%) rotate(45deg);
+  pointer-events: none;
+}
+
+.sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
+.md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
+.lg { min-height: var(--graphite-space-09); font-size: 1rem; }

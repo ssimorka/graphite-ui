@@ -1,0 +1,42 @@
+// Textarea — docs/contracts/textarea.md
+//
+// Growth stops at max-height and hands over to a scrollbar. The contract
+// forbids growing past a defined maximum without an explicit scroll
+// affordance, so the two are set together and neither is optional.
+.textarea {
+  display: block;
+  width: 100%;
+  max-height: var(--graphite-space-13);
+  overflow-y: auto;
+  padding: var(--graphite-space-03) var(--graphite-space-04);
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-02);
+  font: inherit;
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}
+
+.errored,
+.errored:focus-visible {
+  border-color: var(--graphite-danger);
+  box-shadow: 0 0 0 1px var(--graphite-danger);
+}
+
+.textarea:disabled {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.vertical { resize: vertical; }
+.none { resize: none; }
+
+.sm { min-height: var(--graphite-space-09); font-size: 0.8125rem; }
+.md { min-height: var(--graphite-space-10); font-size: 0.875rem; }
+.lg { min-height: var(--graphite-space-11); font-size: 1rem; }

@@ -1,0 +1,72 @@
+// Radio Group — docs/contracts/radio-group.md
+.group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+
+.legend {
+  padding: 0;
+  margin-bottom: var(--graphite-space-03);
+  color: var(--graphite-on-surface);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.options {
+  display: flex;
+  gap: var(--graphite-space-04);
+}
+
+.vertical { flex-direction: column; }
+.horizontal { flex-direction: row; flex-wrap: wrap; }
+
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: var(--graphite-space-07);
+  min-height: var(--graphite-space-07);
+}
+
+.native {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dot {
+  width: var(--graphite-space-05);
+  height: var(--graphite-space-05);
+  border: 1px solid var(--graphite-outline);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+// Selected is a filled centre drawn with an inset shadow, so the ring stays
+// visible rather than the whole control flooding with color.
+.native:checked + .dot {
+  border-color: var(--graphite-primary);
+  box-shadow: inset 0 0 0 4px var(--graphite-primary);
+}
+
+.native:focus-visible + .dot {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+.native:disabled + .dot {
+  border-color: var(--graphite-primary-disabled-content);
+  box-shadow: none;
+}

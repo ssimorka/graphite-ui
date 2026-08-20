@@ -1,0 +1,75 @@
+// Checkbox — docs/contracts/checkbox.md
+//
+// The control keeps a minimum touch target even though the painted box is
+// smaller, which is the same rule Button follows.
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: var(--graphite-space-07);
+  min-height: var(--graphite-space-07);
+}
+
+.native {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--graphite-space-05);
+  height: var(--graphite-space-05);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-01);
+  pointer-events: none;
+}
+
+.native:checked + .box,
+.native:indeterminate + .box {
+  background: var(--graphite-primary);
+  border-color: var(--graphite-primary);
+}
+
+.native:focus-visible + .box {
+  box-shadow: 0 0 0 2px var(--graphite-focus);
+}
+
+.native:disabled + .box {
+  background: var(--graphite-primary-disabled);
+  border-color: var(--graphite-primary-disabled-content);
+}
+
+// Check: two borders rotated into a tick. Hidden until :checked.
+.check {
+  width: 0.3rem;
+  height: 0.6rem;
+  border: solid var(--graphite-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translateY(-10%);
+  opacity: 0;
+}
+
+.native:checked + .box .check { opacity: 1; }
+
+// Dash: a distinct glyph, so indeterminate is not a color swap.
+.dash {
+  width: 0.6rem;
+  height: 2px;
+  background: var(--graphite-on-primary);
+  opacity: 0;
+}
+
+.native:indeterminate + .box .dash { opacity: 1; }
