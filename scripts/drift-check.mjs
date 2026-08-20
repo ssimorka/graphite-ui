@@ -46,7 +46,6 @@ const PRIMARY_STATE_VARS = [
 // Roles a contract may declare that the engine does not produce yet, by
 // design. Each is tracked by open work; they warn rather than fail the build.
 const PENDING_ROLES = new Map([
-  ['status role', 'issue #42 — status container text'],
   ['overlay surface', 'Wave 5 — shared overlay surface token not defined yet'],
   ['scrim', 'Wave 5 — Dialog scrim opacity not defined yet'],
 ])
