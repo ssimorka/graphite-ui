@@ -69,6 +69,13 @@
   --graphite-motion-indeterminate: 1400ms;
   --graphite-motion-indeterminate-ease: cubic-bezier(0.65, 0, 0.35, 1);
 
+  // The site's own easing and durations, lifted out of the docs page so
+  // components move the way the pages around them already do rather than each
+  // picking its own curve.
+  --graphite-motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --graphite-motion-fast: 120ms;
+  --graphite-motion-base: 240ms;
+
   // Scrim. Dialog's contract asks for "a defined opacity", so it is defined
   // here once rather than chosen per Dialog. A veil is one of the few places
   // the system uses alpha rather than a tone step: it has to darken whatever

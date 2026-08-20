@@ -108,6 +108,18 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           <Button variant="danger">Danger</Button>
           <Button disabled>Disabled</Button>
         </Specimen>
+        <Specimen name="Button" note="asChild renders the button onto its child, so a link can be button-shaped without a button wrapping an anchor. Sizes run sm to lg, plus a square icon size whose accessible name still has to be given.">
+          <Button asChild>
+            <a href="/docs">A link, styled as a button</a>
+          </Button>
+          <Button size="sm">Small</Button>
+          <Button size="lg">Large</Button>
+          <Button size="icon" aria-label="Add">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M7.25 3h1.5v4.25H13v1.5H8.75V13h-1.5V8.75H3v-1.5h4.25V3z" fill="currentColor" />
+            </svg>
+          </Button>
+        </Specimen>
       </Wave>
 
       <Wave n="1">

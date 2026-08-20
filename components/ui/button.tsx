@@ -1,51 +1,89 @@
-'use client'
-
+// Deliberately not a client component. Button has no state, and marking it
+// 'use client' would put buttonVariants on the client too — which makes it
+// uncallable from a server component, exactly where borrowing the recipe is
+// most useful. A client caller can still pass onClick; the boundary is the
+// caller's, not this file's.
 import { Children, isValidElement } from 'react'
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type { ComponentPropsWithRef, ReactNode } from 'react'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/cn'
+import { Slot } from './slot'
 import styles from './button.module.scss'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
+/**
+ * Contract: docs/contracts/button.md (2.0.0)
+ *
+ * Structured after shadcn: a cva recipe, exported so siblings can borrow it,
+ * with forwardRef-style ref, className passthrough, prop spread, a data-slot
+ * hook and asChild polymorphism. The recipe resolves to CSS module classes
+ * rather than utility classes, so the styling stays on --graphite-* tokens.
+ */
+export const buttonVariants = cva(styles.button, {
+  variants: {
+    variant: {
+      primary: styles.primary,
+      secondary: styles.secondary,
+      ghost: styles.ghost,
+      danger: styles.danger,
+    },
+    size: {
+      sm: styles.sm,
+      md: styles.md,
+      lg: styles.lg,
+      icon: styles.icon,
+    },
+  },
+  defaultVariants: {
+    // shadcn defaults to its filled variant. Graphite defaults to secondary on
+    // purpose: "one primary action per group" is a contract rule here, and a
+    // primary default would make breaking it the path of least resistance.
+    variant: 'secondary',
+    size: 'md',
+  },
+})
 
-/** Contract: docs/contracts/button.md (1.0.0) */
-type ButtonProps = {
-  children: ReactNode
-  variant?: ButtonVariant
-  size?: 'sm' | 'md' | 'lg'
-  leading?: ReactNode
-  trailing?: ReactNode
-} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'>
+export type ButtonVariant = NonNullable<VariantProps<typeof buttonVariants>['variant']>
+
+export type ButtonProps = ComponentPropsWithRef<'button'> &
+  VariantProps<typeof buttonVariants> & {
+    /** Render onto the single child instead of emitting a button element. */
+    asChild?: boolean
+  }
 
 export function Button({
-  children,
-  variant = 'secondary',
-  size = 'md',
-  leading,
-  trailing,
-  type = 'button',
-  ...rest
+  className,
+  variant,
+  size,
+  asChild = false,
+  type,
+  ...props
 }: ButtonProps) {
+  const Comp = asChild ? Slot : 'button'
+
   return (
-    <button
-      {...rest}
-      type={type}
-      className={`${styles.button} ${styles[variant]} ${styles[size]}`}
-    >
-      {leading ? <span className={styles.icon}>{leading}</span> : null}
-      <span>{children}</span>
-      {trailing ? <span className={styles.icon}>{trailing}</span> : null}
-    </button>
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size }), className)}
+      // Only set a default type when we own the element; a slotted anchor or
+      // Link must not be handed a button type.
+      {...(asChild ? {} : { type: type ?? 'button' })}
+      {...props}
+    />
   )
 }
 
+export type ButtonGroupProps = ComponentPropsWithRef<'div'>
+
 /**
  * Enforces the one-primary-action rule. Card and Dialog wrap their footers in
- * this, so "a Card footer can't have two primary buttons" holds wherever a
- * footer is used rather than only where someone remembers the rule.
+ * this, so the rule holds wherever a footer is used rather than only where
+ * someone remembers it.
  */
-export function ButtonGroup({ children }: { children: ReactNode }) {
+export function ButtonGroup({ className, children, ...props }: ButtonGroupProps) {
   const primaries = Children.toArray(children).filter(
     (child) =>
-      isValidElement<{ variant?: ButtonVariant }>(child) &&
+      isValidElement<{ variant?: ReactNode }>(child) &&
       child.props.variant === 'primary',
   ).length
 
@@ -57,5 +95,9 @@ export function ButtonGroup({ children }: { children: ReactNode }) {
     )
   }
 
-  return <div className={styles.group}>{children}</div>
+  return (
+    <div data-slot="button-group" className={cn(styles.group, className)} {...props}>
+      {children}
+    </div>
+  )
 }
