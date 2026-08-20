@@ -1,0 +1,25 @@
+// Tooltip — docs/contracts/tooltip.md
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tip {
+  position: absolute;
+  z-index: 10;
+  max-width: var(--graphite-space-13);
+  padding: var(--graphite-space-02) var(--graphite-space-03);
+  background: var(--graphite-surface-elevated);
+  color: var(--graphite-on-surface);
+  border-radius: var(--graphite-space-02);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  white-space: normal;
+  width: max-content;
+  pointer-events: none;
+}
+
+.top { bottom: 100%; left: 50%; transform: translate(-50%, calc(-1 * var(--graphite-space-02))); }
+.bottom { top: 100%; left: 50%; transform: translate(-50%, var(--graphite-space-02)); }
+.left { right: 100%; top: 50%; transform: translate(calc(-1 * var(--graphite-space-02)), -50%); }
+.right { left: 100%; top: 50%; transform: translate(var(--graphite-space-02), -50%); }

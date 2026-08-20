@@ -1,0 +1,24 @@
+// Popover — docs/contracts/popover.md
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.panel {
+  position: absolute;
+  z-index: 20;
+  min-width: var(--graphite-space-12);
+  padding: var(--graphite-space-04);
+  background: var(--graphite-surface-elevated);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-03);
+}
+
+.panel:focus-visible {
+  outline: none;
+}
+
+.top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); }
+.bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
+.left { right: 100%; top: 0; margin-right: var(--graphite-space-02); }
+.right { left: 100%; top: 0; margin-left: var(--graphite-space-02); }

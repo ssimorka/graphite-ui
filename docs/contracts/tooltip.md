@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-version: 1.0.0
+version: 1.2.0
 wave: 5
 slots:
   - name: Trigger
@@ -14,10 +14,12 @@ props:
     values: [top, bottom, left, right]
   - name: delay
 tokens:
-  - name: surface
-    usage: Elevated tone-step.
+  - name: surface-elevated
+    usage: The shared overlay surface — surface at an elevated tone step.
   - name: on-surface
     usage: Text.
+  - name: spacing
+    usage: Padding and offset from the trigger.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -33,6 +35,6 @@ prohibitions:
 ### Tooltip
 - **Slots:** Trigger (required, any focusable element), content (required, short text only).
 - **Props:** placement (top, bottom, left, right), delay.
-- **Tokens:** Elevated `surface`, `on-surface` text.
+- **Tokens:** `surface-elevated`, `on-surface` text; the spacing scale for padding and trigger offset.
 - **Composition rules:** Never contains interactive content — a Tooltip you can click into is a Popover.
 - **Prohibitions:** No tooltip as the only source of critical information — it must be supplementary to visible content.

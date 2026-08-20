@@ -67,6 +67,7 @@ export interface ThemeTokens extends Record<string, Token> {
   primaryContainer: Token
   onPrimaryContainer: Token
   surface: Token
+  surfaceElevated: Token
   onSurface: Token
   surfaceVariant: Token
   onSurfaceVariant: Token

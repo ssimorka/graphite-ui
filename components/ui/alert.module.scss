@@ -1,0 +1,57 @@
+// Alert — docs/contracts/alert.md
+//
+// Not elevated. The Wave 5 preamble groups Alert with the overlays, but its
+// own contract puts it inline and persistent, so it takes plain `surface`
+// rather than the elevated overlay surface.
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-04);
+  border-radius: var(--graphite-space-02);
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  border: 1px solid var(--graphite-outline);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  line-height: 1;
+}
+
+.content {
+  min-width: 0;
+}
+
+.title {
+  margin: 0 0 var(--graphite-space-01);
+  font-weight: 600;
+}
+
+.body {
+  min-width: 0;
+}
+
+// Status variants take their generated container role. No hex lives here.
+.info {
+  background: var(--graphite-surface);
+}
+
+.danger {
+  background: var(--graphite-danger-container);
+  color: var(--graphite-on-danger-container);
+  border-color: var(--graphite-danger);
+}
+
+.warning {
+  background: var(--graphite-warning-container);
+  color: var(--graphite-on-warning-container);
+  border-color: var(--graphite-warning);
+}
+
+.success {
+  background: var(--graphite-success-container);
+  color: var(--graphite-on-success-container);
+  border-color: var(--graphite-success);
+}

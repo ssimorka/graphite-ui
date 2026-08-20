@@ -68,6 +68,12 @@
   // drift into different motion languages, as its contract requires.
   --graphite-motion-indeterminate: 1400ms;
   --graphite-motion-indeterminate-ease: cubic-bezier(0.65, 0, 0.35, 1);
+
+  // Scrim. Dialog's contract asks for "a defined opacity", so it is defined
+  // here once rather than chosen per Dialog. A veil is one of the few places
+  // the system uses alpha rather than a tone step: it has to darken whatever
+  // happens to be behind it, which no fixed ramp tone can do.
+  --graphite-scrim: rgb(0 0 0 / 0.55);
 }
 
 html,

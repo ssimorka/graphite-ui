@@ -1,6 +1,6 @@
 ---
 component: Popover
-version: 1.0.0
+version: 1.2.0
 wave: 5
 slots:
   - name: Trigger
@@ -14,10 +14,12 @@ props:
     values: boolean
     notes: Whether it traps focus.
 tokens:
-  - name: surface
-    usage: Elevated tone-step.
+  - name: surface-elevated
+    usage: The shared overlay surface — surface at an elevated tone step.
   - name: outline
     usage: Edge.
+  - name: spacing
+    usage: Padding, radius, and offset from the trigger.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -33,6 +35,6 @@ prohibitions:
 ### Popover
 - **Slots:** Trigger (required), content (required, can include interactive elements).
 - **Props:** placement, modal (boolean — whether it traps focus).
-- **Tokens:** Elevated `surface`, `outline` edge.
+- **Tokens:** `surface-elevated`, `outline` edge; the spacing scale for padding, radius and trigger offset.
 - **Composition rules:** Inherits the shared Overlay dismiss pattern exactly — no custom close behavior per instance.
 - **Prohibitions:** No Popover nested inside another Popover.
