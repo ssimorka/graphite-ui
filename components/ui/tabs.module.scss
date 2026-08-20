@@ -1,0 +1,71 @@
+// Tabs — docs/contracts/tabs.md
+//
+// The active tab changes color *and* carries the indicator bar. Color alone
+// would leave the state invisible to anyone who cannot separate the two tones.
+.tabs {
+  display: flex;
+  min-width: 0;
+}
+
+.horizontal { flex-direction: column; }
+.vertical { flex-direction: row; gap: var(--graphite-space-05); }
+
+.list {
+  display: flex;
+  gap: var(--graphite-space-02);
+}
+
+.horizontal .list {
+  border-bottom: 1px solid var(--graphite-outline);
+}
+
+.vertical .list {
+  flex-direction: column;
+  border-right: 1px solid var(--graphite-outline);
+}
+
+.tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: var(--graphite-on-surface-variant);
+  padding: var(--graphite-space-03) var(--graphite-space-04);
+  position: relative;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+.active {
+  color: var(--graphite-on-surface);
+}
+
+// Position plus color, never color alone.
+.horizontal .active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--graphite-primary);
+}
+
+.vertical .active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -1px;
+  width: 2px;
+  background: var(--graphite-primary);
+}
+
+.panel {
+  padding-top: var(--graphite-space-04);
+  min-width: 0;
+}

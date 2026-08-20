@@ -1,0 +1,27 @@
+// Card — docs/contracts/card.md
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-03);
+}
+
+// Density drives padding only. The gaps above stay put so a compact card is a
+// tighter box, not a differently proportioned one.
+.compact { padding: var(--graphite-density-compact); }
+.default { padding: var(--graphite-density-default); }
+.spacious { padding: var(--graphite-density-spacious); }
+
+.header,
+.body,
+.footer {
+  min-width: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}

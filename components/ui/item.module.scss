@@ -1,0 +1,52 @@
+// Item — docs/contracts/item.md
+//
+// The row primitive Table composes from in Wave 6. Its hover is a tone-step
+// shift from surface to surface-variant, and Table reuses this exact shift
+// rather than inventing a row highlight of its own.
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  width: 100%;
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  min-width: 0;
+}
+
+.compact { padding: var(--graphite-density-compact); }
+.default { padding: var(--graphite-density-default); }
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  background: var(--graphite-surface-variant);
+}
+
+.leading,
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-01);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title,
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  color: var(--graphite-on-surface-variant);
+  font-size: 0.8125rem;
+}

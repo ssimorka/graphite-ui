@@ -1,6 +1,6 @@
 ---
 component: Item
-version: 1.1.0
+version: 1.2.0
 wave: 4
 slots:
   - name: Leading
@@ -23,7 +23,13 @@ tokens:
   - name: on-surface
     usage: Title.
   - name: surface
-    usage: Hover state as a tone-step shift if the item is interactive.
+    usage: Resting background.
+  - name: surface-variant
+    usage: Hover state — the tone-step shift of surface, not a separate color.
+  - name: on-surface-variant
+    usage: Description text, at the lower tone-step beneath the title.
+  - name: spacing
+    usage: Gaps between leading, text, and trailing slots.
 composition_rules:
   - This is the row primitive Table and any future list views should compose from, not reimplement.
 prohibitions:
@@ -33,6 +39,6 @@ prohibitions:
 ### Item
 - **Slots:** Leading (optional — Avatar or icon), title (required, Typography), description (optional), trailing (optional — Badge, Button, or a control).
 - **Props:** density (compact, default).
-- **Tokens:** `on-surface` for title, `surface` hover state as a tone-step shift if the item is interactive.
+- **Tokens:** `on-surface` for title, `surface` at rest with `surface-variant` as the tone-step hover shift if the item is interactive, `on-surface-variant` for the description; the density steps for row padding and the spacing scale for slot gaps.
 - **Composition rules:** This is the row primitive Table and any future list views should compose from, not reimplement.
 - **Prohibitions:** No more than one trailing control cluster — if multiple actions are needed, use Dropdown Menu (Wave 5) as the trailing slot instead of stacking buttons.

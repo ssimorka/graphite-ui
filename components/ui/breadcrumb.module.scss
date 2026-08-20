@@ -1,0 +1,45 @@
+// Breadcrumb — docs/contracts/breadcrumb.md
+//
+// The separator is defined once here, not passed per instance, so every trail
+// in the product reads the same.
+.list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  min-width: 0;
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  min-width: 0;
+}
+
+.link {
+  color: var(--graphite-on-surface-variant);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+// The current page: full strength, and heavier, so it reads as a destination
+// rather than another step.
+.current {
+  color: var(--graphite-on-surface);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.separator {
+  color: var(--graphite-on-surface-variant);
+}
