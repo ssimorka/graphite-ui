@@ -1,0 +1,77 @@
+// Component gallery. Uses the same --graphite-* tokens the components do, so
+// the page itself is a specimen rather than a differently-styled frame.
+.page {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--graphite-space-09) var(--graphite-space-05);
+}
+
+.lede {
+  color: var(--graphite-on-surface-variant);
+  max-width: 44rem;
+  margin: 0 0 var(--graphite-space-08);
+  line-height: 1.6;
+}
+
+.wave {
+  margin-top: var(--graphite-space-09);
+}
+
+.waveTitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+  margin: 0 0 var(--graphite-space-04);
+}
+
+.specimen {
+  border-top: 1px solid var(--graphite-outline);
+  padding: var(--graphite-space-06) 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+  margin-bottom: var(--graphite-space-04);
+}
+
+.name {
+  margin: 0;
+  font-size: 1.0625rem;
+}
+
+// The contract version, read from the contract file at build time.
+.version {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--graphite-on-surface-variant);
+}
+
+.contractLink {
+  font-size: 0.75rem;
+  color: var(--graphite-primary);
+}
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--graphite-space-05);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  width: 100%;
+  max-width: 26rem;
+}
+
+.note {
+  margin: var(--graphite-space-03) 0 0;
+  font-size: 0.8125rem;
+  color: var(--graphite-on-surface-variant);
+}
