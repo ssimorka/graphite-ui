@@ -1,19 +1,23 @@
 'use client'
 
+import { useId } from 'react'
 import { Label } from './label'
 import styles from './switch.module.scss'
 
 /** Contract: docs/contracts/switch.md (1.1.0) */
 type SwitchProps = {
-  id: string
+  /** Supplied by Field when wrapped. Required when used on its own. */
+  id?: string
   /**
-   * Names the setting being controlled ("Notifications"), never the state
-   * ("On"/"Off") — the switch position already communicates that.
+   * Supplied by Field when wrapped. Required otherwise — Switch throws without
+   * one, because the contract has no unlabelled control. Optional in the types
+   * only so Field can inject it; the guard is what enforces it.
    *
-   * Only for changes that take effect immediately and reverse just as fast.
-   * Anything needing confirmation, or that cannot be undone, is a Button.
+   * Names the setting being controlled ("Notifications"), never the state
+   * ("On"/"Off") — the switch position already communicates that. Only for
+   * changes that reverse immediately; anything else is a Button.
    */
-  label: string
+  label?: string
   checked?: boolean
   disabled?: boolean
   onChange?: (checked: boolean) => void
@@ -28,13 +32,22 @@ export function Switch({
   onChange,
   name,
 }: SwitchProps) {
+  const auto = useId()
+  const inputId = id ?? auto
+  if (!label) {
+    throw new Error(
+      'Switch: a label is required (docs/contracts/switch.md). ' +
+        'Wrap it in a Field or pass label.',
+    )
+  }
+
   return (
     <span className={styles.row}>
       <span className={styles.control}>
         <input
           type="checkbox"
           role="switch"
-          id={id}
+          id={inputId}
           name={name}
           className={styles.native}
           checked={checked}
@@ -45,7 +58,13 @@ export function Switch({
           <span className={styles.thumb} />
         </span>
       </span>
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={inputId}>{label}</Label>
     </span>
   )
 }
+
+
+// Field reads this to know the label belongs here rather than above the
+// control: Switch places its own, because its label sits beside the control
+// rather than over it. See docs/contracts/field.md.
+Switch.ownsLabel = true as const

@@ -1,6 +1,6 @@
 ---
 component: Radio Group
-version: 1.1.0
+version: 1.2.0
 wave: 2
 slots:
   - name: Option label
@@ -8,6 +8,7 @@ slots:
     notes: One per option.
   - name: Group label
     required: true
+    notes: When wrapped in a Field, the label text comes from Field; this component still renders it, in its own position.
 props:
   - name: orientation
     values: [vertical, horizontal]

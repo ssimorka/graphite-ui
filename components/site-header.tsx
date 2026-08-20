@@ -29,6 +29,7 @@ const NAV_ITEMS = [
   { href: '/#system', label: 'System' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/docs', label: 'Docs' },
+  { href: '/gallery', label: 'Components' },
 ]
 
 export function SiteHeader() {

@@ -1,11 +1,11 @@
 ---
 component: Checkbox
-version: 1.1.0
+version: 1.2.0
 wave: 2
 slots:
   - name: Label
     required: true
-    notes: Always paired, never a bare checkbox.
+    notes: Always paired, never a bare checkbox. When wrapped in a Field, the label text comes from Field; this component still renders it, in its own position.
 props:
   - name: checked
   - name: indeterminate
