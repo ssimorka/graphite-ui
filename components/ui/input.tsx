@@ -8,8 +8,12 @@ export type FieldSize = 'sm' | 'md' | 'lg'
 
 /** Contract: docs/contracts/input.md (1.2.0) */
 type InputProps = {
-  /** Required so a Label can associate with it. See the prohibition below. */
-  id: string
+  /**
+   * Supplied by Field when wrapped, which is the composition the contract
+   * expects. Pass it explicitly only when using Input on its own — and then a
+   * Label still has to associate with it.
+   */
+  id?: string
   size?: FieldSize
   /**
    * `focus` is in the contract's state list but is not a prop: focus is a real

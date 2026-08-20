@@ -1,6 +1,6 @@
 ---
 component: Field
-version: 1.0.0
+version: 1.1.0
 wave: 3
 slots:
   - name: Label
@@ -19,7 +19,13 @@ props:
   - name: state
     notes: Inherits from child input.
 tokens:
-  - notes: No new tokens — inherits from whichever atom it wraps.
+  - name: on-surface
+    usage: Help text.
+  - name: danger
+    usage: Error text, matching the error border its child input takes.
+  - name: spacing
+    usage: Gaps between label, control, and message.
+  - notes: The control itself introduces no tokens — it inherits from whichever atom it wraps.
 composition_rules:
   - "This is the contract that actually prevents drift at the form level: Field is the only place Label + input + error text are allowed to compose."
   - No page should hand-assemble a label next to an input outside this wrapper.
@@ -30,6 +36,6 @@ prohibitions:
 ### Field
 - **Slots:** Label (required), one input-family atom (required — Input, Textarea, Checkbox, Radio Group, Switch, or Select), help text (optional), error text (optional, replaces help text when present).
 - **Props:** required (boolean), state (inherits from child input).
-- **Tokens:** No new tokens — inherits from whichever atom it wraps.
+- **Tokens:** The wrapped control introduces none — it inherits from whichever atom it wraps. Field's own text does: `on-surface` for help text and `danger` for error text, matching the border its child takes, plus the spacing scale for the gaps between label, control, and message.
 - **Composition rules:** This is the contract that actually prevents drift at the form level: Field is the only place Label + input + error text are allowed to compose. No page should hand-assemble a label next to an input outside this wrapper.
 - **Prohibitions:** No error text present without the child input also being in `error` state — text and visual state must move together, never one without the other.
