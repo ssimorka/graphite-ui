@@ -6,7 +6,8 @@ import styles from './textarea.module.scss'
 
 /** Contract: docs/contracts/textarea.md (1.0.0) — inherits Input's contract. */
 type TextareaProps = {
-  id: string
+  /** Supplied by Field when wrapped. See Input. */
+  id?: string
   size?: FieldSize
   state?: FieldState
   /**

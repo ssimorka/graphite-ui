@@ -1,0 +1,23 @@
+// Field — docs/contracts/field.md
+//
+// The only sanctioned composition of label, control and message. Error text
+// takes the same `danger` role as the border its child input takes, so the two
+// cannot drift into different reds.
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  width: 100%;
+}
+
+.help {
+  color: var(--graphite-on-surface);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.error {
+  color: var(--graphite-danger);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
