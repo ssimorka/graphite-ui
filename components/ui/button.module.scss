@@ -3,6 +3,9 @@
 // Hover and pressed are tone-step moves on the resting fill's own ramp, never
 // a new color. Input's focus border, Switch's on state and Dropdown Menu's
 // item hover all point back at this.
+//
+// Timing comes from the shared motion tokens, which carry the docs page's own
+// easing, so a button moves the way the page around it already does.
 .button {
   display: inline-flex;
   align-items: center;
@@ -12,10 +15,24 @@
   border-radius: var(--graphite-space-02);
   font: inherit;
   font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
   // The touch target holds at every size, which is the rule Checkbox cites.
   min-height: var(--graphite-space-07);
   padding: 0 var(--graphite-space-04);
+  transition:
+    background var(--graphite-motion-fast) var(--graphite-motion-ease),
+    border-color var(--graphite-motion-fast) var(--graphite-motion-ease),
+    color var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+// Icons are children rather than slots, the way shadcn has them, so they are
+// sized here instead of through a wrapper element.
+.button svg {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  pointer-events: none;
 }
 
 .button:disabled {
@@ -28,6 +45,12 @@
 .button:focus-visible {
   outline: 2px solid var(--graphite-focus);
   outline-offset: 2px;
+}
+
+.button:active:not(:disabled) {
+  // A small press displacement on the site's own curve, matching the lift the
+  // docs page uses on its interactive tiles.
+  transform: translateY(1px);
 }
 
 .primary {
@@ -44,16 +67,16 @@
   border-color: var(--graphite-primary);
 }
 
+.ghost {
+  background: transparent;
+  color: var(--graphite-on-surface);
+}
+
 .secondary:hover:not(:disabled),
 .ghost:hover:not(:disabled) { background: var(--graphite-surface-variant); }
 
 .secondary:active:not(:disabled),
 .ghost:active:not(:disabled) { background: var(--graphite-surface-variant); }
-
-.ghost {
-  background: transparent;
-  color: var(--graphite-on-surface);
-}
 
 .danger {
   background: var(--graphite-danger);
@@ -64,10 +87,17 @@
 .md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-09); font-size: 1rem; padding: 0 var(--graphite-space-05); }
 
+// Square, for a button whose whole content is an icon. Its accessible name
+// still has to come from somewhere — the contract forbids relying on the glyph.
 .icon {
-  display: inline-flex;
-  flex: none;
-  line-height: 1;
+  min-height: var(--graphite-space-08);
+  width: var(--graphite-space-08);
+  padding: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: none; }
+  .button:active:not(:disabled) { transform: none; }
 }
 
 .group {

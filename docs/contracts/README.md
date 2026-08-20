@@ -35,6 +35,35 @@ This is a solo-maintainer model. It doesn't require review gates, just a fixed p
 
 No component contract carries a **[blocked on Wave 0]** marker any more. Two Wave 5 dependencies remain open — the shared overlay surface token and the Dialog scrim — and the drift check reports those as expected warnings rather than failures.
 
+## Component API conventions
+
+Contracts say what a component *is*. This says what its React surface looks
+like, so twenty-six components do not each invent an answer. The shape follows
+shadcn; the styling does not — variants resolve to CSS module classes on
+`--graphite-*`, not utility classes.
+
+1. **Variants are a `cva` recipe, and the recipe is exported.** A sibling that
+   needs to render something button-shaped borrows `buttonVariants` instead of
+   restating the rules or forking the styles.
+2. **`className` is merged after the recipe.** A caller extends without
+   forking. Nothing takes a `classNames` bag of internal overrides.
+3. **Props spread to the underlying element.** If the DOM node accepts it, the
+   component does too; no allowlist of the handful of attributes someone
+   happened to need.
+4. **`asChild` renders onto the child** instead of emitting a wrapper, for the
+   cases where a button must actually be a link.
+5. **Multi-part components export their parts** — `Card`, `CardHeader`,
+   `CardTitle`, `CardContent`, `CardFooter` — rather than taking slots as
+   props. Composition happens in JSX, where a caller can see it.
+6. **Every part carries `data-slot`**, so a page can target a component's
+   internals from outside without depending on generated class names.
+7. **Motion comes from the shared tokens.** Components move on the same curve
+   as the pages around them; no component picks its own easing.
+
+Point 5 is the one that changes contracts rather than just code: a slot that
+was a prop becomes a child component, which is a breaking change under rule 3.
+Button is the reference implementation at 2.0.0; the rest follow.
+
 ### Reconciliation note
 
 The gap list above was rewritten on 2026-08-19 after checking the source document against the codebase. As originally written it claimed spacing and status roles were both entirely absent; status roles in fact largely exist, and the `on-surface` binding gap was not known. The governance model puts the contract above the implementation, but that does not license the contract to be wrong about what the implementation contains — where the two disagreed on plain fact, fact won.
