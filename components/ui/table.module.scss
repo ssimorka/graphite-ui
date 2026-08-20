@@ -1,0 +1,75 @@
+// Table — docs/contracts/table.md
+//
+// Item's contract applied at scale, not a separate visual system: the row
+// hover below is --graphite-surface-variant, the same token item.module.scss
+// uses, so a change to one moves the other.
+.scroll {
+  width: 100%;
+  overflow-x: auto;
+  // The sticky header needs a bounded height to stick against; without this
+  // it only survives horizontal scroll, which is the case the contract names.
+  max-height: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--graphite-on-surface);
+}
+
+.caption {
+  text-align: left;
+  padding-bottom: var(--graphite-space-03);
+  color: var(--graphite-on-surface);
+  font-weight: 600;
+}
+
+// Sticky is not optional. The contract forbids a table that loses its column
+// headers on scroll, so this is structural rather than a nicety.
+.th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  border-bottom: 1px solid var(--graphite-outline);
+  white-space: nowrap;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  appearance: none;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sortButton:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// The sort-active column is marked by the primary indicator, not by color alone.
+.sorted .indicator {
+  color: var(--graphite-primary);
+}
+
+.td {
+  border-bottom: 1px solid var(--graphite-outline);
+}
+
+.compact .th,
+.compact .td { padding: var(--graphite-density-compact); }
+
+.default .th,
+.default .td { padding: var(--graphite-density-default); }
+
+.row:hover {
+  background: var(--graphite-surface-variant);
+}
