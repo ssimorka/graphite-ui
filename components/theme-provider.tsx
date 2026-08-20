@@ -73,6 +73,7 @@ const CARBON_VAR_BINDINGS: readonly [
   ['--cds-layer', (t) => t.surface.hex],
   ['--cds-layer-01', (t) => t.surface.hex],
   ['--cds-layer-02', (t) => t.surfaceVariant.hex],
+  ['--cds-layer-03', (t) => t.surfaceElevated.hex],
   ['--cds-layer-accent', (t) => t.surfaceVariant.hex],
   ['--cds-layer-accent-01', (t) => t.surfaceVariant.hex],
   ['--cds-field', (t) => t.surfaceVariant.hex],

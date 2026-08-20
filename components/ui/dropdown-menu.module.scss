@@ -1,0 +1,57 @@
+// Dropdown Menu — docs/contracts/dropdown-menu.md
+//
+// Item hover and focus move on the same tone step Button uses, rather than a
+// highlight convention invented for menus.
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.menu {
+  position: absolute;
+  z-index: 20;
+  min-width: var(--graphite-space-12);
+  padding: var(--graphite-space-02);
+  display: flex;
+  flex-direction: column;
+  background: var(--graphite-surface-elevated);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-03);
+}
+
+.bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
+.top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); }
+
+.item {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--graphite-on-surface);
+  padding: var(--graphite-space-02) var(--graphite-space-03);
+  border-radius: var(--graphite-space-01);
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible {
+  background: var(--graphite-surface-variant);
+  outline: none;
+}
+
+.item:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+// A destructive item may never read as a neutral one.
+.destructive {
+  color: var(--graphite-danger);
+}
+
+.separator {
+  height: 1px;
+  margin: var(--graphite-space-02) 0;
+  background: var(--graphite-outline);
+}

@@ -46,8 +46,6 @@ const PRIMARY_STATE_VARS = [
 // Roles a contract may declare that the engine does not produce yet, by
 // design. Each is tracked by open work; they warn rather than fail the build.
 const PENDING_ROLES = new Map([
-  ['overlay surface', 'Wave 5 — shared overlay surface token not defined yet'],
-  ['scrim', 'Wave 5 — Dialog scrim opacity not defined yet'],
 ])
 
 // ---------------------------------------------------------------- contracts
@@ -110,6 +108,7 @@ async function readTokenModel() {
   for (const v of space.spacing) bind('spacing', v)
   for (const v of space.density) bind('density', v)
   for (const v of space.motion) bind('motion', v)
+  for (const v of space.scrim) bind('scrim', v)
   return { roleToVars, varToRole }
 }
 
@@ -124,6 +123,7 @@ function readSpacingVars() {
     spacing: decls(/--graphite-space-\d{2}(?=\s*:)/g),
     density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
     motion: decls(/--graphite-motion-[a-z-]+(?=\s*:)/g),
+    scrim: decls(/--graphite-scrim(?=\s*:)/g),
   }
 }
 

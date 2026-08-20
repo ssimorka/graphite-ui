@@ -1,6 +1,6 @@
 ---
 component: Dropdown Menu
-version: 1.0.0
+version: 1.1.0
 wave: 5
 slots:
   - name: Trigger
@@ -17,6 +17,14 @@ props:
 tokens:
   - inherited_from: Popover
     usage: Elevated `surface`, `outline` edge.
+  - name: on-surface
+    usage: Item labels.
+  - name: surface-variant
+    usage: Item hover and focus, the same tone-step shift Button uses.
+  - name: danger
+    usage: Destructive items, which must not read as neutral ones.
+  - name: spacing
+    usage: Item padding and separator gaps.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -32,6 +40,6 @@ prohibitions:
 ### Dropdown Menu
 - **Slots:** Trigger (required), menu items (required, minimum 1), optional separators and sub-menus.
 - **Props:** placement.
-- **Tokens:** Same as Popover.
+- **Tokens:** Same as Popover, plus `on-surface` for item labels, `surface-variant` for the hover and focus tone-step, `danger` for destructive items, and the spacing scale for padding.
 - **Composition rules:** Item hover/focus state uses the same tone-step logic as Button hover, not a separate highlight convention.
 - **Prohibitions:** No destructive action (delete, remove) styled identically to a neutral action — destructive items need the status-role treatment once Wave 0 ships; until then, they get explicit confirmation via Dialog rather than a one-click destructive menu item.
