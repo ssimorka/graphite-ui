@@ -1,0 +1,59 @@
+// Input — docs/contracts/input.md
+//
+// Focus is a tone-step move on primary, matching the hover logic already
+// proven on Button, rather than a new color introduced for focus.
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  width: 100%;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-space-02);
+  padding: 0 var(--graphite-space-04);
+}
+
+.wrap:focus-within {
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}
+
+.errored,
+.errored:focus-within {
+  border-color: var(--graphite-danger);
+  box-shadow: 0 0 0 1px var(--graphite-danger);
+}
+
+.wrap:has(.input:disabled) {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  padding: 0;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.affix {
+  display: inline-flex;
+  flex: none;
+  color: var(--graphite-on-surface);
+}
+
+.sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
+.md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
+.lg { min-height: var(--graphite-space-09); font-size: 1rem; }
