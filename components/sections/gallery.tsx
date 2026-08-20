@@ -110,7 +110,10 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           <Avatar initials="AD" size="sm" />
           <Avatar initials="GR" size="md" shape="square" />
           <Avatar initials="AL" size="lg" status={{ label: 'Online' }} />
-          <Avatar initials="XX" src="/missing.png" alt="broken source" />
+          {/* An unreadable data URI rather than a bad path: it exercises the
+              fallback exactly the same way without firing a 404 at the server
+              on every page load. */}
+          <Avatar initials="XX" src="data:image/png;base64,not-an-image" alt="broken source" />
         </Specimen>
         <Specimen name="Badge" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
           <Badge>neutral</Badge>
