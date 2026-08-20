@@ -1,11 +1,11 @@
 ---
 component: Switch
-version: 1.1.0
+version: 1.2.0
 wave: 2
 slots:
   - name: Label
     required: true
-    notes: Describes the setting being toggled.
+    notes: Describes the setting being toggled. When wrapped in a Field, the label text comes from Field; this component still renders it, in its own position.
 props:
   - name: checked
   - name: disabled

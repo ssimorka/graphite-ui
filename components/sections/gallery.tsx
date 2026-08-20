@@ -151,7 +151,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
         <Specimen name="Radio Group" note="A group legend is required; option labels alone are not enough.">
           <RadioGroup
             name="g-radio"
-            legend="Group legend"
+            label="Group legend"
             value={radio}
             onChange={setRadio}
             options={[

@@ -6,18 +6,22 @@ import type { FieldState } from './input'
 import { Label } from './label'
 import styles from './field.module.scss'
 
-/** Contract: docs/contracts/field.md (1.1.0) */
+/** Contract: docs/contracts/field.md (1.2.0) */
 type FieldProps = {
   id: string
   label: string
   /**
-   * One input-family atom. Field owns the label, so this should be an atom
-   * that does not render its own — Input or Textarea today.
+   * Any input-family atom. Field always owns the label *content*; where that
+   * content is rendered depends on the atom.
    *
-   * Checkbox, Switch, Select and Radio Group each carry a required label of
-   * their own per their contracts, which collides with Field's required Label
-   * slot. That conflict is a contract question, not something to paper over
-   * here, so it is tracked rather than silently resolved.
+   * Input and Textarea take a label above the control, so Field renders one.
+   * Checkbox, Switch, Select and Radio Group place theirs in their own shape
+   * and mark themselves with a static `ownsLabel`; for those Field passes the
+   * text down rather than rendering a second label.
+   *
+   * Either way exactly one label exists and Field decides what it says, which
+   * is what "the only place Label + input + error text compose" has to mean
+   * once the atoms have different shapes.
    */
   children: ReactElement<Record<string, unknown>>
   helpText?: string
@@ -38,6 +42,12 @@ export function Field({
 }: FieldProps) {
   // The prohibition made structural: error text and error state are derived
   // from the same value, so no caller can show one without the other.
+  // Atoms that render their own label say so on the component itself, so
+  // Field does not have to keep a list of which ones do.
+  const ownsLabel =
+    typeof children.type !== 'string' &&
+    (children.type as { ownsLabel?: boolean }).ownsLabel === true
+
   const errored = Boolean(errorText)
   const resolvedState: FieldState = errored ? 'error' : state
   const messageId = `${id}-message`
@@ -48,13 +58,17 @@ export function Field({
     state: resolvedState,
     required,
     'aria-describedby': message ? messageId : undefined,
+    // The label text goes to the atom when the atom is the one rendering it.
+    ...(ownsLabel ? { label } : {}),
   })
 
   return (
     <div className={styles.field}>
-      <Label htmlFor={id} required={required}>
-        {label}
-      </Label>
+      {ownsLabel ? null : (
+        <Label htmlFor={id} required={required}>
+          {label}
+        </Label>
+      )}
       {control}
       {message ? (
         <span

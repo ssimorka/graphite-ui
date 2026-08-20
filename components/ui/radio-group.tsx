@@ -14,10 +14,12 @@ type RadioGroupProps = {
   /** Namespaces the option ids and binds the radios into one group. */
   name: string
   /**
-   * Required. Option labels alone do not tell a screen reader what the group
-   * is asking, so the contract forbids rendering without one.
+   * The group label, rendered as a legend. Required: option labels alone do
+   * not tell a screen reader what the group is asking. Named `label` rather
+   * than `legend` so Field can supply it the same way it does for every other
+   * self-labelling atom.
    */
-  legend: string
+  label: string
   options: RadioOption[]
   value?: string
   orientation?: 'vertical' | 'horizontal'
@@ -28,7 +30,7 @@ type RadioGroupProps = {
 
 export function RadioGroup({
   name,
-  legend,
+  label,
   options,
   value,
   orientation = 'vertical',
@@ -37,7 +39,7 @@ export function RadioGroup({
 }: RadioGroupProps) {
   return (
     <fieldset className={styles.group} disabled={disabled}>
-      <legend className={styles.legend}>{legend}</legend>
+      <legend className={styles.legend}>{label}</legend>
       <div className={`${styles.options} ${styles[orientation]}`}>
         {options.map((option) => {
           const id = `${name}-${option.value}`
@@ -66,3 +68,9 @@ export function RadioGroup({
     </fieldset>
   )
 }
+
+
+// Field reads this to know the label belongs here rather than above the
+// control: RadioGroup places its own, because its label sits beside the control
+// rather than over it. See docs/contracts/field.md.
+RadioGroup.ownsLabel = true as const
