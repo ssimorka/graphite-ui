@@ -1,0 +1,46 @@
+// Navigation Menu — docs/contracts/navigation-menu.md
+.nav {
+  min-width: 0;
+}
+
+.list,
+.sublist {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: var(--graphite-space-02);
+}
+
+.horizontal { flex-direction: row; flex-wrap: wrap; }
+.vertical { flex-direction: column; }
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+}
+
+.sublist {
+  flex-direction: column;
+  padding-left: var(--graphite-space-04);
+}
+
+.link {
+  display: block;
+  padding: var(--graphite-space-02) var(--graphite-space-03);
+  color: var(--graphite-on-surface);
+  text-decoration: none;
+  border-radius: var(--graphite-space-01);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// Current page carries the primary indicator, not just a color change.
+.current {
+  color: var(--graphite-primary);
+  box-shadow: inset 2px 0 0 var(--graphite-primary);
+}
