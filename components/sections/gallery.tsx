@@ -7,6 +7,7 @@ import { Alert } from '@/components/ui/alert'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Dialog } from '@/components/ui/dialog'
@@ -31,6 +32,7 @@ import { Typography } from '@/components/ui/typography'
 import styles from './gallery.module.scss'
 
 const WAVES: Record<string, string> = {
+  '0': 'Foundation — the dependency the waves build on',
   '1': 'Wave 1 — Zero-dependency primitives',
   '2': 'Wave 2 — Form atoms',
   '3': 'Wave 3 — Form composition',
@@ -74,6 +76,13 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
     )
   }
 
+  const Swatch = ({ label, children }: { label: string; children: ReactNode }) => (
+    <span className={styles.swatch}>
+      {children}
+      <span className={styles.swatchLabel}>{label}</span>
+    </span>
+  )
+
   const Wave = ({ n, children }: { n: string; children: ReactNode }) => (
     <div className={styles.wave}>
       <h2 className={styles.waveTitle}>{WAVES[n]}</h2>
@@ -91,13 +100,29 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
         contract file at build time rather than typed here.
       </p>
 
-      <Wave n="1">
-        <Specimen name="Label">
-          <Label htmlFor="g-label" required>Label with required indicator</Label>
-          <input id="g-label" required />
+      <Wave n="0">
+        <Specimen name="Button" note="One primary action per group — a Card or Dialog footer refuses a second, and destructive work takes danger rather than primary.">
+          <Button variant="primary">Primary</Button>
+          <Button>Secondary</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="danger">Danger</Button>
+          <Button disabled>Disabled</Button>
         </Specimen>
-        <Specimen name="Separator">
-          <div style={{ width: '100%' }}><Separator /></div>
+      </Wave>
+
+      <Wave n="1">
+        <Specimen name="Label" note="Always bound to exactly one control; Field is what normally supplies the pairing.">
+          <div className={styles.stack}>
+            <Label htmlFor="g-label" required>Label with required indicator</Label>
+            <Input id="g-label" required placeholder="The control it names" />
+          </div>
+        </Specimen>
+        <Specimen name="Separator" note="Structural only — it carries no margin, because spacing belongs to the layout that places it.">
+          <div className={styles.stack}>
+            <Typography>Content above the rule.</Typography>
+            <Separator />
+            <Typography>Content below it.</Typography>
+          </div>
         </Specimen>
         <Specimen name="Typography">
           <div className={styles.stack}>
@@ -106,14 +131,12 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             <Typography variant="caption">Caption</Typography>
           </div>
         </Specimen>
-        <Specimen name="Avatar" note="Image failure falls back to initials, never a broken icon — the last one has a missing source.">
-          <Avatar initials="AD" size="sm" />
-          <Avatar initials="GR" size="md" shape="square" />
-          <Avatar initials="AL" size="lg" status={{ label: 'Online' }} />
-          {/* An unreadable data URI rather than a bad path: it exercises the
-              fallback exactly the same way without firing a 404 at the server
-              on every page load. */}
-          <Avatar initials="XX" src="data:image/png;base64,not-an-image" alt="broken source" />
+        <Specimen name="Avatar" note="The fourth has an unreadable image source: failure falls back to initials, never a broken icon or an empty circle.">
+          <Swatch label="sm"><Avatar initials="AD" size="sm" /></Swatch>
+          <Swatch label="md"><Avatar initials="GR" size="md" /></Swatch>
+          <Swatch label="lg square"><Avatar initials="AL" size="lg" shape="square" /></Swatch>
+          <Swatch label="status dot"><Avatar initials="ZO" size="lg" status={{ label: 'Online' }} /></Swatch>
+          <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,not-an-image" alt="broken source" /></Swatch>
         </Specimen>
         <Specimen name="Badge" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
           <Badge>neutral</Badge>
@@ -196,7 +219,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             <Card
               header={<Typography variant="heading-4">Card header</Typography>}
               body={<Typography>Body content.</Typography>}
-              footer={<Badge variant="primary">footer</Badge>}
+              footer={<><Button>Cancel</Button><Button variant="primary">Save</Button></>}
             />
           </div>
         </Specimen>
@@ -245,17 +268,17 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       <Wave n="5">
         <Specimen name="Tooltip" note="Supplementary only, and never interactive — a tooltip you can click into is a Popover.">
           <Tooltip content="Supplementary text">
-            <button type="button">Hover or focus me</button>
+            <Button>Hover or focus me</Button>
           </Tooltip>
         </Specimen>
         <Specimen name="Popover" note="Escape dismisses and focus returns to the trigger, from the shared Overlay base.">
-          <Popover trigger={(p) => <button type="button" {...p}>Open popover</button>}>
+          <Popover defaultOpen trigger={(p) => <Button {...p}>Open popover</Button>}>
             <Typography>Interactive content is allowed here.</Typography>
           </Popover>
         </Specimen>
         <Specimen name="Dropdown Menu" note="Destructive items never read as neutral ones.">
           <DropdownMenu
-            trigger={(p) => <button type="button" {...p}>Open menu</button>}
+            trigger={(p) => <Button {...p}>Open menu</Button>}
             items={[
               { label: 'Rename', onSelect: () => {} },
               { kind: 'separator' },
@@ -264,13 +287,13 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           />
         </Specimen>
         <Specimen name="Dialog" note="Traps focus, returns it to the trigger on close, and never stacks.">
-          <button type="button" onClick={() => setDialogOpen(true)}>Open dialog</button>
+          <Button variant="primary" onClick={() => setDialogOpen(true)}>Open dialog</Button>
           <Dialog
             open={dialogOpen}
             onClose={() => setDialogOpen(false)}
             title="Dialog title"
             body={<Typography>Dialog body content.</Typography>}
-            footer={<button type="button" onClick={() => setDialogOpen(false)}>Close</button>}
+            footer={<Button variant="primary" onClick={() => setDialogOpen(false)}>Close</Button>}
           />
         </Specimen>
         <Specimen name="Alert" note="Inline and persistent — not a toast, which is Tier 2 with its own timing contract.">

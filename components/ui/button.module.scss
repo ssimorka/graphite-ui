@@ -1,0 +1,77 @@
+// Button — docs/contracts/button.md
+//
+// Hover and pressed are tone-step moves on the resting fill's own ramp, never
+// a new color. Input's focus border, Switch's on state and Dropdown Menu's
+// item hover all point back at this.
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--graphite-space-02);
+  border: 1px solid transparent;
+  border-radius: var(--graphite-space-02);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  // The touch target holds at every size, which is the rule Checkbox cites.
+  min-height: var(--graphite-space-07);
+  padding: 0 var(--graphite-space-04);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+  border-color: transparent;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+.primary {
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+.primary:hover:not(:disabled) { background: var(--graphite-primary-hover); }
+.primary:active:not(:disabled) { background: var(--graphite-primary-pressed); }
+
+.secondary {
+  background: transparent;
+  color: var(--graphite-on-surface);
+  border-color: var(--graphite-primary);
+}
+
+.secondary:hover:not(:disabled),
+.ghost:hover:not(:disabled) { background: var(--graphite-surface-variant); }
+
+.secondary:active:not(:disabled),
+.ghost:active:not(:disabled) { background: var(--graphite-surface-variant); }
+
+.ghost {
+  background: transparent;
+  color: var(--graphite-on-surface);
+}
+
+.danger {
+  background: var(--graphite-danger);
+  color: var(--graphite-on-danger);
+}
+
+.sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
+.md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
+.lg { min-height: var(--graphite-space-09); font-size: 1rem; padding: 0 var(--graphite-space-05); }
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  line-height: 1;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}

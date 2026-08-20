@@ -1,6 +1,6 @@
 ---
 component: Card
-version: 1.2.0
+version: 1.3.0
 wave: 4
 slots:
   - name: Header
@@ -23,7 +23,7 @@ tokens:
   - name: spacing
     usage: Corner radius and the gaps between header, body, and footer.
 composition_rules:
-  - Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons.
+  - Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons. Enforced: the footer is wrapped in a ButtonGroup, which refuses a second primary.
 prohibitions:
   - No nested Cards. If content needs visual grouping inside a Card, use Separator, not a second Card.
 ---
@@ -32,5 +32,5 @@ prohibitions:
 - **Slots:** Header (optional), body (required), footer (optional, typically holds Button).
 - **Props:** padding density (compact, default, spacious).
 - **Tokens:** `surface` background, `outline` border or shadow-equivalent edge; the density steps for padding and the spacing scale for radius and internal gaps.
-- **Composition rules:** Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons.
+- **Composition rules:** Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons. This is enforced rather than trusted: the footer wraps its children in a ButtonGroup, which refuses a second primary.
 - **Prohibitions:** No nested Cards. If content needs visual grouping inside a Card, use Separator, not a second Card.
