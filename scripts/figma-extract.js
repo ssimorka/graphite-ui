@@ -59,14 +59,20 @@ const variables = await figma.variables.getLocalVariablesAsync()
 const collById = new Map(collections.map((c) => [c.id, c]))
 const varById = new Map(variables.map((v) => [v.id, v]))
 
-// One variable name in this file contains a literal U+2028 LINE SEPARATOR
-// (`Content switcher (low contrast)/content-switcher-<U+2028>background`).
-// U+2028 is valid in a JSON string but terminates a line in the MCP's SSE
-// transport, so any response carrying it arrives truncated mid-string and
-// fails to parse. Escape everything outside printable ASCII on the wire and
-// let scripts/figma-snapshot.mjs decode it back, so the snapshot still
-// records the true name rather than a sanitised one. Backslash is escaped
-// first so decoding is unambiguous.
+// Escape everything outside printable ASCII on the wire; let
+// scripts/figma-snapshot.mjs decode it back, so the snapshot records true
+// names rather than sanitised ones. Backslash is escaped first so decoding
+// is unambiguous.
+//
+// This is not belt-and-braces. A variable in Graphite Theme was found named
+// `content-switcher-<U+2028>background`, with a literal U+2028 LINE
+// SEPARATOR in it. U+2028 is valid inside a JSON string but terminates a
+// line in the MCP's SSE transport, so every response carrying that variable
+// arrived truncated mid-string and failed to parse, at any chunk size. That
+// name has since been fixed in Figma, but the collections still hold en
+// dashes (`Breakpoint LG–XL`) and the AI collection holds emoji, so the
+// escaping stays — and it is the only reason a future paste accident
+// degrades to a readable `\uXXXX` instead of an unparseable response.
 const safe = (s) =>
   typeof s === 'string'
     ? s
