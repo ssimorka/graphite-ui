@@ -119,23 +119,28 @@ async function readTokenModel() {
     bind(role, `--graphite-${kebab(role)}`)
   for (const v of PRIMARY_STATE_VARS) bind('primary', v)
   for (const v of SECONDARY_STATE_VARS) bind('secondary', v)
-  const space = readSpacingVars()
-  for (const v of space.spacing) bind('spacing', v)
-  for (const v of space.density) bind('density', v)
-  for (const v of space.motion) bind('motion', v)
-  for (const v of space.scrim) bind('scrim', v)
+  const statics = readStaticVars()
+  for (const v of statics.spacing) bind('spacing', v)
+  for (const v of statics.radius) bind('radius', v)
+  for (const v of statics.density) bind('density', v)
+  for (const v of statics.motion) bind('motion', v)
+  for (const v of statics.scrim) bind('scrim', v)
   return { roleToVars, varToRole }
 }
 
-// Spacing is not generated — it has no ramp to sample — so its variables are
-// declared statically in the stylesheet rather than produced by the engine.
-// Read the declarations (not var() references) so the check covers spacing too
-// and rule 4 is not silently color-only.
-function readSpacingVars() {
+// These foundations are not generated — they have no ramp to sample — so
+// their variables are declared statically in the stylesheet rather than
+// produced by the engine. Read the declarations (not var() references) so the
+// check covers them too and rule 4 is not silently color-only.
+//
+// Radius reads `[a-z0-9-]` rather than spacing's `\d{2}` because its suffix is
+// the pixel value, so it is unpadded and includes the words none and full.
+function readStaticVars() {
   const src = fs.readFileSync(path.join(ROOT, STYLESHEET), 'utf8')
   const decls = (re) => [...new Set(src.match(re) || [])]
   return {
     spacing: decls(/--graphite-space-\d{2}(?=\s*:)/g),
+    radius: decls(/--graphite-radius-[a-z0-9-]+(?=\s*:)/g),
     density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
     motion: decls(/--graphite-motion-[a-z-]+(?=\s*:)/g),
     scrim: decls(/--graphite-scrim(?=\s*:)/g),

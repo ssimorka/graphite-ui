@@ -56,6 +56,28 @@
   --graphite-space-12: #{spacing.$spacing-12};
   --graphite-space-13: #{spacing.$spacing-13};
 
+  // Radius. Carbon has no radius scale, so unlike spacing these numbers come
+  // from the Figma kit — `Radius` in docs/tokens/figma-snapshot.json — and the
+  // suffix is the pixel value, not an index. That is deliberate and differs
+  // from --graphite-space-NN, where the number is Carbon's step index: reading
+  // --graphite-space-02 as 2px is already an easy mistake to make, and padding
+  // these to match would spread it.
+  //
+  // Kept in px rather than converted to rem. The kit stores px, and leaving
+  // the unit alone keeps the check in #73 a direct comparison against the
+  // snapshot instead of one mediated by a root-font assumption.
+  --graphite-radius-none: 0;
+  --graphite-radius-2: 2px;
+  --graphite-radius-4: 4px;
+  --graphite-radius-6: 6px;
+  --graphite-radius-8: 8px;
+  --graphite-radius-16: 16px;
+  --graphite-radius-20: 20px;
+  // 999px, the kit's own value, not the more common 9999px. Either pills a
+  // box; this one stays faithful to the source so the drift check has nothing
+  // to forgive.
+  --graphite-radius-full: 999px;
+
   // Semantic density steps. Components bind here rather than reaching for a
   // raw step, so Card's compact/default/spacious and Table's and Item's
   // compact/default all move together from one edit.
