@@ -1,6 +1,6 @@
 ---
 component: Switch
-version: 1.2.0
+version: 1.3.0
 wave: 2
 slots:
   - name: Label
@@ -18,6 +18,8 @@ tokens:
     usage: Thumb, which must read against both the on and off track.
   - name: spacing
     usage: Track and thumb dimensions.
+  - name: radius
+    usage: Track corner. The thumb is a shape, not a radius step.
 composition_rules:
   - Label text describes the state being controlled ("Notifications"), not the state itself ("On/Off") — the switch position already communicates that.
 prohibitions:

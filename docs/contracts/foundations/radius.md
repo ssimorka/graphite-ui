@@ -1,6 +1,6 @@
 ---
 foundation: Radius
-version: 1.0.0
+version: 1.1.0
 source: Graphite UI Kit › Radius (8 variables, 1 mode)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -42,15 +42,23 @@ against the snapshot without a root-font assumption in the middle.
 radius is left unpadded — `--graphite-radius-2`, not `-02` — to keep the
 difference visible at a glance.
 
-**Migration in progress (#78).** 17 `border-radius` declarations across 16
-files still use `--graphite-space-*`. Sixteen of them map cleanly onto kit
-values; one does not — `badge` uses 24px, and the kit's scale goes 20 then
-`full`. Five further declarations use a hardcoded `50%`, which no fixed radius
-expresses: `--graphite-radius-full` only reads as a circle on a square box.
-Both are design decisions rather than renames, which is why the migration is
-tracked separately.
+**Migration complete (#78).** Every `border-radius` in the component layer now
+references this scale. It was 17 declarations across 16 files expressing radius
+through `--graphite-space-*`; sixteen were value-identical renames, and `badge`
+moved from a 24px corner to `full`. That one looked like a design decision
+until the box was measured: the badge is 24px tall and its radius equalled its
+height, so it was always a pill, and its own contract said so — *"the pill
+radius step"*. `full` renders identically and stays correct if the badge ever
+changes height.
 
-`token-drift` reports the tangle as a warning. It cannot report it as an error,
-because every value still agrees with the kit — 4px is 4px whichever token
-carries it. That is precisely why the prohibition above is written down rather
-than left to the checker.
+**The five `50%` circles are deliberately unmigrated.** `avatar` (twice),
+`radio-group`, `switch` and one site-header dot. All five sit on boxes that are
+square by construction, so `--graphite-radius-full` would render identically —
+but 50% is the honest expression of "circle", and this scale has no circle
+step. See the prohibition above.
+
+`token-drift` reported the tangle as a warning while it lasted, and could not
+have reported it as an error: every value agreed with the kit throughout — 4px
+is 4px whichever token carries it. That is precisely why the prohibition is
+written down rather than left to the checker, and why it stays written down now
+that the count is zero.

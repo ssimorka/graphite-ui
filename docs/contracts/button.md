@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.0.0
+version: 2.1.0
 wave: 0
 slots:
   - name: Children
@@ -37,6 +37,8 @@ tokens:
     usage: Padding, gap to icons, and the minimum touch target.
   - name: motion
     usage: Transition duration and easing, shared with the pages so a button moves the way its surroundings do.
+  - name: radius
+    usage: Corner.
 composition_rules:
   - "One primary action per group. A group of buttons — a Card footer, a Dialog footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Card and Dialog wrap their footers in it."
   - Hover and pressed are tone-step moves on the same ramp as the resting fill, never a different color. This is the logic Input's focus border, Switch's on state, and Dropdown Menu's item hover all refer back to.

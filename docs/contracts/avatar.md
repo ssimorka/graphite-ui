@@ -1,6 +1,6 @@
 ---
 component: Avatar
-version: 1.1.0
+version: 1.2.0
 wave: 1
 slots:
   - name: Image
@@ -22,6 +22,8 @@ tokens:
     usage: Fallback initials text.
   - name: spacing
     usage: Size steps for sm, md, and lg.
+  - name: radius
+    usage: Corner on the square variant. The circle variant is a shape, not a radius step.
 composition_rules:
   - Image failure always falls back to initials, never to a broken image icon or blank circle.
 prohibitions:

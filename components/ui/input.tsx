@@ -6,7 +6,7 @@ import styles from './input.module.scss'
 export type FieldState = 'default' | 'disabled' | 'error' | 'invalid'
 export type FieldSize = 'sm' | 'md' | 'lg'
 
-/** Contract: docs/contracts/input.md (1.2.0) */
+/** Contract: docs/contracts/input.md (1.3.0) */
 type InputProps = {
   /**
    * Supplied by Field when wrapped, which is the composition the contract

@@ -1,6 +1,6 @@
 import styles from './badge.module.scss'
 
-/** Contract: docs/contracts/badge.md (2.1.0) */
+/** Contract: docs/contracts/badge.md (2.2.0) */
 type BadgeProps = {
   /** Short text, or a number to be capped at `max`. */
   children: string | number

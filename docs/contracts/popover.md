@@ -1,6 +1,6 @@
 ---
 component: Popover
-version: 1.3.0
+version: 1.4.0
 wave: 5
 slots:
   - name: Trigger
@@ -22,7 +22,9 @@ tokens:
   - name: outline
     usage: Edge.
   - name: spacing
-    usage: Padding, radius, and offset from the trigger.
+    usage: Padding and offset from the trigger.
+  - name: radius
+    usage: Panel corner.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).

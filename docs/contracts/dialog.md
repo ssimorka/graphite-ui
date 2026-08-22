@@ -1,6 +1,6 @@
 ---
 component: Dialog
-version: 1.3.0
+version: 1.4.0
 wave: 5
 slots:
   - name: Title
@@ -25,7 +25,9 @@ tokens:
   - name: outline
     usage: Footer divider.
   - name: spacing
-    usage: Padding, radius, and size steps.
+    usage: Padding and size steps.
+  - name: radius
+    usage: Panel corner.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).

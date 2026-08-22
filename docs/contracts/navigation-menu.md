@@ -1,6 +1,6 @@
 ---
 component: Navigation Menu
-version: 1.1.0
+version: 1.2.0
 wave: 4
 slots:
   - name: Top-level items
@@ -17,6 +17,8 @@ tokens:
     usage: Default items.
   - name: spacing
     usage: Item padding and gaps between levels.
+  - name: radius
+    usage: Corner on each item.
 composition_rules:
   - Depends on the overlay surface pattern (Wave 5) for any nested/flyout menus — same soft dependency as Select.
 prohibitions:

@@ -8,7 +8,7 @@ import styles from './card.module.scss'
 // Presence of this context means we are already inside a Card.
 const InsideCard = createContext(false)
 
-/** Contract: docs/contracts/card.md (1.2.0) */
+/** Contract: docs/contracts/card.md (1.4.0) */
 type CardProps = {
   body: ReactNode
   header?: ReactNode

@@ -1,6 +1,6 @@
 ---
 component: Input
-version: 1.2.0
+version: 1.3.0
 wave: 2
 slots:
   - name: Value
@@ -30,6 +30,8 @@ tokens:
     usage: Value text.
   - name: spacing
     usage: Field padding and height steps.
+  - name: radius
+    usage: Field corner. Inherited by Select and Textarea.
 composition_rules:
   - Focus state border is always a tone-step move on `primary`, matching the hover logic already proven on Button.
 prohibitions:

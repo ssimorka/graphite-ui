@@ -230,6 +230,22 @@ for (const c of contracts) {
     pending++
     continue
   }
+
+  // Governance rule 3 versions every contract, and rule 5 has the Figma
+  // component carry that number. The component's own docblock is the third
+  // copy, and nothing was comparing them: seven had fallen behind, two of
+  // them by two minor versions, before #78 went looking.
+  const implSrc = fs.readFileSync(path.join(ROOT, impl), 'utf8')
+  const stamped = new RegExp(`${c.slug}\\.md \\((\\d+\\.\\d+\\.\\d+)\\)`).exec(
+    implSrc,
+  )
+  if (!stamped) {
+    warnings.push(`${impl}: no "Contract: ${c.file} (version)" docblock`)
+  } else if (stamped[1] !== c.version) {
+    errors.push(
+      `${impl}: docblock says ${c.slug}.md (${stamped[1]}), but ${c.file} is ${c.version}`,
+    )
+  }
   checked++
 
   const used = scan(impl)

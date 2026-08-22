@@ -1,6 +1,6 @@
 ---
 component: Progress
-version: 1.1.0
+version: 1.2.0
 wave: 1
 slots: []
 props:
@@ -17,6 +17,8 @@ tokens:
     usage: Track height.
   - name: motion
     usage: Indeterminate sweep duration and easing, defined once and shared with Spinner.
+  - name: radius
+    usage: Track and indicator corner.
 composition_rules:
   - Indeterminate variant uses a defined animation timing, not an arbitrary one — this should be specified once and reused by Spinner later (Tier 2) so the two don't drift into different motion languages.
 prohibitions:

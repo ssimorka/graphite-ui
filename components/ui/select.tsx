@@ -11,7 +11,7 @@ export type SelectOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/select.md (1.0.0) */
+/** Contract: docs/contracts/select.md (1.2.0) */
 type SelectProps = {
   /** Supplied by Field when wrapped. Required when used on its own. */
   id?: string

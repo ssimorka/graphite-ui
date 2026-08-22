@@ -19,7 +19,7 @@ export type NavItem = {
   items?: NavChild[]
 }
 
-/** Contract: docs/contracts/navigation-menu.md (1.1.0) */
+/** Contract: docs/contracts/navigation-menu.md (1.2.0) */
 type NavigationMenuProps = {
   items: [NavItem, ...NavItem[]]
   orientation?: 'horizontal' | 'vertical'
