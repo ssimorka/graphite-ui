@@ -22,15 +22,16 @@ This is a solo-maintainer model. It doesn't require review gates, just a fixed p
 ## Token structure reference (current, confirmed)
 
 - Source: one hex input, resolved in **OKLab**, sampled at fixed tone stops into a perceptual ramp.
-- Semantic roles: the engine generates **27 roles**, every one emitted as a `--graphite-*` CSS variable, plus 6 interaction-state variables — 33 in total. Names are kebab-case and match the vocabulary these contracts use, so `on-surface` in a contract is `--graphite-on-surface` in the CSS.
-- Carbon's `--cds-*` variables are still stamped (55 of them) as a **compatibility layer**, so Carbon's own components keep picking up generated values. They are not the canonical surface and cannot express the full set — Graphite's own components read `--graphite-*` only.
+- Semantic roles: the engine generates **32 roles**, every one emitted as a `--graphite-*` CSS variable, plus **13 interaction-state variables** — 45 in total. Names are kebab-case and match the vocabulary these contracts use, so `on-surface` in a contract is `--graphite-on-surface` in the CSS. The states are six per interactive family (`primary`, `secondary`) plus the page-level `--graphite-focus`; families come from `STATE_FAMILIES` in `lib/color.js` rather than a hand-written list.
+- Carbon's `--cds-*` variables are still stamped (56 of them) as a **compatibility layer**, so Carbon's own components keep picking up generated values. They are not the canonical surface and cannot express the full set — Graphite's own components read `--graphite-*` only.
 - State resolution: discrete **tone-step** moves on the ramp (not opacity). Direction preserves WCAG contrast — darker in light themes, lighter in dark.
 - Contrast is enforced at generation time, not audited after.
-- Output per theme pass: **33 `--graphite-*` color variables** (canonical) and **55 `--cds-*` variables** (Carbon compatibility), light and dark generated together. A further **16 `--graphite-space-*` / `--graphite-density-*` variables** are declared statically in `app/globals.scss`; spacing does not vary by theme, so it is not part of the generated pass.
+- Output per theme pass: **45 `--graphite-*` color variables** (canonical) and **56 `--cds-*` variables** (Carbon compatibility), light and dark generated together.
+- A further **101 variables** are declared statically in `app/globals.scss`, because they do not vary by theme and so are not part of the generated pass: 14 spacing, 3 density, 8 radius, 5 breakpoint, 3 font family, 62 typography (58 step values plus 4 weights), 5 motion, 1 scrim. Four of those groups now come from the Figma kit rather than from Carbon or from nothing — see `foundations/`.
 
 **Wave 0 is complete.** Both prerequisites shipped; recorded here because the contracts still refer to them:
 
-- **Spacing is a runtime scale now** (issue #41). `--graphite-space-01…13` and three semantic `--graphite-density-*` steps are declared in `app/globals.scss`, interpolated from Carbon's `$spacing-*` so the numbers cannot fall out of step. Components bind to the density steps rather than raw steps. The drift check covers them, so rule 4 is no longer color-only. What is still *not* done: the scale is Carbon's numbers under Graphite names, not a scale generated from anything — spacing has no ramp to sample, so this may simply be the right answer.
+- **Spacing is a runtime scale now** (issue #41). `--graphite-space-00…13` and three semantic `--graphite-density-*` steps are declared in `app/globals.scss`. Components bind to the density steps rather than raw steps. The drift check covers them, so rule 4 is no longer color-only. The closing caveat here used to read that the scale was "Carbon's numbers under Graphite names, not a scale generated from anything" — that is no longer true. Since #72 the numbers come from the Figma kit, and `token-drift.mjs` verifies them against it; the values were identical at the swap, so nothing moved.
 - **Status roles are complete** (issue #42). `danger`, `warning`, `success`, and `info` each resolve base, `on*`, `*Container`, and `on*Container`, and all four sets now emit under `--graphite-*`. The `on*Container` text tokens have no Carbon equivalent — Carbon ships one per-status text token (`text-error`) and no slot for text on a container fill — so they exist only in the Graphite namespace.
 
 No component contract carries a **[blocked on Wave 0]** marker any more. Two Wave 5 dependencies remain open — the shared overlay surface token and the Dialog scrim — and the drift check reports those as expected warnings rather than failures.
@@ -100,6 +101,22 @@ Button is done and sits underneath Wave 4 (Card actions) and Wave 5 (Dialog conf
 ## What this unblocks
 
 Once Wave 0's two token additions ship, three prohibitions above (Badge status variants, Alert status variants, Field error-state color) resolve themselves without touching any other contract — that's the actual payoff of doing token work before component work, rather than inventing a red for Alert today and a different red for Badge next week.
+
+---
+
+## Foundation contracts
+
+The four foundations that came out of the Figma sync — spacing, radius,
+breakpoint and typography — have contracts in [`foundations/`](foundations/).
+They sit in their own directory because they are not components (no slots, no
+props) and because they answer to a different checker: `token-drift.mjs`, which
+diffs their declared values against `docs/tokens/figma-snapshot.json`, rather
+than `drift-check.mjs`, which reads only the top level of this directory and is
+unaffected by them.
+
+Note that `typography` appears in both places and means two different things:
+`typography.md` here is the **component**, `foundations/typography.md` is the
+**scale it draws from**.
 
 ---
 
