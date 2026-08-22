@@ -14,6 +14,7 @@ import {
   buildTheme,
   buildStates,
   normalizeHex,
+  STATE_FAMILIES,
 } from '@/lib/color.js'
 
 type CarbonTheme = 'white' | 'g100'
@@ -153,7 +154,8 @@ export const CARBON_VAR_COUNT = CARBON_VAR_BINDINGS.length
 // Derived from the token keys rather than hand-listed, so it cannot drift from
 // what the engine actually produces.
 
-const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+const kebab = (s: string) =>
+  s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
 export const graphiteVarName = (role: string) => `--graphite-${kebab(role)}`
 
@@ -163,12 +165,20 @@ function graphiteVarsFor(theme: BuiltTheme, states: BuiltStates) {
     out[graphiteVarName(role)] = (token as { hex: string }).hex
   }
   // Interaction states are tone references on the same ramp, not separate
-  // roles, so they live alongside rather than inside the token map.
-  out['--graphite-primary-hover'] = states.primary.hover.hex
-  out['--graphite-primary-pressed'] = states.primary.pressed.hex
-  out['--graphite-primary-selected'] = states.primary.selected.hex
-  out['--graphite-primary-disabled'] = states.primary.disabled.hex
-  out['--graphite-primary-disabled-content'] = states.primary.disabled.content.hex
+  // roles, so they live alongside rather than inside the token map. Driven off
+  // STATE_FAMILIES so a new family arrives here without an edit.
+  for (const family of STATE_FAMILIES) {
+    const f = states[family]
+    out[`--graphite-${family}-hover`] = f.hover.hex
+    out[`--graphite-${family}-pressed`] = f.pressed.hex
+    out[`--graphite-${family}-selected`] = f.selected.hex
+    out[`--graphite-${family}-disabled`] = f.disabled.hex
+    out[`--graphite-${family}-disabled-content`] = f.disabled.content.hex
+    out[`--graphite-${family}-focus`] = f.focus.hex
+  }
+  // The page-level ring. Same value as --graphite-primary-focus; kept because
+  // it is the name components already read and the one that means "focus"
+  // without picking a family.
   out['--graphite-focus'] = states.focus.hex
   return out
 }
@@ -200,7 +210,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }
 
   // Compute ramps + both themes whenever sourceHex changes
-  const ramps = useMemo(() => (sourceHex ? makeRamps(sourceHex) : null), [sourceHex])
+  const ramps = useMemo(
+    () => (sourceHex ? makeRamps(sourceHex) : null),
+    [sourceHex],
+  )
 
   const light = useMemo(
     () => (ramps ? buildTheme('light', ramps, level) : null),
@@ -210,10 +223,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     () => (ramps ? buildTheme('dark', ramps, level) : null),
     [ramps, level],
   )
-  const lightStates = useMemo(() => (ramps && light ? buildStates(light.tokens, ramps, 'light') : null), [ramps, light])
-  const darkStates = useMemo(() => (ramps && dark ? buildStates(dark.tokens, ramps, 'dark') : null), [ramps, dark])
+  const lightStates = useMemo(
+    () => (ramps && light ? buildStates(light.tokens, ramps, 'light') : null),
+    [ramps, light],
+  )
+  const darkStates = useMemo(
+    () => (ramps && dark ? buildStates(dark.tokens, ramps, 'dark') : null),
+    [ramps, dark],
+  )
 
-  const lightBundle = light && lightStates ? { ...light, states: lightStates } : null
+  const lightBundle =
+    light && lightStates ? { ...light, states: lightStates } : null
   const darkBundle = dark && darkStates ? { ...dark, states: darkStates } : null
 
   // Stamp --cds-* variables onto document root.
@@ -256,7 +276,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggleTheme = () => setTheme((t) => (t === 'white' ? 'g100' : 'white'))
 
   return (
-    <ThemeContext.Provider value={{
+    <ThemeContext.Provider
+      value={{
         theme,
         toggleTheme,
         setTheme,
@@ -267,7 +288,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         level,
         setLevel,
         ramps,
-      }}>
+      }}
+    >
       <GlobalTheme theme={theme}>{children}</GlobalTheme>
     </ThemeContext.Provider>
   )

@@ -6,7 +6,8 @@
 // functions actually return — keep them in sync if color.js changes.
 
 export type StatusName = 'danger' | 'warning' | 'success' | 'info'
-export type RampName = 'accent' | 'neutral' | 'neutralVariant' | StatusName
+export type RampName =
+  'accent' | 'secondary' | 'neutral' | 'neutralVariant' | StatusName
 export type ThemeMode = 'light' | 'dark'
 export type ContrastLevel = 'AA' | 'AAA'
 
@@ -66,6 +67,10 @@ export interface ThemeTokens extends Record<string, Token> {
   onPrimary: Token
   primaryContainer: Token
   onPrimaryContainer: Token
+  secondary: Token
+  onSecondary: Token
+  secondaryContainer: Token
+  onSecondaryContainer: Token
   surface: Token
   surfaceElevated: Token
   onSurface: Token
@@ -109,16 +114,26 @@ export interface DisabledState extends StateEntry {
   content: StateEntry
 }
 
-export interface PrimaryStates extends Record<string, StateEntry | DisabledState> {
+/** The state set every interactive family carries. */
+export interface FamilyStates extends Record<
+  string,
+  StateEntry | DisabledState
+> {
   base: StateEntry
   hover: StateEntry
   pressed: StateEntry
   selected: StateEntry
   disabled: DisabledState
+  focus: StateEntry
 }
 
+/** Retained name for the same shape, from when primary was the only family. */
+export type PrimaryStates = FamilyStates
+
 export interface States {
-  primary: PrimaryStates
+  primary: FamilyStates
+  secondary: FamilyStates
+  /** The page-level focus ring — primary's, not a third value. */
   focus: StateEntry
 }
 
@@ -133,6 +148,7 @@ export interface ExportBundle {
 
 export declare const TONE_STOPS: number[]
 export declare const STATUS_NAMES: StatusName[]
+export declare const STATE_FAMILIES: readonly ['primary', 'secondary']
 
 export declare function normalizeHex(hex: string): string
 export declare function hexToRgb(hex: string): Rgb

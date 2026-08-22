@@ -18,7 +18,8 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
 
 - **Auto-fix on-colors toggle is a no-op.** Swept 96 hues × light/dark ×
   AA/AAA through `buildTheme` — no pairing ever fails, so `autoFix` never
-  has anything to fix. The wiring is correct (flows into `buildTheme`,
+  has anything to fix. Re-verified 2026-08-22 with the secondary family
+  added: 6144 pairs, still zero failures and zero repairs. The wiring is correct (flows into `buildTheme`,
   re-renders on toggle); the *engine* just never produces a failing pair
   at any tested input. Confirmed correct behavior, not a bug — but don't
   assume the toggle does something visible without retesting the actual
@@ -38,6 +39,20 @@ Configured in `.claude/launch.json` under the name `helix`, port 3001.
   chroma tracks the source, clamped 0.10–0.20. Chrome that should
   track the source but carries no status meaning still belongs on
   `--cds-interactive` / `--cds-button-primary`.
+- **The secondary ramp is verified against the kit, including its one
+  mismatch.** `secondary` is source-derived (hue − 120°, chroma × 0.585)
+  and reproduces `Graphite Primitives/secondary/*` from
+  `docs/tokens/figma-snapshot.json` within 1/255 at nine of ten stops. The
+  tenth is the source-tone stop, off by 3 — and the engine is the more
+  correct one: its hue is 0.17° from the intended `source − 120°` where
+  Figma's baked value is 1.19° off, at a tone where red sits at the sRGB
+  gamut edge. Don't "fix" that delta toward Figma.
+- **Secondary shares accent's tone ladder, not neutral's.** In the kit,
+  accent and secondary sample at the pinned source tone while neutral,
+  neutralVariant and all four status ramps sample at a round 50. That is
+  why `makeRamps` pins the source tone for secondary — and why it then
+  clears the `source` flag, which means "this stop is the source hex" and
+  is false for a hue 120° away.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

@@ -32,21 +32,26 @@ const PROBE_HEX = '#5e44aa'
 const camel = (s) => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-// Interaction states belong to the primary role rather than being roles of
-// their own, so a contract declaring `primary` may reference them.
-const PRIMARY_STATE_VARS = [
-  '--graphite-primary-hover',
-  '--graphite-primary-pressed',
-  '--graphite-primary-selected',
-  '--graphite-primary-disabled',
-  '--graphite-primary-disabled-content',
-  '--graphite-focus',
+// Interaction states belong to their family's role rather than being roles of
+// their own, so a contract declaring `primary` or `secondary` may reference
+// that family's states. Built from the family name so the two stay in step.
+const familyStateVars = (family) => [
+  `--graphite-${family}-hover`,
+  `--graphite-${family}-pressed`,
+  `--graphite-${family}-selected`,
+  `--graphite-${family}-disabled`,
+  `--graphite-${family}-disabled-content`,
+  `--graphite-${family}-focus`,
 ]
+
+// --graphite-focus is the page-level ring: it belongs to no family, so any
+// contract that declares primary may reach for it.
+const PRIMARY_STATE_VARS = [...familyStateVars('primary'), '--graphite-focus']
+const SECONDARY_STATE_VARS = familyStateVars('secondary')
 
 // Roles a contract may declare that the engine does not produce yet, by
 // design. Each is tracked by open work; they warn rather than fail the build.
-const PENDING_ROLES = new Map([
-])
+const PENDING_ROLES = new Map([])
 
 // ---------------------------------------------------------------- contracts
 const frontmatter = (t) => (t.match(/^---\r?\n([\s\S]*?)\r?\n---/) || [, ''])[1]
@@ -61,7 +66,8 @@ const block = (fm, key) => {
   const i = lines.findIndex((l) => new RegExp(`^${key}:`).test(l))
   if (i === -1) return []
   const out = []
-  for (let j = i + 1; j < lines.length && !/^\S/.test(lines[j]); j++) out.push(lines[j])
+  for (let j = i + 1; j < lines.length && !/^\S/.test(lines[j]); j++)
+    out.push(lines[j])
   return out
 }
 
@@ -71,20 +77,27 @@ function readContracts() {
     .filter((f) => f.endsWith('.md') && f !== 'README.md')
     .sort()
     .map((file) => {
-      const fm = frontmatter(fs.readFileSync(path.join(ROOT, CONTRACTS_DIR, file), 'utf8'))
+      const fm = frontmatter(
+        fs.readFileSync(path.join(ROOT, CONTRACTS_DIR, file), 'utf8'),
+      )
       const roles = []
       const inherits = []
       for (const line of block(fm, 'tokens')) {
         let m = line.match(/^\s*-\s*name:\s*(.+?)\s*$/)
-        if (m) { roles.push(m[1]); continue }
+        if (m) {
+          roles.push(m[1])
+          continue
+        }
         m = line.match(/^\s*-\s*inherited_from:\s*(.+?)\s*$/)
         if (m) inherits.push(m[1])
       }
       return {
-        file, slug: file.replace(/\.md$/, ''),
+        file,
+        slug: file.replace(/\.md$/, ''),
         component: scalar(fm, 'component'),
         version: scalar(fm, 'version'),
-        roles, inherits,
+        roles,
+        inherits,
       }
     })
 }
@@ -102,8 +115,10 @@ async function readTokenModel() {
     roleToVars.get(role).add(v)
     varToRole.set(v, role)
   }
-  for (const role of Object.keys(theme.tokens)) bind(role, `--graphite-${kebab(role)}`)
+  for (const role of Object.keys(theme.tokens))
+    bind(role, `--graphite-${kebab(role)}`)
   for (const v of PRIMARY_STATE_VARS) bind('primary', v)
+  for (const v of SECONDARY_STATE_VARS) bind('secondary', v)
   const space = readSpacingVars()
   for (const v of space.spacing) bind('spacing', v)
   for (const v of space.density) bind('density', v)
@@ -139,7 +154,8 @@ function findImpl(slug) {
       for (const e of fs.readdirSync(cur, { withFileTypes: true })) {
         const p = path.join(cur, e.name)
         if (e.isDirectory()) stack.push(p)
-        else if (names.includes(e.name)) return path.relative(ROOT, p).split(path.sep).join('/')
+        else if (names.includes(e.name))
+          return path.relative(ROOT, p).split(path.sep).join('/')
       }
     }
   }
@@ -188,41 +204,66 @@ for (const c of contracts) {
   for (const r of roles) {
     if (roleToVars.has(r)) continue
     const why = PENDING_ROLES.get(r)
-    if (why) warnings.push(`${c.file}: role "${r}" not generated yet — expected, ${why}`)
-    else errors.push(`${c.file}: declares role "${r}", which ${ENGINE} does not generate`)
+    if (why)
+      warnings.push(
+        `${c.file}: role "${r}" not generated yet — expected, ${why}`,
+      )
+    else
+      errors.push(
+        `${c.file}: declares role "${r}", which ${ENGINE} does not generate`,
+      )
   }
 
   const impl = findImpl(c.slug)
-  if (!impl) { pending++; continue }
+  if (!impl) {
+    pending++
+    continue
+  }
   checked++
 
   const used = scan(impl)
   for (const v of used.graphite) {
-    if (!varToRole.has(v)) errors.push(`${impl}: uses ${v}, which the engine never emits`)
+    if (!varToRole.has(v))
+      errors.push(`${impl}: uses ${v}, which the engine never emits`)
     else if (!allowed.has(v)) {
-      errors.push(`${impl}: uses ${v} (role "${varToRole.get(v)}"), not declared in ${c.file}`)
+      errors.push(
+        `${impl}: uses ${v} (role "${varToRole.get(v)}"), not declared in ${c.file}`,
+      )
     }
   }
   for (const v of used.cds) {
-    warnings.push(`${impl}: uses Carbon's ${v} — prefer the --graphite-* equivalent`)
+    warnings.push(
+      `${impl}: uses Carbon's ${v} — prefer the --graphite-* equivalent`,
+    )
   }
   for (const r of roles) {
     const vars = roleToVars.get(r)
     if (vars && ![...vars].some((v) => used.graphite.has(v))) {
-      warnings.push(`${c.file}: declares role "${r}" but ${impl} never references it`)
+      warnings.push(
+        `${c.file}: declares role "${r}" but ${impl} never references it`,
+      )
     }
   }
 }
 
 const plural = (n, s) => `${n} ${s}${n === 1 ? '' : 's'}`
-console.log(`drift-check: ${plural(contracts.length, 'contract')}, ` +
-  `${plural(roleToVars.size, 'role')}, ${plural(varToRole.size, 'declared variable')}`)
-console.log(`  ${checked} implemented and checked, ${pending} awaiting implementation`)
-if (warnings.length) { console.log('\nwarnings:'); for (const w of warnings) console.log(`  ! ${w}`) }
+console.log(
+  `drift-check: ${plural(contracts.length, 'contract')}, ` +
+    `${plural(roleToVars.size, 'role')}, ${plural(varToRole.size, 'declared variable')}`,
+)
+console.log(
+  `  ${checked} implemented and checked, ${pending} awaiting implementation`,
+)
+if (warnings.length) {
+  console.log('\nwarnings:')
+  for (const w of warnings) console.log(`  ! ${w}`)
+}
 if (errors.length) {
   console.log('\nerrors:')
   for (const e of errors) console.log(`  x ${e}`)
-  console.log(`\nFAIL — ${errors.length} mismatch${errors.length === 1 ? '' : 'es'}`)
+  console.log(
+    `\nFAIL — ${errors.length} mismatch${errors.length === 1 ? '' : 'es'}`,
+  )
   process.exit(1)
 }
 console.log('\nOK — no drift')
