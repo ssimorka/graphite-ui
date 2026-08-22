@@ -42,19 +42,53 @@
 // cannot fall out of step. Graphite owns the names, Carbon owns the numbers —
 // the same split as color.
 :root {
-  --graphite-space-01: #{spacing.$spacing-01};
-  --graphite-space-02: #{spacing.$spacing-02};
-  --graphite-space-03: #{spacing.$spacing-03};
-  --graphite-space-04: #{spacing.$spacing-04};
-  --graphite-space-05: #{spacing.$spacing-05};
-  --graphite-space-06: #{spacing.$spacing-06};
-  --graphite-space-07: #{spacing.$spacing-07};
-  --graphite-space-08: #{spacing.$spacing-08};
-  --graphite-space-09: #{spacing.$spacing-09};
-  --graphite-space-10: #{spacing.$spacing-10};
-  --graphite-space-11: #{spacing.$spacing-11};
-  --graphite-space-12: #{spacing.$spacing-12};
-  --graphite-space-13: #{spacing.$spacing-13};
+  // Sourced from the kit's `Spacing` collection in
+  // docs/tokens/figma-snapshot.json, not from Carbon. The numbers are
+  // identical either way today — that is why this was safe to switch — but
+  // the kit is the authority now, so a future change to Carbon's scale is
+  // drift to be caught rather than a value to inherit silently.
+  //
+  // Written in rem, at the kit's px over 16. The kit stores px; emitting it
+  // raw would drop the rem scaling these have always had and quietly change
+  // behavior for anyone running a non-default root size. The px is in the
+  // comment so the snapshot comparison stays legible by eye as well as to
+  // the check in #73.
+  //
+  // Note --graphite-space-00, which Carbon has no counterpart for: the kit
+  // carries an explicit zero and this scale did not.
+  --graphite-space-00: 0; // 0px
+  --graphite-space-01: 0.125rem; // 2px
+  --graphite-space-02: 0.25rem; // 4px
+  --graphite-space-03: 0.5rem; // 8px
+  --graphite-space-04: 0.75rem; // 12px
+  --graphite-space-05: 1rem; // 16px
+  --graphite-space-06: 1.5rem; // 24px
+  --graphite-space-07: 2rem; // 32px
+  --graphite-space-08: 2.5rem; // 40px
+  --graphite-space-09: 3rem; // 48px
+  --graphite-space-10: 4rem; // 64px
+  --graphite-space-11: 5rem; // 80px
+  --graphite-space-12: 6rem; // 96px
+  --graphite-space-13: 10rem; // 160px
+
+  // Breakpoints, from the kit's `Breakpoint` collection. lg and xl are kept
+  // as two tokens rather than one lg-xl: in the kit they live in a separate
+  // `Breakpoint LG–XL` collection that the main one aliases into per mode,
+  // and collapsing them here would flatten a distinction the kit makes.
+  //
+  // In px, matching the kit exactly, because these are reference values
+  // rather than layout inputs — see the caveat below.
+  //
+  // CAVEAT: a custom property cannot be used in a media query, so these
+  // cannot drive @media. They exist to be read from JS and to give the
+  // breakpoints one authoritative home. The @media rules in this file still
+  // carry their numbers literally; keeping them honest is on the drift check
+  // in #73, not on these tokens.
+  --graphite-breakpoint-sm: 320px;
+  --graphite-breakpoint-md: 672px;
+  --graphite-breakpoint-lg: 1056px;
+  --graphite-breakpoint-xl: 1312px;
+  --graphite-breakpoint-max: 1584px;
 
   // Radius. Carbon has no radius scale, so unlike spacing these numbers come
   // from the Figma kit — `Radius` in docs/tokens/figma-snapshot.json — and the
