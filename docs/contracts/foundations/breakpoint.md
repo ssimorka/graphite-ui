@@ -1,6 +1,6 @@
 ---
 foundation: Breakpoint
-version: 1.0.0
+version: 1.1.0
 source: Graphite UI Kit › Breakpoint (4 modes) + Breakpoint LG–XL (2 modes)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -43,11 +43,23 @@ breakpoint in this codebase; they exist so the numbers have one authoritative
 home, and so JS can read them. Every `@media` rule still carries its number
 literally.
 
-`token-drift` closes that gap from the other side: it scans `@media`
-conditions and warns when one matches no kit breakpoint (accepting both a
-breakpoint and one-below-it, per the convention above). One currently does not
-— a `max-width: 419px` rule in `app/globals.scss` that corresponds to nothing
-in the kit.
+`token-drift` closes that gap from two sides.
+
+It scans `@media` conditions and warns when one matches no kit breakpoint
+(accepting both a breakpoint and one-below-it, per the convention above). One
+currently does not — a `max-width: 419px` rule in `app/globals.scss` that
+corresponds to nothing in the kit.
+
+That scan cannot see `@include breakpoint.breakpoint(lg)`, because the mixin
+compiles to a media query at build time and there is no literal number in the
+source to read. So the check reads Carbon's `$grid-breakpoints` map directly
+and compares it to the kit instead — if the two ever diverge, every one of
+those 15 media queries is following Carbon, and this fails. They agree as of
+`@carbon/grid` 11.56.0: 320 / 672 / 1056 / 1312 / 1584.
+
+Note Carbon calls the 1312px stop **`xlg`** where the kit and these tokens call
+it `xl`. The check maps between them; anyone reading the mixin calls should
+know the names do not line up.
 
 **Scope.** The `Breakpoint` collection holds four variables and only one,
 `Viewport size`, is a breakpoint. The other three — `Modal min-width`,

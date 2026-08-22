@@ -14,7 +14,6 @@
 @use '@carbon/react/scss/zone';
 
 // Carbon foundations for custom layout styles.
-@use '@carbon/react/scss/spacing' as spacing;
 @use '@carbon/react/scss/type' as type;
 @use '@carbon/react/scss/breakpoint' as breakpoint;
 
@@ -38,9 +37,12 @@
 // resolved at compile time, so nothing could read them at runtime and the
 // drift check could not see them at all.
 //
-// Values are interpolated from Carbon's scale rather than restated, so the two
-// cannot fall out of step. Graphite owns the names, Carbon owns the numbers —
-// the same split as color.
+// This paragraph used to say the values were interpolated from Carbon's scale,
+// with Graphite owning the names and Carbon the numbers. Both halves of that
+// have since changed: #72 moved the numbers to the Figma kit, and #83 pointed
+// the rest of this file at the tokens below rather than at Carbon directly.
+// Nothing here reaches for `spacing.$spacing-*` any more, which is why the
+// import is gone.
 :root {
   // Sourced from the kit's `Spacing` collection in
   // docs/tokens/figma-snapshot.json, not from Carbon. The numbers are
@@ -333,10 +335,10 @@ body {
 .site-header__source-trigger {
   display: flex;
   align-items: center;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
   height: 100%;
   min-width: 44px;
-  padding: 0 spacing.$spacing-05;
+  padding: 0 var(--graphite-space-05);
   background: none;
   border: none;
   color: inherit;
@@ -381,8 +383,8 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: spacing.$spacing-03;
-  margin-top: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-03);
 }
 
 .canvas-toolbar__hint {
@@ -395,7 +397,7 @@ body {
 
 .canvas-toolbar__actions {
   display: flex;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
 
   // Carbon's `sm` buttons are 32px tall, which is under a comfortable touch
   // target. Keep the compact desktop look but grow them on touch-sized
@@ -467,9 +469,9 @@ body {
 .art__cover-hint {
   position: absolute;
   left: 50%;
-  bottom: spacing.$spacing-06;
-  transform: translate(-50%, spacing.$spacing-03);
-  padding: spacing.$spacing-03 spacing.$spacing-05;
+  bottom: var(--graphite-space-06);
+  transform: translate(-50%, var(--graphite-space-03));
+  padding: var(--graphite-space-03) var(--graphite-space-05);
   @include type.type-style('label-01');
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
@@ -493,7 +495,7 @@ body {
 // ---------------------------------------------------------------------------
 .reveal {
   opacity: 0;
-  transform: translateY(spacing.$spacing-06);
+  transform: translateY(var(--graphite-space-06));
   transition:
     opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -518,15 +520,15 @@ body {
 // ---------------------------------------------------------------------------
 .section {
   position: relative;
-  padding: spacing.$spacing-08 0;
+  padding: var(--graphite-space-08) 0;
   border-bottom: 1px solid var(--cds-border-subtle-01);
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-10 0;
+    padding: var(--graphite-space-10) 0;
   }
 
   @include breakpoint.breakpoint(lg) {
-    padding: spacing.$spacing-12 0;
+    padding: var(--graphite-space-12) 0;
   }
 }
 
@@ -535,15 +537,15 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-secondary);
-  margin-bottom: spacing.$spacing-04;
+  margin-bottom: var(--graphite-space-04);
 
   display: inline-flex;
   align-items: center;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
 
   &::before {
     content: '';
-    width: spacing.$spacing-05;
+    width: var(--graphite-space-05);
     height: 1px;
     background: var(--cds-border-interactive);
   }
@@ -557,8 +559,8 @@ body {
 
 .section__subtitle {
   @include type.type-style('body-02');
-  margin-top: spacing.$spacing-05;
-  margin-bottom: spacing.$spacing-08;
+  margin-top: var(--graphite-space-05);
+  margin-bottom: var(--graphite-space-08);
   max-width: 40rem;
   color: var(--cds-text-secondary);
   text-wrap: pretty;
@@ -574,17 +576,17 @@ body {
   --py: 0; // pointer y offset, -0.5..0.5
   position: relative;
   overflow: hidden;
-  padding: spacing.$spacing-07 0 spacing.$spacing-07;
+  padding: var(--graphite-space-07) 0 var(--graphite-space-07);
   background: var(--cds-background);
   border-bottom: 1px solid var(--cds-border-subtle-01);
   isolation: isolate;
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-10 0 spacing.$spacing-09;
+    padding: var(--graphite-space-10) 0 var(--graphite-space-09);
   }
 
   @include breakpoint.breakpoint(lg) {
-    padding: spacing.$spacing-12 0 spacing.$spacing-10;
+    padding: var(--graphite-space-12) 0 var(--graphite-space-10);
   }
 }
 
@@ -654,17 +656,17 @@ body {
 .hero__eyebrow {
   display: inline-flex !important;
   align-items: center;
-  gap: spacing.$spacing-03;
-  margin-bottom: spacing.$spacing-05;
+  gap: var(--graphite-space-03);
+  margin-bottom: var(--graphite-space-05);
 
   .cds--tag__label {
     display: inline-flex;
     align-items: center;
-    gap: spacing.$spacing-02;
+    gap: var(--graphite-space-02);
   }
 
   @include breakpoint.breakpoint(md) {
-    margin-bottom: spacing.$spacing-06;
+    margin-bottom: var(--graphite-space-06);
   }
 }
 
@@ -681,24 +683,24 @@ body {
 
 .hero__subtitle {
   @include type.type-style('fluid-paragraph-01', true);
-  margin-top: spacing.$spacing-05;
+  margin-top: var(--graphite-space-05);
   max-width: 42rem;
   color: var(--cds-text-secondary);
   text-wrap: pretty;
 
   @include breakpoint.breakpoint(md) {
-    margin-top: spacing.$spacing-06;
+    margin-top: var(--graphite-space-06);
   }
 }
 
 // Product preview
 .hero__preview {
   position: relative;
-  margin-top: spacing.$spacing-07;
+  margin-top: var(--graphite-space-07);
   animation: hero-rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
 
   @include breakpoint.breakpoint(md) {
-    margin-top: spacing.$spacing-10;
+    margin-top: var(--graphite-space-10);
   }
 }
 
@@ -713,8 +715,8 @@ body {
   will-change: transform;
   border: 1px solid var(--cds-border-subtle-02);
   background: var(--cds-layer-01);
-  padding: spacing.$spacing-03;
-  box-shadow: 0 spacing.$spacing-08 spacing.$spacing-12
+  padding: var(--graphite-space-03);
+  box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
     color-mix(in srgb, #000 45%, transparent);
   overflow: hidden;
 
@@ -741,7 +743,7 @@ body {
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translateY(spacing.$spacing-07) scale(0.98);
+    transform: translateY(var(--graphite-space-07)) scale(0.98);
   }
   to {
     opacity: 1;
@@ -765,7 +767,7 @@ body {
 // Trusted by
 // ---------------------------------------------------------------------------
 .trusted {
-  padding: spacing.$spacing-08 0;
+  padding: var(--graphite-space-08) 0;
   border-bottom: 1px solid var(--cds-border-subtle-01);
   background: var(--cds-layer-01);
 }
@@ -776,7 +778,7 @@ body {
   color: var(--cds-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: spacing.$spacing-06;
+  margin-bottom: var(--graphite-space-06);
 }
 
 .trusted__logos {
@@ -784,7 +786,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: spacing.$spacing-07 spacing.$spacing-10;
+  gap: var(--graphite-space-07) var(--graphite-space-10);
 
   // Below this, the flex-wrap + wide desktop gap leaves an orphaned,
   // off-center item on its own row. A fixed 2-column grid keeps every
@@ -793,7 +795,7 @@ body {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
-    gap: spacing.$spacing-06 spacing.$spacing-05;
+    gap: var(--graphite-space-06) var(--graphite-space-05);
   }
 }
 
@@ -816,7 +818,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
   text-align: center;
 }
 
@@ -841,8 +843,8 @@ body {
 .ramp-stack {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-06;
-  padding: spacing.$spacing-06;
+  gap: var(--graphite-space-06);
+  padding: var(--graphite-space-06);
   background: var(--cds-layer-01);
 }
 
@@ -852,7 +854,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--cds-text-secondary);
-  margin-bottom: spacing.$spacing-03;
+  margin-bottom: var(--graphite-space-03);
 }
 
 // Fixed-width swatches (repeat(n, 1fr) won't shrink past their min-content)
@@ -861,18 +863,18 @@ body {
 // stop reachable and keeps the two rows in sync while swiping.
 .ramp__scroll {
   overflow-x: auto;
-  padding-bottom: spacing.$spacing-02;
+  padding-bottom: var(--graphite-space-02);
 }
 
 .ramp__grid,
 .ramp__weights {
   display: grid;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
   min-width: min-content;
 }
 
 .ramp__weights {
-  margin-top: spacing.$spacing-02;
+  margin-top: var(--graphite-space-02);
 
   span {
     text-align: center;
@@ -891,7 +893,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
-  padding: spacing.$spacing-02;
+  padding: var(--graphite-space-02);
   font: inherit;
   cursor: pointer;
 
@@ -916,12 +918,12 @@ body {
 // ---------------------------------------------------------------------------
 .studio-panel {
   background: var(--cds-layer-01);
-  padding: spacing.$spacing-05;
+  padding: var(--graphite-space-05);
 }
 
 .studio-panel__heading {
   @include type.type-style('heading-compact-01');
-  margin: spacing.$spacing-06 0 spacing.$spacing-04;
+  margin: var(--graphite-space-06) 0 var(--graphite-space-04);
 }
 
 .studio-table {
@@ -938,13 +940,13 @@ body {
 .states-matrix {
   display: flex;
   flex-wrap: wrap;
-  gap: spacing.$spacing-05;
+  gap: var(--graphite-space-05);
 }
 
 .states-matrix__item {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
   width: 88px;
   text-align: center;
 }
@@ -971,9 +973,9 @@ body {
 .source-controls {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-04;
-  margin-top: spacing.$spacing-05;
-  padding-top: spacing.$spacing-04;
+  gap: var(--graphite-space-04);
+  margin-top: var(--graphite-space-05);
+  padding-top: var(--graphite-space-04);
   border-top: 1px solid var(--cds-border-subtle);
 }
 
@@ -984,7 +986,7 @@ body {
   @include type.type-style('label-01');
   display: flex;
   align-items: baseline;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
   color: var(--cds-text-secondary);
 }
 
@@ -1008,11 +1010,11 @@ body {
 
 .studio-toast {
   position: fixed;
-  bottom: spacing.$spacing-06;
+  bottom: var(--graphite-space-06);
   left: 50%;
   transform: translateX(-50%);
   z-index: 9500;
-  padding: spacing.$spacing-03 spacing.$spacing-05;
+  padding: var(--graphite-space-03) var(--graphite-space-05);
   background: var(--cds-layer-inverse, #393939);
   color: var(--cds-text-inverse, #fff);
   @include type.type-style('body-compact-01');
@@ -1061,13 +1063,13 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: spacing.$spacing-06;
+  gap: var(--graphite-space-06);
 }
 
 .span-list__item {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
 }
 
 .span-list__box {
@@ -1091,7 +1093,7 @@ body {
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: spacing.$spacing-05;
+  gap: var(--graphite-space-05);
 
   @include breakpoint.breakpoint(md) {
     grid-template-columns: repeat(4, 1fr);
@@ -1106,7 +1108,7 @@ body {
   aspect-ratio: 1;
   border: 1px solid var(--cds-border-subtle-01);
   overflow: hidden;
-  margin-bottom: spacing.$spacing-03;
+  margin-bottom: var(--graphite-space-03);
 }
 
 .tile-grid__label {
@@ -1116,7 +1118,7 @@ body {
   letter-spacing: 0.1em;
   color: var(--cds-text-secondary);
   display: flex;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
 }
 
 .tile-grid__num {
@@ -1127,13 +1129,13 @@ body {
 // Features
 // ---------------------------------------------------------------------------
 .feature-grid {
-  margin-top: spacing.$spacing-03;
-  row-gap: spacing.$spacing-05;
+  margin-top: var(--graphite-space-03);
+  row-gap: var(--graphite-space-05);
 }
 
 .feature-card {
   height: 100%;
-  padding: spacing.$spacing-06;
+  padding: var(--graphite-space-06);
   background: var(--cds-layer-01);
   border: 1px solid var(--cds-border-subtle-01);
   transition:
@@ -1142,9 +1144,9 @@ body {
     box-shadow 240ms ease;
 
   &:hover {
-    transform: translateY(calc(-1 * spacing.$spacing-03));
+    transform: translateY(calc(-1 * var(--graphite-space-03)));
     border-color: var(--cds-border-interactive);
-    box-shadow: 0 spacing.$spacing-06 spacing.$spacing-09
+    box-shadow: 0 var(--graphite-space-06) var(--graphite-space-09)
       color-mix(in srgb, #000 35%, transparent);
   }
 }
@@ -1153,9 +1155,9 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: spacing.$spacing-09;
-  height: spacing.$spacing-09;
-  margin-bottom: spacing.$spacing-06;
+  width: var(--graphite-space-09);
+  height: var(--graphite-space-09);
+  margin-bottom: var(--graphite-space-06);
   color: var(--cds-interactive);
   background: color-mix(in srgb, var(--cds-interactive) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--cds-interactive) 30%, transparent);
@@ -1163,7 +1165,7 @@ body {
 
 .feature-card__title {
   @include type.type-style('heading-03');
-  margin-bottom: spacing.$spacing-04;
+  margin-bottom: var(--graphite-space-04);
 }
 
 .feature-card__body {
@@ -1180,7 +1182,7 @@ body {
 
 .showcase__switcher {
   max-width: 22rem;
-  margin: 0 auto spacing.$spacing-07;
+  margin: 0 auto var(--graphite-space-07);
 }
 
 .showcase__stage {
@@ -1204,8 +1206,8 @@ body {
 .showcase__frame {
   border: 1px solid var(--cds-border-subtle-02);
   background: var(--cds-background);
-  padding: spacing.$spacing-03;
-  box-shadow: 0 spacing.$spacing-08 spacing.$spacing-12
+  padding: var(--graphite-space-03);
+  box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
     color-mix(in srgb, #000 45%, transparent);
   overflow: hidden;
   animation: fade-swap 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1218,13 +1220,13 @@ body {
 }
 
 .showcase__caption {
-  margin-top: spacing.$spacing-07;
+  margin-top: var(--graphite-space-07);
   text-align: center;
 }
 
 .showcase__caption-title {
   @include type.type-style('heading-04');
-  margin-bottom: spacing.$spacing-03;
+  margin-bottom: var(--graphite-space-03);
 }
 
 .showcase__caption-body {
@@ -1256,19 +1258,19 @@ body {
 // Benefits
 // ---------------------------------------------------------------------------
 .benefit-grid {
-  row-gap: spacing.$spacing-07;
+  row-gap: var(--graphite-space-07);
 }
 
 .benefit {
   height: 100%;
-  padding-top: spacing.$spacing-05;
+  padding-top: var(--graphite-space-05);
   border-top: 2px solid var(--cds-border-interactive);
 }
 
 .benefit__icon {
   display: inline-flex;
   color: var(--cds-interactive);
-  margin-bottom: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-05);
 }
 
 .benefit__stat {
@@ -1278,8 +1280,8 @@ body {
 
 .benefit__title {
   @include type.type-style('heading-03');
-  margin-top: spacing.$spacing-03;
-  margin-bottom: spacing.$spacing-03;
+  margin-top: var(--graphite-space-03);
+  margin-bottom: var(--graphite-space-03);
 }
 
 .benefit__body {
@@ -1291,11 +1293,11 @@ body {
 // FAQ
 // ---------------------------------------------------------------------------
 .section--faq {
-  row-gap: spacing.$spacing-07;
+  row-gap: var(--graphite-space-07);
 }
 
 .faq__accordion {
-  margin-top: spacing.$spacing-02;
+  margin-top: var(--graphite-space-02);
 }
 
 .faq__answer {
@@ -1310,13 +1312,13 @@ body {
 .cta {
   position: relative;
   overflow: hidden;
-  padding: spacing.$spacing-09 0;
+  padding: var(--graphite-space-09) 0;
   background: var(--cds-background);
   border-bottom: 1px solid var(--cds-border-subtle-01);
   isolation: isolate;
 
   @include breakpoint.breakpoint(md) {
-    padding: spacing.$spacing-12 0;
+    padding: var(--graphite-space-12) 0;
   }
 }
 
@@ -1348,7 +1350,7 @@ body {
 .cta__subtitle {
   @include type.type-style('body-02');
   color: var(--cds-text-secondary);
-  margin-top: spacing.$spacing-05;
+  margin-top: var(--graphite-space-05);
   max-width: 36rem;
   text-wrap: pretty;
 }
@@ -1357,16 +1359,16 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: spacing.$spacing-05;
+  gap: var(--graphite-space-05);
   width: 100%;
   max-width: 30rem;
-  margin-top: spacing.$spacing-07;
+  margin-top: var(--graphite-space-07);
 }
 
 .cta__fields {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-04;
+  gap: var(--graphite-space-04);
   width: 100%;
   text-align: left;
 }
@@ -1387,7 +1389,7 @@ body {
 // Footer
 // ---------------------------------------------------------------------------
 .footer {
-  padding: spacing.$spacing-06 0;
+  padding: var(--graphite-space-06) 0;
   border-top: 1px solid var(--cds-border-subtle-01);
   background: var(--cds-background);
 }
@@ -1397,7 +1399,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
 
   // The two halves can't sit on one line at phone widths; stacking them
   // deliberately (rather than letting space-between strand the credit) keeps
@@ -1405,7 +1407,7 @@ body {
   @media (max-width: 671px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: spacing.$spacing-04;
+    gap: var(--graphite-space-04);
   }
 }
 
@@ -1472,21 +1474,21 @@ body {
 }
 
 .docpage__intro {
-  padding-bottom: spacing.$spacing-07;
+  padding-bottom: var(--graphite-space-07);
 }
 
 .docpage__title {
-  margin-bottom: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-05);
 }
 
 .docpage__lede {
-  margin-bottom: spacing.$spacing-06;
+  margin-bottom: var(--graphite-space-06);
 }
 
 .docpage__body {
   @include type.type-style('body-01');
   max-width: 44rem;
-  margin-bottom: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-05);
   color: var(--cds-text-secondary);
   text-wrap: pretty;
 
@@ -1500,17 +1502,17 @@ body {
 // where Carbon stacks the columns and a sticky block would sit in the flow.
 .docpage__toc {
   border-left: 1px solid var(--cds-border-subtle);
-  padding-left: spacing.$spacing-05;
+  padding-left: var(--graphite-space-05);
 
   @include breakpoint.breakpoint(lg) {
     position: sticky;
-    top: calc(3rem + #{spacing.$spacing-06});
+    top: calc(3rem + var(--graphite-space-06));
   }
 
   ul {
     display: flex;
     flex-direction: column;
-    gap: spacing.$spacing-03;
+    gap: var(--graphite-space-03);
   }
 
   a {
@@ -1530,23 +1532,23 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-primary);
-  margin-bottom: spacing.$spacing-04;
+  margin-bottom: var(--graphite-space-04);
 }
 
 .doc-heading {
   @include type.type-style('fluid-heading-04', true);
-  margin-bottom: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-05);
   scroll-margin-top: 4rem; // fixed header + breathing room for anchor jumps
 }
 
 .doc-subheading {
   @include type.type-style('heading-03');
-  margin-top: spacing.$spacing-08;
-  margin-bottom: spacing.$spacing-04;
+  margin-top: var(--graphite-space-08);
+  margin-bottom: var(--graphite-space-04);
 }
 
 .doc-group {
-  margin-bottom: spacing.$spacing-07;
+  margin-bottom: var(--graphite-space-07);
 }
 
 // "In short" gloss opening each section. Sits above the prose and reads as a
@@ -1555,10 +1557,10 @@ body {
   @include type.type-style('body-02');
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
   max-width: 44rem;
-  margin-bottom: spacing.$spacing-06;
-  padding: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
   background: var(--cds-layer-02);
   border-left: 3px solid var(--cds-border-interactive);
   color: var(--cds-text-primary);
@@ -1573,19 +1575,19 @@ body {
 
 .doc-glossary {
   max-width: 44rem;
-  margin-bottom: spacing.$spacing-06;
+  margin-bottom: var(--graphite-space-06);
   border-top: 1px solid var(--cds-border-subtle);
 }
 
 .doc-glossary__item {
   display: grid;
-  gap: spacing.$spacing-02;
-  padding: spacing.$spacing-05 0;
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-05) 0;
   border-bottom: 1px solid var(--cds-border-subtle);
 
   @include breakpoint.breakpoint(md) {
     grid-template-columns: 12rem 1fr;
-    gap: spacing.$spacing-05;
+    gap: var(--graphite-space-05);
   }
 
   dt {
@@ -1602,14 +1604,14 @@ body {
 // Pipeline: numbered layers, source color through component bindings.
 .doc-pipeline {
   list-style: none;
-  margin: spacing.$spacing-06 0 spacing.$spacing-08;
+  margin: var(--graphite-space-06) 0 var(--graphite-space-08);
   border-top: 1px solid var(--cds-border-subtle);
 }
 
 .doc-pipeline__step {
   display: flex;
-  gap: spacing.$spacing-05;
-  padding: spacing.$spacing-05 0;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-05) 0;
   border-bottom: 1px solid var(--cds-border-subtle);
 }
 
@@ -1629,7 +1631,7 @@ body {
 .doc-pipeline__body {
   display: flex;
   flex-direction: column;
-  gap: spacing.$spacing-02;
+  gap: var(--graphite-space-02);
 }
 
 .doc-pipeline__name {
@@ -1645,7 +1647,7 @@ body {
 
 .doc-table {
   overflow-x: auto;
-  margin-bottom: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-05);
 
   code {
     @include type.type-style('code-01');
@@ -1657,7 +1659,7 @@ body {
 .doc-value {
   display: inline-flex;
   align-items: center;
-  gap: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
 }
 
 .doc-value__text {
@@ -1696,7 +1698,7 @@ body {
 .doc-note {
   @include type.type-style('label-01');
   max-width: 44rem;
-  margin-bottom: spacing.$spacing-06;
+  margin-bottom: var(--graphite-space-06);
   color: var(--cds-text-secondary);
 }
 
@@ -1710,8 +1712,8 @@ body {
 .doc-callout {
   @include type.type-style('body-01');
   max-width: 44rem;
-  margin: spacing.$spacing-06 0;
-  padding: spacing.$spacing-05;
+  margin: var(--graphite-space-06) 0;
+  padding: var(--graphite-space-05);
   background: var(--cds-layer-02);
   border-left: 3px solid var(--cds-border-interactive);
   color: var(--cds-text-secondary);
@@ -1725,14 +1727,14 @@ body {
 .doc-list,
 .doc-ordered {
   max-width: 44rem;
-  margin-bottom: spacing.$spacing-06;
-  padding-left: spacing.$spacing-05;
+  margin-bottom: var(--graphite-space-06);
+  padding-left: var(--graphite-space-05);
 
   li {
     @include type.type-style('body-01');
     color: var(--cds-text-secondary);
-    margin-bottom: spacing.$spacing-04;
-    padding-left: spacing.$spacing-03;
+    margin-bottom: var(--graphite-space-04);
+    padding-left: var(--graphite-space-03);
 
     strong {
       color: var(--cds-text-primary);
@@ -1747,14 +1749,14 @@ body {
 
   li {
     position: relative;
-    padding-left: spacing.$spacing-05;
+    padding-left: var(--graphite-space-05);
 
     &::before {
       content: '';
       position: absolute;
       left: 0;
       top: 0.6em;
-      width: spacing.$spacing-03;
+      width: var(--graphite-space-03);
       height: 1px;
       background: var(--cds-border-interactive);
     }
@@ -1771,7 +1773,7 @@ body {
 
 .doc-rules {
   display: grid;
-  gap: spacing.$spacing-06;
+  gap: var(--graphite-space-06);
 
   @include breakpoint.breakpoint(md) {
     grid-template-columns: 1fr 1fr;
@@ -1780,7 +1782,7 @@ body {
 
 .doc-rules__col {
   background: var(--cds-layer-02);
-  padding: spacing.$spacing-05;
+  padding: var(--graphite-space-05);
   border-top: 3px solid var(--cds-border-subtle);
 
   ul {
@@ -1790,7 +1792,7 @@ body {
   li {
     @include type.type-style('body-01');
     color: var(--cds-text-secondary);
-    padding: spacing.$spacing-04 0;
+    padding: var(--graphite-space-04) 0;
     border-bottom: 1px solid var(--cds-border-subtle);
 
     &:last-child {
@@ -1810,8 +1812,8 @@ body {
   @include type.type-style('heading-compact-01');
   display: flex;
   align-items: center;
-  gap: spacing.$spacing-03;
-  margin-bottom: spacing.$spacing-03;
+  gap: var(--graphite-space-03);
+  margin-bottom: var(--graphite-space-03);
   color: var(--cds-text-primary);
 }
 
@@ -1820,19 +1822,19 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-secondary);
-  margin-top: spacing.$spacing-06;
-  margin-bottom: spacing.$spacing-04;
+  margin-top: var(--graphite-space-06);
+  margin-bottom: var(--graphite-space-04);
 }
 
 .doc-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: spacing.$spacing-03;
-  margin-bottom: spacing.$spacing-05;
+  gap: var(--graphite-space-03);
+  margin-bottom: var(--graphite-space-05);
 
   code {
     @include type.type-style('code-01');
-    padding: spacing.$spacing-02 spacing.$spacing-03;
+    padding: var(--graphite-space-02) var(--graphite-space-03);
     background: var(--cds-layer-02);
     border: 1px solid var(--cds-border-subtle);
     color: var(--cds-text-primary);
@@ -1840,13 +1842,13 @@ body {
 }
 
 .doc-footer-link {
-  margin-top: spacing.$spacing-08;
+  margin-top: var(--graphite-space-08);
 
   a {
     @include type.type-style('body-compact-01');
     display: inline-flex;
     align-items: center;
-    gap: spacing.$spacing-03;
+    gap: var(--graphite-space-03);
     color: var(--cds-link-primary);
     text-decoration: none;
 
