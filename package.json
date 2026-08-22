@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "drift-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/drift-check.mjs"
+    "drift-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/drift-check.mjs",
+    "figma-snapshot": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/figma-snapshot.mjs"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.82.0",
