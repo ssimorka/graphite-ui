@@ -14,14 +14,74 @@
   color: var(--graphite-surface);
 }
 
-.display { font-size: 3rem; line-height: 1.1; letter-spacing: -0.02em; }
-.heading-1 { font-size: 2.25rem; line-height: 1.15; letter-spacing: -0.015em; }
-.heading-2 { font-size: 1.75rem; line-height: 1.2; }
-.heading-3 { font-size: 1.375rem; line-height: 1.25; }
-.heading-4 { font-size: 1.125rem; line-height: 1.3; }
-.body { font-size: 1rem; line-height: 1.5; }
-.caption { font-size: 0.8125rem; line-height: 1.4; }
+// Sizes come from the kit's Typography collection rather than being set here.
+// Each variant binds to a step, and the step carries its own line height and
+// its own Desktop/Mobile behaviour, so this file no longer decides any of that.
+//
+// These variants sit on the kit's *title* ladder, not its *heading* ladder.
+// The kit keeps two: `heading/*` is the editorial scale that runs to 64px, and
+// `title/*` is the UI scale. A component-level h2 is a UI title, so mapping it
+// to `heading/2` would have quadrupled its size to say the same thing. Only
+// `.display` reaches into the heading ladder, where an editorial scale is the
+// point.
+//
+// Families follow the split the kit states in its own descriptions: font-1 for
+// display, headings and titles 1-2; font-2 for titles 3-5, body and component
+// text. Both resolve to IBM Plex Sans today, so this is a semantic binding
+// rather than a visual change — and the pair can diverge without touching this
+// file.
+.display {
+  font-family: var(--graphite-font-1);
+  font-size: var(--graphite-text-heading-3-size);
+  line-height: var(--graphite-text-heading-3-line-height);
+  letter-spacing: -0.02em;
+}
 
-.regular { font-weight: 400; }
-.medium { font-weight: 500; }
-.semibold { font-weight: 600; }
+.heading-1 {
+  font-family: var(--graphite-font-1);
+  font-size: var(--graphite-text-title-1-size);
+  line-height: var(--graphite-text-title-1-line-height);
+  letter-spacing: -0.015em;
+}
+
+.heading-2 {
+  font-family: var(--graphite-font-1);
+  font-size: var(--graphite-text-title-2-size);
+  line-height: var(--graphite-text-title-2-line-height);
+}
+
+.heading-3 {
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+}
+
+.heading-4 {
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+}
+
+.body {
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.caption {
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+// Weights were numbers here because the kit stores Figma style names, which
+// CSS cannot use. The mapping now happens once, at the token.
+.regular {
+  font-weight: var(--graphite-text-weight-regular);
+}
+.medium {
+  font-weight: var(--graphite-text-weight-medium);
+}
+.semibold {
+  font-weight: var(--graphite-text-weight-semibold);
+}
