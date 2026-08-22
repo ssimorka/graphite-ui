@@ -50,9 +50,9 @@ const EXPECTED = new Map([
 
 // ------------------------------------------------------------------ decoding
 // figma-extract.js escapes everything outside printable ASCII to get past the
-// MCP transport, which truncates on U+2028. Undo that here so the snapshot
-// records real names — including the en dashes in `Breakpoint LG–XL` and the
-// stray U+2028 inside one Content switcher variable.
+// MCP transport, which cannot carry a U+2028. Undo that here so the snapshot
+// records real names — the en dashes in `Breakpoint LG–XL` reach this path on
+// every run.
 const decode = (s) =>
   typeof s === 'string'
     ? s.replace(/\\(\\|u[0-9a-fA-F]{4})/g, (_, esc) =>

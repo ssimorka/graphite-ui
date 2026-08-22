@@ -3815,7 +3815,7 @@
             }
           }
         },
-        "Content switcher (low contrast)/content-switcher-background-hover": {
+        "Content switcher (low contrast)/content-switcher-background": {
           "type": "COLOR",
           "values": {
             "Light": {
@@ -3844,7 +3844,7 @@
             }
           }
         },
-        "Content switcher (low contrast)/content-switcher- background": {
+        "Content switcher (low contrast)/content-switcher-background-hover": {
           "type": "COLOR",
           "values": {
             "Light": {
