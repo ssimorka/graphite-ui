@@ -23,7 +23,7 @@ const TAG_FOR: Record<Variant, 'h1' | 'h2' | 'h3' | 'h4' | 'p' | 'span'> = {
   caption: 'span',
 }
 
-/** Contract: docs/contracts/typography.md (1.0.0) */
+/** Contract: docs/contracts/typography.md (1.1.0) */
 type TypographyProps = {
   children: ReactNode
   variant?: Variant

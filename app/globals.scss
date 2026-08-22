@@ -137,6 +137,126 @@
   // the system uses alpha rather than a tone step: it has to darken whatever
   // happens to be behind it, which no fixed ramp tone can do.
   --graphite-scrim: rgb(0 0 0 / 0.55);
+
+  // Families. font-1 and font-2 share a value today but are two roles,
+  // per the kit: font-1 is display, headings and titles 1-2; font-2 is
+  // titles 3-5, body and component text. Keeping both means the pair can
+  // diverge later without a rename sweep.
+  --graphite-font-1: 'IBM Plex Sans';
+  --graphite-font-2: 'IBM Plex Sans';
+  --graphite-font-mono: 'IBM Plex Mono';
+
+  // Weights. The kit stores Figma style names ("SemiBold"); CSS wants
+  // numbers, so the mapping happens here rather than at every call site.
+  --graphite-text-weight-bold: 700; // Bold
+  --graphite-text-weight-medium: 500; // Medium
+  --graphite-text-weight-regular: 400; // Regular
+  --graphite-text-weight-semibold: 600; // SemiBold
+
+  // Type steps, Desktop mode. Sizes and line heights are the kit’s px
+  // over 16 — see the rem note on spacing above; type is the case where
+  // that matters most, since it is what answers to a reader who has
+  // turned their font size up.
+  --graphite-text-body-1-size: 1.125rem; // 18px
+  --graphite-text-body-1-line-height: 1.75rem; // 28px
+  --graphite-text-body-2-size: 1rem; // 16px
+  --graphite-text-body-2-line-height: 1.5rem; // 24px
+  --graphite-text-body-3-size: 0.875rem; // 14px
+  --graphite-text-body-3-line-height: 1.25rem; // 20px
+  --graphite-text-caption-1-size: 0.75rem; // 12px
+  --graphite-text-caption-1-line-height: 1rem; // 16px
+  --graphite-text-caption-2-size: 0.75rem; // 12px
+  --graphite-text-caption-2-line-height: 1rem; // 16px
+  --graphite-text-code-1-size: 1rem; // 16px
+  --graphite-text-code-1-line-height: 1.5rem; // 24px
+  --graphite-text-code-2-size: 0.875rem; // 14px
+  --graphite-text-code-2-line-height: 1.25rem; // 20px
+  --graphite-text-code-3-size: 0.75rem; // 12px
+  --graphite-text-code-3-line-height: 1rem; // 16px
+  --graphite-text-component-button-1-size: 1rem; // 16px
+  --graphite-text-component-button-1-line-height: 1.5rem; // 24px
+  --graphite-text-component-button-2-size: 0.875rem; // 14px
+  --graphite-text-component-button-2-line-height: 1.25rem; // 20px
+  --graphite-text-component-button-3-size: 0.75rem; // 12px
+  --graphite-text-component-button-3-line-height: 1rem; // 16px
+  --graphite-text-component-input-1-size: 1rem; // 16px
+  --graphite-text-component-input-1-line-height: 1.5rem; // 24px
+  --graphite-text-component-input-2-size: 0.75rem; // 12px
+  --graphite-text-component-input-2-line-height: 1rem; // 16px
+  --graphite-text-component-input-3-size: 0.75rem; // 12px
+  --graphite-text-component-input-3-line-height: 1rem; // 16px
+  --graphite-text-component-table-1-size: 0.875rem; // 14px
+  --graphite-text-component-table-1-line-height: 1.5rem; // 24px
+  --graphite-text-component-tooltip-1-size: 0.75rem; // 12px
+  --graphite-text-component-tooltip-1-line-height: 1rem; // 16px
+  --graphite-text-display-1-size: 6rem; // 96px
+  --graphite-text-display-1-line-height: 7.5rem; // 120px
+  --graphite-text-footnote-1-size: 0.875rem; // 14px
+  --graphite-text-footnote-1-line-height: 1.25rem; // 20px
+  --graphite-text-heading-1-size: 4rem; // 64px
+  --graphite-text-heading-1-line-height: 5rem; // 80px
+  --graphite-text-heading-2-size: 3.5rem; // 56px
+  --graphite-text-heading-2-line-height: 4.5rem; // 72px
+  --graphite-text-heading-3-size: 3rem; // 48px
+  --graphite-text-heading-3-line-height: 4rem; // 64px
+  --graphite-text-heading-4-size: 2.5rem; // 40px
+  --graphite-text-heading-4-line-height: 3rem; // 48px
+  --graphite-text-heading-5-size: 2rem; // 32px
+  --graphite-text-heading-5-line-height: 2.5rem; // 40px
+  --graphite-text-heading-6-size: 1.5rem; // 24px
+  --graphite-text-heading-6-line-height: 2rem; // 32px
+  --graphite-text-title-1-size: 2rem; // 32px
+  --graphite-text-title-1-line-height: 2.5rem; // 40px
+  --graphite-text-title-2-size: 1.5rem; // 24px
+  --graphite-text-title-2-line-height: 2rem; // 32px
+  --graphite-text-title-3-size: 1.125rem; // 18px
+  --graphite-text-title-3-line-height: 1.75rem; // 28px
+  --graphite-text-title-4-size: 1rem; // 16px
+  --graphite-text-title-4-line-height: 1.5rem; // 24px
+  --graphite-text-title-5-size: 0.875rem; // 14px
+  --graphite-text-title-5-line-height: 1.25rem; // 20px
+}
+
+// Mobile mode from the kit. Only the steps that actually differ are
+// restated — 15 of 29 — so this is an override list rather than a
+// second copy of the scale.
+//
+// The kit does not say which breakpoint separates its Desktop and Mobile
+// modes, so this reuses the boundary the rest of this file already
+// uses: one below md (672px). If that is wrong it is wrong in one place.
+@media (max-width: 671px) {
+  :root {
+    --graphite-text-body-1-size: 1rem; // 16px
+    --graphite-text-body-1-line-height: 1.5rem; // 24px
+    --graphite-text-body-2-size: 0.875rem; // 14px
+    --graphite-text-body-2-line-height: 1.25rem; // 20px
+    --graphite-text-body-3-size: 0.8125rem; // 13px
+    --graphite-text-body-3-line-height: 1rem; // 16px
+    --graphite-text-display-1-size: 4rem; // 64px
+    --graphite-text-display-1-line-height: 5rem; // 80px
+    --graphite-text-heading-1-size: 3rem; // 48px
+    --graphite-text-heading-1-line-height: 3.5rem; // 56px
+    --graphite-text-heading-2-size: 2.5rem; // 40px
+    --graphite-text-heading-2-line-height: 3rem; // 48px
+    --graphite-text-heading-3-size: 2rem; // 32px
+    --graphite-text-heading-3-line-height: 2.5rem; // 40px
+    --graphite-text-heading-4-size: 1.75rem; // 28px
+    --graphite-text-heading-4-line-height: 2rem; // 32px
+    --graphite-text-heading-5-size: 1.5rem; // 24px
+    --graphite-text-heading-5-line-height: 2rem; // 32px
+    --graphite-text-heading-6-size: 1.125rem; // 18px
+    --graphite-text-heading-6-line-height: 1.75rem; // 28px
+    --graphite-text-title-1-size: 1.5rem; // 24px
+    --graphite-text-title-1-line-height: 2rem; // 32px
+    --graphite-text-title-2-size: 1.125rem; // 18px
+    --graphite-text-title-2-line-height: 1.75rem; // 28px
+    --graphite-text-title-3-size: 1rem; // 16px
+    --graphite-text-title-3-line-height: 1.5rem; // 24px
+    --graphite-text-title-4-size: 0.875rem; // 14px
+    --graphite-text-title-4-line-height: 1.25rem; // 20px
+    --graphite-text-title-5-size: 0.8125rem; // 13px
+    --graphite-text-title-5-line-height: 1rem; // 16px
+  }
 }
 
 html,
