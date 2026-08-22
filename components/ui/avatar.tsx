@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import styles from './avatar.module.scss'
 
-/** Contract: docs/contracts/avatar.md (1.2.0) */
+/** Contract: docs/contracts/avatar.md (1.2.1) */
 type AvatarProps = {
   /**
    * Always required, not just when there is no image: it is the fallback the
@@ -39,6 +39,13 @@ export function Avatar({
           className={styles.image}
           src={src}
           alt={alt ?? ''}
+          // Server-rendered markup starts loading before React hydrates, so an
+          // image that fails early fires its error event with no handler
+          // attached and onError never runs. A complete image with no intrinsic
+          // width has already failed, so re-check that on mount.
+          ref={(node) => {
+            if (node?.complete && node.naturalWidth === 0) setFailed(true)
+          }}
           // Failure falls back to initials — never a broken-image icon and
           // never an empty circle.
           onError={() => setFailed(true)}

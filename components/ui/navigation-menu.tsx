@@ -34,8 +34,11 @@ export function NavigationMenu({
   return (
     <nav aria-label={label} className={styles.nav}>
       <ul className={`${styles.list} ${styles[orientation]}`}>
-        {items.map((item) => (
-          <li key={item.href} className={styles.item}>
+        {/* Keyed on the index alongside the href: nothing stops two items from
+            pointing at the same destination, and a repeated href alone would
+            collide. */}
+        {items.map((item, i) => (
+          <li key={`${item.href}-${i}`} className={styles.item}>
             <a
               className={`${styles.link} ${item.current ? styles.current : ''}`}
               href={item.href}
@@ -47,8 +50,8 @@ export function NavigationMenu({
                 Wave 5 overlay surface — the same soft dependency Select has. */}
             {item.items?.length ? (
               <ul className={styles.sublist}>
-                {item.items.map((child) => (
-                  <li key={child.href}>
+                {item.items.map((child, i) => (
+                  <li key={`${child.href}-${i}`}>
                     <a
                       className={`${styles.link} ${child.current ? styles.current : ''}`}
                       href={child.href}

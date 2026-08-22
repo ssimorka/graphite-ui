@@ -1,6 +1,6 @@
 ---
 component: Avatar
-version: 1.2.0
+version: 1.2.1
 wave: 1
 slots:
   - name: Image
@@ -25,7 +25,7 @@ tokens:
   - name: radius
     usage: Corner on the square variant. The circle variant is a shape, not a radius step.
 composition_rules:
-  - Image failure always falls back to initials, never to a broken image icon or blank circle.
+  - Image failure always falls back to initials, never to a broken image icon or blank circle. This includes an image that fails before hydration: server-rendered markup starts loading immediately, so an onError handler attached later never fires and the component must re-check on mount.
 prohibitions:
   - No status dot without an accessible label describing the status (not color alone).
 ---
