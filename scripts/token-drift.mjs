@@ -445,6 +445,33 @@ const countMixinUses = () => {
   return n
 }
 
+// 2c. Carbon type styles still applied directly. These are deliberate — the
+// kit cannot express a fluid ramp, and four style names sit at sizes the kit
+// has no step for (#85) — but "deliberate" decays into "forgotten" without
+// something saying the number out loud on every run.
+function checkCarbonTypeStyles() {
+  const uses = new Map()
+  for (const file of scanFiles()) {
+    const src = fs.readFileSync(file, 'utf8')
+    for (const m of src.matchAll(
+      /type\.type-style\('([a-z0-9-]+)'(,\s*true)?\)/g,
+    )) {
+      const key = m[1] + (m[2] ? ' (fluid)' : '')
+      uses.set(key, (uses.get(key) || 0) + 1)
+    }
+  }
+  if (!uses.size) return
+
+  const total = [...uses.values()].reduce((a, b) => a + b, 0)
+  const fluid = [...uses]
+    .filter(([k]) => k.includes('fluid'))
+    .reduce((a, [, n]) => a + n, 0)
+  warnings.push(
+    `${total} Carbon type styles still applied directly (${fluid} fluid, ${total - fluid} at sizes the kit has no step for) ` +
+      `— see docs/contracts/foundations/typography.md; the rest moved to --graphite-text-* in #85`,
+  )
+}
+
 // 3. Carbon consumed directly, bypassing the token layer.
 function checkDirectCarbon() {
   const src = fs.readFileSync(stylesheetPath, 'utf8')
@@ -520,6 +547,7 @@ checkTypography()
 checkFoundationContracts()
 checkMediaQueries(kitBreakpoints)
 checkCarbonBreakpoints(kitBreakpoints)
+checkCarbonTypeStyles()
 checkRadiusCategory()
 checkDirectCarbon()
 

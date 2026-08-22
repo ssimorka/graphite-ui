@@ -1,6 +1,6 @@
 ---
 foundation: Typography
-version: 1.0.0
+version: 1.1.0
 source: Graphite UI Kit › Graphite Typography (65 variables, Desktop/Mobile)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -60,6 +60,40 @@ since generating from a file means inheriting its mistakes:
 - `family/font-1` and `font-2` looked like a duplicate and are not. Their
   descriptions define distinct roles. Left alone; see the composition rule
   above.
+
+**Adoption is partial, and the remainder is principled (#85).** The site chrome
+in `app/globals.scss` applied 58 Carbon type styles. 39 of them resolve to
+exactly a kit step and now use the local `text()` mixin, which reads
+`--graphite-text-*`:
+
+| Carbon | kit step | uses |
+|---|---|---|
+| `label-01` | `caption-1` | 22 |
+| `body-01` | `body-3` | 8 |
+| `body-02` | `body-2` | 5 |
+| `code-01` | `code-3` (+ `--graphite-font-mono`) | 4 |
+
+19 stay on Carbon because the kit cannot express them, not because nobody got
+to them:
+
+- **8 fluid styles.** Carbon's `fluid-*` tokens compile to
+  `calc(Nrem + Nvw)` with a different formula per breakpoint band — genuine
+  continuous interpolation. The hero title ramps 32.6px → 60px across the
+  viewport. Two discrete modes cannot reproduce that; forcing it would replace
+  a ramp with a step.
+- **11 at sizes with no kit step.** `heading-compact-01` and
+  `body-compact-01` are 14/18, `heading-03` is 20/28, `heading-04` is 28/36.
+  The kit has no 18px line height, and its sizes jump 18 → 24 → 32.
+
+`token-drift` reports the 19 on every run so the exception stays visible.
+
+**Letter-spacing has no token, and is carried by hand.** The kit models family,
+weight, size and line height — not tracking. Carbon set small values on some
+styles (0.32px on `label-01` and `code-01`, 0.16px on `body-01`), and the
+`text()` mixin takes them as an argument so they survive the move rather than
+being silently dropped. Worth knowing that most `caption-1` call sites override
+it locally anyway with their own `0.08em`/`0.12em`; the preserved value only
+actually applies where nothing else sets it, such as `.doc-table code`.
 
 **Relationship to the component contract.** `docs/contracts/typography.md`
 describes the `Typography` component — its variants, its tags, its
