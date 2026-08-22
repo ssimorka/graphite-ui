@@ -1,6 +1,6 @@
 ---
 foundation: Spacing
-version: 2.0.0
+version: 2.1.0
 source: Graphite UI Kit › Spacing (14 variables, 1 mode)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -40,7 +40,16 @@ running a non-default root size.
 **`--graphite-space-00`.** New in #72. The kit carries an explicit zero and
 Carbon has no counterpart, so the code scale previously started at 01.
 
-**Known gap.** `app/globals.scss` still reaches past these tokens to Carbon
-directly — 147 uses of `spacing.$spacing-NN` across 134 declarations — so the
-site chrome inherits Carbon's scale, not the kit's. They agree today. `token-drift` reports
-this as a warning rather than a failure; closing it is its own piece of work.
+**Gap closed (#83).** `app/globals.scss` used to reach past these tokens to
+Carbon directly — 147 uses of `spacing.$spacing-NN` across 134 declarations —
+so the site chrome inherited Carbon's scale rather than the kit's. All 147 now
+reference `--graphite-space-*`, and the Carbon spacing import is gone, so
+nothing in the codebase consumes that scale directly any more.
+
+**One category compromise remains.** Seven of those declarations are not
+spacing: three `box-shadow` blur and offset distances, and four `transform`
+translate distances. They borrow the spacing scale because there is nothing
+else to borrow — the kit has no shadow geometry or motion distance scale.
+Tokenised is better than hardcoded, but this is the same shape of category
+error that #78 removed from `border-radius`, and it should be revisited if the
+kit ever gains either scale.

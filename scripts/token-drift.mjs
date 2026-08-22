@@ -368,6 +368,83 @@ function checkRadiusCategory() {
   }
 }
 
+// 2b. Carbon's breakpoint mixin. `@include breakpoint.breakpoint(lg)` is the
+// correct tool — a custom property does not resolve in an @media condition, so
+// --graphite-breakpoint-* cannot replace it — but it compiles to a media query
+// at build time, which means the scan above never sees the number it produces.
+// Check the map it reads from instead.
+function checkCarbonBreakpoints(kitBreakpoints) {
+  const config =
+    'node_modules/.pnpm/@carbon+grid@11.56.0/node_modules/@carbon/grid/scss/_config.scss'
+  const abs = path.join(ROOT, config)
+  if (!fs.existsSync(abs)) {
+    warnings.push(
+      `cannot verify Carbon's breakpoint map — ${config} not found (version bump?). ` +
+        `The ${countMixinUses()} breakpoint.breakpoint() media queries are unverified.`,
+    )
+    return
+  }
+
+  // Read only the `$grid-breakpoints: ( … ) !default;` declaration. Further
+  // down, a `map.merge` block re-lists lg/xlg/max to override their column
+  // counts; scanning the whole file picks those up and silently mis-assigns
+  // the widths.
+  const whole = fs.readFileSync(abs, 'utf8')
+  const decl = /\$grid-breakpoints:\s*\(([\s\S]*?)\n\)\s*!default;/.exec(whole)
+  if (!decl) {
+    warnings.push(
+      `could not find the $grid-breakpoints declaration in ${config}`,
+    )
+    return
+  }
+
+  // Each entry is a nested map with `columns` and `margin` before `width`, and
+  // `margin` itself contains a to-rem() call — so match the block first, then
+  // pull the width out of it, rather than trying to skip over parentheses.
+  // The lookbehind matters: without it `lg` also matches inside `xlg`, and the
+  // later match silently overwrites the real lg with xlg's width.
+  const carbon = new Map()
+  for (const block of decl[1].matchAll(
+    /(?<![a-z])(sm|md|lg|xlg|max):\s*\(([\s\S]*?)\n\s*\),/g,
+  )) {
+    const w = /width:\s*convert\.to-rem\((\d+)px\)/.exec(block[2])
+    if (w) carbon.set(block[1], Number(w[1]))
+  }
+
+  // Carbon calls the 1312px stop `xlg`; the kit and our tokens call it `xl`.
+  const CARBON_NAME = { sm: 'sm', md: 'md', lg: 'lg', xl: 'xlg', max: 'max' }
+  if (carbon.size === 0) {
+    warnings.push(`could not parse Carbon's breakpoint map out of ${config}`)
+    return
+  }
+
+  for (const [name, kitPx] of kitBreakpoints) {
+    const key = CARBON_NAME[name]
+    if (!carbon.has(key)) {
+      warnings.push(
+        `Carbon has no "${key}" breakpoint; the kit's ${name} is ${kitPx}px`,
+      )
+    } else if (carbon.get(key) !== kitPx) {
+      errors.push(
+        `breakpoint: Carbon's ${key} is ${carbon.get(key)}px but the kit's ${name} is ${kitPx}px — ` +
+          `every breakpoint.breakpoint(${key}) media query follows Carbon, not the kit`,
+      )
+    }
+  }
+}
+
+const countMixinUses = () => {
+  let n = 0
+  for (const file of scanFiles()) {
+    n += (
+      fs
+        .readFileSync(file, 'utf8')
+        .match(/@include\s+breakpoint\.breakpoint\(/g) || []
+    ).length
+  }
+  return n
+}
+
 // 3. Carbon consumed directly, bypassing the token layer.
 function checkDirectCarbon() {
   const src = fs.readFileSync(stylesheetPath, 'utf8')
@@ -442,6 +519,7 @@ const kitBreakpoints = checkBreakpoints()
 checkTypography()
 checkFoundationContracts()
 checkMediaQueries(kitBreakpoints)
+checkCarbonBreakpoints(kitBreakpoints)
 checkRadiusCategory()
 checkDirectCarbon()
 
