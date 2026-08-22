@@ -148,7 +148,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           <Swatch label="md"><Avatar initials="GR" size="md" /></Swatch>
           <Swatch label="lg square"><Avatar initials="AL" size="lg" shape="square" /></Swatch>
           <Swatch label="status dot"><Avatar initials="ZO" size="lg" status={{ label: 'Online' }} /></Swatch>
-          <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,not-an-image" alt="broken source" /></Swatch>
+          <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,AAAA" alt="broken source" /></Swatch>
         </Specimen>
         <Specimen name="Badge" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
           <Badge>neutral</Badge>
