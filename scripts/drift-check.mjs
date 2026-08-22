@@ -122,6 +122,7 @@ async function readTokenModel() {
   const statics = readStaticVars()
   for (const v of statics.spacing) bind('spacing', v)
   for (const v of statics.radius) bind('radius', v)
+  for (const v of statics.breakpoint) bind('breakpoint', v)
   for (const v of statics.density) bind('density', v)
   for (const v of statics.motion) bind('motion', v)
   for (const v of statics.scrim) bind('scrim', v)
@@ -141,6 +142,7 @@ function readStaticVars() {
   return {
     spacing: decls(/--graphite-space-\d{2}(?=\s*:)/g),
     radius: decls(/--graphite-radius-[a-z0-9-]+(?=\s*:)/g),
+    breakpoint: decls(/--graphite-breakpoint-[a-z]+(?=\s*:)/g),
     density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
     motion: decls(/--graphite-motion-[a-z-]+(?=\s*:)/g),
     scrim: decls(/--graphite-scrim(?=\s*:)/g),
