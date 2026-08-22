@@ -14,8 +14,34 @@
 @use '@carbon/react/scss/zone';
 
 // Carbon foundations for custom layout styles.
+//
+// `type` is still here for the 19 type styles the kit cannot express — see the
+// `text()` mixin below and docs/contracts/foundations/typography.md. `breakpoint`
+// is here permanently: a custom property does not resolve in an @media
+// condition, so the mixin is the only way to write one.
 @use '@carbon/react/scss/type' as type;
 @use '@carbon/react/scss/breakpoint' as breakpoint;
+
+// Applies one step of the kit's type scale. This is what Carbon's
+// `type.type-style()` did, reading --graphite-text-* instead of Carbon's
+// compile-time maps — so the values follow the Figma kit and pick up the
+// Desktop/Mobile switch at 672px on their own.
+//
+// letter-spacing is an argument rather than a token because the kit does not
+// model letter-spacing at all. Carbon set small values on some styles; they
+// are preserved here rather than dropped, and the gap is recorded in the
+// typography foundation contract.
+@mixin text($step, $weight: regular, $letter-spacing: null, $family: null) {
+  font-size: var(--graphite-text-#{$step}-size);
+  line-height: var(--graphite-text-#{$step}-line-height);
+  font-weight: var(--graphite-text-weight-#{$weight});
+  @if $family {
+    font-family: var(--graphite-font-#{$family});
+  }
+  @if $letter-spacing {
+    letter-spacing: $letter-spacing;
+  }
+}
 
 // Root theme switching: the ThemeProvider toggles .cds--white / .cds--g100 on
 // <html>. The :root.cds--* selectors out-rank the zone classes so the toggle
@@ -358,7 +384,7 @@ body {
 
   @include breakpoint.breakpoint(lg) {
     display: block;
-    @include type.type-style('label-01');
+    @include text('caption-1', $letter-spacing: 0.32px);
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -388,7 +414,7 @@ body {
 }
 
 .canvas-toolbar__hint {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -472,7 +498,7 @@ body {
   bottom: var(--graphite-space-06);
   transform: translate(-50%, var(--graphite-space-03));
   padding: var(--graphite-space-03) var(--graphite-space-05);
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -533,7 +559,7 @@ body {
 }
 
 .section__eyebrow {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-secondary);
@@ -558,7 +584,7 @@ body {
 }
 
 .section__subtitle {
-  @include type.type-style('body-02');
+  @include text('body-2');
   margin-top: var(--graphite-space-05);
   margin-bottom: var(--graphite-space-08);
   max-width: 40rem;
@@ -773,7 +799,7 @@ body {
 }
 
 .trusted__label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   text-align: center;
   color: var(--cds-text-secondary);
   text-transform: uppercase;
@@ -830,7 +856,7 @@ body {
 }
 
 .trusted__fact-label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -849,7 +875,7 @@ body {
 }
 
 .ramp__label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -878,7 +904,7 @@ body {
 
   span {
     text-align: center;
-    @include type.type-style('label-01');
+    @include text('caption-1', $letter-spacing: 0.32px);
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
     color: var(--cds-text-secondary);
   }
@@ -898,7 +924,7 @@ body {
   cursor: pointer;
 
   span {
-    @include type.type-style('label-01');
+    @include text('caption-1', $letter-spacing: 0.32px);
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
   }
 
@@ -909,7 +935,7 @@ body {
 }
 
 .ramp-stack__hint {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   color: var(--cds-text-secondary);
 }
 
@@ -959,12 +985,12 @@ body {
 }
 
 .states-matrix__name {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   color: var(--cds-text-primary);
 }
 
 .states-matrix__tone {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   color: var(--cds-text-secondary);
 }
@@ -983,7 +1009,7 @@ body {
 // not colored green on its own: the tick carries the state, so the line still
 // reads correctly for anyone who cannot separate the hue from the text.
 .source-contrast {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   display: flex;
   align-items: baseline;
   gap: var(--graphite-space-02);
@@ -1034,7 +1060,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1083,7 +1109,7 @@ body {
 }
 
 .span-list__label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1112,7 +1138,7 @@ body {
 }
 
 .tile-grid__label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1169,7 +1195,7 @@ body {
 }
 
 .feature-card__body {
-  @include type.type-style('body-01');
+  @include text('body-3', $letter-spacing: 0.16px);
   color: var(--cds-text-secondary);
 }
 
@@ -1230,7 +1256,7 @@ body {
 }
 
 .showcase__caption-body {
-  @include type.type-style('body-02');
+  @include text('body-2');
   color: var(--cds-text-secondary);
   max-width: 40rem;
   margin: 0 auto;
@@ -1285,7 +1311,7 @@ body {
 }
 
 .benefit__body {
-  @include type.type-style('body-01');
+  @include text('body-3', $letter-spacing: 0.16px);
   color: var(--cds-text-secondary);
 }
 
@@ -1301,7 +1327,7 @@ body {
 }
 
 .faq__answer {
-  @include type.type-style('body-02');
+  @include text('body-2');
   color: var(--cds-text-secondary);
   max-width: 44rem;
 }
@@ -1348,7 +1374,7 @@ body {
 }
 
 .cta__subtitle {
-  @include type.type-style('body-02');
+  @include text('body-2');
   color: var(--cds-text-secondary);
   margin-top: var(--graphite-space-05);
   max-width: 36rem;
@@ -1486,7 +1512,7 @@ body {
 }
 
 .docpage__body {
-  @include type.type-style('body-01');
+  @include text('body-3', $letter-spacing: 0.16px);
   max-width: 44rem;
   margin-bottom: var(--graphite-space-05);
   color: var(--cds-text-secondary);
@@ -1528,7 +1554,7 @@ body {
 }
 
 .docpage__toc-label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-primary);
@@ -1554,7 +1580,7 @@ body {
 // "In short" gloss opening each section. Sits above the prose and reads as a
 // separate register — a newcomer can follow just these top to bottom.
 .doc-summary {
-  @include type.type-style('body-02');
+  @include text('body-2');
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-03);
@@ -1567,7 +1593,7 @@ body {
 }
 
 .doc-summary__label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-secondary);
@@ -1596,7 +1622,7 @@ body {
   }
 
   dd {
-    @include type.type-style('body-01');
+    @include text('body-3', $letter-spacing: 0.16px);
     color: var(--cds-text-secondary);
   }
 }
@@ -1616,7 +1642,7 @@ body {
 }
 
 .doc-pipeline__index {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   flex: 0 0 auto;
   width: 1.5rem;
   height: 1.5rem;
@@ -1640,7 +1666,7 @@ body {
 }
 
 .doc-pipeline__detail {
-  @include type.type-style('body-01');
+  @include text('body-3', $letter-spacing: 0.16px);
   color: var(--cds-text-secondary);
   max-width: 40rem;
 }
@@ -1650,7 +1676,7 @@ body {
   margin-bottom: var(--graphite-space-05);
 
   code {
-    @include type.type-style('code-01');
+    @include text('code-3', $letter-spacing: 0.32px, $family: mono);
     color: var(--cds-text-primary);
   }
 }
@@ -1668,13 +1694,13 @@ body {
 }
 
 .doc-value__hex {
-  @include type.type-style('code-01');
+  @include text('code-3', $letter-spacing: 0.32px, $family: mono);
   color: var(--cds-text-primary);
   text-transform: uppercase;
 }
 
 .doc-value__meta {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   color: var(--cds-text-secondary);
   white-space: nowrap;
 }
@@ -1696,7 +1722,7 @@ body {
 }
 
 .doc-note {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   max-width: 44rem;
   margin-bottom: var(--graphite-space-06);
   color: var(--cds-text-secondary);
@@ -1710,7 +1736,7 @@ body {
 // that rule — a region that must read as distinct takes the variant — so it
 // should follow it.
 .doc-callout {
-  @include type.type-style('body-01');
+  @include text('body-3', $letter-spacing: 0.16px);
   max-width: 44rem;
   margin: var(--graphite-space-06) 0;
   padding: var(--graphite-space-05);
@@ -1731,7 +1757,7 @@ body {
   padding-left: var(--graphite-space-05);
 
   li {
-    @include type.type-style('body-01');
+    @include text('body-3', $letter-spacing: 0.16px);
     color: var(--cds-text-secondary);
     margin-bottom: var(--graphite-space-04);
     padding-left: var(--graphite-space-03);
@@ -1790,7 +1816,7 @@ body {
   }
 
   li {
-    @include type.type-style('body-01');
+    @include text('body-3', $letter-spacing: 0.16px);
     color: var(--cds-text-secondary);
     padding: var(--graphite-space-04) 0;
     border-bottom: 1px solid var(--cds-border-subtle);
@@ -1818,7 +1844,7 @@ body {
 }
 
 .doc-reference-label {
-  @include type.type-style('label-01');
+  @include text('caption-1', $letter-spacing: 0.32px);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--cds-text-secondary);
@@ -1833,7 +1859,7 @@ body {
   margin-bottom: var(--graphite-space-05);
 
   code {
-    @include type.type-style('code-01');
+    @include text('code-3', $letter-spacing: 0.32px, $family: mono);
     padding: var(--graphite-space-02) var(--graphite-space-03);
     background: var(--cds-layer-02);
     border: 1px solid var(--cds-border-subtle);
@@ -1863,6 +1889,6 @@ body {
 .docpage__body code,
 .doc-callout code,
 .doc-list code {
-  @include type.type-style('code-01');
+  @include text('code-3', $letter-spacing: 0.32px, $family: mono);
   color: var(--cds-text-primary);
 }
