@@ -383,11 +383,64 @@ function checkDirectCarbon() {
   }
 }
 
+// ------------------------------------------------------- contracts stay true
+// Each foundation contract states how many variables its foundation declares.
+// That number is exactly the kind of fact that rots: the counts in the parent
+// contracts README had drifted by twelve before anyone noticed. Checking it
+// here means a token added without a contract update fails the build rather
+// than quietly making the documentation wrong.
+const FOUNDATION_VARS = {
+  spacing: [
+    /--graphite-space-\d{2}(?=\s*:)/g,
+    /--graphite-density-[a-z-]+(?=\s*:)/g,
+  ],
+  radius: [/--graphite-radius-[a-z0-9-]+(?=\s*:)/g],
+  breakpoint: [/--graphite-breakpoint-[a-z]+(?=\s*:)/g],
+  typography: [
+    /--graphite-font-[a-z0-9-]+(?=\s*:)/g,
+    /--graphite-text-[a-z0-9-]+(?=\s*:)/g,
+  ],
+}
+
+function checkFoundationContracts() {
+  const dir = path.join(ROOT, 'docs/contracts/foundations')
+  if (!fs.existsSync(dir)) return
+
+  for (const [name, patterns] of Object.entries(FOUNDATION_VARS)) {
+    const file = path.join(dir, `${name}.md`)
+    if (!fs.existsSync(file)) {
+      warnings.push(
+        `docs/contracts/foundations/${name}.md is missing — the foundation is undocumented`,
+      )
+      continue
+    }
+    const declared = new Set()
+    for (const re of patterns)
+      for (const v of css.match(re) || []) declared.add(v)
+
+    const m = /^variable_count:\s*(\d+)/m.exec(fs.readFileSync(file, 'utf8'))
+    if (!m) {
+      warnings.push(
+        `docs/contracts/foundations/${name}.md declares no variable_count`,
+      )
+      continue
+    }
+    const stated = Number(m[1])
+    if (stated !== declared.size) {
+      errors.push(
+        `docs/contracts/foundations/${name}.md says variable_count: ${stated}, ` +
+          `but ${STYLESHEET} declares ${declared.size}`,
+      )
+    }
+  }
+}
+
 // --------------------------------------------------------------------- main
 checkSpacing()
 checkRadius()
 const kitBreakpoints = checkBreakpoints()
 checkTypography()
+checkFoundationContracts()
 checkMediaQueries(kitBreakpoints)
 checkRadiusCategory()
 checkDirectCarbon()

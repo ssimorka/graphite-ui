@@ -111,6 +111,15 @@ const cases = [
     expect: /radius: --graphite-radius-13 has no counterpart in the kit/,
   },
   {
+    name: 'a foundation contract count goes stale',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-radius-20: 20px;',
+        '--graphite-radius-20: 20px;\n  --graphite-radius-24: 24px;',
+      ),
+    expect: /foundations\/radius\.md says variable_count: 8, but .* declares 9/,
+  },
+  {
     name: 'a mobile override goes missing',
     mutate: (s) =>
       s.replace(/\n\s*--graphite-text-body-2-size: 0\.875rem;[^\n]*/, ''),
