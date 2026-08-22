@@ -1,6 +1,6 @@
 ---
 component: Checkbox
-version: 1.2.0
+version: 1.3.0
 wave: 2
 slots:
   - name: Label
@@ -19,6 +19,8 @@ tokens:
     usage: Check and indeterminate dash glyphs, drawn on the primary fill.
   - name: spacing
     usage: Box size and the minimum touch target.
+  - name: radius
+    usage: Box corner.
 composition_rules:
   - Indeterminate state is visually distinct from both checked and unchecked, not a color swap — a distinct glyph (dash) inside the same box.
 prohibitions:

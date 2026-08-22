@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import styles from './avatar.module.scss'
 
-/** Contract: docs/contracts/avatar.md (1.1.0) */
+/** Contract: docs/contracts/avatar.md (1.2.0) */
 type AvatarProps = {
   /**
    * Always required, not just when there is no image: it is the fallback the

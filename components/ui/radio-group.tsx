@@ -9,7 +9,7 @@ export type RadioOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/radio-group.md (1.1.0) */
+/** Contract: docs/contracts/radio-group.md (1.2.0) */
 type RadioGroupProps = {
   /** Namespaces the option ids and binds the radios into one group. */
   name: string

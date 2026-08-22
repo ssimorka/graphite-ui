@@ -1,6 +1,6 @@
 ---
 component: Dropdown Menu
-version: 1.1.0
+version: 1.2.0
 wave: 5
 slots:
   - name: Trigger
@@ -25,6 +25,8 @@ tokens:
     usage: Destructive items, which must not read as neutral ones.
   - name: spacing
     usage: Item padding and separator gaps.
+  - name: radius
+    usage: Panel corner, and the corner on each item.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).

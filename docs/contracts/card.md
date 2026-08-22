@@ -1,6 +1,6 @@
 ---
 component: Card
-version: 1.3.0
+version: 1.4.0
 wave: 4
 slots:
   - name: Header
@@ -21,7 +21,9 @@ tokens:
   - name: outline
     usage: Border or shadow-equivalent edge.
   - name: spacing
-    usage: Corner radius and the gaps between header, body, and footer.
+    usage: Gaps between header, body, and footer.
+  - name: radius
+    usage: Container corner.
 composition_rules:
   - Footer actions follow the Button contract's "one primary action per group" rule — a Card footer can't have two primary buttons. Enforced: the footer is wrapped in a ButtonGroup, which refuses a second primary.
 prohibitions:

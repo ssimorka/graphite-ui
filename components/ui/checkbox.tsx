@@ -4,7 +4,7 @@ import { useEffect, useId, useRef } from 'react'
 import { Label } from './label'
 import styles from './checkbox.module.scss'
 
-/** Contract: docs/contracts/checkbox.md (1.1.0) */
+/** Contract: docs/contracts/checkbox.md (1.3.0) */
 type CheckboxProps = {
   /** Supplied by Field when wrapped. Required when used on its own. */
   id?: string

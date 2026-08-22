@@ -1,6 +1,6 @@
 ---
 component: Alert
-version: 2.1.0
+version: 2.2.0
 wave: 5
 slots:
   - name: Icon
@@ -39,6 +39,8 @@ tokens:
     usage: Text on the warning variant.
   - name: on-success-container
     usage: Text on the success variant.
+  - name: radius
+    usage: Container corner.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).

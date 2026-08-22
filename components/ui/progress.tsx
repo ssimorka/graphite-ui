@@ -1,6 +1,6 @@
 import styles from './progress.module.scss'
 
-/** Contract: docs/contracts/progress.md (1.1.0) */
+/** Contract: docs/contracts/progress.md (1.2.0) */
 type ProgressProps = {
   /** 0-100. Ignored, and omitted from ARIA, when indeterminate. */
   value?: number

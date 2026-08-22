@@ -4,7 +4,7 @@ import { useId } from 'react'
 import { Label } from './label'
 import styles from './switch.module.scss'
 
-/** Contract: docs/contracts/switch.md (1.1.0) */
+/** Contract: docs/contracts/switch.md (1.3.0) */
 type SwitchProps = {
   /** Supplied by Field when wrapped. Required when used on its own. */
   id?: string

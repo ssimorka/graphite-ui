@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import styles from './alert.module.scss'
 
-/** Contract: docs/contracts/alert.md (2.1.0) */
+/** Contract: docs/contracts/alert.md (2.2.0) */
 type AlertProps = {
   body: ReactNode
   title?: string

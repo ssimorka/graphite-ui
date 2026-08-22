@@ -9,7 +9,7 @@ export type MenuItem =
   | { kind?: 'item'; label: string; onSelect: () => void; disabled?: boolean; destructive?: boolean }
   | { kind: 'separator' }
 
-/** Contract: docs/contracts/dropdown-menu.md (1.1.0) */
+/** Contract: docs/contracts/dropdown-menu.md (1.2.0) */
 type DropdownMenuProps = {
   trigger: (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-haspopup': 'menu' }) => ReactNode
   /** At least one item. Separators do not count toward that on their own. */

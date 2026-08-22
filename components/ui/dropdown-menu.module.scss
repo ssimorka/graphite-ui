@@ -16,7 +16,7 @@
   flex-direction: column;
   background: var(--graphite-surface-elevated);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-space-03);
+  border-radius: var(--graphite-radius-8);
 }
 
 .bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
@@ -31,7 +31,7 @@
   cursor: pointer;
   color: var(--graphite-on-surface);
   padding: var(--graphite-space-02) var(--graphite-space-03);
-  border-radius: var(--graphite-space-01);
+  border-radius: var(--graphite-radius-2);
 }
 
 .item:hover:not(:disabled),

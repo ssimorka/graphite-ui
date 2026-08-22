@@ -1,6 +1,6 @@
 ---
 component: Badge
-version: 2.1.0
+version: 2.2.0
 wave: 1
 slots:
   - name: Label
@@ -25,13 +25,15 @@ tokens:
   - name: success-container
     usage: Background on the success variant.
   - name: spacing
-    usage: Padding and the pill radius step.
+    usage: Padding.
   - name: on-danger-container
     usage: Text on the danger variant.
   - name: on-warning-container
     usage: Text on the warning variant.
   - name: on-success-container
     usage: Text on the success variant.
+  - name: radius
+    usage: Pill shape, via `full` — the badge radius has always equalled its height.
 composition_rules:
   - Numeric badges cap display at a defined max (e.g. "99+") rather than overflowing their container.
 prohibitions:
