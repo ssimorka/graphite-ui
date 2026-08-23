@@ -273,6 +273,57 @@ for (const c of contracts) {
   }
 }
 
+// ------------------------------------- components that no contract declares
+// Governance rule 1: every component has one contract file. The loop above is
+// contract-driven, so a component nothing declares is never visited — which is
+// how ButtonGroup shipped. button.md, card.md and dialog.md all named it as
+// the mechanism enforcing the one-primary rule while it had no contract of its
+// own (#93).
+//
+// The signal is an intersection, and that is what keeps it quiet: a name some
+// contract's text refers to, that components/ui exports, and that no contract
+// declares. Multi-part exports like CardHeader are exported but never referred
+// to as components in contract text; work that does not exist yet, like
+// Spinner and Toast, is referred to but not exported. Only something being
+// leaned on without a spec satisfies all three.
+const UI_DIR = 'components/ui'
+
+const exportedComponents = () => {
+  const out = new Map()
+  const abs = path.join(ROOT, UI_DIR)
+  if (!fs.existsSync(abs)) return out
+  for (const e of fs.readdirSync(abs)) {
+    if (!/\.(tsx|jsx|ts)$/.test(e)) continue
+    const src = fs.readFileSync(path.join(abs, e), 'utf8')
+    for (const m of src.matchAll(/export\s+(?:function|const)\s+([A-Z][A-Za-z0-9]*)/g))
+      if (!out.has(m[1])) out.set(m[1], `${UI_DIR}/${e}`)
+  }
+  return out
+}
+
+{
+  const exported = exportedComponents()
+  // "Dropdown Menu" in frontmatter is DropdownMenu in code.
+  const declared = new Set(
+    contracts.map((c) => (c.component || '').replace(/\s+/g, '')),
+  )
+  const seen = new Map()
+  for (const c of contracts) {
+    const text = fs.readFileSync(path.join(ROOT, CONTRACTS_DIR, c.file), 'utf8')
+    for (const m of text.matchAll(/\b[A-Z][A-Za-z0-9]+\b/g)) {
+      const name = m[0]
+      if (exported.has(name) && !declared.has(name) && !seen.has(name))
+        seen.set(name, c.file)
+    }
+  }
+  for (const [name, from] of seen) {
+    errors.push(
+      `${exported.get(name)}: exports ${name}, which ${from} leans on but no ` +
+        `contract declares — governance rule 1`,
+    )
+  }
+}
+
 const plural = (n, s) => `${n} ${s}${n === 1 ? '' : 's'}`
 console.log(
   `drift-check: ${plural(contracts.length, 'contract')}, ` +
