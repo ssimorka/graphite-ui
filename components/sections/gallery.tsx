@@ -143,11 +143,12 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             <Typography variant="caption">Caption</Typography>
           </div>
         </Specimen>
-        <Specimen name="Avatar" note="The fourth has an unreadable image source: failure falls back to initials, never a broken icon or an empty circle.">
+        <Specimen name="Avatar" note="The broken image swatch points at an unreadable source: failure falls back to initials, never a broken icon or an empty circle.">
           <Swatch label="sm"><Avatar initials="AD" size="sm" /></Swatch>
           <Swatch label="md"><Avatar initials="GR" size="md" /></Swatch>
           <Swatch label="lg square"><Avatar initials="AL" size="lg" shape="square" /></Swatch>
           <Swatch label="status dot"><Avatar initials="ZO" size="lg" status={{ label: 'Online' }} /></Swatch>
+          <Swatch label="image"><Avatar initials="GR" size="lg" src="/graphite/eye.jpg" alt="Halftone eye from the Graphite kit" /></Swatch>
           <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,AAAA" alt="broken source" /></Swatch>
         </Specimen>
         <Specimen name="Badge" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
