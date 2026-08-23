@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useId } from 'react'
 import type { ReactNode } from 'react'
-import { ButtonGroup } from './button'
+import { ButtonGroup } from './button-group'
 import { useOverlay } from './overlay'
 import styles from './dialog.module.scss'
 

@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react'
 import type { ReactNode } from 'react'
-import { ButtonGroup } from './button'
+import { ButtonGroup } from './button-group'
 import styles from './card.module.scss'
 
 // Presence of this context means we are already inside a Card.
