@@ -1,6 +1,6 @@
 ---
 component: Avatar
-version: 1.2.1
+version: 1.3.0
 wave: 1
 slots:
   - name: Image
@@ -15,6 +15,8 @@ props:
     values: [sm, md, lg]
   - name: shape
     values: [circle, square]
+  - name: className
+    notes: Merged after the size and shape classes, so a caller can extend without forking. Used by the site header to tint the source-color trigger.
 tokens:
   - name: surface
     usage: Fallback background.
@@ -32,7 +34,7 @@ prohibitions:
 
 ### Avatar
 - **Slots:** Image (optional), initials fallback (required if no image), status dot (optional).
-- **Props:** size (sm, md, lg), shape (circle, square).
+- **Props:** size (sm, md, lg), shape (circle, square), className.
 - **Tokens:** `surface` for the fallback background, `on-surface` for fallback initials text; the spacing scale for the size steps.
 - **Composition rules:** Image failure always falls back to initials, never to a broken image icon or blank circle.
 - **Prohibitions:** No status dot without an accessible label describing the status (not color alone).

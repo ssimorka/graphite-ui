@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { cn } from '@/lib/cn'
 import styles from './avatar.module.scss'
 
-/** Contract: docs/contracts/avatar.md (1.2.1) */
+/** Contract: docs/contracts/avatar.md (1.3.0) */
 type AvatarProps = {
   /**
    * Always required, not just when there is no image: it is the fallback the
@@ -19,6 +20,8 @@ type AvatarProps = {
    * color as the only carrier of meaning, which the contract forbids.
    */
   status?: { label: string }
+  /** Merged after the size and shape classes, per README convention 2. */
+  className?: string
 }
 
 export function Avatar({
@@ -28,12 +31,13 @@ export function Avatar({
   size = 'md',
   shape = 'circle',
   status,
+  className,
 }: AvatarProps) {
   const [failed, setFailed] = useState(false)
   const showImage = Boolean(src) && !failed
 
   return (
-    <span className={`${styles.avatar} ${styles[size]} ${styles[shape]}`}>
+    <span className={cn(styles.avatar, styles[size], styles[shape], className)}>
       {showImage ? (
         <img
           className={styles.image}
