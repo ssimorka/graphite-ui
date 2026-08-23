@@ -1,0 +1,9 @@
+// Button Group — docs/contracts/button-group.md
+//
+// Horizontal by definition. A vertical stack of actions is a layout decision
+// belonging to whatever contains the group, not a variant of the group itself.
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
