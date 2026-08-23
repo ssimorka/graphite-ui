@@ -1,0 +1,64 @@
+# Governance checks — the ones docs/contracts/README.md says gate a build.
+#
+# Rule 4 there states the drift check "fails the build on mismatch". Until this
+# existed nothing ran it: the repo's only PR checks were Vercel's deployment,
+# which builds the site and knows nothing about contracts. Every green tick on
+# a PR meant the app compiled, not that it matched its spec.
+#
+# Deliberately does not run `next build`. Vercel already does that on every
+# PR, and duplicating a five-minute build to learn the same thing twice is
+# just slower feedback.
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  # A new push supersedes the run in flight for the same ref.
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # token-drift reads @carbon/grid's own _config.scss to check the kit's
+      # breakpoints against Carbon's, so the install is not optional for it.
+      # --frozen-lockfile keeps the resolved version matching the path that
+      # script looks for.
+      - run: pnpm install --frozen-lockfile
+
+      # Each check runs even if an earlier one failed. A contract change
+      # typically trips more than one, and seeing them together beats fixing
+      # them one round trip at a time.
+      - name: Typecheck
+        if: ${{ !cancelled() }}
+        run: pnpm typecheck
+
+      - name: "Drift check: components against their contracts"
+        if: ${{ !cancelled() }}
+        run: pnpm drift-check
+
+      - name: "Token drift: foundations against the Figma snapshot"
+        if: ${{ !cancelled() }}
+        run: pnpm token-drift
+
+      - name: Token drift self-test
+        if: ${{ !cancelled() }}
+        run: pnpm token-drift:test
