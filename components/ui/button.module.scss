@@ -100,8 +100,3 @@
   .button:active:not(:disabled) { transform: none; }
 }
 
-.group {
-  display: flex;
-  align-items: center;
-  gap: var(--graphite-space-03);
-}

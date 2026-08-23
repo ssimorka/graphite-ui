@@ -3,8 +3,7 @@
 // uncallable from a server component, exactly where borrowing the recipe is
 // most useful. A client caller can still pass onClick; the boundary is the
 // caller's, not this file's.
-import { Children, isValidElement } from 'react'
-import type { ComponentPropsWithRef, ReactNode } from 'react'
+import type { ComponentPropsWithRef } from 'react'
 import { cva } from 'class-variance-authority'
 import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/cn'
@@ -70,34 +69,5 @@ export function Button({
       {...(asChild ? {} : { type: type ?? 'button' })}
       {...props}
     />
-  )
-}
-
-export type ButtonGroupProps = ComponentPropsWithRef<'div'>
-
-/**
- * Enforces the one-primary-action rule. Card and Dialog wrap their footers in
- * this, so the rule holds wherever a footer is used rather than only where
- * someone remembers it.
- */
-export function ButtonGroup({ className, children, ...props }: ButtonGroupProps) {
-  const primaries = Children.toArray(children).filter(
-    (child) =>
-      isValidElement<{ variant?: ReactNode }>(child) &&
-      child.props.variant === 'primary',
-  ).length
-
-  if (primaries > 1) {
-    throw new Error(
-      `ButtonGroup: ${primaries} primary buttons in one group — only one is ` +
-        'allowed (docs/contracts/button.md). The second is not an emphasis ' +
-        'choice, it is a missing decision about what the group is for.',
-    )
-  }
-
-  return (
-    <div data-slot="button-group" className={cn(styles.group, className)} {...props}>
-      {children}
-    </div>
   )
 }
