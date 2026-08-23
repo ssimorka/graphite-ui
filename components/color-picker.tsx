@@ -10,6 +10,7 @@ import {
 import { Dropdown } from '@carbon/react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
+import { Avatar } from '@/components/ui/avatar'
 
 const HUE_GRADIENT =
   'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))'
@@ -249,11 +250,24 @@ export function ColorPickerPopover({
         onClick={() => setOpen((o) => !o)}
       >
         <span className="site-header__source-label">Pick a color</span>
+        {/* The visitor's own chip, built from Avatar rather than a bare span so
+            the header uses the component the system ships. The source colour is
+            already carried by the block behind this, so the chip is free to be
+            the kit's face. It rides in as a custom property anyway, because it
+            is what the initials fall back onto if the image fails: Avatar takes
+            a className and not a style, so the tint stays in the stylesheet. */}
         <span
           aria-hidden="true"
-          className="site-header__source-swatch"
-          style={{ background: swatchColor }}
-        />
+          className="site-header__source-avatar"
+          style={{ ['--source-swatch' as string]: swatchColor }}
+        >
+          <Avatar
+            initials="GU"
+            src="/graphite/eye.jpg"
+            size="sm"
+            className="site-header__source-chip"
+          />
+        </span>
       </button>
 
       {/* Popover */}
