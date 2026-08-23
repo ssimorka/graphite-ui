@@ -61,21 +61,37 @@
 .primary:hover:not(:disabled) { background: var(--graphite-primary-hover); }
 .primary:active:not(:disabled) { background: var(--graphite-primary-pressed); }
 
+// Secondary carries the secondary role rather than borrowing primary's. It
+// stays an outline at rest, so the one-primary-action hierarchy still reads
+// and the accent stays a line rather than a fill — secondary is the 10% of the
+// 60/30/10 rhythm, and this is the default variant. It fills on hover and
+// press, which is the same tone-step-on-its-own-ramp move primary makes.
 .secondary {
   background: transparent;
-  color: var(--graphite-on-surface);
-  border-color: var(--graphite-primary);
+  color: var(--graphite-secondary);
+  border-color: var(--graphite-secondary);
 }
 
+// Ghost keeps the neutral tint. It is the quiet variant, so it should not pick
+// up an accent just because secondary did.
 .ghost {
   background: transparent;
   color: var(--graphite-on-surface);
 }
 
-.secondary:hover:not(:disabled),
-.ghost:hover:not(:disabled) { background: var(--graphite-surface-variant); }
+.secondary:hover:not(:disabled) {
+  background: var(--graphite-secondary-hover);
+  border-color: var(--graphite-secondary-hover);
+  color: var(--graphite-on-secondary);
+}
 
-.secondary:active:not(:disabled),
+.secondary:active:not(:disabled) {
+  background: var(--graphite-secondary-pressed);
+  border-color: var(--graphite-secondary-pressed);
+  color: var(--graphite-on-secondary);
+}
+
+.ghost:hover:not(:disabled),
 .ghost:active:not(:disabled) { background: var(--graphite-surface-variant); }
 
 .danger {
