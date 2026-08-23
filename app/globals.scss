@@ -164,7 +164,7 @@
   // here once rather than chosen per Dialog. A veil is one of the few places
   // the system uses alpha rather than a tone step: it has to darken whatever
   // happens to be behind it, which no fixed ramp tone can do.
-  --graphite-scrim: rgb(0 0 0 / 0.55);
+  --graphite-scrim: rgb(3 3 5 / 0.55);
 
   // Families. font-1 and font-2 share a value today but are two roles,
   // per the kit: font-1 is display, headings and titles 1-2; font-2 is
