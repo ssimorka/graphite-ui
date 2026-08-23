@@ -31,6 +31,7 @@ const WEIGHT_LABELS = [
 
 const RAMP_LABELS: Record<string, string> = {
   accent: 'Accent',
+  secondary: 'Secondary',
   neutral: 'Neutral',
   neutralVariant: 'Neutral variant',
 }

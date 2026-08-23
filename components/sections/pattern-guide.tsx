@@ -19,8 +19,9 @@ const SPANS: { label: string; cols: number; rows: number }[] = [
 export function PatternGuide() {
   const { sourceHex, theme, lightBundle, darkBundle } = useTheme()
   const isDark = theme === 'g100'
-  // The 10% band is the composition's on-surface color, so read the real
-  // token rather than aliasing it through a Carbon variable.
+  // The 10% band is the secondary role, the same ramp the composition draws
+  // its pop from, so read the real token rather than aliasing it through a
+  // Carbon variable.
   const bundle =
     (isDark ? darkBundle : lightBundle) ??
     buildTheme(isDark ? 'dark' : 'light', makeRamps(sourceHex || COVER_SOURCE_HEX))
@@ -53,18 +54,19 @@ export function PatternGuide() {
           <Reveal>
             <h3 className="doc-subheading">Color rhythm · 60 / 30 / 10</h3>
             <p className="docpage__body">
-              Sixty percent neutrals, thirty percent accent, ten percent a
-              vivid complement. Adjacent panels check their neighbours so no
-              color clusters.
+              Sixty percent neutrals, thirty percent accent, ten percent
+              secondary: the ramp the engine derives 120° off your source, so
+              the vivid tenth is generated rather than picked. Adjacent panels
+              check their neighbours so no color clusters.
             </p>
-            <div className="ratio-bar" role="img" aria-label="Sixty percent neutral, thirty percent accent, ten percent complement">
+            <div className="ratio-bar" role="img" aria-label="Sixty percent neutral, thirty percent accent, ten percent secondary">
               <span className="ratio-bar__seg ratio-bar__seg--neutral"><span>60% Neutral</span></span>
               <span className="ratio-bar__seg ratio-bar__seg--accent"><span>30% Accent</span></span>
               <span
                 className="ratio-bar__seg ratio-bar__seg--pop"
                 style={{
-                  background: tokens.onSurface.hex,
-                  color: tokens.surface.hex,
+                  background: tokens.secondary.hex,
+                  color: tokens.onSecondary.hex,
                 }}
               >
                 <span>10%</span>

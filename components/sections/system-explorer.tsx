@@ -39,8 +39,8 @@ const VIEWS = [
   {
     key: 'ramps',
     label: 'Ramps',
-    title: 'Three ramps from one input',
-    body: 'Your source color is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp plus two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
+    title: 'Four ramps from one input',
+    body: 'Your source color is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp, a secondary ramp 120° away, and two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
   },
   {
     key: 'contrast',
@@ -120,17 +120,17 @@ export function SystemExplorer({ embedded = false }: { embedded?: boolean }) {
 
           {active.key === 'ramps' && (
             <div className="ramp-stack">
-              {(['accent', 'neutral', 'neutralVariant'] as const).map(
-                (name) => (
-                  <RampRow
-                    key={name}
-                    name={name}
-                    ramp={ramps[name]}
-                    copiedKey={copiedKey}
-                    onCopy={copy}
-                  />
-                ),
-              )}
+              {(
+                ['accent', 'secondary', 'neutral', 'neutralVariant'] as const
+              ).map((name) => (
+                <RampRow
+                  key={name}
+                  name={name}
+                  ramp={ramps[name]}
+                  copiedKey={copiedKey}
+                  onCopy={copy}
+                />
+              ))}
               <p className="ramp-stack__hint">
                 Select any swatch to copy its hex. The outlined stop is where
                 your source color landed.
