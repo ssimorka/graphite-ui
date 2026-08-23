@@ -1,6 +1,6 @@
 ---
 component: Overlay
-version: 1.0.0
+version: 1.0.1
 wave: 5
 internal: true
 slots: []
@@ -45,3 +45,21 @@ The source document asks for it directly:
   here, never from the component.
 - **Prohibitions:** No overlay defines its own dismiss behavior. One that needs
   a different pattern is a different component, not a variant of this one.
+
+### How the shared surface resolves in the kit (#92)
+
+`surfaceElevated` now exists in the kit's `Graphite Semantic` collection,
+aliased to `neutral/050` in Light and `neutral/700` in Dark — the same two
+stops `elevation/01` uses.
+
+It is snapped rather than exact. The engine asks for neutral tone 100 in Light
+and tone 24 in Dark, and neither is on the 050-900 ramp, so both were moved to
+the nearest grid stop the same way `surface` already snaps its dark ground to
+`neutral/800`. The alternative was two new intermediate primitives, which the
+ramp constraint rules out.
+
+**The consequence is load-bearing.** In Light, `surface-elevated` resolves to
+the same value as `surface`, so an overlay has no fill separation from the page
+behind it and its edge has to be drawn. That is why every overlay declares
+`outline`, Tooltip included as of 1.4.0 — an overlay that declares only
+`surface-elevated` is invisible in Light.

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-/** Contract: docs/contracts/overlay.md (1.0.0) — the shared Wave 5 base. */
+/** Contract: docs/contracts/overlay.md (1.0.1) — the shared Wave 5 base. */
 export type DismissOptions = {
   open: boolean
   onDismiss: () => void
