@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.1.0
+version: 2.2.0
 wave: 0
 slots:
   - name: Children
@@ -22,13 +22,17 @@ props:
     notes: Defaults to button, and only when this component owns the element.
 tokens:
   - name: primary
-    usage: Fill on the primary variant, and the border on secondary.
+    usage: Fill on the primary variant.
   - name: on-primary
     usage: Label on the primary variant.
+  - name: secondary
+    usage: Outline and label on the secondary variant at rest, and the fill it takes on hover and press.
+  - name: on-secondary
+    usage: Label on the secondary variant once it fills, on hover and press.
   - name: on-surface
-    usage: Label on the secondary and ghost variants.
+    usage: Label on the ghost variant.
   - name: surface-variant
-    usage: Hover and pressed background on secondary and ghost.
+    usage: Hover and pressed background on ghost.
   - name: danger
     usage: Fill on the destructive variant.
   - name: on-danger
@@ -59,12 +63,13 @@ the component API conventions in `README.md`.
   caller rather than chosen from a fixed leading/trailing pair.
 - **Props:** variant (primary, secondary, ghost, danger — defaults to
   secondary), size (sm, md, lg, icon), asChild, className, type.
-- **Tokens:** `primary` with `on-primary` for the primary variant, `primary` as
-  the border on secondary, `on-surface` for secondary and ghost labels,
-  `surface-variant` for their hover and pressed states, `danger` with
-  `on-danger` for the destructive variant; the spacing scale for padding, icon
-  gaps and the minimum touch target; the motion tokens for transitions, so a
-  button moves on the same curve as the page around it.
+- **Tokens:** `primary` with `on-primary` for the primary variant, `secondary`
+  for the outline and label on secondary with `on-secondary` for the label once
+  it fills, `on-surface` for the ghost label, `surface-variant` for ghost's
+  hover and pressed states, `danger` with `on-danger` for the destructive
+  variant; the spacing scale for padding, icon gaps and the minimum touch
+  target; the motion tokens for transitions, so a button moves on the same
+  curve as the page around it.
 - **Composition rules:** One primary action per group — a Card footer, a Dialog
   footer or a toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new

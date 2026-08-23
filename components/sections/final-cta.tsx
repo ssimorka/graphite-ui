@@ -59,7 +59,12 @@ export function FinalCta() {
                     onChange={(e) => setMessage(e.target.value)}
                   />
                 </div>
-                <Button type="submit" size="lg" renderIcon={ArrowRight}>
+                <Button
+                  type="submit"
+                  kind="secondary"
+                  size="lg"
+                  renderIcon={ArrowRight}
+                >
                   Learn more
                 </Button>
               </form>

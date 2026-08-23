@@ -100,6 +100,16 @@ const CARBON_VAR_BINDINGS: readonly [
   ['--cds-button-primary', (_t, s) => s.primary.base.hex],
   ['--cds-button-primary-hover', (_t, s) => s.primary.hover.hex],
   ['--cds-button-primary-active', (_t, s) => s.primary.pressed.hex],
+  // Carbon's secondary button is a fixed gray until these are bound, which
+  // reads as a foreign color next to generated chrome — the same trap
+  // --cds-support-* used to be. Bound to the secondary family so a Carbon
+  // secondary button matches Graphite's own secondary variant.
+  // Carbon labels it with --cds-text-on-color, which is onPrimary; measured
+  // against all three secondary tones it clears AAA in both themes, so the
+  // label needs no separate binding.
+  ['--cds-button-secondary', (_t, s) => s.secondary.base.hex],
+  ['--cds-button-secondary-hover', (_t, s) => s.secondary.hover.hex],
+  ['--cds-button-secondary-active', (_t, s) => s.secondary.pressed.hex],
   ['--cds-text-on-color', (t) => t.onPrimary.hex],
   ['--cds-icon-on-color', (t) => t.onPrimary.hex],
   ['--cds-background-selected', (t) => t.primaryContainer.hex],
