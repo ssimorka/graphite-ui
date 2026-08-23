@@ -331,19 +331,43 @@ function checkMediaQueries(kitBreakpoints) {
     known.add(px - 1) // max-width bounds sit one below the next one up
   }
 
+  // Not every media query is a breakpoint. A rule can be keyed to the width at
+  // which its own content stops fitting — a content threshold — which by
+  // definition will not land on the kit's scale, and forcing it onto the
+  // nearest stop breaks the layout rather than aligning it. Such a rule opts
+  // out with `token-drift-allow:` in the comment directly above it, which has
+  // to carry the reason, so the exemption is argued in the source rather than
+  // hidden in this script.
+  const ALLOW = 'token-drift-allow:'
+
   for (const file of scanFiles()) {
     const src = fs.readFileSync(file, 'utf8')
     const rel = path.relative(ROOT, file).split(path.sep).join('/')
-    for (const m of src.matchAll(
-      /@media[^{]*?\((min|max)-width:\s*(\d+)px\)/g,
-    )) {
-      const px = Number(m[2])
-      if (!known.has(px)) {
-        warnings.push(
-          `${rel}: @media ${m[1]}-width ${px}px matches no kit breakpoint`,
-        )
+    const lines = src.split('\n')
+
+    const allowed = (index) => {
+      // Walk back over the contiguous comment block immediately above.
+      for (let i = index - 1; i >= 0; i -= 1) {
+        const line = lines[i].trim()
+        if (line === '' || line.startsWith('//')) {
+          if (line.includes(ALLOW)) return true
+          continue
+        }
+        return false
       }
+      return false
     }
+
+    lines.forEach((line, i) => {
+      const m = /@media[^{]*?\((min|max)-width:\s*(\d+)px\)/.exec(line)
+      if (!m) return
+      const px = Number(m[2])
+      if (known.has(px) || allowed(i)) return
+      warnings.push(
+        `${rel}:${i + 1}: @media ${m[1]}-width ${px}px matches no kit breakpoint ` +
+          `— align it to the scale, or mark it \`${ALLOW} <reason>\` if it is a content threshold`,
+      )
+    })
   }
 }
 

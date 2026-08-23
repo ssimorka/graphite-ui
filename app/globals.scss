@@ -437,6 +437,12 @@ body {
   // Two full-height Carbon buttons don't fit beside each other under ~360px
   // of usable width; splitting them 50/50 keeps both labels readable instead
   // of letting the second one clip.
+  //
+  // token-drift-allow: content threshold, not a system breakpoint. The width
+  // is set by what this button pair needs, not by the kit's scale — the
+  // nearest stops are sm (320px), which would leave it broken on a 375px
+  // phone, and md (672px), which would split the buttons on tablets where
+  // they fit. A container query is the right long-term shape for this.
   @media (max-width: 419px) {
     width: 100%;
 
