@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-version: 1.3.0
+version: 1.4.0
 wave: 5
 slots:
   - name: Trigger
@@ -18,6 +18,8 @@ tokens:
     usage: The shared overlay surface — surface at an elevated tone step.
   - name: on-surface
     usage: Text.
+  - name: outline
+    usage: Edge. Required, not decorative — in Light the elevated surface resolves to the same value as `surface`, so the border is the only thing separating the bubble from the page.
   - name: spacing
     usage: Padding and offset from the trigger.
   - name: radius
@@ -37,6 +39,6 @@ prohibitions:
 ### Tooltip
 - **Slots:** Trigger (required, any focusable element), content (required, short text only).
 - **Props:** placement (top, bottom, left, right), delay.
-- **Tokens:** `surface-elevated`, `on-surface` text; the spacing scale for padding and trigger offset.
+- **Tokens:** `surface-elevated`, `on-surface` text, `outline` for the edge; the spacing scale for padding and trigger offset.
 - **Composition rules:** Never contains interactive content — a Tooltip you can click into is a Popover.
 - **Prohibitions:** No tooltip as the only source of critical information — it must be supplementary to visible content.

@@ -1,6 +1,6 @@
 ---
 component: Dialog
-version: 1.4.0
+version: 1.4.1
 wave: 5
 slots:
   - name: Title
@@ -47,3 +47,20 @@ prohibitions:
 - **Tokens:** `surface-elevated`, `on-surface` text, `outline` footer divider, and a full-screen `scrim` at a defined opacity over the base surface; the spacing scale for padding and size steps.
 - **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's one-primary-action rule, same as Card, wrapped in the same ButtonGroup that enforces it.
 - **Prohibitions:** No Dialog opened from within another Dialog — stack depth of one.
+
+### How `scrim` resolves in the kit (#92)
+
+The kit variable was named `overlay` and held Carbon's `#161616` at 50% Light /
+70% Dark, with a description recording that Graphite had no token of its own.
+It is now named `scrim`, matching this contract, and its hue is Graphite's
+darkest neutral stop (`#030305`). It stays a literal RGBA rather than an alias
+because a Figma variable alias cannot carry an alpha channel.
+
+`app/globals.scss` took the same hue, so `--graphite-scrim` is now
+`rgb(3 3 5 / 0.55)` rather than flat black.
+
+One thing is deliberately still open: the stylesheet declares a single flat
+opacity where the kit has 50% Light and 70% Dark. Whether the scrim should
+deepen in dark at all is a design decision, not a sync error, and it has not
+been made. The value is static rather than generated, so closing it means
+either dropping the kit's split or moving `scrim` into the themed pass.
