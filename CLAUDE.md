@@ -139,6 +139,21 @@ a browser result.
   and a Tag replaced it; Typography is the type of its *required* title slot and
   is the remedy in Progress bar's prohibition. "The repo imports it" is not the
   test: only the gallery imports Typography.
+- **The kit's 27 unclaimed pages hold 132 component sets, not "~40".** Walked
+  2026-08-28 through the Plugin API and published as
+  `docs/contracts/kit/figma-only.md` (#124 Part B; it lives in `kit/` because
+  `drift-check` treats every top-level `.md` in `docs/contracts/` as a component
+  contract). 73 public, 59 private, 2,106
+  variants; Dropdown and Date picker carry 16 sets each. Don't re-derive from
+  page names — they understate by ~5x.
+  **The `_` prefix is the kit's own public/private line** and rule 6's labelling
+  applies to the 73 public sets only; `_`-prefixed sets carry "🚫 Do not edit"
+  and are load-bearing internals (Dropdown alone instances 3,139 of them).
+  Two traps recorded there: the AI sets are instanced *inside* Dropdown's
+  variants (246 `AI layer - Field`, 201 `AI label`), so "drop the AI components"
+  is not self-contained; and `_Structured list header row item` exists **twice**
+  as two distinct sets, which defeats the name-based lookup the gallery badge
+  and #134/#136 failures depend on.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

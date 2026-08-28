@@ -191,6 +191,30 @@ The kit is still canonical: it decides which value a component gets. The table
 only says which Graphite role produces that value, so the code can bind the
 role rather than the Carbon alias.
 
+### The disposition list
+
+Part B is done. [`kit/figma-only.md`](kit/figma-only.md) lists every set on the 27
+unclaimed pages with its bucket, derived by walking the kit through the Plugin
+API rather than inferred from page names. Regenerate it the same way when the
+kit gains or loses sets.
+
+Two things it corrects here. **The total is 132 sets, not "~40"** — 73 public
+and 59 private — across 2,106 variants; Dropdown and Date picker carry 16 each.
+And **rule 6's labelling obligation attaches to the 73 public sets only.** The
+kit already marks its own internals with a `_` prefix and a "🚫 Do not edit"
+description; those inherit their page's disposition, and nobody can mistake one
+for a governed component. Labelling all 132 would be triple the work for less
+clarity.
+
+The walk also found four pages that fit none of the categories below — Menu
+buttons, File uploader, Form and List. They are bucketed in the list and folded
+into the categories here.
+
+It lives in `kit/` for the same reason `foundations/` exists: `drift-check.mjs`
+reads the top level of this directory and treats every `.md` there as a
+component contract. It said so, loudly, when the file was first written next to
+them.
+
 ### Which bucket a set falls in
 
 **Out of scope by construction.** Graphite contracts govern component
@@ -214,7 +238,10 @@ permanently rather than pending:
   variable collections, which `scripts/figma-extract.js` already excludes from
   the snapshot as "component-level state rather than a foundation token layer".
 - *Carbon idioms with no Graphite counterpart* — Structured list, Toggletip,
-  Tile, Code snippet, Loading, Progress indicator.
+  Tile, Code snippet, Loading, Progress indicator, Form, List. Form and List
+  were added by the Part B walk: Form is a control wrapper, the species Field
+  already was before #135 removed it, and List is the typographic sibling of the
+  governed Contained list.
 
   `Contained list` was on this list and has come off it. The component that
   used to be called `Item` was renamed to it when the code adopted the kit's
@@ -224,12 +251,15 @@ permanently rather than pending:
 
 **Already spoken for.** Some Carbon sets are not separate components in
 Graphite but values on one: Number input and Password input are `type` on
-Text input; Dropdown is Select, or Menu for the menu case. These are
-ungoverned, and the fold is recorded on the governing contract so the
-functionality stays findable.
+Text input; Dropdown is Select, or Menu for the menu case; Menu buttons — the
+`Menu button`, `Combo button` and `Overflow` sets #103 flagged as unaccounted —
+is Button composed with Menu, both of which are governed. These are ungoverned,
+and the fold is recorded on the governing contract so the functionality stays
+findable.
 
 **In scope, awaiting demand.** Primitives Graphite has no contract for but
-plausibly wants — Link, Search, Slider, Pagination, Date picker, Accordion.
+plausibly wants — Link, Search, Slider, Pagination, Date picker, File uploader,
+Accordion.
 Ungoverned until something asks: the repo uses one, a contract references one,
 or committed work needs one. Wanting it in the abstract is not demand.
 
