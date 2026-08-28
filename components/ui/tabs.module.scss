@@ -31,7 +31,12 @@
   cursor: pointer;
   font: inherit;
   color: var(--graphite-on-surface-variant);
-  padding: var(--graphite-space-03) var(--graphite-space-04);
+  // The kit's tab item is 40 tall and inset 16, with an 8 gap to its icon.
+  // Expressed as a height plus a horizontal inset rather than the kit's 11px
+  // vertical padding, which is not on the spacing scale.
+  min-height: var(--graphite-space-08);
+  padding: 0 var(--graphite-space-05);
+  gap: var(--graphite-space-03);
   position: relative;
 }
 

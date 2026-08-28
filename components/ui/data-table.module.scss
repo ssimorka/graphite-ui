@@ -31,6 +31,10 @@
   top: 0;
   z-index: 1;
   text-align: left;
+  // The kit's header cell is transparent at rest, sitting on the table's own
+  // ground. That value cannot transfer: this header is position:sticky, and a
+  // transparent sticky header lets rows scroll through it. `surface` is kept
+  // deliberately — the kit does not model scrolling, so it has no opinion here.
   background: var(--graphite-surface);
   color: var(--graphite-on-surface);
   border-bottom: 1px solid var(--graphite-outline);
@@ -71,5 +75,11 @@
 .default .td { padding: var(--graphite-density-default); }
 
 .row:hover {
+  background: var(--graphite-surface-variant);
+}
+
+// A sortable header takes the same surfaceVariant on hover that the kit gives
+// its Hover, Focus and Sorted header states.
+.th:has(.sortButton):hover {
   background: var(--graphite-surface-variant);
 }
