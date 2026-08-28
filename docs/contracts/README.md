@@ -24,6 +24,7 @@ is a bug in the contract, not in Figma.
 5. Figma components carry the contract version number in their description field, so anyone opening the file knows which spec they're looking at.
 6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. See "Carbon-only sets in the kit" below.
 7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. Where **the kit disagrees with itself**, the more specific artefact wins; where the kit has **no opinion**, the code keeps its own. See "When the kit is not of one mind" below.
+8. Rules 6 and 7 say who wins; neither says what should **exist**. A governed component with no counterpart in the kit is kept only while something needs it, and rule 6's demand test decides. See "When the kit has nothing" below.
 
 ### When the kit is not of one mind
 
@@ -59,6 +60,76 @@ says nothing about behaviour the code has and Figma cannot express.
 contract or the stylesheet it affects, next to the value it explains. A
 divergence nobody wrote down reads as a mistake to the next person, and gets
 "fixed" back.
+
+### When the kit has nothing
+
+Rule 7 settles kit-versus-contract and its tie-break settles kit-versus-kit.
+Both answer **who wins a disagreement**. Neither answers **whether the
+component should exist at all**, and six components have needed that second
+answer.
+
+#133 proposed a corollary for them: *"these stay code-only, and their contracts
+remain authoritative for them, because a rule about who wins a disagreement
+says nothing where only one party exists."* It is half right, and the halves
+have to come apart.
+
+- **On authority — ratified.** Where the kit has nothing, the contract is
+  authoritative for that component. This is not a new rule; it is rule 7's
+  tie-break ("where the kit has no opinion, the code keeps its own") applied to
+  a component instead of a property.
+- **On existence — struck.** The corollary read "rule 7 does not reach this" as
+  "therefore keep", which does not follow. Nothing supported keep-by-default,
+  and five merges went the other way before anyone noticed the proposal was
+  still standing. Rule 8 replaces that half.
+
+### The three questions, in order
+
+1. **Does the kit have a governed counterpart?** Rule 7: the kit wins, bring
+   the code to it. This is the F-wave inversion (#133 bucket A), and it covers
+   eighteen components.
+2. **No counterpart of its own, but does the kit answer the same need inside
+   something it does govern?** Then absorb it there. "The kit has nothing" must
+   mean *nothing anywhere*, not *no set with that name* — the trap Label and
+   Field would have fallen into. Carbon ships no Label set, but it has a firm
+   opinion about where a label lives: on the control. See #135.
+3. **Does the kit say nothing at all?** The contract is authoritative (above),
+   and rule 6's demand test decides whether the component is kept.
+
+### What counts as demand
+
+Rule 6 states it as *"the repo uses one, a contract references one, or
+committed work needs one. Wanting it in the abstract is not demand."* Applied
+to retention, one distinction does the work:
+
+**A dependency survives the question; an illustration does not.** If the
+reference still reads correctly after substituting something else, it was an
+illustration.
+
+Avatar and Typography are the worked pair, and they land on opposite sides:
+
+- `contained-list.md` named **Avatar** in its *optional* leading slot, as one
+  of several markers. The slot took a Tag instead and the contract lost only a
+  word. Illustration. Removed in `e49b422`.
+- `contained-list.md` names **Typography** as the type of its *required* title
+  slot, and `progress-bar.md` names it in the remedy to a prohibition — *"no
+  text label baked into the bar itself, pair with Typography externally."*
+  Remove Typography and a prohibition points at nothing. Dependency.
+
+Note that neither of those is "the repo imports it". Typography is imported
+only by the gallery, and that is not what keeps it.
+
+### The six, sorted
+
+| | Question 2 or 3 | Demand | Outcome |
+|---|---|---|---|
+| Separator, Avatar, Card | 3 | None; only the gallery composed them | **Removed** (#95, #97, #109) |
+| Label, Field | 2 | Answered on the form controls instead | **Absorbed** (#94, #107) |
+| Navigation Menu | 3 | `site-header.tsx`, and step 1 of `SHADCN-MIGRATION.md` | **Kept** (#113) |
+| Typography | 3 | Two contracts depend on it, one in a prohibition | **Kept** (#96) |
+
+Settled in #133. The five merges that preceded the rule were each right on
+their own facts, which is why none of them felt like a violation at the time;
+what was missing was the sentence they had in common.
 
 This is a solo-maintainer model. It doesn't require review gates, just a fixed place where truth lives and a script that checks reality against it.
 
@@ -165,30 +236,10 @@ or committed work needs one. Wanting it in the abstract is not demand.
 ### The demand test runs both ways
 
 The test above decides whether an ungoverned kit set *acquires* a contract. It
-reads just as well in the other direction, and #113 is the first place that
-mattered: it decides whether a governed component with no kit counterpart
-*keeps* one.
-
-That situation is not rare and is not a defect. Six components have been in it,
-and the same test sorts every one:
-
-| | Demand | Outcome |
-|---|---|---|
-| Separator, Avatar, Card | None — only the gallery composed them | **Removed** (#95, #97, #109) |
-| Label, Field | Real, but the kit answers it inside each form control | **Absorbed** (#94, #107) |
-| Navigation Menu | `site-header.tsx` is on Carbon's UI shell, and step 1 of `SHADCN-MIGRATION.md` replaces it | **Kept** (#113) |
-
-Label and Field are the case worth reading twice. Demand alone did not keep
-them: the kit had an opinion about where a label lives, rule 7 bit, and the
-demand was satisfied somewhere else. The test only decides retention once rule
-7 has found nothing to say.
-
-**This is a description, not yet a ratified rule.** #133 proposed the opposite
-corollary — that components with no kit counterpart stay code-only with their
-contracts authoritative — and five merges then went the other way without the
-proposal being struck. The table above is what those merges plus #113 actually
-did. Ratifying or replacing it is #133's job, and **Typography (#96) is the one
-member the test has not been run against.**
+reads just as well in the other direction, deciding whether a governed
+component with no kit counterpart *keeps* one. That is rule 8, and it is
+written up under "When the kit has nothing" in the governance model rather than
+restated here.
 
 ### What the rule decides today
 

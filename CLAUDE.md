@@ -121,14 +121,24 @@ a browser result.
   2.0.0 for the added "not an application shell" prohibition; the only code
   change is the version docblock, which `drift-check` verifies against the
   contract. Don't re-open this as deferred work.
-- **The demand test decides retention, not just adoption.** Rule 6's *"the repo
-  uses one, a contract references one, or committed work needs one"* is written
-  for ungoverned kit sets acquiring a contract, but it is also what sorted the
-  six governed components with no kit counterpart: Separator/Avatar/Card
-  removed, Label/Field absorbed, Navigation Menu kept. Typography (#96) is the
-  one it has not been run against. This is recorded in
-  `docs/contracts/README.md` as a description of what the merges did, and is
-  still unratified — #133 proposed the opposite and was never struck.
+- **Rule 8 settles whether a component with no kit counterpart exists.**
+  Ratified in #133 and written up as "When the kit has nothing" in
+  `docs/contracts/README.md`. Rules 6 and 7 answer *who wins a disagreement*;
+  neither answers *what should exist*, and #133's original corollary conflated
+  the two. Its authority half is ratified (where the kit has nothing, the
+  contract is authoritative) and its existence half is struck (it read "rule 7
+  does not reach this" as "therefore keep").
+  Three questions in order: does the kit have a counterpart (invert, rule 7) →
+  does the kit answer the same need inside something else it governs (absorb,
+  as Label and Field were) → does it say nothing at all (rule 6's demand test
+  decides). All six cases are sorted in the table there: Separator/Avatar/Card
+  removed, Label/Field absorbed, Navigation Menu and Typography kept.
+  **The distinction that does the work is dependency versus illustration** — if
+  the reference still reads correctly after substituting something else, it was
+  an illustration. Avatar was named in Contained list's *optional* leading slot
+  and a Tag replaced it; Typography is the type of its *required* title slot and
+  is the remedy in Progress bar's prohibition. "The repo imports it" is not the
+  test: only the gallery imports Typography.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

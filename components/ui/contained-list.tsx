@@ -5,7 +5,7 @@ import styles from './contained-list.module.scss'
 type ContainedListProps = {
   /** Typography by convention; the row does not impose a variant on it. */
   title: ReactNode
-  /** Avatar or icon. */
+  /** An icon, Tag, or other short marker. Named Avatar until #97 removed it. */
   leading?: ReactNode
   description?: ReactNode
   /**
