@@ -8,7 +8,7 @@ import styles from './dialog.module.scss'
 
 const InsideDialog = createContext(false)
 
-/** Contract: docs/contracts/dialog.md (1.4.1) */
+/** Contract: docs/contracts/dialog.md (1.4.2) */
 type DialogProps = {
   open: boolean
   onClose: () => void

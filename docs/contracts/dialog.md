@@ -1,6 +1,6 @@
 ---
 component: Dialog
-version: 1.4.1
+version: 1.4.2
 wave: 5
 slots:
   - name: Title
@@ -56,11 +56,23 @@ It is now named `scrim`, matching this contract, and its hue is Graphite's
 darkest neutral stop (`#030305`). It stays a literal RGBA rather than an alias
 because a Figma variable alias cannot carry an alpha channel.
 
-`app/globals.scss` took the same hue, so `--graphite-scrim` is now
-`rgb(3 3 5 / 0.55)` rather than flat black.
+`app/globals.scss` took the same hue, so `--graphite-scrim` became
+`rgb(3 3 5 / 0.55)` rather than flat black — but still flat, and still static.
 
-One thing is deliberately still open: the stylesheet declares a single flat
-opacity where the kit has 50% Light and 70% Dark. Whether the scrim should
-deepen in dark at all is a design decision, not a sync error, and it has not
-been made. The value is static rather than generated, so closing it means
-either dropping the kit's split or moving `scrim` into the themed pass.
+That gap is now closed, by the second of the two routes this section used to
+offer: `scrim` moved into the themed pass. `scrimFor()` in `lib/color.js`
+derives it from `neutral` tone 10 and applies the kit's 50% Light / 70% Dark
+split. Two things follow. The scrim tracks the source colour like every other
+role, where before it was the one role that stayed put while the rest moved.
+And the design question the split implied is answered: the scrim does deepen in
+dark, because the surface it veils is already dark and an equal alpha separates
+the Dialog from its background far less.
+
+It is emitted alongside the token map rather than inside it. A scrim has no
+`on-` partner and enters no contrast pairing, so putting it in `tokens` would
+enter it into both, and it resolves to RGBA rather than a tone in any case.
+The declaration in `app/globals.scss` remains, but only as the pre-hydration
+fallback, at the dark alpha because `layout.tsx` first-paints `cds--g100`.
+
+The kit variable's description has been updated to match and is awaiting a
+library republish.
