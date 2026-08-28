@@ -177,3 +177,9 @@ export declare function buildStates(
 
 export declare function buildCss(bundle: ExportBundle): string
 export declare function buildJson(bundle: ExportBundle): string
+
+/** CSS colour for the modal scrim: alpha over the darkest neutral, so it
+ *  carries the source colour. Not a token — it has no `on-` partner and enters
+ *  no contrast pairing — so it is emitted alongside the token map rather than
+ *  inside it. Alphas are the kit's: 50% Light, 70% Dark. */
+export function scrimFor(ramps: Ramps, mode: ThemeMode): string

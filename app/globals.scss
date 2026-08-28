@@ -160,11 +160,17 @@
   --graphite-motion-fast: 120ms;
   --graphite-motion-base: 240ms;
 
-  // Scrim. Dialog's contract asks for "a defined opacity", so it is defined
-  // here once rather than chosen per Dialog. A veil is one of the few places
-  // the system uses alpha rather than a tone step: it has to darken whatever
-  // happens to be behind it, which no fixed ramp tone can do.
-  --graphite-scrim: rgb(3 3 5 / 0.55);
+  // Scrim. A veil is one of the few places the system uses alpha rather than a
+  // tone step: it has to darken whatever happens to be behind it, which no
+  // fixed ramp tone can do.
+  //
+  // The value below is only the pre-hydration fallback. ThemeProvider
+  // overwrites --graphite-scrim on every source change via scrimFor() in
+  // lib/color.js, which reads the darkest neutral so the scrim carries the
+  // source colour, and splits the alpha 50/70 between Light and Dark per the
+  // kit's Graphite Semantic `scrim`. This used to be the only declaration,
+  // which is why the scrim stayed put while every other role moved.
+  --graphite-scrim: rgb(3 3 5 / 0.7);
 
   // Families. font-1 and font-2 share a value today but are two roles,
   // per the kit: font-1 is display, headings and titles 1-2; font-2 is

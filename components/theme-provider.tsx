@@ -14,6 +14,7 @@ import {
   buildTheme,
   buildStates,
   normalizeHex,
+  scrimFor,
   STATE_FAMILIES,
 } from '@/lib/color.js'
 
@@ -58,6 +59,7 @@ export function useTheme() {
 }
 
 type BuiltTheme = ReturnType<typeof buildTheme>
+type BuiltRamps = ReturnType<typeof makeRamps>
 type BuiltStates = ReturnType<typeof buildStates>
 type Tokens = BuiltTheme['tokens']
 
@@ -169,7 +171,12 @@ const kebab = (s: string) =>
 
 export const graphiteVarName = (role: string) => `--graphite-${kebab(role)}`
 
-function graphiteVarsFor(theme: BuiltTheme, states: BuiltStates) {
+function graphiteVarsFor(
+  theme: BuiltTheme,
+  states: BuiltStates,
+  ramps: BuiltRamps,
+  mode: 'light' | 'dark',
+) {
   const out: Record<string, string> = {}
   for (const [role, token] of Object.entries(theme.tokens)) {
     out[graphiteVarName(role)] = (token as { hex: string }).hex
@@ -190,6 +197,12 @@ function graphiteVarsFor(theme: BuiltTheme, states: BuiltStates) {
   // it is the name components already read and the one that means "focus"
   // without picking a family.
   out['--graphite-focus'] = states.focus.hex
+  // Scrim is not in the token map — it is rgba over the darkest neutral rather
+  // than a tone, and has no `on-` partner or contrast pairing — so it is added
+  // here rather than arriving through theme.tokens. It still comes from the
+  // engine, so it tracks the source colour; it used to be a fixed value in
+  // globals.scss that stayed put while every other role moved.
+  out['--graphite-scrim'] = scrimFor(ramps, mode)
   return out
 }
 
@@ -265,10 +278,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const activeTheme = theme === 'white' ? light : dark
     const activeStates = theme === 'white' ? lightStates : darkStates
 
-    if (sourceHex && activeTheme && activeStates) {
+    if (sourceHex && activeTheme && activeStates && ramps) {
       const vars = {
         ...carbonVarsFor(activeTheme, activeStates),
-        ...graphiteVarsFor(activeTheme, activeStates),
+        ...graphiteVarsFor(
+          activeTheme,
+          activeStates,
+          ramps,
+          theme === 'white' ? 'light' : 'dark',
+        ),
       }
       for (const [prop, value] of Object.entries(vars)) {
         root.style.setProperty(prop, value)
@@ -281,7 +299,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // tab, where frames are throttled and the callback may never run.
     void root.offsetHeight
     root.classList.remove('is-retheming')
-  }, [theme, light, dark, lightStates, darkStates, sourceHex])
+  }, [theme, light, dark, lightStates, darkStates, sourceHex, ramps])
 
   const toggleTheme = () => setTheme((t) => (t === 'white' ? 'g100' : 'white'))
 
