@@ -39,7 +39,7 @@ No component contract carries a **[blocked on Wave 0]** marker any more. Two Wav
 ## Component API conventions
 
 Contracts say what a component *is*. This says what its React surface looks
-like, so twenty-six components do not each invent an answer. The shape follows
+like, so twenty-seven components do not each invent an answer. The shape follows
 shadcn; the styling does not — variants resolve to CSS module classes on
 `--graphite-*`, not utility classes.
 
@@ -89,12 +89,12 @@ Field (wraps Label + an input atom + help/error text)
 Card, Item, Tabs, Breadcrumb, Navigation Menu
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
-Tooltip, Popover, Dropdown Menu, Dialog, Alert
+Overlay (internal: the shared pattern the other five implement), Tooltip, Popover, Dropdown Menu, Dialog, Alert
 
 **Wave 6 — Data display**
 Table
 
-Button is done and sits underneath Wave 4 (Card actions) and Wave 5 (Dialog confirm/cancel) as a dependency.
+Button is done and sits underneath Wave 4 (Card actions) and Wave 5 (Dialog confirm/cancel) as a dependency. Button Group sits beside it at wave 0 for the same reason: Card and Dialog wrap their footers in it, so it precedes both.
 
 ---
 
