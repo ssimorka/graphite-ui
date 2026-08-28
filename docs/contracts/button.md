@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.2.0
+version: 2.2.1
 wave: 0
 slots:
   - name: Children
@@ -34,7 +34,7 @@ tokens:
   - name: surface-variant
     usage: Hover and pressed background on ghost.
   - name: danger
-    usage: Fill on the destructive variant.
+    usage: Fill on the destructive variant, and the tone steps it takes on hover and press.
   - name: on-danger
     usage: Label on the destructive variant.
   - name: spacing
@@ -67,9 +67,9 @@ the component API conventions in `README.md`.
   for the outline and label on secondary with `on-secondary` for the label once
   it fills, `on-surface` for the ghost label, `surface-variant` for ghost's
   hover and pressed states, `danger` with `on-danger` for the destructive
-  variant; the spacing scale for padding, icon gaps and the minimum touch
-  target; the motion tokens for transitions, so a button moves on the same
-  curve as the page around it.
+  variant and its own hover and pressed steps; the spacing scale for padding,
+  icon gaps and the minimum touch target; the motion tokens for transitions, so
+  a button moves on the same curve as the page around it.
 - **Composition rules:** One primary action per group — a Card footer, a Dialog
   footer or a toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new

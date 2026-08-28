@@ -46,8 +46,6 @@ const familyStateVars = (family) => [
 
 // --graphite-focus is the page-level ring: it belongs to no family, so any
 // contract that declares primary may reach for it.
-const PRIMARY_STATE_VARS = [...familyStateVars('primary'), '--graphite-focus']
-const SECONDARY_STATE_VARS = familyStateVars('secondary')
 
 // Roles a contract may declare that the engine does not produce yet, by
 // design. Each is tracked by open work; they warn rather than fail the build.
@@ -117,8 +115,12 @@ async function readTokenModel() {
   }
   for (const role of Object.keys(theme.tokens))
     bind(role, `--graphite-${kebab(role)}`)
-  for (const v of PRIMARY_STATE_VARS) bind('primary', v)
-  for (const v of SECONDARY_STATE_VARS) bind('secondary', v)
+  // Driven off the engine's own family list, so a family added there is bound
+  // here without a second edit. --graphite-focus is primary's ring rather than
+  // a family of its own, so it is bound separately.
+  for (const family of mod.STATE_FAMILIES)
+    for (const v of familyStateVars(family)) bind(family, v)
+  bind('primary', '--graphite-focus')
   const statics = readStaticVars()
   for (const v of statics.spacing) bind('spacing', v)
   for (const v of statics.radius) bind('radius', v)
