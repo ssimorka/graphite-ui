@@ -1,5 +1,5 @@
 ---
-component: Progress
+component: Progress bar
 version: 1.2.0
 wave: 1
 slots: []
@@ -26,7 +26,7 @@ prohibitions:
   - No text label baked into the bar itself — pair with Typography externally if a percentage needs to show.
 ---
 
-### Progress
+### Progress bar
 - **Slots:** None (value-driven, no children).
 - **Props:** value (0–100), variant (determinate, indeterminate).
 - **Tokens:** `outline` for track, `primary` for fill; the spacing scale for track height and the motion tokens for the indeterminate sweep.

@@ -1,5 +1,5 @@
 ---
-component: Radio Group
+component: Radio button group
 version: 1.2.0
 wave: 2
 slots:
@@ -29,7 +29,7 @@ prohibitions:
   - No radio group rendered without a group-level label — individual option labels aren't sufficient for screen readers.
 ---
 
-### Radio Group
+### Radio button group
 - **Slots:** One label per option (required), group label (required).
 - **Props:** orientation (vertical, horizontal), disabled (per-option or group-level).
 - **Tokens:** Same as Checkbox — `primary` fill, `outline` border — plus `on-surface` for the group label and the spacing scale for control size and option gaps.

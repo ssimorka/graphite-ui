@@ -44,8 +44,8 @@ tokens:
   - name: radius
     usage: Corner.
 composition_rules:
-  - "One primary action per group. A group of buttons — a Card footer, a Dialog footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Card and Dialog wrap their footers in it."
-  - Hover and pressed are tone-step moves on the same ramp as the resting fill, never a different color. This is the logic Input's focus border, Switch's on state, and Dropdown Menu's item hover all refer back to.
+  - "One primary action per group. A group of buttons — a Card footer, a Modal footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Card and Modal wrap their footers in it."
+  - Hover and pressed are tone-step moves on the same ramp as the resting fill, never a different color. This is the logic Text input's focus border, Toggle's on state, and Menu's item hover all refer back to.
   - Never smaller than the defined minimum touch target, whatever the size prop. Checkbox refers back to this.
   - Variants are declared once as a recipe and exported, so a sibling component can render something button-shaped without restating the rules or forking the styles.
 prohibitions:
@@ -70,10 +70,10 @@ the component API conventions in `README.md`.
   variant and its own hover and pressed steps; the spacing scale for padding,
   icon gaps and the minimum touch target; the motion tokens for transitions, so
   a button moves on the same curve as the page around it.
-- **Composition rules:** One primary action per group — a Card footer, a Dialog
+- **Composition rules:** One primary action per group — a Card footer, a Modal
   footer or a toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new
-  color; this is the logic Input's focus border, Switch's on state and Dropdown
+  color; this is the logic Text input's focus border, Toggle's on state and Dropdown
   Menu's item hover all refer back to. The minimum touch target holds at every
   size, which is the rule Checkbox cites. The variant recipe is exported, so a
   sibling can render something button-shaped without restating the rules.

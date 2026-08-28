@@ -1,7 +1,7 @@
 'use client'
 
 import { Label } from './label'
-import styles from './radio-group.module.scss'
+import styles from './radio-button-group.module.scss'
 
 export type RadioOption = {
   value: string
@@ -9,8 +9,8 @@ export type RadioOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/radio-group.md (1.2.0) */
-type RadioGroupProps = {
+/** Contract: docs/contracts/radio-button-group.md (1.2.0) */
+type RadioButtonGroupProps = {
   /** Namespaces the option ids and binds the radios into one group. */
   name: string
   /**
@@ -28,7 +28,7 @@ type RadioGroupProps = {
   onChange?: (value: string) => void
 }
 
-export function RadioGroup({
+export function RadioButtonGroup({
   name,
   label,
   options,
@@ -36,7 +36,7 @@ export function RadioGroup({
   orientation = 'vertical',
   disabled = false,
   onChange,
-}: RadioGroupProps) {
+}: RadioButtonGroupProps) {
   return (
     <fieldset className={styles.group} disabled={disabled}>
       <legend className={styles.legend}>{label}</legend>
@@ -71,6 +71,6 @@ export function RadioGroup({
 
 
 // Field reads this to know the label belongs here rather than above the
-// control: RadioGroup places its own, because its label sits beside the control
+// control: RadioButtonGroup places its own, because its label sits beside the control
 // rather than over it. See docs/contracts/field.md.
-RadioGroup.ownsLabel = true as const
+RadioButtonGroup.ownsLabel = true as const

@@ -1,5 +1,5 @@
 ---
-component: Item
+component: Contained list
 version: 1.2.0
 wave: 4
 slots:
@@ -13,7 +13,7 @@ slots:
     required: false
   - name: Trailing
     required: false
-    notes: Badge, Button, or a control.
+    notes: Tag, Button, or a control.
 props:
   - name: density
     values: [compact, default]
@@ -31,14 +31,14 @@ tokens:
   - name: spacing
     usage: Gaps between leading, text, and trailing slots.
 composition_rules:
-  - This is the row primitive Table and any future list views should compose from, not reimplement.
+  - This is the row primitive Data table and any future list views should compose from, not reimplement.
 prohibitions:
-  - No more than one trailing control cluster — if multiple actions are needed, use Dropdown Menu (Wave 5) as the trailing slot instead of stacking buttons.
+  - No more than one trailing control cluster — if multiple actions are needed, use Menu (Wave 5) as the trailing slot instead of stacking buttons.
 ---
 
-### Item
-- **Slots:** Leading (optional — Avatar or icon), title (required, Typography), description (optional), trailing (optional — Badge, Button, or a control).
+### Contained list
+- **Slots:** Leading (optional — Avatar or icon), title (required, Typography), description (optional), trailing (optional — Tag, Button, or a control).
 - **Props:** density (compact, default).
 - **Tokens:** `on-surface` for title, `surface` at rest with `surface-variant` as the tone-step hover shift if the item is interactive, `on-surface-variant` for the description; the density steps for row padding and the spacing scale for slot gaps.
-- **Composition rules:** This is the row primitive Table and any future list views should compose from, not reimplement.
-- **Prohibitions:** No more than one trailing control cluster — if multiple actions are needed, use Dropdown Menu (Wave 5) as the trailing slot instead of stacking buttons.
+- **Composition rules:** This is the row primitive Data table and any future list views should compose from, not reimplement.
+- **Prohibitions:** No more than one trailing control cluster — if multiple actions are needed, use Menu (Wave 5) as the trailing slot instead of stacking buttons.

@@ -1,12 +1,12 @@
 'use client'
 
 import type { TextareaHTMLAttributes } from 'react'
-import type { FieldSize, FieldState } from './input'
-import styles from './textarea.module.scss'
+import type { FieldSize, FieldState } from './text-input'
+import styles from './text-area.module.scss'
 
-/** Contract: docs/contracts/textarea.md (1.0.0) — inherits Input's contract. */
-type TextareaProps = {
-  /** Supplied by Field when wrapped. See Input. */
+/** Contract: docs/contracts/text-area.md (1.0.0) — inherits TextInput's contract. */
+type TextAreaProps = {
+  /** Supplied by Field when wrapped. See TextInput. */
   id?: string
   size?: FieldSize
   state?: FieldState
@@ -17,13 +17,13 @@ type TextareaProps = {
   resize?: 'vertical' | 'none'
 } & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id' | 'style'>
 
-export function Textarea({
+export function TextArea({
   id,
   size = 'md',
   state = 'default',
   resize = 'vertical',
   ...rest
-}: TextareaProps) {
+}: TextAreaProps) {
   const errored = state === 'error' || state === 'invalid'
 
   return (

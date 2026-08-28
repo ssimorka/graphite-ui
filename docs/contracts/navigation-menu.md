@@ -16,7 +16,7 @@ tokens:
   - name: on-surface
     usage: Default items.
   - name: spacing
-    usage: Item padding and gaps between levels.
+    usage: Contained list padding and gaps between levels.
   - name: radius
     usage: Corner on each item.
 composition_rules:

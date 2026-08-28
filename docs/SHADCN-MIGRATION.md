@@ -58,7 +58,7 @@ the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
   pieces of work, not one. None of Accordion, Sidebar, Command, Scroll area,
   Skeleton, Collapsible or Sheet has a contract today. Keep the bill to one:
   Sidebar lives outside `components/ui/` as site chrome rather than a system
-  component; mobile nav reuses Dialog instead of Sheet; overflow stays native
+  component; mobile nav reuses Modal instead of Sheet; overflow stays native
   instead of Scroll area; Accordion covers Collapsible; there is no async
   content to Skeleton. That leaves **Accordion** as the only new contract, and
   it is needed anyway because `faq.tsx` is on Carbon's today. Command palette
