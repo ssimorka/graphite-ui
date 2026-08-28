@@ -8,11 +8,13 @@
   position: absolute;
   z-index: 10;
   max-width: var(--graphite-space-13);
-  padding: var(--graphite-space-02) var(--graphite-space-03);
+  // 2 / 16, per the kit's Tooltip body item.
+  padding: var(--graphite-space-01) var(--graphite-space-05);
   background: var(--graphite-surface-elevated);
   color: var(--graphite-on-surface);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-4);
+  // The one overlay the kit does not make square: its body carries 2.
+  border-radius: var(--graphite-radius-2);
   font-size: 0.8125rem;
   line-height: 1.35;
   white-space: normal;

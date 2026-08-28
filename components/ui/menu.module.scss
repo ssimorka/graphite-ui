@@ -16,7 +16,7 @@
   flex-direction: column;
   background: var(--graphite-surface-elevated);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-8);
+  border-radius: var(--graphite-radius-none);
 }
 
 .bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
@@ -30,8 +30,11 @@
   text-align: left;
   cursor: pointer;
   color: var(--graphite-on-surface);
-  padding: var(--graphite-space-02) var(--graphite-space-03);
-  border-radius: var(--graphite-radius-2);
+  // Items inset 16 horizontally with an 8 gap, per the kit's menu list
+  // item. Square, like the panel that holds them.
+  padding: var(--graphite-space-02) var(--graphite-space-05);
+  gap: var(--graphite-space-03);
+  border-radius: var(--graphite-radius-none);
 }
 
 .item:hover:not(:disabled),

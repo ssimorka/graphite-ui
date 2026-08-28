@@ -46,6 +46,26 @@ The source document asks for it directly:
 - **Prohibitions:** No overlay defines its own dismiss behavior. One that needs
   a different pattern is a different component, not a variant of this one.
 
+### Why the code binds surfaceElevated and the kit's components do not
+
+Worth recording, because reading the component sets alone would suggest the
+opposite. Carbon's Popover and Menu fill with `Layer/layer-01`, which the
+binding table in `theme-provider.tsx` feeds from `surface` — not from
+`surfaceElevated`. Taken literally, governance rule 7 would move the overlays
+onto `surface`.
+
+It should not. The kit's own semantic layer is explicit about this: the
+`surfaceElevated` variable's description reads *"Shared overlay surface:
+Tooltip, Popover, Dropdown Menu, Dialog."* It was added in #92 for exactly
+these four. The components still bind `layer-01` because they are Carbon's,
+un-migrated — the same reason they still carry Carbon's variant axes.
+
+So the kit says two things and the more specific one wins: a variable authored
+to name these components beats a component binding inherited from Carbon. When
+those sets are eventually rebuilt they should bind `surfaceElevated`, and this
+note stops the next reader "correcting" the code toward `layer-01` in the
+meantime.
+
 ### How the shared surface resolves in the kit (#92)
 
 `surfaceElevated` now exists in the kit's `Graphite Semantic` collection,

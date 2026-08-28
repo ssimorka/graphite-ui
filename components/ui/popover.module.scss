@@ -8,10 +8,11 @@
   position: absolute;
   z-index: 20;
   min-width: var(--graphite-space-12);
-  padding: var(--graphite-space-04);
+  // 16, per the kit's Popover content.
+  padding: var(--graphite-space-05);
   background: var(--graphite-surface-elevated);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-8);
+  border-radius: var(--graphite-radius-none);
 }
 
 .panel:focus-visible {
