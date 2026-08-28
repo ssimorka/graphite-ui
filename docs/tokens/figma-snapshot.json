@@ -486,7 +486,7 @@
             }
           }
         },
-        "error/050": {
+        "danger/050": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -494,7 +494,7 @@
             }
           }
         },
-        "error/100": {
+        "danger/100": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -502,7 +502,7 @@
             }
           }
         },
-        "error/200": {
+        "danger/200": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -510,7 +510,7 @@
             }
           }
         },
-        "error/300": {
+        "danger/300": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -518,7 +518,7 @@
             }
           }
         },
-        "error/400": {
+        "danger/400": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -526,7 +526,7 @@
             }
           }
         },
-        "error/500": {
+        "danger/500": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -534,7 +534,7 @@
             }
           }
         },
-        "error/600": {
+        "danger/600": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -542,7 +542,7 @@
             }
           }
         },
-        "error/700": {
+        "danger/700": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -550,7 +550,7 @@
             }
           }
         },
-        "error/800": {
+        "danger/800": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -558,7 +558,7 @@
             }
           }
         },
-        "error/900": {
+        "danger/900": {
           "type": "COLOR",
           "values": {
             "Value": {
@@ -1054,7 +1054,7 @@
         "Dark"
       ],
       "defaultMode": "Light",
-      "variableCount": 87,
+      "variableCount": 88,
       "variables": {
         "background": {
           "type": "COLOR",
@@ -1072,6 +1072,48 @@
               "aliasChain": [
                 {
                   "ref": "Graphite Primitives/neutral/800"
+                }
+              ]
+            }
+          }
+        },
+        "danger": {
+          "type": "COLOR",
+          "values": {
+            "Light": {
+              "value": "#880c06",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/danger/600"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#ffa192",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/danger/200"
+                }
+              ]
+            }
+          }
+        },
+        "dangerContainer": {
+          "type": "COLOR",
+          "values": {
+            "Light": {
+              "value": "#ffd2ca",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/danger/100"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#5d0000",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             }
@@ -1161,48 +1203,6 @@
             }
           }
         },
-        "error": {
-          "type": "COLOR",
-          "values": {
-            "Light": {
-              "value": "#880c06",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/error/600"
-                }
-              ]
-            },
-            "Dark": {
-              "value": "#ffa192",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/error/200"
-                }
-              ]
-            }
-          }
-        },
-        "errorContainer": {
-          "type": "COLOR",
-          "values": {
-            "Light": {
-              "value": "#ffd2ca",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/error/100"
-                }
-              ]
-            },
-            "Dark": {
-              "value": "#5d0000",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/error/700"
-                }
-              ]
-            }
-          }
-        },
         "flag/dark": {
           "type": "BOOLEAN",
           "values": {
@@ -1274,7 +1274,7 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             },
@@ -1282,7 +1282,7 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             }
@@ -1456,14 +1456,14 @@
             }
           }
         },
-        "onError": {
+        "onDanger": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#fff6f5",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/050"
+                  "ref": "Graphite Primitives/danger/050"
                 }
               ]
             },
@@ -1471,20 +1471,20 @@
               "value": "#330000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/800"
+                  "ref": "Graphite Primitives/danger/800"
                 }
               ]
             }
           }
         },
-        "onErrorContainer": {
+        "onDangerContainer": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#0e0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/900"
+                  "ref": "Graphite Primitives/danger/900"
                 }
               ]
             },
@@ -1492,7 +1492,7 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             }
@@ -1813,17 +1813,6 @@
             }
           }
         },
-        "overlay": {
-          "type": "COLOR",
-          "values": {
-            "Light": {
-              "value": "#16161680"
-            },
-            "Dark": {
-              "value": "#161616b2"
-            }
-          }
-        },
         "primary": {
           "type": "COLOR",
           "values": {
@@ -1863,6 +1852,17 @@
                   "ref": "Graphite Primitives/accent/700"
                 }
               ]
+            }
+          }
+        },
+        "scrim": {
+          "type": "COLOR",
+          "values": {
+            "Light": {
+              "value": "#03030580"
+            },
+            "Dark": {
+              "value": "#030305b2"
             }
           }
         },
@@ -1908,7 +1908,7 @@
             }
           }
         },
-        "state/error-disabled": {
+        "state/danger-disabled": {
           "type": "COLOR",
           "values": {
             "Light": {
@@ -1929,7 +1929,7 @@
             }
           }
         },
-        "state/error-disabled-content": {
+        "state/danger-disabled-content": {
           "type": "COLOR",
           "values": {
             "Light": {
@@ -1950,14 +1950,14 @@
             }
           }
         },
-        "state/error-focus-ring": {
+        "state/danger-focus-ring": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#aa3428",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/500"
+                  "ref": "Graphite Primitives/danger/500"
                 }
               ]
             },
@@ -1965,20 +1965,20 @@
               "value": "#f07463",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/300"
+                  "ref": "Graphite Primitives/danger/300"
                 }
               ]
             }
           }
         },
-        "state/error-hover": {
+        "state/danger-hover": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#5d0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/700"
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             },
@@ -1986,20 +1986,20 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             }
           }
         },
-        "state/error-pressed": {
+        "state/danger-pressed": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#330000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/800"
+                  "ref": "Graphite Primitives/danger/800"
                 }
               ]
             },
@@ -2007,20 +2007,20 @@
               "value": "#fff6f5",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/050"
+                  "ref": "Graphite Primitives/danger/050"
                 }
               ]
             }
           }
         },
-        "state/error-selected": {
+        "state/danger-selected": {
           "type": "COLOR",
           "values": {
             "Light": {
               "value": "#5d0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/700"
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             },
@@ -2028,7 +2028,7 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             }
@@ -2769,6 +2769,27 @@
             }
           }
         },
+        "surfaceElevated": {
+          "type": "COLOR",
+          "values": {
+            "Light": {
+              "value": "#f8f8fc",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/050"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#2e2d31",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/700"
+                }
+              ]
+            }
+          }
+        },
         "surfaceVariant": {
           "type": "COLOR",
           "values": {
@@ -3445,11 +3466,11 @@
               "value": "#330000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/state/error-pressed",
+                  "ref": "Graphite Semantic/state/danger-pressed",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/800"
+                  "ref": "Graphite Primitives/danger/800"
                 }
               ]
             },
@@ -3457,11 +3478,11 @@
               "value": "#fff6f5",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/state/error-pressed",
+                  "ref": "Graphite Semantic/state/danger-pressed",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/050"
+                  "ref": "Graphite Primitives/danger/050"
                 }
               ]
             }
@@ -3474,11 +3495,11 @@
               "value": "#5d0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/state/error-hover",
+                  "ref": "Graphite Semantic/state/danger-hover",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/700"
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             },
@@ -3486,11 +3507,11 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/state/error-hover",
+                  "ref": "Graphite Semantic/state/danger-hover",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             }
@@ -3503,11 +3524,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -3515,11 +3536,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -3532,11 +3553,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -3544,11 +3565,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -5110,11 +5131,11 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/errorContainer",
+                  "ref": "Graphite Semantic/dangerContainer",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             },
@@ -5122,11 +5143,11 @@
               "value": "#5d0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/errorContainer",
+                  "ref": "Graphite Semantic/dangerContainer",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/700"
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             }
@@ -5139,11 +5160,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -5151,11 +5172,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -5400,11 +5421,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -5412,11 +5433,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -5429,7 +5450,7 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             },
@@ -5437,7 +5458,7 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             }
@@ -6876,11 +6897,11 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/errorContainer",
+                  "ref": "Graphite Semantic/dangerContainer",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             },
@@ -6888,11 +6909,11 @@
               "value": "#5d0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/errorContainer",
+                  "ref": "Graphite Semantic/dangerContainer",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/700"
+                  "ref": "Graphite Primitives/danger/700"
                 }
               ]
             }
@@ -6992,11 +7013,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -7004,11 +7025,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -7021,11 +7042,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -7033,11 +7054,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -7050,11 +7071,11 @@
               "value": "#0e0000",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/onErrorContainer",
+                  "ref": "Graphite Semantic/onDangerContainer",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/900"
+                  "ref": "Graphite Primitives/danger/900"
                 }
               ]
             },
@@ -7062,11 +7083,11 @@
               "value": "#ffd2ca",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/onErrorContainer",
+                  "ref": "Graphite Semantic/onDangerContainer",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/100"
+                  "ref": "Graphite Primitives/danger/100"
                 }
               ]
             }
@@ -7079,11 +7100,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -7091,11 +7112,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }
@@ -7572,11 +7593,11 @@
               "value": "#880c06",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/error/600"
+                  "ref": "Graphite Primitives/danger/600"
                 }
               ]
             },
@@ -7584,11 +7605,11 @@
               "value": "#ffa192",
               "aliasChain": [
                 {
-                  "ref": "Graphite Semantic/error",
+                  "ref": "Graphite Semantic/danger",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/error/200"
+                  "ref": "Graphite Primitives/danger/200"
                 }
               ]
             }

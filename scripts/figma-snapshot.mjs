@@ -38,7 +38,7 @@ const FILE_KEY = 'p2jyUgkFhJd6A5M7L39Ixo'
 // before the snapshot lands.
 const EXPECTED = new Map([
   ['Graphite Primitives', 80],
-  ['Graphite Semantic', 87],
+  ['Graphite Semantic', 88],
   ['Graphite Theme', 183],
   ['Graphite Layer', 6],
   ['Graphite Typography', 65],
