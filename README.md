@@ -97,3 +97,7 @@ request and every push to `main`: typecheck, drift check, token drift, and the
 token drift self-test. Each step runs even if an earlier one failed, because a
 contract change typically trips more than one. It deliberately does not run
 `next build`, since the Vercel deployment already does that on every PR.
+
+## License
+
+MIT. See [LICENSE](LICENSE). Commercial use included.
