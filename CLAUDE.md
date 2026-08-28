@@ -109,6 +109,26 @@ a browser result.
   Content switcher), Carbon's AI components, and Carbon idioms with no
   Graphite counterpart. Don't re-argue any of this per component: that
   piecemeal drift is exactly what #124 exists to stop.
+- **Navigation Menu is deliberately un-inverted, and that is settled.** #113
+  looked like the last open Wave 4 item and was not: rule 6 (#128) puts
+  Carbon's six UI shell sets out of scope by construction as application
+  shells, which leaves the kit *silent* on `navigation-menu.md` rather than
+  disagreeing with it, and rule 7's tie-break (#141) then says the code keeps
+  its own. It is kept rather than removed because it passes rule 6's demand
+  test where Separator, Avatar and Card failed it: `site-header.tsx` still
+  renders Carbon's `Header` / `HeaderNavigation` / `SideNav`, and step 1 of
+  `docs/SHADCN-MIGRATION.md` is de-Carboning exactly that. Contract went to
+  2.0.0 for the added "not an application shell" prohibition; the only code
+  change is the version docblock, which `drift-check` verifies against the
+  contract. Don't re-open this as deferred work.
+- **The demand test decides retention, not just adoption.** Rule 6's *"the repo
+  uses one, a contract references one, or committed work needs one"* is written
+  for ungoverned kit sets acquiring a contract, but it is also what sorted the
+  six governed components with no kit counterpart: Separator/Avatar/Card
+  removed, Label/Field absorbed, Navigation Menu kept. Typography (#96) is the
+  one it has not been run against. This is recorded in
+  `docs/contracts/README.md` as a description of what the merges did, and is
+  still unratified — #133 proposed the opposite and was never struck.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

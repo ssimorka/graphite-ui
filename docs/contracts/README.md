@@ -128,6 +128,15 @@ permanently rather than pending:
 
 - *Application shells* — UI shell Header / Left panel / Right panel, Tree view,
   Content switcher. These compose an application; they are not primitives.
+
+  This bullet also settles **Navigation Menu** (#113), which is why that issue
+  is not an open Wave 4 item. The six UI shell sets are the kit's only
+  navigation counterpart, and placing them out of scope here leaves the kit
+  *silent* on `navigation-menu.md` rather than in disagreement with it. Rule
+  7's tie-break then applies unchanged — where the kit has no opinion, the code
+  keeps its own — so there was never an inversion to perform. The two halves of
+  that argument were written days apart, in #128 and #141, and neither one
+  mentioned the other. Recorded in full in `navigation-menu.md`.
 - *Vendor features* — AI label, AI layer, AI explainability popover. Carbon's AI
   affordances, tied to IBM product decisions Graphite does not make. Dropping
   these also decides the fate of the `AI`, `AI presence` and `AI revert`
@@ -152,6 +161,34 @@ functionality stays findable.
 plausibly wants — Link, Search, Slider, Pagination, Date picker, Accordion.
 Ungoverned until something asks: the repo uses one, a contract references one,
 or committed work needs one. Wanting it in the abstract is not demand.
+
+### The demand test runs both ways
+
+The test above decides whether an ungoverned kit set *acquires* a contract. It
+reads just as well in the other direction, and #113 is the first place that
+mattered: it decides whether a governed component with no kit counterpart
+*keeps* one.
+
+That situation is not rare and is not a defect. Six components have been in it,
+and the same test sorts every one:
+
+| | Demand | Outcome |
+|---|---|---|
+| Separator, Avatar, Card | None — only the gallery composed them | **Removed** (#95, #97, #109) |
+| Label, Field | Real, but the kit answers it inside each form control | **Absorbed** (#94, #107) |
+| Navigation Menu | `site-header.tsx` is on Carbon's UI shell, and step 1 of `SHADCN-MIGRATION.md` replaces it | **Kept** (#113) |
+
+Label and Field are the case worth reading twice. Demand alone did not keep
+them: the kit had an opinion about where a label lives, rule 7 bit, and the
+demand was satisfied somewhere else. The test only decides retention once rule
+7 has found nothing to say.
+
+**This is a description, not yet a ratified rule.** #133 proposed the opposite
+corollary — that components with no kit counterpart stay code-only with their
+contracts authoritative — and five merges then went the other way without the
+proposal being struck. The table above is what those merges plus #113 actually
+did. Ratifying or replacing it is #133's job, and **Typography (#96) is the one
+member the test has not been run against.**
 
 ### What the rule decides today
 
@@ -231,7 +268,7 @@ Text input, Text area, Checkbox, Radio button group, Toggle, Select
 None. This wave held Field, which wrapped Label, an input atom and help/error text. Both were removed when the code took the kit's shape: the kit ships no standalone label and no field wrapper, so every form control carries its own label and supporting text. See #94 and #107.
 
 **Wave 4 — Layout & navigation**
-Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none.
+Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu is complete but was never inverted, because the kit is silent on it rather than in disagreement — see #113 and the application-shells bullet above.
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
 Overlay (internal: the shared pattern the other five implement), Tooltip, Popover, Menu, Modal, Notification
