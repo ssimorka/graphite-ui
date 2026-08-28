@@ -11,33 +11,46 @@ Primary CTA component. Use Primary for the main action on a screen, Secondary fo
 |---|---|
 | Style | Primary, Secondary, Ghost, Danger primary, Danger ghost |
 | Type | Text + Icon, Icon only |
-| Size | 2x large, Extra large, Large (default), Medium, Small |
+| Size | Expressive, 2x large, Extra large, Large (default), Medium, Small |
 | State | Enabled, Hover, Focus, Active, Disabled, Skeleton |
 
-Not every Style × Type × Size combination has a variant defined — Icon only is currently only built out at Extra large and Large. Check the component set in Figma before assuming a combination exists.
+258 variants. Not every Style × Type × Size × State combination exists — Icon only is not built out at every size. Check the component set in Figma before assuming a combination is there.
+
+## Geometry
+
+Read from the component set, not from the contract. The frame itself carries no padding or radius: layout lives in an inner `Button content` frame.
+
+| Size | Height | Font size / line-height |
+|---|---|---|
+| Small | 32px | 12 / 16 |
+| Medium | 42px | 14 / 20 |
+| Large | 50px | 14 / 20 |
+| Expressive | 50px | 16 / 24 |
+| Extra large | 66px | 14 / 20 |
+| 2x large | 82px | 14 / 20 |
+
+- **Padding** (`Button content`): `15px 64px 15px 16px`. The large right inset is deliberate — it is the space the trailing icon sits in, and it is what gives a Carbon button its left-aligned label rather than a centred one.
+- **Corner radius:** `0` on every variant.
+- **Gap:** `0`. The icon is positioned by the right padding, not by a gap.
+- **Icon:** 24×24 frame at the trailing edge, holding an icon instance (`fi-rs-plus-small` in the shipped variants).
 
 ## Tokens
 
-Resolved from the component set's bound variables. All are semantic/theme-tier — never bind to primitives directly.
+Resolved from the component set's bound variables — all semantic tier, never primitives. Names below are the Figma variable names; the token export prefixes these as `--cts-*`.
 
-| Token | Value (light) | Used for |
+| Style | Fill | Label |
 |---|---|---|
-| `--cts-primary` | `#4c2f93` | Primary style fill (Enabled) |
-| `--cts-primary-hover` | `#340b74` | Primary style fill (Hover) |
-| `--cts-primary-pressed` | `#1a0044` | Primary style fill (Active) |
-| `--cts-primary-disabled` | `#dedde2` | Primary/Secondary fill (Disabled) |
-| `--cts-on-primary` | `#f8f7ff` | Text/icon on Primary fill |
-| `--cts-secondary` | `#005543` | Secondary style border/text |
-| `--cts-secondary-hover` | `#00372a` | Secondary style (Hover) |
-| `--cts-secondary-pressed` | `#001c14` | Secondary style (Active) |
-| `--cts-error` | `#880c06` | Danger primary fill (Enabled) |
-| `--cts-error-hover` | `#5d0000` | Danger primary (Hover) |
-| `--cts-error-pressed` | `#330000` | Danger primary (Active) |
-| `--cts-focus-ring` | `#5e44aa` | Focus ring, all styles except danger |
-| `--cts-error-focus-ring` | `#aa3428` | Focus ring, danger styles |
-| `--cts-disabled-content` | `#808084` | Disabled label/icon color |
+| Primary | `primary` | `onPrimary` |
+| Secondary | `secondary` | `onPrimary` |
+| Ghost | `transparent` | `primary` |
+| Danger primary | `danger` | `onPrimary` |
+| Danger ghost | `transparent` | `danger` |
 
-**Typography:** bound to `family/font-2` (IBM Plex Sans), weight `weight/medium`. Font size steps with size: `16/24` (Large+), `14/20` (Medium), `12/16` (Small) — size/line-height in px.
+No style carries a stroke. Secondary is a **filled** style in the kit, not an outline.
+
+Interaction states resolve from the matching `state/*` roles — `state/primary-hover`, `state/primary-pressed`, `state/danger-hover`, and so on — plus `state/*-focus-ring` for focus and `state/*-disabled` / `state/*-disabled-content` for disabled.
+
+**Typography:** `family/font-2` (IBM Plex Sans), weight `weight/medium`.
 
 ## When to use
 
@@ -54,4 +67,4 @@ Resolved from the component set's bound variables. All are semantic/theme-tier �
 - Don't use Icon only without an accessible label (`aria-label` or equivalent) in code.
 
 ---
-*Generated from Figma component set `1854:1776` — regenerate if variant properties or tokens change.*
+*Generated from Figma component set `1854:1776`, 2026-08-28 — regenerate if variant properties or tokens change.*

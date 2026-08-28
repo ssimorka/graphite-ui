@@ -5,6 +5,25 @@ using the Graphite design system (`docs/tokens/figma-snapshot.json` in Figma,
 `--graphite-*` in code; the kit's written spec is the "00 Read Me" page,
 node `11678:251`).
 
+> **Amended 2026-08-28 — source of truth reversed.** This file was written when
+> code was canonical and the kit's component pages were to be regenerated from
+> it. That is no longer the direction. Governance rule 7 now states that where
+> the kit and a contract disagree, **the kit wins**, and the contract is
+> corrected to match.
+>
+> What survives: the four page targets, the shared foundation, and the build
+> order. Those describe the *site's* information architecture, which shadcn
+> still models well.
+>
+> What does not: any implication that components should move toward shadcn's
+> shape. **The site's components should look like the kit's.** Button went
+> first — square corners, Carbon's asymmetric `0 64px 0 16px` inset, a filled
+> secondary, `primary` as the ghost label — and its contract was corrected to
+> follow, not the other way round.
+>
+> The two hold together as long as the distinction does: shadcn-shaped
+> *pages*, kit-shaped *components*.
+
 | Target | Reference | Route | Status |
 |---|---|---|---|
 | Home | `ui.shadcn.com` | `/` | Exists, Carbon-styled. Restyle. |
@@ -44,7 +63,9 @@ the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
 2. Docs shell, then `/docs/installation`.
 3. `/docs/components/[slug]`. The API reference section comes from
    `docs/contracts/*.md`, which are already versioned and governed — an
-   advantage over shadcn, whose prop tables are hand-maintained.
+   advantage over shadcn, whose prop tables are hand-maintained. Note the
+   contracts now follow the kit rather than lead it, so a page generated from
+   them describes the kit at one remove.
 4. Home restyle.
 5. `/create`.
 
@@ -63,9 +84,10 @@ the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
   content to Skeleton. That leaves **Accordion** as the only new contract, and
   it is needed anyway because `faq.tsx` is on Carbon's today. Command palette
   is deferred with search.
-- **Font is still open.** The kit's 65 typography variables specify IBM Plex
-  and are drift-checked against the snapshot; the shadcn look is Inter/Geist.
-  Changing it is a deliberate divergence to record, not a silent edit.
+- **Font is settled by rule 7.** The kit's 65 typography variables specify IBM
+  Plex, so IBM Plex it is. This previously read as an open question between the
+  kit and shadcn's Inter/Geist; with the kit canonical there is no question to
+  answer.
 - Removing Carbon collapses `--cds-*` (56 vars, 124 references in
   `globals.scss`) into the single `--graphite-*` namespace, deleting the
   hand-listed binding table CLAUDE.md flags as driftable. Simplification, not

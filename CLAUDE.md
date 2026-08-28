@@ -80,6 +80,15 @@ a browser result.
   still the fourth ramp in the ramp stack and still drives `outline`, so
   that absence is intended, not an omission to repair. The ratio bar in
   `pattern-guide.tsx` reads the `secondary` / `onSecondary` roles to match.
+- **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
+  Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
+  disagree, the kit wins and the *contract* is corrected. Contracts are still
+  the written spec the code is checked against — `drift-check` is unchanged —
+  but they describe the kit rather than outrank it. The practical rule is that
+  the site's components should look like the kit's, which for Button meant
+  square corners, Carbon's asymmetric `0 64px 0 16px` inset, a filled
+  secondary, and `primary` as ghost's label. Don't reason from the old
+  precedence: both READMEs said "contracts win" until this date.
 - **Carbon-only sets in the kit are labelled, not deleted.** Governance
   rule 6 (`docs/contracts/README.md`, "Carbon-only sets in the kit") settles
   what happens to the 27 component pages no contract claims: a set is

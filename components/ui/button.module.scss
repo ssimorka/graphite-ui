@@ -12,14 +12,19 @@
   justify-content: center;
   gap: var(--graphite-space-02);
   border: 1px solid transparent;
-  border-radius: var(--graphite-radius-4);
+  // The kit is square-cornered on every Button variant.
+  border-radius: var(--graphite-radius-none);
   font: inherit;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
   // The touch target holds at every size, which is the rule Checkbox cites.
   min-height: var(--graphite-space-07);
-  padding: 0 var(--graphite-space-04);
+  // Kit `Button content` padding is 15px 64px 15px 16px. The horizontal
+  // values are the scale's space-05 and space-10; the large right inset is
+  // what left-aligns the label and reserves the trailing icon's slot. Vertical
+  // padding is not needed — the size classes set an explicit height.
+  padding: 0 var(--graphite-space-10) 0 var(--graphite-space-05);
   transition:
     background var(--graphite-motion-fast) var(--graphite-motion-ease),
     border-color var(--graphite-motion-fast) var(--graphite-motion-ease),
@@ -61,42 +66,42 @@
 .primary:hover:not(:disabled) { background: var(--graphite-primary-hover); }
 .primary:active:not(:disabled) { background: var(--graphite-primary-pressed); }
 
-// Secondary carries the secondary role rather than borrowing primary's. It
-// stays an outline at rest, so the one-primary-action hierarchy still reads
-// and the accent stays a line rather than a fill — secondary is the 10% of the
-// 60/30/10 rhythm, and this is the default variant. It fills on hover and
-// press, which is the same tone-step-on-its-own-ramp move primary makes.
+// Secondary is a filled style, which is what the kit binds: Style=Secondary
+// resolves its fill to `secondary` and its label to `onPrimary`. It used to be
+// an outline here, on the reasoning that the accent should stay a line rather
+// than a fill. The kit disagrees, and under governance rule 7 the kit wins.
+// The label stays `onPrimary` through hover and press — one label colour for
+// the variant, as the kit has it, rather than swapping to `onSecondary`.
 .secondary {
-  background: transparent;
-  color: var(--graphite-secondary);
-  border-color: var(--graphite-secondary);
+  background: var(--graphite-secondary);
+  color: var(--graphite-on-primary);
+  border-color: transparent;
 }
 
-// Ghost keeps the neutral tint. It is the quiet variant, so it should not pick
-// up an accent just because secondary did.
+// Ghost carries the accent as its label colour, which is what the kit binds:
+// Style=Ghost resolves its text to `primary`, not to a neutral.
 .ghost {
   background: transparent;
-  color: var(--graphite-on-surface);
+  color: var(--graphite-primary);
 }
 
 .secondary:hover:not(:disabled) {
   background: var(--graphite-secondary-hover);
   border-color: var(--graphite-secondary-hover);
-  color: var(--graphite-on-secondary);
 }
 
 .secondary:active:not(:disabled) {
   background: var(--graphite-secondary-pressed);
   border-color: var(--graphite-secondary-pressed);
-  color: var(--graphite-on-secondary);
 }
 
 .ghost:hover:not(:disabled),
 .ghost:active:not(:disabled) { background: var(--graphite-surface-variant); }
 
+// The kit binds Danger primary's label to `onPrimary`, not `onDanger`.
 .danger {
   background: var(--graphite-danger);
-  color: var(--graphite-on-danger);
+  color: var(--graphite-on-primary);
 }
 
 // Danger moves on its own ramp, the same tone-step logic primary uses. It had
@@ -105,9 +110,11 @@
 .danger:hover:not(:disabled) { background: var(--graphite-danger-hover); }
 .danger:active:not(:disabled) { background: var(--graphite-danger-pressed); }
 
-.sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
-.md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
-.lg { min-height: var(--graphite-space-09); font-size: 1rem; padding: 0 var(--graphite-space-05); }
+.sm { min-height: var(--graphite-space-07); font-size: 0.75rem; line-height: 1rem; }
+// Kit Medium is 42px and Large 50px — both two off the spacing scale, which
+// tops out at 40 and 48. Recorded as a kit fact rather than rounded away.
+.md { min-height: calc(var(--graphite-space-08) + 2px); font-size: 0.875rem; line-height: 1.25rem; }
+.lg { min-height: calc(var(--graphite-space-09) + 2px); font-size: 0.875rem; line-height: 1.25rem; }
 
 // Square, for a button whose whole content is an icon. Its accessible name
 // still has to come from somewhere — the contract forbids relying on the glyph.
