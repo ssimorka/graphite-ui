@@ -2,14 +2,14 @@
 
 import { useId } from 'react'
 import { Label } from './label'
-import styles from './switch.module.scss'
+import styles from './toggle.module.scss'
 
-/** Contract: docs/contracts/switch.md (1.3.0) */
-type SwitchProps = {
+/** Contract: docs/contracts/toggle.md (1.3.0) */
+type ToggleProps = {
   /** Supplied by Field when wrapped. Required when used on its own. */
   id?: string
   /**
-   * Supplied by Field when wrapped. Required otherwise — Switch throws without
+   * Supplied by Field when wrapped. Required otherwise — Toggle throws without
    * one, because the contract has no unlabelled control. Optional in the types
    * only so Field can inject it; the guard is what enforces it.
    *
@@ -24,19 +24,19 @@ type SwitchProps = {
   name?: string
 }
 
-export function Switch({
+export function Toggle({
   id,
   label,
   checked = false,
   disabled = false,
   onChange,
   name,
-}: SwitchProps) {
+}: ToggleProps) {
   const auto = useId()
   const inputId = id ?? auto
   if (!label) {
     throw new Error(
-      'Switch: a label is required (docs/contracts/switch.md). ' +
+      'Toggle: a label is required (docs/contracts/switch.md). ' +
         'Wrap it in a Field or pass label.',
     )
   }
@@ -65,6 +65,6 @@ export function Switch({
 
 
 // Field reads this to know the label belongs here rather than above the
-// control: Switch places its own, because its label sits beside the control
+// control: Toggle places its own, because its label sits beside the control
 // rather than over it. See docs/contracts/field.md.
-Switch.ownsLabel = true as const
+Toggle.ownsLabel = true as const

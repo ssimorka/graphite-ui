@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import styles from './alert.module.scss'
+import styles from './notification.module.scss'
 
-/** Contract: docs/contracts/alert.md (2.2.0) */
-type AlertProps = {
+/** Contract: docs/contracts/notification.md (2.2.0) */
+type NotificationProps = {
   body: ReactNode
   title?: string
   icon?: ReactNode
@@ -14,7 +14,7 @@ type AlertProps = {
  * toast. Toast is a Tier 2 component with its own timing contract, and this
  * one deliberately has no timing at all.
  */
-export function Alert({ body, title, icon, variant = 'info' }: AlertProps) {
+export function Notification({ body, title, icon, variant = 'info' }: NotificationProps) {
   return (
     <div
       className={`${styles.alert} ${styles[variant]}`}

@@ -1,5 +1,5 @@
 ---
-component: Dialog
+component: Modal
 version: 1.4.2
 wave: 5
 slots:
@@ -34,19 +34,19 @@ composition_rules:
   - Always traps focus, always returns focus to the trigger on close.
   - Footer follows Button's one-primary-action rule, same as Card, and is wrapped in the same ButtonGroup that enforces it.
 prohibitions:
-  - No Dialog opened from within another Dialog — stack depth of one.
+  - No Modal opened from within another Modal — stack depth of one.
 ---
 
 > **Shared Wave 5 overlay base** — quoted from the source document, applies to all five Wave 5 overlay components:
 >
 > All five below share one base pattern: a `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component). Define that shared base once as an internal "Overlay" contract, then each component below only needs to declare what's different.
 
-### Dialog
+### Modal
 - **Slots:** Title (required), body (required), footer actions (optional, typically Button).
 - **Props:** size (sm, md, lg), dismissible (boolean).
 - **Tokens:** `surface-elevated`, `on-surface` text, `outline` footer divider, and a full-screen `scrim` at a defined opacity over the base surface; the spacing scale for padding and size steps.
 - **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's one-primary-action rule, same as Card, wrapped in the same ButtonGroup that enforces it.
-- **Prohibitions:** No Dialog opened from within another Dialog — stack depth of one.
+- **Prohibitions:** No Modal opened from within another Modal — stack depth of one.
 
 ### How `scrim` resolves in the kit (#92)
 
@@ -66,7 +66,7 @@ split. Two things follow. The scrim tracks the source colour like every other
 role, where before it was the one role that stayed put while the rest moved.
 And the design question the split implied is answered: the scrim does deepen in
 dark, because the surface it veils is already dark and an equal alpha separates
-the Dialog from its background far less.
+the Modal from its background far less.
 
 It is emitted alongside the token map rather than inside it. A scrim has no
 `on-` partner and enters no contrast pairing, so putting it in `tokens` would

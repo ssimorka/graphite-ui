@@ -3,30 +3,30 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import type { ContractMeta } from '@/app/gallery/page'
-import { Alert } from '@/components/ui/alert'
+import { Notification } from '@/components/ui/notification'
 import { Avatar } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+import { Tag } from '@/components/ui/tag'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Dialog } from '@/components/ui/dialog'
-import { DropdownMenu } from '@/components/ui/dropdown-menu'
+import { Modal } from '@/components/ui/modal'
+import { Menu } from '@/components/ui/menu'
 import { Field } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { Item } from '@/components/ui/item'
+import { TextInput } from '@/components/ui/text-input'
+import { ContainedList } from '@/components/ui/contained-list'
 import { Label } from '@/components/ui/label'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Popover } from '@/components/ui/popover'
-import { Progress } from '@/components/ui/progress'
-import { RadioGroup } from '@/components/ui/radio-group'
+import { ProgressBar } from '@/components/ui/progress-bar'
+import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Select } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Switch } from '@/components/ui/switch'
-import { Table } from '@/components/ui/table'
-import type { Sort } from '@/components/ui/table'
+import { Toggle } from '@/components/ui/toggle'
+import { DataTable } from '@/components/ui/data-table'
+import type { Sort } from '@/components/ui/data-table'
 import { Tabs } from '@/components/ui/tabs'
-import { Textarea } from '@/components/ui/textarea'
+import { TextArea } from '@/components/ui/text-area'
 import { Tooltip } from '@/components/ui/tooltip'
 import { Typography } from '@/components/ui/typography'
 import styles from './gallery.module.scss'
@@ -101,7 +101,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </p>
 
       <Wave n="0">
-        <Specimen name="Button" note="One primary action per group — a Card or Dialog footer refuses a second, and destructive work takes danger rather than primary.">
+        <Specimen name="Button" note="One primary action per group — a Card or Modal footer refuses a second, and destructive work takes danger rather than primary.">
           <Button variant="primary">Primary</Button>
           <Button>Secondary</Button>
           <Button variant="ghost">Ghost</Button>
@@ -126,7 +126,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
         <Specimen name="Label" note="Always bound to exactly one control; Field is what normally supplies the pairing.">
           <div className={styles.stack}>
             <Label htmlFor="g-label" required>Label with required indicator</Label>
-            <Input id="g-label" required placeholder="The control it names" />
+            <TextInput id="g-label" required placeholder="The control it names" />
           </div>
         </Specimen>
         <Specimen name="Separator" note="Structural only — it carries no margin, because spacing belongs to the layout that places it.">
@@ -151,33 +151,33 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           <Swatch label="image"><Avatar initials="GR" size="lg" src="/graphite/eye.jpg" alt="Halftone eye from the Graphite kit" /></Swatch>
           <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,AAAA" alt="broken source" /></Swatch>
         </Specimen>
-        <Specimen name="Badge" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
-          <Badge>neutral</Badge>
-          <Badge variant="primary">primary</Badge>
-          <Badge variant="danger">danger</Badge>
-          <Badge variant="warning">warning</Badge>
-          <Badge variant="success">success</Badge>
-          <Badge>{1200}</Badge>
+        <Specimen name="Tag" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
+          <Tag>neutral</Tag>
+          <Tag variant="primary">primary</Tag>
+          <Tag variant="danger">danger</Tag>
+          <Tag variant="warning">warning</Tag>
+          <Tag variant="success">success</Tag>
+          <Tag>{1200}</Tag>
         </Specimen>
-        <Specimen name="Progress">
+        <Specimen name="Progress bar">
           <div className={styles.stack}>
-            <Progress value={62} label="Determinate example" />
-            <Progress variant="indeterminate" label="Indeterminate example" />
+            <ProgressBar value={62} label="Determinate example" />
+            <ProgressBar variant="indeterminate" label="Indeterminate example" />
           </div>
         </Specimen>
       </Wave>
 
       <Wave n="2">
-        <Specimen name="Input">
+        <Specimen name="Text input">
           <div className={styles.stack}>
-            <Input id="g-in" placeholder="Default" />
-            <Input id="g-in-e" state="error" defaultValue="Error state" />
-            <Input id="g-in-d" state="disabled" defaultValue="Disabled" />
+            <TextInput id="g-in" placeholder="Default" />
+            <TextInput id="g-in-e" state="error" defaultValue="Error state" />
+            <TextInput id="g-in-d" state="disabled" defaultValue="Disabled" />
           </div>
         </Specimen>
-        <Specimen name="Textarea">
+        <Specimen name="Text area">
           <div className={styles.stack}>
-            <Textarea id="g-ta" defaultValue="Resizes vertically only." />
+            <TextArea id="g-ta" defaultValue="Resizes vertically only." />
           </div>
         </Specimen>
         <Specimen name="Checkbox" note="Indeterminate is a distinct glyph, not a recolored check.">
@@ -187,8 +187,8 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             <Checkbox id="g-cb3" label="Disabled" disabled />
           </div>
         </Specimen>
-        <Specimen name="Radio Group" note="A group legend is required; option labels alone are not enough.">
-          <RadioGroup
+        <Specimen name="Radio button group" note="A group legend is required; option labels alone are not enough.">
+          <RadioButtonGroup
             name="g-radio"
             label="Group legend"
             value={radio}
@@ -200,8 +200,8 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             ]}
           />
         </Specimen>
-        <Specimen name="Switch" note="Labels name the setting, never the state.">
-          <Switch id="g-sw" label="Notifications" checked={switched} onChange={setSwitched} />
+        <Specimen name="Toggle" note="Labels name the setting, never the state.">
+          <Toggle id="g-sw" label="Notifications" checked={switched} onChange={setSwitched} />
         </Specimen>
         <Specimen name="Select" note="A native select, so type-ahead and arrow keys survive.">
           <div className={styles.stack}>
@@ -220,8 +220,8 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       <Wave n="3">
         <Specimen name="Field" note="Error text forces the child into its error state — the two cannot be shown apart.">
           <div className={styles.stack}>
-            <Field id="g-f1" label="Email" helpText="We never share it."><Input type="email" /></Field>
-            <Field id="g-f2" label="Password" errorText="Too short."><Input type="password" /></Field>
+            <Field id="g-f1" label="Email" helpText="We never share it."><TextInput type="email" /></Field>
+            <Field id="g-f2" label="Password" errorText="Too short."><TextInput type="password" /></Field>
           </div>
         </Specimen>
       </Wave>
@@ -236,14 +236,14 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             />
           </div>
         </Specimen>
-        <Specimen name="Item" note="The row primitive Table composes from — its hover is the same token Table uses.">
+        <Specimen name="Contained list" note="The row primitive DataTable composes from — its hover is the same token DataTable uses.">
           <div className={styles.stack}>
-            <Item
+            <ContainedList
               interactive
               leading={<Avatar initials="AD" size="sm" />}
-              title="Item title"
-              description="Item description"
-              trailing={<Badge variant="success">ok</Badge>}
+              title="ContainedList title"
+              description="ContainedList description"
+              trailing={<Tag variant="success">ok</Tag>}
             />
           </div>
         </Specimen>
@@ -289,8 +289,8 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             <Typography>Interactive content is allowed here.</Typography>
           </Popover>
         </Specimen>
-        <Specimen name="Dropdown Menu" note="Destructive items never read as neutral ones.">
-          <DropdownMenu
+        <Specimen name="Menu" note="Destructive items never read as neutral ones.">
+          <Menu
             trigger={(p) => <Button {...p}>Open menu</Button>}
             items={[
               { label: 'Rename', onSelect: () => {} },
@@ -299,29 +299,29 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             ]}
           />
         </Specimen>
-        <Specimen name="Dialog" note="Traps focus, returns it to the trigger on close, and never stacks.">
+        <Specimen name="Modal" note="Traps focus, returns it to the trigger on close, and never stacks.">
           <Button variant="primary" onClick={() => setDialogOpen(true)}>Open dialog</Button>
-          <Dialog
+          <Modal
             open={dialogOpen}
             onClose={() => setDialogOpen(false)}
-            title="Dialog title"
-            body={<Typography>Dialog body content.</Typography>}
+            title="Modal title"
+            body={<Typography>Modal body content.</Typography>}
             footer={<Button variant="primary" onClick={() => setDialogOpen(false)}>Close</Button>}
           />
         </Specimen>
-        <Specimen name="Alert" note="Inline and persistent — not a toast, which is Tier 2 with its own timing contract.">
+        <Specimen name="Notification" note="Inline and persistent — not a toast, which is Tier 2 with its own timing contract.">
           <div className={styles.stack}>
-            <Alert variant="info" title="Info" body="Informational alert." />
-            <Alert variant="danger" title="Danger" body="Danger alert." />
-            <Alert variant="warning" body="Warning alert." />
-            <Alert variant="success" body="Success alert." />
+            <Notification variant="info" title="Info" body="Informational alert." />
+            <Notification variant="danger" title="Danger" body="Danger alert." />
+            <Notification variant="warning" body="Warning alert." />
+            <Notification variant="success" body="Success alert." />
           </div>
         </Specimen>
       </Wave>
 
       <Wave n="6">
-        <Specimen name="Table" note="Sticky headers survive scroll, and row hover is Item's token rather than a table-specific highlight.">
-          <Table<Row>
+        <Specimen name="Data table" note="Sticky headers survive scroll, and row hover is ContainedList's token rather than a table-specific highlight.">
+          <DataTable<Row>
             caption="Members"
             columns={[
               {
@@ -329,7 +329,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
                 header: 'Name',
                 sortable: true,
                 render: (r) => (
-                  <Item leading={<Avatar initials={r.name.slice(0, 2)} size="sm" />} title={r.name} />
+                  <ContainedList leading={<Avatar initials={r.name.slice(0, 2)} size="sm" />} title={r.name} />
                 ),
               },
               { key: 'role', header: 'Role', sortable: true },

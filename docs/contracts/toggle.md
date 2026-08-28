@@ -1,5 +1,5 @@
 ---
-component: Switch
+component: Toggle
 version: 1.3.0
 wave: 2
 slots:
@@ -23,12 +23,12 @@ tokens:
 composition_rules:
   - Label text describes the state being controlled ("Notifications"), not the state itself ("On/Off") — the switch position already communicates that.
 prohibitions:
-  - No switch used for an action that isn't reversible immediately — that's a Button's job, not a Switch's.
+  - No switch used for an action that isn't reversible immediately — that's a Button's job, not a Toggle's.
 ---
 
-### Switch
+### Toggle
 - **Slots:** Label (required, describes the setting being toggled).
 - **Props:** checked, disabled.
 - **Tokens:** `primary` fill when on, `outline` fill when off — same tone-step logic as Button's active state, not a separate green/gray convention — with `surface` for the thumb and the spacing scale for track dimensions.
 - **Composition rules:** Label text describes the state being controlled ("Notifications"), not the state itself ("On/Off") — the switch position already communicates that.
-- **Prohibitions:** No switch used for an action that isn't reversible immediately — that's a Button's job, not a Switch's.
+- **Prohibitions:** No switch used for an action that isn't reversible immediately — that's a Button's job, not a Toggle's.

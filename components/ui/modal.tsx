@@ -4,12 +4,12 @@ import { createContext, useContext, useId } from 'react'
 import type { ReactNode } from 'react'
 import { ButtonGroup } from './button-group'
 import { useOverlay } from './overlay'
-import styles from './dialog.module.scss'
+import styles from './modal.module.scss'
 
 const InsideDialog = createContext(false)
 
-/** Contract: docs/contracts/dialog.md (1.4.2) */
-type DialogProps = {
+/** Contract: docs/contracts/modal.md (1.4.2) */
+type ModalProps = {
   open: boolean
   onClose: () => void
   title: string
@@ -21,7 +21,7 @@ type DialogProps = {
   dismissible?: boolean
 }
 
-export function Dialog({
+export function Modal({
   open,
   onClose,
   title,
@@ -29,22 +29,22 @@ export function Dialog({
   footer,
   size = 'md',
   dismissible = true,
-}: DialogProps) {
+}: ModalProps) {
   const id = useId()
   const nested = useContext(InsideDialog)
 
   // Stack depth of one, enforced. Like Popover, this fires when the inner
-  // Dialog opens rather than at build time, since a closed Dialog renders
+  // Modal opens rather than at build time, since a closed Modal renders
   // nothing for prerendering to inspect.
   if (nested) {
     throw new Error(
-      'Dialog: a Dialog may not be opened from within another Dialog — ' +
+      'Modal: a Modal may not be opened from within another Modal — ' +
         'stack depth is one (docs/contracts/dialog.md).',
     )
   }
 
   // Always traps focus, and the shared base always returns focus to the
-  // trigger on close. Neither is optional for a Dialog.
+  // trigger on close. Neither is optional for a Modal.
   const ref = useOverlay<HTMLDivElement>({
     open,
     onDismiss: onClose,

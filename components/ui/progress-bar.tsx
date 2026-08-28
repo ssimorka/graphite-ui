@@ -1,7 +1,7 @@
-import styles from './progress.module.scss'
+import styles from './progress-bar.module.scss'
 
-/** Contract: docs/contracts/progress.md (1.2.0) */
-type ProgressProps = {
+/** Contract: docs/contracts/progress-bar.md (1.2.0) */
+type ProgressBarProps = {
   /** 0-100. Ignored, and omitted from ARIA, when indeterminate. */
   value?: number
   variant?: 'determinate' | 'indeterminate'
@@ -14,11 +14,11 @@ type ProgressProps = {
 
 const clamp = (n: number) => Math.min(100, Math.max(0, n))
 
-export function Progress({
+export function ProgressBar({
   value = 0,
   variant = 'determinate',
   label,
-}: ProgressProps) {
+}: ProgressBarProps) {
   const determinate = variant === 'determinate'
   const pct = clamp(value)
 

@@ -2,7 +2,7 @@
 
 import { cloneElement } from 'react'
 import type { ReactElement } from 'react'
-import type { FieldState } from './input'
+import type { FieldState } from './text-input'
 import { Label } from './label'
 import styles from './field.module.scss'
 
@@ -14,7 +14,7 @@ type FieldProps = {
    * Any input-family atom. Field always owns the label *content*; where that
    * content is rendered depends on the atom.
    *
-   * Input and Textarea take a label above the control, so Field renders one.
+   * TextInput and Textarea take a label above the control, so Field renders one.
    * Checkbox, Switch, Select and Radio Group place theirs in their own shape
    * and mark themselves with a static `ownsLabel`; for those Field passes the
    * text down rather than rendering a second label.

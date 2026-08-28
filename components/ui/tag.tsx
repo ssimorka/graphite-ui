@@ -1,7 +1,7 @@
-import styles from './badge.module.scss'
+import styles from './tag.module.scss'
 
-/** Contract: docs/contracts/badge.md (2.2.0) */
-type BadgeProps = {
+/** Contract: docs/contracts/tag.md (2.2.0) */
+type TagProps = {
   /** Short text, or a number to be capped at `max`. */
   children: string | number
   variant?: 'neutral' | 'primary' | 'danger' | 'warning' | 'success'
@@ -9,7 +9,7 @@ type BadgeProps = {
   max?: number
 }
 
-export function Badge({ children, variant = 'neutral', max = 99 }: BadgeProps) {
+export function Tag({ children, variant = 'neutral', max = 99 }: TagProps) {
   const overflowed = typeof children === 'number' && children > max
   const label = overflowed ? `${max}+` : children
 

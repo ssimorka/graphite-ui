@@ -1,16 +1,16 @@
 'use client'
 
 import type { InputHTMLAttributes, ReactNode } from 'react'
-import styles from './input.module.scss'
+import styles from './text-input.module.scss'
 
 export type FieldState = 'default' | 'disabled' | 'error' | 'invalid'
 export type FieldSize = 'sm' | 'md' | 'lg'
 
-/** Contract: docs/contracts/input.md (1.3.0) */
-type InputProps = {
+/** Contract: docs/contracts/text-input.md (1.3.0) */
+type TextInputProps = {
   /**
    * Supplied by Field when wrapped, which is the composition the contract
-   * expects. Pass it explicitly only when using Input on its own — and then a
+   * expects. Pass it explicitly only when using TextInput on its own — and then a
    * Label still has to associate with it.
    */
   id?: string
@@ -26,14 +26,14 @@ type InputProps = {
   trailing?: ReactNode
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'id'>
 
-export function Input({
+export function TextInput({
   id,
   size = 'md',
   state = 'default',
   leading,
   trailing,
   ...rest
-}: InputProps) {
+}: TextInputProps) {
   const errored = state === 'error' || state === 'invalid'
 
   return (

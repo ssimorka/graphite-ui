@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import styles from './item.module.scss'
+import styles from './contained-list.module.scss'
 
-/** Contract: docs/contracts/item.md (1.2.0) */
-type ItemProps = {
+/** Contract: docs/contracts/contained-list.md (1.2.0) */
+type ContainedListProps = {
   /** Typography by convention; the row does not impose a variant on it. */
   title: ReactNode
   /** Avatar or icon. */
@@ -19,14 +19,14 @@ type ItemProps = {
   interactive?: boolean
 }
 
-export function Item({
+export function ContainedList({
   title,
   leading,
   description,
   trailing,
   density = 'default',
   interactive = false,
-}: ItemProps) {
+}: ContainedListProps) {
   return (
     <div
       className={`${styles.item} ${styles[density]} ${interactive ? styles.interactive : ''}`}

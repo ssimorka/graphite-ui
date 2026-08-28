@@ -1,5 +1,5 @@
 ---
-component: Input
+component: Text input
 version: 1.3.0
 wave: 2
 slots:
@@ -31,14 +31,14 @@ tokens:
   - name: spacing
     usage: Field padding and height steps.
   - name: radius
-    usage: Field corner. Inherited by Select and Textarea.
+    usage: Field corner. Inherited by Select and Text area.
 composition_rules:
   - Focus state border is always a tone-step move on `primary`, matching the hover logic already proven on Button.
 prohibitions:
   - No placeholder text used as a label substitute — Label is required in the Field composition (Wave 3), never optional as a stand-in.
 ---
 
-### Input
+### Text input
 - **Slots:** None beyond the value itself. Leading/trailing icon optional.
 - **Props:** type (text, email, password, number, etc.), size (sm, md, lg), state (default, focus, disabled, error, invalid).
 - **Tokens:** `surface` background, `on-surface` value text, `outline` border at rest, `primary` border on focus (tone-step, not a new color), `danger` for the error border; the spacing scale for padding and height.

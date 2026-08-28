@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import styles from './table.module.scss'
+import styles from './data-table.module.scss'
 
 export type Column<T> = {
   key: string
@@ -14,8 +14,8 @@ export type Column<T> = {
 
 export type Sort = { key: string; direction: 'asc' | 'desc' }
 
-/** Contract: docs/contracts/table.md (1.2.0) */
-type TableProps<T> = {
+/** Contract: docs/contracts/data-table.md (1.2.0) */
+type DataTableProps<T> = {
   /** Names the table for assistive tech. Not optional. */
   caption: string
   columns: [Column<T>, ...Column<T>[]]
@@ -27,7 +27,7 @@ type TableProps<T> = {
   footer?: ReactNode
 }
 
-export function Table<T>({
+export function DataTable<T>({
   caption,
   columns,
   rows,
@@ -36,7 +36,7 @@ export function Table<T>({
   sort,
   onSortChange,
   footer,
-}: TableProps<T>) {
+}: DataTableProps<T>) {
   return (
     // The scroll container is part of the component, not the caller's problem:
     // the sticky header below only works if the overflow lives here.

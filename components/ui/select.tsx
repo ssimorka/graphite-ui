@@ -1,7 +1,7 @@
 'use client'
 
 import { useId } from 'react'
-import type { FieldSize } from './input'
+import type { FieldSize } from './text-input'
 import { Label } from './label'
 import styles from './select.module.scss'
 

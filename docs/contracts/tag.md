@@ -1,5 +1,5 @@
 ---
-component: Badge
+component: Tag
 version: 2.2.0
 wave: 1
 slots:
@@ -40,7 +40,7 @@ prohibitions:
   - No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex.
 ---
 
-### Badge
+### Tag
 - **Slots:** Label (required, short text or number).
 - **Props:** variant (neutral, primary, danger, warning, success).
 - **Tokens:** `primary` with `on-primary` for the emphasis variant, `on-surface`/`surface` for neutral, and `danger-container`/`warning-container`/`success-container` with the matching `on-*-container` for status variants.

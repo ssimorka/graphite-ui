@@ -1,25 +1,25 @@
 ---
-component: Textarea
+component: Text area
 version: 1.0.0
 wave: 2
-inherits: Input
+inherits: Text input
 slots:
-  - inherited_from: Input
+  - inherited_from: Text input
 props:
-  - inherited_from: Input
+  - inherited_from: Text input
   - name: resize
     values: [vertical, none]
     notes: Never horizontal, which breaks layout containers.
 tokens:
-  - inherited_from: Input
+  - inherited_from: Text input
 composition_rules:
-  - inherited_from: Input
+  - inherited_from: Text input
 prohibitions:
-  - inherited_from: Input
+  - inherited_from: Text input
   - No auto-resize beyond a defined max-height without an explicit scroll affordance.
 ---
 
-### Textarea
-- Same contract as Input, with one addition:
+### Text area
+- Same contract as Text input, with one addition:
 - **Props:** resize (vertical, none) — never horizontal, which breaks layout containers.
 - **Prohibitions:** No auto-resize beyond a defined max-height without an explicit scroll affordance.
