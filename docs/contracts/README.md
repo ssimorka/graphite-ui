@@ -23,7 +23,42 @@ is a bug in the contract, not in Figma.
 4. A drift check script reads each contract's declared token dependencies and verifies the component's actual code references those exact variable names, nothing else. Fails the build on mismatch.
 5. Figma components carry the contract version number in their description field, so anyone opening the file knows which spec they're looking at.
 6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. See "Carbon-only sets in the kit" below.
-7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. See the governance model above.
+7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. Where **the kit disagrees with itself**, the more specific artefact wins; where the kit has **no opinion**, the code keeps its own. See "When the kit is not of one mind" below.
+
+### When the kit is not of one mind
+
+Rule 7 settles kit-versus-contract. It does not settle kit-versus-kit, and that
+came up three times in the first pass of bringing components across, so the
+tie-break is written down rather than re-derived.
+
+**The more specific artefact wins.** A component set beats a token specimen; a
+variable authored to name particular components beats a binding those
+components inherited from Carbon. Specificity here means "closer to the thing
+being decided", not "more recently edited".
+
+- The type specimen (node `11444:9897`) names `Input Label` as 12/12. Every
+  form component renders its label at 12/16. The components won — they are
+  what the label actually looks like. See #137.
+- `surfaceElevated`'s description reads *"Shared overlay surface: Tooltip,
+  Popover, Dropdown Menu, Dialog"*, while those same Carbon component sets fill
+  with `Layer/layer-01`, which resolves to `surface`. The variable won — it was
+  authored for those four in #92, where the bindings are un-migrated Carbon.
+  See #139 and `overlay.md`.
+
+**Where the kit has no opinion, the code keeps its own.** This is not a
+disagreement and rule 7 does not reach it. The kit models static frames, so it
+says nothing about behaviour the code has and Figma cannot express.
+
+- Data table's header cell is transparent in the kit. The code's header is
+  `position: sticky`, and a transparent sticky header lets rows scroll through
+  it. The kit does not model scrolling, so `surface` stays. See #140.
+- Hover, focus and pressed are variant axes in the kit and pseudo-classes in
+  code. A `State=Hover` variant is not an instruction to add a `hover` prop.
+
+**Record the call, don't just make it.** Every one of these lives in the
+contract or the stylesheet it affects, next to the value it explains. A
+divergence nobody wrote down reads as a mistake to the next person, and gets
+"fixed" back.
 
 This is a solo-maintainer model. It doesn't require review gates, just a fixed place where truth lives and a script that checks reality against it.
 
