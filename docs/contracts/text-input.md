@@ -44,6 +44,8 @@ tokens:
     usage: Field padding and height steps.
   - name: radius
     usage: Field corner. Inherited by Select and Text area.
+  - name: on-surface-variant
+    usage: Label and helper text, which the kit binds to onSurfaceVariant rather than onSurface.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Focus state border is always a tone-step move on `primary`, matching the hover logic already proven on Button.

@@ -6,8 +6,11 @@
 // each form component. These mixins are what stops that absorption turning
 // into the same twenty lines copied into six stylesheets.
 //
-// Type sizes come from the kit's type specimen (node 11444:9897), which names
-// `Input Label` and `Helper Text` both at 12/12.
+// Type comes from the kit's components rather than from its type specimen.
+// The specimen names `Input Label` and `Helper Text` as 12/12, but every form
+// component actually renders its label and helper at 12/16 — Checkbox, Radio
+// button, Toggle, Text input and Text area all agree. The component set is the
+// more specific authority, so 16 wins.
 
 @mixin field-stack {
   display: flex;
@@ -23,9 +26,11 @@
   display: inline-flex;
   align-items: baseline;
   gap: var(--graphite-space-02);
-  color: var(--graphite-on-surface);
+  // onSurfaceVariant, not onSurface: it is what the kit binds on every form
+  // component's Label and Helper text.
+  color: var(--graphite-on-surface-variant);
   font-size: 0.75rem;
-  line-height: 1;
+  line-height: 1.3333;
   font-weight: 500;
 }
 
@@ -35,9 +40,9 @@
 }
 
 @mixin field-help {
-  color: var(--graphite-on-surface);
+  color: var(--graphite-on-surface-variant);
   font-size: 0.75rem;
-  line-height: 1;
+  line-height: 1.3333;
 }
 
 // Error text takes the same `danger` role as the control's error border, so
@@ -45,5 +50,5 @@
 @mixin field-error {
   color: var(--graphite-danger);
   font-size: 0.75rem;
-  line-height: 1;
+  line-height: 1.3333;
 }

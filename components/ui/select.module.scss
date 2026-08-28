@@ -19,7 +19,7 @@
   width: 100%;
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-4);
+  border-radius: var(--graphite-radius-none);
 }
 
 .wrap:focus-within {
@@ -40,7 +40,7 @@
   background: transparent;
   color: var(--graphite-on-surface);
   font: inherit;
-  padding: 0 var(--graphite-space-08) 0 var(--graphite-space-04);
+  padding: 0 var(--graphite-space-08) 0 var(--graphite-space-05);
   cursor: pointer;
 }
 

@@ -32,6 +32,10 @@ tokens:
     usage: Group label text.
   - name: spacing
     usage: Control size and the gap between options.
+  - name: on-surface-variant
+    usage: Label and helper text, which the kit binds to onSurfaceVariant rather than onSurface.
+  - name: danger
+    usage: Error text, taking the same role as the control's error border so the two cannot drift apart.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Exactly one option selected at a time within a group is enforced by the component, not left to implementation.

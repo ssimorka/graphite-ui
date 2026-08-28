@@ -49,8 +49,9 @@
 }
 
 .dot {
-  width: var(--graphite-space-05);
-  height: var(--graphite-space-05);
+  // 20px, matching Checkbox and the kit.
+  width: 20px;
+  height: 20px;
   border: 1px solid var(--graphite-outline);
   border-radius: 50%;
   pointer-events: none;
