@@ -38,7 +38,7 @@ tokens:
   - name: radius
     usage: Corner. The kit is square-cornered, so this resolves to `radius-none`.
 composition_rules:
-  - "One primary action per group. A group of buttons — a Card footer, a Modal footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Card and Modal wrap their footers in it."
+  - "One primary action per group. A group of buttons — a Modal footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Modal wraps its footer in it."
   - Hover and pressed are tone-step moves on the same ramp as the resting fill, never a different color. This is the logic Text input's focus border, Toggle's on state, and Menu's item hover all refer back to.
   - Never smaller than the defined minimum touch target, whatever the size prop. Checkbox refers back to this.
   - Variants are declared once as a recipe and exported, so a sibling component can render something button-shaped without restating the rules or forking the styles.
@@ -70,8 +70,8 @@ the component API conventions in `README.md`.
   trailing icon's slot, and heights of 32/42/50 for sm/md/lg. Medium and Large
   sit two pixels off the spacing scale; that is a kit fact, recorded rather
   than rounded away.
-- **Composition rules:** One primary action per group — a Card footer, a Modal
-  footer or a toolbar may hold at most one, and ButtonGroup enforces it. Hover
+- **Composition rules:** One primary action per group — a Modal footer or a
+  toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new
   color; this is the logic Text input's focus border, Toggle's on state and Dropdown
   Menu's item hover all refer back to. The minimum touch target holds at every

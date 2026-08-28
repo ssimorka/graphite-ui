@@ -10,7 +10,6 @@ import {
 import { Dropdown } from '@carbon/react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
-import { Avatar } from '@/components/ui/avatar'
 
 const HUE_GRADIENT =
   'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))'
@@ -182,6 +181,8 @@ export function ColorPickerPopover({
   onChange: (hex: string) => void
 }) {
   const [open, setOpen] = useState(false)
+  // Was Avatar's internal state before Avatar was removed.
+  const [chipFailed, setChipFailed] = useState(false)
   const [input, setInput] = useState(value || '#0f62fe')
   const { level, setLevel, lightBundle, darkBundle } = useTheme()
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -250,23 +251,37 @@ export function ColorPickerPopover({
         onClick={() => setOpen((o) => !o)}
       >
         <span className="site-header__source-label">Pick a color</span>
-        {/* The visitor's own chip, built from Avatar rather than a bare span so
-            the header uses the component the system ships. The source colour is
-            already carried by the block behind this, so the chip is free to be
-            the kit's face. It rides in as a custom property anyway, because it
-            is what the initials fall back onto if the image fails: Avatar takes
-            a className and not a style, so the tint stays in the stylesheet. */}
+        {/* The visitor's own chip. This was an Avatar until Avatar was removed
+            for having no counterpart in the kit; the markup is inlined rather
+            than replaced with a bare swatch, because the initials fallback is
+            the part worth keeping. The source colour rides in as a custom
+            property because it is what the initials land on when the image
+            fails. */}
         <span
           aria-hidden="true"
           className="site-header__source-avatar"
           style={{ ['--source-swatch' as string]: swatchColor }}
         >
-          <Avatar
-            initials="GU"
-            src="/graphite/eye.jpg"
-            size="sm"
-            className="site-header__source-chip"
-          />
+          <span className="site-header__source-chip">
+            {chipFailed ? (
+              <span className="site-header__source-initials">GU</span>
+            ) : (
+              <img
+                className="site-header__source-image"
+                src="/graphite/eye.jpg"
+                alt=""
+                // Server-rendered markup starts loading before React hydrates,
+                // so an image that fails early fires its error event with no
+                // handler attached and onError never runs. A complete image
+                // with no intrinsic width has already failed, so re-check on
+                // mount. Carried over from Avatar, where it was load-bearing.
+                ref={(node) => {
+                  if (node?.complete && node.naturalWidth === 0) setChipFailed(true)
+                }}
+                onError={() => setChipFailed(true)}
+              />
+            )}
+          </span>
         </span>
       </button>
 

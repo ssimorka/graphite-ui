@@ -14,7 +14,7 @@ tokens:
     usage: Gap between actions.
 composition_rules:
   - "Enforces Button's one-primary-action rule by refusing to render: more than one child with `variant=\"primary\"` throws, naming the count and pointing at this contract. The rule is checked, not documented and hoped for."
-  - Card and Modal wrap their footers in this rather than trusting each caller, so the rule holds wherever a footer is used instead of only where someone remembers it.
+  - Modal wraps its footer in this rather than trusting each caller, so the rule holds wherever a footer is used instead of only where someone remembers it.
   - Horizontal by definition. A vertical stack of actions is a layout decision belonging to whatever contains the group.
 prohibitions:
   - No second primary. The check is a throw rather than a warning, because a silently-wrong emphasis hierarchy is the failure this component exists to prevent.
@@ -38,7 +38,7 @@ file.
   color of its own: a group is an arrangement, and the buttons inside it carry
   every visual decision.
 - **Composition rules:** More than one child with `variant="primary"` throws.
-  Card and Modal wrap their footers in this, so the rule holds wherever a
+  Modal wraps its footer in this, so the rule holds wherever a
   footer is used. Horizontal by definition.
 - **Prohibitions:** No second primary. No orientation prop. No per-instance
   spacing override.

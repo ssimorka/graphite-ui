@@ -136,9 +136,11 @@ shadcn; the styling does not — variants resolve to CSS module classes on
    happened to need.
 4. **`asChild` renders onto the child** instead of emitting a wrapper, for the
    cases where a button must actually be a link.
-5. **Multi-part components export their parts** — `Card`, `CardHeader`,
-   `CardTitle`, `CardContent`, `CardFooter` — rather than taking slots as
-   props. Composition happens in JSX, where a caller can see it.
+5. **Multi-part components export their parts** rather than taking slots as
+   props, so composition happens in JSX where a caller can see it. Card was
+   the illustration here — `Card`, `CardHeader`, `CardTitle`, `CardContent`,
+   `CardFooter` — and has since been removed for having no counterpart in the
+   kit. The convention outlives the example.
 6. **Every part carries `data-slot`**, so a page can target a component's
    internals from outside without depending on generated class names.
 7. **Motion comes from the shared tokens.** Components move on the same curve
@@ -160,7 +162,7 @@ The gap list above was rewritten on 2026-08-19 after checking the source documen
 Spacing scale, status color roles.
 
 **Wave 1 — Zero-dependency primitives**
-Label, Separator, Typography, Avatar, Tag, Progress bar
+Typography, Tag, Progress bar. Label, Separator and Avatar were removed with the rest of the components the kit has no counterpart for (#94, #95, #97).
 
 **Wave 2 — Form atoms**
 Text input, Text area, Checkbox, Radio button group, Toggle, Select
@@ -169,7 +171,7 @@ Text input, Text area, Checkbox, Radio button group, Toggle, Select
 None. This wave held Field, which wrapped Label, an input atom and help/error text. Both were removed when the code took the kit's shape: the kit ships no standalone label and no field wrapper, so every form control carries its own label and supporting text. See #94 and #107.
 
 **Wave 4 — Layout & navigation**
-Card, Contained list, Tabs, Breadcrumb, Navigation Menu
+Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none.
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
 Overlay (internal: the shared pattern the other five implement), Tooltip, Popover, Menu, Modal, Notification
@@ -177,7 +179,7 @@ Overlay (internal: the shared pattern the other five implement), Tooltip, Popove
 **Wave 6 — Data display**
 Data table
 
-Button is done and sits underneath Wave 4 (Card actions) and Wave 5 (Modal confirm/cancel) as a dependency. Button Group sits beside it at wave 0 for the same reason: Card and Modal wrap their footers in it, so it precedes both.
+Button is done and sits underneath Wave 5 (Modal confirm/cancel) as a dependency. Button Group sits beside it at wave 0 for the same reason: Modal wraps its footer in it, so it precedes Modal. Both used to name Card as well, until Card was removed (#109).
 
 ---
 

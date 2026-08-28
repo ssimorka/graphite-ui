@@ -4,11 +4,9 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import type { ContractMeta } from '@/app/gallery/page'
 import { Notification } from '@/components/ui/notification'
-import { Avatar } from '@/components/ui/avatar'
 import { Tag } from '@/components/ui/tag'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Modal } from '@/components/ui/modal'
 import { Menu } from '@/components/ui/menu'
@@ -19,7 +17,6 @@ import { Popover } from '@/components/ui/popover'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Select } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
 import { Toggle } from '@/components/ui/toggle'
 import { DataTable } from '@/components/ui/data-table'
 import type { Sort } from '@/components/ui/data-table'
@@ -99,7 +96,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </p>
 
       <Wave n="0">
-        <Specimen name="Button" note="One primary action per group — a Card or Modal footer refuses a second, and destructive work takes danger rather than primary.">
+        <Specimen name="Button" note="One primary action per group — a Modal footer refuses a second, and destructive work takes danger rather than primary.">
           <Button variant="primary">Primary</Button>
           <Button>Secondary</Button>
           <Button variant="ghost">Ghost</Button>
@@ -121,27 +118,12 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="1">
-        <Specimen name="Separator" note="Structural only — it carries no margin, because spacing belongs to the layout that places it.">
-          <div className={styles.stack}>
-            <Typography>Content above the rule.</Typography>
-            <Separator />
-            <Typography>Content below it.</Typography>
-          </div>
-        </Specimen>
         <Specimen name="Typography">
           <div className={styles.stack}>
             <Typography variant="heading-3">Heading three</Typography>
             <Typography>Body text sits at the default variant.</Typography>
             <Typography variant="caption">Caption</Typography>
           </div>
-        </Specimen>
-        <Specimen name="Avatar" note="The broken image swatch points at an unreadable source: failure falls back to initials, never a broken icon or an empty circle.">
-          <Swatch label="sm"><Avatar initials="AD" size="sm" /></Swatch>
-          <Swatch label="md"><Avatar initials="GR" size="md" /></Swatch>
-          <Swatch label="lg square"><Avatar initials="AL" size="lg" shape="square" /></Swatch>
-          <Swatch label="status dot"><Avatar initials="ZO" size="lg" status={{ label: 'Online' }} /></Swatch>
-          <Swatch label="image"><Avatar initials="GR" size="lg" src="/graphite/eye.jpg" alt="Halftone eye from the Graphite kit" /></Swatch>
-          <Swatch label="broken image"><Avatar initials="XX" src="data:image/png;base64,AAAA" alt="broken source" /></Swatch>
         </Specimen>
         <Specimen name="Tag" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
           <Tag>neutral</Tag>
@@ -217,20 +199,11 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="4">
-        <Specimen name="Card" note="Cards never nest; use a Separator to group content inside one.">
-          <div className={styles.stack}>
-            <Card
-              header={<Typography variant="heading-4">Card header</Typography>}
-              body={<Typography>Body content.</Typography>}
-              footer={<><Button>Cancel</Button><Button variant="primary">Save</Button></>}
-            />
-          </div>
-        </Specimen>
         <Specimen name="Contained list" note="The row primitive DataTable composes from — its hover is the same token DataTable uses.">
           <div className={styles.stack}>
             <ContainedList
               interactive
-              leading={<Avatar initials="AD" size="sm" />}
+              leading={<Tag variant="neutral">AD</Tag>}
               title="ContainedList title"
               description="ContainedList description"
               trailing={<Tag variant="success">ok</Tag>}
@@ -319,7 +292,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
                 header: 'Name',
                 sortable: true,
                 render: (r) => (
-                  <ContainedList leading={<Avatar initials={r.name.slice(0, 2)} size="sm" />} title={r.name} />
+                  <ContainedList leading={<Tag variant="neutral">{r.name.slice(0, 2)}</Tag>} title={r.name} />
                 ),
               },
               { key: 'role', header: 'Role', sortable: true },

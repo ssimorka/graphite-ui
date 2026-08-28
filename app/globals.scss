@@ -398,28 +398,47 @@ body {
   }
 }
 
-// The source chip is an Avatar rather than a bare span, so the header uses the
-// component the system ships. Its fill is the live source color, handed in as
-// --source-swatch because Avatar takes a className and not a style.
+// The source chip. It was an Avatar until Avatar was removed for having no
+// counterpart in the kit; the sizing and the initials fallback moved here with
+// it. Its fill is the live source color, handed in as --source-swatch.
 .site-header__source-avatar {
   display: inline-flex;
   flex-shrink: 0;
   pointer-events: none;
 }
 
-// Overrides Avatar's own surface / on-surface pair, which is right for a
-// person's initials on a page surface and wrong here. Qualified by the parent
-// deliberately: Avatar's `.avatar` module class carries the same specificity as
-// a bare class here, so a single class only wins if the modules happen to load
-// first, and they do not. Two classes settle it whatever the load order.
-//
 // The image covers the fill, so --source-swatch is what the initials land on if
 // the image ever fails. The ring separates the chip from the accent block
 // behind it, which is the job the old bare swatch's border did.
-.site-header__source-avatar .site-header__source-chip {
+//
+// Sizes are Avatar's `sm` step, kept as-is so the header did not change shape
+// when the component went away.
+.site-header__source-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--graphite-space-06);
+  height: var(--graphite-space-06);
+  border-radius: 50%;
+  font-size: 0.625rem;
+  font-weight: 600;
+  user-select: none;
   background: var(--source-swatch);
   color: var(--cds-text-on-color, #fff);
   border: 2px solid var(--cds-text-on-color, #fff);
+}
+
+.site-header__source-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.site-header__source-initials {
+  line-height: 1;
 }
 
 // ---------------------------------------------------------------------------
