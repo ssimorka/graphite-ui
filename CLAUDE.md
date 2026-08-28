@@ -89,6 +89,15 @@ a browser result.
   square corners, Carbon's asymmetric `0 64px 0 16px` inset, a filled
   secondary, and `primary` as ghost's label. Don't reason from the old
   precedence: both READMEs said "contracts win" until this date.
+- **The kit contradicts itself, and rule 7 has a tie-break for it.** Three
+  times in one pass: the type specimen says `Input Label` is 12/12 while every
+  component renders 12/16; `surfaceElevated` is described as the overlay
+  surface while those overlays bind `Layer/layer-01`; and the kit is simply
+  silent where the code has behaviour Figma cannot express. The rule is *the
+  more specific artefact wins*, and *where the kit has no opinion the code
+  keeps its own* — see "When the kit is not of one mind" in
+  `docs/contracts/README.md`. Don't resolve one of these from first principles
+  again; the precedents are recorded next to the values they explain.
 - **Carbon-only sets in the kit are labelled, not deleted.** Governance
   rule 6 (`docs/contracts/README.md`, "Carbon-only sets in the kit") settles
   what happens to the 27 component pages no contract claims: a set is
