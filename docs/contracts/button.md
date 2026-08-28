@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.2.1
+version: 2.3.0
 wave: 0
 slots:
   - name: Children
@@ -22,27 +22,21 @@ props:
     notes: Defaults to button, and only when this component owns the element.
 tokens:
   - name: primary
-    usage: Fill on the primary variant.
+    usage: Fill on the primary variant, and the label colour on ghost — the kit binds Style=Ghost's text to `primary`, not to a neutral.
   - name: on-primary
-    usage: Label on the primary variant.
+    usage: Label on primary, secondary and danger. One label colour across all three filled styles, as the kit has it.
   - name: secondary
-    usage: Outline and label on the secondary variant at rest, and the fill it takes on hover and press.
-  - name: on-secondary
-    usage: Label on the secondary variant once it fills, on hover and press.
-  - name: on-surface
-    usage: Label on the ghost variant.
+    usage: Fill on the secondary variant, which the kit renders filled rather than outlined.
   - name: surface-variant
     usage: Hover and pressed background on ghost.
   - name: danger
     usage: Fill on the destructive variant, and the tone steps it takes on hover and press.
-  - name: on-danger
-    usage: Label on the destructive variant.
   - name: spacing
     usage: Padding, gap to icons, and the minimum touch target.
   - name: motion
     usage: Transition duration and easing, shared with the pages so a button moves the way its surroundings do.
   - name: radius
-    usage: Corner.
+    usage: Corner. The kit is square-cornered, so this resolves to `radius-none`.
 composition_rules:
   - "One primary action per group. A group of buttons — a Card footer, a Modal footer, a toolbar — may contain at most one `primary`. Everything else is secondary, ghost, or danger. ButtonGroup enforces this, and Card and Modal wrap their footers in it."
   - Hover and pressed are tone-step moves on the same ramp as the resting fill, never a different color. This is the logic Text input's focus border, Toggle's on state, and Menu's item hover all refer back to.
@@ -63,13 +57,19 @@ the component API conventions in `README.md`.
   caller rather than chosen from a fixed leading/trailing pair.
 - **Props:** variant (primary, secondary, ghost, danger — defaults to
   secondary), size (sm, md, lg, icon), asChild, className, type.
-- **Tokens:** `primary` with `on-primary` for the primary variant, `secondary`
-  for the outline and label on secondary with `on-secondary` for the label once
-  it fills, `on-surface` for the ghost label, `surface-variant` for ghost's
-  hover and pressed states, `danger` with `on-danger` for the destructive
-  variant and its own hover and pressed steps; the spacing scale for padding,
-  icon gaps and the minimum touch target; the motion tokens for transitions, so
-  a button moves on the same curve as the page around it.
+- **Tokens:** `primary` fills the primary variant and also colours the ghost
+  label; `secondary` fills secondary, which the kit renders filled rather than
+  outlined; `danger` fills the destructive variant and supplies its hover and
+  pressed steps. `on-primary` is the label on all three filled styles — one
+  label colour, not one per variant. `surface-variant` is ghost's hover and
+  pressed background. The spacing scale carries padding and the minimum touch
+  target, and the motion tokens carry transitions, so a button moves on the
+  same curve as the page around it.
+- **Geometry follows the kit** (governance rule 7): square corners, an
+  asymmetric `0 64px 0 16px` inset that left-aligns the label and reserves the
+  trailing icon's slot, and heights of 32/42/50 for sm/md/lg. Medium and Large
+  sit two pixels off the spacing scale; that is a kit fact, recorded rather
+  than rounded away.
 - **Composition rules:** One primary action per group — a Card footer, a Modal
   footer or a toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new

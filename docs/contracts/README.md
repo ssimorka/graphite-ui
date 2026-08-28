@@ -6,7 +6,15 @@ These two sections apply to **every** component contract in this directory, not 
 
 ## Governance model
 
-The contract file is canonical. Figma and the live site both implement a contract, neither one defines it.
+**The Figma kit is canonical.** Where the kit and a contract disagree, the kit wins and the
+contract is corrected to match it.
+
+This reversed on 2026-08-28. It previously read: *"The contract file is canonical. Figma and
+the live site both implement a contract, neither one defines it."* Contracts are still the
+written specification the code is checked against — rule 4's drift check is unchanged, and a
+component still may not change without its contract changing first. What moved is precedence:
+a contract is now a description of the kit rather than an authority over it, so a disagreement
+is a bug in the contract, not in Figma.
 
 **Rules:**
 1. Every component has one contract file (`/contracts/<component>.md`) in the same repo as the site.
@@ -15,6 +23,7 @@ The contract file is canonical. Figma and the live site both implement a contrac
 4. A drift check script reads each contract's declared token dependencies and verifies the component's actual code references those exact variable names, nothing else. Fails the build on mismatch.
 5. Figma components carry the contract version number in their description field, so anyone opening the file knows which spec they're looking at.
 6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. See "Carbon-only sets in the kit" below.
+7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. See the governance model above.
 
 This is a solo-maintainer model. It doesn't require review gates, just a fixed place where truth lives and a script that checks reality against it.
 

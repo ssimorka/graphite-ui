@@ -6,10 +6,11 @@ This folder documents Graphite UI components as they exist in the **Figma kit**.
 
 You'll see matching filenames in both folders (button.md, tabs.md, checkbox.md, popover.md, and others). They answer different questions.
 
-- **docs/contracts/** is canonical. It defines a component's behavior, slots, props, token dependencies, and prohibitions. Code and Figma both implement it. If contracts and Figma ever disagree, contracts win.
-- **docs/components/** is descriptive. It's a snapshot of what the Figma kit currently shows: variant names, states, tokens in use. It does not describe the component's public code API.
+- **The Figma kit is canonical.** If contracts and Figma ever disagree, **Figma wins**, and the contract is corrected to match. (This reversed on 2026-08-28; it previously read "contracts win".)
+- **docs/contracts/** defines a component's behavior, slots, props, token dependencies, and prohibitions, and is what the code is checked against by `drift-check`. It is the written spec for the code — but it answers to the kit, not the other way round.
+- **docs/components/** is descriptive. It's a snapshot of what the Figma kit currently shows: variant names, geometry, tokens in use. Since the kit is canonical, a disagreement between this folder and a contract means the contract needs correcting.
 
-If you're implementing or consuming a component in code, start with docs/contracts/. If you're working in Figma or checking what the kit currently renders, start here.
+If you're implementing or consuming a component in code, start with docs/contracts/ for the API. If the two folders disagree about what a component *is*, this folder is closer to the truth, because it is generated from the thing that now decides.
 
 ## A note on staleness
 
