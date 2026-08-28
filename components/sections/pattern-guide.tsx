@@ -55,9 +55,9 @@ export function PatternGuide() {
             <h3 className="doc-subheading">Color rhythm · 60 / 30 / 10</h3>
             <p className="docpage__body">
               Sixty percent neutrals, thirty percent accent, ten percent
-              secondary: the ramp the engine derives 120° off your source, so
-              the vivid tenth is generated rather than picked. Adjacent panels
-              check their neighbours so no color clusters.
+              secondary: the ramp the engine derives as your source's
+              complement, so the vivid tenth is generated rather than picked.
+              Adjacent panels check their neighbours so no color clusters.
             </p>
             <div className="ratio-bar" role="img" aria-label="Sixty percent neutral, thirty percent accent, ten percent secondary">
               <span className="ratio-bar__seg ratio-bar__seg--neutral"><span>60% Neutral</span></span>

@@ -22,8 +22,8 @@ a browser result.
 
 - **Auto-fix on-colors toggle is a no-op.** Swept 96 hues × light/dark ×
   AA/AAA through `buildTheme` — no pairing ever fails, so `autoFix` never
-  has anything to fix. Re-verified 2026-08-22 with the secondary family
-  added: 6144 pairs, still zero failures and zero repairs. The wiring is correct (flows into `buildTheme`,
+  has anything to fix. Re-verified 2026-08-23 with secondary rotated to the
+  complement: 6144 pairs, still zero failures and zero repairs. The wiring is correct (flows into `buildTheme`,
   re-renders on toggle); the *engine* just never produces a failing pair
   at any tested input. Confirmed correct behavior, not a bug — but don't
   assume the toggle does something visible without retesting the actual
@@ -57,20 +57,23 @@ a browser result.
   chroma tracks the source, clamped 0.10–0.20. Chrome that should
   track the source but carries no status meaning still belongs on
   `--cds-interactive` / `--cds-button-primary`.
-- **The secondary ramp is verified against the kit, including its one
-  mismatch.** `secondary` is source-derived (hue − 120°, chroma × 0.585)
-  and reproduces `Graphite Primitives/secondary/*` from
-  `docs/tokens/figma-snapshot.json` within 1/255 at nine of ten stops. The
-  tenth is the source-tone stop, off by 3 — and the engine is the more
-  correct one: its hue is 0.17° from the intended `source − 120°` where
-  Figma's baked value is 1.19° off, at a tone where red sits at the sRGB
-  gamut edge. Don't "fix" that delta toward Figma.
+- **Secondary is the source's complement, and no longer matches the kit.**
+  `secondary` is source-derived (hue + 180°, chroma × 0.585) as of
+  2026-08-23, by explicit request. It previously turned − 120° and
+  reproduced `Graphite Primitives/secondary/*` from
+  `docs/tokens/figma-snapshot.json` within 1/255 at nine of ten stops; at a
+  half turn it reproduces none of them. That divergence is intended — the
+  ramp is no longer the code side of the kit's secondary primitives, and
+  nothing automated catches it, because `token-drift` only checks spacing,
+  radius, breakpoints and typography against the snapshot, never the color
+  ramps. If the kit is ever resynced, don't read the secondary mismatch as
+  drift to repair. The chroma scale (0.585) is still the kit's number.
 - **Secondary shares accent's tone ladder, not neutral's.** In the kit,
   accent and secondary sample at the pinned source tone while neutral,
   neutralVariant and all four status ramps sample at a round 50. That is
   why `makeRamps` pins the source tone for secondary — and why it then
   clears the `source` flag, which means "this stop is the source hex" and
-  is false for a hue 120° away.
+  is false for the complementary hue.
 - **The 10% of the 60/30/10 rhythm is `secondary`, deliberately.** It was
   `neutralVariant` until #90. `buildPalette` in `components/generative-art.tsx`
   now samples `secondary` at the same two tone stops neutralVariant held

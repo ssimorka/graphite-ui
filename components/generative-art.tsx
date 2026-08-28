@@ -320,7 +320,8 @@ function buildPalette(sourceHex: string, isDark: boolean): Palette {
   // 30% accent — the same stops the semantic tokens draw primary from.
   const accents = isDark ? [a(30), a(80), a(90)] : [a(40), a(30), a(90)]
 
-  // 10% — the secondary ramp, which the engine derives at 120° off the source.
+  // 10% — the secondary ramp, which the engine derives as the source's
+  // complement, 180° opposite.
   // It is the vivid counterpoint the rhythm asks for and still on-system: a
   // generated ramp sampled at a canonical stop, not an invented hue. Holds the
   // two tones neutralVariant used here, so the light/dark split of the pool is

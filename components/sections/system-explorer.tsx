@@ -40,7 +40,7 @@ const VIEWS = [
     key: 'ramps',
     label: 'Ramps',
     title: 'Four ramps from one input',
-    body: 'Your source color is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp, a secondary ramp 120° away, and two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
+    body: 'Your source color is resolved in OKLab, then sampled at fixed tone stops to build an accent ramp, a complementary secondary ramp, and two neutrals. Perceptual spacing means every step reads as an even move, at any hue.',
   },
   {
     key: 'contrast',
