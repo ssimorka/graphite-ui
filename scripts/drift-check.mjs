@@ -175,18 +175,45 @@ function findImpl(slug) {
   return null
 }
 
+// Follows `@use './x'` from a stylesheet into the partial it pulls in, so a
+// token reached through a shared mixin is still attributed to the component
+// using it. Without this, moving a rule into a partial hides it from rule 4
+// entirely: when Label and Field were absorbed into the form controls their
+// shared parts moved to _form-parts.scss, and four roles went invisible
+// across six components with the check still green.
+const readWithPartials = (abs, seen = new Set()) => {
+  if (seen.has(abs) || !fs.existsSync(abs)) return ''
+  seen.add(abs)
+  const src = fs.readFileSync(abs, 'utf8')
+  const dir = path.dirname(abs)
+  let out = src
+  for (const m of src.matchAll(/@use\s+'\.\/([A-Za-z0-9_-]+)'/g)) {
+    // Sass resolves `./form-parts` to `_form-parts.scss`.
+    for (const cand of [`_${m[1]}.scss`, `${m[1]}.scss`]) {
+      const p = path.join(dir, cand)
+      if (fs.existsSync(p)) {
+        out += '\n' + readWithPartials(p, seen)
+        break
+      }
+    }
+  }
+  return out
+}
+
 const scan = (rel) => {
-  // A component's styles are part of its code, so the co-located module counts.
+  // A component's styles are part of its code, so the co-located module counts
+  // -- and so does anything that module @uses.
   const sheet = rel.replace(/\.(tsx|jsx|ts)$/, '.module.scss')
-  const sheetAbs = path.join(ROOT, sheet)
   const src =
     fs.readFileSync(path.join(ROOT, rel), 'utf8') +
-    (fs.existsSync(sheetAbs) ? '\n' + fs.readFileSync(sheetAbs, 'utf8') : '')
+    '\n' +
+    readWithPartials(path.join(ROOT, sheet))
   return {
     graphite: new Set(src.match(/--graphite-[a-z0-9-]+/g) || []),
     cds: new Set(src.match(/--cds-[a-z0-9-]+/g) || []),
   }
 }
+
 
 // --------------------------------------------------------------------- main
 const contracts = readContracts()

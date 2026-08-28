@@ -29,18 +29,20 @@
 .track {
   display: inline-flex;
   align-items: center;
+  // 48x24 with a 3px inset, per the kit. radius-full rather than a fixed 12,
+  // because a pill is what half of 24 means and it survives a height change.
   width: var(--graphite-space-09);
-  height: var(--graphite-space-05);
-  padding: 2px;
-  border-radius: var(--graphite-radius-16);
+  height: var(--graphite-space-06);
+  padding: 3px;
+  border-radius: var(--graphite-radius-full);
   background: var(--graphite-outline);
   transition: background 120ms ease;
   pointer-events: none;
 }
 
 .thumb {
-  width: calc(var(--graphite-space-05) - 4px);
-  height: calc(var(--graphite-space-05) - 4px);
+  width: calc(var(--graphite-space-06) - 6px);
+  height: calc(var(--graphite-space-06) - 6px);
   border-radius: 50%;
   background: var(--graphite-surface);
   transition: transform 120ms ease;

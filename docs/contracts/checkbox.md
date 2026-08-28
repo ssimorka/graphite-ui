@@ -30,6 +30,12 @@ tokens:
     usage: Box size and the minimum touch target.
   - name: radius
     usage: Box corner.
+  - name: on-surface-variant
+    usage: Label and helper text, which the kit binds to onSurfaceVariant rather than onSurface.
+  - name: on-surface
+    usage: The required-field indicator beside the label.
+  - name: danger
+    usage: Error text, taking the same role as the control's error border so the two cannot drift apart.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Indeterminate state is visually distinct from both checked and unchecked, not a color swap — a distinct glyph (dash) inside the same box.

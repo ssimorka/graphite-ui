@@ -32,10 +32,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--graphite-space-05);
-  height: var(--graphite-space-05);
+  // 20px: the kit's box size, between space-05 (16) and space-06 (24).
+  width: 20px;
+  height: 20px;
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-2);
+  border-radius: var(--graphite-radius-none);
   pointer-events: none;
 }
 

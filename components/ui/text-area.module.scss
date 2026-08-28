@@ -10,11 +10,12 @@
   width: 100%;
   max-height: var(--graphite-space-13);
   overflow-y: auto;
-  padding: var(--graphite-space-03) var(--graphite-space-04);
+  // The kit insets Text area evenly at 16 on all four sides.
+  padding: var(--graphite-space-05);
   background: var(--graphite-surface);
   color: var(--graphite-on-surface);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-4);
+  border-radius: var(--graphite-radius-none);
   font: inherit;
 }
 

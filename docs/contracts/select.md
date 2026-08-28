@@ -26,6 +26,8 @@ props:
 tokens:
   - inherited_from: Text input
     usage: Closed trigger.
+  - name: on-surface-variant
+    usage: Label and helper text, which the kit binds to onSurfaceVariant rather than onSurface.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Depends on the overlay elevation pattern from Wave 5 — flag this as a soft dependency even though Select ships in Wave 2, since its open state borrows Wave 5's surface treatment. Build the trigger first, wire the menu once Wave 5 lands.

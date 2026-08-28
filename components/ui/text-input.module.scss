@@ -15,8 +15,9 @@
   width: 100%;
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-4);
-  padding: 0 var(--graphite-space-04);
+  // Square corners and a 16px inset, per the kit's Text input.
+  border-radius: var(--graphite-radius-none);
+  padding: 0 var(--graphite-space-05);
 }
 
 .wrap:focus-within {
