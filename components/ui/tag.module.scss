@@ -16,13 +16,17 @@
 }
 
 .neutral {
-  background: var(--graphite-surface);
-  color: var(--graphite-on-surface);
+  // The kit's Gray tag: surfaceVariant, not surface.
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-on-surface-variant);
 }
 
 .primary {
-  background: var(--graphite-primary);
-  color: var(--graphite-on-primary);
+  // The kit's Purple tag is primaryContainer, not the full-strength primary.
+  // Every colour in Tag - Read-only is a container role, so a tag never reads
+  // as heavy as a filled Button.
+  background: var(--graphite-primary-container);
+  color: var(--graphite-on-primary-container);
 }
 
 .danger {
