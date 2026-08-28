@@ -7,7 +7,9 @@
   position: relative;
   width: 100%;
   height: var(--graphite-space-02);
-  border-radius: var(--graphite-radius-4);
+  // Square, matching the kit. Its track binds border-subtle-00 and its
+  // fill border-interactive, which resolve to outline and primary here.
+  border-radius: var(--graphite-radius-none);
   background: var(--graphite-outline);
   overflow: hidden;
 }

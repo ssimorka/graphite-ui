@@ -6,7 +6,8 @@
 .item {
   display: flex;
   align-items: center;
-  gap: var(--graphite-space-04);
+  // 16, per the kit's Contained list row cell, which insets 14/16 and gaps 16.
+  gap: var(--graphite-space-05);
   width: 100%;
   background: var(--graphite-surface);
   color: var(--graphite-on-surface);

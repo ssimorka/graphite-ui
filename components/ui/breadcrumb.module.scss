@@ -6,7 +6,8 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: var(--graphite-space-02);
+  // 8, per the kit's Breadcrumb item.
+  gap: var(--graphite-space-03);
   margin: 0;
   padding: 0;
   list-style: none;

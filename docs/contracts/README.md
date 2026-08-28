@@ -60,6 +60,31 @@ Labelling is cheap and can be done in one pass; adoption is a contract plus an
 implementation plus a Figma wave, and should be paid for only when something
 actually needs it.
 
+### Reading a kit component that binds Carbon tokens
+
+Not every kit component binds Graphite Semantic. Several bind the Carbon
+compatibility layer instead — Progress bar's track is `Border/border-subtle-00`
+and its fill `Border/border-interactive`, Breadcrumb's link is
+`Link/link-primary`, Contained list's rows are `Background/background`.
+
+Do not follow those into component code. Contracts forbid it, and the whole
+point of `--graphite-*` is that it is the canonical surface. Translate instead,
+through the `CARBON_VAR_BINDINGS` table in `components/theme-provider.tsx`,
+which is what feeds those Carbon variables in the first place:
+
+| Kit binds | Fed by |
+|---|---|
+| `Background/background` | `background` |
+| `Border/border-subtle-00` | `outline` |
+| `Border/border-interactive` | `primary` |
+| `Text/text-primary` | `onBackground` |
+| `Text/text-secondary` | `onSurfaceVariant` |
+| `Link/link-primary` | `primary` |
+
+The kit is still canonical: it decides which value a component gets. The table
+only says which Graphite role produces that value, so the code can bind the
+role rather than the Carbon alias.
+
 ### Which bucket a set falls in
 
 **Out of scope by construction.** Graphite contracts govern component

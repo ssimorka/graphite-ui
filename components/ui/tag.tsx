@@ -1,6 +1,6 @@
 import styles from './tag.module.scss'
 
-/** Contract: docs/contracts/tag.md (2.2.0) */
+/** Contract: docs/contracts/tag.md (2.3.0) */
 type TagProps = {
   /** Short text, or a number to be capped at `max`. */
   children: string | number
