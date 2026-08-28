@@ -12,10 +12,8 @@ import { Card } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Modal } from '@/components/ui/modal'
 import { Menu } from '@/components/ui/menu'
-import { Field } from '@/components/ui/field'
 import { TextInput } from '@/components/ui/text-input'
 import { ContainedList } from '@/components/ui/contained-list'
-import { Label } from '@/components/ui/label'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Popover } from '@/components/ui/popover'
 import { ProgressBar } from '@/components/ui/progress-bar'
@@ -123,12 +121,6 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="1">
-        <Specimen name="Label" note="Always bound to exactly one control; Field is what normally supplies the pairing.">
-          <div className={styles.stack}>
-            <Label htmlFor="g-label" required>Label with required indicator</Label>
-            <TextInput id="g-label" required placeholder="The control it names" />
-          </div>
-        </Specimen>
         <Specimen name="Separator" note="Structural only — it carries no margin, because spacing belongs to the layout that places it.">
           <div className={styles.stack}>
             <Typography>Content above the rule.</Typography>
@@ -170,14 +162,14 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       <Wave n="2">
         <Specimen name="Text input">
           <div className={styles.stack}>
-            <TextInput id="g-in" placeholder="Default" />
-            <TextInput id="g-in-e" state="error" defaultValue="Error state" />
-            <TextInput id="g-in-d" state="disabled" defaultValue="Disabled" />
+            <TextInput id="g-in" label="Default" placeholder="Default" />
+            <TextInput id="g-in-e" label="Error" state="error" defaultValue="Error state" />
+            <TextInput id="g-in-d" label="Disabled" state="disabled" defaultValue="Disabled" />
           </div>
         </Specimen>
         <Specimen name="Text area">
           <div className={styles.stack}>
-            <TextArea id="g-ta" defaultValue="Resizes vertically only." />
+            <TextArea id="g-ta" label="Notes" defaultValue="Resizes vertically only." />
           </div>
         </Specimen>
         <Specimen name="Checkbox" note="Indeterminate is a distinct glyph, not a recolored check.">
@@ -218,11 +210,9 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="3">
-        <Specimen name="Field" note="Error text forces the child into its error state — the two cannot be shown apart.">
-          <div className={styles.stack}>
-            <Field id="g-f1" label="Email" helpText="We never share it."><TextInput type="email" /></Field>
-            <Field id="g-f2" label="Password" errorText="Too short."><TextInput type="password" /></Field>
-          </div>
+        <Specimen name="Text input" note="Label and supporting text are built into the control, the way the kit has them. Error text forces the error state — the two cannot be shown apart.">
+          <TextInput label="Email" type="email" helpText="We never share it." />
+          <TextInput label="Password" type="password" errorText="Too short." />
         </Specimen>
       </Wave>
 

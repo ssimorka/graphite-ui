@@ -157,7 +157,7 @@ Label, Separator, Typography, Avatar, Tag, Progress bar
 Text input, Text area, Checkbox, Radio button group, Toggle, Select
 
 **Wave 3 — Form composition**
-Field (wraps Label + an input atom + help/error text)
+None. This wave held Field, which wrapped Label, an input atom and help/error text. Both were removed when the code took the kit's shape: the kit ships no standalone label and no field wrapper, so every form control carries its own label and supporting text. See #94 and #107.
 
 **Wave 4 — Layout & navigation**
 Card, Contained list, Tabs, Breadcrumb, Navigation Menu
@@ -174,7 +174,7 @@ Button is done and sits underneath Wave 4 (Card actions) and Wave 5 (Modal confi
 
 ## What this unblocks
 
-Once Wave 0's two token additions ship, three prohibitions above (Tag status variants, Notification status variants, Field error-state color) resolve themselves without touching any other contract — that's the actual payoff of doing token work before component work, rather than inventing a red for Notification today and a different red for Tag next week.
+Once Wave 0's two token additions ship, three prohibitions above (Tag status variants, Notification status variants, form error-state color) resolve themselves without touching any other contract — that's the actual payoff of doing token work before component work, rather than inventing a red for Notification today and a different red for Tag next week.
 
 ---
 

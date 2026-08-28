@@ -1,3 +1,5 @@
+@use './form-parts' as parts;
+
 // Select — docs/contracts/select.md
 //
 // The closed trigger takes Input's treatment. The open menu is the browser's
@@ -65,3 +67,8 @@
 .sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
 .md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-09); font-size: 1rem; }
+
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }

@@ -1,6 +1,7 @@
 'use client'
 
-import { Label } from './label'
+import { useId } from 'react'
+import { fieldMessage } from '@/lib/field-message'
 import styles from './radio-button-group.module.scss'
 
 export type RadioOption = {
@@ -9,15 +10,13 @@ export type RadioOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/radio-button-group.md (1.2.0) */
+/** Contract: docs/contracts/radio-button-group.md (2.0.0) */
 type RadioButtonGroupProps = {
   /** Namespaces the option ids and binds the radios into one group. */
   name: string
   /**
    * The group label, rendered as a legend. Required: option labels alone do
-   * not tell a screen reader what the group is asking. Named `label` rather
-   * than `legend` so Field can supply it the same way it does for every other
-   * self-labelling atom.
+   * not tell a screen reader what the group is asking.
    */
   label: string
   options: RadioOption[]
@@ -26,6 +25,9 @@ type RadioButtonGroupProps = {
   /** Group-level; individual options can also opt out via `option.disabled`. */
   disabled?: boolean
   onChange?: (value: string) => void
+  helpText?: string
+  /** Its presence renders the message as an error. */
+  errorText?: string
 }
 
 export function RadioButtonGroup({
@@ -36,9 +38,22 @@ export function RadioButtonGroup({
   orientation = 'vertical',
   disabled = false,
   onChange,
+  helpText,
+  errorText,
 }: RadioButtonGroupProps) {
+  const auto = useId()
+  const { errored, messageId, message, describedBy } = fieldMessage(
+    auto,
+    helpText,
+    errorText,
+  )
+
   return (
-    <fieldset className={styles.group} disabled={disabled}>
+    <fieldset
+      className={styles.group}
+      disabled={disabled}
+      aria-describedby={describedBy}
+    >
       <legend className={styles.legend}>{label}</legend>
       <div className={`${styles.options} ${styles[orientation]}`}>
         {options.map((option) => {
@@ -60,17 +75,22 @@ export function RadioButtonGroup({
                 />
                 <span className={styles.dot} aria-hidden="true" />
               </span>
-              <Label htmlFor={id}>{option.label}</Label>
+              <label htmlFor={id} className={styles.label}>
+                {option.label}
+              </label>
             </span>
           )
         })}
       </div>
+      {message ? (
+        <span
+          id={messageId}
+          className={errored ? styles.error : styles.help}
+          role={errored ? 'alert' : undefined}
+        >
+          {message}
+        </span>
+      ) : null}
     </fieldset>
   )
 }
-
-
-// Field reads this to know the label belongs here rather than above the
-// control: RadioButtonGroup places its own, because its label sits beside the control
-// rather than over it. See docs/contracts/field.md.
-RadioButtonGroup.ownsLabel = true as const

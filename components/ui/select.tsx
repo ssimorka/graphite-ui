@@ -2,7 +2,7 @@
 
 import { useId } from 'react'
 import type { FieldSize } from './text-input'
-import { Label } from './label'
+import { fieldMessage } from '@/lib/field-message'
 import styles from './select.module.scss'
 
 export type SelectOption = {
@@ -11,15 +11,12 @@ export type SelectOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/select.md (1.2.0) */
+/** Contract: docs/contracts/select.md (2.0.0) */
 type SelectProps = {
-  /** Supplied by Field when wrapped. Required when used on its own. */
+  /** Generated when omitted, so the label and message can always associate. */
   id?: string
-  /**
-   * Supplied by Field when wrapped. Required otherwise — Select throws without
-   * one. Optional in the types only so Field can inject it.
-   */
-  label?: string
+  /** Required. With Field gone there is no wrapper left to supply one. */
+  label: string
   /**
    * The tuple shape enforces the contract's two-option minimum at compile
    * time: a Select with one choice is a statement, not a choice.
@@ -30,6 +27,9 @@ type SelectProps = {
   state?: 'default' | 'disabled' | 'error'
   onChange?: (value: string) => void
   name?: string
+  helpText?: string
+  /** Its presence forces the error state. The two cannot be separated. */
+  errorText?: string
 }
 
 export function Select({
@@ -41,21 +41,26 @@ export function Select({
   state = 'default',
   onChange,
   name,
+  helpText,
+  errorText,
 }: SelectProps) {
   const auto = useId()
   const selectId = id ?? auto
-  if (!label) {
-    throw new Error(
-      'Select: a label is required (docs/contracts/select.md). ' +
-        'Wrap it in a Field or pass label.',
-    )
-  }
+  const { errored: hasError, messageId, message, describedBy } = fieldMessage(
+    selectId,
+    helpText,
+    errorText,
+  )
 
-  const errored = state === 'error'
+  // Error text and error state resolve from the same value, so neither can be
+  // shown without the other. Field used to guarantee this.
+  const errored = hasError || state === 'error'
 
   return (
     <span className={styles.field}>
-      <Label htmlFor={selectId}>{label}</Label>
+      <label htmlFor={selectId} className={styles.label}>
+        {label}
+      </label>
       <span className={`${styles.wrap} ${styles[size]} ${errored ? styles.errored : ''}`}>
         {/* A native select keeps type-ahead, arrow keys and the platform's own
             menu. Its contract forbids styling that trades those away, and the
@@ -67,6 +72,7 @@ export function Select({
           value={value}
           disabled={state === 'disabled'}
           aria-invalid={errored || undefined}
+          aria-describedby={describedBy}
           onChange={(e) => onChange?.(e.target.value)}
         >
           {options.map((option) => (
@@ -77,12 +83,15 @@ export function Select({
         </select>
         <span className={styles.chevron} aria-hidden="true" />
       </span>
+      {message ? (
+        <span
+          id={messageId}
+          className={errored ? styles.error : styles.help}
+          role={errored ? 'alert' : undefined}
+        >
+          {message}
+        </span>
+      ) : null}
     </span>
   )
 }
-
-
-// Field reads this to know the label belongs here rather than above the
-// control: Select places its own, because its label sits beside the control
-// rather than over it. See docs/contracts/field.md.
-Select.ownsLabel = true as const

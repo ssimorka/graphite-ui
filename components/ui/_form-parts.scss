@@ -1,0 +1,49 @@
+// Shared form-field parts.
+//
+// Not a component and not contracted. Label and Field were removed when the
+// code took the kit's shape (#94, #107): Carbon has no standalone label or
+// field wrapper, it builds the label, the control and the supporting text into
+// each form component. These mixins are what stops that absorption turning
+// into the same twenty lines copied into six stylesheets.
+//
+// Type sizes come from the kit's type specimen (node 11444:9897), which names
+// `Input Label` and `Helper Text` both at 12/12.
+
+@mixin field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  width: 100%;
+}
+
+// Prohibitions carried over from the old Label contract: no color other than
+// on-surface, and nothing that could be mistaken for a tooltip trigger — no
+// underline, no dotted border, no help cursor.
+@mixin field-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--graphite-space-02);
+  color: var(--graphite-on-surface);
+  font-size: 0.75rem;
+  line-height: 1;
+  font-weight: 500;
+}
+
+// Decorative only — the control's own `required` is what assistive tech reads.
+@mixin field-indicator {
+  color: var(--graphite-on-surface);
+}
+
+@mixin field-help {
+  color: var(--graphite-on-surface);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+// Error text takes the same `danger` role as the control's error border, so
+// the two cannot drift into different reds.
+@mixin field-error {
+  color: var(--graphite-danger);
+  font-size: 0.75rem;
+  line-height: 1;
+}

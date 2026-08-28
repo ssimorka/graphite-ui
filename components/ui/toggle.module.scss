@@ -1,3 +1,5 @@
+@use './form-parts' as parts;
+
 // Switch — docs/contracts/switch.md
 //
 // On is `primary` and off is `outline`, moving on the same ramp as Button's
@@ -66,3 +68,8 @@
     transition: none;
   }
 }
+
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }

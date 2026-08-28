@@ -1,6 +1,6 @@
 ---
 component: Text area
-version: 1.0.0
+version: 2.0.0
 wave: 2
 inherits: Text input
 slots:
@@ -13,6 +13,7 @@ props:
 tokens:
   - inherited_from: Text input
 composition_rules:
+  - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - inherited_from: Text input
 prohibitions:
   - inherited_from: Text input
