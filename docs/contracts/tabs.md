@@ -23,6 +23,7 @@ tokens:
   - name: spacing
     usage: Tab padding and list gaps.
 composition_rules:
+  - The kit's Tabs set carries no orientation axis — its axes are Style (Contained, Line), Type and Alignment, and vertical tabs live in a separate internal `_Vertical tabs items` component. The `orientation` prop is kept anyway: the capability exists in the kit, only structured differently, and removing a prop is breaking. Worth revisiting if that set is ever rebuilt.
   - Active indicator position is always a tone-step-driven color change plus position, never color alone — same principle as the video's point about visuals over text, applied to state, not onboarding.
 prohibitions:
   - No tab content lazy-unmounts in a way that loses form state — if a form field lives inside a tab panel, switching tabs cannot silently clear it.
