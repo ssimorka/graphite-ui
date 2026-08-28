@@ -1,24 +1,26 @@
 'use client'
 
 import { useEffect, useId, useRef } from 'react'
-import { Label } from './label'
+import { fieldMessage } from '@/lib/field-message'
 import styles from './checkbox.module.scss'
 
-/** Contract: docs/contracts/checkbox.md (1.3.0) */
+/** Contract: docs/contracts/checkbox.md (2.0.0) */
 type CheckboxProps = {
-  /** Supplied by Field when wrapped. Required when used on its own. */
+  /** Generated when omitted, so the label and message can always associate. */
   id?: string
   /**
-   * Supplied by Field when wrapped. Required otherwise — Checkbox throws without
-   * one, because the contract has no bare control. Optional in the types only
-   * so Field can inject it; the guard below is what actually enforces it.
+   * Required. The contract has no bare control, and with Field gone there is
+   * no wrapper left to supply one.
    */
-  label?: string
+  label: string
   checked?: boolean
   indeterminate?: boolean
   disabled?: boolean
   onChange?: (checked: boolean) => void
   name?: string
+  helpText?: string
+  /** Its presence renders the message as an error. */
+  errorText?: string
 }
 
 export function Checkbox({
@@ -29,15 +31,16 @@ export function Checkbox({
   disabled = false,
   onChange,
   name,
+  helpText,
+  errorText,
 }: CheckboxProps) {
   const auto = useId()
   const inputId = id ?? auto
-  if (!label) {
-    throw new Error(
-      'Checkbox: a label is required — a bare checkbox is prohibited ' +
-        '(docs/contracts/checkbox.md). Wrap it in a Field or pass label.',
-    )
-  }
+  const { errored, messageId, message, describedBy } = fieldMessage(
+    inputId,
+    helpText,
+    errorText,
+  )
 
   const ref = useRef<HTMLInputElement>(null)
 
@@ -59,6 +62,7 @@ export function Checkbox({
           checked={checked}
           disabled={disabled}
           onChange={(e) => onChange?.(e.target.checked)}
+          aria-describedby={describedBy}
         />
         <span className={styles.box} aria-hidden="true">
           {/* Indeterminate is its own glyph, not a recolored check: the
@@ -66,13 +70,18 @@ export function Checkbox({
           <span className={indeterminate ? styles.dash : styles.check} />
         </span>
       </span>
-      <Label htmlFor={inputId}>{label}</Label>
+      <label htmlFor={inputId} className={styles.label}>
+        {label}
+      </label>
+      {message ? (
+        <span
+          id={messageId}
+          className={errored ? styles.error : styles.help}
+          role={errored ? 'alert' : undefined}
+        >
+          {message}
+        </span>
+      ) : null}
     </span>
   )
 }
-
-
-// Field reads this to know the label belongs here rather than above the
-// control: Checkbox places its own, because its label sits beside the control
-// rather than over it. See docs/contracts/field.md.
-Checkbox.ownsLabel = true as const

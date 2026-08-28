@@ -1,4 +1,10 @@
-// Input — docs/contracts/input.md
+@use './form-parts' as parts;
+
+// Text input — docs/contracts/text-input.md
+//
+// The label and supporting text live here rather than in a wrapper: the kit
+// builds them into Text input as `Label text` and `Helper / Error text`
+// properties, and ships no standalone label or field component.
 //
 // Focus is a tone-step move on primary, matching the hover logic already
 // proven on Button, rather than a new color introduced for focus.
@@ -57,3 +63,9 @@
 .sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
 .md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-09); font-size: 1rem; }
+
+.field { @include parts.field-stack; }
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }

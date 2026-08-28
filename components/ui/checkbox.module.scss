@@ -1,3 +1,5 @@
+@use './form-parts' as parts;
+
 // Checkbox — docs/contracts/checkbox.md
 //
 // The control keeps a minimum touch target even though the painted box is
@@ -73,3 +75,8 @@
 }
 
 .native:indeterminate + .box .dash { opacity: 1; }
+
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }

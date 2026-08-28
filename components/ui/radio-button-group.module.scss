@@ -1,3 +1,5 @@
+@use './form-parts' as parts;
+
 // Radio Group — docs/contracts/radio-group.md
 .group {
   border: 0;
@@ -70,3 +72,8 @@
   border-color: var(--graphite-primary-disabled-content);
   box-shadow: none;
 }
+
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }

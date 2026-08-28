@@ -25,7 +25,7 @@ tokens:
 composition_rules:
   - Active indicator position is always a tone-step-driven color change plus position, never color alone — same principle as the video's point about visuals over text, applied to state, not onboarding.
 prohibitions:
-  - No tab content lazy-unmounts in a way that loses form state — if a Field lives inside a tab panel, switching tabs cannot silently clear it.
+  - No tab content lazy-unmounts in a way that loses form state — if a form field lives inside a tab panel, switching tabs cannot silently clear it.
 ---
 
 ### Tabs
@@ -33,4 +33,4 @@ prohibitions:
 - **Props:** orientation (horizontal, vertical).
 - **Tokens:** `primary` underline/indicator on active tab, `on-surface` for the active label and `on-surface-variant` — its lower tone-step — for inactive ones; `outline` for the rule the list sits on; the spacing scale for padding and gaps.
 - **Composition rules:** Active indicator position is always a tone-step-driven color change plus position, never color alone — same principle as the video's point about visuals over text, applied to state, not onboarding.
-- **Prohibitions:** No tab content lazy-unmounts in a way that loses form state — if a Field lives inside a tab panel, switching tabs cannot silently clear it.
+- **Prohibitions:** No tab content lazy-unmounts in a way that loses form state — if a form field lives inside a tab panel, switching tabs cannot silently clear it.

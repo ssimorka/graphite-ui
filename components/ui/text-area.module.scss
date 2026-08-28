@@ -1,3 +1,5 @@
+@use './form-parts' as parts;
+
 // Textarea — docs/contracts/textarea.md
 //
 // Growth stops at max-height and hands over to a scrollbar. The contract
@@ -40,3 +42,8 @@
 .sm { min-height: var(--graphite-space-09); font-size: 0.8125rem; }
 .md { min-height: var(--graphite-space-10); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-11); font-size: 1rem; }
+
+.label { @include parts.field-label; }
+.indicator { @include parts.field-indicator; }
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }
