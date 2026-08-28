@@ -80,6 +80,17 @@ a browser result.
   still the fourth ramp in the ramp stack and still drives `outline`, so
   that absence is intended, not an omission to repair. The ratio bar in
   `pattern-guide.tsx` reads the `secondary` / `onSecondary` roles to match.
+- **Carbon-only sets in the kit are labelled, not deleted.** Governance
+  rule 6 (`docs/contracts/README.md`, "Carbon-only sets in the kit") settles
+  what happens to the 27 component pages no contract claims: a set is
+  *governed* if a contract declares it and *ungoverned* otherwise, ungoverned
+  sets stay in the file and say so in their description, and movement is
+  one-way. Deleting is off the table while the library is published, because
+  removal is a breaking change for consumers. Three classes are ungoverned
+  permanently rather than pending — application shells (UI shell, Tree view,
+  Content switcher), Carbon's AI components, and Carbon idioms with no
+  Graphite counterpart. Don't re-argue any of this per component: that
+  piecemeal drift is exactly what #124 exists to stop.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
