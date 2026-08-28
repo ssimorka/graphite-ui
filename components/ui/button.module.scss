@@ -99,6 +99,12 @@
   color: var(--graphite-on-danger);
 }
 
+// Danger moves on its own ramp, the same tone-step logic primary uses. It had
+// neither state until #129: it was the one variant sitting outside the
+// composition rule above.
+.danger:hover:not(:disabled) { background: var(--graphite-danger-hover); }
+.danger:active:not(:disabled) { background: var(--graphite-danger-pressed); }
+
 .sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
 .md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-09); font-size: 1rem; padding: 0 var(--graphite-space-05); }
