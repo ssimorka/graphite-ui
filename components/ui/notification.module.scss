@@ -7,8 +7,9 @@
   display: flex;
   align-items: flex-start;
   gap: var(--graphite-space-03);
-  padding: var(--graphite-space-04);
-  border-radius: var(--graphite-radius-4);
+  // 16, per the kit's Notification - Inline.
+  padding: var(--graphite-space-05);
+  border-radius: var(--graphite-radius-none);
   background: var(--graphite-surface);
   color: var(--graphite-on-surface);
   border: 1px solid var(--graphite-outline);
