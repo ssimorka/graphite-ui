@@ -19,4 +19,31 @@ Files here are regenerated manually, not synced automatically. Two things can ma
 1. **Figma changes.** If a component's variants or tokens change in the kit after a doc was generated, the doc won't reflect it until it's regenerated.
 2. **Code API changes.** SHADCN-MIGRATION.md tracks components being restructured from slot props to composed children. That's a code-side API change and it is not reflected here. A component doc in this folder can be fully accurate about Figma's current state while describing an API shape the code no longer uses.
 
-When a component's migration lands in SHADCN-MIGRATION.md, flag its file here for regen. No tooling enforces this yet — it's a manual checklist item for now.
+When a component's migration lands in SHADCN-MIGRATION.md, flag its file here for regen.
+
+### What is enforced now
+
+Cause 1 is checked. `scripts/component-doc-drift.mjs` runs in CI and fails the
+build when a doc no longer matches the kit:
+
+- every Figma node id a doc cites still resolves to a page or component set,
+- every **public** set on a page a doc covers is either named or cited in it,
+- every component page in the kit has a doc.
+
+It found eight undocumented sets the day it landed, across `ai-label.md`,
+`ai-layer.md`, `ai-explainability-popover.md`, `data-table.md` and
+`date-picker.md` — none of which anyone had noticed.
+
+It reads `docs/tokens/figma-components.json`, not Figma, so it runs offline.
+That snapshot is the manual half: re-extract with `scripts/component-extract.js`
+through the Figma MCP, then merge with `pnpm component-snapshot`. The split is
+the same one `token-drift` makes — the snapshot is the reviewable record of the
+kit, and a kit change shows up as a diff on it.
+
+Private, underscore-prefixed sets are exempt from the coverage rule. They carry
+"Do not edit this component" rather than a spec; see
+`docs/contracts/kit/figma-only.md`.
+
+**Cause 2 is still manual.** Nothing compares these docs against the code's API
+shape, and this check will not catch a doc that describes props the component
+no longer has.

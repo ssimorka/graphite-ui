@@ -154,6 +154,22 @@ a browser result.
   is not self-contained; and `_Structured list header row item` exists **twice**
   as two distinct sets, which defeats the name-based lookup the gallery badge
   and #134/#136 failures depend on.
+- **There are three governance checks now, not two.**
+  `component-doc-drift.mjs` joins `drift-check.mjs` (components vs contracts)
+  and `token-drift.mjs` (foundations vs token snapshot). It checks
+  `docs/components/*.md` against `docs/tokens/figma-components.json` — 45 pages,
+  206 sets — and closes the "no tooling enforces this yet" gap that README
+  admitted to. It found 8 undocumented public sets on the day it landed.
+  Both Figma-backed checks read a committed snapshot and never the network, so
+  they run offline in CI; **re-extracting the snapshot is still manual**
+  (`scripts/component-extract.js` through the MCP, then `pnpm
+  component-snapshot`). So the check catches a *doc* drifting from the
+  snapshot, not the *snapshot* drifting from Figma.
+  Two gotchas if you touch it: a set counts as documented if the doc cites its
+  node id **or** names it (dropdown.md documents all 8 sets by id in a matrix
+  and names none of them), and `page.loadAsync()` is what lets one `use_figma`
+  call read many pages — `setCurrentPageAsync` is capped at one per call and
+  `loadAllPagesAsync` is unsupported by the MCP tool.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
