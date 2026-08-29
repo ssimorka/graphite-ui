@@ -62,3 +62,13 @@ jobs:
       - name: Token drift self-test
         if: ${{ !cancelled() }}
         run: pnpm token-drift:test
+
+      # docs/components/ used to say "No tooling enforces this yet — it's a
+      # manual checklist item for now." These two steps are that tooling.
+      - name: "Component doc drift: docs/components against the kit snapshot"
+        if: ${{ !cancelled() }}
+        run: pnpm component-doc-drift
+
+      - name: Component doc drift self-test
+        if: ${{ !cancelled() }}
+        run: pnpm component-doc-drift:test

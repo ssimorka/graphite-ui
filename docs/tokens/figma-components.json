@@ -1,0 +1,1513 @@
+{
+  "source": {
+    "file": "p2jyUgkFhJd6A5M7L39Ixo"
+  },
+  "pages": [
+    {
+      "id": "57561:170",
+      "name": "02 Components – AI explainability popover",
+      "sets": [
+        {
+          "name": "AI explainability popover",
+          "id": "57561:3508",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "AI explainability popover actions footer",
+          "id": "57561:3559",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "_AI explainability popover/Test",
+          "id": "65732:222818",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_AI explainability popover/Test 2",
+          "id": "65780:275000",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_AI explainability popover/Test 3",
+          "id": "65780:275730",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "51447:1896",
+      "name": "02 Components – AI label",
+      "sets": [
+        {
+          "name": "AI label",
+          "id": "51447:1916",
+          "variants": 28,
+          "private": false
+        },
+        {
+          "name": "AI label - Inline",
+          "id": "51447:2035",
+          "variants": 18,
+          "private": false
+        },
+        {
+          "name": "AI label wrapper",
+          "id": "82808:17",
+          "variants": 1,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "51447:122450",
+      "name": "02 Components – AI layer",
+      "sets": [
+        {
+          "name": "AI layer - Background",
+          "id": "51447:122453",
+          "variants": 15,
+          "private": false
+        },
+        {
+          "name": "AI layer - Border",
+          "id": "51447:122528",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "AI layer - Field",
+          "id": "55928:174",
+          "variants": 6,
+          "private": false
+        },
+        {
+          "name": "AI layer - Shadow",
+          "id": "51447:122527",
+          "variants": 1,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "31:2385",
+      "name": "02 Components – Accordion",
+      "sets": [
+        {
+          "name": "Accordion",
+          "id": "2490:17019",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "Accordion item",
+          "id": "2154:8478",
+          "variants": 120,
+          "private": false
+        },
+        {
+          "name": "_Accordion content skeleton",
+          "id": "5734:286365",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Accordion header skeleton",
+          "id": "5734:283688",
+          "variants": 6,
+          "private": true
+        },
+        {
+          "name": "_Accordion skeleton item",
+          "id": "5734:283758",
+          "variants": 12,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "136:10048",
+      "name": "02 Components – Breadcrumb",
+      "sets": [
+        {
+          "name": "Breadcrumb",
+          "id": "11479:54258",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "_Breadcrumb item",
+          "id": "3136:29234",
+          "variants": 11,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "0:1",
+      "name": "02 Components – Button",
+      "sets": [
+        {
+          "name": "Button",
+          "id": "1854:1776",
+          "variants": 258,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "17:0",
+      "name": "02 Components – Checkbox",
+      "sets": [
+        {
+          "name": "Checkbox",
+          "id": "11506:27302",
+          "variants": 19,
+          "private": false
+        },
+        {
+          "name": "Checkbox group",
+          "id": "11506:27535",
+          "variants": 8,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "35:2542",
+      "name": "02 Components – Code snippet",
+      "sets": [
+        {
+          "name": "Code snippet - Inline",
+          "id": "4266:104904",
+          "variants": 6,
+          "private": false
+        },
+        {
+          "name": "Code snippet - Multi-line",
+          "id": "4257:168802",
+          "variants": 5,
+          "private": false
+        },
+        {
+          "name": "Code snippet - Single line",
+          "id": "4266:103999",
+          "variants": 3,
+          "private": false
+        },
+        {
+          "name": "_Code snippet - Inline item",
+          "id": "4266:104960",
+          "variants": 5,
+          "private": true
+        },
+        {
+          "name": "_Code snippet ghost button",
+          "id": "4378:125635",
+          "variants": 12,
+          "private": true
+        },
+        {
+          "name": "_Code snippet tooltip",
+          "id": "4378:123550",
+          "variants": 7,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "16193:269966",
+      "name": "02 Components – Contained list",
+      "sets": [
+        {
+          "name": "Contained list",
+          "id": "16193:272726",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Contained list row cell item",
+          "id": "16888:272014",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Contained list row divider",
+          "id": "16892:271119",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Contained list row item",
+          "id": "16193:272771",
+          "variants": 20,
+          "private": true
+        },
+        {
+          "name": "_Contained list title item",
+          "id": "16193:272755",
+          "variants": 10,
+          "private": true
+        },
+        {
+          "name": "_List title actions - Disclosed",
+          "id": "16193:272749",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_List title actions - On page",
+          "id": "16193:272740",
+          "variants": 5,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "68:3091",
+      "name": "02 Components – Content switcher",
+      "sets": [
+        {
+          "name": "Content switcher",
+          "id": "10151:402486",
+          "variants": 24,
+          "private": false
+        },
+        {
+          "name": "_Content switcher icon item",
+          "id": "21988:280553",
+          "variants": 144,
+          "private": true
+        },
+        {
+          "name": "_Content switcher text item",
+          "id": "10151:402337",
+          "variants": 144,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "24:0",
+      "name": "02 Components – Data table",
+      "sets": [
+        {
+          "name": "Data table",
+          "id": "4630:268268",
+          "variants": 7,
+          "private": false
+        },
+        {
+          "name": "Data table batch actions bar item",
+          "id": "4487:181347",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "Data table batch actions button",
+          "id": "43082:290652",
+          "variants": 24,
+          "private": false
+        },
+        {
+          "name": "Data table body row item",
+          "id": "4547:163221",
+          "variants": 22,
+          "private": false
+        },
+        {
+          "name": "Data table expand cell item",
+          "id": "43292:32955",
+          "variants": 4,
+          "private": false
+        },
+        {
+          "name": "Data table header cell item",
+          "id": "43292:32017",
+          "variants": 8,
+          "private": false
+        },
+        {
+          "name": "Data table header item",
+          "id": "4630:273365",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "Data table header row item",
+          "id": "62100:540870",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Data table row cell item",
+          "id": "6172:291044",
+          "variants": 3,
+          "private": false
+        },
+        {
+          "name": "Data table select cell item",
+          "id": "43292:32873",
+          "variants": 4,
+          "private": false
+        },
+        {
+          "name": "Data table toolbar item",
+          "id": "4487:180741",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Data table body row expanded content base",
+          "id": "4631:214763",
+          "variants": 5,
+          "private": true
+        },
+        {
+          "name": "_Data table skeleton base",
+          "id": "4535:162705",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Data table skeleton item",
+          "id": "4535:163063",
+          "variants": 2,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "60:0",
+      "name": "02 Components – Date picker",
+      "sets": [
+        {
+          "name": "Date picker - Range calendar - Default",
+          "id": "17544:268170",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Date picker - Range calendar - Fluid",
+          "id": "17544:268235",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Date picker - Simple date - Default",
+          "id": "17544:266985",
+          "variants": 37,
+          "private": false
+        },
+        {
+          "name": "Date picker - Simple date - Fluid",
+          "id": "17544:267399",
+          "variants": 10,
+          "private": false
+        },
+        {
+          "name": "Date picker - Single calendar - Default",
+          "id": "17544:267504",
+          "variants": 39,
+          "private": false
+        },
+        {
+          "name": "Date picker - Single calendar - Fluid",
+          "id": "17544:267989",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Time picker - Default",
+          "id": "17544:268301",
+          "variants": 18,
+          "private": false
+        },
+        {
+          "name": "Time picker - Fluid",
+          "id": "17544:268399",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Time picker items - Clock",
+          "id": "17544:266804",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Time picker items - Fixed",
+          "id": "17544:266768",
+          "variants": 6,
+          "private": false
+        },
+        {
+          "name": "Time picker items - Timezone",
+          "id": "17544:266925",
+          "variants": 6,
+          "private": false
+        },
+        {
+          "name": "_Date picker calendar",
+          "id": "17544:266661",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Date picker calendar day item",
+          "id": "17544:266602",
+          "variants": 11,
+          "private": true
+        },
+        {
+          "name": "_Date picker month pagination",
+          "id": "17544:266628",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Date picker month year",
+          "id": "17544:266637",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Time picker item - Fixed",
+          "id": "17544:266721",
+          "variants": 21,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "14032:290630",
+      "name": "02 Components – Dropdown",
+      "sets": [
+        {
+          "name": "Dropdown - Combo box - Default",
+          "id": "14032:290976",
+          "variants": 48,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Combo box - Fluid",
+          "id": "14505:304219",
+          "variants": 15,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Default",
+          "id": "14032:290635",
+          "variants": 102,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Filterable multi-select - Default",
+          "id": "14032:291673",
+          "variants": 51,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Filterable multi-select - Fluid",
+          "id": "45988:11486",
+          "variants": 17,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Fluid",
+          "id": "14505:302528",
+          "variants": 15,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Multi-select  - Fluid",
+          "id": "14530:300220",
+          "variants": 17,
+          "private": false
+        },
+        {
+          "name": "Dropdown - Multi-select - Default",
+          "id": "14032:291311",
+          "variants": 102,
+          "private": false
+        },
+        {
+          "name": "_Dropdown chevron",
+          "id": "11003:404855",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Dropdown list item - Default",
+          "id": "65724:1014775",
+          "variants": 30,
+          "private": true
+        },
+        {
+          "name": "_Dropdown list item - Fluid input",
+          "id": "14342:307346",
+          "variants": 20,
+          "private": true
+        },
+        {
+          "name": "_Dropdown menu list - Default",
+          "id": "65724:1021842",
+          "variants": 3,
+          "private": true
+        },
+        {
+          "name": "_Dropdown menu list - Fluid input",
+          "id": "14505:299496",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Dropdown parent checkbox - Default",
+          "id": "66940:23913",
+          "variants": 18,
+          "private": true
+        },
+        {
+          "name": "_Dropdown parent checkbox - Fluid",
+          "id": "67006:26342",
+          "variants": 12,
+          "private": true
+        },
+        {
+          "name": "_Dropdown skeleton item",
+          "id": "11003:404908",
+          "variants": 7,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "346:0",
+      "name": "02 Components – File uploader",
+      "sets": [
+        {
+          "name": "File uploader",
+          "id": "5465:294860",
+          "variants": 18,
+          "private": false
+        },
+        {
+          "name": "_File uploader - Drag and drop box states",
+          "id": "3183:29103",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_File uploader file item",
+          "id": "3199:35182",
+          "variants": 18,
+          "private": true
+        },
+        {
+          "name": "_File uploader file list item",
+          "id": "4188:102462",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "474:15004",
+      "name": "02 Components – Form",
+      "sets": [
+        {
+          "name": "Form modal - Default",
+          "id": "4260:102550",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "Form modal - Fluid",
+          "id": "16827:270697",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "Form on page",
+          "id": "3897:51336",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Form modal base",
+          "id": "4164:88977",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "366:0",
+      "name": "02 Components – Link",
+      "sets": [
+        {
+          "name": "Link",
+          "id": "50111:991",
+          "variants": 36,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "369:0",
+      "name": "02 Components – List",
+      "sets": [
+        {
+          "name": "List",
+          "id": "3284:27553",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "List item",
+          "id": "3284:27542",
+          "variants": 4,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "370:0",
+      "name": "02 Components – Loading",
+      "sets": [
+        {
+          "name": "Inline loading",
+          "id": "3238:28455",
+          "variants": 4,
+          "private": false
+        },
+        {
+          "name": "Loading",
+          "id": "78017:897920",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Loading animation",
+          "id": "3165:28659",
+          "variants": 8,
+          "private": true
+        },
+        {
+          "name": "_Loading base",
+          "id": "3172:28703",
+          "variants": 2,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "31107:3280",
+      "name": "02 Components – Menu",
+      "sets": [
+        {
+          "name": "Menu",
+          "id": "31131:96397",
+          "variants": 8,
+          "private": false
+        },
+        {
+          "name": "_Keyboard shortcut",
+          "id": "36234:37616",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Menu list item",
+          "id": "36234:38344",
+          "variants": 28,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "31107:3281",
+      "name": "02 Components – Menu buttons",
+      "sets": [
+        {
+          "name": "Combo button",
+          "id": "31753:68447",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Menu button",
+          "id": "31420:317548",
+          "variants": 12,
+          "private": false
+        },
+        {
+          "name": "Overflow",
+          "id": "3717:45725",
+          "variants": 72,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "410:13792",
+      "name": "02 Components – Modal",
+      "sets": [
+        {
+          "name": "Modal",
+          "id": "4080:55366",
+          "variants": 5,
+          "private": false
+        },
+        {
+          "name": "_Modal footer item",
+          "id": "3906:50587",
+          "variants": 12,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "505:0",
+      "name": "02 Components – Notification",
+      "sets": [
+        {
+          "name": "Notification - Callout",
+          "id": "84336:36580",
+          "variants": 8,
+          "private": false
+        },
+        {
+          "name": "Notification - Inline",
+          "id": "4179:105911",
+          "variants": 32,
+          "private": false
+        },
+        {
+          "name": "Notification - Toast",
+          "id": "84336:35011",
+          "variants": 16,
+          "private": false
+        },
+        {
+          "name": "Notification action button item",
+          "id": "5359:236353",
+          "variants": 10,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "351:58",
+      "name": "02 Components – Number input",
+      "sets": [
+        {
+          "name": "Number input - Default",
+          "id": "19893:290998",
+          "variants": 21,
+          "private": false
+        },
+        {
+          "name": "Number input - Fluid",
+          "id": "19893:291117",
+          "variants": 8,
+          "private": false
+        },
+        {
+          "name": "_AI slug action item",
+          "id": "58112:7898",
+          "variants": 3,
+          "private": true
+        },
+        {
+          "name": "_Number input action item",
+          "id": "19893:290945",
+          "variants": 18,
+          "private": true
+        },
+        {
+          "name": "_Number input base",
+          "id": "19893:290911",
+          "variants": 3,
+          "private": true
+        },
+        {
+          "name": "_Revert button action item",
+          "id": "58112:8060",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "490:11",
+      "name": "02 Components – Pagination",
+      "sets": [
+        {
+          "name": "Pagination - Nav",
+          "id": "2799:20761",
+          "variants": 3,
+          "private": false
+        },
+        {
+          "name": "Pagination - Table bar",
+          "id": "3889:50204",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "_Pagination - Nav page item",
+          "id": "5730:281784",
+          "variants": 24,
+          "private": true
+        },
+        {
+          "name": "_Pagination select menu item",
+          "id": "5730:282123",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "3556:37675",
+      "name": "02 Components – Password input",
+      "sets": [
+        {
+          "name": "Password input - Default",
+          "id": "5621:280380",
+          "variants": 93,
+          "private": false
+        },
+        {
+          "name": "Password input - Fluid",
+          "id": "68771:7312",
+          "variants": 16,
+          "private": false
+        },
+        {
+          "name": "_Password input base",
+          "id": "5519:272447",
+          "variants": 3,
+          "private": true
+        },
+        {
+          "name": "_Password input placeholder base",
+          "id": "5520:284682",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "8705:400369",
+      "name": "02 Components – Popover",
+      "sets": [
+        {
+          "name": "Popover",
+          "id": "9125:400576",
+          "variants": 24,
+          "private": false
+        },
+        {
+          "name": "Popover - Tab tip",
+          "id": "9826:402965",
+          "variants": 8,
+          "private": false
+        },
+        {
+          "name": "Popover item",
+          "id": "8850:400476",
+          "variants": 24,
+          "private": false
+        },
+        {
+          "name": "_Popover caret item",
+          "id": "9124:401385",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "8930:400384",
+      "name": "02 Components – Progress bar",
+      "sets": [
+        {
+          "name": "Progress bar",
+          "id": "9506:402924",
+          "variants": 22,
+          "private": false
+        },
+        {
+          "name": "_Progress bar animation - Determinate",
+          "id": "64082:248",
+          "variants": 7,
+          "private": true
+        },
+        {
+          "name": "_Progress bar animation - Indeterminate",
+          "id": "64082:1207",
+          "variants": 2,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "521:16785",
+      "name": "02 Components – Progress indicator",
+      "sets": [
+        {
+          "name": "Progress indicator",
+          "id": "3925:58667",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Progress indicator item",
+          "id": "3377:31707",
+          "variants": 12,
+          "private": true
+        },
+        {
+          "name": "_Progress indicator skeleton item",
+          "id": "3942:52659",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Progress indicator step label base",
+          "id": "3925:58967",
+          "variants": 6,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "435:1",
+      "name": "02 Components – Radio button",
+      "sets": [
+        {
+          "name": "Radio button",
+          "id": "2930:23442",
+          "variants": 26,
+          "private": false
+        },
+        {
+          "name": "Radio button group",
+          "id": "2927:28166",
+          "variants": 8,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "453:14562",
+      "name": "02 Components – Search",
+      "sets": [
+        {
+          "name": "Search - Default",
+          "id": "2805:21056",
+          "variants": 42,
+          "private": false
+        },
+        {
+          "name": "Search - Fluid",
+          "id": "15503:270751",
+          "variants": 7,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "443:23",
+      "name": "02 Components – Select",
+      "sets": [
+        {
+          "name": "Select - Default",
+          "id": "17650:274860",
+          "variants": 54,
+          "private": false
+        },
+        {
+          "name": "Select - Fluid",
+          "id": "17650:275243",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "_Select menu chrome menu",
+          "id": "23682:299835",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Select menu chrome menu items",
+          "id": "17650:274824",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Select menu default base",
+          "id": "17650:274740",
+          "variants": 3,
+          "private": true
+        },
+        {
+          "name": "_Select menu inline base",
+          "id": "17650:274786",
+          "variants": 3,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "456:14680",
+      "name": "02 Components – Slider",
+      "sets": [
+        {
+          "name": "Slider",
+          "id": "3673:40574",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "Slider - Range",
+          "id": "41061:1531",
+          "variants": 44,
+          "private": false
+        },
+        {
+          "name": "_Slider - Range handle",
+          "id": "41061:2570",
+          "variants": 10,
+          "private": true
+        },
+        {
+          "name": "_Slider - Range slider track",
+          "id": "41061:2597",
+          "variants": 18,
+          "private": true
+        },
+        {
+          "name": "_Slider base",
+          "id": "3673:40453",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Slider item",
+          "id": "5734:286445",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Slider left rail",
+          "id": "5193:234027",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Slider rail",
+          "id": "4510:161198",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Slider right rail",
+          "id": "4510:161146",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Slider skeleton item",
+          "id": "5734:287718",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "494:0",
+      "name": "02 Components – Structured list",
+      "sets": [
+        {
+          "name": "Structured list",
+          "id": "11797:285083",
+          "variants": 4,
+          "private": false
+        },
+        {
+          "name": "Structured list - Selectable",
+          "id": "61653:7458",
+          "variants": 4,
+          "private": false
+        },
+        {
+          "name": "_Structured list header cell base",
+          "id": "11871:287656",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Structured list header row item",
+          "id": "11809:286209",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Structured list header row item",
+          "id": "61634:2136",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Structured list row cell base",
+          "id": "11801:289539",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Structured list row item",
+          "id": "61634:3169",
+          "variants": 8,
+          "private": true
+        },
+        {
+          "name": "_Structured list row item - Selectable",
+          "id": "11803:290100",
+          "variants": 32,
+          "private": true
+        },
+        {
+          "name": "_Structured list select cell base",
+          "id": "11871:287657",
+          "variants": 2,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "464:14848",
+      "name": "02 Components – Tabs",
+      "sets": [
+        {
+          "name": "Tabs",
+          "id": "3890:50605",
+          "variants": 5,
+          "private": false
+        },
+        {
+          "name": "Vertical tabs",
+          "id": "75823:2818",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "_Horizontal tabs items",
+          "id": "103086:4853",
+          "variants": 36,
+          "private": true
+        },
+        {
+          "name": "_Tabs button item",
+          "id": "5662:278514",
+          "variants": 12,
+          "private": true
+        },
+        {
+          "name": "_Tabs skeleton item",
+          "id": "5657:278356",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Vertical tabs items",
+          "id": "75769:1965",
+          "variants": 7,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "481:0",
+      "name": "02 Components – Tag",
+      "sets": [
+        {
+          "name": "Tag - Operational",
+          "id": "46254:10165",
+          "variants": 90,
+          "private": false
+        },
+        {
+          "name": "Tag - Read-only",
+          "id": "16031:269750",
+          "variants": 72,
+          "private": false
+        },
+        {
+          "name": "Tag - Selectable",
+          "id": "46254:7550",
+          "variants": 18,
+          "private": false
+        },
+        {
+          "name": "_Tag close button",
+          "id": "3699:49526",
+          "variants": 96,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "5564:279849",
+      "name": "02 Components – Text area",
+      "sets": [
+        {
+          "name": "Text area - Default",
+          "id": "14494:263111",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "Text area - Fluid",
+          "id": "18791:274643",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "_Text area min-height",
+          "id": "18714:272580",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Text area resize handle",
+          "id": "18714:272578",
+          "variants": 1,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "395:4",
+      "name": "02 Components – Text input",
+      "sets": [
+        {
+          "name": "Text input - Default",
+          "id": "15784:271032",
+          "variants": 69,
+          "private": false
+        },
+        {
+          "name": "Text input - Fluid",
+          "id": "15784:271289",
+          "variants": 12,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "404:0",
+      "name": "02 Components – Tile",
+      "sets": [
+        {
+          "name": "Tile",
+          "id": "20125:279432",
+          "variants": 65,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "467:0",
+      "name": "02 Components – Toggle",
+      "sets": [
+        {
+          "name": "Toggle",
+          "id": "3038:25739",
+          "variants": 36,
+          "private": false
+        },
+        {
+          "name": "_Toggle item",
+          "id": "11412:330975",
+          "variants": 4,
+          "private": true
+        },
+        {
+          "name": "_Toggle skeleton item",
+          "id": "3044:26188",
+          "variants": 1,
+          "private": true
+        },
+        {
+          "name": "_Toggle switch - Small",
+          "id": "3393:33067",
+          "variants": 4,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "8996:400548",
+      "name": "02 Components – Toggletip",
+      "sets": [
+        {
+          "name": "Toggletip",
+          "id": "9384:402406",
+          "variants": 24,
+          "private": false
+        },
+        {
+          "name": "_Toggletip body item",
+          "id": "9005:400571",
+          "variants": 12,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "500:0",
+      "name": "02 Components – Tooltip",
+      "sets": [
+        {
+          "name": "Tooltip",
+          "id": "3684:40507",
+          "variants": 44,
+          "private": false
+        },
+        {
+          "name": "Tooltip body item",
+          "id": "11925:293850",
+          "variants": 22,
+          "private": false
+        },
+        {
+          "name": "_Tooltip caret item",
+          "id": "3498:33136",
+          "variants": 2,
+          "private": true
+        },
+        {
+          "name": "_Tooltip definition item",
+          "id": "3997:52532",
+          "variants": 3,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "11800:284738",
+      "name": "02 Components – Tree view",
+      "sets": [
+        {
+          "name": "Branch node item",
+          "id": "11828:285325",
+          "variants": 32,
+          "private": false
+        },
+        {
+          "name": "Tree view",
+          "id": "11948:286738",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "_Tree view spacer - Branch node",
+          "id": "11871:287833",
+          "variants": 8,
+          "private": true
+        },
+        {
+          "name": "_Tree view spacer - Leaf node",
+          "id": "11833:285396",
+          "variants": 8,
+          "private": true
+        }
+      ]
+    },
+    {
+      "id": "539:0",
+      "name": "02 Components – UI shell - Header",
+      "sets": [
+        {
+          "name": "UI shell - Header",
+          "id": "92123:1663",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "UI shell - Header actions",
+          "id": "2133:10716",
+          "variants": 10,
+          "private": false
+        },
+        {
+          "name": "UI shell - Header menu",
+          "id": "2213:15047",
+          "variants": 9,
+          "private": false
+        },
+        {
+          "name": "UI shell - Header menu item",
+          "id": "2133:9531",
+          "variants": 15,
+          "private": false
+        },
+        {
+          "name": "UI shell - Header sub-menu",
+          "id": "2133:9973",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "UI shell - Header sub-menu item",
+          "id": "2133:9888",
+          "variants": 6,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "2258:13866",
+      "name": "02 Components – UI shell - Left panel",
+      "sets": [
+        {
+          "name": "UI shell - Left panel",
+          "id": "6227:297201",
+          "variants": 2,
+          "private": false
+        },
+        {
+          "name": "UI shell - Left panel menu item",
+          "id": "2346:16194",
+          "variants": 34,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "2258:13915",
+      "name": "02 Components – UI shell - Right panel",
+      "sets": [
+        {
+          "name": "UI shell - Right panel",
+          "id": "2319:15100",
+          "variants": 1,
+          "private": false
+        },
+        {
+          "name": "UI shell - Right panel item",
+          "id": "2282:13907",
+          "variants": 7,
+          "private": false
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,11 @@ Appears when the user interacts with an AI label, and gives detailed information
 **Figma:** [AI explainability popover](https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo/Graphite-UI-Kit?node-id=57561-3508)
 **Figma node ID:** `57561:3508` — page "02 Components – AI explainability popover"
 
+| Component | Node ID |
+|---|---|
+| AI explainability popover | `57561:3508` |
+| AI explainability popover actions footer | `57561:3559` |
+
 ## Variant properties
 
 | Property | Options |
@@ -20,8 +25,13 @@ Appears when the user interacts with an AI label, and gives detailed information
 | Function details / Model details / Training data | Boolean | show/hide each explainability section |
 | Slot 1–4 / Swap slot 1–4 | Boolean + Instance swap | up to 4 custom content slots |
 | Confidence | Boolean | shows a confidence score in the heading |
-| Actions | Boolean | footer action row |
+| Actions | Boolean | footer action row, backed by `AI explainability popover actions footer` |
 | Top caret / Bottom caret / Push caret right / Push caret left | Boolean | positions the popover's pointer |
+
+`AI explainability popover actions footer` (`57561:3559`) is the footer the
+`Actions` boolean shows. It is a single component rather than a variant set,
+carrying four booleans — `Action 1`, `Action 2`, `Action 3` and `Details
+button` — so the row can hold up to three actions beside the details affordance.
 
 The heading supports two type-token options — **Confidence score** (shows a percentage) and **Detail** (more background copy) — switched via the Callout heading modifier in Figma.
 
@@ -37,4 +47,4 @@ The heading supports two type-token options — **Confidence score** (shows a pe
 - Don't show a `Confidence` score you can't actually back with a real value — it implies precision the AI output may not have.
 
 ---
-*Generated from Figma component set `57561:3508` — regenerate if variant properties change.*
+*Generated from Figma component sets `57561:3508` / `57561:3559` — regenerate if variant properties change.*

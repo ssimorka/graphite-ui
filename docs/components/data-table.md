@@ -18,6 +18,7 @@ Also carries `Pagination`, `Toolbar`, `Slot`/`Swap slot`, and `Body` booleans to
 
 | Component | Node ID | Purpose |
 |---|---|---|
+| Data table header item | `4630:273365` | The table's own title and description block, above the column headers. Carries `Title text`, `Description text` and a `Description` boolean |
 | Data table header cell item | `43292:32017` | Column headers, with `Sortable`/`Sorted` states |
 | Data table row cell item | `6172:291044` | Standard body cell, supports a second text line |
 | Data table select cell item | `43292:32873` | Checkbox/radio selection cell (internal — do not use directly) |

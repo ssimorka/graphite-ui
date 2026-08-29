@@ -13,6 +13,18 @@ Date and time selection components. Date picker has three modes: Simple date (ty
 
 **Figma:** [Date picker - Single calendar - Default](https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo/Graphite-UI-Kit?node-id=17544-267504)
 
+### Time picker item lists
+
+The three sets a Time picker's dropdown is built from. Each is a list of
+selectable items rather than a picker in its own right, and all three share one
+`State` axis — Enabled, Hover, Focus, Error + Warning, Disabled, Skeleton.
+
+| Component | Node ID | Holds |
+|---|---|---|
+| Time picker items - Fixed | `17544:266768` | A fixed list of times. `Time text` and `Time label` |
+| Time picker items - Clock | `17544:266804` | Clock-face selection. Adds an `AM` boolean axis, and takes a `Clock label` |
+| Time picker items - Timezone | `17544:266925` | Timezone selection. `Timezone text` and `Timezone label` |
+
 ## Variant properties — Date picker - Single calendar - Default
 
 | Property | Options |
