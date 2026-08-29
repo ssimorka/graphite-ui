@@ -397,14 +397,29 @@ function checkRadiusCategory() {
 // --graphite-breakpoint-* cannot replace it — but it compiles to a media query
 // at build time, which means the scan above never sees the number it produces.
 // Check the map it reads from instead.
+//
+// "Cannot verify" is an error, not a warning, for as long as a mixin call
+// still exists. Warning would mean removing @carbon/react silences the only
+// check covering those media queries while CI stays green — the trap
+// docs/SHADCN-MIGRATION.md names as a precondition of de-Carboning. Once the
+// last breakpoint.breakpoint() call is gone there is nothing left to verify
+// and this stands down on its own, which is the honest end state rather than
+// a hardcoded node_modules path kept alive for its own sake.
 function checkCarbonBreakpoints(kitBreakpoints) {
+  const uses = countMixinUses()
+  if (uses === 0) return
+
+  // Overridable for the same reason STYLESHEET is: the self-test has to watch
+  // this fail, and the only way to stage an unreadable config is to point it
+  // at a path that is not there.
   const config =
+    process.env.TOKEN_DRIFT_CARBON_GRID ||
     'node_modules/.pnpm/@carbon+grid@11.56.0/node_modules/@carbon/grid/scss/_config.scss'
-  const abs = path.join(ROOT, config)
+  const abs = path.isAbsolute(config) ? config : path.join(ROOT, config)
   if (!fs.existsSync(abs)) {
-    warnings.push(
+    errors.push(
       `cannot verify Carbon's breakpoint map — ${config} not found (version bump?). ` +
-        `The ${countMixinUses()} breakpoint.breakpoint() media queries are unverified.`,
+        `${uses} breakpoint.breakpoint() media queries are unverified.`,
     )
     return
   }
@@ -416,8 +431,9 @@ function checkCarbonBreakpoints(kitBreakpoints) {
   const whole = fs.readFileSync(abs, 'utf8')
   const decl = /\$grid-breakpoints:\s*\(([\s\S]*?)\n\)\s*!default;/.exec(whole)
   if (!decl) {
-    warnings.push(
-      `could not find the $grid-breakpoints declaration in ${config}`,
+    errors.push(
+      `could not find the $grid-breakpoints declaration in ${config} — ` +
+        `${uses} breakpoint.breakpoint() media queries are unverified.`,
     )
     return
   }
@@ -438,7 +454,10 @@ function checkCarbonBreakpoints(kitBreakpoints) {
   // Carbon calls the 1312px stop `xlg`; the kit and our tokens call it `xl`.
   const CARBON_NAME = { sm: 'sm', md: 'md', lg: 'lg', xl: 'xlg', max: 'max' }
   if (carbon.size === 0) {
-    warnings.push(`could not parse Carbon's breakpoint map out of ${config}`)
+    errors.push(
+      `could not parse Carbon's breakpoint map out of ${config} — ` +
+        `${uses} breakpoint.breakpoint() media queries are unverified.`,
+    )
     return
   }
 
