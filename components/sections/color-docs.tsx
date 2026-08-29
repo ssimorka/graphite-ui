@@ -25,21 +25,6 @@ import { Reveal } from '@/components/reveal'
 
 type Entry = { hex: string; ramp: string; tone: number }
 
-const TOC = [
-  { href: '#how-it-works', label: 'How color works' },
-  { href: '#roles', label: 'Color roles' },
-  { href: '#hierarchy', label: 'Color hierarchy' },
-  { href: '#themes', label: 'Themes' },
-  { href: '#states', label: 'Interaction states' },
-  { href: '#accessibility', label: 'Accessibility' },
-  { href: '#usage', label: 'Usage' },
-  { href: '#tokens', label: 'Tokens' },
-  // Pattern reference and Glossary are sibling sections on this page rather
-  // than part of ColorDocs, so they are listed by hand in page order.
-  { href: '#patterns', label: 'Pattern reference' },
-  { href: '#glossary', label: 'Glossary' },
-]
-
 const PIPELINE = [
   {
     step: 'Your color',
@@ -356,6 +341,11 @@ function toneLabel(tone: number) {
 }
 
 /** One-line plain-English gloss opening a section, for readers skimming. */
+// Columns span the full 16 inside the docs shell. The `offset: 1` these
+// carried, and the spans of 10 to 14 that went with it, insetting the content
+// from the viewport edge — the shell's sidebar, on-this-page rail and padding
+// now do that, and keeping both inset it twice. Reading width is held where it
+// was by `.docpage__body`'s own 44rem cap rather than by the grid.
 export function InShort({ children }: { children: ReactNode }) {
   return (
     <p className="doc-summary">
@@ -404,7 +394,9 @@ export function ColorDocs() {
     <article className="docpage">
       <section className="section docpage__intro">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 8, offset: 1 }}>
+          {/* Was span 8 alongside the TOC column; the shell's rail took the
+              TOC, so this now matches the span every other section uses. */}
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <p className="section__eyebrow">Docs</p>
               <h1 className="section__title docpage__title">Color</h1>
@@ -429,27 +421,13 @@ export function ColorDocs() {
               </p>
             </Reveal>
           </Column>
-          <Column sm={4} md={8} lg={{ span: 3, offset: 10 }}>
-            <Reveal delay={80}>
-              <nav className="docpage__toc" aria-label="On this page">
-                <p className="docpage__toc-label">On this page</p>
-                <ul>
-                  {TOC.map((item) => (
-                    <li key={item.href}>
-                      <a href={item.href}>{item.label}</a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </Reveal>
-          </Column>
         </Grid>
       </section>
 
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="how-it-works">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">How color works</h2>
               <InShort>
@@ -556,7 +534,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="roles">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Color roles</h2>
               <InShort>
@@ -650,7 +628,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="hierarchy">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Color hierarchy</h2>
               <InShort>
@@ -705,7 +683,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="themes">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Themes</h2>
               <InShort>
@@ -779,7 +757,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="states">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Interaction states</h2>
               <InShort>
@@ -903,7 +881,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="accessibility">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Accessibility</h2>
               <InShort>
@@ -1034,7 +1012,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="usage">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 12, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Usage</h2>
               <div className="doc-rules">
@@ -1067,7 +1045,7 @@ export function ColorDocs() {
       {/* ---------------------------------------------------------------- */}
       <section className="section" id="tokens">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Tokens</h2>
               <InShort>
@@ -1199,7 +1177,7 @@ export function ColorGlossary() {
     <article className="docpage">
       <section className="section" id="glossary">
         <Grid>
-          <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+          <Column sm={4} md={8} lg={16}>
             <Reveal>
               <h2 className="doc-heading">Glossary</h2>
               <dl className="doc-glossary">

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { ColorDocs, ColorGlossary } from '@/components/sections/color-docs'
 import { PatternGuide } from '@/components/sections/pattern-guide'
 import { SiteFooter } from '@/components/sections/site-footer'
+import { DocsShell } from '@/components/docs-shell'
+import { DOCS_NAV, COLOR_DOCS_TOC } from '@/components/docs-nav'
 
 export const metadata: Metadata = {
   title: 'Docs · Graphite UI',
@@ -12,9 +14,13 @@ export const metadata: Metadata = {
 export default function DocsPage() {
   return (
     <main id="main-content" className="page-main">
-      <ColorDocs />
-      <PatternGuide />
-      <ColorGlossary />
+      <DocsShell nav={DOCS_NAV} toc={COLOR_DOCS_TOC}>
+        <ColorDocs />
+        <PatternGuide />
+        <ColorGlossary />
+      </DocsShell>
+      {/* Outside the shell: the footer belongs to the page, not to the
+          column between the two rails. */}
       <SiteFooter />
     </main>
   )
