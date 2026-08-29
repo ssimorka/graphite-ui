@@ -9,10 +9,16 @@
 //
 //   node scripts/token-drift.test.mjs
 //
-// The warning-only checks (media queries, radius-via-spacing, direct Carbon)
-// are not covered here. They read the component tree rather than the
-// stylesheet argument, and they are deliberately non-fatal, so there is no
-// exit code to assert on.
+// Most cases drift the stylesheet. The Carbon breakpoint check is the
+// exception: it reads Carbon's own grid config rather than the stylesheet, so
+// its cases stage a bad config path through TOKEN_DRIFT_CARBON_GRID instead.
+// It earns coverage because it is fatal — the whole point of promoting it from
+// a warning was that removing @carbon/react must not silence it quietly.
+//
+// The remaining warning-only checks (radius-via-spacing, direct Carbon
+// spacing and type styles) are still not covered. They read the component tree
+// rather than the stylesheet argument, and they are deliberately non-fatal, so
+// there is no exit code to assert on.
 
 import fs from 'node:fs'
 import os from 'node:os'
@@ -26,7 +32,7 @@ const tmp = path.join(
   'globals.scss',
 )
 
-const run = (file) => {
+const run = (file, env) => {
   try {
     return {
       code: 0,
@@ -37,7 +43,7 @@ const run = (file) => {
           'scripts/token-drift.mjs',
           file,
         ],
-        { encoding: 'utf8' },
+        { encoding: 'utf8', env: { ...process.env, ...env } },
       ),
     }
   } catch (e) {
@@ -135,6 +141,38 @@ const cases = [
     expect:
       /--graphite-text-caption-1-size has a mobile override but the kit's modes are identical \(12px\)/,
   },
+
+  // The three ways the Carbon breakpoint check can fail to read its config.
+  // All three are fatal rather than advisory so that dropping @carbon/react
+  // cannot leave the breakpoint.breakpoint() media queries unverified behind a
+  // green CI run. `stage` returns the environment; unlike `mutate` it leaves
+  // the stylesheet alone, because the config is what these drift.
+  {
+    name: "Carbon's grid config is missing",
+    stage: () => ({ TOKEN_DRIFT_CARBON_GRID: 'nope/does-not-exist.scss' }),
+    expect:
+      /cannot verify Carbon's breakpoint map — nope\/does-not-exist\.scss not found[\s\S]*breakpoint\.breakpoint\(\) media queries are unverified/,
+  },
+  {
+    name: "Carbon's grid config declares no breakpoint map",
+    stage: (dir) => {
+      const f = path.join(dir, 'no-decl.scss')
+      fs.writeFileSync(f, '$spacing: (\n  spacing-01: 0.125rem,\n) !default;\n')
+      return { TOKEN_DRIFT_CARBON_GRID: f }
+    },
+    expect:
+      /could not find the \$grid-breakpoints declaration[\s\S]*media queries are unverified/,
+  },
+  {
+    name: "Carbon's breakpoint map does not parse",
+    stage: (dir) => {
+      const f = path.join(dir, 'empty-decl.scss')
+      fs.writeFileSync(f, '$grid-breakpoints: (\n) !default;\n')
+      return { TOKEN_DRIFT_CARBON_GRID: f }
+    },
+    expect:
+      /could not parse Carbon's breakpoint map out of[\s\S]*media queries are unverified/,
+  },
 ]
 
 // If the unmutated stylesheet does not pass, every negative below is
@@ -152,15 +190,20 @@ let caught = 0
 const failures = []
 
 for (const c of cases) {
-  const mutated = c.mutate(original)
-  if (mutated === original) {
-    failures.push(
-      `${c.name}: the mutation changed nothing — its anchor has moved`,
-    )
-    continue
+  let r
+  if (c.stage) {
+    r = run(REAL, c.stage(path.dirname(tmp)))
+  } else {
+    const mutated = c.mutate(original)
+    if (mutated === original) {
+      failures.push(
+        `${c.name}: the mutation changed nothing — its anchor has moved`,
+      )
+      continue
+    }
+    fs.writeFileSync(tmp, mutated)
+    r = run(tmp)
   }
-  fs.writeFileSync(tmp, mutated)
-  const r = run(tmp)
 
   if (r.code === 0)
     failures.push(`${c.name}: the check PASSED when it should have failed`)
