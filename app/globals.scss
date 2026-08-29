@@ -1564,43 +1564,6 @@ body {
   }
 }
 
-// Sticky so the reader keeps their place through a long page. Static below lg,
-// where Carbon stacks the columns and a sticky block would sit in the flow.
-.docpage__toc {
-  border-left: 1px solid var(--cds-border-subtle);
-  padding-left: var(--graphite-space-05);
-
-  @include breakpoint.breakpoint(lg) {
-    position: sticky;
-    top: calc(3rem + var(--graphite-space-06));
-  }
-
-  ul {
-    display: flex;
-    flex-direction: column;
-    gap: var(--graphite-space-03);
-  }
-
-  a {
-    @include type.type-style('body-compact-01');
-    color: var(--cds-text-secondary);
-    text-decoration: none;
-
-    &:hover {
-      color: var(--cds-link-primary-hover);
-      text-decoration: underline;
-    }
-  }
-}
-
-.docpage__toc-label {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--cds-text-primary);
-  margin-bottom: var(--graphite-space-04);
-}
-
 .doc-heading {
   @include type.type-style('fluid-heading-04', true);
   margin-bottom: var(--graphite-space-05);
@@ -1922,6 +1885,24 @@ body {
       color: var(--cds-link-primary-hover);
       text-decoration: underline;
     }
+  }
+}
+
+// Code blocks. The first `<pre>` on the site: the docs pages had only inline
+// code until the installation page needed a command to copy.
+.docpage__pre {
+  max-width: 44rem;
+  margin-bottom: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  overflow-x: auto;
+  background: var(--graphite-surface-variant);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-radius-4);
+
+  code {
+    @include text('code-3', $letter-spacing: 0.32px, $family: mono);
+    color: var(--cds-text-primary);
+    white-space: pre;
   }
 }
 

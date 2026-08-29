@@ -16,6 +16,11 @@ const SPANS: { label: string; cols: number; rows: number }[] = [
   { label: '3 × 2', cols: 3, rows: 2 },
 ]
 
+// Columns span the full 16 inside the docs shell. The `offset: 1` these
+// carried, and the spans of 10 to 14 that went with it, insetting the content
+// from the viewport edge — the shell's sidebar, on-this-page rail and padding
+// now do that, and keeping both inset it twice. Reading width is held where it
+// was by `.docpage__body`'s own 44rem cap rather than by the grid.
 export function PatternGuide() {
   const { sourceHex, theme, lightBundle, darkBundle } = useTheme()
   const isDark = theme === 'g100'
@@ -32,7 +37,7 @@ export function PatternGuide() {
   return (
     <section className="section section--guide" id="patterns">
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 10, offset: 1 }}>
+        <Column sm={4} md={8} lg={16}>
           <Reveal>
             <h2 className="doc-heading">Pattern reference</h2>
             <InShort>
@@ -50,7 +55,7 @@ export function PatternGuide() {
 
       {/* Color rhythm */}
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
+        <Column sm={4} md={8} lg={16}>
           <Reveal>
             <h3 className="doc-subheading">Color rhythm · 60 / 30 / 10</h3>
             <p className="docpage__body">
@@ -78,7 +83,7 @@ export function PatternGuide() {
 
       {/* Span definitions */}
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
+        <Column sm={4} md={8} lg={16}>
           <Reveal>
             <h3 className="doc-subheading">Span definitions</h3>
             <p className="docpage__body">
@@ -103,7 +108,7 @@ export function PatternGuide() {
 
       {/* Tile library */}
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 14, offset: 1 }}>
+        <Column sm={4} md={8} lg={16}>
           <Reveal>
             <h3 className="doc-subheading">Tile library</h3>
             <p className="docpage__body">

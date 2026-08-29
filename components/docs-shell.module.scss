@@ -1,0 +1,148 @@
+// Docs shell — site chrome, the second half of S1.
+//
+// Same boundary as site-header.module.scss: navigation-menu.md's 2.0.0
+// prohibition puts "a collapsible side panel" outside components/ui/, so the
+// sidebar rail, the sticky rails and the group headings live here and the
+// component supplies only the link lists.
+//
+// Serves /docs and, from S2, every component page — so nothing in here knows
+// what the content is.
+
+.shell {
+  display: block;
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 0 var(--graphite-space-05);
+}
+
+.content {
+  min-width: 0;
+  padding: var(--graphite-space-07) 0 var(--graphite-space-10);
+}
+
+// ------------------------------------------------------------------- rails
+// Neither rail is a rail on a narrow screen. The sidebar stacks above the
+// content instead of hiding: it is the only route to the docs pages the header
+// nav does not list, so hiding it would leave /docs/installation reachable
+// only by typing the URL.
+.rail {
+  padding-bottom: var(--graphite-space-05);
+}
+
+.sidebar {
+  border-bottom: 1px solid var(--graphite-outline);
+  margin-bottom: var(--graphite-space-05);
+}
+
+// The TOC does hide, because every link in it points at a heading in the
+// content directly below. Nothing is unreachable without it.
+.toc {
+  display: none;
+}
+
+// A group heading is not a link, so it cannot be a NavigationMenu item —
+// NavItem requires an href. The shell owns the heading and hands the component
+// the links below it, which is the same split the header uses.
+.group + .group {
+  margin-top: var(--graphite-space-06);
+}
+
+.groupLabel {
+  margin: 0 0 var(--graphite-space-02);
+  padding: 0 var(--graphite-space-03);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.tocLabel {
+  margin: 0 0 var(--graphite-space-03);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.tocList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tocLink {
+  display: block;
+  padding: var(--graphite-space-02) var(--graphite-space-03);
+  border-left: 2px solid var(--graphite-outline);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  text-decoration: none;
+}
+
+.tocLink:hover {
+  color: var(--graphite-on-surface);
+}
+
+.tocLink:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// Scroll-spy marks the section you are reading. `primary` on the rule as well
+// as the label, so the cue is position and weight and not colour alone — the
+// same reason CLAUDE.md gives for never letting colour carry status by itself.
+.tocCurrent {
+  border-left-color: var(--graphite-primary);
+  color: var(--graphite-primary);
+  font-weight: 600;
+}
+
+// ------------------------------------------------------------- wide layouts
+// md (672px) brings in the sidebar; xl (1312px) adds the on-this-page rail.
+// The TOC waits for the wider stop because it is the more losable of the two:
+// its links all exist in the content below it, the sidebar's do not.
+@media (min-width: 672px) {
+  .shell {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: var(--graphite-space-07);
+  }
+
+  // Now they are rails: stuck under the fixed 3rem header. `height` rather
+  // than `max-height` so a long list scrolls inside the rail instead of
+  // pushing the page, which is what keeps the sidebar usable once S3 fills it
+  // with every component.
+  .rail {
+    position: sticky;
+    top: 3rem;
+    height: calc(100vh - 3rem);
+    overflow-y: auto;
+    padding: var(--graphite-space-07) 0;
+  }
+
+  .sidebar {
+    border-bottom: none;
+    border-right: 1px solid var(--graphite-outline);
+    margin-bottom: 0;
+    padding-right: var(--graphite-space-05);
+  }
+
+  .toc {
+    padding-left: var(--graphite-space-05);
+  }
+}
+
+@media (min-width: 1312px) {
+  .shell {
+    grid-template-columns: 15rem minmax(0, 1fr) 14rem;
+  }
+
+  .toc {
+    display: block;
+  }
+}
