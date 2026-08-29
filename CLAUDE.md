@@ -175,6 +175,35 @@ a browser result.
   pinning hue; don't treat it as a bug, and never let color alone carry
   status meaning in the UI.
 
+## Landing changes
+
+**`main` is protected and you cannot push to it.** Enabled 2026-08-29 after a
+long run of green governance runs made `governance` safe to require. Every
+change goes through a PR, including one-line doc edits.
+
+- A pull request is required. Approvals required: **0**, because a solo
+  maintainer cannot approve their own PR and any higher number would be a
+  lock-out rather than a gate.
+- `governance` must pass. That is the workflow job in
+  `.github/workflows/checks.yml`, not Vercel: Vercel proves the site builds,
+  which is not the same claim.
+- **`enforce_admins` is on**, so this binds the repo owner too. That is the
+  entire point — the one unreviewed change in recent history (`e49b422`) was
+  the owner pushing straight to `main` after a merge, and admin bypass would
+  have permitted it.
+- Force pushes and branch deletion are off; linear history is required, which
+  the squash-merge habit already produced.
+- `strict` (branch must be up to date before merging) is **off**, deliberately:
+  with one PR in flight at a time it only buys needless rebases.
+
+Verified by probe: an empty commit pushed directly to `main` is rejected with
+"Changes must be made through a pull request" and "Required status check
+'governance' is expected."
+
+If CI is ever broken badly enough to block a fix, the escape hatch is to
+disable protection, land the fix, and re-enable — a deliberate act that leaves
+a trace, which is what "no bypass" is meant to cost.
+
 ## Architecture notes
 
 - `components/theme-provider.tsx` is the single source of truth for
