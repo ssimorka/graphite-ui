@@ -1,0 +1,142 @@
+// Site chrome — the app shell's header bar.
+//
+// Deliberately not a CSS module under components/ui/: navigation-menu.md's
+// prohibition says "a header bar, a global action rail or a collapsible side
+// panel is site chrome and belongs outside components/ui/". This file is that
+// chrome. It composes NavigationMenu for the link list and owns nothing the
+// contract governs.
+//
+// Nothing here reaches for Carbon. The bar used to be @carbon/react's UI shell
+// Header + SideNav, whose geometry came from Carbon's own Sass; every value
+// below is a --graphite-* token instead, which is the point of the swap.
+
+.header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 8000; // above the page, below Modal's scrim
+  height: 3rem; // .page-main compensates with an equal margin-top
+  background: var(--graphite-surface);
+  border-bottom: 1px solid var(--graphite-outline);
+  color: var(--graphite-on-surface);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  height: 100%;
+  padding-left: var(--graphite-space-05);
+}
+
+// ---------------------------------------------------------------- skip link
+// Carbon shipped SkipToContent; this replaces it. Off-screen until focused
+// rather than display:none, which would take it out of the tab order and
+// defeat the purpose.
+.skip {
+  position: absolute;
+  top: var(--graphite-space-03);
+  left: var(--graphite-space-03);
+  z-index: 1;
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+// `:focus`, not `:focus-visible`. The link sits off-screen and is reachable
+// only by keyboard, so there is no pointer focus to suppress — and the
+// heuristic behind :focus-visible does not fire for programmatic focus, which
+// would leave assistive tech moving focus here to a link it cannot see.
+.skip:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// -------------------------------------------------------------------- brand
+.brand {
+  flex: none;
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// ---------------------------------------------------------------------- nav
+// Carbon hid its HeaderNavigation below lg (1056px) and offered a SideNav as
+// the fallback. The same split survives, with a Modal as the fallback: the
+// migration plan spends its one new-component budget on Accordion, so mobile
+// nav reuses Modal rather than introducing Sheet.
+.nav {
+  display: none;
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  height: 100%;
+}
+
+// A square action tile, sized to the bar. 3rem is both the header height and
+// a comfortable touch target, so the two constraints agree here.
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.action:hover {
+  background: var(--graphite-surface-variant);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// 1056px is the kit's `lg` stop, the same one Carbon's HeaderNavigation used.
+@media (min-width: 1056px) {
+  .nav {
+    display: block;
+  }
+
+  .menuButton {
+    display: none;
+  }
+}
+
+// --------------------------------------------------------------- mobile nav
+// NavigationMenu sizes its links for a dense list; reached by thumb in the
+// Modal panel they need a full touch target. This replaces the rule that used
+// to qualify Carbon's `.cds--side-nav a.cds--header__menu-item`, and is an
+// improvement on it: the target belongs to this panel, not to every nav on the
+// site, so it is scoped here rather than pushed into the component's own
+// geometry, which the contract keeps.
+//
+// Matched on the element rather than the class because NavigationMenu's are
+// CSS-module-hashed and not addressable from outside. `:where` holds the
+// specificity at zero so the component's own focus and current rules still win.
+.mobileNav :where(a) {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+}
