@@ -332,9 +332,10 @@ body {
   overflow-x: clip;
 }
 
-// Offset fixed Carbon UI Shell header.
+// Offset the fixed site header. 3rem is `.header`'s height in
+// components/site-header.module.scss; the two have to agree.
 .page-main {
-  margin-top: 3rem; // height of .cds--header
+  margin-top: 3rem;
   background: var(--cds-background);
 }
 
@@ -376,13 +377,6 @@ body {
   color: inherit;
   font: inherit;
   cursor: pointer;
-}
-
-// Carbon sizes side-nav links for a dense product shell; on a marketing page
-// reached by thumb they need a full touch target. Carbon's own rule qualifies
-// the class with `a`, so this has to match that specificity to win.
-.cds--side-nav a.cds--header__menu-item {
-  min-height: 48px;
 }
 
 .site-header__source-label {
