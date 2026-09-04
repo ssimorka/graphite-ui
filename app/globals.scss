@@ -668,7 +668,10 @@ body {
     color-mix(in srgb, var(--cds-interactive) 22%, transparent),
     transparent 60%
   );
-  transition: background 120ms linear;
+  // Duration is the fast step; the easing stays linear on purpose. This
+  // transition restarts on every pointermove, and an ease-out curve makes a
+  // continuously-retargeted value rubber-band instead of tracking the cursor.
+  transition: background var(--graphite-motion-fast) linear;
   pointer-events: none;
   // Drifts up faster than the page for depth.
   transform: translate3d(
@@ -1205,9 +1208,9 @@ body {
   background: var(--cds-layer-01);
   border: 1px solid var(--cds-border-subtle-01);
   transition:
-    transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 240ms ease,
-    box-shadow 240ms ease;
+    transform var(--graphite-motion-base) var(--graphite-motion-ease),
+    border-color var(--graphite-motion-base) ease,
+    box-shadow var(--graphite-motion-base) ease;
 
   &:hover {
     transform: translateY(calc(-1 * var(--graphite-space-03)));
