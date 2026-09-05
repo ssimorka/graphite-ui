@@ -20,6 +20,22 @@
   white-space: normal;
   width: max-content;
   pointer-events: none;
+  // Opacity only. Each placement class below carries its own transform, and an
+  // animated transform would overwrite the placement rather than offset from
+  // it. There is no exit: the bubble unmounts on close.
+  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tip {
+    animation: none;
+  }
 }
 
 .top { bottom: 100%; left: 50%; transform: translate(-50%, calc(-1 * var(--graphite-space-02))); }

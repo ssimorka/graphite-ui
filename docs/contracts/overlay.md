@@ -1,6 +1,6 @@
 ---
 component: Overlay
-version: 1.0.1
+version: 1.1.0
 wave: 5
 internal: true
 slots: []
@@ -14,6 +14,8 @@ props:
 tokens: []
 composition_rules:
   - The elevated surface is `surface-elevated` and the edge is `outline`. Each overlay declares those in its own contract rather than inheriting them silently, so the drift check can hold it to them.
+  - Overlays enter on one shared fade — the fast motion step on the shared easing — and each overlay declares `motion` in its own contract for the same reason it declares its surface. The fade is opacity only: Tooltip carries its placement in `transform`, a different value per side, so an entrance that moved would overwrite the position it was moving to.
+  - There is no exit transition, deliberately. Every overlay unmounts its content on close, and Popover depends on that: its no-nesting prohibition is enforced by a throw that only fires because content does not exist until it is open. Holding a closed overlay mounted to animate it out would move that throw to prerender.
   - Focus returns to the element that opened the overlay when it closes, in every case, trapped or not.
   - Escape dismisses any overlay that is dismissible at all, and it is always the outermost open overlay that closes first.
 prohibitions:
