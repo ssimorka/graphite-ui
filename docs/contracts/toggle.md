@@ -1,6 +1,6 @@
 ---
 component: Toggle
-version: 2.0.0
+version: 2.1.0
 wave: 2
 slots:
   - name: Label
@@ -35,6 +35,8 @@ tokens:
     usage: The required-field indicator beside the label.
   - name: danger
     usage: Error text, taking the same role as the control's error border so the two cannot drift apart.
+  - name: motion
+    usage: Duration for the track fill and the thumb travel. The easing stays a plain ease rather than the settle curve, because a switch is a short mechanical move and not something entering the viewport.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Label text describes the state being controlled ("Notifications"), not the state itself ("On/Off") — the switch position already communicates that.
@@ -45,6 +47,6 @@ prohibitions:
 ### Toggle
 - **Slots:** Label (required, describes the setting being toggled).
 - **Props:** checked, disabled.
-- **Tokens:** `primary` fill when on, `outline` fill when off — same tone-step logic as Button's active state, not a separate green/gray convention — with `surface` for the thumb and the spacing scale for track dimensions.
+- **Tokens:** `primary` fill when on, `outline` fill when off — same tone-step logic as Button's active state, not a separate green/gray convention — with `surface` for the thumb and the spacing scale for track dimensions. The motion tokens carry the duration of both the track fill and the thumb travel, so the switch moves at the same speed as the controls around it; the easing stays a plain ease, because a switch is a short mechanical move rather than something entering the viewport.
 - **Composition rules:** Label text describes the state being controlled ("Notifications"), not the state itself ("On/Off") — the switch position already communicates that.
 - **Prohibitions:** No switch used for an action that isn't reversible immediately — that's a Button's job, not a Toggle's.

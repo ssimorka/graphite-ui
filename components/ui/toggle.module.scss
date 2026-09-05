@@ -36,7 +36,10 @@
   padding: 3px;
   border-radius: var(--graphite-radius-full);
   background: var(--graphite-outline);
-  transition: background 120ms ease;
+  // Duration from the shared motion tokens; the easing stays a plain ease
+  // rather than the settle curve, because a switch is a short mechanical move
+  // and not something entering the viewport.
+  transition: background var(--graphite-motion-fast) ease;
   pointer-events: none;
 }
 
@@ -45,7 +48,7 @@
   height: calc(var(--graphite-space-06) - 6px);
   border-radius: 50%;
   background: var(--graphite-surface);
-  transition: transform 120ms ease;
+  transition: transform var(--graphite-motion-fast) ease;
 }
 
 .native:checked + .track {

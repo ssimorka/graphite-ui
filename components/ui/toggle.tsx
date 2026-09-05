@@ -4,7 +4,7 @@ import { useId } from 'react'
 import { fieldMessage } from '@/lib/field-message'
 import styles from './toggle.module.scss'
 
-/** Contract: docs/contracts/toggle.md (2.0.0) */
+/** Contract: docs/contracts/toggle.md (2.1.0) */
 type ToggleProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
