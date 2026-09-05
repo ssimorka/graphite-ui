@@ -556,6 +556,15 @@ body {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  // Safe to drop outright: the from-state is the only thing `both` was holding,
+  // so with no animation the cover sits at its natural opacity rather than
+  // stranding invisible.
+  .art__cover {
+    animation: none;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Scroll-reveal motion primitive
 // ---------------------------------------------------------------------------
