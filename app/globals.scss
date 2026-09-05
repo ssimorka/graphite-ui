@@ -563,6 +563,17 @@ body {
   .art__cover {
     animation: none;
   }
+
+  // transform does two jobs on the hint: -50% centres it against `left: 50%`,
+  // and the y value is the reveal travel. `transform: none` — the pattern used
+  // everywhere else in this file — would uncentre it, so pin it to the resting
+  // position and drop only the travel. The opacity fade stays: it carries no
+  // movement, and losing it would make the hint appear with no transition at
+  // all rather than simply without motion.
+  .art__cover-hint {
+    transform: translate(-50%, 0);
+    transition: opacity 160ms ease;
+  }
 }
 
 // ---------------------------------------------------------------------------
