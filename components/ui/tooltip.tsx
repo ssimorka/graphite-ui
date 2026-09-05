@@ -5,7 +5,7 @@ import type { ReactElement } from 'react'
 import { useOverlay } from './overlay'
 import styles from './tooltip.module.scss'
 
-/** Contract: docs/contracts/tooltip.md (1.4.0) */
+/** Contract: docs/contracts/tooltip.md (1.5.0) */
 type TooltipProps = {
   /** Any focusable element. Hover alone would strand keyboard users. */
   children: ReactElement<Record<string, unknown>>

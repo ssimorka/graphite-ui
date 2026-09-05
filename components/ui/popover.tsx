@@ -7,7 +7,7 @@ import styles from './popover.module.scss'
 
 const InsidePopover = createContext(false)
 
-/** Contract: docs/contracts/popover.md (1.4.0) */
+/** Contract: docs/contracts/popover.md (1.5.0) */
 type PopoverProps = {
   trigger: (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => ReactNode
   /** May contain interactive elements — that is what separates it from Tooltip. */

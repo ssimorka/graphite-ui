@@ -17,6 +17,21 @@
   background: var(--graphite-surface-elevated);
   border: 1px solid var(--graphite-outline);
   border-radius: var(--graphite-radius-none);
+  // The shared overlay entrance, same as Popover and Tooltip. Opacity only,
+  // and no exit: the menu unmounts on close.
+  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
 }
 
 .bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }

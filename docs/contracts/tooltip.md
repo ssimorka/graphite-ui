@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-version: 1.4.0
+version: 1.5.0
 wave: 5
 slots:
   - name: Trigger
@@ -24,6 +24,8 @@ tokens:
     usage: Padding and offset from the trigger.
   - name: radius
     usage: Bubble corner.
+  - name: motion
+    usage: The entrance fade. Opacity only — the four placement classes each carry their own `transform`, so an animation that moved would overwrite the placement.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).

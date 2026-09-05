@@ -1,6 +1,6 @@
 ---
 component: Menu
-version: 1.2.0
+version: 1.3.0
 wave: 5
 slots:
   - name: Trigger
@@ -27,6 +27,8 @@ tokens:
     usage: Contained list padding and separator gaps.
   - name: radius
     usage: Panel corner, and the corner on each item.
+  - name: motion
+    usage: The shared overlay entrance, inherited from Popover along with the surface. Declared here too so the drift check can hold this component to it rather than trusting the inheritance.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
