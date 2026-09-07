@@ -60,6 +60,11 @@ const RAMPS = [
     use: 'Brand color, interactive elements, focus',
   },
   {
+    name: 'Secondary',
+    chroma: 'Just over half your color',
+    use: 'Counterpoint accent: the vivid tenth of the 60/30/10 rhythm',
+  },
+  {
     name: 'Neutral variant',
     chroma: 'Barely tinted',
     use: 'Secondary surfaces, borders, supporting text',
@@ -469,9 +474,11 @@ export function ColorDocs() {
               <h3 className="doc-subheading">Step 2: the ramps</h3>
               <p className="docpage__body">
                 A <strong>ramp</strong> is one color laid out from dark to
-                light, like a paint strip. The system keeps your color&rsquo;s
-                hue and varies how light it is, then repeats that at three
-                levels of intensity:
+                light, like a paint strip. The system varies how light your
+                color is, then repeats that at four levels of intensity. Three
+                of them keep your color&rsquo;s hue exactly; the fourth turns
+                it a third of the way around the color wheel, so the
+                counterpoint is generated rather than picked:
               </p>
               <div className="doc-table">
                 <Table size="lg">
@@ -1123,7 +1130,7 @@ export function ColorDocs() {
                 ))}
               </p>
               <p className="doc-reference-label">
-                Primitives: 7 ramps × 10 stops
+                Primitives: 8 ramps × 10 stops
               </p>
               <p className="docpage__body">
                 Exported for reference and tooling. Available to inspect and
