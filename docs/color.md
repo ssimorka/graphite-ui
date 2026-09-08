@@ -32,11 +32,12 @@ The calculations run in **OKLab**, a way of describing color built to match how 
 
 ### 2. Primitives: the ramps
 
-The source color's hue is held constant while lightness sweeps from dark to light. Chroma is scaled to produce three parallel ramps:
+Lightness sweeps from dark to light while chroma is scaled, producing four parallel ramps. Three hold the source hue constant; Secondary turns it 120°, so the counterpoint color is generated rather than picked:
 
 | Ramp | Intensity | What it is for |
 |---|---|---|
 | **Accent** | Same as your color | Brand color, interactive elements, focus |
+| **Secondary** | Just over half your color | Counterpoint accent: the vivid tenth of the 60/30/10 rhythm |
 | **Neutral variant** | Barely tinted | Secondary surfaces, borders, supporting text |
 | **Neutral** | Almost gray | Page backgrounds, primary surfaces, primary text |
 
@@ -70,7 +71,7 @@ Designers do not usually touch this layer, but it explains an important constrai
 The system exports in two formats:
 
 - **CSS**: custom properties prefixed `--cts-`, in kebab-case (`--cts-on-surface-variant`), scoped to `:root, [data-theme="light"]` and `[data-theme="dark"]`. Each token ships with two companion variables recording its provenance: `--cts-primary-ramp: accent` and `--cts-primary-tone: 40`.
-- **JSON**: `source`, `primitives` (all three ramps with every stop), and `semantic` (both themes, with tokens, contrast results, and states).
+- **JSON**: `source`, `primitives` (all four ramps with every stop), and `semantic` (both themes, with tokens, contrast results, and states).
 
 The provenance variables are worth knowing about. Every token is auditable back to a ramp and a tone, so "why is this color this color" always has an answer.
 

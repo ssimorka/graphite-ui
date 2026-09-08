@@ -7,7 +7,7 @@ import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 const FAQS = [
   {
     q: 'What exactly do I get from one color?',
-    a: 'Three perceptual ramps (accent, neutral, neutral variant), a set of semantic tokens for light and dark, a WCAG contrast report for every pairing, and a generative pattern library, all derived from the single hex you provide.',
+    a: 'Four perceptual ramps (accent, secondary, neutral, neutral variant), a set of semantic tokens for light and dark, a WCAG contrast report for every pairing, and a generative pattern library, all derived from the single hex you provide.',
   },
   {
     q: 'How does the contrast auto-fix work?',

@@ -10,7 +10,7 @@ export function SiteFooter() {
         <Column sm={4} md={8} lg={16}>
           <div className="footer__bar">
             <p className="footer__stats">
-              3 ramps · {CARBON_VAR_COUNT} variables · WCAG AA/AAA · 20 patterns
+              4 ramps · {CARBON_VAR_COUNT} variables · WCAG AA/AAA · 20 patterns
             </p>
             <div className="footer__credit">
               <span className="footer__credit-label">Built by</span>
