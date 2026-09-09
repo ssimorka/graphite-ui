@@ -1,0 +1,119 @@
+// Component wall — kit "02 Component wall" (11863:2973).
+//
+// Uses the same --graphite-* tokens the components themselves do. That is the
+// point of the section: the specimens repaint with the source color because
+// nothing here overrides them.
+.section {
+  padding: var(--graphite-space-11) 0;
+  border-bottom: 1px solid var(--graphite-outline);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin-bottom: var(--graphite-space-07);
+}
+
+.title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.body {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+  max-width: 47.5rem; // kit caps the lede at 760px
+  margin: 0;
+}
+
+// The kit pins cards at 265px and gaps them 20px, which is exactly four across
+// its 1120px content column. Expressed as an auto-fill grid instead so the row
+// stays full at every width rather than only at the three drawn breakpoints;
+// 240px + space-06 still resolves to four columns at X-Large.
+.wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--graphite-space-06);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline);
+  // Shadows/Menu
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+}
+
+.preview {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 9.25rem; // kit preview area is 148px
+  padding: var(--graphite-space-06) var(--graphite-space-05);
+  overflow: hidden;
+}
+
+// Specimens are sized for their own pages, so the narrow ones are held to the
+// preview's width rather than allowed to set the card's.
+.preview > * {
+  max-width: 100%;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-outline);
+}
+
+.name {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Status badge: the version is spelled out in the label, so the color is
+// reinforcement rather than the only thing carrying the meaning.
+.badge {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: var(--graphite-text-weight-medium);
+  text-transform: uppercase;
+  padding: var(--graphite-space-01) var(--graphite-space-03);
+  background: var(--graphite-success-container);
+  border: 1px solid var(--graphite-success);
+  // Text takes onSuccessContainer rather than the kit literal success:
+  // success-on-successContainer is not a pairing buildTheme measures, so it
+  // is only incidentally legible. It clears AA at the seeded color (6.8:1)
+  // but nothing holds it there for a user-picked source. The engine-checked
+  // role looks the same and cannot drift.
+  color: var(--graphite-on-success-container);
+}
+
+// Progress bar's label and helper line are separate elements by contract, so
+// the card stacks them rather than the component doing it.
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  width: 100%;
+}
