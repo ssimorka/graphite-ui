@@ -1,7 +1,6 @@
 import { Hero } from '@/components/sections/hero'
 import { TrustedBy } from '@/components/sections/trusted-by'
-import { Features } from '@/components/sections/features'
-import { Benefits } from '@/components/sections/benefits'
+import { Capabilities } from '@/components/sections/capabilities'
 import { Faq } from '@/components/sections/faq'
 import { FinalCta } from '@/components/sections/final-cta'
 import { SiteFooter } from '@/components/sections/site-footer'
@@ -13,8 +12,7 @@ export default function Page() {
           product shot, so evidence sections come before the ask. */}
       <Hero />
       <TrustedBy />
-      <Features />
-      <Benefits />
+      <Capabilities />
       <Faq />
       <FinalCta />
       <SiteFooter />

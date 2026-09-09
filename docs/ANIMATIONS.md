@@ -15,7 +15,7 @@ Five, all declared on `:root` in `app/globals.scss`.
 | Token | Value | Used by |
 |---|---|---|
 | `--graphite-motion-fast` | 120ms | Button, Toggle, the three overlays, hero spotlight |
-| `--graphite-motion-base` | 240ms | Feature card hover |
+| `--graphite-motion-base` | 240ms | Capabilities carousel item state and body reveal |
 | `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep |
 | `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
 | `--graphite-motion-indeterminate-ease` | `cubic-bezier(0.65, 0, 0.35, 1)` | The sweep only |
@@ -28,7 +28,7 @@ frame. That gap is tracked in the site blueprint, not here.
 
 **The settle curve, `--graphite-motion-ease`.** Anything entering the viewport or
 replacing content: scroll reveal, hero rise, view-switch fade, the overlay
-entrance, feature card hover.
+entrance, the carousel's body reveal.
 
 **Plain `ease`.** Short mechanical moves that are not entrances: Toggle's track
 and thumb, Progress determinate, the cover reveal, theme and link transitions.
@@ -47,22 +47,32 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Motion | Selector | Duration | Easing | Trigger |
 |---|---|---|---|---|
 | Scroll reveal | `.reveal` | 700ms | settle | `IntersectionObserver`, once per element |
-| Hero entrance | `.hero__preview` / `hero-rise` | 900ms | settle | Mount, one-shot |
+| Hero entrance | `.hero__source-strip` / `hero-rise` | 900ms | settle | Mount, one-shot |
 | Hero parallax | `.hero__spotlight`, `.hero__grid-lines` | continuous | — | `pointermove` + `scroll` via rAF |
 | Spotlight tracking | `.hero__spotlight` | `fast` | linear | Pointer position rewrite |
-| View-switch fade | `.showcase__frame` / `fade-swap` | 500ms | settle | Remount on `key={active.key}` |
+| View-switch fade | `.showcase__frame`, `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={active.key}` |
 | Cover reveal | `.art__cover` / `cover-in` | 320ms | ease | Mount, one-shot |
 | Cover hint | `.art__cover-hint` | 160ms | ease | Hover / focus on the cover |
-| Feature card hover | `.feature-card` | `base` | settle | Hover |
+| Carousel dwell rail | `.cap-item__fill` | 7000ms | linear | rAF, the same clock that advances the carousel |
+| Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | settle | Mount, when the item becomes active |
+| Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | ease | Selection change, hover |
 | Theme swap | `html`, `body`, `.cds--*` | 180ms | ease | Theme toggle |
 
 The 700ms, 900ms, 500ms, 320ms, 200ms, 180ms and 160ms values are literals. They
 have no token, and minting one per call site would trade a readable number for an
 indirection that explains nothing.
 
-**Stagger.** `Reveal` fires flat everywhere except two sections: Features
-staggers `delay={(i % 3) * 80}` so rows fade left to right, Benefits staggers
-`delay={i * 80}`. Every other use passes no delay.
+**Stagger.** `Reveal` fires flat everywhere except the Capabilities proof strip,
+which staggers `delay={i * 80}`. Every other use passes no delay.
+
+**The dwell rail is not a CSS animation.** `.cap-item__fill` is written from the
+animation frame in `capabilities.tsx` rather than given a keyframe, because the
+bar and the advance have to be the same clock: a keyframe would drift from the
+timer and promise a moment the carousel does not turn on. Its only CSS is the
+resting `scaleY(0)`. That is also why pausing is exact rather than a
+`animation-play-state` approximation, and why the carousel simply does not run
+under `prefers-reduced-motion` — the component drops the timer, leaving the rail
+as a static position marker.
 
 ## Component motion
 
@@ -101,24 +111,28 @@ so the three compile to distinct identifiers and cannot collide.
 
 ## Reduced motion
 
-Ten blocks. Everything that moves is covered.
+Eleven blocks. Everything that moves is covered.
 
 | Where | Treatment |
 |---|---|
 | `.reveal` | Revealed immediately, transition removed |
-| `.hero__preview` | `animation: none` |
+| `.hero__source-strip` | `animation: none` |
 | `.hero__spotlight`, `.hero__grid-lines` | Transforms and transitions removed |
 | `.art__cover` | `animation: none` |
 | `.art__cover-hint` | Travel removed, fade kept |
 | `.showcase__frame` | `animation: none` |
+| `.cap-stage__frame`, `.cap-item__reveal` | `animation: none` |
 | Button | Transition and press displacement removed |
 | Toggle | Transitions removed |
 | Tooltip, Popover, Menu | `animation: none` |
 | Progress | Determinate transition removed; the sweep stretches to 3s |
 
-Two are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible
+Three are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible
 immediately, so the observer never runs. `hero.tsx` returns before attaching its
 scroll listener, so `--sy` stays at its default and the effect never exists.
+`capabilities.tsx` never starts the dwell timer, so the carousel holds on
+whichever item you select and its pause control is not rendered: there is
+nothing left to pause.
 
 **The progress sweep slows rather than stops.** A frozen indeterminate bar reads
 as a broken one, so it stretches to 3s and stays legible.
@@ -142,6 +156,13 @@ Neutralise the axis that moves, not the whole property.
 A hidden preview pane freezes `document.timeline`, and a frozen clock makes
 `getComputedStyle` report an animation's backwards fill forever. A correct
 entrance reads as `opacity: 0` and looks like a bug.
+
+**The same pane also never hydrates.** Every `.reveal` on the page sits at
+`opacity: 0`, no control responds, and DOM nodes carry no `__reactFiber$` key —
+on pages the change under test does not touch, which is the tell. Confirm it
+against `/docs` before spending time on a component: if the theme toggle there
+is dead too, the pane is the problem. What still works is the server render, so
+a panel can be inspected by making it the one that renders on load.
 
 Sample the effect directly instead:
 

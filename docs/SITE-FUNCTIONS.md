@@ -7,8 +7,7 @@ This document walks through every section and interactive piece of the Helix lan
 [`app/page.tsx`](../app/page.tsx) composes the whole page as a flat list of section components inside a single `<main>`:
 
 ```
-Hero → TrustedBy → Features → ProductShowcase → Benefits →
-Testimonials → Pricing → Faq → FinalCta → SiteFooter
+Hero → TrustedBy → Capabilities → Faq → FinalCta → SiteFooter
 ```
 
 [`app/layout.tsx`](../app/layout.tsx) wraps every page in `ThemeProvider` and renders the fixed `SiteHeader` above `children`. It also sets the page `<title>`/`<meta description>` and the browser theme color.
@@ -33,9 +32,30 @@ The above-the-fold section. Function-wise it does three things beyond static mar
 
 A static row of six placeholder logos (Northwind, Vantage, Cobalt, Meridian, Loop, Axion) under the label "Trusted by engineering teams shipping to millions." Wrapped in a single `Reveal` for a fade-in-on-scroll.
 
-## Features — `components/sections/features.tsx`
+## Capabilities — `components/sections/capabilities.tsx`
 
-Renders a 6-item `FEATURES` array (Live metrics, Distributed tracing, Structured logs, AI anomaly detection, Smart alerting, Enterprise security) as Carbon `Tile` cards in a responsive grid. Each card staggers its reveal animation by `(index % 3) * 80ms` so rows fade in left-to-right.
+The former Features and Benefits sections, merged into one auto-advancing
+carousel. Both were card grids of the same shape, one after the other; this says
+it once and spends the saved height on demonstrating the engine rather than
+describing it.
+
+- **The list** is six disclosure buttons, one per capability. Selecting one puts
+  it on the stage; the body copy is mounted only while its item is active, so
+  `aria-expanded` and what a screen reader can reach agree.
+- **The dwell timer** advances every 7s. It runs on `requestAnimationFrame`, and
+  the same frame writes the rail fill on the active item, so the bar and the
+  advance are one clock. It pauses on hover, on focus within the stage, when the
+  section leaves the viewport, and on the explicit pause control (7s is past the
+  5s threshold that makes an unpausable auto-advance a WCAG 2.2.2 failure). Under
+  `prefers-reduced-motion` the timer never starts and the control is not
+  rendered.
+- **The stage** renders the engine's live output, not screenshots: the four
+  ramps, eight semantic tokens, five contrast pairings each painted on the color
+  they were measured against, the `--graphite-*` declarations, six pattern
+  specimens, and the light/dark pair side by side. Every panel reads
+  `useTheme()`, so the whole section repaints when the source color changes.
+- **The proof strip** below carries the four Benefits stats, staggered
+  `delay={i * 80}`.
 
 ## Product showcase — `components/sections/product-showcase.tsx`
 
@@ -43,10 +63,6 @@ An interactive tabbed image viewer:
 - A Carbon `ContentSwitcher` toggles between two `VIEWS` — **Dashboards** and **Traces & Logs**.
 - Switching updates `index` state, which swaps the displayed screenshot (`dashboard-dark.png` / `traces-panel.png`) and the caption text beneath it.
 - The `key={active.key}` on the image frame forces a remount on switch, so the CSS entry transition replays each time.
-
-## Benefits — `components/sections/benefits.tsx`
-
-Four stat-driven cards (68% faster resolution, 40% lower spend, 3.2x more ships/week, <1s query response), each with an icon, a big number, a title, and supporting copy. Purely presentational, staggered reveal per card.
 
 ## Testimonials — `components/sections/testimonials.tsx`
 
