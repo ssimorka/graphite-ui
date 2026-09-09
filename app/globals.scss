@@ -568,6 +568,72 @@ body {
 }
 
 // ---------------------------------------------------------------------------
+// Page bands backdrop — kit "Grid lines — full bleed" (11896:292490) and the
+// second "Hero spotlight" instance (13400:6405)
+// ---------------------------------------------------------------------------
+// Both are parented to Main content in the kit, not to the hero, and span
+// y 1344-3942: sections 02 through 05. So they are the backdrop the middle of
+// the page sits on. The hero keeps its own pair, which are masked and
+// pointer-tracked; these are neither.
+//
+// isolation, so the z-index -3 children stay behind the four sections while
+// still painting above .page-main's own fill.
+.page-bands {
+  position: relative;
+  isolation: isolate;
+}
+
+// Unlike the hero's, this grid carries no radial mask: the kit renders it as
+// an even 3rem cell edge to edge. It fades only at the two ends, so it does
+// not butt hard against the hero above or the FAQ below — the kit gets that
+// for free from the instance's bounds, which a full-height layer does not.
+.page-bands__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 4rem,
+    #000 calc(100% - 4rem),
+    transparent
+  );
+  pointer-events: none;
+}
+
+// The kit places this instance at x 96, y 1594, 1120x486 — the content column,
+// starting 240px into the band region, which puts it over the component wall.
+// Static here: the pointer-tracked variant is the hero's, and a second one
+// following the cursor down the page would read as a bug.
+.page-bands__glow {
+  position: absolute;
+  top: 15rem; // 240px, the kit's offset from the band region's top
+  left: 50%;
+  z-index: -2;
+  width: min(70rem, 100%);
+  height: 30.375rem; // 486px
+  transform: translateX(-50%);
+  background: radial-gradient(
+    40rem 40rem at 50% 30%,
+    color-mix(in srgb, var(--cds-interactive) 22%, transparent),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+// ---------------------------------------------------------------------------
 // Shared section scaffolding
 // ---------------------------------------------------------------------------
 .section {

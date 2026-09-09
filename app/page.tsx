@@ -20,10 +20,26 @@ export default function Page() {
     <main id="main-content" className="page-main">
       {/* Section order is the kit's, 01 through 07. */}
       <Hero />
-      <ComponentWall contracts={contracts} />
-      <Capabilities contracts={contractList} stats={readKitStats()} />
-      <ThemeCta />
-      <TwoDoors />
+
+      {/* The kit parents "Grid lines — full bleed" and a second "Hero
+          spotlight" to Main content rather than to the hero, spanning y
+          1344-3942 — which is sections 02 through 05 exactly. So they are a
+          backdrop for the middle of the page, not hero decoration, and the
+          four sections below sit on top of them.
+
+          04 Theme is the one that interrupts it: the kit gives that section a
+          fill and the menu shadow, which is what punches an opaque band
+          through the grid. That is why it is the only band here with a
+          background. */}
+      <div className="page-bands">
+        <div className="page-bands__grid" aria-hidden="true" />
+        <div className="page-bands__glow" aria-hidden="true" />
+        <ComponentWall contracts={contracts} />
+        <Capabilities contracts={contractList} stats={readKitStats()} />
+        <ThemeCta />
+        <TwoDoors />
+      </div>
+
       <Faq />
       <SiteFooter />
     </main>
