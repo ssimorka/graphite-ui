@@ -2,9 +2,14 @@
 //
 // The kit lifts this band off the page with the menu shadow, which is what
 // separates it from the two plain sections either side of it.
+// The kit lifts this band off the page with the menu shadow and rules it
+// top and bottom. background and surface are the same hex, so the shadow and
+// the rules are the whole separation.
 .section {
   padding: var(--graphite-space-10) 0;
   background: var(--graphite-background);
+  border-top: 1px solid var(--graphite-surface-variant);
+  border-bottom: 1px solid var(--graphite-surface-variant);
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
 }
 

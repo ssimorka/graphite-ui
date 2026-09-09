@@ -1,8 +1,8 @@
 // Site footer — kit "07 Footer" (11865:3294).
 .footer {
   padding: var(--graphite-space-09) 0 var(--graphite-space-06);
-  border-top: 1px solid var(--graphite-outline);
-  background: var(--graphite-background);
+  border-top: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-surface);
 }
 
 // Brand block sits left of the link columns at X-Large and above it below.
@@ -31,11 +31,13 @@
 
 // The mark is the source color itself, which is the most on-message thing a
 // mark on this site can be.
+// The kit's footer mark is a primary-container swatch, not the header's
+// image: it reads as a mark at this size without competing with the wordmark.
 .mark {
   width: 1.75rem;
   height: 1.75rem;
   flex: none;
-  background: var(--graphite-primary);
+  background: var(--graphite-primary-container);
 }
 
 .wordmark {
@@ -86,10 +88,12 @@
   a {
     font-size: var(--graphite-text-body-3-size);
     line-height: var(--graphite-text-body-3-line-height);
-    color: var(--graphite-on-surface);
+    color: var(--graphite-on-surface-variant);
     text-decoration: none;
+    transition: color var(--graphite-motion-fast) var(--graphite-motion-ease);
 
     &:hover {
+      color: var(--graphite-primary);
       text-decoration: underline;
     }
 
@@ -108,7 +112,7 @@
   gap: var(--graphite-space-05);
   margin-top: var(--graphite-space-08);
   padding-top: var(--graphite-space-05);
-  border-top: 1px solid var(--graphite-outline);
+  border-top: 1px solid var(--graphite-surface-variant);
 }
 
 .stats {
@@ -133,4 +137,11 @@
   display: block;
   height: 1.25rem;
   width: auto;
+}
+
+// The source mark is a solid white PNG, made for a permanently dark page.
+// This site's light theme needs it inverted to stay legible. Scoped through
+// :global because the theme class lives on <html>, outside this module.
+:global(:root.cds--white) .creditLogo {
+  filter: invert(1);
 }
