@@ -24,6 +24,8 @@ import {
   graphiteVarName,
 } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
+import { WEIGHT_LABELS } from '@/components/studio'
+import type { KitStats } from '@/lib/kit-stats'
 import type { Ramps, Theme } from '@/lib/color.js'
 
 // How long each capability holds the stage before the carousel advances.
@@ -33,92 +35,57 @@ import type { Ramps, Theme } from '@/lib/color.js'
 const DWELL_MS = 7000
 
 type PanelKey =
+  | 'source'
   | 'ramps'
-  | 'tokens'
-  | 'contrast'
-  | 'vars'
-  | 'patterns'
-  | 'themes'
+  | 'roles'
+  | 'components'
+  | 'checks'
+  | 'sets'
 
 // The six capabilities, each paired with the panel that demonstrates it. Copy
-// is the former Features grid verbatim: the section changed shape, not claims.
+// names the artefacts the engine produces rather than the features that
+// produce them, which is what the rail counts down.
 const CAPABILITIES: {
   key: PanelKey
-  icon: typeof ColorPalette
   title: string
   body: string
   caption: string
 }[] = [
   {
-    key: 'ramps',
-    icon: ColorPalette,
-    title: 'Perceptual ramps',
-    body: 'Your source color is resolved in OKLab and sampled at fixed tone stops. Steps read as evenly spaced at any hue: no muddy midtones, no blown-out highs.',
-    caption: 'Live ramps from the color you picked. The outlined stop is your source.',
+    key: 'source',
+    title: 'A source color',
+    body: 'Any hex. It is resolved in OKLab and sampled at fixed tone stops, so the steps read as evenly spaced at any hue.',
+    caption: "The outlined stop is the source. Numbers are the ramp's stops; hover one for its OKLab tone.",
   },
   {
-    key: 'tokens',
-    icon: Types,
-    title: 'Semantic tokens',
-    body: 'Ramps resolve into named roles: surface, on-surface, primary, outline. You design against meaning, not hex values, so a color change never means a find-and-replace.',
+    key: 'ramps',
+    title: 'Eight ramps',
+    body: 'Four are derived from the source: an accent, a secondary 120 degrees away, and two neutrals. Four more are pinned to their status hue, so red still reads as danger whatever you put in.',
+    caption: 'Every ramp the engine emits, live from the color you picked.',
+  },
+  {
+    key: 'roles',
+    title: 'Thirty-two roles',
+    body: 'Ramps resolve into named roles: surface, on-surface, primary, outline. You design against meaning rather than hex values, so a color change is never a find-and-replace.',
     caption: 'Eight of the thirty-two roles, resolved for the theme you are reading in.',
   },
   {
-    key: 'contrast',
-    icon: Accessibility,
-    title: 'Contrast auto-fix',
-    body: 'Every pairing is measured against WCAG 2.1 and walked along its ramp until it passes. Accessibility is a property of the system, not a review step.',
-    caption: 'Each row is rendered on the color it was measured against.',
+    key: 'components',
+    title: '22 governed components',
+    body: 'Each one carries a versioned contract saying what it must do, what it must not, and which roles it may touch. The contract is the spec the code is checked against.',
+    caption: 'Every component with a contract, and the version it implements.',
   },
   {
-    key: 'vars',
-    icon: Api,
-    title: 'Drop-in variables',
-    body: `${CARBON_VAR_COUNT} CSS custom properties map onto your existing component library. Point your build at the output and existing UI repaints untouched.`,
-    caption: 'The same values this page is painted with, ready to paste.',
+    key: 'checks',
+    title: '3 checks in CI',
+    body: 'One holds the components to their contracts, one holds the foundations to the token snapshot, and one holds the component docs to the kit. All three read committed snapshots, so they run offline.',
+    caption: 'The governance job. A red check blocks the merge.',
   },
   {
-    key: 'patterns',
-    icon: GridIcon,
-    title: 'Generative patterns',
-    body: 'Twenty tile types on a variable-span grid with neighbour-aware color and layout. Brand imagery that composes itself, exportable at print resolution.',
-    caption: 'Six of the twenty specimens, seeded from your source hex.',
-  },
-  {
-    key: 'themes',
-    icon: Moon,
-    title: 'Paired themes',
-    body: 'Light and dark are generated together from the same source, so they stay in lockstep. Ship both from day one without maintaining two palettes.',
-    caption: 'One input, two themes, generated in the same pass.',
-  },
-]
-
-// The old Benefits grid, folded in as proof under the carousel rather than
-// repeating the card-grid shape a second time down the page.
-const PROOF = [
-  {
-    icon: Time,
-    stat: 'Minutes',
-    title: 'From brand color to shipped theme',
-    body: 'Skip the week of swatch spreadsheets and contrast spot-checks. Paste a hex, review the output, hand engineering a token file.',
-  },
-  {
-    icon: Accessibility,
-    stat: '100%',
-    title: 'Of pairings meet their target',
-    body: 'Contrast is enforced when tokens are generated, so accessibility bugs never reach a design review or an audit.',
-  },
-  {
-    icon: Renew,
-    stat: 'Zero',
-    title: 'Rework when the brand changes',
-    body: 'Rebranding is one input away. Every ramp, token, theme, and pattern regenerates from the new color in a single pass.',
-  },
-  {
-    icon: Bot,
-    stat: 'Rules',
-    title: 'A machine can actually follow',
-    body: 'The system is defined as constraints, not opinions, which is precisely what makes it legible to the agents now assembling interfaces.',
+    key: 'sets',
+    title: '206 component sets tracked',
+    body: 'The kit is larger than its governed surface, and the parts without a contract say so on their own page rather than leaving you to find out.',
+    caption: 'Walked from the kit snapshot, not counted from page names.',
   },
 ]
 
@@ -154,12 +121,124 @@ const RAMP_LABELS: Record<string, string> = {
   secondary: 'secondary',
   neutral: 'neutral',
   neutralVariant: 'neutral variant',
+  danger: 'danger',
+  warning: 'warning',
+  success: 'success',
+  info: 'info',
+}
+
+// Order matters: the four source-derived families first, then the four pinned
+// to a status hue. That is the split the rail's copy describes.
+const ALL_RAMPS = [
+  'accent',
+  'secondary',
+  'neutral',
+  'neutralVariant',
+  'danger',
+  'warning',
+  'success',
+  'info',
+] as const
+
+// The kit's first panel: the one input, then the accent ramp it produced, with
+// the OKLab tone under each stop.
+function PanelSource({ hex, ramps }: { hex: string; ramps: Ramps }) {
+  return (
+    <div className="cap-source">
+      <p className="cap-source__input">
+        <span
+          className="cap-source__swatch"
+          style={{ background: hex }}
+          aria-hidden="true"
+        />
+        <span className="cap-source__hex">{hex}</span>
+        <span className="cap-source__note">the one input</span>
+      </p>
+      <div className="cap-source__stops">
+        {ramps.accent.stops.map((stop, i) => (
+          <span key={i} className="cap-source__stop">
+            <span
+              className={`cap-source__chip${stop.source ? ' is-source' : ''}`}
+              style={{ background: stop.hex }}
+              title={`${stop.hex} · OKLab tone ${Math.round(stop.tone)}`}
+            />
+            <span className="cap-source__tone">{WEIGHT_LABELS[i]}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PanelComponents({
+  contracts,
+}: {
+  contracts: { component: string; version: string }[]
+}) {
+  return (
+    <ul className="cap-components">
+      {contracts.map((c) => (
+        <li key={c.component} className="cap-components__row">
+          <span className="cap-components__name">{c.component}</span>
+          <span className="cap-components__version">{c.version}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// The three drift checks the governance job runs. Descriptions rather than a
+// screenshot of a green tick: what each one actually compares is the point.
+const CHECKS = [
+  {
+    name: 'drift-check',
+    body: 'Components against their contracts. Every declared role and variable has to exist in the implementation.',
+  },
+  {
+    name: 'token-drift',
+    body: 'Foundations against the kit token snapshot: spacing, radius, breakpoints and the type scale.',
+  },
+  {
+    name: 'component-doc-drift',
+    body: 'Component docs against the kit snapshot, so a public set cannot ship undocumented.',
+  },
+]
+
+function PanelChecks() {
+  return (
+    <ul className="cap-checks">
+      {CHECKS.map((check) => (
+        <li key={check.name} className="cap-checks__row">
+          <code className="cap-checks__name">{check.name}</code>
+          <p className="cap-checks__body">{check.body}</p>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function PanelSets({ stats }: { stats: KitStats }) {
+  const rows = [
+    { value: stats.sets, label: 'Component sets in the kit' },
+    { value: stats.pages, label: 'Pages the snapshot covers' },
+    { value: stats.governed, label: 'Carrying a versioned contract' },
+  ]
+  return (
+    <ul className="cap-sets">
+      {rows.map((row) => (
+        <li key={row.label} className="cap-sets__row">
+          <span className="cap-sets__value">{row.value}</span>
+          <span className="cap-sets__label">{row.label}</span>
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 function PanelRamps({ ramps }: { ramps: Ramps }) {
   return (
     <div className="cap-ramps">
-      {(['accent', 'secondary', 'neutral', 'neutralVariant'] as const).map(
+      {ALL_RAMPS.map(
         (name) => (
           <div key={name} className="cap-ramps__row">
             <p className="cap-ramps__label">{RAMP_LABELS[name]}</p>
@@ -315,7 +394,13 @@ function PanelThemes({ light, dark }: { light: Theme; dark: Theme }) {
 
 // --- Section ----------------------------------------------------------------
 
-export function Capabilities() {
+export function Capabilities({
+  contracts,
+  stats,
+}: {
+  contracts: { component: string; version: string }[]
+  stats: KitStats
+}) {
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const [hovering, setHovering] = useState(false)
@@ -396,15 +481,13 @@ export function Capabilities() {
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>
-            <p className="section__eyebrow">The system</p>
             <h2 className="section__title">
-              Everything downstream of one decision
+              One decision, resolved all the way down
             </h2>
             <p className="section__subtitle">
-              Pick a color. Graphite UI derives the ramps, the tokens, the
-              contrast pairings, and the patterns, then keeps them in sync every
-              time you change your mind. Color is the first foundation; the same
-              model extends to layout and components as they ship.
+              The engine does the work Figma cannot: it derives, it measures,
+              and it does both themes at once. Three checks in CI then keep the
+              result honest.
             </p>
           </Reveal>
         </Column>
@@ -415,7 +498,6 @@ export function Capabilities() {
           <Reveal>
             <ul className="cap-list">
               {CAPABILITIES.map((capability, i) => {
-                const Icon = capability.icon
                 const isActive = i === active
                 return (
                   <li
@@ -438,7 +520,6 @@ export function Capabilities() {
                       aria-controls="cap-stage"
                       onClick={() => setActive(i)}
                     >
-                      <Icon size={20} className="cap-item__icon" />
                       <span className="cap-item__title">
                         {capability.title}
                       </span>
@@ -493,14 +574,16 @@ export function Capabilities() {
                 role="region"
                 aria-labelledby={`cap-trigger-${item.key}`}
               >
-                {item.key === 'ramps' && <PanelRamps ramps={ramps} />}
-                {item.key === 'tokens' && <PanelTokens theme={current} />}
-                {item.key === 'contrast' && <PanelContrast theme={current} />}
-                {item.key === 'vars' && <PanelVars theme={current} />}
-                {item.key === 'patterns' && <PanelPatterns />}
-                {item.key === 'themes' && (
-                  <PanelThemes light={light} dark={dark} />
+                {item.key === 'source' && (
+                  <PanelSource hex={activeHex} ramps={ramps} />
                 )}
+                {item.key === 'ramps' && <PanelRamps ramps={ramps} />}
+                {item.key === 'roles' && <PanelTokens theme={current} />}
+                {item.key === 'components' && (
+                  <PanelComponents contracts={contracts} />
+                )}
+                {item.key === 'checks' && <PanelChecks />}
+                {item.key === 'sets' && <PanelSets stats={stats} />}
               </div>
               <p className="cap-stage__caption">{item.caption}</p>
             </div>
@@ -508,30 +591,6 @@ export function Capabilities() {
         </Column>
       </Grid>
 
-      <Grid className="cap-proof">
-        <Column sm={4} md={8} lg={16}>
-          <Reveal>
-            <p className="cap-proof__lead">What that buys you</p>
-          </Reveal>
-        </Column>
-        {PROOF.map((entry, i) => {
-          const Icon = entry.icon
-          return (
-            <Column key={entry.title} sm={4} md={4} lg={4}>
-              <Reveal delay={i * 80}>
-                <div className="cap-proof__item">
-                  <span className="cap-proof__icon">
-                    <Icon size={20} />
-                  </span>
-                  <p className="cap-proof__stat">{entry.stat}</p>
-                  <h3 className="cap-proof__title">{entry.title}</h3>
-                  <p className="cap-proof__body">{entry.body}</p>
-                </div>
-              </Reveal>
-            </Column>
-          )
-        })}
-      </Grid>
     </section>
   )
 }

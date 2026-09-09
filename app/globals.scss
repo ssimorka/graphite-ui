@@ -1608,44 +1608,151 @@ body {
   padding: var(--graphite-space-03) var(--graphite-space-05);
 }
 
-// --- Proof strip -----------------------------------------------------------
-.cap-proof {
-  margin-top: var(--graphite-space-10);
-  row-gap: var(--graphite-space-07);
+// --- Stage panels: source, components, checks, sets -------------------------
+.cap-source {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  justify-content: center;
+  height: 100%;
 }
 
-.cap-proof__lead {
+.cap-source__input {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+}
+
+.cap-source__swatch {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border: 1px solid var(--cds-border-subtle-01);
+}
+
+.cap-source__hex {
+  @include text('body-3', $letter-spacing: 0.16px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.cap-source__note {
   @include text('caption-1', $letter-spacing: 0.32px);
-  margin-bottom: var(--graphite-space-05);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
   color: var(--cds-text-secondary);
 }
 
-.cap-proof__item {
-  height: 100%;
-  padding-top: var(--graphite-space-05);
-  border-top: 2px solid var(--cds-border-interactive);
+.cap-source__stops {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: var(--graphite-space-02);
 }
 
-.cap-proof__icon {
-  display: inline-flex;
-  margin-bottom: var(--graphite-space-05);
+.cap-source__stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-02);
+}
+
+.cap-source__chip {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--cds-border-subtle-01);
+
+  &.is-source {
+    border: 2px solid var(--cds-focus);
+  }
+}
+
+.cap-source__tone {
+  @include text('caption-1', $letter-spacing: 0.32px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+}
+
+.cap-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--graphite-space-02) var(--graphite-space-05);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-components__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-02) 0;
+  border-bottom: 1px solid var(--cds-border-subtle-01);
+}
+
+.cap-components__name {
+  @include text('body-3', $letter-spacing: 0.16px);
+}
+
+.cap-components__version {
+  @include text('caption-1', $letter-spacing: 0.32px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+}
+
+.cap-checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  justify-content: center;
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-checks__row {
+  padding-left: var(--graphite-space-05);
+  border-left: 2px solid var(--cds-border-interactive);
+}
+
+.cap-checks__name {
+  display: block;
+  margin-bottom: var(--graphite-space-02);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-primary);
+}
+
+.cap-checks__body {
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-secondary);
+}
+
+.cap-sets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  justify-content: center;
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-sets__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--graphite-space-05);
+}
+
+.cap-sets__value {
+  min-width: 4ch;
+  @include type.type-style('fluid-heading-04', true);
+  letter-spacing: -0.02em;
   color: var(--cds-interactive);
 }
 
-.cap-proof__stat {
-  @include type.type-style('fluid-heading-04', true);
-  letter-spacing: -0.02em;
-}
-
-.cap-proof__title {
-  @include type.type-style('heading-03');
-  margin-top: var(--graphite-space-03);
-  margin-bottom: var(--graphite-space-03);
-}
-
-.cap-proof__body {
+.cap-sets__label {
   @include text('body-3', $letter-spacing: 0.16px);
   color: var(--cds-text-secondary);
 }
@@ -1746,6 +1853,17 @@ body {
 // ---------------------------------------------------------------------------
 .section--faq {
   row-gap: var(--graphite-space-07);
+}
+
+// The kit sets the FAQ heading at Heading/6 like every other section title
+// on the page, rather than the larger fluid step the old two-column FAQ used.
+.section--capabilities .section__title,
+.faq__title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  margin-bottom: var(--graphite-space-06);
+  max-width: none;
 }
 
 .faq__accordion {

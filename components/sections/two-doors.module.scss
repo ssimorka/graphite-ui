@@ -1,0 +1,147 @@
+// Two doors — kit "05 Two doors" (11864:3180).
+.section {
+  padding: var(--graphite-space-11) 0;
+  border-bottom: 1px solid var(--graphite-outline);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin-bottom: var(--graphite-space-07);
+}
+
+.title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.body {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+  max-width: 47.5rem;
+  margin: 0;
+}
+
+// Two equal doors at X-Large, stacking below it. The kit pins each at 550px,
+// which is its 1120px column split in two; 1fr each is the same split without
+// the magic number.
+.doors {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--graphite-space-06);
+
+  @media (min-width: 64rem) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 19.875rem; // kit door is 318px
+  padding: var(--graphite-space-06);
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline);
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+  // The artefact slides under the card's edge rather than escaping it.
+  overflow: hidden;
+}
+
+.doorBody {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-04);
+  max-width: 16rem;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.doorTitle {
+  font-size: var(--graphite-text-title-2-size);
+  line-height: var(--graphite-text-title-2-line-height);
+  font-weight: var(--graphite-text-weight-regular);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.doorCopy {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+  margin: 0;
+}
+
+// Decorative artefact, clipped by the door. Below the copy in stacking order
+// and inert to the pointer, so it can never take a click meant for the button.
+.artefact {
+  position: absolute;
+  right: -8rem;
+  top: 7.5rem;
+  width: 20rem;
+  display: none;
+  padding: var(--graphite-space-07);
+  background: var(--graphite-surface-variant);
+  border: 1px solid var(--graphite-outline);
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+  pointer-events: none;
+  z-index: 0;
+
+  @media (min-width: 30rem) {
+    display: block;
+  }
+}
+
+.tokenTable {
+  border: 1px solid var(--graphite-outline);
+  width: 45rem; // overflows its frame on purpose: the kit shows a slice
+}
+
+.tokenRow {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-outline);
+}
+
+.tokenSwatch {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 1px solid var(--graphite-outline);
+}
+
+.tokenRole {
+  width: 13.125rem;
+  flex: none;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.tokenUse {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.code {
+  margin: 0;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: 1.5;
+  color: var(--graphite-on-surface-variant);
+  white-space: pre;
+}

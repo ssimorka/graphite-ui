@@ -58,6 +58,9 @@
 
 // -------------------------------------------------------------------- brand
 .brand {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
   flex: none;
   font-size: var(--graphite-text-title-5-size);
   line-height: var(--graphite-text-title-5-line-height);
@@ -139,4 +142,19 @@
   display: flex;
   align-items: center;
   min-height: 48px;
+}
+
+// Brand mark — kit header (11862:2928). Square like everything else in the
+// kit, and filled with the generated primary so it retints with the source.
+.mark {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  background: var(--graphite-primary);
+}
+
+// Repo link in the utility rail. Shares .action's hit area and focus ring;
+// only the anchor's underline needs clearing.
+.repo {
+  text-decoration: none;
 }

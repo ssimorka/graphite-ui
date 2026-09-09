@@ -2,51 +2,43 @@
 
 import { Grid, Column, Accordion, AccordionItem } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
-import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 
+// The kit draws only the first answer open; the other four questions are
+// collapsed, so their copy is written here against what the repo actually
+// does rather than invented.
 const FAQS = [
   {
-    q: 'What exactly do I get from one color?',
-    a: 'Three perceptual ramps (accent, neutral, neutral variant), a set of semantic tokens for light and dark, a WCAG contrast report for every pairing, and a generative pattern library, all derived from the single hex you provide.',
+    q: 'Is Graphite UI production ready?',
+    a: 'Twenty-two components carry a versioned contract and are checked against the kit on every build. The kit ships more than that, and anything without a contract is labelled ungoverned on its own page rather than left for you to find out.',
   },
   {
-    q: 'How does the contrast auto-fix work?',
-    a: 'Each foreground/background pairing is measured against WCAG 2.1. If a pair falls short of its target (4.5:1 for text, 3:1 for UI elements), the foreground is walked along its own ramp until it passes, so the fix stays on-brand.',
+    q: 'Does it require Carbon?',
+    a: 'No, but it is built on it today. The components style themselves from the --graphite-* tokens, and the engine also emits a Carbon compatibility layer so an existing Carbon build repaints without touching a component. Moving off Carbon is a tracked migration, not a rewrite.',
   },
   {
-    q: 'Does it work with my existing components?',
-    a: `Yes. Graphite UI exports ${CARBON_VAR_COUNT} CSS custom properties, plus raw CSS and JSON for everything else. This entire site is themed through that mapping; try the color control in the header.`,
+    q: 'Can I use my own brand color?',
+    a: 'That is the only input. Any hex is resolved in OKLab and sampled at fixed tone stops to build the ramps, the roles and both themes. One caveat worth knowing: a source that sits on a status hue collapses the two, so a red brand color resolves primary and danger to nearly the same value.',
   },
   {
-    q: 'Can I control the output, or is it fully automatic?',
-    a: 'Both. Defaults are opinionated so you can ship immediately, and the tone stops, ramp rules, and contrast targets are all exposed when you need the system to match an existing brand exactly.',
+    q: 'How do the Figma kit and the code stay in step?',
+    a: 'The kit is canonical: where it and a contract disagree, the kit wins and the contract is corrected. Three checks in CI enforce it, reading committed snapshots of the kit rather than the network, so they run offline. Re-extracting a snapshot is still a manual step.',
   },
   {
-    q: 'What are the patterns for?',
-    a: 'Brand imagery that scales without a photoshoot: campaign art, empty states, social cards, section dividers. Compositions are generated from your palette and export at 1600 × 900, so no two are alike.',
-  },
-  {
-    q: 'Is the engine really open source?',
-    a: 'Yes. The color engine and pattern library are MIT licensed, including commercial use. Nothing about the core is gated.',
+    q: 'How do I contribute a component?',
+    a: 'Start with the contract, not the code. It declares the roles and variables the component may touch, and drift-check then holds the implementation to it. Main is protected, so everything lands through a pull request with the governance job green.',
   },
 ]
 
+/** Kit section "06 FAQ" (11865:3162). */
 export function Faq() {
   return (
     <section className="section section--faq" id="faq">
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 6, offset: 1 }}>
+        <Column sm={4} md={8} lg={16}>
           <Reveal>
-            <p className="section__eyebrow">FAQ</p>
-            <h2 className="section__title">Questions, answered</h2>
-            <p className="section__subtitle">
-              How the engine works, what it exports, and where it fits in an
-              existing stack. Anything missing? Ask us.
-            </p>
-          </Reveal>
-        </Column>
-        <Column sm={4} md={8} lg={{ span: 8, offset: 0 }}>
-          <Reveal>
+            <h2 className="section__title faq__title">
+              Questions people actually ask
+            </h2>
             <Accordion size="lg" className="faq__accordion">
               {FAQS.map((item) => (
                 <AccordionItem key={item.q} title={item.q}>

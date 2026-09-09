@@ -1,0 +1,42 @@
+// Theme CTA — kit "04 Theme" (11864:3148).
+//
+// The kit lifts this band off the page with the menu shadow, which is what
+// separates it from the two plain sections either side of it.
+.section {
+  padding: var(--graphite-space-10) 0;
+  background: var(--graphite-background);
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin-bottom: var(--graphite-space-06);
+}
+
+.title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.body {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+  max-width: 47.5rem;
+  margin: 0;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-04);
+
+  a {
+    text-decoration: none;
+  }
+}

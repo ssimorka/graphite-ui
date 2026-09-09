@@ -16,7 +16,7 @@ import { contrastRatio, TONE_STOPS, STATUS_NAMES } from '@/lib/color.js'
 // order rather than by value, so they line up with each ramp's ten stops
 // regardless of the actual OKLab tone at that position. The real tone stays
 // available in each swatch's tooltip.
-const WEIGHT_LABELS = [
+export const WEIGHT_LABELS = [
   '900',
   '800',
   '700',

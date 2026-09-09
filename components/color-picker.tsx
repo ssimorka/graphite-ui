@@ -173,6 +173,9 @@ function HsvPicker({
 
 // --- Popover ---
 
+/** The header's source-color trigger, so other sections can open it. */
+export const SOURCE_TRIGGER_ID = 'source-color-trigger'
+
 export function ColorPickerPopover({
   value,
   onChange,
@@ -241,8 +244,11 @@ export function ColorPickerPopover({
     <div className="site-header__source-wrap">
       {/* The whole trigger — label and swatch — opens the popover, not just
           the swatch, so the click target matches the visible primary block. */}
+      {/* Named so the home page's theme section can open the real control
+          rather than linking at a builder route that does not exist yet. */}
       <button
         ref={buttonRef}
+        id={SOURCE_TRIGGER_ID}
         type="button"
         className="site-header__source-trigger"
         aria-haspopup="true"

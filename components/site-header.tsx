@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Asleep, Light, Menu, Close } from '@carbon/icons-react'
+import { Asleep, Light, Menu, Close, LogoGithub } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
@@ -61,6 +61,10 @@ export function SiteHeader() {
       </a>
       <div className={styles.inner}>
         <a className={styles.brand} href="/">
+          {/* The kit pairs the wordmark with a mark, and fills it with the
+              source colour: the most on-message thing a mark on this site
+              can be. */}
+          <span className={styles.mark} aria-hidden="true" />
           Graphite UI
         </a>
         <div className={styles.nav}>
@@ -86,6 +90,18 @@ export function SiteHeader() {
               onChange={setSourceHex}
             />
           </div>
+          {/* The kit puts a repo link in the utility rail. Its Search sits
+              there too, but a search index is a feature rather than a
+              restyle, so that slot is left out rather than faked. */}
+          <a
+            className={`${styles.action} ${styles.repo}`}
+            href="https://github.com/ssimorka/graphite-ui"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Graphite UI on GitHub"
+          >
+            <LogoGithub size={18} />
+          </a>
           <button
             type="button"
             className={`${styles.action} ${styles.menuButton}`}

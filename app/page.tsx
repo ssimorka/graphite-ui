@@ -1,21 +1,30 @@
 import { Hero } from '@/components/sections/hero'
 import { ComponentWall } from '@/components/sections/component-wall'
 import { Capabilities } from '@/components/sections/capabilities'
+import { ThemeCta } from '@/components/sections/theme-cta'
+import { TwoDoors } from '@/components/sections/two-doors'
 import { Faq } from '@/components/sections/faq'
-import { FinalCta } from '@/components/sections/final-cta'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { readContracts } from '@/lib/contracts'
+import { readKitStats } from '@/lib/kit-stats'
 
 export default function Page() {
+  const contracts = readContracts()
+  // Sorted so the carousel's component panel reads alphabetically rather than
+  // in whatever order the contracts directory happens to list.
+  const contractList = Object.values(contracts)
+    .map(({ component, version }) => ({ component, version }))
+    .sort((a, b) => a.component.localeCompare(b.component))
+
   return (
     <main id="main-content" className="page-main">
-      {/* Section order is the kit's: show the system, prove it renders, explain
-          how it resolves, then the two ways in and the ask. */}
+      {/* Section order is the kit's, 01 through 07. */}
       <Hero />
-      <ComponentWall contracts={readContracts()} />
-      <Capabilities />
+      <ComponentWall contracts={contracts} />
+      <Capabilities contracts={contractList} stats={readKitStats()} />
+      <ThemeCta />
+      <TwoDoors />
       <Faq />
-      <FinalCta />
       <SiteFooter />
     </main>
   )
