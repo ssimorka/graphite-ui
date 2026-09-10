@@ -1020,7 +1020,17 @@ body {
 // stop reachable and keeps the two rows in sync while swiping.
 .ramp__scroll {
   overflow-x: auto;
-  padding-bottom: var(--graphite-space-02);
+  // The hover scale grows a swatch about 5px on every side, and setting
+  // overflow-x makes overflow-y compute to auto as well — so the scaled
+  // swatch was being clipped top, bottom and at both ends of the row.
+  //
+  // The padding is that room. The negative margin puts the row back where it
+  // was, so nothing else moves; the strip's own 24px inset absorbs it. The
+  // extra bottom padding preserves the original scrollbar clearance under the
+  // weights, which the negative margin would otherwise cancel.
+  padding: var(--graphite-space-03);
+  padding-bottom: calc(var(--graphite-space-03) + var(--graphite-space-02));
+  margin: calc(var(--graphite-space-03) * -1);
 }
 
 .ramp__grid,
