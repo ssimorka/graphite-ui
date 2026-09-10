@@ -1,0 +1,180 @@
+// Component wall — kit "02 Component wall" (11863:2973).
+//
+// Uses the same --graphite-* tokens the components themselves do. That is the
+// point of the section: the specimens repaint with the source color because
+// nothing here overrides them.
+.section {
+  padding: var(--graphite-space-11) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+  // The field, and only the field. Not a band class: those rebind the role
+  // variables for every descendant, which would carry the fill onto the cards
+  // and their previews. It stops at this surface; the cards keep their own
+  // neutral fill on top of it.
+  background: var(--graphite-secondary-container);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin-bottom: var(--graphite-space-07);
+}
+
+.title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  color: var(--graphite-on-secondary-container);
+  margin: 0;
+}
+
+.body {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: color-mix(
+    in srgb,
+    var(--graphite-on-secondary-container) 70%,
+    var(--graphite-secondary-container)
+  );
+  max-width: 47.5rem; // kit caps the lede at 760px
+  margin: 0;
+}
+
+// One, two, then four, which is what the kit draws at Small, Medium and
+// X-Large.
+//
+// This was an auto-fill grid, on the reasoning that it would keep the row full
+// at widths between the three drawn frames. It does — and past X-Large it
+// keeps going, laying out five and six across on a wide display where the kit
+// caps at four. Counting the columns per breakpoint is the kit's own rule and
+// has no upper end to drift past. Plain media queries because this module
+// pulls in no Sass helpers.
+.wall {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-06);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  // md
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // lg
+  @media (min-width: 1056px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  // Shadows/Menu
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+  // Hover states .md gives this 300ms ease-out, moving border and preview
+  // together. 300ms is not a token: only fast (120), base (240) and
+  // indeterminate (1400) are, so it is a literal here the way the other
+  // one-off durations on this page are.
+  transition: border-color 300ms ease-out;
+}
+
+// The kit takes the rule from border-disabled to outline-strong. The engine
+// has one outline role, so rest sits on surfaceVariant (the outline-subtle
+// hex) and hover steps up to it.
+.card:hover {
+  border-color: var(--graphite-outline);
+}
+
+// The frame, its fill and its radius do not move; only the artwork inside
+// does, gaining the menu shadow as it goes.
+.card:hover .preview {
+  transform: translateY(12px);
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, #000 30%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .preview {
+    transition: none;
+  }
+
+  .card:hover .preview {
+    transform: none;
+  }
+}
+
+.preview {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 9.25rem; // kit preview area is 148px
+  padding: var(--graphite-space-06) var(--graphite-space-05);
+  overflow: hidden;
+  // No fill, which is what the kit does: its preview area has none of its own
+  // and the specimen sits on the card's surface. The rule on .meta is all that
+  // separates the specimen from its label. A field here only ever competed
+  // with the components, which are the section's whole claim.
+  transition:
+    transform 300ms ease-out,
+    filter 300ms ease-out;
+}
+
+// Specimens are sized for their own pages, so the narrow ones are held to the
+// preview's width rather than allowed to set the card's.
+.preview > * {
+  max-width: 100%;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.name {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface);
+  margin: 0;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Status badge: the version is spelled out in the label, so the color is
+// reinforcement rather than the only thing carrying the meaning.
+.badge {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: var(--graphite-text-weight-medium);
+  text-transform: uppercase;
+  padding: var(--graphite-space-01) var(--graphite-space-03);
+  background: var(--graphite-success-container);
+  border: 1px solid var(--graphite-success);
+  // Text takes onSuccessContainer rather than the kit literal success:
+  // success-on-successContainer is not a pairing buildTheme measures, so it
+  // is only incidentally legible. It clears AA at the seeded color (6.8:1)
+  // but nothing holds it there for a user-picked source. The engine-checked
+  // role looks the same and cannot drift.
+  color: var(--graphite-on-success-container);
+}
+
+// Progress bar's label and helper line are separate elements by contract, so
+// the card stacks them rather than the component doing it.
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  width: 100%;
+}

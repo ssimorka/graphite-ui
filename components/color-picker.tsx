@@ -173,6 +173,9 @@ function HsvPicker({
 
 // --- Popover ---
 
+/** The header's source-color trigger, so other sections can open it. */
+export const SOURCE_TRIGGER_ID = 'source-color-trigger'
+
 export function ColorPickerPopover({
   value,
   onChange,
@@ -182,7 +185,6 @@ export function ColorPickerPopover({
 }) {
   const [open, setOpen] = useState(false)
   // Was Avatar's internal state before Avatar was removed.
-  const [chipFailed, setChipFailed] = useState(false)
   const [input, setInput] = useState(value || '#0f62fe')
   const { level, setLevel, lightBundle, darkBundle } = useTheme()
   const popoverRef = useRef<HTMLDivElement>(null)
@@ -239,10 +241,13 @@ export function ColorPickerPopover({
 
   return (
     <div className="site-header__source-wrap">
-      {/* The whole trigger — label and swatch — opens the popover, not just
-          the swatch, so the click target matches the visible primary block. */}
+      {/* The whole chip opens the popover, not just the swatch, so the click
+          target matches the visible control. Named so the home page's theme
+          section can open it rather than linking at a builder route that does
+          not exist yet. */}
       <button
         ref={buttonRef}
+        id={SOURCE_TRIGGER_ID}
         type="button"
         className="site-header__source-trigger"
         aria-haspopup="true"
@@ -250,39 +255,15 @@ export function ColorPickerPopover({
         aria-label="Source color"
         onClick={() => setOpen((o) => !o)}
       >
-        <span className="site-header__source-label">Pick a color</span>
-        {/* The visitor's own chip. This was an Avatar until Avatar was removed
-            for having no counterpart in the kit; the markup is inlined rather
-            than replaced with a bare swatch, because the initials fallback is
-            the part worth keeping. The source colour rides in as a custom
-            property because it is what the initials land on when the image
-            fails. */}
+        {/* The kit's chip is a swatch and the hex, not a label and an avatar.
+            The eye image the avatar carried moved to the header's brand mark,
+            which is where the kit puts it. */}
         <span
           aria-hidden="true"
-          className="site-header__source-avatar"
-          style={{ ['--source-swatch' as string]: swatchColor }}
-        >
-          <span className="site-header__source-chip">
-            {chipFailed ? (
-              <span className="site-header__source-initials">GU</span>
-            ) : (
-              <img
-                className="site-header__source-image"
-                src="/graphite/eye.jpg"
-                alt=""
-                // Server-rendered markup starts loading before React hydrates,
-                // so an image that fails early fires its error event with no
-                // handler attached and onError never runs. A complete image
-                // with no intrinsic width has already failed, so re-check on
-                // mount. Carried over from Avatar, where it was load-bearing.
-                ref={(node) => {
-                  if (node?.complete && node.naturalWidth === 0) setChipFailed(true)
-                }}
-                onError={() => setChipFailed(true)}
-              />
-            )}
-          </span>
-        </span>
+          className="site-header__source-swatch"
+          style={{ background: swatchColor }}
+        />
+        <span className="site-header__source-hex">{value.toUpperCase()}</span>
       </button>
 
       {/* Popover */}

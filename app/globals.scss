@@ -335,32 +335,23 @@ body {
 // Offset the fixed site header. 3rem is `.header`'s height in
 // components/site-header.module.scss; the two have to agree.
 .page-main {
-  margin-top: 3rem;
+  margin-top: 4rem;
   background: var(--cds-background);
 }
 
 // ---------------------------------------------------------------------------
 // Header source-color control
 // ---------------------------------------------------------------------------
+// Source colour control — kit header "Source colour chip" (11862:2943).
+// A bordered chip carrying the live swatch and its hex, sitting flush against
+// the theme toggle as one control group.
 .site-header__source {
   display: flex;
   align-items: center;
-  height: 3rem;
-  background: var(--cds-button-primary);
-  transition: background 240ms ease;
-
-  &:hover {
-    background: var(--cds-button-primary-hover);
-  }
-
-  &:active {
-    background: var(--cds-button-primary-active);
-  }
 }
 
 .site-header__source-wrap {
   position: relative;
-  height: 100%;
   display: flex;
   align-items: center;
 }
@@ -369,70 +360,65 @@ body {
   display: flex;
   align-items: center;
   gap: var(--graphite-space-03);
-  height: 100%;
-  min-width: 44px;
-  padding: 0 var(--graphite-space-05);
-  background: none;
-  border: none;
-  color: inherit;
+  // Height comes from the group so this cannot drift from the toggle beside
+  // it. Vertical padding would only fight it, so the sides are all that is
+  // set here.
+  height: var(--header-control-h);
+  padding: 0 var(--graphite-space-04) 0 var(--graphite-space-03);
+  background: var(--graphite-surface);
+  // Left border omitted: the chip butts against the theme toggle, and two
+  // adjacent 1px rules read as a 2px seam.
+  border: 1px solid var(--graphite-outline);
+  border-left: none;
+  color: var(--graphite-on-surface);
   font: inherit;
   cursor: pointer;
+  transition:
+    background var(--graphite-motion-fast) var(--graphite-motion-ease),
+    border-color var(--graphite-motion-fast) var(--graphite-motion-ease);
 }
 
-.site-header__source-label {
-  display: none;
-
-  @include breakpoint.breakpoint(lg) {
-    display: block;
-    @include text('caption-1', $letter-spacing: 0.32px);
-    font-family: 'IBM Plex Mono', 'Courier New', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--cds-text-on-color);
-  }
+// Hover is a tone step on the resting surface, matching the rule the kit's
+// components use for their own hover fills.
+.site-header__source-trigger:hover {
+  background: var(--graphite-surface-variant);
+  border-color: var(--graphite-primary);
 }
 
-// The source chip. It was an Avatar until Avatar was removed for having no
-// counterpart in the kit; the sizing and the initials fallback moved here with
-// it. Its fill is the live source color, handed in as --source-swatch.
-.site-header__source-avatar {
-  display: inline-flex;
-  flex-shrink: 0;
-  pointer-events: none;
+.site-header__source-trigger:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
 }
 
-// The image covers the fill, so --source-swatch is what the initials land on if
-// the image ever fails. The ring separates the chip from the accent block
-// behind it, which is the job the old bare swatch's border did.
-//
-// Sizes are Avatar's `sm` step, kept as-is so the header did not change shape
-// when the component went away.
-.site-header__source-chip {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.site-header__source-swatch {
   flex: none;
-  width: var(--graphite-space-06);
-  height: var(--graphite-space-06);
-  border-radius: 50%;
-  font-size: 0.625rem;
-  font-weight: 600;
-  user-select: none;
-  background: var(--source-swatch);
-  color: var(--cds-text-on-color, #fff);
-  border: 2px solid var(--cds-text-on-color, #fff);
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 1px solid var(--graphite-surface-variant);
 }
 
-.site-header__source-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
+.site-header__source-hex {
+  // Gone at Small, where the kit shows the swatch alone. Not display:none —
+  // the hex is the control's only visible value, so it stays in the
+  // accessibility tree for anyone who cannot see the swatch.
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
 
-.site-header__source-initials {
-  line-height: 1;
+  @include breakpoint.breakpoint(md) {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -602,12 +588,168 @@ body {
 }
 
 // ---------------------------------------------------------------------------
+// Page bands backdrop — kit "Grid lines — full bleed" (11896:292490) and the
+// second "Hero spotlight" instance (13400:6405)
+// ---------------------------------------------------------------------------
+// Both are parented to Main content in the kit, not to the hero, and span
+// y 1344-3942: sections 02 through 05. So they are the backdrop the middle of
+// the page sits on. The hero keeps its own pair, which are masked and
+// pointer-tracked; these are neither.
+//
+// isolation, so the z-index -3 children stay behind the four sections while
+// still painting above .page-main's own fill.
+.page-bands {
+  // Scroll progress past this region's top, written by page-bands.tsx. The
+  // default keeps the grid still before the listener runs, and under reduced
+  // motion the listener never attaches so it stays here.
+  --sy: 0; // scroll progress past this region's top, in px
+  --px: 0; // pointer x offset, -0.5..0.5
+  --py: 0; // pointer y offset, -0.5..0.5
+  position: relative;
+  isolation: isolate;
+}
+
+// Unlike the hero's, this grid carries no radial mask: the kit renders it as
+// an even 3rem cell edge to edge. It fades only at the two ends, so it does
+// not butt hard against the hero above or the FAQ below — the kit gets that
+// for free from the instance's bounds, which a full-height layer does not.
+.page-bands__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--cds-border-subtle-01) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 4rem,
+    #000 calc(100% - 4rem),
+    transparent
+  );
+  // The hero's grid transform, coefficients included: 0.12px per pixel of
+  // scroll, 0.75rem of pointer sway on both axes. Deliberately not scaled for
+  // this region being twice the hero's height — the two layers are the same
+  // backdrop and matching the feel means matching the rate, not the total
+  // travel.
+  transform: translate3d(
+    calc(var(--px) * 0.75rem),
+    calc(var(--sy) * 0.12px + var(--py) * 0.75rem),
+    0
+  );
+  will-change: transform;
+  // Half strength. The rules are already drawn at 60% of outline, so this
+  // lands them near 30% against the band behind them — enough to read as a
+  // grid without competing with the sections sitting on it.
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+// The kit places this instance at x 96, y 1594, 1120x486 — the content column,
+// starting 240px into the band region, which puts it over the component wall.
+// Static here: the pointer-tracked variant is the hero's, and a second one
+// following the cursor down the page would read as a bug.
+.page-bands__glow {
+  position: absolute;
+  top: 15rem; // 240px, the kit's offset from the band region's top
+  left: 50%;
+  z-index: -2;
+  width: min(70rem, 100%);
+  height: 30.375rem; // 486px
+  transform: translateX(-50%);
+  background: radial-gradient(
+    40rem 40rem at 50% 30%,
+    color-mix(in srgb, var(--cds-interactive) 22%, transparent),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+// ---------------------------------------------------------------------------
+// Colour rhythm — 60 / 30 / 10
+// ---------------------------------------------------------------------------
+// The rhythm is defined for compositions in generative-art.tsx: six neutral
+// stops, three accent, one secondary. These two classes carry the same ratio
+// into the page chrome, so the site is painted by the rule it documents.
+//
+// A band does not restyle its children. It repaints itself and then rebinds
+// the role variables those children already reference, the way a theme layer
+// does — so a card inside an accent band asks for on-surface and gets the
+// colour that is legible on accent, without knowing it is in a band.
+//
+// Every pairing here is one the engine measures. Body text takes the
+// container's own on-colour (10.7:1 dark, 15.2:1 light). The second tier is
+// that on-colour mixed 70% toward the container, which still clears AA in
+// both themes (5.8:1 dark, 7.2:1 light) — checked before it was used, because
+// a mix is not a pairing buildTheme validates.
+@mixin band($surface, $on-surface) {
+  background: var(#{$surface});
+  color: var(#{$on-surface});
+
+  // The second text tier, and the rules and hairlines that sit on this band.
+  --band-muted: color-mix(in srgb, var(#{$on-surface}) 70%, var(#{$surface}));
+  --band-rule: color-mix(in srgb, var(#{$on-surface}) 22%, var(#{$surface}));
+  --band-raised: color-mix(in srgb, var(#{$on-surface}) 8%, var(#{$surface}));
+
+  // Rebind what the children ask for. Both namespaces: --graphite-* is the
+  // primary one, --cds-* is Carbon's compatibility layer, and components on
+  // this page use each.
+  --graphite-on-surface: var(#{$on-surface});
+  --graphite-on-surface-variant: var(--band-muted);
+  --graphite-surface: var(--band-raised);
+  --graphite-surface-variant: var(--band-rule);
+  --graphite-background: var(#{$surface});
+  --graphite-outline: var(--band-rule);
+
+  --cds-text-primary: var(#{$on-surface});
+  --cds-text-secondary: var(--band-muted);
+  --cds-text-helper: var(--band-muted);
+  --cds-layer: var(--band-raised);
+  --cds-layer-01: var(--band-raised);
+  --cds-layer-hover: var(--band-rule);
+  --cds-background: var(#{$surface});
+  --cds-border-subtle: var(--band-rule);
+  --cds-border-subtle-00: var(--band-rule);
+  --cds-border-subtle-01: var(--band-rule);
+  --cds-border-subtle-02: var(--band-rule);
+  --cds-border-strong: var(--band-muted);
+  --cds-border-strong-01: var(--band-muted);
+}
+
+// The 30. Accent is the supporting voice, so it takes the larger share.
+.band--accent {
+  @include band(--graphite-primary-container, --graphite-on-primary-container);
+}
+
+// The 10. Secondary is the ramp the engine derives 120 degrees off the source,
+// which is what makes the vivid tenth generated rather than picked.
+.band--secondary {
+  @include band(
+    --graphite-secondary-container,
+    --graphite-on-secondary-container
+  );
+}
+
+.band--info {
+  @include band(--graphite-info-container, --graphite-on-info-container);
+}
+
+// ---------------------------------------------------------------------------
 // Shared section scaffolding
 // ---------------------------------------------------------------------------
 .section {
   position: relative;
   padding: var(--graphite-space-08) 0;
-  border-bottom: 1px solid var(--cds-border-subtle-01);
+  border-bottom: 1px solid var(--graphite-surface-variant);
 
   @include breakpoint.breakpoint(md) {
     padding: var(--graphite-space-10) 0;
@@ -664,7 +806,7 @@ body {
   overflow: hidden;
   padding: var(--graphite-space-07) 0 var(--graphite-space-07);
   background: var(--cds-background);
-  border-bottom: 1px solid var(--cds-border-subtle-01);
+  border-bottom: 1px solid var(--graphite-surface-variant);
   isolation: isolate;
 
   @include breakpoint.breakpoint(md) {
@@ -747,6 +889,23 @@ body {
   align-items: center;
   gap: var(--graphite-space-03);
   margin-bottom: var(--graphite-space-05);
+  // Carbon's tag types are fixed hues. The kit fills the eyebrow with the
+  // generated primary so it retints with the source like the rest of the
+  // page, and pairs it with the engine's own on-color.
+  background: var(--graphite-primary) !important;
+  color: var(--graphite-on-primary) !important;
+  border-radius: var(--graphite-radius-full);
+  max-width: none;
+
+  svg {
+    fill: currentColor;
+  }
+
+  .cds--tag__label {
+    overflow: visible;
+    text-overflow: clip;
+    max-width: none;
+  }
 
   .cds--tag__label {
     display: inline-flex;
@@ -770,6 +929,17 @@ body {
   max-width: 20ch;
 }
 
+// The kit breaks the headline after "One color." from Medium up. At Small
+// there is not room for "A whole design system." on one line either way, so
+// the forced break only splits it worse; let it wrap on its own there.
+.hero__title-break {
+  display: none;
+
+  @include breakpoint.breakpoint(md) {
+    display: block;
+  }
+}
+
 .hero__subtitle {
   @include type.type-style('fluid-paragraph-01', true);
   margin-top: var(--graphite-space-05);
@@ -782,8 +952,34 @@ body {
   }
 }
 
-// Product preview
-.hero__preview {
+.hero__ctas {
+  display: flex;
+  // The kit stacks these at Small and rows them from Medium up.
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--graphite-space-04);
+
+  @include breakpoint.breakpoint(md) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  margin-top: var(--graphite-space-06);
+
+  // asChild renders an anchor, which picks up the page's link underline. The
+  // button recipe owns its own affordance, so the decoration comes off.
+  a {
+    text-decoration: none;
+  }
+
+  @include breakpoint.breakpoint(md) {
+    margin-top: var(--graphite-space-07);
+  }
+}
+
+// Source strip — the hero's product shot
+.hero__source-strip {
   position: relative;
   margin-top: var(--graphite-space-07);
   animation: hero-rise 900ms var(--graphite-motion-ease) both;
@@ -791,42 +987,32 @@ body {
   @include breakpoint.breakpoint(md) {
     margin-top: var(--graphite-space-10);
   }
-}
 
-.hero__preview-frame {
-  position: relative;
-  // Frame eases upward slower than the page + gentle pointer tilt.
-  transform: translate3d(
-    calc(var(--px) * 0.5rem),
-    calc(var(--sy) * -0.05px + var(--py) * 0.4rem),
-    0
-  );
-  will-change: transform;
-  border: 1px solid var(--cds-border-subtle-02);
-  background: var(--cds-layer-01);
-  padding: var(--graphite-space-03);
-  box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
-    color-mix(in srgb, #000 45%, transparent);
-  overflow: hidden;
+  // Kit panel: square, one strong rule, and the menu shadow rather than the
+  // deep lift the old screenshot frame used. The strip is a surface on the
+  // page, not a floating object above it.
+  max-width: 1000px;
+  margin-inline: auto;
+  border: 1px solid var(--cds-border-strong-01);
+  background: var(--cds-background);
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
 
-  &::after {
-    // top sheen
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--cds-interactive) 10%, transparent),
-      transparent 30%
-    );
-    pointer-events: none;
+  // Inside the strip the ramp name is a title, not the mono eyebrow the
+  // studio and docs tables use. Scoped rather than changed globally: those
+  // surfaces still want the label to recede.
+  .ramp-stack {
+    padding: var(--graphite-space-05) var(--graphite-space-06);
+    background: transparent;
   }
-}
 
-.hero__preview-img {
-  display: block;
-  width: 100%;
-  height: auto;
+  .ramp__label {
+    // Kit Title/3 — the strip names its ramps, it does not caption them.
+    @include text('title-3', semibold);
+    font-family: inherit;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--cds-text-primary);
+  }
 }
 
 @keyframes hero-rise {
@@ -841,7 +1027,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__preview {
+  .hero__source-strip {
     animation: none;
   }
   // Neutralize all parallax transforms.
@@ -852,83 +1038,7 @@ body {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Trusted by
-// ---------------------------------------------------------------------------
-.trusted {
-  padding: var(--graphite-space-08) 0;
-  border-bottom: 1px solid var(--cds-border-subtle-01);
-  background: var(--cds-layer-01);
-}
 
-.trusted__label {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  text-align: center;
-  color: var(--cds-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: var(--graphite-space-06);
-}
-
-.trusted__logos {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--graphite-space-07) var(--graphite-space-10);
-
-  // Below this, the flex-wrap + wide desktop gap leaves an orphaned,
-  // off-center item on its own row. A fixed 2-column grid keeps every
-  // row even instead of reflowing organically.
-  @media (max-width: 671px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    justify-items: center;
-    gap: var(--graphite-space-06) var(--graphite-space-05);
-  }
-}
-
-.trusted__logo {
-  @include type.type-style('fluid-heading-03', true);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--cds-text-secondary);
-  opacity: 0.65;
-  transition: opacity 200ms ease, color 200ms ease;
-
-  &:hover {
-    opacity: 1;
-    color: var(--cds-text-primary);
-  }
-}
-
-// System-fact strip that replaced the invented logo wall.
-.trusted__fact {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--graphite-space-02);
-  text-align: center;
-}
-
-.trusted__fact-value {
-  @include type.type-style('fluid-heading-03', true);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-weight: 600;
-  color: var(--cds-text-primary);
-}
-
-.trusted__fact-label {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--cds-text-secondary);
-}
-
-// ---------------------------------------------------------------------------
-// System explorer — ramps & contrast views
-// ---------------------------------------------------------------------------
 .ramp-stack {
   display: flex;
   flex-direction: column;
@@ -952,21 +1062,53 @@ body {
 // stop reachable and keeps the two rows in sync while swiping.
 .ramp__scroll {
   overflow-x: auto;
-  padding-bottom: var(--graphite-space-02);
+  // The hover scale grows a swatch about 5px on every side, and setting
+  // overflow-x makes overflow-y compute to auto as well — so the scaled
+  // swatch was being clipped top, bottom and at both ends of the row.
+  //
+  // The padding is that room. The negative margin puts the row back where it
+  // was, so nothing else moves; the strip's own 24px inset absorbs it. The
+  // extra bottom padding preserves the original scrollbar clearance under the
+  // weights, which the negative margin would otherwise cancel.
+  padding: var(--graphite-space-03);
+  padding-bottom: calc(var(--graphite-space-03) + var(--graphite-space-02));
+  margin: calc(var(--graphite-space-03) * -1);
 }
 
+// One rule sizes both rows, so the stops and their labels are on the same
+// tracks by construction rather than by two declarations agreeing.
+//
+// minmax rather than a min-width on the items: the floor has to sit on the
+// track, not on its contents. Put on the items, the "500 · source" label — the
+// one label wider than a stop — dragged its own track past 88px and pushed the
+// whole row into a scroll at X-Large, where it had always fit.
 .ramp__grid,
 .ramp__weights {
   display: grid;
+  grid-template-columns: repeat(var(--ramp-cols, 10), minmax(56px, 1fr));
   gap: var(--graphite-space-03);
   min-width: min-content;
+
+  // No floor at X-Large: the strip offers 950px of content and ten 88px
+  // tracks plus their gaps want 952, so an 88px floor put the row into a
+  // scroll two pixels short of fitting. The kit draws no scroll affordance
+  // here, which is the tell that all ten are meant to fit — so the tracks
+  // divide what the strip has and land at 87.8px. Below lg the floor stays,
+  // because there the kit does draw the affordance and the row is meant to
+  // scroll.
+  @include breakpoint.breakpoint(lg) {
+    grid-template-columns: repeat(var(--ramp-cols, 10), minmax(0, 1fr));
+  }
 }
 
 .ramp__weights {
   margin-top: var(--graphite-space-02);
 
   span {
+    // Zero, so a label can never widen its own track.
+    min-width: 0;
     text-align: center;
+    white-space: nowrap;
     @include text('caption-1', $letter-spacing: 0.32px);
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
     color: var(--cds-text-secondary);
@@ -978,7 +1120,8 @@ body {
 .ramp-swatch {
   aspect-ratio: 1 / 1;
   width: 100%;
-  min-width: 56px;
+  // Size comes from the track now, shared with the weights row above.
+  min-width: 0;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
@@ -987,13 +1130,81 @@ body {
   cursor: pointer;
 
   span {
-    @include text('caption-1', $letter-spacing: 0.32px);
+    // A seven-character hex at the caption step measures 52.6px, which with
+    // the tile's 4px of padding either side overran the 56px stop by 4.6px.
+    // Stepped down below lg, where the stop is 56px; at X-Large it is 88px
+    // and the caption step fits with room to spare.
+    font-size: 0.625rem;
+    line-height: 1rem;
+    letter-spacing: 0;
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
+
+    @include breakpoint.breakpoint(lg) {
+      @include text('caption-1', $letter-spacing: 0.32px);
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    }
+  }
+
+  // Hover states .md: the swatch grows 88px to 98px on both axes, with the
+  // fill and the 1px border unchanged. Scaled rather than resized because the
+  // stops are grid columns — growing the box would reflow the whole row, and
+  // the ramp has to stay aligned with the weight labels beneath it. The hex
+  // label rides the scale, which resizing in Figma does not do to it.
+  transition: transform var(--graphite-motion-base) ease-out;
+
+  &:hover {
+    transform: scale(1.1136); // 98 / 88
+    z-index: 1;
   }
 
   &:focus-visible {
     outline: 2px solid var(--cds-focus);
     outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // The scale is the whole affordance here, so it stays and only the
+  // transition goes: removing it as well would leave the swatch with no
+  // hover feedback at all.
+  .ramp-swatch {
+    transition: none;
+  }
+}
+
+// The source marker stacks under its number below lg and sits beside it at
+// X-Large.
+//
+// The kit keeps it inline at every width — 68px of text in a 56px stop, a 6px
+// spill either side it evidently tolerates. At the caption step this renders
+// nearer 86px, which is a 15px spill and lands on top of the 400 and 600
+// labels rather than merely past its own edges. Stacking clears it: "source"
+// alone measures about 43px and fits the 56px stop outright.
+.ramp__source {
+  display: block;
+
+  @include breakpoint.breakpoint(lg) {
+    display: inline;
+
+    // The separator belongs to the inline form only, so it lives here rather
+    // than in the markup where the stacked form would inherit it too.
+    &::before {
+      content: ' · ';
+    }
+  }
+}
+
+// The kit gives each ramp a scroll affordance below lg, where the row is
+// wider than the strip. Hidden at X-Large, where all ten stops fit.
+.ramp__scroll-hint {
+  display: block;
+  text-align: right;
+  margin-top: var(--graphite-space-02);
+  @include text('caption-1', $letter-spacing: 0.32px);
+  color: var(--cds-text-secondary);
+
+  @include breakpoint.breakpoint(lg) {
+    display: none;
   }
 }
 
@@ -1215,51 +1426,594 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Features
+// Capabilities carousel
+//
+// The former Features grid and Benefits grid, merged: an accordion list on the
+// left drives a live demo stage on the right, and the benefits follow as a
+// proof strip. Both grids used to say "here are N boxes" in the same shape one
+// after the other; this says it once and spends the saved height on showing
+// the engine's output instead of describing it.
 // ---------------------------------------------------------------------------
-.feature-grid {
+.cap-grid {
   margin-top: var(--graphite-space-03);
-  row-gap: var(--graphite-space-05);
+  row-gap: var(--graphite-space-07);
+  align-items: start;
 }
 
-.feature-card {
-  height: 100%;
-  padding: var(--graphite-space-06);
-  background: var(--cds-layer-01);
-  border: 1px solid var(--cds-border-subtle-01);
-  transition:
-    transform var(--graphite-motion-base) var(--graphite-motion-ease),
-    border-color var(--graphite-motion-base) ease,
-    box-shadow var(--graphite-motion-base) ease;
+// Medium and Small: the kit stacks all six capabilities, each above its own
+// stage, rather than running a carousel. There is no rail fill, no count and
+// no pause, because nothing advances.
+.cap-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-10);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-  &:hover {
-    transform: translateY(calc(-1 * var(--graphite-space-03)));
-    border-color: var(--cds-border-interactive);
-    box-shadow: 0 var(--graphite-space-06) var(--graphite-space-09)
-      color-mix(in srgb, #000 35%, transparent);
+.cap-stack__head {
+  // The kit's left rule, kept from the carousel item so the two layouts read
+  // as the same component in a different arrangement.
+  padding-left: var(--graphite-space-05);
+  border-left: 3px solid var(--cds-border-interactive);
+  margin-bottom: var(--graphite-space-06);
+}
+
+.cap-stack__title {
+  @include text('title-3', semibold);
+  color: var(--cds-text-primary);
+  margin: 0 0 var(--graphite-space-03);
+}
+
+.cap-stack__body {
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-secondary);
+  margin: 0;
+}
+
+// Static: the carousel's stage animates on remount, and nothing remounts here.
+.cap-stage--static .cap-stage__frame {
+  animation: none;
+}
+
+.cap-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+
+  // The rail holds the height of its tallest state instead of resizing as the
+  // carousel advances. Only the active item carries body copy, and the six
+  // bodies are different lengths, so without this the list swung 40px every
+  // seven seconds and took the count and the pause control with it.
+  //
+  // Measured, not guessed: the tallest state at each width the layout has,
+  // taken by stepping through all six items. The widest lg case is not the
+  // worst one — the rail column is narrowest at the lg entry point, so the
+  // copy wraps hardest there.
+  //
+  //   below 672   548px   rail is full width, narrow viewport
+  //   672-1055    484px   rail is full width, roomy
+  //   1056+       524px   rail is a 6-column beside the stage
+  //
+  // Re-measure if the item copy changes; these are floors, so copy that grows
+  // past them brings the movement back.
+  min-height: 34.25rem;
+
+  @include breakpoint.breakpoint(md) {
+    min-height: 30.25rem;
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    min-height: 32.75rem;
   }
 }
 
-.feature-card__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--graphite-space-09);
-  height: var(--graphite-space-09);
-  margin-bottom: var(--graphite-space-06);
-  color: var(--cds-interactive);
-  background: color-mix(in srgb, var(--cds-interactive) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--cds-interactive) 30%, transparent);
+.cap-item {
+  position: relative;
+  padding: var(--graphite-space-05) var(--graphite-space-05)
+    var(--graphite-space-05) var(--graphite-space-07);
+  background: var(--cds-layer-01);
+  border: 1px solid var(--cds-border-subtle-01);
+  transition:
+    background var(--graphite-motion-base) ease,
+    border-color var(--graphite-motion-base) ease;
+
+  &.is-active {
+    background: var(--cds-layer-02);
+    border-color: var(--cds-border-interactive);
+  }
 }
 
-.feature-card__title {
+// The rail is the dwell timer made visible. Its fill is written from the same
+// animation frame that advances the carousel, so the bar cannot promise a
+// different moment than the one the stage actually turns on.
+.cap-item__rail {
+  position: absolute;
+  left: var(--graphite-space-04);
+  top: var(--graphite-space-05);
+  bottom: var(--graphite-space-05);
+  width: 2px;
+  overflow: hidden;
+  background: var(--cds-border-subtle-02);
+}
+
+.cap-item__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--cds-border-interactive);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.cap-item__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--cds-text-secondary);
+  transition: color var(--graphite-motion-fast) ease;
+
+  &:hover {
+    color: var(--cds-text-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cds-focus);
+    outline-offset: var(--graphite-space-02);
+  }
+
+  .cap-item.is-active & {
+    color: var(--cds-text-primary);
+  }
+}
+
+.cap-item__icon {
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.cap-item__title {
   @include type.type-style('heading-03');
+}
+
+.cap-item__reveal {
+  padding-top: var(--graphite-space-04);
+  animation: cap-reveal var(--graphite-motion-base) var(--graphite-motion-ease)
+    both;
+}
+
+.cap-item__body {
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-secondary);
+  text-wrap: pretty;
+}
+
+@keyframes cap-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--graphite-space-03)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.cap-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--graphite-space-05);
+}
+
+.cap-controls__count {
+  @include text('caption-1', $family: mono);
+  color: var(--cds-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+// --- Stage -----------------------------------------------------------------
+.cap-stage {
+  position: relative;
+}
+
+.cap-stage__glow {
+  position: absolute;
+  inset: 12% 8%;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--cds-interactive) 40%, transparent),
+    transparent 70%
+  );
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.cap-stage__frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 22rem;
+  padding: var(--graphite-space-07);
+  border: 1px solid var(--cds-border-subtle-02);
+  background: var(--cds-background);
+  box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
+    color-mix(in srgb, #000 45%, transparent);
+  overflow: hidden;
+  // Shared with .showcase__frame: the two are the same gesture, a panel
+  // replacing another in place, so they use one keyframe rather than two.
+  animation: fade-swap 500ms var(--graphite-motion-ease) both;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.cap-stage__caption {
+  @include text('caption-1');
+  margin-top: var(--graphite-space-05);
+  color: var(--cds-text-secondary);
+  text-wrap: pretty;
+}
+
+// --- Panels ----------------------------------------------------------------
+.cap-ramps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+}
+
+.cap-ramps__label {
+  @include text('caption-1', $family: mono);
+  margin-bottom: var(--graphite-space-03);
+  color: var(--cds-text-secondary);
+}
+
+.cap-ramps__strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 2px;
+}
+
+.cap-ramps__stop {
+  height: var(--graphite-space-08);
+  // The dark end of a neutral ramp is within a few points of the panel it sits
+  // on, so without an edge those stops read as a gap in the strip rather than
+  // as colors. Inset so it does not add to the swatch's footprint.
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--cds-text-primary) 12%, transparent);
+
+  &.is-source {
+    outline: 2px solid var(--cds-text-primary);
+    outline-offset: -2px;
+  }
+}
+
+.cap-tokens {
+  display: flex;
+  flex-direction: column;
+}
+
+.cap-tokens__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  padding: var(--graphite-space-03) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.cap-tokens__swatch {
+  width: var(--graphite-space-06);
+  height: var(--graphite-space-06);
+  border: 1px solid var(--cds-border-subtle-02);
+}
+
+.cap-tokens__role {
+  @include text('body-3');
+}
+
+.cap-tokens__hex {
+  @include text('code-2', $family: mono);
+  color: var(--cds-text-secondary);
+}
+
+// Each row is painted with the pair it reports on, so the number and the thing
+// the number describes cannot drift apart.
+.cap-contrast {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+}
+
+.cap-contrast__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+}
+
+.cap-contrast__role {
+  @include text('body-3');
+}
+
+.cap-contrast__ratio {
+  @include text('body-3', $family: mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.cap-contrast__verdict {
+  @include text('caption-1');
+}
+
+.cap-vars__code {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: var(--graphite-space-05);
+  border: 1px solid var(--cds-border-subtle-01);
+  background: var(--cds-layer-01);
+  overflow-x: auto;
+}
+
+.cap-vars__line {
+  @include text('code-2', $family: mono);
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  white-space: pre;
+}
+
+.cap-vars__dot {
+  flex: 0 0 auto;
+  width: var(--graphite-space-04);
+  height: var(--graphite-space-04);
+  border: 1px solid var(--cds-border-subtle-02);
+}
+
+.cap-vars__more {
+  @include text('caption-1');
+  margin-top: var(--graphite-space-05);
+  color: var(--cds-text-secondary);
+}
+
+.cap-patterns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--graphite-space-04);
+}
+
+.cap-patterns__tile {
+  aspect-ratio: 1;
+  border: 1px solid var(--cds-border-subtle-01);
+  overflow: hidden;
+}
+
+// The pair is painted from its own bundle rather than from the page's, which
+// is the whole claim: the theme you are not currently in still resolves.
+.cap-themes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--graphite-space-05);
+}
+
+.cap-themes__card {
+  padding: var(--graphite-space-05);
+  border: 1px solid;
+}
+
+.cap-themes__label {
+  @include text('caption-1', $family: mono);
   margin-bottom: var(--graphite-space-04);
 }
 
-.feature-card__body {
+.cap-themes__surface {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  padding: var(--graphite-space-05);
+  border: 1px solid;
+}
+
+.cap-themes__line {
+  height: var(--graphite-space-03);
+  background: currentColor;
+  opacity: 0.25;
+
+  &--short {
+    width: 60%;
+  }
+}
+
+.cap-themes__button {
+  @include text('component-button-2');
+  align-self: flex-start;
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+}
+
+// --- Stage panels: source, components, checks, sets -------------------------
+.cap-source {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  justify-content: center;
+  height: 100%;
+}
+
+.cap-source__input {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+}
+
+.cap-source__swatch {
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border: 1px solid var(--cds-border-subtle-01);
+}
+
+.cap-source__hex {
+  @include text('body-3', $letter-spacing: 0.16px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.cap-source__note {
+  @include text('caption-1', $letter-spacing: 0.32px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+}
+
+.cap-source__stops {
+  display: grid;
+  // minmax(0, 1fr) rather than 1fr: a bare 1fr floors each column at its
+  // content's min-width, and at Small the tone labels are wider than the
+  // tenth of the panel they get — the row overflowed its own frame by 39px.
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--graphite-space-02);
+}
+
+.cap-source__stop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-02);
+}
+
+.cap-source__chip {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--cds-border-subtle-01);
+
+  &.is-source {
+    border: 2px solid var(--cds-focus);
+  }
+}
+
+.cap-source__tone {
+  @include text('caption-1', $letter-spacing: 0.32px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+  // Ten labels across a 288px panel leaves about 22px each, which the caption
+  // step overruns. Stepped down until lg, where the panel is wide enough.
+  font-size: 0.625rem;
+  letter-spacing: 0;
+
+  @include breakpoint.breakpoint(lg) {
+    font-size: var(--graphite-text-caption-1-size);
+    letter-spacing: 0.32px;
+  }
+}
+
+.cap-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--graphite-space-02) var(--graphite-space-05);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-components__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-02) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.cap-components__name {
+  @include text('body-3', $letter-spacing: 0.16px);
+}
+
+.cap-components__version {
+  @include text('caption-1', $letter-spacing: 0.32px);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: var(--cds-text-secondary);
+}
+
+.cap-checks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  justify-content: center;
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-checks__row {
+  padding-left: var(--graphite-space-05);
+  border-left: 2px solid var(--cds-border-interactive);
+}
+
+.cap-checks__name {
+  display: block;
+  margin-bottom: var(--graphite-space-02);
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-primary);
+}
+
+.cap-checks__body {
   @include text('body-3', $letter-spacing: 0.16px);
   color: var(--cds-text-secondary);
+}
+
+.cap-sets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  justify-content: center;
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-sets__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--graphite-space-05);
+}
+
+.cap-sets__value {
+  min-width: 4ch;
+  @include type.type-style('fluid-heading-04', true);
+  letter-spacing: -0.02em;
+  color: var(--cds-interactive);
+}
+
+.cap-sets__label {
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  // The component drops the dwell timer entirely under reduced motion, so the
+  // rail becomes a static position marker rather than a moving one. What is
+  // left to switch off here is the two entrances.
+  .cap-stage__frame,
+  .cap-item__reveal {
+    animation: none;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -1344,45 +2098,21 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Benefits
-// ---------------------------------------------------------------------------
-.benefit-grid {
-  row-gap: var(--graphite-space-07);
-}
-
-.benefit {
-  height: 100%;
-  padding-top: var(--graphite-space-05);
-  border-top: 2px solid var(--cds-border-interactive);
-}
-
-.benefit__icon {
-  display: inline-flex;
-  color: var(--cds-interactive);
-  margin-bottom: var(--graphite-space-05);
-}
-
-.benefit__stat {
-  @include type.type-style('fluid-heading-04', true);
-  letter-spacing: -0.02em;
-}
-
-.benefit__title {
-  @include type.type-style('heading-03');
-  margin-top: var(--graphite-space-03);
-  margin-bottom: var(--graphite-space-03);
-}
-
-.benefit__body {
-  @include text('body-3', $letter-spacing: 0.16px);
-  color: var(--cds-text-secondary);
-}
-
-// ---------------------------------------------------------------------------
 // FAQ
 // ---------------------------------------------------------------------------
 .section--faq {
   row-gap: var(--graphite-space-07);
+}
+
+// The kit sets the FAQ heading at Heading/6 like every other section title
+// on the page, rather than the larger fluid step the old two-column FAQ used.
+.section--capabilities .section__title,
+.faq__title {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: var(--graphite-text-weight-bold);
+  margin-bottom: var(--graphite-space-06);
+  max-width: none;
 }
 
 .faq__accordion {
@@ -1393,164 +2123,6 @@ body {
   @include text('body-2');
   color: var(--cds-text-secondary);
   max-width: 44rem;
-}
-
-// ---------------------------------------------------------------------------
-// Final CTA
-// ---------------------------------------------------------------------------
-.cta {
-  position: relative;
-  overflow: hidden;
-  padding: var(--graphite-space-09) 0;
-  background: var(--cds-background);
-  border-bottom: 1px solid var(--cds-border-subtle-01);
-  isolation: isolate;
-
-  @include breakpoint.breakpoint(md) {
-    padding: var(--graphite-space-12) 0;
-  }
-}
-
-.cta__glow {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(
-    40rem 26rem at 50% 120%,
-    color-mix(in srgb, var(--cds-interactive) 32%, transparent),
-    transparent 65%
-  );
-  pointer-events: none;
-}
-
-.cta__inner {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.cta__title {
-  @include type.type-style('fluid-heading-05', true);
-  text-wrap: balance;
-  max-width: 20ch;
-}
-
-.cta__subtitle {
-  @include text('body-2');
-  color: var(--cds-text-secondary);
-  margin-top: var(--graphite-space-05);
-  max-width: 36rem;
-  text-wrap: pretty;
-}
-
-.cta__form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--graphite-space-05);
-  width: 100%;
-  max-width: 30rem;
-  margin-top: var(--graphite-space-07);
-}
-
-.cta__fields {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-04);
-  width: 100%;
-  text-align: left;
-}
-
-.cta__form > .cds--btn {
-  // Full-bleed on phones so the primary action is unmissable and easy to
-  // hit; right-aligned to the field edge once there is room for it.
-  width: 100%;
-  justify-content: space-between;
-
-  @include breakpoint.breakpoint(md) {
-    width: auto;
-    align-self: flex-end;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Footer
-// ---------------------------------------------------------------------------
-.footer {
-  padding: var(--graphite-space-06) 0;
-  border-top: 1px solid var(--cds-border-subtle-01);
-  background: var(--cds-background);
-}
-
-.footer__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--graphite-space-03);
-
-  // The two halves can't sit on one line at phone widths; stacking them
-  // deliberately (rather than letting space-between strand the credit) keeps
-  // the wrapped stat line and the attribution left-aligned to each other.
-  @media (max-width: 671px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--graphite-space-04);
-  }
-}
-
-.footer__stats {
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #888;
-  margin: 0;
-
-  // At the tracked-out desktop spacing this line overshoots a phone's content
-  // width by a few px and orphans the last word. Tightening the tracking keeps
-  // it on one line rather than wrapping a single word.
-  @media (max-width: 671px) {
-    letter-spacing: 0.1em;
-  }
-}
-
-.footer__credit {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-}
-
-.footer__credit-label {
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #888;
-}
-
-.footer__credit a {
-  display: inline-flex;
-  align-items: center;
-  // Invisible padding expands the tap target to ~44px without shifting
-  // surrounding layout (offset by the matching negative margin).
-  padding: 13px;
-  margin: -13px;
-}
-
-.footer__credit-logo {
-  height: 18px;
-  width: auto;
-  display: block;
-  opacity: 0.9;
-}
-
-// The source mark is a solid white PNG, made for a permanently dark page.
-// This site's light theme needs it inverted to stay legible.
-:root.cds--white .footer__credit-logo {
-  filter: invert(1);
 }
 
 // ---------------------------------------------------------------------------

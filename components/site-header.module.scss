@@ -14,18 +14,23 @@
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 8000; // above the page, below Modal's scrim
-  height: 3rem; // .page-main compensates with an equal margin-top
+  height: 4rem; // kit bar is 64px; .page-main compensates with an equal margin
   background: var(--graphite-surface);
-  border-bottom: 1px solid var(--graphite-outline);
+  // The kit rules the bar off with outline-subtle. The engine has no separate
+  // subtle-outline role, but surfaceVariant resolves to that exact hex in both
+  // themes (#2e2c37 dark, #dedcea light), so this is the binding rather than an
+  // approximation of it. Same substitution everywhere the kit says
+  // outline-subtle; plain outline stays plain outline.
+  border-bottom: 1px solid var(--graphite-surface-variant);
   color: var(--graphite-on-surface);
 }
 
 .inner {
   display: flex;
   align-items: center;
-  gap: var(--graphite-space-05);
+  gap: var(--graphite-space-06);
   height: 100%;
-  padding-left: var(--graphite-space-05);
+  padding: 0 var(--graphite-space-06);
 }
 
 // ---------------------------------------------------------------- skip link
@@ -57,14 +62,27 @@
 }
 
 // -------------------------------------------------------------------- brand
+// Just the link wrapper now: Brand owns the mark, the wordmark and the gap.
+//
+// Below lg the kit centres the brand in the space left between the menu
+// button and the utility rail, not on the bar itself: at Small its gaps are
+// 41px either side, at Medium 160.5px either side, and in both cases the bar's
+// own midpoint sits elsewhere. Auto margins give exactly that, and unlike
+// absolute centring they cannot drive the wordmark under the utility rail —
+// which at 320px they did, by 35px.
 .brand {
+  display: flex;
+  align-items: center;
   flex: none;
-  font-size: var(--graphite-text-title-5-size);
-  line-height: var(--graphite-text-title-5-line-height);
-  font-weight: 600;
+  margin-inline: auto;
+  min-width: 0;
   color: var(--graphite-on-surface);
   text-decoration: none;
-  white-space: nowrap;
+
+  // 1056px is the kit's lg stop, written raw for the reason above.
+  @media (min-width: 1056px) {
+    margin-inline: 0;
+  }
 }
 
 .brand:focus-visible {
@@ -80,13 +98,162 @@
 .nav {
   display: none;
   min-width: 0;
+  margin-left: auto;
+}
+
+.navList {
+  display: flex;
+  align-items: stretch;
+  gap: var(--graphite-space-07);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Label with a 2px indicator beneath it. The indicator is always in the
+// layout and only changes colour, so nothing shifts on hover.
+.navLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-06) 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+  text-decoration: none;
+  transition: color var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+.navIndicator {
+  height: 2px;
+  width: 100%;
+  background: transparent;
+  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+.navLink:hover {
+  color: var(--graphite-on-surface);
+}
+
+.navLink:hover .navIndicator {
+  background: var(--graphite-outline);
+}
+
+// Current page takes the primary indicator. Colour is never the only signal:
+// aria-current carries it for anyone not seeing the bar.
+.navLink[aria-current='page'] {
+  color: var(--graphite-on-surface);
+}
+
+.navLink[aria-current='page'] .navIndicator {
+  background: var(--graphite-primary);
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
 }
 
 .actions {
   display: flex;
   align-items: center;
-  margin-left: auto;
+  gap: var(--graphite-space-04);
   height: 100%;
+
+  // Below lg the brand's auto margins already push this to the right edge; a
+  // second auto margin here would split the leftover space between the two
+  // and pull the brand off the centre the kit gives it.
+  @media (min-width: 1056px) {
+    margin-left: auto;
+  }
+}
+
+// ------------------------------------------------------------------- search
+// The kit draws a 232px field ruled underneath rather than boxed, matching
+// the text input the rest of the kit uses.
+.search {
+  display: none;
+  align-items: center;
+  width: 14.5rem;
+  background: var(--graphite-surface);
+  border-bottom: 1px solid var(--graphite-outline);
+  transition: border-color var(--graphite-motion-fast)
+    var(--graphite-motion-ease);
+}
+
+.search:hover {
+  border-bottom-color: var(--graphite-primary);
+}
+
+.searchIcon {
+  flex: none;
+  margin: var(--graphite-space-03);
+  color: var(--graphite-on-surface-variant);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding: var(--graphite-space-03) var(--graphite-space-03)
+    var(--graphite-space-03) 0;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.searchInput:disabled {
+  cursor: not-allowed;
+}
+
+.searchInput::placeholder {
+  color: var(--graphite-on-surface-variant);
+  opacity: 1;
+}
+
+// ----------------------------------------------------------- theme + source
+// The kit sets these flush against each other as one control group.
+.controlGroup {
+  display: flex;
+  align-items: center;
+  // One height for both halves of the group. The toggle and the chip are
+  // styled in different files — the chip's rules live in globals.scss with
+  // the rest of the colour control — and they were drifting apart at 34 and
+  // 30px, which left the chip sitting 2px low against the toggle. A custom
+  // property is not module-scoped, so it reaches both from here.
+  --header-control-h: 2.125rem;
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--header-control-h);
+  padding: 0 var(--graphite-space-03);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  border: 1px solid var(--graphite-primary);
+  cursor: pointer;
+  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+// Hover is a tone step on the resting fill's own ramp, never a new colour:
+// the rule Button's contract sets and the rest of the site points back at.
+.themeToggle:hover {
+  background: var(--graphite-primary-hover);
+  border-color: var(--graphite-primary-hover);
+}
+
+.themeToggle:active {
+  background: var(--graphite-primary-pressed);
+  border-color: var(--graphite-primary-pressed);
+}
+
+.themeToggle:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
 }
 
 // A square action tile, sized to the bar. 3rem is both the header height and
@@ -106,6 +273,7 @@
 
 .action:hover {
   background: var(--graphite-surface-variant);
+  color: var(--graphite-primary);
 }
 
 .action:focus-visible {
@@ -117,6 +285,10 @@
 @media (min-width: 1056px) {
   .nav {
     display: block;
+  }
+
+  .search {
+    display: flex;
   }
 
   .menuButton {
@@ -139,4 +311,32 @@
   display: flex;
   align-items: center;
   min-height: 48px;
+}
+
+// Brand mark — kit header (11862:2928). A 22px image, cover-fitted. Sized on both axes so a failed
+// load cannot stretch it to its intrinsic size.
+.mark {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex: none;
+  display: block;
+  object-fit: cover;
+}
+
+// Repo link in the utility rail. Shares .action's hit area and focus ring;
+// only the anchor's underline needs clearing.
+.repo {
+  text-decoration: none;
+}
+
+// At Small the kit drops the mark and runs the wordmark alone — 320px has to
+// hold the menu button, the brand and three utility controls. The footer's
+// Brand keeps both at every width, so this is scoped to the header's copy.
+.brand :global(img) {
+  display: none;
+
+  // 672px is the kit's md stop.
+  @media (min-width: 672px) {
+    display: block;
+  }
 }

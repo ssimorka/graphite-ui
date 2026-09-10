@@ -1,0 +1,25 @@
+// Brand — kit Brand frame (11862:2929 in the header, 11844:289119 in the
+// footer; the two are identical).
+.brand {
+  display: flex;
+  align-items: center;
+  // The kit's gap is 10px, which the spacing scale has no step for. space-03
+  // is the nearer of the two neighbours.
+  gap: var(--graphite-space-03);
+  white-space: nowrap;
+}
+
+.mark {
+  width: 1.375rem; // kit mark is 22px
+  height: 1.375rem;
+  flex: none;
+  display: block;
+  object-fit: cover;
+}
+
+.wordmark {
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: var(--graphite-text-weight-semibold);
+  color: var(--graphite-on-surface);
+}

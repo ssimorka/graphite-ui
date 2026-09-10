@@ -2,13 +2,25 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { Grid, Column, Tag } from '@carbon/react'
-import { FlashFilled } from '@carbon/icons-react'
-import { SystemExplorer } from '@/components/sections/system-explorer'
+import { Gem, ArrowRight, Grid as GridIcon } from '@carbon/icons-react'
+import { Button } from '@/components/ui/button'
+import { RampRow, Toast, useCopy } from '@/components/studio'
+import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
+import { makeRamps } from '@/lib/color.js'
+
+// The four ramps the source strip shows. The engine emits eight; the four
+// status ramps are pinned to their status hue rather than derived from the
+// source, so they prove nothing about the input and would pad the strip to
+// twice its height. The carousel below carries the full set.
+const STRIP_RAMPS = ['accent', 'secondary', 'neutral', 'neutralVariant'] as const
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null)
   const pointerFrame = useRef<number | null>(null)
   const scrollFrame = useRef<number | null>(null)
+  const { copiedKey, toast, copy } = useCopy()
+  const { sourceHex } = useTheme()
+  const ramps = makeRamps(sourceHex || COVER_SOURCE_HEX)
 
   // Pointer-driven depth + spotlight position.
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
@@ -66,30 +78,68 @@ export function Hero() {
       <Grid className="hero__content">
         <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>
           <div className="hero__center">
-            <Tag type="blue" size="md" className="hero__eyebrow">
-              <FlashFilled size={11} className="hero__eyebrow-icon" /> New: Patterns module
+            <Tag type="purple" size="md" className="hero__eyebrow">
+              <Gem size={16} className="hero__eyebrow-icon" /> Wave 4 · 22
+              governed components
             </Tag>
             <h1 className="hero__title" id="hero-title">
-              One color. A whole design system.
+              One color.{' '}
+              <br className="hero__title-break" />
+              A whole design system.
             </h1>
             <p className="hero__subtitle">
-              Pick a color and watch it become every shade, token, and pattern
-              on this page, live.
+              Pick a color. Graphite resolves eight ramps, thirty-two semantic
+              roles and both themes from it, measures every pairing as it goes,
+              and keeps the Figma kit and the code provably in step.
             </p>
+            <div className="hero__ctas">
+              <Button variant="primary" size="lg" asChild>
+                <a href="/docs">
+                  Get started
+                  <ArrowRight />
+                </a>
+              </Button>
+              <Button variant="ghost" size="lg" asChild>
+                <a href="/gallery">
+                  Browse components
+                  <GridIcon />
+                </a>
+              </Button>
+            </div>
           </div>
         </Column>
       </Grid>
 
-      {/* The live system explorer is the hero's product shot. It carries the
-          original tool's controls plus the ramp and contrast views, so there is
-          one interactive demo on the page rather than two competing canvases. */}
+      {/* The source strip is the hero's product shot: the four source-derived
+          ramps, always visible rather than behind a switcher, so the claim in
+          the subtitle is answered on the same screen that makes it. */}
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 12, offset: 2 }}>
-          <div className="hero__preview">
-            <SystemExplorer embedded />
+        {/* Full content width, not a 12-of-16 span: the kit centres a 1000px
+            strip inside the 1120px column, and a span narrowed it to about
+            928 — which pulled the ten stops down from the kit's 88px to 79.
+            The strip max-width does the centring instead. */}
+        <Column sm={4} md={8} lg={16}>
+          <div className="hero__source-strip">
+            <div className="ramp-stack">
+              {STRIP_RAMPS.map((name) => (
+                <RampRow
+                  key={name}
+                  name={name}
+                  ramp={ramps[name]}
+                  copiedKey={copiedKey}
+                  onCopy={copy}
+                />
+              ))}
+              <p className="ramp-stack__hint">
+                Select any swatch to copy its hex. The outlined stop is where
+                your source color landed.
+              </p>
+            </div>
           </div>
         </Column>
       </Grid>
+
+      <Toast message={toast} />
     </section>
   )
 }

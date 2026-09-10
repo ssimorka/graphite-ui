@@ -16,7 +16,7 @@ import { contrastRatio, TONE_STOPS, STATUS_NAMES } from '@/lib/color.js'
 // order rather than by value, so they line up with each ramp's ten stops
 // regardless of the actual OKLab tone at that position. The real tone stays
 // available in each swatch's tooltip.
-const WEIGHT_LABELS = [
+export const WEIGHT_LABELS = [
   '900',
   '800',
   '700',
@@ -158,8 +158,9 @@ export function RampRow({
   copiedKey: string | null
   onCopy: (key: string, hex: string) => void
 }) {
-  const columns = ramp.stops.length
-  const cols = { gridTemplateColumns: `repeat(${columns}, 1fr)` }
+  // Only the count comes from here; the track size lives in the stylesheet,
+  // which is what keeps the stops and the weights on identical tracks.
+  const cols = { ['--ramp-cols' as string]: ramp.stops.length }
   return (
     <div className="ramp">
       <p className="ramp__label">{RAMP_LABELS[name] ?? name}</p>
@@ -181,11 +182,20 @@ export function RampRow({
           {ramp.stops.map((stop, i) => (
             <span key={i} title={`OKLab tone ${Math.round(stop.tone)}`}>
               {WEIGHT_LABELS[i]}
-              {stop.source ? ' · source' : ''}
+              {stop.source ? (
+                <span className="ramp__source">source</span>
+              ) : null}
             </span>
           ))}
         </div>
       </div>
+      {/* The kit gives each ramp a scroll affordance below lg, where ten stops
+          are wider than the strip. Hidden by CSS at X-Large, where they fit.
+          aria-hidden because it describes a pointer gesture: the row is a list
+          of buttons and reachable by tab regardless. */}
+      <p className="ramp__scroll-hint" aria-hidden="true">
+        Scroll for more
+      </p>
     </div>
   )
 }

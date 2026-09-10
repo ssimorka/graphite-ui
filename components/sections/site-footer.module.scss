@@ -1,0 +1,125 @@
+// Site footer — kit "07 Footer" (11865:3294).
+.footer {
+  padding: var(--graphite-space-09) 0 var(--graphite-space-06);
+  border-top: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-surface);
+}
+
+// Brand block sits left of the link columns at X-Large and above it below.
+.columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--graphite-space-08);
+
+  // The kit only sets the brand beside the links at X-Large. At Medium and
+  // Small it sits above them, which 42rem was breaking too early.
+  @media (min-width: 66rem) {
+    grid-template-columns: minmax(0, 16.7rem) 1fr;
+    gap: var(--graphite-space-07);
+  }
+}
+
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.tagline {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+  margin: 0;
+  max-width: 20rem;
+}
+
+.links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: var(--graphite-space-07);
+}
+
+.linkColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.linkHeading {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: var(--graphite-text-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--graphite-on-surface-variant);
+  margin: 0;
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  a {
+    font-size: var(--graphite-text-body-3-size);
+    line-height: var(--graphite-text-body-3-line-height);
+    color: var(--graphite-on-surface-variant);
+    text-decoration: none;
+    transition: color var(--graphite-motion-fast) var(--graphite-motion-ease);
+
+    &:hover {
+      color: var(--graphite-primary);
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--graphite-focus);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-05);
+  margin-top: var(--graphite-space-08);
+  padding-top: var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.stats {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  color: var(--graphite-on-surface-variant);
+  margin: 0;
+}
+
+.credit {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+.creditLabel {
+  font-size: var(--graphite-text-caption-2-size);
+  color: var(--graphite-on-surface-variant);
+}
+
+.creditLogo {
+  display: block;
+  height: 1.25rem;
+  width: auto;
+}
+
+// The source mark is a solid white PNG, made for a permanently dark page.
+// This site's light theme needs it inverted to stay legible. Scoped through
+// :global because the theme class lives on <html>, outside this module.
+:global(:root.cds--white) .creditLogo {
+  filter: invert(1);
+}
