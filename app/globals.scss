@@ -1105,9 +1105,7 @@ body {
   margin-top: var(--graphite-space-02);
 
   span {
-    // Zero, so a label can never widen its own track. "500 · source" is wider
-    // than a stop and spills over its neighbours instead, which is what the
-    // kit draws.
+    // Zero, so a label can never widen its own track.
     min-width: 0;
     text-align: center;
     white-space: nowrap;
@@ -1171,6 +1169,28 @@ body {
   // hover feedback at all.
   .ramp-swatch {
     transition: none;
+  }
+}
+
+// The source marker stacks under its number below lg and sits beside it at
+// X-Large.
+//
+// The kit keeps it inline at every width — 68px of text in a 56px stop, a 6px
+// spill either side it evidently tolerates. At the caption step this renders
+// nearer 86px, which is a 15px spill and lands on top of the 400 and 600
+// labels rather than merely past its own edges. Stacking clears it: "source"
+// alone measures about 43px and fits the 56px stop outright.
+.ramp__source {
+  display: block;
+
+  @include breakpoint.breakpoint(lg) {
+    display: inline;
+
+    // The separator belongs to the inline form only, so it lives here rather
+    // than in the markup where the stacked form would inherit it too.
+    &::before {
+      content: ' · ';
+    }
   }
 }
 

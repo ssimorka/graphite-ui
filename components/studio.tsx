@@ -182,7 +182,9 @@ export function RampRow({
           {ramp.stops.map((stop, i) => (
             <span key={i} title={`OKLab tone ${Math.round(stop.tone)}`}>
               {WEIGHT_LABELS[i]}
-              {stop.source ? ' · source' : ''}
+              {stop.source ? (
+                <span className="ramp__source">source</span>
+              ) : null}
             </span>
           ))}
         </div>
