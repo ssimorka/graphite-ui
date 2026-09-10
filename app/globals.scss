@@ -2336,6 +2336,11 @@ $cap-dwell: 500px;
 // ---------------------------------------------------------------------------
 .section--faq {
   row-gap: var(--graphite-space-07);
+  // Kit 11865:3162 fills this with surfaceVariant. The field, and only the
+  // field: not a band class, which would rebind the role variables for every
+  // descendant. The kit sets the copy in on-surface, which is what the page
+  // already uses, so nothing inside needs re-pairing.
+  background: var(--graphite-surface-variant);
 }
 
 // The kit sets the FAQ heading at Heading/6 like every other section title
