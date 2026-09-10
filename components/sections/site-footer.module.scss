@@ -1,11 +1,12 @@
 // Site footer — kit "07 Footer" (11865:3294).
 .footer {
-  // Positioned for the same reason every .section is: the full-bleed grid in
-  // .page-bands carries a parallax translate that pushes it past its parent's
-  // box, and .page-bands is positioned, so an unpositioned footer paints its
-  // background underneath the grid and the lines read straight through it.
-  // This puts the footer in the same paint layer, where being later in the DOM
-  // wins. The sections above it never showed the bleed for exactly this reason.
+  // Positioned, like every .section is. It went in to stop the full-bleed grid
+  // in .page-bands painting over the footer's background, which happened
+  // because that grid's parallax pushed it past its parent and .page-bands is
+  // positioned while the footer was not. .page-bands now clips the grid to
+  // itself, so this is no longer load-bearing - it is kept because every other
+  // top-level block on the page carries it and an unpositioned one is the odd
+  // case that invites the same class of bug back.
   position: relative;
   padding: var(--graphite-space-09) 0 var(--graphite-space-06);
   // Back to the subtle rule, which is the binding every other rule on the site
