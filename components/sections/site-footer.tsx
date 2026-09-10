@@ -1,6 +1,7 @@
 'use client'
 
 import { Grid, Column } from '@carbon/react'
+import { Brand } from '@/components/brand'
 import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 import styles from './site-footer.module.scss'
 
@@ -60,10 +61,7 @@ export function SiteFooter() {
         <Column sm={4} md={8} lg={16}>
           <div className={styles.columns}>
             <div className={styles.brandBlock}>
-              <div className={styles.brand}>
-                <span className={styles.mark} aria-hidden="true" />
-                <span className={styles.wordmark}>Graphite UI</span>
-              </div>
+              <Brand />
               <p className={styles.tagline}>
                 A design system that derives itself from one decision, and
                 proves it.

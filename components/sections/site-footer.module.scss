@@ -23,30 +23,6 @@
   gap: var(--graphite-space-04);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: var(--graphite-space-04);
-}
-
-// The mark is the source color itself, which is the most on-message thing a
-// mark on this site can be.
-// The kit's footer mark is a primary-container swatch, not the header's
-// image: it reads as a mark at this size without competing with the wordmark.
-.mark {
-  width: 1.75rem;
-  height: 1.75rem;
-  flex: none;
-  background: var(--graphite-primary-container);
-}
-
-.wordmark {
-  font-size: var(--graphite-text-title-3-size);
-  line-height: var(--graphite-text-title-3-line-height);
-  font-weight: var(--graphite-text-weight-semibold);
-  color: var(--graphite-on-surface);
-}
-
 .tagline {
   font-size: var(--graphite-text-body-2-size);
   line-height: var(--graphite-text-body-2-line-height);

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Asleep, Light, Menu, Close, LogoGithub, Search } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
+import { Brand } from '@/components/brand'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { Modal } from '@/components/ui/modal'
 import styles from './site-header.module.scss'
@@ -65,13 +66,7 @@ export function SiteHeader() {
       </a>
       <div className={styles.inner}>
         <a className={styles.brand} href="/">
-          {/* The kit's own mark asset (11862:2930), exported and committed
-              rather than linked: Figma's asset URLs expire after a week. It is
-              a halftone treatment of the same eye, not the hard black-and-white
-              eye.jpg the generative art still uses as a source texture, so the
-              two files stay separate. */}
-          <img className={styles.mark} src="/graphite/mark.png" alt="" />
-          Graphite UI
+          <Brand />
         </a>
 
         <nav className={styles.nav} aria-label="Main">

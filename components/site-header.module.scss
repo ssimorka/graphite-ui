@@ -62,17 +62,13 @@
 }
 
 // -------------------------------------------------------------------- brand
+// Just the link wrapper now: Brand owns the mark, the wordmark and the gap.
 .brand {
   display: flex;
   align-items: center;
-  gap: var(--graphite-space-03);
   flex: none;
-  font-size: var(--graphite-text-title-3-size);
-  line-height: var(--graphite-text-title-3-line-height);
-  font-weight: 600;
   color: var(--graphite-on-surface);
   text-decoration: none;
-  white-space: nowrap;
 }
 
 .brand:focus-visible {
