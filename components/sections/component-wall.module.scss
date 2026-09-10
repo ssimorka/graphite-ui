@@ -92,13 +92,12 @@
   min-height: 9.25rem; // kit preview area is 148px
   padding: var(--graphite-space-06) var(--graphite-space-05);
   overflow: hidden;
-  // Background, not an accent field. This was part of the 30 and should not
-  // have been: the specimens are the section's whole claim, and several of
-  // them are themselves primary — the Tag and the Toggle's on-state were
-  // primary on primary-container and all but vanished. The kit gives this
-  // area no fill of its own either; the rule on .meta is what separates the
-  // specimen from its label.
-  background: var(--graphite-background);
+  // surfaceVariant: a raised neutral, so the specimen sits on a field of its
+  // own without competing with it. This was an accent field and should not
+  // have been — several of the specimens are themselves primary, and the Tag
+  // and the Toggle's on-state were primary on primary-container and all but
+  // vanished. Neutral is what lets a primary component read as primary.
+  background: var(--graphite-surface-variant);
   transition:
     transform 300ms ease-out,
     filter 300ms ease-out;
