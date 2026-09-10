@@ -51,25 +51,34 @@
   border: 1px solid var(--graphite-surface-variant);
   // Shadows/Menu
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
-  transition:
-    border-color var(--graphite-motion-fast) var(--graphite-motion-ease),
-    transform var(--graphite-motion-fast) var(--graphite-motion-ease);
+  // Hover states .md gives this 300ms ease-out, moving border and preview
+  // together. 300ms is not a token: only fast (120), base (240) and
+  // indeterminate (1400) are, so it is a literal here the way the other
+  // one-off durations on this page are.
+  transition: border-color 300ms ease-out;
 }
 
-// The wall is the section's proof that these are live components, so the card
-// answers the pointer: the rule picks up the source colour and the card lifts
-// by the same 1px Button presses by.
+// The kit takes the rule from border-disabled to outline-strong. The engine
+// has one outline role, so rest sits on surfaceVariant (the outline-subtle
+// hex) and hover steps up to it.
 .card:hover {
-  border-color: var(--graphite-primary);
-  transform: translateY(-1px);
+  border-color: var(--graphite-outline);
 }
 
-// The card is not itself interactive, so the lift is decoration and goes
-// where motion is not wanted.
+// The frame, its fill and its radius do not move; only the artwork inside
+// does, gaining the menu shadow as it goes.
+.card:hover .preview {
+  transform: translateY(12px);
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, #000 30%, transparent));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card,
-  .card:hover {
+  .preview {
     transition: none;
+  }
+
+  .card:hover .preview {
     transform: none;
   }
 }
@@ -83,6 +92,9 @@
   min-height: 9.25rem; // kit preview area is 148px
   padding: var(--graphite-space-06) var(--graphite-space-05);
   overflow: hidden;
+  transition:
+    transform 300ms ease-out,
+    filter 300ms ease-out;
 }
 
 // Specimens are sized for their own pages, so the narrow ones are held to the

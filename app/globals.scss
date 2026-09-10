@@ -984,21 +984,16 @@ body {
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
   }
 
-  // The swatch is a copy button, so it has to answer the pointer. Its fill
-  // is the token being demonstrated and must not shift, so the affordance is
-  // a lift and a shadow rather than a colour change.
-  transition:
-    transform var(--graphite-motion-fast) var(--graphite-motion-ease),
-    box-shadow var(--graphite-motion-fast) var(--graphite-motion-ease);
+  // Hover states .md: the swatch grows 88px to 98px on both axes, with the
+  // fill and the 1px border unchanged. Scaled rather than resized because the
+  // stops are grid columns — growing the box would reflow the whole row, and
+  // the ramp has to stay aligned with the weight labels beneath it. The hex
+  // label rides the scale, which resizing in Figma does not do to it.
+  transition: transform var(--graphite-motion-base) ease-out;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px color-mix(in srgb, #000 40%, transparent);
+    transform: scale(1.1136); // 98 / 88
     z-index: 1;
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 
   &:focus-visible {
@@ -1008,10 +1003,11 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ramp-swatch,
-  .ramp-swatch:hover {
+  // The scale is the whole affordance here, so it stays and only the
+  // transition goes: removing it as well would leave the swatch with no
+  // hover feedback at all.
+  .ramp-swatch {
     transition: none;
-    transform: none;
   }
 }
 

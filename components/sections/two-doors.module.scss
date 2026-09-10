@@ -51,12 +51,30 @@
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // The artefact slides under the card's edge rather than escaping it.
   overflow: hidden;
-  transition: border-color var(--graphite-motion-fast)
-    var(--graphite-motion-ease);
+  transition: border-color var(--graphite-motion-base) ease-out;
 }
 
+// Hover states .md: the rule steps from outline-subtle to outline-strong, and
+// the artefact loses its own rule and lifts toward the card edge, 240ms
+// ease-out, which is --graphite-motion-base.
 .door:hover {
-  border-color: var(--graphite-primary);
+  border-color: var(--graphite-outline);
+}
+
+.door:hover .artefact {
+  border-color: transparent;
+  transform: translate(-10px, -23px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door,
+  .artefact {
+    transition: none;
+  }
+
+  .door:hover .artefact {
+    transform: none;
+  }
 }
 
 .doorBody {
@@ -101,9 +119,10 @@
   border: 1px solid var(--graphite-outline);
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   pointer-events: none;
-  // Held back so the copy in front of it stays the thing being read.
-  opacity: 0.7;
   z-index: 0;
+  transition:
+    border-color var(--graphite-motion-base) ease-out,
+    transform var(--graphite-motion-base) ease-out;
 
   @media (min-width: 30rem) {
     display: block;

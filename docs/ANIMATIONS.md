@@ -15,7 +15,7 @@ Five, all declared on `:root` in `app/globals.scss`.
 | Token | Value | Used by |
 |---|---|---|
 | `--graphite-motion-fast` | 120ms | Button, Toggle, the three overlays, hero spotlight |
-| `--graphite-motion-base` | 240ms | Capabilities carousel item state and body reveal |
+| `--graphite-motion-base` | 240ms | Capabilities carousel item state and body reveal, ramp swatch and Info card hovers |
 | `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep |
 | `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
 | `--graphite-motion-indeterminate-ease` | `cubic-bezier(0.65, 0, 0.35, 1)` | The sweep only |
@@ -57,10 +57,30 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | settle | Mount, when the item becomes active |
 | Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | ease | Selection change, hover |
 | Theme swap | `html`, `body`, `.cds--*` | 180ms | ease | Theme toggle |
+| Ramp swatch hover | `.ramp-swatch` | `base` | ease-out | Pointer over a swatch |
+| Wall card hover | `.card`, `.card .preview` | 300ms | ease-out | Pointer over a component card |
+| Info card hover | `.door`, `.door .artefact` | `base` | ease-out | Pointer over a door |
+| Header nav hover | `.navLink`, `.navIndicator` | `fast` | settle | Pointer over a nav item |
 
-The 700ms, 900ms, 500ms, 320ms, 200ms, 180ms and 160ms values are literals. They
-have no token, and minting one per call site would trade a readable number for an
-indirection that explains nothing.
+The 700ms, 900ms, 500ms, 320ms, 300ms, 200ms, 180ms and 160ms values are
+literals. They have no token, and minting one per call site would trade a
+readable number for an indirection that explains nothing.
+
+**The hover durations come from the kit, not from here.** `Read Me — Hover
+states` (13463:16977) documents the Home prototype's 195 hover reactions and
+fixes two durations: 240ms ease-out for the ramp swatch and the Info cards,
+300ms ease-out for the component card, which moves its border and its preview
+together. Those are the only two the prototype states; everything else it
+leaves without a transition object, which in code means the component's own
+timing governs, Button on `fast`.
+
+**Where the site has hovers the kit does not.** That Read Me lists its own
+gaps: the header nav links, the Search field, the GitHub icon and the whole
+footer bar carry no hover interaction in the prototype. The site adds them
+anyway. A nav item that does not answer the pointer reads as broken, and
+governance rule 7's tie-break says the code keeps its own where the kit has no
+opinion. They are listed above so the difference is on the record rather than
+discovered later.
 
 **Stagger.** `Reveal` fires flat everywhere except the Capabilities proof strip,
 which staggers `delay={i * 80}`. Every other use passes no delay.
