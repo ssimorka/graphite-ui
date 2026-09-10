@@ -613,6 +613,10 @@ body {
     #000 calc(100% - 4rem),
     transparent
   );
+  // Half strength. The rules are already drawn at 60% of outline, so this
+  // lands them near 30% against the band behind them — enough to read as a
+  // grid without competing with the sections sitting on it.
+  opacity: 0.5;
   pointer-events: none;
 }
 
