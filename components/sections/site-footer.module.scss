@@ -1,8 +1,22 @@
 // Site footer — kit "07 Footer" (11865:3294).
 .footer {
+  // Positioned for the same reason every .section is: the full-bleed grid in
+  // .page-bands carries a parallax translate that pushes it past its parent's
+  // box, and .page-bands is positioned, so an unpositioned footer paints its
+  // background underneath the grid and the lines read straight through it.
+  // This puts the footer in the same paint layer, where being later in the DOM
+  // wins. The sections above it never showed the bleed for exactly this reason.
+  position: relative;
   padding: var(--graphite-space-09) 0 var(--graphite-space-06);
+  // Back to the subtle rule, which is the binding every other rule on the site
+  // uses and is visible again now the fill is not surfaceVariant.
   border-top: 1px solid var(--graphite-surface-variant);
-  background: var(--graphite-surface);
+  // The page plane, named as such. The engine resolves surface and background
+  // to the same hex in both themes (#121215 dark, #f8f8fc light), so this is
+  // the colour a surface fill was already producing - but background is what
+  // the footer actually means, and it will not drift if the two ever separate.
+  // The rule above is what divides the footer from the section over it.
+  background: var(--graphite-background);
 }
 
 // Brand block sits left of the link columns at X-Large and above it below.
