@@ -102,12 +102,10 @@
   min-height: 9.25rem; // kit preview area is 148px
   padding: var(--graphite-space-06) var(--graphite-space-05);
   overflow: hidden;
-  // surfaceVariant: a raised neutral, so the specimen sits on a field of its
-  // own without competing with it. This was an accent field and should not
-  // have been — several of the specimens are themselves primary, and the Tag
-  // and the Toggle's on-state were primary on primary-container and all but
-  // vanished. Neutral is what lets a primary component read as primary.
-  background: var(--graphite-surface-variant);
+  // No fill, which is what the kit does: its preview area has none of its own
+  // and the specimen sits on the card's surface. The rule on .meta is all that
+  // separates the specimen from its label. A field here only ever competed
+  // with the components, which are the section's whole claim.
   transition:
     transform 300ms ease-out,
     filter 300ms ease-out;
