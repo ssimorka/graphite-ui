@@ -1440,6 +1440,72 @@ body {
   align-items: start;
 }
 
+// How much scrolling each capability is worth. Kept in step with DWELL_PX in
+// capabilities.tsx, which describes the same distance from the other side.
+$cap-dwell: 500px;
+
+// Desktop only: the section is a scroll track and the content is stuck to the
+// viewport inside it, so reading position picks the panel. Nothing advances on
+// a timer any more.
+//
+// Below lg the stacked layout renders instead, with all six capabilities open
+// at once and nothing to select, so none of this applies there: .cap-sticky is
+// an ordinary div and the section keeps its own height.
+@include breakpoint.breakpoint(lg) {
+  .section--capabilities {
+    // One dwell of scrolling per panel, on top of the pane that stays put.
+    // --cap-count comes from the component so the panel list stays the one
+    // place the number of capabilities is written down.
+    min-height: calc(100vh - 4rem + var(--cap-count, 6) * #{$cap-dwell});
+    // The track is tall and the pane inside it is not, so the section's own
+    // padding would sit hundreds of pixels away from anything. The pane
+    // carries it instead.
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .cap-sticky {
+    position: sticky;
+    top: 4rem; // clears the fixed 64px header, same value .page-main offsets by
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    // The 1066px the section held before it became a track: kept wherever the
+    // viewport has room, and capped by the viewport where it does not, since a
+    // sticky pane taller than the screen cannot actually stay put.
+    min-height: min(1066px, calc(100vh - 4rem));
+    padding: var(--graphite-space-09) 0;
+  }
+
+  // Both columns match the stage rather than sitting at the top of the grid,
+  // so the rail runs the full height of the panel beside it.
+  .section--capabilities .cap-grid {
+    align-items: stretch;
+  }
+
+  .section--capabilities .cap-grid .reveal {
+    height: 100%;
+  }
+
+  .section--capabilities .cap-stage {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  // The tallest panel ("Eight ramps") measured 689px; holding that as a floor
+  // is what stops the stage resizing as the selection changes. Re-measure if a
+  // panel grows, since this is a floor and taller content pushes past it.
+  //
+  // Scoped past .cap-stage__frame's own min-height rather than repeating the
+  // bare class: that rule is declared further down the file, so at equal
+  // specificity its 22rem would win on source order.
+  .section--capabilities .cap-stage__frame {
+    flex: 1;
+    min-height: 43.0625rem; // 689px
+  }
+}
+
 // Medium and Small: the kit stacks all six capabilities, each above its own
 // stage, rather than running a carousel. There is no rail fill, no count and
 // no pause, because nothing advances.
@@ -1533,7 +1599,7 @@ body {
   left: var(--graphite-space-04);
   top: var(--graphite-space-05);
   bottom: var(--graphite-space-05);
-  width: 2px;
+  width: 4px;
   overflow: hidden;
   background: var(--cds-border-subtle-02);
 }
@@ -1617,6 +1683,14 @@ body {
   @include text('caption-1', $family: mono);
   color: var(--cds-text-secondary);
   font-variant-numeric: tabular-nums;
+}
+
+// Sits where the pause control used to. aria-hidden in the markup: it names a
+// pointer gesture, and the capabilities are a list of buttons reachable by tab
+// whether or not anyone scrolls.
+.cap-controls__hint {
+  @include text('caption-1');
+  color: var(--cds-text-secondary);
 }
 
 // --- Stage -----------------------------------------------------------------

@@ -5,12 +5,15 @@
 // nothing here overrides them.
 .section {
   padding: var(--graphite-space-11) 0;
-  border-bottom: 1px solid var(--graphite-surface-variant);
+  // Plain outline, not the usual subtle one: surfaceVariant is the binding for
+  // outline-subtle everywhere else, and it is this section's fill now, so a
+  // subtle rule here would be the same colour as the field it sits on.
+  border-bottom: 1px solid var(--graphite-outline);
   // The field, and only the field. Not a band class: those rebind the role
   // variables for every descendant, which would carry the fill onto the cards
   // and their previews. It stops at this surface; the cards keep their own
   // neutral fill on top of it.
-  background: var(--graphite-secondary-container);
+  background: var(--graphite-surface-variant);
 }
 
 .heading {
@@ -24,18 +27,18 @@
   font-size: var(--graphite-text-heading-6-size);
   line-height: var(--graphite-text-heading-6-line-height);
   font-weight: var(--graphite-text-weight-bold);
-  color: var(--graphite-on-secondary-container);
+  color: var(--graphite-on-surface);
   margin: 0;
 }
 
 .body {
   font-size: var(--graphite-text-body-1-size);
   line-height: var(--graphite-text-body-1-line-height);
-  color: color-mix(
-    in srgb,
-    var(--graphite-on-secondary-container) 70%,
-    var(--graphite-secondary-container)
-  );
+  // No mix: on a surfaceVariant field the two on-roles already are the bright
+  // and muted pair the heading and lede want. The 70% mix this replaces was
+  // tuned against secondaryContainer and dimmed onSurfaceVariant to 4.41:1 at
+  // 18px, just under the 4.5 that body copy needs.
+  color: var(--graphite-on-surface-variant);
   max-width: 47.5rem; // kit caps the lede at 760px
   margin: 0;
 }

@@ -2,6 +2,9 @@
 .section {
   padding: var(--graphite-space-11) 0;
   border-bottom: 1px solid var(--graphite-surface-variant);
+  // The field, and only the field: not a band class, which would rebind the
+  // role variables for every descendant and carry the fill onto the doors.
+  background: var(--graphite-background);
 }
 
 .heading {
