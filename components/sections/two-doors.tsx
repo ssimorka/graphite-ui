@@ -19,14 +19,31 @@ const DOOR_TOKENS: { role: string; use: string }[] = [
   { role: 'surfaceVariant', use: 'Trigger hover. A tone step, never a new color.' },
 ]
 
-const CODE_SAMPLE = `import { Button } from '@/components/ui/button'
-import { Tag } from '@/components/ui/tag'
+// The kit's own three blocks for this panel
+// (I13170:4478;13170:4451 through 4453), verbatim. Two are Figma's "copy as
+// CSS" output and the third is a usage sample, which is a fair picture of
+// what crossing from design into code actually looks like.
+//
+// The Accordion import is forward-looking: there is no
+// components/ui/accordion yet and no contract for one. It is the single new
+// component docs/SHADCN-MIGRATION.md budgets for, so the kit is drawing what
+// is planned rather than what ships today.
+const CODE_BLOCKS = [
+  `display: flex;
+width: 401px;
+flex-direction: column;
+align-items: flex-start;`,
+  `border-top: 1px solid var(--Border-border-subtle-00, #DEDCEA);
+background: var(--Transparent, rgba(0, 0, 0, 0.00));
+background-blend-mode: multiply;`,
+  `import { Accordion, AccordionItem } from '@/components/ui/accordion'
 
-<Button variant="primary">
-  Get started
-</Button>
-
-<Tag variant="success">Contract 2.3.0</Tag>`
+<Accordion type="single" collapsible>
+  <AccordionItem value="ready" title="Is Graphite UI production ready?">
+    Twenty-two components carry a versioned contract.
+  </AccordionItem>
+</Accordion>`,
+]
 
 /** Kit section "05 Two doors" (11864:3180). */
 export function TwoDoors() {
@@ -100,7 +117,11 @@ export function TwoDoors() {
                   </Button>
                 </div>
                 <div className={styles.artefact} aria-hidden="true">
-                  <pre className={styles.code}>{CODE_SAMPLE}</pre>
+                  {CODE_BLOCKS.map((block, i) => (
+                    <pre key={i} className={styles.code}>
+                      {block}
+                    </pre>
+                  ))}
                 </div>
               </article>
             </div>

@@ -121,6 +121,8 @@
   // panel again.
   height: 28.5rem;
   display: none;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
   padding: var(--graphite-space-07);
   background: var(--graphite-surface-variant);
   border: 1px solid var(--graphite-outline);
@@ -132,7 +134,7 @@
     transform var(--graphite-motion-base) ease-out;
 
   @media (min-width: 30rem) {
-    display: block;
+    display: flex;
   }
 }
 
