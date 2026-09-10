@@ -25,7 +25,11 @@ export function ThemeCta() {
   }
 
   return (
-    <section className={styles.section} aria-labelledby="theme-title">
+    <section
+      className={`${styles.section} band--accent`}
+      id="theme"
+      aria-labelledby="theme-title"
+    >
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>

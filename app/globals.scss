@@ -637,6 +637,71 @@ body {
 }
 
 // ---------------------------------------------------------------------------
+// Colour rhythm — 60 / 30 / 10
+// ---------------------------------------------------------------------------
+// The rhythm is defined for compositions in generative-art.tsx: six neutral
+// stops, three accent, one secondary. These two classes carry the same ratio
+// into the page chrome, so the site is painted by the rule it documents.
+//
+// A band does not restyle its children. It repaints itself and then rebinds
+// the role variables those children already reference, the way a theme layer
+// does — so a card inside an accent band asks for on-surface and gets the
+// colour that is legible on accent, without knowing it is in a band.
+//
+// Every pairing here is one the engine measures. Body text takes the
+// container's own on-colour (10.7:1 dark, 15.2:1 light). The second tier is
+// that on-colour mixed 70% toward the container, which still clears AA in
+// both themes (5.8:1 dark, 7.2:1 light) — checked before it was used, because
+// a mix is not a pairing buildTheme validates.
+@mixin band($surface, $on-surface) {
+  background: var(#{$surface});
+  color: var(#{$on-surface});
+
+  // The second text tier, and the rules and hairlines that sit on this band.
+  --band-muted: color-mix(in srgb, var(#{$on-surface}) 70%, var(#{$surface}));
+  --band-rule: color-mix(in srgb, var(#{$on-surface}) 22%, var(#{$surface}));
+  --band-raised: color-mix(in srgb, var(#{$on-surface}) 8%, var(#{$surface}));
+
+  // Rebind what the children ask for. Both namespaces: --graphite-* is the
+  // primary one, --cds-* is Carbon's compatibility layer, and components on
+  // this page use each.
+  --graphite-on-surface: var(#{$on-surface});
+  --graphite-on-surface-variant: var(--band-muted);
+  --graphite-surface: var(--band-raised);
+  --graphite-surface-variant: var(--band-rule);
+  --graphite-background: var(#{$surface});
+  --graphite-outline: var(--band-rule);
+
+  --cds-text-primary: var(#{$on-surface});
+  --cds-text-secondary: var(--band-muted);
+  --cds-text-helper: var(--band-muted);
+  --cds-layer: var(--band-raised);
+  --cds-layer-01: var(--band-raised);
+  --cds-layer-hover: var(--band-rule);
+  --cds-background: var(#{$surface});
+  --cds-border-subtle: var(--band-rule);
+  --cds-border-subtle-00: var(--band-rule);
+  --cds-border-subtle-01: var(--band-rule);
+  --cds-border-subtle-02: var(--band-rule);
+  --cds-border-strong: var(--band-muted);
+  --cds-border-strong-01: var(--band-muted);
+}
+
+// The 30. Accent is the supporting voice, so it takes the larger share.
+.band--accent {
+  @include band(--graphite-primary-container, --graphite-on-primary-container);
+}
+
+// The 10. Secondary is the ramp the engine derives 120 degrees off the source,
+// which is what makes the vivid tenth generated rather than picked.
+.band--secondary {
+  @include band(
+    --graphite-secondary-container,
+    --graphite-on-secondary-container
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Shared section scaffolding
 // ---------------------------------------------------------------------------
 .section {

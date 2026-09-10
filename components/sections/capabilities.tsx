@@ -477,7 +477,7 @@ export function Capabilities({
   const item = CAPABILITIES[active]
 
   return (
-    <section className="section section--capabilities" id="system">
+    <section className="section section--capabilities band--accent" id="system">
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>

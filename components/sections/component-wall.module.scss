@@ -92,6 +92,10 @@
   min-height: 9.25rem; // kit preview area is 148px
   padding: var(--graphite-space-06) var(--graphite-space-05);
   overflow: hidden;
+  // Part of the 30. Also earns its keep: the specimen now sits on its own
+  // field rather than sharing the card's fill with the label beneath it.
+  background: var(--graphite-primary-container);
+  color: var(--graphite-on-primary-container);
   transition:
     transform 300ms ease-out,
     filter 300ms ease-out;
