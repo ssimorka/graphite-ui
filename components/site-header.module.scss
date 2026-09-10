@@ -202,13 +202,20 @@
 .controlGroup {
   display: flex;
   align-items: center;
+  // One height for both halves of the group. The toggle and the chip are
+  // styled in different files — the chip's rules live in globals.scss with
+  // the rest of the colour control — and they were drifting apart at 34 and
+  // 30px, which left the chip sitting 2px low against the toggle. A custom
+  // property is not module-scoped, so it reaches both from here.
+  --header-control-h: 2.125rem;
 }
 
 .themeToggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--graphite-space-03);
+  height: var(--header-control-h);
+  padding: 0 var(--graphite-space-03);
   background: var(--graphite-primary);
   color: var(--graphite-on-primary);
   border: 1px solid var(--graphite-primary);

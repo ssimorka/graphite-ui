@@ -360,8 +360,11 @@ body {
   display: flex;
   align-items: center;
   gap: var(--graphite-space-03);
-  padding: var(--graphite-space-02) var(--graphite-space-04)
-    var(--graphite-space-02) var(--graphite-space-03);
+  // Height comes from the group so this cannot drift from the toggle beside
+  // it. Vertical padding would only fight it, so the sides are all that is
+  // set here.
+  height: var(--header-control-h);
+  padding: 0 var(--graphite-space-04) 0 var(--graphite-space-03);
   background: var(--graphite-surface);
   // Left border omitted: the chip butts against the theme toggle, and two
   // adjacent 1px rules read as a 2px seam.
