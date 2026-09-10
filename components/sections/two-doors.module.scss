@@ -113,6 +113,13 @@
   right: -8rem;
   top: 7.5rem;
   width: 20rem;
+  // The kit's Code content is a fixed 456px, positioned so it runs a long way
+  // past the door's bottom edge — 241px on the developers card. Left at its
+  // content height it stopped within a few pixels of that edge instead, which
+  // reads as an accidental crop rather than a deliberate bleed, and the hover
+  // shift only drew attention to it. Fixed height puts the cut well inside the
+  // panel again.
+  height: 28.5rem;
   display: none;
   padding: var(--graphite-space-07);
   background: var(--graphite-surface-variant);
