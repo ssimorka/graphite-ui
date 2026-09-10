@@ -40,17 +40,32 @@
   margin: 0;
 }
 
-// The kit pins cards at 265px and gaps them 20px, which is exactly four across
-// its 1120px content column. Expressed as an auto-fill grid instead so the row
-// stays full at every width rather than only at the three drawn breakpoints;
-// 240px + space-06 still resolves to four columns at X-Large.
+// One, two, then four, which is what the kit draws at Small, Medium and
+// X-Large.
+//
+// This was an auto-fill grid, on the reasoning that it would keep the row full
+// at widths between the three drawn frames. It does — and past X-Large it
+// keeps going, laying out five and six across on a wide display where the kit
+// caps at four. Counting the columns per breakpoint is the kit's own rule and
+// has no upper end to drift past. Plain media queries because this module
+// pulls in no Sass helpers.
 .wall {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--graphite-space-06);
   list-style: none;
   margin: 0;
   padding: 0;
+
+  // md
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // lg
+  @media (min-width: 1056px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .card {
