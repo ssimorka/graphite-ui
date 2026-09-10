@@ -607,6 +607,15 @@ body {
   --py: 0; // pointer y offset, -0.5..0.5
   position: relative;
   isolation: isolate;
+  // Contain the grid, the way .hero does for the identical layer it owns. The
+  // grid is inset:0 but its parallax translates it downward, so without this it
+  // paints past the bottom of this region and over whatever follows it.
+  //
+  // `clip` rather than the hero's `hidden`: hidden creates a scroll container,
+  // which would make this the scrollport for .cap-sticky inside it and break
+  // the capabilities carousel. clip creates none, which is the same reason
+  // body reaches for it.
+  overflow: clip;
 }
 
 // Unlike the hero's, this grid carries no radial mask: the kit renders it as
@@ -1493,16 +1502,37 @@ $cap-dwell: 500px;
     height: 100%;
   }
 
-  // The tallest panel ("Eight ramps") measured 689px; holding that as a floor
-  // is what stops the stage resizing as the selection changes. Re-measure if a
-  // panel grows, since this is a floor and taller content pushes past it.
+  // Capped at 464px, which is also the height the list beside it settles at, so
+  // the two sides of the grid match. Fixed rather than a ceiling: a max alone
+  // would let the short panels shrink and bring back the resizing this held
+  // still in the first place.
   //
   // Scoped past .cap-stage__frame's own min-height rather than repeating the
   // bare class: that rule is declared further down the file, so at equal
   // specificity its 22rem would win on source order.
   .section--capabilities .cap-stage__frame {
-    flex: 1;
-    min-height: 43.0625rem; // 689px
+    flex: 0 0 auto;
+    height: 29rem; // 464px
+  }
+
+  // The eight ramps have to fit that 464px. At the full-size strip they run to
+  // 624px, and the frame centres its content, so the panel was clipped at both
+  // ends: accent off the top, info off the bottom, and "Eight ramps" showed
+  // six. Strip 40px -> 24px, row gap 16 -> 12, label margin 8 -> 4 brings the
+  // panel to about 436px.
+  //
+  // Only here. Below lg every capability has its own uncapped stage, so the
+  // strips keep their full size where there is room for them.
+  .section--capabilities .cap-ramps {
+    gap: var(--graphite-space-04);
+  }
+
+  .section--capabilities .cap-ramps__label {
+    margin-bottom: var(--graphite-space-02);
+  }
+
+  .section--capabilities .cap-ramps__stop {
+    height: var(--graphite-space-06);
   }
 }
 
