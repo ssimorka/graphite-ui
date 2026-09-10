@@ -65,10 +65,12 @@ export function SiteHeader() {
       </a>
       <div className={styles.inner}>
         <a className={styles.brand} href="/">
-          {/* The kit's mark is the eye image, which used to ride on the colour
-              control's avatar. It moves here and the control takes the swatch
-              and hex the kit gives it. */}
-          <img className={styles.mark} src="/graphite/eye.jpg" alt="" />
+          {/* The kit's own mark asset (11862:2930), exported and committed
+              rather than linked: Figma's asset URLs expire after a week. It is
+              a halftone treatment of the same eye, not the hard black-and-white
+              eye.jpg the generative art still uses as a source texture, so the
+              two files stay separate. */}
+          <img className={styles.mark} src="/graphite/mark.png" alt="" />
           Graphite UI
         </a>
 
