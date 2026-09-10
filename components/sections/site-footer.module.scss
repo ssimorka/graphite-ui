@@ -11,7 +11,9 @@
   grid-template-columns: 1fr;
   gap: var(--graphite-space-08);
 
-  @media (min-width: 42rem) {
+  // The kit only sets the brand beside the links at X-Large. At Medium and
+  // Small it sits above them, which 42rem was breaking too early.
+  @media (min-width: 66rem) {
     grid-template-columns: minmax(0, 16.7rem) 1fr;
     gap: var(--graphite-space-07);
   }

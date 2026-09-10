@@ -65,6 +65,19 @@ export function SiteHeader() {
         Skip to main content
       </a>
       <div className={styles.inner}>
+        {/* First in the DOM, not just visually: below lg the kit puts this at
+            the far left, and reordering with CSS alone would leave the tab
+            order disagreeing with what is on screen. */}
+        <button
+          type="button"
+          className={`${styles.action} ${styles.menuButton}`}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? <Close size={20} /> : <Menu size={20} />}
+        </button>
+
         <a className={styles.brand} href="/">
           <Brand />
         </a>
@@ -131,15 +144,6 @@ export function SiteHeader() {
             />
           </div>
 
-          <button
-            type="button"
-            className={`${styles.action} ${styles.menuButton}`}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? <Close size={20} /> : <Menu size={20} />}
-          </button>
         </div>
       </div>
       {/* Mobile nav is a Modal, not a Sheet: the migration plan spends its one

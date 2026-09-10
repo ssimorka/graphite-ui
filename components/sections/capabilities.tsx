@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Grid, Column, Button } from '@carbon/react'
 import {
   ColorPalette,
@@ -60,31 +60,31 @@ const CAPABILITIES: {
   {
     key: 'ramps',
     title: 'Eight ramps',
-    body: 'Four are derived from the source: an accent, a secondary 120 degrees away, and two neutrals. Four more are pinned to their status hue, so red still reads as danger whatever you put in.',
+    body: 'Accent, secondary, neutral, neutral variant and four status ramps. Status hue is pinned so red still reads as danger whatever the source is.',
     caption: 'Every ramp the engine emits, live from the color you picked.',
   },
   {
     key: 'roles',
     title: 'Thirty-two roles',
-    body: 'Ramps resolve into named roles: surface, on-surface, primary, outline. You design against meaning rather than hex values, so a color change is never a find-and-replace.',
+    body: 'Named roles per theme (surface, on-surface, primary, outline) checked against WCAG as they resolve. You design against meaning, not hex values.',
     caption: 'Eight of the thirty-two roles, resolved for the theme you are reading in.',
   },
   {
     key: 'components',
     title: '22 governed components',
-    body: 'Each one carries a versioned contract saying what it must do, what it must not, and which roles it may touch. The contract is the spec the code is checked against.',
+    body: 'Each one may not change without its contract changing first.',
     caption: 'Every component with a contract, and the version it implements.',
   },
   {
     key: 'checks',
     title: '3 checks in CI',
-    body: 'One holds the components to their contracts, one holds the foundations to the token snapshot, and one holds the component docs to the kit. All three read committed snapshots, so they run offline.',
+    body: 'Contracts against code, foundations against the token snapshot, docs against the kit.',
     caption: 'The governance job. A red check blocks the merge.',
   },
   {
     key: 'sets',
     title: '206 component sets tracked',
-    body: 'The kit is larger than its governed surface, and the parts without a contract say so on their own page rather than leaving you to find out.',
+    body: 'Including the 73 public sets with no contract, which are labelled rather than hidden.',
     caption: 'Walked from the kit snapshot, not counted from page names.',
   },
 ]
@@ -392,7 +392,57 @@ function PanelThemes({ light, dark }: { light: Theme; dark: Theme }) {
   )
 }
 
+function StagePanel({
+  item,
+  hex,
+  ramps,
+  theme,
+  contracts,
+  stats,
+}: {
+  item: (typeof CAPABILITIES)[number]
+  hex: string
+  ramps: Ramps
+  theme: Theme
+  contracts: { component: string; version: string }[]
+  stats: KitStats
+}) {
+  switch (item.key) {
+    case 'source':
+      return <PanelSource hex={hex} ramps={ramps} />
+    case 'ramps':
+      return <PanelRamps ramps={ramps} />
+    case 'roles':
+      return <PanelTokens theme={theme} />
+    case 'components':
+      return <PanelComponents contracts={contracts} />
+    case 'checks':
+      return <PanelChecks />
+    case 'sets':
+      return <PanelSets stats={stats} />
+  }
+}
+
 // --- Section ----------------------------------------------------------------
+
+// The kit only draws the carousel at X-Large. Medium and Small stack all six
+// capabilities, each above its own stage, with the controls hidden — so below
+// lg there is no carousel to drive and no dwell timer to run.
+//
+// Defaults true so the server renders the X-Large tree and hydration matches;
+// a narrow viewport corrects it on mount. 1056px is the kit's lg stop, the
+// same one the header's nav uses.
+function useCarouselLayout() {
+  const [isCarousel, setIsCarousel] = useState(true)
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1056px)')
+    const sync = () => setIsCarousel(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+  return isCarousel
+}
 
 export function Capabilities({
   contracts,
@@ -421,7 +471,8 @@ export function Capabilities({
   const dark = (darkBundle ?? buildTheme('dark', ramps, level)) as Theme
   const current = theme === 'white' ? light : dark
 
-  const running = inView && !paused && !hovering && !reduced
+  const isCarousel = useCarouselLayout()
+  const running = isCarousel && inView && !paused && !hovering && !reduced
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -493,103 +544,138 @@ export function Capabilities({
         </Column>
       </Grid>
 
-      <Grid className="cap-grid">
-        <Column sm={4} md={8} lg={6}>
-          <Reveal>
-            <ul className="cap-list">
-              {CAPABILITIES.map((capability, i) => {
-                const isActive = i === active
-                return (
-                  <li
-                    key={capability.key}
-                    className={`cap-item${isActive ? ' is-active' : ''}`}
-                  >
-                    <span className="cap-item__rail" aria-hidden="true">
-                      <span
-                        className="cap-item__fill"
-                        ref={(el) => {
-                          fills.current[i] = el
-                        }}
-                      />
-                    </span>
-                    <button
-                      type="button"
-                      className="cap-item__trigger"
-                      id={`cap-trigger-${capability.key}`}
-                      aria-expanded={isActive}
-                      aria-controls="cap-stage"
-                      onClick={() => setActive(i)}
+      {isCarousel ? (
+        <Grid className="cap-grid">
+          <Column sm={4} md={8} lg={6}>
+            <Reveal>
+              <ul className="cap-list">
+                {CAPABILITIES.map((capability, i) => {
+                  const isActive = i === active
+                  return (
+                    <li
+                      key={capability.key}
+                      className={`cap-item${isActive ? ' is-active' : ''}`}
                     >
-                      <span className="cap-item__title">
-                        {capability.title}
+                      <span className="cap-item__rail" aria-hidden="true">
+                        <span
+                          className="cap-item__fill"
+                          ref={(el) => {
+                            fills.current[i] = el
+                          }}
+                        />
                       </span>
-                    </button>
-                    {/* Mounted only while active rather than hidden: it keeps
-                        the collapsed bodies out of the accessibility tree, so
-                        aria-expanded and what a screen reader can reach agree,
-                        and the mount is what replays the entrance. */}
-                    {isActive && (
-                      <div className="cap-item__reveal">
-                        <p className="cap-item__body">{capability.body}</p>
-                      </div>
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
+                      <button
+                        type="button"
+                        className="cap-item__trigger"
+                        id={`cap-trigger-${capability.key}`}
+                        aria-expanded={isActive}
+                        aria-controls="cap-stage"
+                        onClick={() => setActive(i)}
+                      >
+                        <span className="cap-item__title">
+                          {capability.title}
+                        </span>
+                      </button>
+                      {/* Mounted only while active rather than hidden: it keeps
+                          the collapsed bodies out of the accessibility tree, so
+                          aria-expanded and what a screen reader can reach agree,
+                          and the mount is what replays the entrance. */}
+                      {isActive && (
+                        <div className="cap-item__reveal">
+                          <p className="cap-item__body">{capability.body}</p>
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
 
-            <div className="cap-controls">
-              <p className="cap-controls__count">
-                {active + 1} / {CAPABILITIES.length}
-              </p>
-              {!reduced && (
-                <Button
-                  kind="ghost"
-                  size="sm"
-                  renderIcon={paused ? Play : Pause}
-                  onClick={() => setPaused((p) => !p)}
-                >
-                  {paused ? 'Play' : 'Pause'}
-                </Button>
-              )}
-            </div>
-          </Reveal>
-        </Column>
-
-        <Column sm={4} md={8} lg={10}>
-          <Reveal>
-            <div
-              className="cap-stage"
-              ref={stageRef}
-              onPointerEnter={() => setHovering(true)}
-              onPointerLeave={() => setHovering(false)}
-              onFocusCapture={() => setHovering(true)}
-              onBlurCapture={() => setHovering(false)}
-            >
-              <div className="cap-stage__glow" aria-hidden="true" />
-              <div
-                className="cap-stage__frame"
-                id="cap-stage"
-                key={item.key}
-                role="region"
-                aria-labelledby={`cap-trigger-${item.key}`}
-              >
-                {item.key === 'source' && (
-                  <PanelSource hex={activeHex} ramps={ramps} />
+              <div className="cap-controls">
+                <p className="cap-controls__count">
+                  {active + 1} / {CAPABILITIES.length}
+                </p>
+                {!reduced && (
+                  <Button
+                    kind="ghost"
+                    size="sm"
+                    renderIcon={paused ? Play : Pause}
+                    onClick={() => setPaused((p) => !p)}
+                  >
+                    {paused ? 'Play' : 'Pause'}
+                  </Button>
                 )}
-                {item.key === 'ramps' && <PanelRamps ramps={ramps} />}
-                {item.key === 'roles' && <PanelTokens theme={current} />}
-                {item.key === 'components' && (
-                  <PanelComponents contracts={contracts} />
-                )}
-                {item.key === 'checks' && <PanelChecks />}
-                {item.key === 'sets' && <PanelSets stats={stats} />}
               </div>
-              <p className="cap-stage__caption">{item.caption}</p>
-            </div>
-          </Reveal>
-        </Column>
-      </Grid>
+            </Reveal>
+          </Column>
+
+          <Column sm={4} md={8} lg={10}>
+            <Reveal>
+              <div
+                className="cap-stage"
+                ref={stageRef}
+                onPointerEnter={() => setHovering(true)}
+                onPointerLeave={() => setHovering(false)}
+                onFocusCapture={() => setHovering(true)}
+                onBlurCapture={() => setHovering(false)}
+              >
+                <div className="cap-stage__glow" aria-hidden="true" />
+                <div
+                  className="cap-stage__frame"
+                  id="cap-stage"
+                  key={item.key}
+                  role="region"
+                  aria-labelledby={`cap-trigger-${item.key}`}
+                >
+                  <StagePanel
+                    item={item}
+                    hex={activeHex}
+                    ramps={ramps}
+                    theme={current}
+                    contracts={contracts}
+                    stats={stats}
+                  />
+                </div>
+                <p className="cap-stage__caption">{item.caption}</p>
+              </div>
+            </Reveal>
+          </Column>
+        </Grid>
+      ) : (
+        /* Medium and Small: every capability shown, each above its own stage.
+           No rail fill, no count, no pause — with nothing advancing there is
+           nothing to report or to stop. The left rule stays as the marker the
+           kit draws. */
+        <Grid className="cap-grid">
+          <Column sm={4} md={8} lg={16}>
+            <ul className="cap-stack">
+              {CAPABILITIES.map((capability) => (
+                <li key={capability.key} className="cap-stack__item">
+                  <Reveal>
+                    <div className="cap-stack__head">
+                      <h3 className="cap-stack__title">{capability.title}</h3>
+                      <p className="cap-stack__body">{capability.body}</p>
+                    </div>
+                    <div className="cap-stage cap-stage--static">
+                      <div className="cap-stage__glow" aria-hidden="true" />
+                      <div className="cap-stage__frame">
+                        <StagePanel
+                          item={capability}
+                          hex={activeHex}
+                          ramps={ramps}
+                          theme={current}
+                          contracts={contracts}
+                          stats={stats}
+                        />
+                      </div>
+                      <p className="cap-stage__caption">{capability.caption}</p>
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </Column>
+        </Grid>
+      )}
 
     </section>
   )

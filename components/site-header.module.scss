@@ -63,12 +63,26 @@
 
 // -------------------------------------------------------------------- brand
 // Just the link wrapper now: Brand owns the mark, the wordmark and the gap.
+//
+// Below lg the kit centres the brand in the space left between the menu
+// button and the utility rail, not on the bar itself: at Small its gaps are
+// 41px either side, at Medium 160.5px either side, and in both cases the bar's
+// own midpoint sits elsewhere. Auto margins give exactly that, and unlike
+// absolute centring they cannot drive the wordmark under the utility rail —
+// which at 320px they did, by 35px.
 .brand {
   display: flex;
   align-items: center;
   flex: none;
+  margin-inline: auto;
+  min-width: 0;
   color: var(--graphite-on-surface);
   text-decoration: none;
+
+  // 1056px is the kit's lg stop, written raw for the reason above.
+  @media (min-width: 1056px) {
+    margin-inline: 0;
+  }
 }
 
 .brand:focus-visible {
@@ -144,8 +158,14 @@
   display: flex;
   align-items: center;
   gap: var(--graphite-space-04);
-  margin-left: auto;
   height: 100%;
+
+  // Below lg the brand's auto margins already push this to the right edge; a
+  // second auto margin here would split the leftover space between the two
+  // and pull the brand off the centre the kit gives it.
+  @media (min-width: 1056px) {
+    margin-left: auto;
+  }
 }
 
 // ------------------------------------------------------------------- search
@@ -307,4 +327,16 @@
 // only the anchor's underline needs clearing.
 .repo {
   text-decoration: none;
+}
+
+// At Small the kit drops the mark and runs the wordmark alone — 320px has to
+// hold the menu button, the brand and three utility controls. The footer's
+// Brand keeps both at every width, so this is scoped to the header's copy.
+.brand :global(img) {
+  display: none;
+
+  // 672px is the kit's md stop.
+  @media (min-width: 672px) {
+    display: block;
+  }
 }

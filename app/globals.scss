@@ -398,10 +398,27 @@ body {
 }
 
 .site-header__source-hex {
+  // Gone at Small, where the kit shows the swatch alone. Not display:none —
+  // the hex is the control's only visible value, so it stays in the
+  // accessibility tree for anyone who cannot see the swatch.
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
   color: var(--graphite-on-surface);
+
+  @include breakpoint.breakpoint(md) {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -937,9 +954,17 @@ body {
 
 .hero__ctas {
   display: flex;
-  flex-wrap: wrap;
+  // The kit stacks these at Small and rows them from Medium up.
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
   gap: var(--graphite-space-04);
+
+  @include breakpoint.breakpoint(md) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
   margin-top: var(--graphite-space-06);
 
   // asChild renders an anchor, which picks up the page's link underline. The
@@ -1074,7 +1099,14 @@ body {
 .ramp-swatch {
   aspect-ratio: 1 / 1;
   width: 100%;
+  // The kit draws the stop at 56px below lg and 88px at X-Large. min-width is
+  // what the scroller measures, so this is the size that decides whether the
+  // row scrolls at all.
   min-width: 56px;
+
+  @include breakpoint.breakpoint(lg) {
+    min-width: 88px;
+  }
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
@@ -1111,6 +1143,20 @@ body {
   // hover feedback at all.
   .ramp-swatch {
     transition: none;
+  }
+}
+
+// The kit gives each ramp a scroll affordance below lg, where the row is
+// wider than the strip. Hidden at X-Large, where all ten stops fit.
+.ramp__scroll-hint {
+  display: block;
+  text-align: right;
+  margin-top: var(--graphite-space-02);
+  @include text('caption-1', $letter-spacing: 0.32px);
+  color: var(--cds-text-secondary);
+
+  @include breakpoint.breakpoint(lg) {
+    display: none;
   }
 }
 
@@ -1344,6 +1390,43 @@ body {
   margin-top: var(--graphite-space-03);
   row-gap: var(--graphite-space-07);
   align-items: start;
+}
+
+// Medium and Small: the kit stacks all six capabilities, each above its own
+// stage, rather than running a carousel. There is no rail fill, no count and
+// no pause, because nothing advances.
+.cap-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-10);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cap-stack__head {
+  // The kit's left rule, kept from the carousel item so the two layouts read
+  // as the same component in a different arrangement.
+  padding-left: var(--graphite-space-05);
+  border-left: 3px solid var(--cds-border-interactive);
+  margin-bottom: var(--graphite-space-06);
+}
+
+.cap-stack__title {
+  @include text('title-3', semibold);
+  color: var(--cds-text-primary);
+  margin: 0 0 var(--graphite-space-03);
+}
+
+.cap-stack__body {
+  @include text('body-3', $letter-spacing: 0.16px);
+  color: var(--cds-text-secondary);
+  margin: 0;
+}
+
+// Static: the carousel's stage animates on remount, and nothing remounts here.
+.cap-stage--static .cap-stage__frame {
+  animation: none;
 }
 
 .cap-list {
@@ -1750,7 +1833,10 @@ body {
 
 .cap-source__stops {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  // minmax(0, 1fr) rather than 1fr: a bare 1fr floors each column at its
+  // content's min-width, and at Small the tone labels are wider than the
+  // tenth of the panel they get — the row overflowed its own frame by 39px.
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: var(--graphite-space-02);
 }
 
@@ -1775,6 +1861,15 @@ body {
   @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   color: var(--cds-text-secondary);
+  // Ten labels across a 288px panel leaves about 22px each, which the caption
+  // step overruns. Stepped down until lg, where the panel is wide enough.
+  font-size: 0.625rem;
+  letter-spacing: 0;
+
+  @include breakpoint.breakpoint(lg) {
+    font-size: var(--graphite-text-caption-1-size);
+    letter-spacing: 0.32px;
+  }
 }
 
 .cap-components {

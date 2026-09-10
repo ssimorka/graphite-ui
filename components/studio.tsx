@@ -186,6 +186,13 @@ export function RampRow({
           ))}
         </div>
       </div>
+      {/* The kit gives each ramp a scroll affordance below lg, where ten stops
+          are wider than the strip. Hidden by CSS at X-Large, where they fit.
+          aria-hidden because it describes a pointer gesture: the row is a list
+          of buttons and reachable by tab regardless. */}
+      <p className="ramp__scroll-hint" aria-hidden="true">
+        Scroll for more
+      </p>
     </div>
   )
 }

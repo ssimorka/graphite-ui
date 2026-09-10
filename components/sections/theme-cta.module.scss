@@ -38,8 +38,16 @@
 
 .ctas {
   display: flex;
-  flex-wrap: wrap;
+  // Stacked at Small, in a row from Medium up, as the kit has it.
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--graphite-space-04);
+
+  @media (min-width: 42rem) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
 
   a {
     text-decoration: none;
