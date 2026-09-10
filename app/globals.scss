@@ -1515,25 +1515,12 @@ $cap-dwell: 500px;
     height: 29rem; // 464px
   }
 
-  // The eight ramps have to fit that 464px. At the full-size strip they run to
-  // 624px, and the frame centres its content, so the panel was clipped at both
-  // ends: accent off the top, info off the bottom, and "Eight ramps" showed
-  // six. Strip 40px -> 24px, row gap 16 -> 12, label margin 8 -> 4 brings the
-  // panel to about 436px.
-  //
-  // Only here. Below lg every capability has its own uncapped stage, so the
-  // strips keep their full size where there is room for them.
-  .section--capabilities .cap-ramps {
-    gap: var(--graphite-space-04);
+  // Scoped for source order: .cap-stage__frame is declared further down, so a
+  // bare class here would lose the mobile padding it sets.
+  .section--capabilities .cap-stage__frame {
+    padding: var(--graphite-space-07);
   }
 
-  .section--capabilities .cap-ramps__label {
-    margin-bottom: var(--graphite-space-02);
-  }
-
-  .section--capabilities .cap-ramps__stop {
-    height: var(--graphite-space-06);
-  }
 }
 
 // Medium and Small: the kit stacks all six capabilities, each above its own
@@ -1726,10 +1713,16 @@ $cap-dwell: 500px;
 
 .cap-stage__frame {
   position: relative;
+  // The kit's Stage: a centred column holding the panel and its caption, the
+  // caption inside the frame rather than under it, 20px apart.
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem; // the kit's 20, which is not a step on the spacing scale
   min-height: 22rem;
-  padding: var(--graphite-space-07);
+  // Kit mobile Stage 13429:16065: 28 down, 12 across. Neither is a step on the
+  // spacing scale. The lg frame goes back to an even 32 below.
+  padding: 28px var(--graphite-space-04);
   border: 1px solid var(--cds-border-subtle-02);
   background: var(--cds-background);
   box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
@@ -1744,35 +1737,69 @@ $cap-dwell: 500px;
   }
 }
 
+// Body/2 in the kit, not a caption step, and no margin: the frame's gap owns
+// the space above it now.
 .cap-stage__caption {
-  @include text('caption-1');
-  margin-top: var(--graphite-space-05);
+  @include text('body-2');
   color: var(--cds-text-secondary);
   text-wrap: pretty;
 }
 
+// Only the roles slide renders both. The wide one wins from lg, where its
+// table puts the compared role beside the name rather than under it.
+.cap-stage__caption-wide {
+  display: none;
+}
+
+.cap-stage__caption-narrow {
+  display: inline;
+}
+
+@include breakpoint.breakpoint(lg) {
+  .cap-stage__caption-wide {
+    display: inline;
+  }
+
+  .cap-stage__caption-narrow {
+    display: none;
+  }
+}
+
 // --- Panels ----------------------------------------------------------------
+// Kit 13395:739. The label sits in a fixed left column beside the strip rather
+// than above it, which is what makes eight ramps fit a panel this size.
 .cap-ramps {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-05);
+  gap: var(--graphite-space-06); // kit 24
+}
+
+.cap-ramps__row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04); // kit 12
 }
 
 .cap-ramps__label {
-  @include text('caption-1', $family: mono);
-  margin-bottom: var(--graphite-space-03);
+  @include text('code-2', $family: mono);
+  flex: none;
+  width: 7rem; // kit 112
   color: var(--cds-text-secondary);
 }
 
 .cap-ramps__strip {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 1fr;
+  // minmax(0, 1fr) rather than 1fr, so a stop is never floored at its own
+  // content width and cannot push the strip past the panel.
+  grid-auto-columns: minmax(0, 1fr);
+  flex: 1;
+  min-width: 0;
   gap: 2px;
 }
 
 .cap-ramps__stop {
-  height: var(--graphite-space-08);
+  height: 1.125rem; // kit 18
   // The dark end of a neutral ramp is within a few points of the panel it sits
   // on, so without an edge those stops read as a gap in the strip rather than
   // as colors. Inset so it does not add to the swatch's footprint.
@@ -1785,66 +1812,172 @@ $cap-dwell: 500px;
   }
 }
 
-.cap-tokens {
-  display: flex;
-  flex-direction: column;
-}
+// Kit "Carousel slide" 13395:742 at lg, and "Thirty-two roles - Small"
+// 13433:1844 below it.
+//
+// Collapsed is the base: the kit's own note says the four-column table breaks
+// below ~600px and that Small and Medium both take the stacked form, which is
+// exactly where .cap-stack renders. So the table is the lg case, not the
+// default.
+//
+// The markup does not change between them - the same four cells re-flow, which
+// is why the collapsed form is grid areas rather than a second block of HTML.
+.cap-roles {
+  display: block;
+  width: 100%;
+  // th defaults to centred; every column here reads from the left except the
+  // ratio, which the collapsed layout pushes to the right edge.
+  text-align: left;
 
-.cap-tokens__row {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: var(--graphite-space-04);
-  padding: var(--graphite-space-03) 0;
-  border-bottom: 1px solid var(--graphite-surface-variant);
+  thead {
+    display: none; // the column names have nowhere to sit once rows stack
+  }
 
-  &:last-child {
+  tbody {
+    display: block;
+  }
+
+  tr {
+    display: grid;
+    // Swatch spans both lines; the role name takes the first, the compared
+    // role and its ratio share the second.
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      'swatch role  role'
+      'swatch against ratio';
+    align-items: start;
+    column-gap: var(--graphite-space-04); // kit 12
+    row-gap: 2px; // kit 2
+    padding: var(--graphite-space-04) 0; // kit 12
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th,
+  td {
+    display: block;
+    width: auto;
+    padding: 0;
     border-bottom: 0;
+    font-weight: inherit;
   }
 }
 
-.cap-tokens__swatch {
-  width: var(--graphite-space-06);
-  height: var(--graphite-space-06);
-  border: 1px solid var(--cds-border-subtle-02);
+// Scoped past the base .cap-roles th/td padding reset, which is the more
+// specific selector.
+.cap-roles .cap-roles__swatch-col {
+  grid-area: swatch;
+  // 4px, which centres a 16px swatch against the line of the role name.
+  padding-top: 4px;
 }
 
-.cap-tokens__role {
-  @include text('body-3');
+.cap-roles__swatch {
+  display: block;
+  width: var(--graphite-space-05); // 16px
+  height: var(--graphite-space-05);
+  border: 1px solid var(--graphite-surface-variant);
 }
 
-.cap-tokens__hex {
+.cap-roles__role {
+  grid-area: role;
+  @include text('body-2');
+  color: var(--cds-text-primary);
+}
+
+.cap-roles__against {
+  grid-area: against;
   @include text('code-2', $family: mono);
   color: var(--cds-text-secondary);
 }
 
-// Each row is painted with the pair it reports on, so the number and the thing
-// the number describes cannot drift apart.
-.cap-contrast {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-02);
-}
-
-.cap-contrast__row {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: var(--graphite-space-05);
-  padding: var(--graphite-space-04) var(--graphite-space-05);
-}
-
-.cap-contrast__role {
-  @include text('body-3');
-}
-
-.cap-contrast__ratio {
-  @include text('body-3', $family: mono);
+.cap-roles__ratio {
+  grid-area: ratio;
+  @include text('code-2', $family: mono);
   font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--graphite-success);
+
+  // Nothing in the engine currently fails, so this is a state the panel should
+  // be able to report rather than one it shows today.
+  &.is-fail {
+    color: var(--graphite-danger);
+  }
 }
 
-.cap-contrast__verdict {
-  @include text('caption-1');
+@include breakpoint.breakpoint(lg) {
+  // Back to a real table: three columns of tabular data with a header, so the
+  // columns are sized on the cells and the row rule collapses into one line.
+  .cap-roles {
+    display: table;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: left;
+
+    thead {
+      display: table-header-group;
+    }
+
+    tbody {
+      display: table-row-group;
+    }
+
+    tr {
+      display: table-row;
+    }
+
+    th,
+    td {
+      display: table-cell;
+      vertical-align: middle;
+      // The kit's 12px column gap. Tables have no gap, and border-spacing would
+      // pad the outer edges too and pull the table off the frame's padding.
+      padding-right: var(--graphite-space-04);
+
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+
+    // Header carries the kit's 8px below and no rule of its own: the first rule
+    // belongs to the first row.
+    thead th {
+      @include text('code-2', $family: mono);
+      padding-bottom: var(--graphite-space-03);
+      color: var(--cds-text-secondary);
+    }
+
+    tbody th,
+    tbody td {
+      padding-top: 9px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+  }
+
+  // Widths are border-box, so each column's own padding-right sits inside the
+  // number: 16px of swatch plus the kit's 12px gap.
+  // Scoped past the base rule that zeroes these: .cap-roles th/td is a more
+  // specific selector than a bare class, so a bare class here would lose.
+  .cap-roles .cap-roles__swatch-col {
+    width: 1.75rem; // 16px + 12px
+    padding-top: 0;
+  }
+
+  .cap-roles .cap-roles__against {
+    width: 8.25rem; // 120px + 12px gap
+  }
+
+  .cap-roles .cap-roles__ratio {
+    width: 6.5rem; // 104px, last column so no gap to carry
+    text-align: left;
+  }
+
+  // thead's cells are headers too, so they would otherwise pick up the column
+  // colours set above.
+  .cap-roles thead .cap-roles__role,
+  .cap-roles thead .cap-roles__ratio {
+    @include text('code-2', $family: mono);
+    color: var(--cds-text-secondary);
+  }
 }
 
 .cap-vars__code {
@@ -1934,36 +2067,37 @@ $cap-dwell: 500px;
 }
 
 // --- Stage panels: source, components, checks, sets -------------------------
+// Kit 13359:7043.
 .cap-source {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-06);
-  justify-content: center;
-  height: 100%;
+  gap: 1.25rem; // the kit's 20, which is not a step on the spacing scale
 }
 
 .cap-source__input {
   display: flex;
   align-items: center;
-  gap: var(--graphite-space-04);
+  gap: var(--graphite-space-04); // kit 12
 }
 
 .cap-source__swatch {
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem; // kit 36
+  height: 2.25rem;
   flex: none;
-  border: 1px solid var(--cds-border-subtle-01);
+  // 2px, the same emphasis the source stop carries in the strip below.
+  border: 2px solid var(--cds-text-primary);
 }
 
+// Sans semibold, not mono: the kit sets the hex in Title/4.
 .cap-source__hex {
-  @include text('body-3', $letter-spacing: 0.16px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  font-weight: 600;
+  @include text('title-4', semibold);
+  color: var(--cds-text-primary);
 }
 
 .cap-source__note {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  @include text('code-2', $family: mono);
+  flex: 1;
+  min-width: 0;
   color: var(--cds-text-secondary);
 }
 
@@ -1971,106 +2105,112 @@ $cap-dwell: 500px;
   display: grid;
   // minmax(0, 1fr) rather than 1fr: a bare 1fr floors each column at its
   // content's min-width, and at Small the tone labels are wider than the
-  // tenth of the panel they get — the row overflowed its own frame by 39px.
+  // tenth of the panel they get - the row overflowed its own frame by 39px.
   grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: var(--graphite-space-02);
+  gap: 2px;
 }
 
 .cap-source__stop {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--graphite-space-02);
+  align-items: stretch;
+  gap: 6px; // the kit's gap between the strip and its tone row
 }
 
 .cap-source__chip {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  border: 1px solid var(--cds-border-subtle-01);
+  height: 2.75rem; // kit 44
+  border: 1px solid var(--graphite-surface-variant);
 
   &.is-source {
-    border: 2px solid var(--cds-focus);
+    border: 2px solid var(--cds-text-primary);
   }
 }
 
 .cap-source__tone {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  @include text('code-2', $family: mono);
   color: var(--cds-text-secondary);
-  // Ten labels across a 288px panel leaves about 22px each, which the caption
-  // step overruns. Stepped down until lg, where the panel is wide enough.
+  text-align: center;
+  // Ten labels across a 288px panel leaves about 22px each, which the kit's
+  // 14px overruns. Stepped down until lg, where the panel is the width the kit
+  // draws and the step can be its own.
   font-size: 0.625rem;
-  letter-spacing: 0;
 
   @include breakpoint.breakpoint(lg) {
-    font-size: var(--graphite-text-caption-1-size);
-    letter-spacing: 0.32px;
+    font-size: var(--graphite-text-code-2-size);
   }
 }
 
+// Kit 13395:745. Chips that wrap, name only.
 .cap-components {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: var(--graphite-space-02) var(--graphite-space-05);
+  display: flex;
+  flex-wrap: wrap;
+  // 24 both ways, by request. The kit draws 8 down and 24 across.
+  gap: var(--graphite-space-06);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.cap-components__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--graphite-space-03);
-  padding: var(--graphite-space-02) 0;
-  border-bottom: 1px solid var(--graphite-surface-variant);
+.cap-components__chip {
+  @include text('code-2', $family: mono);
+  padding: 7px var(--graphite-space-04); // kit 7 / 12
+  background: var(--graphite-surface-variant);
+  color: var(--cds-text-primary);
+  white-space: nowrap;
+  // The kit also draws a 1px outline-subtle border here. surfaceVariant is the
+  // binding for outline-subtle in this system, so that border resolves to the
+  // same colour as the fill under it. Left off rather than declared as a no-op.
 }
 
-.cap-components__name {
-  @include text('body-3', $letter-spacing: 0.16px);
-}
-
-.cap-components__version {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  color: var(--cds-text-secondary);
-}
-
+// Kit 13395:748.
 .cap-checks {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-05);
-  justify-content: center;
-  height: 100%;
+  gap: 10px; // kit 10
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .cap-checks__row {
-  padding-left: var(--graphite-space-05);
-  border-left: 2px solid var(--cds-border-interactive);
+  display: flex;
+  flex-direction: column;
+  gap: 6px; // kit 6
+  padding: 14px var(--graphite-space-05) var(--graphite-space-05);
+  border: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-surface);
+}
+
+.cap-checks__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .cap-checks__name {
-  display: block;
-  margin-bottom: var(--graphite-space-02);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  @include text('body-3', $letter-spacing: 0.16px);
+  @include text('code-2', $family: mono);
+  flex: 1;
+  min-width: 0;
   color: var(--cds-text-primary);
 }
 
+.cap-checks__verdict {
+  @include text('code-2', $family: mono);
+  flex: none;
+  white-space: nowrap;
+  color: var(--graphite-success);
+}
+
 .cap-checks__body {
-  @include text('body-3', $letter-spacing: 0.16px);
+  @include text('body-2');
   color: var(--cds-text-secondary);
 }
 
+// Kit 13395:751.
 .cap-sets {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-06);
-  justify-content: center;
-  height: 100%;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -2078,19 +2218,25 @@ $cap-dwell: 500px;
 
 .cap-sets__row {
   display: flex;
-  align-items: baseline;
-  gap: var(--graphite-space-05);
+  align-items: center;
+  gap: 14px; // kit 14
+  padding: 14px 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
 }
 
 .cap-sets__value {
-  min-width: 4ch;
-  @include type.type-style('fluid-heading-04', true);
-  letter-spacing: -0.02em;
-  color: var(--cds-interactive);
+  // A step up from the kit's Heading/6, by request.
+  @include text('heading-5', bold);
+  flex: none;
+  width: 4rem; // kit 64
+  color: var(--graphite-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .cap-sets__label {
-  @include text('body-3', $letter-spacing: 0.16px);
+  @include text('body-2');
+  flex: 1;
+  min-width: 0;
   color: var(--cds-text-secondary);
 }
 

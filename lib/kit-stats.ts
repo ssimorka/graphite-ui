@@ -6,8 +6,15 @@ export type KitStats = {
   governed: number
   /** Component sets in the kit snapshot, private internals included. */
   sets: number
+  /**
+   * Sets without the kit's `_` prefix, which is its own public/private line.
+   * These are the ones component-doc-drift holds to a doc.
+   */
+  publicSets: number
   /** Kit pages the snapshot covers. */
   pages: number
+  /** Component docs the drift check reads, README excluded as it does. */
+  docs: number
   /** Governance checks wired into CI. */
   checks: number
 }
@@ -40,7 +47,22 @@ export function readKitStats(): KitStats {
     ),
   ) as { pages: { sets: { name: string }[] }[] }
 
-  const sets = snapshot.pages.reduce((n, p) => n + (p.sets?.length ?? 0), 0)
+  const allSets = snapshot.pages.flatMap((p) => p.sets ?? [])
+  // Same two exclusions component-doc-drift makes, so the numbers the roles
+  // slide quotes are the ones that check reports rather than a near miss: the
+  // kit's `_` prefix marks a private internal, and README.md is not a doc.
+  const publicSets = allSets.filter((s) => !s.name.startsWith('_')).length
 
-  return { governed, sets, pages: snapshot.pages.length, checks: CI_CHECKS.length }
+  const docs = fs
+    .readdirSync(path.join(process.cwd(), 'docs', 'components'))
+    .filter((f) => f.endsWith('.md') && f !== 'README.md').length
+
+  return {
+    governed,
+    sets: allSets.length,
+    publicSets,
+    pages: snapshot.pages.length,
+    docs,
+    checks: CI_CHECKS.length,
+  }
 }
