@@ -32,7 +32,7 @@ const FAQS = [
 /** Kit section "06 FAQ" (11865:3162). */
 export function Faq() {
   return (
-    <section className="section section--faq band--secondary" id="faq">
+    <section className="section section--faq band--info" id="faq">
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>

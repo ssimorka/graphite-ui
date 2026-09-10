@@ -705,6 +705,10 @@ body {
   );
 }
 
+.band--info {
+  @include band(--graphite-info-container, --graphite-on-info-container);
+}
+
 // ---------------------------------------------------------------------------
 // Shared section scaffolding
 // ---------------------------------------------------------------------------
@@ -1319,6 +1323,32 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-03);
+
+  // The rail holds the height of its tallest state instead of resizing as the
+  // carousel advances. Only the active item carries body copy, and the six
+  // bodies are different lengths, so without this the list swung 40px every
+  // seven seconds and took the count and the pause control with it.
+  //
+  // Measured, not guessed: the tallest state at each width the layout has,
+  // taken by stepping through all six items. The widest lg case is not the
+  // worst one — the rail column is narrowest at the lg entry point, so the
+  // copy wraps hardest there.
+  //
+  //   below 672   548px   rail is full width, narrow viewport
+  //   672-1055    484px   rail is full width, roomy
+  //   1056+       524px   rail is a 6-column beside the stage
+  //
+  // Re-measure if the item copy changes; these are floors, so copy that grows
+  // past them brings the movement back.
+  min-height: 34.25rem;
+
+  @include breakpoint.breakpoint(md) {
+    min-height: 30.25rem;
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    min-height: 32.75rem;
+  }
 }
 
 .cap-item {
