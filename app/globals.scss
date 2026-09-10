@@ -1075,17 +1075,40 @@ body {
   margin: calc(var(--graphite-space-03) * -1);
 }
 
+// One rule sizes both rows, so the stops and their labels are on the same
+// tracks by construction rather than by two declarations agreeing.
+//
+// minmax rather than a min-width on the items: the floor has to sit on the
+// track, not on its contents. Put on the items, the "500 · source" label — the
+// one label wider than a stop — dragged its own track past 88px and pushed the
+// whole row into a scroll at X-Large, where it had always fit.
 .ramp__grid,
 .ramp__weights {
   display: grid;
+  grid-template-columns: repeat(var(--ramp-cols, 10), minmax(56px, 1fr));
   gap: var(--graphite-space-03);
   min-width: min-content;
+
+  // No floor at X-Large: the strip offers 950px of content and ten 88px
+  // tracks plus their gaps want 952, so an 88px floor put the row into a
+  // scroll two pixels short of fitting. The kit draws no scroll affordance
+  // here, which is the tell that all ten are meant to fit — so the tracks
+  // divide what the strip has and land at 87.8px. Below lg the floor stays,
+  // because there the kit does draw the affordance and the row is meant to
+  // scroll.
+  @include breakpoint.breakpoint(lg) {
+    grid-template-columns: repeat(var(--ramp-cols, 10), minmax(0, 1fr));
+  }
 }
 
 .ramp__weights {
   margin-top: var(--graphite-space-02);
 
   span {
+    // Zero, so a label can never widen its own track. "500 · source" is wider
+    // than a stop and spills over its neighbours instead, which is what the
+    // kit draws.
+    min-width: 0;
     text-align: center;
     white-space: nowrap;
     @include text('caption-1', $letter-spacing: 0.32px);
@@ -1099,14 +1122,8 @@ body {
 .ramp-swatch {
   aspect-ratio: 1 / 1;
   width: 100%;
-  // The kit draws the stop at 56px below lg and 88px at X-Large. min-width is
-  // what the scroller measures, so this is the size that decides whether the
-  // row scrolls at all.
-  min-width: 56px;
-
-  @include breakpoint.breakpoint(lg) {
-    min-width: 88px;
-  }
+  // Size comes from the track now, shared with the weights row above.
+  min-width: 0;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
@@ -1115,8 +1132,19 @@ body {
   cursor: pointer;
 
   span {
-    @include text('caption-1', $letter-spacing: 0.32px);
+    // A seven-character hex at the caption step measures 52.6px, which with
+    // the tile's 4px of padding either side overran the 56px stop by 4.6px.
+    // Stepped down below lg, where the stop is 56px; at X-Large it is 88px
+    // and the caption step fits with room to spare.
+    font-size: 0.625rem;
+    line-height: 1rem;
+    letter-spacing: 0;
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
+
+    @include breakpoint.breakpoint(lg) {
+      @include text('caption-1', $letter-spacing: 0.32px);
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    }
   }
 
   // Hover states .md: the swatch grows 88px to 98px on both axes, with the

@@ -114,7 +114,11 @@ export function Hero() {
           ramps, always visible rather than behind a switcher, so the claim in
           the subtitle is answered on the same screen that makes it. */}
       <Grid>
-        <Column sm={4} md={8} lg={{ span: 12, offset: 2 }}>
+        {/* Full content width, not a 12-of-16 span: the kit centres a 1000px
+            strip inside the 1120px column, and a span narrowed it to about
+            928 — which pulled the ten stops down from the kit's 88px to 79.
+            The strip max-width does the centring instead. */}
+        <Column sm={4} md={8} lg={16}>
           <div className="hero__source-strip">
             <div className="ramp-stack">
               {STRIP_RAMPS.map((name) => (

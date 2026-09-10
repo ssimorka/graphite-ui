@@ -158,8 +158,9 @@ export function RampRow({
   copiedKey: string | null
   onCopy: (key: string, hex: string) => void
 }) {
-  const columns = ramp.stops.length
-  const cols = { gridTemplateColumns: `repeat(${columns}, 1fr)` }
+  // Only the count comes from here; the track size lives in the stylesheet,
+  // which is what keeps the stops and the weights on identical tracks.
+  const cols = { ['--ramp-cols' as string]: ramp.stops.length }
   return (
     <div className="ramp">
       <p className="ramp__label">{RAMP_LABELS[name] ?? name}</p>
