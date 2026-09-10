@@ -1548,31 +1548,15 @@ $cap-dwell: 500px;
   flex-direction: column;
   gap: var(--graphite-space-03);
 
-  // The rail holds the height of its tallest state instead of resizing as the
-  // carousel advances. Only the active item carries body copy, and the six
-  // bodies are different lengths, so without this the list swung 40px every
-  // seven seconds and took the count and the pause control with it.
+  // No min-height. It used to hold the tallest state so the dwell timer could
+  // not move the count and the pause control every seven seconds, but nothing
+  // advances on its own now and the section's height is held by .cap-sticky and
+  // the stage frame instead. Reserving it here only pushed the controls away
+  // from the items it belongs to - 80px rather than the 16 below.
   //
-  // Measured, not guessed: the tallest state at each width the layout has,
-  // taken by stepping through all six items. The widest lg case is not the
-  // worst one — the rail column is narrowest at the lg entry point, so the
-  // copy wraps hardest there.
-  //
-  //   below 672   548px   rail is full width, narrow viewport
-  //   672-1055    484px   rail is full width, roomy
-  //   1056+       524px   rail is a 6-column beside the stage
-  //
-  // Re-measure if the item copy changes; these are floors, so copy that grows
-  // past them brings the movement back.
-  min-height: 34.25rem;
-
-  @include breakpoint.breakpoint(md) {
-    min-height: 30.25rem;
-  }
-
-  @include breakpoint.breakpoint(lg) {
-    min-height: 32.75rem;
-  }
+  // The list still changes height as the active body copy changes, so the
+  // controls shift with it. That is scroll-driven now, which is the reader's
+  // own doing rather than something that happens at them.
 }
 
 .cap-item {
