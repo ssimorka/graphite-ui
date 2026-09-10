@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Grid, Column, Button } from '@carbon/react'
+import { Grid, Column } from '@carbon/react'
 import {
   ColorPalette,
   Types,
@@ -12,8 +12,6 @@ import {
   Time,
   Renew,
   Bot,
-  Pause,
-  Play,
 } from '@carbon/icons-react'
 import { Reveal } from '@/components/reveal'
 import { PatternSpecimen } from '@/components/generative-art'
@@ -28,11 +26,13 @@ import { WEIGHT_LABELS } from '@/components/studio'
 import type { KitStats } from '@/lib/kit-stats'
 import type { Ramps, Theme } from '@/lib/color.js'
 
-// How long each capability holds the stage before the carousel advances.
-// Long enough to read the body copy without waiting on it, and well past the
-// 5s threshold that makes an unpausable auto-advance a WCAG 2.2.2 failure —
-// which is why the pause control below is not optional decoration.
-const DWELL_MS = 7000
+// The desktop carousel has no timer. The section is a tall scroll track with
+// the content stuck to the viewport inside it, so reading position picks the
+// panel. How tall that track is lives in globals.scss ($cap-dwell) and is read
+// back from geometry here rather than duplicated, so there is one number.
+//
+// That also takes WCAG 2.2.2 off the table rather than satisfying it: there is
+// no moving content to pause, because the reader is what moves it.
 
 type PanelKey =
   | 'source'
@@ -452,14 +452,11 @@ export function Capabilities({
   stats: KitStats
 }) {
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const [hovering, setHovering] = useState(false)
-  const [inView, setInView] = useState(false)
   const [reduced, setReduced] = useState(false)
 
-  const stageRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLElement>(null)
+  const paneRef = useRef<HTMLDivElement>(null)
   const fills = useRef<(HTMLSpanElement | null)[]>([])
-  const elapsed = useRef(0)
 
   const { sourceHex, lightBundle, darkBundle, level, theme } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
@@ -472,7 +469,6 @@ export function Capabilities({
   const current = theme === 'white' ? light : dark
 
   const isCarousel = useCarouselLayout()
-  const running = isCarousel && inView && !paused && !hovering && !reduced
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -482,201 +478,226 @@ export function Capabilities({
     return () => mq.removeEventListener('change', sync)
   }, [])
 
-  useEffect(() => {
-    const el = stageRef.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.25 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
+  // Where the track sits and how far it can be read through. Taken from live
+  // geometry rather than recomputed from DWELL_PX, so the stylesheet stays the
+  // single place the track's height is decided.
+  const measure = useCallback(() => {
+    const track = trackRef.current
+    const pane = paneRef.current
+    if (!track || !pane) return null
+    // The pane sticks when the track's top reaches the pane's own `top`, so
+    // that offset is where progress starts, not the viewport edge.
+    const stickyTop = parseFloat(getComputedStyle(pane).top) || 0
+    const scrollable = track.offsetHeight - pane.offsetHeight
+    if (scrollable <= 0) return null
+    return { track, scrollable, stickyTop }
   }, [])
 
-  // Reset every rail when the selection changes. React does not own the fill
-  // transforms — the animation frame writes them directly — so the item being
-  // left behind has to be cleared by hand or it keeps its last frame.
+  // Desktop: reading position picks the panel. The rail is that same reading,
+  // so the bar cannot show a different progress than the one doing the
+  // selecting — the property the dwell timer used to hold.
   useEffect(() => {
-    elapsed.current = 0
-    fills.current.forEach((el, i) => {
-      if (el) el.style.transform = `scaleY(${reduced && i === active ? 1 : 0})`
-    })
-  }, [active, reduced])
-
-  // The dwell timer and the rail are the same clock, so the bar cannot promise
-  // a different moment than the one the carousel actually advances on.
-  useEffect(() => {
-    if (!running) return
+    if (!isCarousel) return
     let frame = 0
-    let last = performance.now()
-    const tick = (now: number) => {
-      elapsed.current += now - last
-      last = now
-      const progress = Math.min(1, elapsed.current / DWELL_MS)
-      const fill = fills.current[active]
-      if (fill) fill.style.transform = `scaleY(${progress})`
-      if (progress >= 1) {
-        setActive((i) => (i + 1) % CAPABILITIES.length)
-        return
-      }
-      frame = requestAnimationFrame(tick)
+
+    const read = () => {
+      frame = 0
+      const m = measure()
+      if (!m) return
+      const passed = m.stickyTop - m.track.getBoundingClientRect().top
+      const progress = Math.min(1, Math.max(0, passed / m.scrollable))
+      // Each panel owns an equal share of the track. Clamped at the end so the
+      // last one keeps the stage rather than wrapping round to the first.
+      const exact = progress * CAPABILITIES.length
+      const index = Math.min(CAPABILITIES.length - 1, Math.floor(exact))
+      setActive(index)
+      fills.current.forEach((el, i) => {
+        if (!el) return
+        const fill = i < index ? 1 : i > index ? 0 : Math.min(1, exact - index)
+        el.style.transform = `scaleY(${fill})`
+      })
     }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [active, running])
+
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(read)
+    }
+
+    read()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [isCarousel, measure])
+
+  // Clicking a capability scrolls to its share of the track. Setting `active`
+  // straight would last exactly one frame, since the next reading overrides it.
+  const goTo = useCallback(
+    (i: number) => {
+      const m = measure()
+      if (!m) return
+      const trackTop =
+        window.scrollY + m.track.getBoundingClientRect().top - m.stickyTop
+      // Aim at the middle of the panel's share rather than its leading edge, so
+      // a rounding error cannot land on the neighbour.
+      const y = trackTop + m.scrollable * ((i + 0.5) / CAPABILITIES.length)
+      window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' })
+    },
+    [measure, reduced],
+  )
 
   const item = CAPABILITIES[active]
 
   return (
-    <section className="section section--capabilities" id="system">
-      <Grid>
-        <Column sm={4} md={8} lg={16}>
-          <Reveal>
-            <h2 className="section__title">
-              One decision, resolved all the way down
-            </h2>
-            <p className="section__subtitle">
-              The engine does the work Figma cannot: it derives, it measures,
-              and it does both themes at once. Three checks in CI then keep the
-              result honest.
-            </p>
-          </Reveal>
-        </Column>
-      </Grid>
-
-      {isCarousel ? (
-        <Grid className="cap-grid">
-          <Column sm={4} md={8} lg={6}>
-            <Reveal>
-              <ul className="cap-list">
-                {CAPABILITIES.map((capability, i) => {
-                  const isActive = i === active
-                  return (
-                    <li
-                      key={capability.key}
-                      className={`cap-item${isActive ? ' is-active' : ''}`}
-                    >
-                      <span className="cap-item__rail" aria-hidden="true">
-                        <span
-                          className="cap-item__fill"
-                          ref={(el) => {
-                            fills.current[i] = el
-                          }}
-                        />
-                      </span>
-                      <button
-                        type="button"
-                        className="cap-item__trigger"
-                        id={`cap-trigger-${capability.key}`}
-                        aria-expanded={isActive}
-                        aria-controls="cap-stage"
-                        onClick={() => setActive(i)}
-                      >
-                        <span className="cap-item__title">
-                          {capability.title}
-                        </span>
-                      </button>
-                      {/* Mounted only while active rather than hidden: it keeps
-                          the collapsed bodies out of the accessibility tree, so
-                          aria-expanded and what a screen reader can reach agree,
-                          and the mount is what replays the entrance. */}
-                      {isActive && (
-                        <div className="cap-item__reveal">
-                          <p className="cap-item__body">{capability.body}</p>
-                        </div>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-
-              <div className="cap-controls">
-                <p className="cap-controls__count">
-                  {active + 1} / {CAPABILITIES.length}
-                </p>
-                {!reduced && (
-                  <Button
-                    kind="ghost"
-                    size="sm"
-                    renderIcon={paused ? Play : Pause}
-                    onClick={() => setPaused((p) => !p)}
-                  >
-                    {paused ? 'Play' : 'Pause'}
-                  </Button>
-                )}
-              </div>
-            </Reveal>
-          </Column>
-
-          <Column sm={4} md={8} lg={10}>
-            <Reveal>
-              <div
-                className="cap-stage"
-                ref={stageRef}
-                onPointerEnter={() => setHovering(true)}
-                onPointerLeave={() => setHovering(false)}
-                onFocusCapture={() => setHovering(true)}
-                onBlurCapture={() => setHovering(false)}
-              >
-                <div className="cap-stage__glow" aria-hidden="true" />
-                <div
-                  className="cap-stage__frame"
-                  id="cap-stage"
-                  key={item.key}
-                  role="region"
-                  aria-labelledby={`cap-trigger-${item.key}`}
-                >
-                  <StagePanel
-                    item={item}
-                    hex={activeHex}
-                    ramps={ramps}
-                    theme={current}
-                    contracts={contracts}
-                    stats={stats}
-                  />
-                </div>
-                <p className="cap-stage__caption">{item.caption}</p>
-              </div>
-            </Reveal>
-          </Column>
-        </Grid>
-      ) : (
-        /* Medium and Small: every capability shown, each above its own stage.
-           No rail fill, no count, no pause — with nothing advancing there is
-           nothing to report or to stop. The left rule stays as the marker the
-           kit draws. */
-        <Grid className="cap-grid">
+    <section
+      className="section section--capabilities"
+      id="system"
+      ref={trackRef}
+      style={{ ['--cap-count' as string]: CAPABILITIES.length }}
+    >
+      {/* Everything sits in one sticky pane, so the heading stays with the
+          stage while the track scrolls past underneath. Below lg the class
+          carries no styles at all and this is an ordinary div. */}
+      <div className="cap-sticky" ref={paneRef}>
+        <Grid>
           <Column sm={4} md={8} lg={16}>
-            <ul className="cap-stack">
-              {CAPABILITIES.map((capability) => (
-                <li key={capability.key} className="cap-stack__item">
-                  <Reveal>
-                    <div className="cap-stack__head">
-                      <h3 className="cap-stack__title">{capability.title}</h3>
-                      <p className="cap-stack__body">{capability.body}</p>
-                    </div>
-                    <div className="cap-stage cap-stage--static">
-                      <div className="cap-stage__glow" aria-hidden="true" />
-                      <div className="cap-stage__frame">
-                        <StagePanel
-                          item={capability}
-                          hex={activeHex}
-                          ramps={ramps}
-                          theme={current}
-                          contracts={contracts}
-                          stats={stats}
-                        />
-                      </div>
-                      <p className="cap-stage__caption">{capability.caption}</p>
-                    </div>
-                  </Reveal>
-                </li>
-              ))}
-            </ul>
+            <Reveal>
+              <h2 className="section__title">
+                One decision, resolved all the way down
+              </h2>
+              <p className="section__subtitle">
+                The engine does the work Figma cannot: it derives, it measures,
+                and it does both themes at once. Three checks in CI then keep
+                the result honest.
+              </p>
+            </Reveal>
           </Column>
         </Grid>
-      )}
 
+        {isCarousel ? (
+          <Grid className="cap-grid">
+            <Column sm={4} md={8} lg={6}>
+              <Reveal>
+                <ul className="cap-list">
+                  {CAPABILITIES.map((capability, i) => {
+                    const isActive = i === active
+                    return (
+                      <li
+                        key={capability.key}
+                        className={`cap-item${isActive ? ' is-active' : ''}`}
+                      >
+                        <span className="cap-item__rail" aria-hidden="true">
+                          <span
+                            className="cap-item__fill"
+                            ref={(el) => {
+                              fills.current[i] = el
+                            }}
+                          />
+                        </span>
+                        <button
+                          type="button"
+                          className="cap-item__trigger"
+                          id={`cap-trigger-${capability.key}`}
+                          aria-expanded={isActive}
+                          aria-controls="cap-stage"
+                          onClick={() => goTo(i)}
+                        >
+                          <span className="cap-item__title">
+                            {capability.title}
+                          </span>
+                        </button>
+                        {/* Mounted only while active rather than hidden: it keeps
+                            the collapsed bodies out of the accessibility tree, so
+                            aria-expanded and what a screen reader can reach agree,
+                            and the mount is what replays the entrance. */}
+                        {isActive && (
+                          <div className="cap-item__reveal">
+                            <p className="cap-item__body">{capability.body}</p>
+                          </div>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
+
+                {/* No pause control any more: nothing advances on its own, so
+                    there is nothing to stop. */}
+                <div className="cap-controls">
+                  <p className="cap-controls__count">
+                    {active + 1} / {CAPABILITIES.length}
+                  </p>
+                  <p className="cap-controls__hint" aria-hidden="true">
+                    Scroll to explore
+                  </p>
+                </div>
+              </Reveal>
+            </Column>
+
+            <Column sm={4} md={8} lg={10}>
+              <Reveal>
+                <div className="cap-stage">
+                  <div className="cap-stage__glow" aria-hidden="true" />
+                  <div
+                    className="cap-stage__frame"
+                    id="cap-stage"
+                    key={item.key}
+                    role="region"
+                    aria-labelledby={`cap-trigger-${item.key}`}
+                  >
+                    <StagePanel
+                      item={item}
+                      hex={activeHex}
+                      ramps={ramps}
+                      theme={current}
+                      contracts={contracts}
+                      stats={stats}
+                    />
+                  </div>
+                  <p className="cap-stage__caption">{item.caption}</p>
+                </div>
+              </Reveal>
+            </Column>
+          </Grid>
+        ) : (
+          /* Medium and Small: every capability shown, each above its own stage.
+             No rail fill, no count, no pause — with nothing advancing there is
+             nothing to report or to stop. The left rule stays as the marker the
+             kit draws. */
+          <Grid className="cap-grid">
+            <Column sm={4} md={8} lg={16}>
+              <ul className="cap-stack">
+                {CAPABILITIES.map((capability) => (
+                  <li key={capability.key} className="cap-stack__item">
+                    <Reveal>
+                      <div className="cap-stack__head">
+                        <h3 className="cap-stack__title">{capability.title}</h3>
+                        <p className="cap-stack__body">{capability.body}</p>
+                      </div>
+                      <div className="cap-stage cap-stage--static">
+                        <div className="cap-stage__glow" aria-hidden="true" />
+                        <div className="cap-stage__frame">
+                          <StagePanel
+                            item={capability}
+                            hex={activeHex}
+                            ramps={ramps}
+                            theme={current}
+                            contracts={contracts}
+                            stats={stats}
+                          />
+                        </div>
+                        <p className="cap-stage__caption">{capability.caption}</p>
+                      </div>
+                    </Reveal>
+                  </li>
+                ))}
+              </ul>
+            </Column>
+          </Grid>
+        )}
+      </div>
     </section>
   )
 }
