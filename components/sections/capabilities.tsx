@@ -50,42 +50,51 @@ const CAPABILITIES: {
   title: string
   body: string
   caption: string
+  /**
+   * Caption for the collapsed layout, where one is drawn differently. Only the
+   * roles slide needs it: below lg its table becomes two-line blocks, so the
+   * compared role sits under the name rather than beside it and the sentence
+   * has to say so.
+   */
+  captionSmall?: string
 }[] = [
   {
     key: 'source',
     title: 'A source color',
     body: 'Any hex. It is resolved in OKLab and sampled at fixed tone stops, so the steps read as evenly spaced at any hue.',
-    caption: "The outlined stop is the source. Numbers are the ramp's stops; hover one for its OKLab tone.",
+    caption: 'The outlined stop is the source. Numbers are OKLab tones.',
   },
   {
     key: 'ramps',
     title: 'Eight ramps',
     body: 'Accent, secondary, neutral, neutral variant and four status ramps. Status hue is pinned so red still reads as danger whatever the source is.',
-    caption: 'Every ramp the engine emits, live from the color you picked.',
+    caption: 'Every row runs the same ten tone stops, dark to light.',
   },
   {
     key: 'roles',
     title: 'Thirty-two roles',
     body: 'Named roles per theme (surface, on-surface, primary, outline) checked against WCAG as they resolve. You design against meaning, not hex values.',
-    caption: 'Eight of the thirty-two roles, resolved for the theme you are reading in.',
+    caption: 'Six of the thirty-two. Each ratio is measured against the role named beside it.',
+    captionSmall:
+      'Six of the thirty-two. Each ratio is measured against the role named below it.',
   },
   {
     key: 'components',
     title: '22 governed components',
     body: 'Each one may not change without its contract changing first.',
-    caption: 'Every component with a contract, and the version it implements.',
+    caption: 'One chip per contract file in docs/contracts.',
   },
   {
     key: 'checks',
     title: '3 checks in CI',
     body: 'Contracts against code, foundations against the token snapshot, docs against the kit.',
-    caption: 'The governance job. A red check blocks the merge.',
+    caption: 'All three read a committed snapshot, so they run offline.',
   },
   {
     key: 'sets',
     title: '206 component sets tracked',
     body: 'Including the 73 public sets with no contract, which are labelled rather than hidden.',
-    caption: 'Walked from the kit snapshot, not counted from page names.',
+    caption: 'Counts from the last component-doc-drift run, not an estimate.',
   },
 ]
 
@@ -93,22 +102,15 @@ const CAPABILITIES: {
 // Each one renders the engine's actual output rather than a picture of it, so
 // the whole stage repaints when the color picker moves.
 
-const TOKEN_ROLES = [
-  'primary',
-  'onPrimary',
-  'primaryContainer',
-  'secondary',
-  'background',
-  'surface',
-  'onSurface',
-  'outline',
-]
-
+// The six the kit's roles slide draws, in its order. Six of the thirty-two,
+// picked to cover a surface pair, a container pair and the one UI-contrast
+// role, rather than to be the six that score best.
 const CONTRAST_ROLES = [
   'onBackground',
   'onSurface',
   'onSurfaceVariant',
   'onPrimary',
+  'onSecondary',
   'outline',
 ]
 
@@ -120,7 +122,7 @@ const RAMP_LABELS: Record<string, string> = {
   accent: 'accent',
   secondary: 'secondary',
   neutral: 'neutral',
-  neutralVariant: 'neutral variant',
+  neutralVariant: 'neutral var',
   danger: 'danger',
   warning: 'warning',
   success: 'success',
@@ -170,6 +172,10 @@ function PanelSource({ hex, ramps }: { hex: string; ramps: Ramps }) {
   )
 }
 
+// Kit 13395:745 — one chip per contract, name only. The version each one
+// implements is deliberately not here: the kit draws Toggle at 2.0.0 where the
+// contract has moved to 2.1.0, which is exactly the drift this slide should not
+// be repeating in its own chrome.
 function PanelComponents({
   contracts,
 }: {
@@ -178,9 +184,8 @@ function PanelComponents({
   return (
     <ul className="cap-components">
       {contracts.map((c) => (
-        <li key={c.component} className="cap-components__row">
-          <span className="cap-components__name">{c.component}</span>
-          <span className="cap-components__version">{c.version}</span>
+        <li key={c.component} className="cap-components__chip">
+          {c.component}
         </li>
       ))}
     </ul>
@@ -189,18 +194,20 @@ function PanelComponents({
 
 // The three drift checks the governance job runs. Descriptions rather than a
 // screenshot of a green tick: what each one actually compares is the point.
+// Kit 13395:748. Copy is the kit's, which says what each check fails on rather
+// than what it compares - the more useful half of the same fact.
 const CHECKS = [
   {
     name: 'drift-check',
-    body: 'Components against their contracts. Every declared role and variable has to exist in the implementation.',
+    body: 'Fails when a component references a token role its contract does not declare.',
   },
   {
     name: 'token-drift',
-    body: 'Foundations against the kit token snapshot: spacing, radius, breakpoints and the type scale.',
+    body: 'Fails when a foundation value stops matching the committed snapshot.',
   },
   {
     name: 'component-doc-drift',
-    body: 'Component docs against the kit snapshot, so a public set cannot ship undocumented.',
+    body: 'Fails when a public component set has no doc coverage.',
   },
 ]
 
@@ -209,7 +216,12 @@ function PanelChecks() {
     <ul className="cap-checks">
       {CHECKS.map((check) => (
         <li key={check.name} className="cap-checks__row">
-          <code className="cap-checks__name">{check.name}</code>
+          <p className="cap-checks__head">
+            <code className="cap-checks__name">{check.name}</code>
+            {/* Static: these three are green on main, which is what the kit
+                draws. Nothing here reads CI. */}
+            <span className="cap-checks__verdict">pass</span>
+          </p>
           <p className="cap-checks__body">{check.body}</p>
         </li>
       ))}
@@ -217,11 +229,13 @@ function PanelChecks() {
   )
 }
 
+// Kit 13395:751. The three numbers are the ones component-doc-drift prints on
+// every run, which is what the caption claims they are.
 function PanelSets({ stats }: { stats: KitStats }) {
   const rows = [
-    { value: stats.sets, label: 'Component sets in the kit' },
-    { value: stats.pages, label: 'Pages the snapshot covers' },
-    { value: stats.governed, label: 'Carrying a versioned contract' },
+    { value: stats.pages, label: 'kit pages walked by the docs drift check' },
+    { value: stats.publicSets, label: 'public sets checked against their docs' },
+    { value: stats.docs, label: 'component docs read to check them against' },
   ]
   return (
     <ul className="cap-sets">
@@ -259,54 +273,65 @@ function PanelRamps({ ramps }: { ramps: Ramps }) {
   )
 }
 
-function PanelTokens({ theme }: { theme: Theme }) {
+/**
+ * Kit "Carousel slide" 13395:742 — role, what it is measured against, and the
+ * ratio that came out.
+ *
+ * A real table rather than the kit's stack of rows: it is three columns of
+ * tabular data with a header, and the markup should say so. The `against`
+ * column is not a lookup written out here — `buildTheme` already records which
+ * base role each on-color was checked against, so the column is whatever the
+ * engine actually measured. Same for the ratios: the kit's numbers are baked,
+ * these are computed for the source color you are looking at.
+ */
+function PanelRoles({ theme }: { theme: Theme }) {
   return (
-    <ul className="cap-tokens">
-      {TOKEN_ROLES.map((role) => {
-        const token = theme.tokens[role]
-        if (!token) return null
-        return (
-          <li key={role} className="cap-tokens__row">
-            <span
-              className="cap-tokens__swatch"
-              style={{ background: token.hex }}
-              aria-hidden="true"
-            />
-            <span className="cap-tokens__role">{role}</span>
-            <span className="cap-tokens__hex">{token.hex}</span>
-          </li>
-        )
-      })}
-    </ul>
-  )
-}
-
-function PanelContrast({ theme }: { theme: Theme }) {
-  return (
-    <ul className="cap-contrast">
-      {CONTRAST_ROLES.map((role) => {
-        const check = theme.contrast[role]
-        const token = theme.tokens[role]
-        if (!check || !token) return null
-        const against = theme.tokens[check.against]
-        return (
-          <li
-            key={role}
-            className="cap-contrast__row"
-            style={{ background: against?.hex, color: token.hex }}
-          >
-            <span className="cap-contrast__role">{role}</span>
-            <span className="cap-contrast__ratio">
-              {check.ratio.toFixed(1)}:1
-            </span>
-            <span className="cap-contrast__verdict">
-              {check.passes ? 'pass' : 'fail'} · {check.level}
-              {check.fixed ? ' · fixed' : ''}
-            </span>
-          </li>
-        )
-      })}
-    </ul>
+    <table className="cap-roles">
+      <thead>
+        <tr>
+          {/* The kit puts a 16px spacer above the swatches. Empty rather than
+              labelled: the swatch it heads is decorative, and the role name in
+              the next column is the row's real header. */}
+          <th className="cap-roles__swatch-col" />
+          <th className="cap-roles__role" scope="col">
+            role
+          </th>
+          <th className="cap-roles__against" scope="col">
+            against
+          </th>
+          <th className="cap-roles__ratio" scope="col">
+            contrast
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {CONTRAST_ROLES.map((role) => {
+          const check = theme.contrast[role]
+          const token = theme.tokens[role]
+          if (!check || !token) return null
+          return (
+            <tr key={role}>
+              <td className="cap-roles__swatch-col">
+                <span
+                  className="cap-roles__swatch"
+                  style={{ background: token.hex }}
+                  aria-hidden="true"
+                />
+              </td>
+              <th className="cap-roles__role" scope="row">
+                {role}
+              </th>
+              <td className="cap-roles__against">{check.against}</td>
+              <td
+                className={`cap-roles__ratio${check.passes ? '' : ' is-fail'}`}
+              >
+                {check.ratio.toFixed(1)}:1 {check.passes ? 'pass' : 'fail'}
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
   )
 }
 
@@ -392,6 +417,30 @@ function PanelThemes({ light, dark }: { light: Theme; dark: Theme }) {
   )
 }
 
+/**
+ * The caption under a panel, inside its frame.
+ *
+ * Where a slide draws different copy collapsed, both are rendered and CSS picks
+ * one. Swapping the string on a breakpoint in JS would need a matchMedia hook
+ * and would disagree with itself between the server render and the first paint,
+ * which is the bug useCarouselLayout already exists to avoid.
+ */
+function StageCaption({
+  item,
+}: {
+  item: { caption: string; captionSmall?: string }
+}) {
+  if (!item.captionSmall) {
+    return <p className="cap-stage__caption">{item.caption}</p>
+  }
+  return (
+    <p className="cap-stage__caption">
+      <span className="cap-stage__caption-wide">{item.caption}</span>
+      <span className="cap-stage__caption-narrow">{item.captionSmall}</span>
+    </p>
+  )
+}
+
 function StagePanel({
   item,
   hex,
@@ -413,7 +462,7 @@ function StagePanel({
     case 'ramps':
       return <PanelRamps ramps={ramps} />
     case 'roles':
-      return <PanelTokens theme={theme} />
+      return <PanelRoles theme={theme} />
     case 'components':
       return <PanelComponents contracts={contracts} />
     case 'checks':
@@ -655,8 +704,8 @@ export function Capabilities({
                       contracts={contracts}
                       stats={stats}
                     />
+                    <StageCaption item={item} />
                   </div>
-                  <p className="cap-stage__caption">{item.caption}</p>
                 </div>
               </Reveal>
             </Column>
@@ -687,8 +736,8 @@ export function Capabilities({
                             contracts={contracts}
                             stats={stats}
                           />
+                          <StageCaption item={capability} />
                         </div>
-                        <p className="cap-stage__caption">{capability.caption}</p>
                       </div>
                     </Reveal>
                   </li>
