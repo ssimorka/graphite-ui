@@ -1,4 +1,5 @@
 import { Hero } from '@/components/sections/hero'
+import { PageBands } from '@/components/page-bands'
 import { ComponentWall } from '@/components/sections/component-wall'
 import { Capabilities } from '@/components/sections/capabilities'
 import { ThemeCta } from '@/components/sections/theme-cta'
@@ -31,14 +32,12 @@ export default function Page() {
           fill and the menu shadow, which is what punches an opaque band
           through the grid. That is why it is the only band here with a
           background. */}
-      <div className="page-bands">
-        <div className="page-bands__grid" aria-hidden="true" />
-        <div className="page-bands__glow" aria-hidden="true" />
+      <PageBands>
         <ComponentWall contracts={contracts} />
         <Capabilities contracts={contractList} stats={readKitStats()} />
         <ThemeCta />
         <TwoDoors />
-      </div>
+      </PageBands>
 
       <Faq />
       <SiteFooter />

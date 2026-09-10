@@ -582,6 +582,10 @@ body {
 // isolation, so the z-index -3 children stay behind the four sections while
 // still painting above .page-main's own fill.
 .page-bands {
+  // Scroll progress past this region's top, written by page-bands.tsx. The
+  // default keeps the grid still before the listener runs, and under reduced
+  // motion the listener never attaches so it stays here.
+  --sy: 0;
   position: relative;
   isolation: isolate;
 }
@@ -592,7 +596,10 @@ body {
 // for free from the instance's bounds, which a full-height layer does not.
 .page-bands__grid {
   position: absolute;
-  inset: 0;
+  // Overhangs the region by 8rem top and bottom so the drift has material to
+  // move: translating a layer pinned to inset 0 would pull its own edge into
+  // view. The mask below accounts for the overhang.
+  inset: -8rem 0;
   z-index: -3;
   background-image:
     linear-gradient(
@@ -606,13 +613,21 @@ body {
       transparent 1px
     );
   background-size: 3rem 3rem;
+  // 12rem, not 4rem: 8rem of that is the overhang, so the grid still reaches
+  // full strength 4rem inside the region proper, as before.
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    #000 4rem,
-    #000 calc(100% - 4rem),
+    #000 12rem,
+    #000 calc(100% - 12rem),
     transparent
   );
+  // Drifts down as the page scrolls, the way the hero's grid does, at a third
+  // of its rate — the hero crosses 1348px where this region crosses 2599, so
+  // the same coefficient would be three times the travel. 0.04 puts the total
+  // near 104px, comfortably inside the 128px overhang.
+  transform: translate3d(0, calc(var(--sy) * 0.04px), 0);
+  will-change: transform;
   // Half strength. The rules are already drawn at 60% of outline, so this
   // lands them near 30% against the band behind them — enough to read as a
   // grid without competing with the sections sitting on it.

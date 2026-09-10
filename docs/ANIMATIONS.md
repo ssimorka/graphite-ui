@@ -49,6 +49,7 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Scroll reveal | `.reveal` | 700ms | settle | `IntersectionObserver`, once per element |
 | Hero entrance | `.hero__source-strip` / `hero-rise` | 900ms | settle | Mount, one-shot |
 | Hero parallax | `.hero__spotlight`, `.hero__grid-lines` | continuous | — | `pointermove` + `scroll` via rAF |
+| Band grid parallax | `.page-bands__grid` | continuous | — | `scroll` via rAF, from `page-bands.tsx` |
 | Spotlight tracking | `.hero__spotlight` | `fast` | linear | Pointer position rewrite |
 | View-switch fade | `.showcase__frame`, `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={active.key}` |
 | Cover reveal | `.art__cover` / `cover-in` | 320ms | ease | Mount, one-shot |
@@ -138,6 +139,7 @@ Eleven blocks. Everything that moves is covered.
 | `.reveal` | Revealed immediately, transition removed |
 | `.hero__source-strip` | `animation: none` |
 | `.hero__spotlight`, `.hero__grid-lines` | Transforms and transitions removed |
+| `.page-bands__grid` | Listener never attaches, so `--sy` holds at 0 |
 | `.art__cover` | `animation: none` |
 | `.art__cover-hint` | Travel removed, fade kept |
 | `.showcase__frame` | `animation: none` |
@@ -147,12 +149,14 @@ Eleven blocks. Everything that moves is covered.
 | Tooltip, Popover, Menu | `animation: none` |
 | Progress | Determinate transition removed; the sweep stretches to 3s |
 
-Three are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible
-immediately, so the observer never runs. `hero.tsx` returns before attaching its
-scroll listener, so `--sy` stays at its default and the effect never exists.
-`capabilities.tsx` never starts the dwell timer, so the carousel holds on
-whichever item you select and its pause control is not rendered: there is
-nothing left to pause.
+Four are handled in JavaScript rather than CSS, which is why the block count
+does not move when one is added. `use-reveal.ts` reports visible immediately, so
+the observer never runs. `hero.tsx` and `page-bands.tsx` each return before
+attaching their scroll listener, so `--sy` stays at its default and the effect
+never exists — the band grid needs no rule of its own for the same reason the
+hero's parallax needs one only for its transitions. `capabilities.tsx` never
+starts the dwell timer, so the carousel holds on whichever item you select and
+its pause control is not rendered: there is nothing left to pause.
 
 **The progress sweep slows rather than stops.** A frozen indeterminate bar reads
 as a broken one, so it stretches to 3s and stays legible.
