@@ -1,19 +1,28 @@
 // Graphite Primitive Mesh Gradient — see mesh-gradient.tsx for what it is and
 // why it is gradients rather than the kit's exported SVGs.
 //
-// The kit draws the mesh as a fixed 3126 × 1885 canvas centred on whichever
-// section holds it, overflowing on every side and clipped by the section. Same
-// here: the box is that exact size and centred, so the ellipse coordinates
-// below are the kit's own canvas coordinates and the section shows the same
-// window of the mesh the kit does at X-Large. Below that the kit rotates the
-// canvas; a soft backdrop does not earn a second set of numbers for it.
+// The kit draws the mesh as a 3126 × 1885 canvas centred on whichever section
+// holds it, overflowing on every side and clipped by the section. Same here:
+// the box is that size and centred, so the ellipse coordinates below are the
+// kit's own canvas coordinates and the section shows the same window of the
+// mesh the kit does at X-Large.
+//
+// Below X-Large the sections run taller than the canvas - the wall is 2218px
+// at Small - and the kit's answer is to rotate the canvas to portrait. The
+// answer here is to let the box grow to the section instead: never smaller
+// than the kit's canvas, never smaller than the section either way. The
+// ellipses keep their canvas coordinates, so a taller box only adds field
+// above and below them; that is the same base colour and nobody can tell.
 
 .mesh {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 3126px;
-  height: 1885px;
+  // The 2px is bleed: centring a box of odd height by translate lands its
+  // edges on half-pixels, and at Small that showed as a hairline of section
+  // fill along the bottom.
+  width: max(3126px, calc(100% + 2px));
+  height: max(1885px, calc(100% + 2px));
   transform: translate(-50%, -50%);
   // Behind the section's content. The section isolates, so this stays under
   // its own children and never under the section's neighbours.
