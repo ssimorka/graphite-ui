@@ -3,6 +3,7 @@
 import { Grid, Column } from '@carbon/react'
 import { ArrowRight, Book } from '@carbon/icons-react'
 import { Reveal } from '@/components/reveal'
+import { MeshGradient } from '@/components/mesh-gradient'
 import { Button } from '@/components/ui/button'
 import { SOURCE_TRIGGER_ID } from '@/components/color-picker'
 import styles from './theme-cta.module.scss'
@@ -30,6 +31,10 @@ export function ThemeCta() {
       id="theme"
       aria-labelledby="theme-title"
     >
+      {/* Kit 13535:15197, the accent variant. The band class above stays for
+          the text and control bindings it carries; its own fill sits under
+          the mesh. */}
+      <MeshGradient family="accent" />
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>

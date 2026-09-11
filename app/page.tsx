@@ -22,22 +22,19 @@ export default function Page() {
       {/* Section order is the kit's, 01 through 07. */}
       <Hero />
 
-      {/* The kit parents "Grid lines — full bleed" and a second "Hero
-          spotlight" to Main content rather than to the hero, spanning y
-          1344-3942 — which is sections 02 through 05 exactly. So they are a
-          backdrop for the middle of the page, not hero decoration, and the
-          four sections below sit on top of them.
+      <ComponentWall contracts={contracts} />
 
-          04 Theme is the one that interrupts it: the kit gives that section a
-          fill and the menu shadow, which is what punches an opaque band
-          through the grid. That is why it is the only band here with a
-          background. */}
+      {/* The kit parents "Grid lines — full bleed" to 03 Capabilities alone
+          now, sized to that section (11896:292490). It used to span 02
+          through 05 from Main content with a second spotlight beside it; both
+          the span and the spotlight are gone, and 02 and 04 carry a mesh
+          gradient each instead. */}
       <PageBands>
-        <ComponentWall contracts={contracts} />
         <Capabilities contracts={contractList} stats={readKitStats()} />
-        <ThemeCta />
-        <TwoDoors />
       </PageBands>
+
+      <ThemeCta />
+      <TwoDoors />
 
       <Faq />
       <SiteFooter />

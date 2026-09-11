@@ -4,6 +4,13 @@
 // point of the section: the specimens repaint with the source color because
 // nothing here overrides them.
 .section {
+  // Holds the mesh gradient, which is far larger than the section and
+  // z-indexed beneath its content. Isolated so that negative index stays
+  // inside this section, and clipped (not hidden: no scroll container) so the
+  // mesh's overflow goes no further than the kit's does.
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   padding: var(--graphite-space-11) 0;
   // Plain outline, not the usual subtle one: surfaceVariant is the binding for
   // outline-subtle everywhere else, and it is this section's fill now, so a
@@ -12,7 +19,8 @@
   // The field, and only the field. Not a band class: those rebind the role
   // variables for every descendant, which would carry the fill onto the cards
   // and their previews. It stops at this surface; the cards keep their own
-  // neutral fill on top of it.
+  // neutral fill on top of it. The mesh paints over this; it stays as what
+  // shows if the mesh ever does not.
   background: var(--graphite-surface-variant);
 }
 
