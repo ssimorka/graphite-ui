@@ -1,0 +1,79 @@
+// Graphite Primitive Mesh Gradient — see mesh-gradient.tsx for what it is and
+// why it is gradients rather than the kit's exported SVGs.
+//
+// The kit draws the mesh as a fixed 3126 × 1885 canvas centred on whichever
+// section holds it, overflowing on every side and clipped by the section. Same
+// here: the box is that exact size and centred, so the ellipse coordinates
+// below are the kit's own canvas coordinates and the section shows the same
+// window of the mesh the kit does at X-Large. Below that the kit rotates the
+// canvas; a soft backdrop does not earn a second set of numbers for it.
+
+.mesh {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3126px;
+  height: 1885px;
+  transform: translate(-50%, -50%);
+  // Behind the section's content. The section isolates, so this stays under
+  // its own children and never under the section's neighbours.
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--mesh-base);
+  background-repeat: no-repeat;
+}
+
+// Each ellipse is `radial-gradient(rx ry at cx cy, stop, transparent 70%)`,
+// with the radii grown by roughly the kit's blur so the falloff reads as the
+// blur did. Layers list top-first, so the kit's bottom-most ellipse is last.
+
+// 13535:15189. Three ellipses all centred below the canvas, so what the
+// section sees is their upper fringe rising from the bottom right.
+.neutralVariant {
+  background-image:
+    // Ellipse 28 — 900, blur 225
+    radial-gradient(
+      1550px 1300px at 1707px 2410px,
+      var(--mesh-c),
+      transparent 70%
+    ),
+    // Ellipse 27 — 700, blur 500
+    radial-gradient(
+      2000px 1750px at 2507px 2015px,
+      var(--mesh-b),
+      transparent 70%
+    ),
+    // Ellipse 29 — 300 at 80%, fading out across itself, blur 300
+    radial-gradient(
+      1500px 1200px at 2182px 2328px,
+      color-mix(in srgb, var(--mesh-a) 80%, transparent),
+      transparent 70%
+    );
+}
+
+// 13535:15197. The kit composes this one from three ellipses and four rotated
+// blurred vectors; the three gradients here are placed to the rendered result
+// at X-Large — glow gathering bottom right, a lighter lift beside it, the rest
+// pulled dark — rather than transcribed from seven rotated layers that radial
+// gradients could not follow anyway.
+.accent {
+  background-image:
+    // the 900 streaks, upper left
+    radial-gradient(
+      1600px 1200px at 900px 700px,
+      var(--mesh-c),
+      transparent 70%
+    ),
+    // the 100 highlight
+    radial-gradient(
+      900px 700px at 2300px 1350px,
+      color-mix(in srgb, var(--mesh-b) 35%, transparent),
+      transparent 70%
+    ),
+    // the source-stop glow
+    radial-gradient(
+      1400px 1100px at 2100px 1250px,
+      color-mix(in srgb, var(--mesh-a) 90%, transparent),
+      transparent 70%
+    );
+}

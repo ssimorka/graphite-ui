@@ -620,8 +620,8 @@ body {
 
 // Unlike the hero's, this grid carries no radial mask: the kit renders it as
 // an even 3rem cell edge to edge. It fades only at the two ends, so it does
-// not butt hard against the hero above or the FAQ below — the kit gets that
-// for free from the instance's bounds, which a full-height layer does not.
+// not butt hard against the mesh sections either side of it — the kit gets
+// that for free from the instance's bounds, which a full-height layer does not.
 .page-bands__grid {
   position: absolute;
   inset: 0;
@@ -646,10 +646,9 @@ body {
     transparent
   );
   // The hero's grid transform, coefficients included: 0.12px per pixel of
-  // scroll, 0.75rem of pointer sway on both axes. Deliberately not scaled for
-  // this region being twice the hero's height — the two layers are the same
-  // backdrop and matching the feel means matching the rate, not the total
-  // travel.
+  // scroll, 0.75rem of pointer sway on both axes. Deliberately not scaled to
+  // this region's height — the two layers are the same backdrop and matching
+  // the feel means matching the rate, not the total travel.
   transform: translate3d(
     calc(var(--px) * 0.75rem),
     calc(var(--sy) * 0.12px + var(--py) * 0.75rem),
@@ -667,21 +666,6 @@ body {
 // starting 240px into the band region, which puts it over the component wall.
 // Static here: the pointer-tracked variant is the hero's, and a second one
 // following the cursor down the page would read as a bug.
-.page-bands__glow {
-  position: absolute;
-  top: 15rem; // 240px, the kit's offset from the band region's top
-  left: 50%;
-  z-index: -2;
-  width: min(70rem, 100%);
-  height: 30.375rem; // 486px
-  transform: translateX(-50%);
-  background: radial-gradient(
-    40rem 40rem at 50% 30%,
-    color-mix(in srgb, var(--cds-interactive) 22%, transparent),
-    transparent 60%
-  );
-  pointer-events: none;
-}
 
 // ---------------------------------------------------------------------------
 // Colour rhythm — 60 / 30 / 10

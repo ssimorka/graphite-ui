@@ -4,12 +4,12 @@ import { useCallback, useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 
 /**
- * The backdrop the middle of the page sits on, and the listeners that drift it.
+ * The grid behind 03 Capabilities, and the listeners that drift it.
  *
- * The kit parents "Grid lines — full bleed" (11896:292490) and a second "Hero
- * spotlight" (13400:6405) to Main content rather than to the hero, spanning
- * sections 02 through 05. This owns both, plus the custom properties the
- * grid's transform reads.
+ * The kit parents "Grid lines — full bleed" (11896:292490) to that section
+ * alone, sized to it. This owns the grid plus the custom properties its
+ * transform reads. (It once also owned a second spotlight and spanned 02
+ * through 05; the kit dropped both.)
  *
  * The motion is the hero's, not a variation on it: same scroll coefficient,
  * same pointer sway, same rAF batching, same reduced-motion bail-out. A client
@@ -68,7 +68,6 @@ export function PageBands({ children }: { children: ReactNode }) {
   return (
     <div className="page-bands" ref={ref} onPointerMove={handlePointerMove}>
       <div className="page-bands__grid" aria-hidden="true" />
-      <div className="page-bands__glow" aria-hidden="true" />
       {children}
     </div>
   )

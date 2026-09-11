@@ -6,6 +6,7 @@ import { Grid, Column } from '@carbon/react'
 import { Add } from '@carbon/icons-react'
 import type { ContractMeta } from '@/lib/contracts'
 import { Reveal } from '@/components/reveal'
+import { MeshGradient } from '@/components/mesh-gradient'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Notification } from '@/components/ui/notification'
@@ -57,6 +58,8 @@ export function ComponentWall({
 
   return (
     <section className={styles.section} aria-labelledby="wall-title">
+      {/* Kit 13535:15189, the neutralVariant variant. */}
+      <MeshGradient family="neutralVariant" />
       <Grid>
         <Column sm={4} md={8} lg={16}>
           <Reveal>

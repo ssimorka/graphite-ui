@@ -6,6 +6,11 @@
 // top and bottom. background and surface are the same hex, so the shadow and
 // the rules are the whole separation.
 .section {
+  // Holds the mesh gradient: isolated so its negative z-index stays in here,
+  // clipped so its overflow stops where the kit's does.
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   padding: var(--graphite-space-10) 0;
   background: var(--graphite-background);
   border-top: 1px solid var(--graphite-surface-variant);
