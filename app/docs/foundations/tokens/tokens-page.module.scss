@@ -133,13 +133,13 @@
   align-items: center;
   gap: var(--graphite-space-03);
   min-width: 0;
-  opacity: 0.72;
 }
 
 // The theme on screen reads at full strength; the other is still there to
-// compare against, one step quieter.
-.cellActive {
-  opacity: 1;
+// compare against, its label one step quieter. Only the text dims: fading the
+// swatch would misstate the colour it shows.
+.cell:not(.cellActive) .hex {
+  color: var(--graphite-on-surface-variant);
 }
 
 .cellText {

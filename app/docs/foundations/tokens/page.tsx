@@ -201,8 +201,8 @@ export default function TokensPage() {
               lede={
                 <>
                   Every role the engine resolves, with the ramp and tone it came
-                  from, in both themes. The column for the theme on screen is at
-                  full strength. How the roles are chosen is on{' '}
+                  from, in both themes. The theme on screen is marked active in
+                  the column head. How the roles are chosen is on{' '}
                   <a href="/docs/theming">Theming</a>; the ramps are on{' '}
                   <a href="/docs/foundations/color">Color</a>.
                 </>
