@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
+import { nextSurpriseHex } from '@/components/color-picker'
 import { Button } from '@/components/ui/button'
+import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'
 import type { LockKey } from './builder'
-import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
+import { DERIVED_ROLES, useControls } from './controls-model'
 import type { Control } from './controls-model'
 import { GetCodeDialog } from './get-code'
 import styles from './controls.module.scss'
@@ -113,6 +115,73 @@ function Section({
  * (Graphite UI Site 11835:286491). Source colour starts open, as the kit draws
  * it; the rest start collapsed.
  */
+const HEX_RE = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i
+
+/**
+ * The source field. The hex is typed straight in: six digits apply as soon as
+ * they are complete, three apply on Enter or blur (applying them live would
+ * repaint the page on the way to typing six), and anything else snaps back to
+ * the current source on blur. Escape cancels. Pick steps the same Surprise me sequence as the
+ * header popover, so the two buttons agree.
+ */
+function HexField({ value, onChange }: { value: string; onChange: (hex: string) => void }) {
+  const [draft, setDraft] = useState(value)
+  const [editing, setEditing] = useState(false)
+
+  // Follow the source when something else changes it (a preset, Shuffle, the
+  // header picker), but never overwrite what is being typed.
+  useEffect(() => {
+    if (!editing) setDraft(value)
+  }, [value, editing])
+
+  const valid = HEX_RE.test(draft.trim())
+  const commit = (raw: string) => {
+    const hex = normalizeHex(raw.trim().startsWith('#') ? raw.trim() : `#${raw.trim()}`)
+    if (hex.toUpperCase() !== value.toUpperCase()) onChange(hex)
+  }
+
+  return (
+    <div className={styles.field} data-invalid={!valid || undefined}>
+      <span
+        className={styles.current}
+        style={{ background: valid ? normalizeHex(draft.startsWith('#') ? draft : `#${draft}`) : value }}
+        aria-hidden="true"
+      />
+      <input
+        className={styles.hex}
+        value={draft}
+        maxLength={7}
+        spellCheck={false}
+        autoComplete="off"
+        aria-label="Source color hex"
+        aria-invalid={!valid || undefined}
+        onFocus={() => setEditing(true)}
+        onChange={(e) => {
+          const next = e.target.value.toUpperCase()
+          setDraft(next)
+          if (/^#?[0-9A-F]{6}$/.test(next.trim())) commit(next)
+        }}
+        onBlur={(e) => {
+          if (HEX_RE.test(e.currentTarget.value.trim())) commit(e.currentTarget.value)
+          setEditing(false)
+          setDraft(value)
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') e.currentTarget.blur()
+          if (e.key === 'Escape') {
+            e.currentTarget.value = value
+            setDraft(value)
+            e.currentTarget.blur()
+          }
+        }}
+      />
+      <button type="button" className={styles.pick} onClick={() => onChange(nextSurpriseHex())}>
+        Pick
+      </button>
+    </div>
+  )
+}
+
 export function ControlsPanel() {
   const controls = useControls()
   const b = useBuilder()
@@ -147,13 +216,7 @@ export function ControlsPanel() {
         lock={lockOf(source)}
       >
         <p className={styles.caption}>{CAPTIONS.source}</p>
-        <div className={styles.field}>
-          <span className={styles.current} style={{ background: source.value }} aria-hidden="true" />
-          <span className={styles.hex}>{source.value}</span>
-          <button type="button" className={styles.pick} onClick={openSourcePicker}>
-            Pick
-          </button>
-        </div>
+        <HexField value={source.value} onChange={(hex) => source.select(hex)} />
         <div className={styles.presets} role="group" aria-label="Presets">
           {source.options.map((o) => (
             <button

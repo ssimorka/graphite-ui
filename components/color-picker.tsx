@@ -32,6 +32,13 @@ const SURPRISE_PALETTE = [
 
 let surpriseIdx = Math.floor(Math.random() * SURPRISE_PALETTE.length)
 
+/** The next Surprise me colour. Shared, so the Create page's Pick and the
+ *  header popover step through one sequence rather than repeating each other. */
+export function nextSurpriseHex() {
+  surpriseIdx = (surpriseIdx + 1) % SURPRISE_PALETTE.length
+  return SURPRISE_PALETTE[surpriseIdx]
+}
+
 function clamp01(n: number) {
   return Math.min(1, Math.max(0, n))
 }
@@ -353,8 +360,7 @@ export function ColorPickerPopover({
               out the panel rather than sitting above the controls it affects. */}
           <button
             onClick={() => {
-              surpriseIdx = (surpriseIdx + 1) % SURPRISE_PALETTE.length
-              const hex = SURPRISE_PALETTE[surpriseIdx]
+              const hex = nextSurpriseHex()
               setInput(hex)
               onChange(hex)
             }}
