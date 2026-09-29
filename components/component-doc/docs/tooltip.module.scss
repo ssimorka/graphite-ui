@@ -1,0 +1,37 @@
+// Tooltip's own page parts: room around an open bubble, and the anatomy
+// markers. Nothing here restyles the component.
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.still {
+  display: inline-flex;
+}
+
+// The bubble is absolutely positioned, so the stage reserves the space it
+// opens into on every side.
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 9rem;
+}
+
+.anatomy {
+  padding-top: 3.5rem;
+}
+
+.markContent {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markTrigger {
+  top: 4.75rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
