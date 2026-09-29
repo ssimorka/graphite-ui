@@ -118,6 +118,10 @@
   border-left: 3px solid var(--graphite-primary);
 }
 
+.calloutWarning {
+  border-left-color: var(--graphite-warning);
+}
+
 .calloutTitle,
 .calloutBody {
   margin: 0;

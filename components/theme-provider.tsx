@@ -1,5 +1,6 @@
 'use client'
 
+import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import {
   createContext,
   useContext,
@@ -217,11 +218,10 @@ function carbonVarsFor(theme: BuiltTheme, states: BuiltStates) {
 
 const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
 
-// Sampled from the Graphite UI Kit cover: bucketing every chromatic pixel by
-// hue puts ~60% in the purple range, averaging this value. Seeding the source
-// with it means the whole system matches the cover on first open, before the
-// visitor has touched the color control.
-export const COVER_SOURCE_HEX = '#5e44aa'
+// The seeded default. Declared in lib/cover-source so server code can read the
+// value: an import from this 'use client' module arrives on the server as a
+// reference, not a string. Re-exported so existing importers keep their path.
+export { COVER_SOURCE_HEX }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<CarbonTheme>('g100')

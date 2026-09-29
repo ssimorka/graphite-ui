@@ -152,11 +152,14 @@ export function RampRow({
   ramp,
   copiedKey,
   onCopy,
+  scrollHint = 'Scroll for more',
 }: {
   name: string
   ramp: { stops: Stop[] }
   copiedKey: string | null
   onCopy: (key: string, hex: string) => void
+  /** The kit words this differently on the home page and the docs pages. */
+  scrollHint?: string
 }) {
   // Only the count comes from here; the track size lives in the stylesheet,
   // which is what keeps the stops and the weights on identical tracks.
@@ -194,7 +197,7 @@ export function RampRow({
           aria-hidden because it describes a pointer gesture: the row is a list
           of buttons and reachable by tab regardless. */}
       <p className="ramp__scroll-hint" aria-hidden="true">
-        Scroll for more
+        {scrollHint}
       </p>
     </div>
   )
