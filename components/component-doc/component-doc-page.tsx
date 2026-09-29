@@ -22,6 +22,26 @@ import styles from './component-doc.module.scss'
 const NOT_A_COLOUR = new Set(['spacing', 'text', 'motion', 'radius', 'density', 'font'])
 
 /**
+ * The page's sections, in page order. Exported so the search index lists the
+ * same sections the page renders, rather than a second copy of this list.
+ */
+export function componentToc(c: ComponentDocConfig) {
+  return [
+    { href: '#live-preview', label: 'Live preview' },
+    { href: '#installation', label: 'Installation' },
+    { href: '#anatomy', label: 'Anatomy' },
+    ...(c.variants?.length ? [{ href: '#variants', label: 'Variants' }] : []),
+    ...(c.states?.length ? [{ href: '#states', label: 'States' }] : []),
+    { href: '#api', label: 'API reference' },
+    { href: '#tokens', label: 'Design tokens' },
+    { href: '#usage', label: 'Usage' },
+    { href: '#accessibility', label: 'Accessibility' },
+    ...(c.parity?.length ? [{ href: '#parity', label: 'Figma parity' }] : []),
+    { href: '#related', label: 'Related' },
+  ]
+}
+
+/**
  * One component page, laid out as the Accordion page (Graphite UI Site
  * 11814:18) was. The contract supplies the version, wave, slots, props and
  * tokens; the config supplies the demos and the prose. So a page cannot
@@ -40,20 +60,7 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
   const hasVariants = !!c.variants?.length
   const hasStates = !!c.states?.length
   const hasParity = !!c.parity?.length
-
-  const toc = [
-    { href: '#live-preview', label: 'Live preview' },
-    { href: '#installation', label: 'Installation' },
-    { href: '#anatomy', label: 'Anatomy' },
-    ...(hasVariants ? [{ href: '#variants', label: 'Variants' }] : []),
-    ...(hasStates ? [{ href: '#states', label: 'States' }] : []),
-    { href: '#api', label: 'API reference' },
-    { href: '#tokens', label: 'Design tokens' },
-    { href: '#usage', label: 'Usage' },
-    { href: '#accessibility', label: 'Accessibility' },
-    ...(hasParity ? [{ href: '#parity', label: 'Figma parity' }] : []),
-    { href: '#related', label: 'Related' },
-  ]
+  const toc = componentToc(c)
 
   const swatch = (name: string) =>
     c.swatches && name in c.swatches

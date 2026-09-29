@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Asleep, Light, Menu, Close, LogoGithub, Search } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
@@ -9,6 +9,7 @@ import { Brand } from '@/components/brand'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { Modal } from '@/components/ui/modal'
 import { DOCS_NAV } from '@/components/docs-nav'
+import { SearchPalette } from '@/components/search/search-palette'
 import styles from './site-header.module.scss'
 
 // The kit's header nav, with every label pointed at something that exists:
@@ -57,8 +58,37 @@ export function SiteHeader() {
   const { theme, toggleTheme, sourceHex, setSourceHex } = useTheme()
   const isDark = theme === 'g100'
   const [menuOpen, setMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  // Stable, because the Overlay hook re-runs on a new onDismiss and would send
+  // focus back to the trigger while someone is typing.
+  const closeSearch = useCallback(() => setSearchOpen(false), [])
   const pathname = usePathname()
   const items = withCurrent(pathname)
+
+  // The hint names the key the reader has. Set after mount, so the server and
+  // the first client render agree on ⌘K.
+  const [searchKey, setSearchKey] = useState('⌘K')
+  useEffect(() => {
+    if (!/Mac|iPhone|iPad/.test(navigator.platform)) setSearchKey('Ctrl K')
+  }, [])
+
+  // ⌘K or Ctrl K anywhere, and "/" when not already typing into something.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null
+      const typing =
+        !!t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearchOpen((v) => !v)
+      } else if (e.key === '/' && !typing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <header className={styles.header}>
@@ -101,20 +131,31 @@ export function SiteHeader() {
         </nav>
 
         <div className={styles.actions}>
-          {/* Rendered because the kit's utility rail has it, disabled because
-              there is no search index behind it yet. A box that silently does
-              nothing is worse than one that says it is not ready. */}
-          <div className={styles.search}>
-            <Search size={16} className={styles.searchIcon} />
-            <input
-              type="search"
-              className={styles.searchInput}
-              placeholder="Search documentation"
-              aria-label="Search documentation (not yet available)"
-              title="Documentation search is not wired up yet"
-              disabled
-            />
-          </div>
+          {/* The kit's 232px field, as a button: it opens the search dialog
+              rather than taking input itself, so the results have room. Below
+              lg the kit hides the field; the icon button stands in for it. */}
+          <button
+            type="button"
+            className={styles.search}
+            aria-haspopup="dialog"
+            aria-keyshortcuts="Control+K Meta+K /"
+            onClick={() => setSearchOpen(true)}
+          >
+            <Search size={16} className={styles.searchIcon} aria-hidden="true" />
+            <span className={styles.searchPlaceholder}>Search docs</span>
+            <kbd className={styles.searchKey} aria-hidden="true">
+              {searchKey}
+            </kbd>
+          </button>
+          <button
+            type="button"
+            className={`${styles.action} ${styles.searchButton}`}
+            aria-label="Search documentation"
+            aria-haspopup="dialog"
+            onClick={() => setSearchOpen(true)}
+          >
+            <Search size={18} />
+          </button>
 
           <a
             className={`${styles.action} ${styles.repo}`}
@@ -187,6 +228,7 @@ export function SiteHeader() {
           </div>
         }
       />
+      <SearchPalette open={searchOpen} onClose={closeSearch} />
     </header>
   )
 }

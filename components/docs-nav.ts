@@ -73,3 +73,24 @@ export const COLOR_DOCS_TOC: TocItem[] = [
   { href: '#patterns', label: 'Pattern reference' },
   { href: '#glossary', label: 'Glossary' },
 ]
+
+// The Installation and Color ramps pages' contents. Here rather than in the
+// page files because a page may only export what Next allows, and the search
+// index reads every page's sections from this one place.
+export const INSTALLATION_TOC: TocItem[] = [
+  { href: '#requirements', label: 'Requirements' },
+  { href: '#create', label: 'Create the project' },
+  { href: '#run-it', label: 'Run it' },
+  { href: '#webpack', label: 'Why webpack' },
+  { href: '#checks', label: 'Checks' },
+  { href: '#next-steps', label: 'Next steps' },
+]
+
+export const COLOR_RAMPS_TOC: TocItem[] = [
+  { href: '#accent', label: 'Accent' },
+  { href: '#secondary', label: 'Secondary' },
+  { href: '#neutral', label: 'Neutral' },
+  { href: '#neutral-variant', label: 'Neutral variant' },
+  { href: '#sampling', label: 'How stops are sampled' },
+  { href: '#divergence', label: 'Known divergence' },
+]
