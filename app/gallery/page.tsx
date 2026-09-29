@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
 import { DOCS_NAV } from '@/components/docs-nav'
 import { ComponentsIndex } from '@/components/sections/components-index'
-import { Gallery } from '@/components/sections/gallery'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { readComponentsIndex } from '@/lib/components-index'
 import { readContracts } from '@/lib/contracts'
@@ -28,7 +27,6 @@ export default function GalleryPage() {
           stats={readKitStats()}
           index={readComponentsIndex(Object.keys(contracts))}
         />
-        <Gallery contracts={contracts} />
       </DocsShell>
       <SiteFooter />
     </main>
