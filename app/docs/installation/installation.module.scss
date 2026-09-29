@@ -1,0 +1,198 @@
+// The Installation page: the parts of the kit frame (11857:2470) that belong to
+// this page alone. The shared pieces live in components/doc-blocks.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Prose under a block: body/2, with inline code set in the mono face.
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+}
+
+.requirements th {
+  width: 110px;
+  white-space: nowrap;
+}
+
+// The head row is the surfaceVariant band; Command reads primary, as in the kit.
+.checks thead th {
+  background: var(--graphite-surface-variant);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+
+  &:nth-child(2) {
+    color: var(--graphite-primary);
+  }
+
+  &:nth-child(3) {
+    color: var(--graphite-on-surface-variant);
+  }
+}
+
+.checks tbody th {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+}
+
+.command {
+  color: var(--graphite-primary);
+
+  // Room for `pnpm component-doc-drift` on one line once the page has the width.
+  @media (min-width: 1056px) {
+    white-space: nowrap;
+  }
+}
+
+// `danger` says "this gate is fatal" in text as well as colour, so the word
+// carries it and the hue only reinforces.
+.gate {
+  color: var(--graphite-danger);
+}
+
+// Below md the four columns leave ~60px each and identifiers wrap to four
+// lines, which is what the kit's "Table row · Small" exists to avoid: the name
+// on its own line, command and gate as one wrapping meta line, then the prose.
+// The column head has nothing to head in that layout, so it is dropped.
+@media (max-width: 671px) {
+  .checks {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--graphite-space-02) var(--graphite-space-04);
+      padding: var(--graphite-space-04) var(--graphite-space-05);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    tbody th {
+      grid-column: 1 / -1;
+    }
+
+    td:last-child {
+      grid-column: 1 / -1;
+      font-size: var(--graphite-text-body-2-size);
+    }
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

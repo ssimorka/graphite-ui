@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import type { ContractMeta } from '@/app/gallery/page'
+import type { ContractMeta } from '@/lib/contracts'
+import { specimenId } from '@/components/sections/components-index'
 import { Notification } from '@/components/ui/notification'
 import { Tag } from '@/components/ui/tag'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
@@ -49,10 +50,24 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
   const [dialogOpen, setDialogOpen] = useState(false)
   const [sort, setSort] = useState<Sort>({ key: 'name', direction: 'asc' })
 
-  const Specimen = ({ name, note, children }: { name: string; note?: string; children: ReactNode }) => {
+  const Specimen = ({
+    name,
+    note,
+    anchor,
+    children,
+  }: {
+    name: string
+    note?: string
+    /** The first specimen of a component carries the id the index links to. */
+    anchor?: boolean
+    children: ReactNode
+  }) => {
     const meta = contracts[name]
     return (
-      <section className={styles.specimen}>
+      <section
+        id={anchor && meta ? specimenId(meta.slug) : undefined}
+        className={styles.specimen}
+      >
         <div className={styles.head}>
           <h3 className={styles.name}>{name}</h3>
           {meta ? <span className={styles.version}>v{meta.version}</span> : null}
@@ -87,16 +102,18 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
 
   return (
     <div className={styles.page}>
-      <Typography variant="heading-1">Components</Typography>
+      <h2 id="specimens" className={styles.heading}>
+        Specimens
+      </h2>
       <p className={styles.lede}>
         Every Tier 1 component, rendered from the same generated tokens as the
-        rest of the site — change the source color and this page moves with it.
+        rest of the site: change the source color and this page moves with it.
         Each carries the version of the contract it implements, read from the
         contract file at build time rather than typed here.
       </p>
 
       <Wave n="0">
-        <Specimen name="Button" note="One primary action per group — a Modal footer refuses a second, and destructive work takes danger rather than primary.">
+        <Specimen anchor name="Button" note="One primary action per group — a Modal footer refuses a second, and destructive work takes danger rather than primary.">
           <Button variant="primary">Primary</Button>
           <Button>Secondary</Button>
           <Button variant="ghost">Ghost</Button>
@@ -118,14 +135,14 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="1">
-        <Specimen name="Typography">
+        <Specimen anchor name="Typography">
           <div className={styles.stack}>
             <Typography variant="heading-3">Heading three</Typography>
             <Typography>Body text sits at the default variant.</Typography>
             <Typography variant="caption">Caption</Typography>
           </div>
         </Specimen>
-        <Specimen name="Tag" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
+        <Specimen anchor name="Tag" note="Numeric badges cap rather than overflow; the true value stays in the accessible name.">
           <Tag>neutral</Tag>
           <Tag variant="primary">primary</Tag>
           <Tag variant="danger">danger</Tag>
@@ -133,7 +150,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
           <Tag variant="success">success</Tag>
           <Tag>{1200}</Tag>
         </Specimen>
-        <Specimen name="Progress bar">
+        <Specimen anchor name="Progress bar">
           <div className={styles.stack}>
             <ProgressBar value={62} label="Determinate example" />
             <ProgressBar variant="indeterminate" label="Indeterminate example" />
@@ -142,26 +159,26 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="2">
-        <Specimen name="Text input">
+        <Specimen anchor name="Text input">
           <div className={styles.stack}>
             <TextInput id="g-in" label="Default" placeholder="Default" />
             <TextInput id="g-in-e" label="Error" state="error" defaultValue="Error state" />
             <TextInput id="g-in-d" label="Disabled" state="disabled" defaultValue="Disabled" />
           </div>
         </Specimen>
-        <Specimen name="Text area">
+        <Specimen anchor name="Text area">
           <div className={styles.stack}>
             <TextArea id="g-ta" label="Notes" defaultValue="Resizes vertically only." />
           </div>
         </Specimen>
-        <Specimen name="Checkbox" note="Indeterminate is a distinct glyph, not a recolored check.">
+        <Specimen anchor name="Checkbox" note="Indeterminate is a distinct glyph, not a recolored check.">
           <div className={styles.stack}>
             <Checkbox id="g-cb" label="Checked" checked={checked} onChange={setChecked} />
             <Checkbox id="g-cb2" label="Indeterminate" indeterminate />
             <Checkbox id="g-cb3" label="Disabled" disabled />
           </div>
         </Specimen>
-        <Specimen name="Radio button group" note="A group legend is required; option labels alone are not enough.">
+        <Specimen anchor name="Radio button group" note="A group legend is required; option labels alone are not enough.">
           <RadioButtonGroup
             name="g-radio"
             label="Group legend"
@@ -174,10 +191,10 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             ]}
           />
         </Specimen>
-        <Specimen name="Toggle" note="Labels name the setting, never the state.">
+        <Specimen anchor name="Toggle" note="Labels name the setting, never the state.">
           <Toggle id="g-sw" label="Notifications" checked={switched} onChange={setSwitched} />
         </Specimen>
-        <Specimen name="Select" note="A native select, so type-ahead and arrow keys survive.">
+        <Specimen anchor name="Select" note="A native select, so type-ahead and arrow keys survive.">
           <div className={styles.stack}>
             <Select
               id="g-sel"
@@ -199,7 +216,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="4">
-        <Specimen name="Contained list" note="The row primitive DataTable composes from — its hover is the same token DataTable uses.">
+        <Specimen anchor name="Contained list" note="The row primitive DataTable composes from — its hover is the same token DataTable uses.">
           <div className={styles.stack}>
             <ContainedList
               interactive
@@ -210,7 +227,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             />
           </div>
         </Specimen>
-        <Specimen name="Tabs" note="Inactive panels stay mounted, so form state in a tab survives switching away.">
+        <Specimen anchor name="Tabs" note="Inactive panels stay mounted, so form state in a tab survives switching away.">
           <div className={styles.stack}>
             <Tabs
               tabs={[
@@ -220,7 +237,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             />
           </div>
         </Specimen>
-        <Specimen name="Breadcrumb" note="Long trails collapse their middle rather than wrapping; the last crumb is not a link.">
+        <Specimen anchor name="Breadcrumb" note="Long trails collapse their middle rather than wrapping; the last crumb is not a link.">
           <Breadcrumb
             items={[
               { label: 'Home', href: '/' },
@@ -231,7 +248,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             ]}
           />
         </Specimen>
-        <Specimen name="Navigation Menu" note="Two levels only — a third would be a page, not a deeper flyout.">
+        <Specimen anchor name="Navigation Menu" note="Two levels only — a third would be a page, not a deeper flyout.">
           <NavigationMenu
             items={[
               { label: 'System', href: '#', current: true, items: [{ label: 'Color', href: '#' }] },
@@ -242,17 +259,17 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="5">
-        <Specimen name="Tooltip" note="Supplementary only, and never interactive — a tooltip you can click into is a Popover.">
+        <Specimen anchor name="Tooltip" note="Supplementary only, and never interactive — a tooltip you can click into is a Popover.">
           <Tooltip content="Supplementary text">
             <Button>Hover or focus me</Button>
           </Tooltip>
         </Specimen>
-        <Specimen name="Popover" note="Escape dismisses and focus returns to the trigger, from the shared Overlay base.">
+        <Specimen anchor name="Popover" note="Escape dismisses and focus returns to the trigger, from the shared Overlay base.">
           <Popover defaultOpen trigger={(p) => <Button {...p}>Open popover</Button>}>
             <Typography>Interactive content is allowed here.</Typography>
           </Popover>
         </Specimen>
-        <Specimen name="Menu" note="Destructive items never read as neutral ones.">
+        <Specimen anchor name="Menu" note="Destructive items never read as neutral ones.">
           <Menu
             trigger={(p) => <Button {...p}>Open menu</Button>}
             items={[
@@ -262,7 +279,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             ]}
           />
         </Specimen>
-        <Specimen name="Modal" note="Traps focus, returns it to the trigger on close, and never stacks.">
+        <Specimen anchor name="Modal" note="Traps focus, returns it to the trigger on close, and never stacks.">
           <Button variant="primary" onClick={() => setDialogOpen(true)}>Open dialog</Button>
           <Modal
             open={dialogOpen}
@@ -272,7 +289,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
             footer={<Button variant="primary" onClick={() => setDialogOpen(false)}>Close</Button>}
           />
         </Specimen>
-        <Specimen name="Notification" note="Inline and persistent — not a toast, which is Tier 2 with its own timing contract.">
+        <Specimen anchor name="Notification" note="Inline and persistent — not a toast, which is Tier 2 with its own timing contract.">
           <div className={styles.stack}>
             <Notification variant="info" title="Info" body="Informational alert." />
             <Notification variant="danger" title="Danger" body="Danger alert." />
@@ -283,7 +300,7 @@ export function Gallery({ contracts }: { contracts: Record<string, ContractMeta>
       </Wave>
 
       <Wave n="6">
-        <Specimen name="Data table" note="Sticky headers survive scroll, and row hover is ContainedList's token rather than a table-specific highlight.">
+        <Specimen anchor name="Data table" note="Sticky headers survive scroll, and row hover is ContainedList's token rather than a table-specific highlight.">
           <DataTable<Row>
             caption="Members"
             columns={[
