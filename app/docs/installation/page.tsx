@@ -12,6 +12,8 @@ import {
   StatusBadge,
   Step,
 } from '@/components/doc-blocks'
+import { readKitStats } from '@/lib/kit-stats'
+import { spell } from '@/lib/spell'
 import styles from './installation.module.scss'
 
 export const metadata: Metadata = {
@@ -222,8 +224,7 @@ export default function InstallationPage() {
             />
             <NextCards>
               <NextCard href="/gallery" title="Components">
-                Twenty-two governed components, each with its contract version
-                on the page.
+                {`${spell(readKitStats().governed)} governed components, each with its contract version on the page.`}
               </NextCard>
               <NextCard href="/docs#how-it-works" title="Theming">
                 How one source color becomes eight ramps and thirty-two roles.

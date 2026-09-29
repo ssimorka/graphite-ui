@@ -1,0 +1,281 @@
+// The Accordion component page (Graphite UI Site 11814:18). Only what is
+// specific to this component lives here; the parts every component page shares
+// are in components/component-page.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-03) var(--graphite-space-03);
+  padding-top: var(--graphite-space-02);
+}
+
+.figmaLink {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ------------------------------------------------------------------ preview
+.live {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 10rem;
+  margin-left: auto;
+}
+
+.previewSurface {
+  padding: 3.5rem var(--graphite-space-05);
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+
+  @media (min-width: 672px) {
+    padding: 3.5rem 3rem;
+  }
+}
+
+.previewInner {
+  max-width: 35rem;
+  margin: 0 auto;
+}
+
+// ------------------------------------------------------------------- anatomy
+.diagram {
+  position: relative;
+  padding: 3rem var(--graphite-space-09) 3rem 3.25rem;
+  background: var(--graphite-surface-variant);
+
+  @media (min-width: 672px) {
+    padding: 3rem 4.5rem;
+  }
+}
+
+.diagramItem {
+  position: relative;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+// The markers sit on the item's edge, outside the rule, so they never cover the
+// text they point at.
+.marker {
+  position: absolute;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--graphite-radius-full);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  font-size: var(--graphite-text-caption-2-size);
+  font-weight: 500;
+}
+
+.markTrigger {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markIndicator {
+  top: 1.25rem;
+  right: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markPanel {
+  top: 4.25rem;
+  left: -2.25rem;
+}
+
+.slotList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Small: marker, name and requirement share the first line, the note takes the
+// second. Medium and up: four columns.
+.slotRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--graphite-space-02) var(--graphite-space-05);
+  padding: var(--graphite-space-04) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+  align-items: start;
+
+  @media (min-width: 672px) {
+    grid-template-columns: auto 6rem 5rem minmax(0, 1fr);
+  }
+}
+
+.slotMarker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 2px;
+  border-radius: var(--graphite-radius-full);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  font-size: var(--graphite-text-caption-2-size);
+  font-weight: 500;
+}
+
+.slotName,
+.slotReq,
+.slotNotes {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.slotName {
+  color: var(--graphite-on-surface);
+}
+
+.slotReq,
+.slotNotes {
+  color: var(--graphite-on-surface-variant);
+}
+
+.slotNotes {
+  grid-column: 2 / -1;
+
+  @media (min-width: 672px) {
+    grid-column: auto;
+  }
+}
+
+// ------------------------------------------------------------------- variants
+.variants {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+}
+
+// ------------------------------------------------------------------- states
+// The kit draws Hover and Focus as variants; the code has them as pseudo-classes.
+// To put them side by side without asking anyone to hold a pointer down, the
+// matrix forces the same declarations the pseudo-classes carry, through the
+// data-slot hooks the component exposes. Nothing here restyles the component.
+.matrix {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.matrixRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  background: var(--graphite-surface);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  @media (min-width: 672px) {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--graphite-space-06);
+  }
+}
+
+.matrixLabel {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.forceHover [data-slot='accordion-trigger'] {
+  background: var(--graphite-surface-variant);
+}
+
+.forceFocus [data-slot='accordion-trigger'] {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// ------------------------------------------------------------------ TOC footer
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

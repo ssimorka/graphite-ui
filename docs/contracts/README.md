@@ -258,8 +258,7 @@ and the fold is recorded on the governing contract so the functionality stays
 findable.
 
 **In scope, awaiting demand.** Primitives Graphite has no contract for but
-plausibly wants — Link, Search, Slider, Pagination, Date picker, File uploader,
-Accordion.
+plausibly wants — Link, Search, Slider, Pagination, Date picker, File uploader.
 Ungoverned until something asks: the repo uses one, a contract references one,
 or committed work needs one. Wanting it in the abstract is not demand.
 
@@ -273,10 +272,11 @@ restated here.
 
 ### What the rule decides today
 
-Exactly one adoption. **Accordion** already meets the demand test twice over:
-`components/sections/faq.tsx` uses Carbon's today, and it is the only new
-contract the docs-site work requires. Everything else on the in-scope list
-stays ungoverned until it earns a contract the same way.
+Exactly one adoption, now made. **Accordion** met the demand test twice over:
+`components/sections/faq.tsx` used Carbon's, and it was the only new contract
+the docs-site work required. It has a contract (1.0.0), an implementation, and
+the FAQ is on it. Everything else on the in-scope list stays ungoverned until it
+earns a contract the same way.
 
 ---
 
@@ -349,7 +349,7 @@ Text input, Text area, Checkbox, Radio button group, Toggle, Select
 None. This wave held Field, which wrapped Label, an input atom and help/error text. Both were removed when the code took the kit's shape: the kit ships no standalone label and no field wrapper, so every form control carries its own label and supporting text. See #94 and #107.
 
 **Wave 4 — Layout & navigation**
-Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu is complete but was never inverted, because the kit is silent on it rather than in disagreement — see #113 and the application-shells bullet above.
+Accordion, Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu is complete but was never inverted, because the kit is silent on it rather than in disagreement — see #113 and the application-shells bullet above.
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
 Overlay (internal: the shared pattern the other five implement), Tooltip, Popover, Menu, Modal, Notification

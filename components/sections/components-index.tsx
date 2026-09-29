@@ -6,6 +6,7 @@ import type { ContractMeta } from '@/lib/contracts'
 import type { KitStats } from '@/lib/kit-stats'
 import type { IndexStats } from '@/lib/components-index'
 import { StatusBadge } from '@/components/doc-blocks'
+import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
@@ -22,6 +23,7 @@ import { TextArea } from '@/components/ui/text-area'
 import { TextInput } from '@/components/ui/text-input'
 import { Toggle } from '@/components/ui/toggle'
 import { Typography } from '@/components/ui/typography'
+import { spell } from '@/lib/spell'
 import styles from './components-index.module.scss'
 
 type Filter = 'all' | 'governed' | 'ungoverned' | 'forms' | 'overlays'
@@ -49,6 +51,12 @@ const SPECIMENS = new Set([
   'Toggle', 'Tooltip', 'Typography',
 ])
 
+// Components with a page of their own. A card opens it instead of scrolling to
+// the specimen below; the rest of the wall follows as their pages are built.
+const PAGES: Record<string, string> = {
+  Accordion: '/docs/components/accordion',
+}
+
 export const specimenId = (slug: string) => `specimen-${slug}`
 
 const noop = () => {}
@@ -57,6 +65,14 @@ const noop = () => {}
 // source-colour change moves the index with the rest of the site. Overlays are
 // shown by their trigger: opening one inside a card would fight the card.
 const PREVIEWS: Record<string, () => ReactNode> = {
+  Accordion: () => (
+    <Accordion size="sm" defaultValue="a" style={{ width: '100%' }}>
+      <AccordionItem value="a" title="Section">
+        Panel content.
+      </AccordionItem>
+      <AccordionItem value="b" title="Section" />
+    </Accordion>
+  ),
   Button: () => <Button variant="primary">Button</Button>,
   'Button Group': () => (
     <ButtonGroup>
@@ -130,23 +146,6 @@ const PREVIEWS: Record<string, () => ReactNode> = {
       <Typography>Body text</Typography>
     </div>
   ),
-}
-
-const WORDS_UNDER_TWENTY = [
-  'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-  'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
-  'seventeen', 'eighteen', 'nineteen',
-]
-const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
-
-// The lede spells the count, as the kit's copy does. Derived rather than typed
-// so it cannot go stale when a contract is added.
-function spell(n: number): string {
-  const s =
-    n < 20
-      ? WORDS_UNDER_TWENTY[n]
-      : TENS[Math.floor(n / 10)] + (n % 10 ? `-${WORDS_UNDER_TWENTY[n % 10]}` : '')
-  return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 type Card =
@@ -263,9 +262,10 @@ export function ComponentsIndex({
                   <a
                     className={styles.nameLink}
                     href={
-                      SPECIMENS.has(card.name)
+                      PAGES[card.name] ??
+                      (SPECIMENS.has(card.name)
                         ? `#${specimenId(card.meta.slug)}`
-                        : `https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/${card.meta.slug}.md`
+                        : `https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/${card.meta.slug}.md`)
                     }
                   >
                     {card.name}

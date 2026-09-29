@@ -80,7 +80,7 @@ const CAPABILITIES: {
   },
   {
     key: 'components',
-    title: '22 governed components',
+    title: 'Governed components', // the count is prefixed at render, see titleOf
     body: 'Each one may not change without its contract changing first.',
     caption: 'One chip per contract file in docs/contracts.',
   },
@@ -503,6 +503,11 @@ export function Capabilities({
   const [active, setActive] = useState(0)
   const [reduced, setReduced] = useState(false)
 
+  // The components capability quotes the contract count, so it is read from
+  // the contracts passed in rather than written into the table above.
+  const titleOf = (c: (typeof CAPABILITIES)[number]) =>
+    c.key === 'components' ? `${contracts.length} governed components` : c.title
+
   const trackRef = useRef<HTMLElement>(null)
   const paneRef = useRef<HTMLDivElement>(null)
   const fills = useRef<(HTMLSpanElement | null)[]>([])
@@ -655,7 +660,7 @@ export function Capabilities({
                           onClick={() => goTo(i)}
                         >
                           <span className="cap-item__title">
-                            {capability.title}
+                            {titleOf(capability)}
                           </span>
                         </button>
                         {/* Mounted only while active rather than hidden: it keeps
@@ -722,7 +727,7 @@ export function Capabilities({
                   <li key={capability.key} className="cap-stack__item">
                     <Reveal>
                       <div className="cap-stack__head">
-                        <h3 className="cap-stack__title">{capability.title}</h3>
+                        <h3 className="cap-stack__title">{titleOf(capability)}</h3>
                         <p className="cap-stack__body">{capability.body}</p>
                       </div>
                       <div className="cap-stage cap-stage--static">

@@ -18,7 +18,10 @@ export const DOCS_NAV: DocsNavGroup[] = [
     // /gallery is the Components index until S3 adds /docs/components/[slug].
     // It renders inside this shell, so the sidebar is how you get back to it.
     label: 'Components',
-    items: [{ href: '/gallery', label: 'Overview' }],
+    items: [
+      { href: '/gallery', label: 'Overview' },
+      { href: '/docs/components/accordion', label: 'Accordion' },
+    ],
   },
 ]
 
