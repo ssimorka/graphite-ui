@@ -67,15 +67,27 @@ export function Step({
 /** The rule a reader should leave the section with. */
 export function Callout({
   title,
+  tone = 'primary',
   children,
 }: {
   title: string
+  /** `warning` marks a known gap the reader should not "fix". */
+  tone?: 'primary' | 'warning'
+  /** One node per paragraph, so a callout can carry more than one. */
   children: ReactNode
 }) {
   return (
-    <aside className={styles.callout}>
+    <aside className={`${styles.callout} ${tone === 'warning' ? styles.calloutWarning : ''}`}>
       <p className={styles.calloutTitle}>{title}</p>
-      <p className={styles.calloutBody}>{children}</p>
+      {Array.isArray(children) ? (
+        children.map((c, i) => (
+          <p key={i} className={styles.calloutBody}>
+            {c}
+          </p>
+        ))
+      ) : (
+        <p className={styles.calloutBody}>{children}</p>
+      )}
     </aside>
   )
 }

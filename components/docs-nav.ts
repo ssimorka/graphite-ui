@@ -11,8 +11,15 @@ export const DOCS_NAV: DocsNavGroup[] = [
     label: 'Getting started',
     items: [
       { href: '/docs/installation', label: 'Installation' },
-      { href: '/docs', label: 'Color' },
+      // The color essay: how a source becomes ramps and roles. It was labelled
+      // Color until Foundations gave that name to the ramps page; the kit's
+      // Installation next-steps card already calls it Theming.
+      { href: '/docs', label: 'Theming' },
     ],
+  },
+  {
+    label: 'Foundations',
+    items: [{ href: '/docs/foundations/color', label: 'Color' }],
   },
   {
     // /gallery is the Components index until S3 adds /docs/components/[slug].

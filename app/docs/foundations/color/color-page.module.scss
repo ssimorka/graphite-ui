@@ -1,0 +1,129 @@
+// The Color ramps page (Graphite UI Site 11870:291488). The strips themselves are
+// RampRow's, styled in globals.scss; this file is the page around them.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// ---------------------------------------------------------------------- ramps
+.ramps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+// The home page sets a ramp's name as a small mono caption. The docs frame sets
+// it as a section title (Title/3, sentence case), and puts "source" under its
+// weight rather than beside it, because at 72px a stop has no room for
+// "500 · source" on one line. Both are RampRow's own classes, restyled only
+// inside this page.
+.ramps :global(.ramp__label) {
+  margin-bottom: var(--graphite-space-04);
+  font-family: inherit;
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--graphite-on-surface);
+}
+
+.ramps :global(.ramp__source) {
+  display: block;
+
+  &::before {
+    content: none;
+  }
+}
+
+// A ramp is a section so the TOC can point at it; the scroll margin keeps its
+// title clear of the 64px header when it is jumped to.
+.ramp {
+  scroll-margin-top: 5rem;
+}
+
+.hint {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ----------------------------------------------------------------- prose
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
