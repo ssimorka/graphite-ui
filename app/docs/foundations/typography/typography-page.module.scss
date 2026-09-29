@@ -136,6 +136,14 @@
   color: var(--graphite-on-surface);
 }
 
+// In the variant table the sample wraps rather than truncating: the table
+// stacks below md and a nowrap cell would push it past the viewport.
+.variantSample {
+  display: block;
+  color: var(--graphite-on-surface);
+  overflow-wrap: anywhere;
+}
+
 // ----------------------------------------------------------------- tables
 .table {
   width: 100%;

@@ -171,12 +171,60 @@
     padding: var(--graphite-space-03) var(--graphite-space-04);
   }
 
-  .density td:nth-child(2) {
-    display: none;
+  // A scale row becomes two lines: name and value, then the bar full width,
+  // so the 160px step fits beside nothing and never pushes the page sideways.
+  .scale {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--graphite-space-03) var(--graphite-space-04);
+      padding: var(--graphite-space-03) var(--graphite-space-04);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    .barCell {
+      grid-column: 1 / -1;
+    }
   }
 
-  .density thead th:nth-child(2) {
-    display: none;
+  // Density stacks the same way: name and size, then the specimen. The alias
+  // column goes, as the scale table directly above spells out every step.
+  .density {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--graphite-space-03) var(--graphite-space-04);
+      padding: var(--graphite-space-03) var(--graphite-space-04);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    td:nth-child(2) {
+      display: none;
+    }
+
+    .specimenCell {
+      grid-column: 1 / -1;
+    }
   }
 }
 

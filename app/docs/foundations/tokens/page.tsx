@@ -13,7 +13,6 @@ import {
   StatusBadge,
 } from '@/components/doc-blocks'
 import { NotesList, RefTable } from '@/components/component-page'
-import { spell } from '@/lib/spell'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import {
   groupFoundations,
@@ -232,7 +231,7 @@ export default function TokensPage() {
           <section id="foundations" className={styles.block}>
             <SectionHeading
               title="Foundation tokens"
-              lede={`${spell(f.desktop.length)} variables in ${groups.length} groups, the same in both themes. Mobile restates ${f.mobile.length} type values below ${(f.mobileMaxWidth ?? 0) + 1}px.`}
+              lede={`${f.desktop.length} variables in ${groups.length} groups, the same in both themes. Mobile restates ${f.mobile.length} type values below ${(f.mobileMaxWidth ?? 0) + 1}px.`}
             />
             <div className={styles.groups}>
               {inline.map((g) => (

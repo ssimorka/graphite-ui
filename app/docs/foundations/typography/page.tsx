@@ -272,9 +272,8 @@ export default function TypographyPage() {
                 `font-${v.family}`,
                 <span
                   key="s"
-                  className={styles.sample}
+                  className={styles.variantSample}
                   style={{
-                    display: 'block',
                     fontFamily: `var(--graphite-font-${v.family})`,
                     fontSize: `var(--graphite-text-${v.step}-size)`,
                     lineHeight: `var(--graphite-text-${v.step}-line-height)`,
