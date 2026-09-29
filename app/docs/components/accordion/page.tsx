@@ -343,10 +343,10 @@ export default function AccordionPage() {
             />
             <RelatedChips
               items={[
-                { href: '/gallery#specimen-tabs', title: 'Tabs', why: 'the other disclosure' },
-                { href: '/gallery#specimen-contained-list', title: 'Contained list', why: 'when nothing should be hidden' },
-                { href: '/gallery#specimen-modal', title: 'Modal', why: 'when it should interrupt' },
-                { href: '/gallery#specimen-typography', title: 'Typography', why: 'the trigger label’s type' },
+                { href: 'https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/tabs.md', title: 'Tabs', why: 'the other disclosure' },
+                { href: 'https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/contained-list.md', title: 'Contained list', why: 'when nothing should be hidden' },
+                { href: 'https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/modal.md', title: 'Modal', why: 'when it should interrupt' },
+                { href: 'https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/typography.md', title: 'Typography', why: 'the trigger label’s type' },
               ]}
             />
           </section>

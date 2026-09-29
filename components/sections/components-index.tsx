@@ -42,22 +42,11 @@ const FILTERS: { key: Filter; label: string }[] = [
 // governed but there is nothing to put in a card.
 const NO_PREVIEW = new Set(['Overlay'])
 
-// Components whose gallery specimen carries an id (see gallery.tsx). A card
-// opens it; the rest fall back to the contract file.
-const SPECIMENS = new Set([
-  'Breadcrumb', 'Button', 'Checkbox', 'Contained list', 'Data table', 'Menu',
-  'Modal', 'Navigation Menu', 'Notification', 'Popover', 'Progress bar',
-  'Radio button group', 'Select', 'Tabs', 'Tag', 'Text area', 'Text input',
-  'Toggle', 'Tooltip', 'Typography',
-])
-
-// Components with a page of their own. A card opens it instead of scrolling to
-// the specimen below; the rest of the wall follows as their pages are built.
+// Components with a page of their own. A card opens it; the rest open their
+// contract file until their pages are built.
 const PAGES: Record<string, string> = {
   Accordion: '/docs/components/accordion',
 }
-
-export const specimenId = (slug: string) => `specimen-${slug}`
 
 const noop = () => {}
 
@@ -263,9 +252,7 @@ export function ComponentsIndex({
                     className={styles.nameLink}
                     href={
                       PAGES[card.name] ??
-                      (SPECIMENS.has(card.name)
-                        ? `#${specimenId(card.meta.slug)}`
-                        : `https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/${card.meta.slug}.md`)
+                      `https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/${card.meta.slug}.md`
                     }
                   >
                     {card.name}
