@@ -24,6 +24,10 @@ const ONE_COLUMN_ORDER = [
 // 800px preview.
 const TWO_COLUMNS_AT = 600
 const WIDE_EXAMPLES_AT = 780
+// Three columns from 1100px: each is still about the kit's 364px card. The kit
+// draws nothing wider than 800, so past that the examples flow into CSS columns
+// (balanced by the browser) rather than stretching two columns.
+const THREE_COLUMNS_AT = 1100
 
 /** The frame width each device stands for. Desktop fills whatever it is given. */
 const DEVICE_WIDTH: Record<DeviceKey, string | undefined> = {
@@ -66,6 +70,7 @@ export function Preview() {
 
   const wide = width >= WIDE_EXAMPLES_AT
   const twoColumns = width >= TWO_COLUMNS_AT
+  const threeColumns = width >= THREE_COLUMNS_AT
   const shown = CARDS.filter((c) => wide || !c.desktopOnly)
 
   const byId = new Map(shown.map((c) => [c.id, c]))
@@ -96,7 +101,17 @@ export function Preview() {
           data-density={density}
           style={{ ...previewStyle, maxWidth: DEVICE_WIDTH[device] }}
         >
-          {twoColumns ? (
+          {threeColumns ? (
+            <div className={styles.flow}>
+              {[1, 2].flatMap((col) =>
+                shown.filter((c) => c.column === col).map((c) => (
+                  <div key={c.id} className={styles.flowItem}>
+                    {renderCard(c)}
+                  </div>
+                )),
+              )}
+            </div>
+          ) : twoColumns ? (
             <div className={styles.columns}>
               <div className={styles.column}>
                 {shown.filter((c) => c.column === 1).map(renderCard)}

@@ -72,6 +72,18 @@
   align-items: start;
 }
 
+// Past the kit's widest frame: balanced CSS columns, so cards keep their
+// designed width instead of stretching. break-inside keeps a card whole.
+.flow {
+  column-count: 3;
+  column-gap: var(--graphite-space-06);
+}
+
+.flowItem {
+  break-inside: avoid;
+  margin-bottom: var(--graphite-space-06);
+}
+
 .column {
   display: flex;
   flex-direction: column;
