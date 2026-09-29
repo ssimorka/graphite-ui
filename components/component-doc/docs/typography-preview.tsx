@@ -64,9 +64,13 @@ export function TypographyPreview() {
         </>
       }
       preview={
-        <Typography variant={variant} weight={weight}>
-          {TEXT}
-        </Typography>
+        // A heading variant is a real h1 to h4; hidden from the outline for the
+        // same reason as the specimens on the page.
+        <div aria-hidden={variant === 'display' || variant.startsWith('heading') ? true : undefined}>
+          <Typography variant={variant} weight={weight}>
+            {TEXT}
+          </Typography>
+        </div>
       }
       code={codeFor(variant, weight)}
     />

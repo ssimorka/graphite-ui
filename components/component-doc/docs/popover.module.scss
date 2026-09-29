@@ -1,0 +1,39 @@
+// Popover's own page parts: room around an open panel, and the anatomy
+// markers. Nothing here restyles the component.
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  white-space: nowrap;
+}
+
+// A panel is absolutely positioned, so the stage reserves the space it opens
+// into. Each placement gets the side it needs.
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 15rem;
+}
+
+.anatomy {
+  min-height: 9.5rem;
+}
+
+.markTrigger {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markContent {
+  top: 4.5rem;
+  left: -2.25rem;
+}

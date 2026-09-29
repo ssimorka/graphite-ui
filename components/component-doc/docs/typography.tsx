@@ -1,7 +1,16 @@
 import { Typography } from '@/components/ui/typography'
+import type { ReactNode } from 'react'
 import type { ComponentDocConfig } from '../types'
 import styles from './typography.module.scss'
 import { TypographyPreview } from './typography-preview'
+
+// Heading specimens render real h1 to h4, which would put a second h1 and a
+// run of stray headings into this page's own outline. They are pictures of the
+// type, and each Surface label already names the variant and its element, so
+// they are hidden from the accessibility tree.
+function Specimen({ children }: { children: ReactNode }) {
+  return <div aria-hidden="true">{children}</div>
+}
 
 const SAMPLE = 'One source color becomes every ramp and role.'
 
@@ -22,11 +31,11 @@ export function typographyDoc(): ComponentDocConfig {
     variantsLede:
       'Seven variants, each a real element. The headings sit on the kit’s title ladder, the UI scale; only display reaches into the editorial heading ladder. Weight is a separate prop.',
     variants: [
-      { label: 'Variant: Display (h1)', node: <Typography variant="display">{SAMPLE}</Typography> },
-      { label: 'Variant: Heading 1 (h1)', node: <Typography variant="heading-1">{SAMPLE}</Typography> },
-      { label: 'Variant: Heading 2 (h2)', node: <Typography variant="heading-2">{SAMPLE}</Typography> },
-      { label: 'Variant: Heading 3 (h3)', node: <Typography variant="heading-3">{SAMPLE}</Typography> },
-      { label: 'Variant: Heading 4 (h4)', node: <Typography variant="heading-4">{SAMPLE}</Typography> },
+      { label: 'Variant: Display (h1)', node: <Specimen><Typography variant="display">{SAMPLE}</Typography></Specimen> },
+      { label: 'Variant: Heading 1 (h1)', node: <Specimen><Typography variant="heading-1">{SAMPLE}</Typography></Specimen> },
+      { label: 'Variant: Heading 2 (h2)', node: <Specimen><Typography variant="heading-2">{SAMPLE}</Typography></Specimen> },
+      { label: 'Variant: Heading 3 (h3)', node: <Specimen><Typography variant="heading-3">{SAMPLE}</Typography></Specimen> },
+      { label: 'Variant: Heading 4 (h4)', node: <Specimen><Typography variant="heading-4">{SAMPLE}</Typography></Specimen> },
       { label: 'Variant: Body (p, default)', node: <Typography>{SAMPLE}</Typography> },
       { label: 'Variant: Caption (span)', node: <Typography variant="caption">{SAMPLE}</Typography> },
       { label: 'Weight: Regular (default)', node: <Typography>{SAMPLE}</Typography> },
