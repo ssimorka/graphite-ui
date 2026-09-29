@@ -3,6 +3,28 @@
 // 24px gap, inside 48px margins). Below that the preview comes first and the
 // controls become a compact bar under it.
 
+// Kit "Grid lines — full bleed" (13281:4903): the 48px cell, 1px rules in
+// outlineSubtle at half strength, no radial mask, edge to edge behind the whole
+// page. Static and decorative. Unlike the hero's grid it has no parallax, so
+// nothing moves under the controls while someone is dragging a slider.
+.root {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, var(--graphite-surface-variant) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--graphite-surface-variant) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .page {
   display: flex;
   flex-direction: column;
