@@ -160,6 +160,10 @@
   gap: var(--graphite-space-04);
   height: 100%;
 
+  @media (max-width: 399px) {
+    gap: var(--graphite-space-02);
+  }
+
   // Below lg the brand's auto margins already push this to the right edge; a
   // second auto margin here would split the leftover space between the two
   // and pull the brand off the centre the kit gives it.
@@ -175,8 +179,13 @@
   display: none;
   align-items: center;
   width: 14.5rem;
+  padding: 0;
   background: var(--graphite-surface);
+  border: 0;
   border-bottom: 1px solid var(--graphite-outline);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
   transition: border-color var(--graphite-motion-fast)
     var(--graphite-motion-ease);
 }
@@ -185,32 +194,39 @@
   border-bottom-color: var(--graphite-primary);
 }
 
+.search:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
 .searchIcon {
   flex: none;
   margin: var(--graphite-space-03);
   color: var(--graphite-on-surface-variant);
 }
 
-.searchInput {
+.searchPlaceholder {
   flex: 1;
   min-width: 0;
-  padding: var(--graphite-space-03) var(--graphite-space-03)
-    var(--graphite-space-03) 0;
-  background: none;
-  border: none;
-  font: inherit;
+  padding: var(--graphite-space-03) 0;
+  overflow: hidden;
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
-  color: var(--graphite-on-surface);
-}
-
-.searchInput:disabled {
-  cursor: not-allowed;
-}
-
-.searchInput::placeholder {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--graphite-on-surface-variant);
-  opacity: 1;
+}
+
+.searchKey {
+  flex: none;
+  margin-right: var(--graphite-space-03);
+  padding: 0 var(--graphite-space-02);
+  border: 1px solid var(--graphite-surface-variant);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
 }
 
 // ----------------------------------------------------------- theme + source
@@ -291,7 +307,8 @@
     display: flex;
   }
 
-  .menuButton {
+  .menuButton,
+  .searchButton {
     display: none;
   }
 }
@@ -341,6 +358,12 @@
 // only the anchor's underline needs clearing.
 .repo {
   text-decoration: none;
+
+  // Search took a slot in the utility rail, and 320px cannot hold four. The
+  // footer carries the same GitHub link, so the header's copy goes first.
+  @media (max-width: 479px) {
+    display: none;
+  }
 }
 
 // At Small the kit drops the mark and runs the wordmark alone — 320px has to

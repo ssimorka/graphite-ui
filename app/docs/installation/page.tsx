@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, INSTALLATION_TOC } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -26,14 +26,6 @@ export const metadata: Metadata = {
 // the same facts stated for someone already inside the repo. The kit frame
 // (Graphite UI Site 11857:2470) says Node 20 and pnpm 9; CI pins 24 and 10, so
 // the page says what CI runs.
-const TOC = [
-  { href: '#requirements', label: 'Requirements' },
-  { href: '#create', label: 'Create the project' },
-  { href: '#run-it', label: 'Run it' },
-  { href: '#webpack', label: 'Why webpack' },
-  { href: '#checks', label: 'Checks' },
-  { href: '#next-steps', label: 'Next steps' },
-]
 
 // The three gates the kit lists. typecheck and the two self-tests run in the
 // same job and are named under the table rather than given rows of their own.
@@ -63,7 +55,7 @@ export default function InstallationPage() {
     <main id="main-content" className="page-main">
       <DocsShell
         nav={DOCS_NAV}
-        toc={TOC}
+        toc={INSTALLATION_TOC}
         tocFooter={
           <div className={styles.footnote}>
             <p className={styles.footnoteHead}>pnpm 10 · Node 24</p>

@@ -1,0 +1,180 @@
+// The documentation search. Site chrome on the Overlay base, sized and placed
+// like a command palette: under the header, centred, never taller than the
+// viewport. There is no kit frame for results, so it borrows the kit's parts:
+// the header's search field, the elevated overlay surface and its outline edge.
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: var(--graphite-scrim);
+}
+
+.panel {
+  position: fixed;
+  z-index: 9001;
+  top: 4.5rem;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(40rem, calc(100vw - 2 * var(--graphite-space-05)));
+  max-height: calc(100dvh - 6rem);
+  transform: translateX(-50%);
+  background: var(--graphite-surface-elevated);
+  border: 1px solid var(--graphite-outline);
+  color: var(--graphite-on-surface);
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+  }
+}
+
+// Opacity only: the panel carries its centring in transform.
+@keyframes in {
+  from {
+    opacity: 0;
+  }
+}
+
+.field {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  padding: 0 var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  &:focus-within {
+    box-shadow: inset 0 -2px 0 var(--graphite-focus);
+  }
+}
+
+.icon {
+  flex: none;
+  color: var(--graphite-on-surface-variant);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--graphite-space-05) 0;
+  background: none;
+  border: 0;
+  outline: none;
+  font: inherit;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface);
+
+  &::placeholder {
+    color: var(--graphite-on-surface-variant);
+    opacity: 1;
+  }
+}
+
+.panel kbd,
+.esc {
+  padding: 0 var(--graphite-space-02);
+  border: 1px solid var(--graphite-surface-variant);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.esc {
+  flex: none;
+}
+
+.groupLabel {
+  margin: 0;
+  padding: var(--graphite-space-04) var(--graphite-space-05) var(--graphite-space-02);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  letter-spacing: 0.32px;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: var(--graphite-space-02) 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+// Title and kind share the first line; the snippet runs under them.
+.option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--graphite-space-01) var(--graphite-space-04);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-left: 2px solid transparent;
+  cursor: pointer;
+
+  &[aria-selected='true'] {
+    background: var(--graphite-surface-variant);
+    border-left-color: var(--graphite-primary);
+  }
+}
+
+.title {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  font-weight: 500;
+}
+
+.sep {
+  margin: 0 var(--graphite-space-03);
+  color: var(--graphite-on-surface-variant);
+}
+
+.kind {
+  align-self: start;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.snippet {
+  grid-column: 1 / -1;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.status {
+  margin: 0;
+  padding: var(--graphite-space-07) var(--graphite-space-05);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.footer {
+  display: none;
+  flex: none;
+  gap: var(--graphite-space-05);
+  margin: 0;
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  // Keyboard hints are for keyboards; a phone has none to press.
+  @media (hover: hover) and (pointer: fine) {
+    display: flex;
+  }
+}

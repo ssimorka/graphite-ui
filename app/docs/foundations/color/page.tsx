@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, COLOR_RAMPS_TOC } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Callout, SectionHeading, StatusBadge } from '@/components/doc-blocks'
@@ -17,14 +17,6 @@ export const metadata: Metadata = {
     'Four ramps, ten stops each, resolved in OKLab from one source color and sampled at fixed tone stops, with how they are sampled and where they differ from the kit.',
 }
 
-const TOC = [
-  { href: '#accent', label: 'Accent' },
-  { href: '#secondary', label: 'Secondary' },
-  { href: '#neutral', label: 'Neutral' },
-  { href: '#neutral-variant', label: 'Neutral variant' },
-  { href: '#sampling', label: 'How stops are sampled' },
-  { href: '#divergence', label: 'Known divergence' },
-]
 
 // Why each ramp samples where it does. The tone and whether a stop is the
 // source come from the engine below; the reasons are the part a person wrote.
@@ -59,7 +51,7 @@ export default function ColorRampsPage() {
     <main id="main-content" className="page-main">
       <DocsShell
         nav={DOCS_NAV}
-        toc={TOC}
+        toc={COLOR_RAMPS_TOC}
         tocFooter={
           <div className={styles.footnote}>
             <p className={styles.footnoteHead}>source {seed}</p>
