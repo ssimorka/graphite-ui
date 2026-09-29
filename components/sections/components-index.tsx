@@ -42,11 +42,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 // governed but there is nothing to put in a card.
 const NO_PREVIEW = new Set(['Overlay'])
 
-// Components with a page of their own. A card opens it; the rest open their
-// contract file until their pages are built.
-const PAGES: Record<string, string> = {
-  Accordion: '/docs/components/accordion',
-}
+// Every governed component has a page at /docs/components/<contract slug>.
 
 const noop = () => {}
 
@@ -250,10 +246,7 @@ export function ComponentsIndex({
                 {card.kind === 'governed' ? (
                   <a
                     className={styles.nameLink}
-                    href={
-                      PAGES[card.name] ??
-                      `https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/${card.meta.slug}.md`
-                    }
+                    href={`/docs/components/${card.meta.slug}`}
                   >
                     {card.name}
                   </a>

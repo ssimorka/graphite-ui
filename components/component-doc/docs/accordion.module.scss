@@ -1,0 +1,35 @@
+// Accordion's own page parts: where the anatomy markers sit on the item, and
+// the forced states. The matrix forces the same declarations the pseudo-classes
+// carry, through the data-slot hooks the component exposes. Nothing here
+// restyles the component.
+
+.markTrigger {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markIndicator {
+  top: 1.25rem;
+  right: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markPanel {
+  top: 4.25rem;
+  left: -2.25rem;
+}
+
+.forceHover [data-slot='accordion-trigger'] {
+  background: var(--graphite-surface-variant);
+}
+
+.forceFocus [data-slot='accordion-trigger'] {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// A matrix cell is a flex row; an accordion should take the full width of it.
+.full {
+  width: 100%;
+}

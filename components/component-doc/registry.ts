@@ -1,0 +1,56 @@
+import type { ComponentDocConfig } from './types'
+import { accordionDoc } from './docs/accordion'
+import { breadcrumbDoc } from './docs/breadcrumb'
+import { buttonDoc } from './docs/button'
+import { buttonGroupDoc } from './docs/button-group'
+import { checkboxDoc } from './docs/checkbox'
+import { containedListDoc } from './docs/contained-list'
+import { dataTableDoc } from './docs/data-table'
+import { menuDoc } from './docs/menu'
+import { modalDoc } from './docs/modal'
+import { navigationMenuDoc } from './docs/navigation-menu'
+import { notificationDoc } from './docs/notification'
+import { overlayDoc } from './docs/overlay'
+import { popoverDoc } from './docs/popover'
+import { progressBarDoc } from './docs/progress-bar'
+import { radioButtonGroupDoc } from './docs/radio-button-group'
+import { selectDoc } from './docs/select'
+import { tabsDoc } from './docs/tabs'
+import { tagDoc } from './docs/tag'
+import { textAreaDoc } from './docs/text-area'
+import { textInputDoc } from './docs/text-input'
+import { toggleDoc } from './docs/toggle'
+import { tooltipDoc } from './docs/tooltip'
+import { typographyDoc } from './docs/typography'
+
+/**
+ * Every governed component's page, by contract slug. A config is a function so
+ * it can read the repo (kit stats, the contract) at build time; the route calls
+ * it on the server. Adding a component page is one line here and one file in
+ * ./docs.
+ */
+export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
+  'accordion': accordionDoc,
+  'breadcrumb': breadcrumbDoc,
+  'button': buttonDoc,
+  'button-group': buttonGroupDoc,
+  'checkbox': checkboxDoc,
+  'contained-list': containedListDoc,
+  'data-table': dataTableDoc,
+  'menu': menuDoc,
+  'modal': modalDoc,
+  'navigation-menu': navigationMenuDoc,
+  'notification': notificationDoc,
+  'overlay': overlayDoc,
+  'popover': popoverDoc,
+  'progress-bar': progressBarDoc,
+  'radio-button-group': radioButtonGroupDoc,
+  'select': selectDoc,
+  'tabs': tabsDoc,
+  'tag': tagDoc,
+  'text-area': textAreaDoc,
+  'text-input': textInputDoc,
+  'toggle': toggleDoc,
+  'tooltip': tooltipDoc,
+  'typography': typographyDoc,
+}
