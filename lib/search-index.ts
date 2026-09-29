@@ -14,6 +14,24 @@ import { metadata as installMeta } from '@/app/docs/installation/page'
 import { metadata as rampsMeta } from '@/app/docs/foundations/color/page'
 import { metadata as createMeta } from '@/app/create/page'
 import { metadata as galleryMeta } from '@/app/gallery/page'
+import { metadata as introMeta } from '@/app/docs/page'
+import { TOC as introToc } from '@/app/docs/toc'
+import { metadata as quickStartMeta } from '@/app/docs/quick-start/page'
+import { TOC as quickStartToc } from '@/app/docs/quick-start/toc'
+import { metadata as a11yMeta } from '@/app/docs/accessibility/page'
+import { TOC as a11yToc } from '@/app/docs/accessibility/toc'
+import { metadata as governanceMeta } from '@/app/docs/governance/page'
+import { TOC as governanceToc } from '@/app/docs/governance/toc'
+import { metadata as typeMeta } from '@/app/docs/foundations/typography/page'
+import { TOC as typeToc } from '@/app/docs/foundations/typography/toc'
+import { metadata as spacingMeta } from '@/app/docs/foundations/spacing/page'
+import { TOC as spacingToc } from '@/app/docs/foundations/spacing/toc'
+import { metadata as radiusMeta } from '@/app/docs/foundations/radius/page'
+import { TOC as radiusToc } from '@/app/docs/foundations/radius/toc'
+import { metadata as layoutMeta } from '@/app/docs/foundations/layout/page'
+import { TOC as layoutToc } from '@/app/docs/foundations/layout/toc'
+import { metadata as tokensMeta } from '@/app/docs/foundations/tokens/page'
+import { TOC as tokensToc } from '@/app/docs/foundations/tokens/toc'
 
 /**
  * One searchable destination: a page, or a section of one. `page` is what the
@@ -124,9 +142,18 @@ function componentPage(c: ComponentDocConfig): SearchEntry[] {
 /** Every searchable destination on the site, built once at build time. */
 export function buildSearchIndex(): SearchEntry[] {
   return [
+    ...docsPage('/docs', introMeta, introToc, 'Docs', 'Introduction'),
     ...docsPage('/docs/installation', installMeta, INSTALLATION_TOC),
+    ...docsPage('/docs/quick-start', quickStartMeta, quickStartToc),
     ...docsPage('/docs/theming', themingMeta, COLOR_DOCS_TOC),
+    ...docsPage('/docs/accessibility', a11yMeta, a11yToc),
+    ...docsPage('/docs/governance', governanceMeta, governanceToc),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),
+    ...docsPage('/docs/foundations/typography', typeMeta, typeToc),
+    ...docsPage('/docs/foundations/spacing', spacingMeta, spacingToc),
+    ...docsPage('/docs/foundations/radius', radiusMeta, radiusToc),
+    ...docsPage('/docs/foundations/layout', layoutMeta, layoutToc),
+    ...docsPage('/docs/foundations/tokens', tokensMeta, tokensToc),
     ...docsPage('/gallery', galleryMeta, [], 'Docs'),
     ...docsPage('/create', createMeta, [], 'Tool', 'Create a theme'),
     ...Object.values(COMPONENT_DOCS).flatMap((doc) => componentPage(doc())),
