@@ -44,9 +44,10 @@ export type Control = {
   lock?: LockKey
 }
 
-// The kit's eight presets: the 500 stop of each ramp, sampled at the seeded
-// source. Sampled from the engine rather than typed, so they cannot drift from
-// the ramps page.
+// The kit's eight presets: the 500 stop of each ramp, sampled at the current
+// source so they follow whatever is picked. Sampled from the engine rather than
+// typed, so they cannot drift from the ramps page. Accent shows the source stop
+// itself rather than its 500, so the first swatch is always the current pick.
 const PRESET_RAMPS: RampName[] = [
   'accent', 'secondary', 'info', 'success', 'warning', 'danger',
   'neutralVariant', 'neutral',
@@ -69,16 +70,21 @@ export function useControls(): Control[] {
   const { sourceHex, setSourceHex, theme, setTheme, level, setLevel } = useTheme()
   const b = useBuilder()
 
-  const presets = useMemo(() => {
-    const seed = makeRamps(COVER_SOURCE_HEX)
-    return PRESET_RAMPS.map((name) => ({
-      key: seed[name].stops[4].hex,
-      label: `${name}/500`,
-      swatch: seed[name].stops[4].hex,
-    }))
-  }, [])
-
   const hex = (sourceHex || COVER_SOURCE_HEX).toLowerCase()
+
+  const presets = useMemo(() => {
+    const ramps = makeRamps(hex)
+    return PRESET_RAMPS.map((name) => {
+      const stops = ramps[name].stops
+      const stop = (name === 'accent' && stops.find((s) => s.source)) || stops[4]
+      return {
+        key: stop.hex,
+        label: name === 'accent' ? 'accent/source' : `${name}/500`,
+        swatch: stop.hex,
+      }
+    })
+  }, [hex])
+
   const fontLabel = (opts: { key: string; label: string }[], key: string) =>
     opts.find((o) => o.key === key)?.label ?? ''
   const fontOptions = (opts: { key: string; label: string }[]): Option[] =>
