@@ -31,8 +31,8 @@ export function ThemeCta() {
                 Make it yours in one control
               </h2>
               <p className={styles.body}>
-                The builder derives a full theme from any color, shows you the
-                contrast report as it goes, and hands you CSS variables, JSON
+                The builder derives a full theme from any color, holds it to your
+                contrast target as it goes, and hands you CSS variables, JSON
                 tokens or Figma variables at the end.
               </p>
             </div>

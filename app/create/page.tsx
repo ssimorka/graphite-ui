@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { CreatePage } from '@/components/create/create-page'
 import { SiteFooter } from '@/components/sections/site-footer'
-import { sweepContrast } from '@/lib/contrast-sweep'
 
 export const metadata: Metadata = {
   title: 'Create · Graphite UI',
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 export default function Create() {
   return (
     <main id="main-content" className="page-main">
-      <CreatePage sweep={sweepContrast()} />
+      <CreatePage />
       <SiteFooter />
     </main>
   )

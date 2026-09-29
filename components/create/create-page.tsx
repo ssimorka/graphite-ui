@@ -1,8 +1,6 @@
 'use client'
 
-import type { ContrastSweep } from '@/lib/contrast-sweep'
 import { BuilderProvider } from './builder'
-import { ContrastReport } from './contrast-report'
 import { ControlsBar } from './controls-bar'
 import { ControlsPanel } from './controls'
 import { Preview } from './preview'
@@ -14,7 +12,7 @@ import styles from './create-page.module.scss'
  * Medium and Small. Both read one description of the controls, so they cannot
  * disagree.
  */
-export function CreatePage({ sweep }: { sweep: ContrastSweep }) {
+export function CreatePage() {
   return (
     <BuilderProvider>
       <div className={styles.root}>
@@ -35,7 +33,6 @@ export function CreatePage({ sweep }: { sweep: ContrastSweep }) {
             </div>
             <div className={styles.main}>
               <Preview />
-              <ContrastReport sweep={sweep} />
               <div className={styles.bar}>
                 <ControlsBar />
               </div>
