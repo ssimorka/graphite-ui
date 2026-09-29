@@ -1,0 +1,303 @@
+// The Typography foundation page. Header, blocks, prose and footnote follow the
+// Color page; the specimen list and family cards are this page's own.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+
+  a {
+    color: var(--graphite-primary);
+  }
+}
+
+.mono {
+  font-family: var(--graphite-font-mono), monospace;
+}
+
+// --------------------------------------------------------------- specimen
+// One list per ladder. A row is the step's name and numbers, then a sample set
+// in that step. The sample reads the variable rather than a copied number, so
+// below 672px it shows the Mobile value on its own.
+.ladder {
+  display: flex;
+  flex-direction: column;
+  scroll-margin-top: 5rem;
+}
+
+.ladderTitle {
+  margin: 0 0 var(--graphite-space-03);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  line-height: var(--graphite-text-code-3-line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.specimen {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: var(--graphite-space-03) var(--graphite-space-06);
+  align-items: baseline;
+  padding: var(--graphite-space-05) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  @media (max-width: 671px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-01);
+  min-width: 0;
+}
+
+.stepName {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.stepValues {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  line-height: var(--graphite-text-code-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.stepMobile {
+  color: var(--graphite-primary);
+}
+
+.sample {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--graphite-on-surface);
+}
+
+// In the variant table the sample wraps rather than truncating: the table
+// stacks below md and a nowrap cell would push it past the viewport.
+.variantSample {
+  display: block;
+  color: var(--graphite-on-surface);
+  overflow-wrap: anywhere;
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-03) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: baseline;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-3-size);
+    line-height: var(--graphite-text-code-3-line-height);
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  tbody th {
+    font-family: var(--graphite-font-mono), monospace;
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    font-family: var(--graphite-font-mono), monospace;
+    color: var(--graphite-on-surface-variant);
+  }
+}
+
+.changed {
+  color: var(--graphite-primary);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+// ------------------------------------------------------------- families
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--graphite-space-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-05);
+  border: 1px solid var(--graphite-surface-variant);
+  min-width: 0;
+}
+
+.cardGlyphs {
+  font-size: var(--graphite-text-heading-5-size);
+  line-height: var(--graphite-text-heading-5-line-height);
+  color: var(--graphite-on-surface);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cardName {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.cardValue {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  line-height: var(--graphite-text-code-3-line-height);
+  color: var(--graphite-primary);
+}
+
+.cardUsage {
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.cardFlag {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-warning);
+}
+
+// -------------------------------------------------------------- weights
+.weights {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.weight {
+  display: grid;
+  grid-template-columns: 13rem minmax(0, 1fr);
+  gap: var(--graphite-space-03) var(--graphite-space-06);
+  align-items: baseline;
+  padding: var(--graphite-space-04) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  @media (max-width: 671px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.weightSample {
+  font-size: var(--graphite-text-title-2-size);
+  line-height: var(--graphite-text-title-2-line-height);
+  color: var(--graphite-on-surface);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

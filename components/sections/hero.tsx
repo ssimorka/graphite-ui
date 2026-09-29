@@ -14,7 +14,12 @@ import { makeRamps } from '@/lib/color.js'
 // twice its height. The carousel below carries the full set.
 const STRIP_RAMPS = ['accent', 'secondary', 'neutral', 'neutralVariant'] as const
 
-export function Hero() {
+/**
+ * `governed` is the count of contracts, read on the server (readKitStats) and
+ * passed in: this is a client component and cannot read the repo, and a typed
+ * number here said 22 after the 23rd contract landed.
+ */
+export function Hero({ governed }: { governed: number }) {
   const heroRef = useRef<HTMLDivElement | null>(null)
   const pointerFrame = useRef<number | null>(null)
   const scrollFrame = useRef<number | null>(null)
@@ -79,7 +84,7 @@ export function Hero() {
         <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>
           <div className="hero__center">
             <Tag type="purple" size="md" className="hero__eyebrow">
-              <Gem size={16} className="hero__eyebrow-icon" /> Wave 4 · 22
+              <Gem size={16} className="hero__eyebrow-icon" /> Wave 4 · {governed}{' '}
               governed components
             </Tag>
             <h1 className="hero__title" id="hero-title">

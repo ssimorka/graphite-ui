@@ -1,0 +1,233 @@
+// The Introduction page. Adapted from installation.module.scss (the Getting
+// started pattern) plus the ramp specimen, which is this page's alone. The
+// shared pieces live in components/doc-blocks.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// ------------------------------------------------------------------- prose
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  max-width: 44rem;
+
+  p {
+    margin: 0;
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+.more {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  a {
+    color: var(--graphite-primary);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+
+  a {
+    color: var(--graphite-primary);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.parts th {
+  width: 130px;
+  white-space: nowrap;
+}
+
+// Below md the label column eats a third of the width; stack it over its
+// prose instead, as the kit's small table row does.
+@media (max-width: 671px) {
+  .parts {
+    tr {
+      display: flex;
+      flex-direction: column;
+      gap: var(--graphite-space-02);
+      padding: var(--graphite-space-04) var(--graphite-space-05);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      width: auto;
+      padding: 0;
+      border: 0;
+    }
+  }
+}
+
+// --------------------------------------------------------------- specimen
+.specimen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: var(--graphite-space-05);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.specimenRows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.specimenRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-02);
+
+  @media (min-width: 672px) {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--graphite-space-04);
+  }
+}
+
+.specimenName {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.specimenStops {
+  display: flex;
+  min-width: 0;
+}
+
+.specimenStop {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--graphite-space-06);
+}
+
+// Inset, so the outline stays inside the strip rather than overlapping its
+// neighbours, and in onSurface so it reads on either end of any ramp.
+.specimenSource {
+  position: relative;
+  box-shadow: inset 0 0 0 2px var(--graphite-on-surface);
+}
+
+.specimenCaption {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

@@ -1,0 +1,334 @@
+// The Layout & grid page. Page frame adapted from installation.module.scss;
+// the breakpoint table's marker and the grid specimen are this page's own.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  scroll-margin-top: 5rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: 0.9em;
+    color: var(--graphite-on-surface);
+  }
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+    white-space: nowrap;
+  }
+
+  tbody th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+    white-space: nowrap;
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+    white-space: nowrap;
+  }
+}
+
+.value {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  color: var(--graphite-primary);
+  white-space: nowrap;
+}
+
+.missing {
+  color: var(--graphite-danger);
+}
+
+// The bar column takes whatever is left, so the widest step (160px) still has
+// room beside the name at every width the docs column reaches.
+// ---------------------------------------------------------- breakpoints
+.bpWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.here {
+  margin: 0;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+// The current band is marked by a label and a 2px leading rule as well as the
+// fill, so the cue does not rest on colour alone.
+.hereRow {
+  background: var(--graphite-primary-container);
+
+  th {
+    box-shadow: inset 2px 0 0 var(--graphite-primary);
+  }
+}
+
+.hereTag {
+  display: block;
+  margin-top: var(--graphite-space-02);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--graphite-primary);
+}
+
+@media (max-width: 671px) {
+  .wide {
+    display: none;
+  }
+
+  .table th,
+  .table td {
+    padding: var(--graphite-space-03) var(--graphite-space-04);
+  }
+
+  // The token on its own line, then width and range as one meta line.
+  .bp {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--graphite-space-02) var(--graphite-space-04);
+      padding: var(--graphite-space-03) var(--graphite-space-04);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    tbody th {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+// ------------------------------------------------------------- snippets
+.snippets {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.snippetLabel {
+  margin: 0 0 var(--graphite-space-03);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.subhead {
+  margin: 0;
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+// ---------------------------------------------------------------- grid
+// The rules are the Create page's: surfaceVariant, 1px. The cell size is set
+// inline from the stylesheet that draws the real backdrop.
+.gridSpecimen {
+  position: relative;
+  height: calc(var(--graphite-space-09) * 4);
+  background-color: var(--graphite-background);
+  background-image:
+    linear-gradient(to right, var(--graphite-surface-variant) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--graphite-surface-variant) 1px, transparent 1px);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+// One cell outlined, so the size reads without counting.
+.gridCell {
+  position: absolute;
+  top: var(--graphite-space-09);
+  left: var(--graphite-space-09);
+  outline: 1px solid var(--graphite-primary);
+  background: color-mix(in srgb, var(--graphite-primary) 12%, transparent);
+}
+
+// --------------------------------------------------------------- rules
+.rules {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.side {
+  padding: 1.125rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  border-top-width: 3px;
+}
+
+// The heading word carries the meaning; the top rule only reinforces it.
+.do {
+  border-top-color: var(--graphite-success);
+}
+
+.dont {
+  border-top-color: var(--graphite-danger);
+}
+
+.sideLabel {
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.sideList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0 0 0 var(--graphite-space-05);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    overflow-wrap: anywhere;
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

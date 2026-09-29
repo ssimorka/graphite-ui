@@ -21,7 +21,7 @@ import styles from './site-header.module.scss'
 const NAV_ITEMS: [NavItem, ...NavItem[]] = [
   { href: '/docs', label: 'Docs' },
   { href: '/gallery', label: 'Components' },
-  { href: '/docs#patterns', label: 'Patterns' },
+  { href: '/docs/theming#patterns', label: 'Patterns' },
   { href: '/create', label: 'Create' },
 ]
 

@@ -218,7 +218,7 @@ export default function InstallationPage() {
               <NextCard href="/gallery" title="Components">
                 {`${spell(readKitStats().governed)} governed components, each with its contract version on the page.`}
               </NextCard>
-              <NextCard href="/docs#how-it-works" title="Theming">
+              <NextCard href="/docs/theming#how-it-works" title="Theming">
                 How one source color becomes eight ramps and thirty-two roles.
               </NextCard>
               <NextCard

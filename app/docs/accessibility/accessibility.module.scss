@@ -1,0 +1,345 @@
+// The Accessibility page. Adapted from the Installation page's module (the
+// Getting started pattern); the shared pieces live in components/doc-blocks and
+// components/component-page.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Prose under a block: body/2, with inline code set in the mono face.
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+.link {
+  color: var(--graphite-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--graphite-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+}
+
+.targets tbody th {
+  width: 110px;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+}
+
+.tokens tbody th {
+  width: 50%;
+}
+
+// ---------------------------------------------------------------- pairings
+.pairings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+}
+
+// The table is five columns of short values; below md it scrolls inside its
+// own box rather than pushing the page sideways.
+.scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.pairTable {
+  min-width: 36rem;
+
+  tbody th code {
+    color: var(--graphite-on-surface);
+  }
+}
+
+.target {
+  white-space: nowrap;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+}
+
+.ratioCell {
+  white-space: nowrap;
+}
+
+// The pair itself, painted with the engine's hexes for that mode, so the
+// sample shows the dark pairing even on a light page.
+.sample {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 1.5rem;
+  margin-right: var(--graphite-space-03);
+  vertical-align: middle;
+  font-size: var(--graphite-text-body-2-size);
+  font-weight: 600;
+  border: 1px solid var(--graphite-outline);
+}
+
+.ratio {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  color: var(--graphite-on-surface);
+  margin-right: var(--graphite-space-03);
+}
+
+// The verdict is a word first; the colour only reinforces it.
+.pass,
+.fail {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+.pass {
+  color: var(--graphite-on-surface-variant);
+}
+
+.fail {
+  color: var(--graphite-danger);
+  font-weight: 600;
+}
+
+// ------------------------------------------------------------------ sweep
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--graphite-surface-variant);
+  border: 1px solid var(--graphite-surface-variant);
+
+  @media (max-width: 671px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface);
+
+  dt {
+    font-size: var(--graphite-text-caption-1-size);
+    line-height: var(--graphite-text-caption-1-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--graphite-text-title-1-size);
+    line-height: var(--graphite-text-title-1-line-height);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ------------------------------------------------------------------ focus
+.focusRow,
+.collapse {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-06);
+}
+
+.focusSpec,
+.collapseSpec {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  margin: 0;
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--graphite-space-01);
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// A button-sized block wearing the ring the way components do: 2px, offset 2px.
+.focusSwatch {
+  width: 3rem;
+  height: 2rem;
+  background: var(--graphite-surface-variant);
+  outline: 2px solid;
+  outline-offset: 2px;
+}
+
+.focusMode {
+  text-transform: capitalize;
+  color: var(--graphite-on-surface);
+}
+
+// --------------------------------------------------------------- collapse
+.collapseSwatch {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--graphite-outline);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// ------------------------------------------------------------------- gaps
+.gaps {
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding-left: var(--graphite-space-06);
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  strong {
+    font-weight: 600;
+    color: var(--graphite-on-surface);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
