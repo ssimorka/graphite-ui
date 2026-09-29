@@ -4,7 +4,9 @@ import styles from './popover.module.scss'
 import { PopoverPreview, PopoverStill } from './popover-preview'
 
 const still = (placement: 'top' | 'bottom' | 'left' | 'right') => (
-  <div className={styles.stage}>
+  <div
+    className={`${styles.stage} ${placement === 'left' ? styles.stageLeft : ''} ${placement === 'right' ? styles.stageRight : ''}`}
+  >
     <PopoverStill placement={placement} />
   </div>
 )
@@ -53,7 +55,7 @@ export function popoverDoc(): ComponentDocConfig {
     a11y: [
       ['Keyboard', 'Enter and Space on the trigger open it. The panel follows the trigger in the document, so Tab moves into it. Escape closes it from anywhere.'],
       ['Roles', <>The trigger gets <code>aria-expanded</code> and <code>aria-controls</code>. With modal on, the panel is <code>role=&quot;dialog&quot;</code> with <code>aria-modal</code>; there is no label prop, so that dialog has no name of its own. Without modal it has no role.</>],
-      ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes.'],
+      ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes. If the component that renders the Popover re-renders while it is open, focus also jumps back to the trigger, so keep state that changes inside the content.'],
       ['Pointer', 'A press anywhere outside the panel closes it. The trigger counts as outside, so pressing it again closes the panel and the click reopens it: Escape or a press elsewhere is the way out. There is no close button of its own.'],
       ['Contrast', <>The panel is <code>surface-elevated</code> with an <code>outline</code> edge. In Light the elevated surface matches the page, so the edge is what separates them.</>],
       ['Motion', 'It fades in on the fast motion step and appears at once under prefers-reduced-motion. It does not animate out.'],

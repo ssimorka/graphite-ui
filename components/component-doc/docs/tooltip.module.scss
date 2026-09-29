@@ -21,7 +21,7 @@
 }
 
 .anatomy {
-  padding-top: 3.5rem;
+  padding: 3.5rem 0 0 2rem;
 }
 
 .markContent {
@@ -34,4 +34,16 @@
   top: 4.75rem;
   left: -2.25rem;
   transform: translateY(-50%);
+}
+
+// On a phone a centred trigger leaves too little room beside it for a side
+// placement, so the trigger moves to the far edge and the bubble opens across.
+@media (max-width: 671px) {
+  .stageLeft {
+    justify-content: flex-end;
+  }
+
+  .stageRight {
+    justify-content: flex-start;
+  }
 }

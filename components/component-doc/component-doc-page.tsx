@@ -211,19 +211,25 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
               title="Design tokens"
               lede="Every swatch is live. Change the source color in the header and this table repaints, because it reads the same roles the component does."
             />
-            <TokenTable
-              rows={contract.tokens.map((t) =>
-                // An inherited row that names no contract has no role to paint, so
-                // it is named by where it comes from and gets the empty swatch.
-                !t.name
-                  ? { name: `from ${t.inheritedFrom}`, usage: t.usage, swatch: null }
-                  : {
-                      name: t.name,
-                      usage: t.inheritedFrom ? `${t.usage} (from ${t.inheritedFrom})` : t.usage,
-                      swatch: swatch(t.name),
-                    },
-              )}
-            />
+            {contract.tokens.length ? (
+              <TokenTable
+                rows={contract.tokens.map((t) =>
+                  // An inherited row that names no contract has no role to paint, so
+                  // it is named by where it comes from and gets the empty swatch.
+                  !t.name
+                    ? { name: `from ${t.inheritedFrom}`, usage: t.usage, swatch: null }
+                    : {
+                        name: t.name,
+                        usage: t.inheritedFrom ? `${t.usage} (from ${t.inheritedFrom})` : t.usage,
+                        swatch: swatch(t.name),
+                      },
+                )}
+              />
+            ) : (
+              <p className={styles.lede}>
+                The contract declares no tokens: this component draws nothing of its own.
+              </p>
+            )}
           </section>
 
           <section id="usage" className={styles.block}>
