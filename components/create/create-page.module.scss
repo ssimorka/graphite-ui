@@ -107,7 +107,16 @@
   min-width: 0;
 }
 
+// Below xl the compact controls ride the bottom of the viewport while the
+// preview scrolls under them, and settle into place at the end of the column.
+// Sticky, not fixed, so it keeps its place in the flow and never covers the
+// footer. Sheets inside it are position: fixed, which is why nothing here sets
+// a transform or backdrop-filter: either would trap them inside the bar.
 .bar {
+  position: sticky;
+  bottom: max(var(--graphite-space-04), env(safe-area-inset-bottom));
+  z-index: 5;
+
   @media (min-width: 1312px) {
     display: none;
   }

@@ -150,7 +150,7 @@ export function ControlsBar() {
           Shuffle
           <Shuffle />
         </Button>
-        <Button variant="primary" className={styles.barButton} onClick={() => setCodeOpen(true)}>
+        <Button variant="primary" className={styles.barButtonCode} onClick={() => setCodeOpen(true)}>
           Get the code
           <Download />
         </Button>

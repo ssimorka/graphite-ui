@@ -331,6 +331,8 @@
 .bar {
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-surface-variant);
+  // The kit's drop shadow, which lifts the bar off the cards scrolling beneath.
+  box-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
 }
 
 .rail {
@@ -350,7 +352,8 @@
   gap: var(--graphite-space-03);
   width: 9rem;
   padding: 0.625rem 0.625rem 0.625rem var(--graphite-space-04);
-  border: 1px solid var(--graphite-outline);
+  // The kit's subtle picker border (border-disabled), not the full outline.
+  border: 1px solid var(--graphite-surface-variant);
   background: transparent;
   color: var(--graphite-on-surface);
   font: inherit;
@@ -418,9 +421,17 @@
   }
 }
 
+// Shuffle is the kit's fixed 150px; Get the code sizes to its label (16px in,
+// 64px for the icon), which 150px was too narrow to hold.
 .barButton {
   @media (min-width: 672px) {
     width: 9.375rem;
+  }
+}
+
+.barButtonCode {
+  @media (min-width: 672px) {
+    width: auto;
   }
 }
 
