@@ -45,7 +45,7 @@
 }
 
 .anatomy {
-  min-height: 16rem;
+  min-height: 10.5rem;
 }
 
 .markTrigger {
@@ -55,12 +55,13 @@
 }
 
 .markItems {
-  top: 4.25rem;
+  top: 3.95rem;
   left: -2.25rem;
+  transform: translateY(-50%);
 }
 
 .markSeparator {
-  top: 10.4rem;
+  top: 8rem;
   left: -2.25rem;
   transform: translateY(-50%);
 }
