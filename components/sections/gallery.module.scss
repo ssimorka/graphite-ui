@@ -1,9 +1,19 @@
 // Component gallery. Uses the same --graphite-* tokens the components do, so
 // the page itself is a specimen rather than a differently-styled frame.
 .page {
+  // Sits under the index inside the docs shell, so the shell supplies the
+  // gutters and this only bounds the measure.
   max-width: 46rem;
-  margin: 0 auto;
-  padding: var(--graphite-space-09) var(--graphite-space-05);
+  margin: 0;
+  padding: 0;
+}
+
+.heading {
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: 700;
+  scroll-margin-top: 5rem;
 }
 
 .lede {
@@ -26,6 +36,7 @@
 }
 
 .specimen {
+  scroll-margin-top: 5rem; // the index links here; clear the 64px header
   border-top: 1px solid var(--graphite-outline);
   padding: var(--graphite-space-06) 0;
 }

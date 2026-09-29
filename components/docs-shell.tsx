@@ -118,7 +118,7 @@ export function DocsShell({
   const active = useScrollSpy(toc ?? NO_TOC)
 
   return (
-    <div className={styles.shell}>
+    <div className={`${styles.shell} ${toc?.length ? styles.withToc : ''}`}>
       <aside className={`${styles.rail} ${styles.sidebar}`}>
         {nav.map((group) => (
           <div key={group.label} className={styles.group}>

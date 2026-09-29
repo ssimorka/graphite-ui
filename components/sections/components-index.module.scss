@@ -1,0 +1,263 @@
+// The Components index, from the kit's Site page (Graphite UI Site 11830:433).
+//
+// The kit lays a 48px hairline grid behind the whole main column. Two
+// gradients do it here rather than a hundred positioned rules; the line colour
+// is surfaceVariant, which is this system's binding for outline-subtle.
+
+.index {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-08);
+  margin: -1.25rem calc(-1 * var(--graphite-space-05)) 0;
+  padding: 1.25rem var(--graphite-space-05) var(--graphite-space-09);
+  background-image:
+    linear-gradient(to right, var(--graphite-surface-variant) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--graphite-surface-variant) 1px, transparent 1px);
+  background-size: 48px 48px;
+
+  @media (min-width: 672px) {
+    margin: -1.75rem calc(-1 * var(--graphite-space-06)) 0;
+    padding: 1.75rem var(--graphite-space-06) var(--graphite-space-10);
+  }
+
+  @media (min-width: 1056px) {
+    margin: -2.5rem -3rem 0;
+    padding: 2.5rem 3rem 5rem;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  // The grid is decoration; text over it needs the page colour behind it.
+  > * {
+    background: var(--graphite-background);
+  }
+}
+
+.title {
+  margin: 0;
+  width: fit-content;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  width: fit-content;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ----------------------------------------------------------------- counts
+.counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-surface);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: 1.125rem var(--graphite-space-06);
+  border-right: 1px solid var(--graphite-surface-variant);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+  margin: 0 -1px -1px 0;
+}
+
+.figure {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.figureGoverned {
+  color: var(--graphite-success);
+}
+
+.figurePublic {
+  color: var(--graphite-primary);
+}
+
+.caption {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ---------------------------------------------------------------- filters
+.filterBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// The same square chip as StatusBadge, as a button: the selected one takes the
+// primary container, the rest are outlined.
+.chip {
+  padding: 2px 7px;
+  border: 1px solid var(--graphite-outline);
+  background: var(--graphite-background);
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--graphite-primary-container);
+    border-color: var(--graphite-primary);
+    color: var(--graphite-primary);
+  }
+}
+
+.sorted {
+  width: fit-content;
+  margin: 0;
+  background: var(--graphite-background);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ------------------------------------------------------------------- grid
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19.125rem), 1fr));
+  gap: 1.25rem; // the kit's 20px: three 306px cards fit the 960px column
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-height: 16.875rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 11rem;
+  padding: 1.5rem var(--graphite-space-06);
+  // The previews are live components. In a card they are specimens, so a click
+  // on one must not do anything: the card's link is the interaction.
+  pointer-events: none;
+}
+
+.previewInner {
+  width: 100%;
+  max-width: 14rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-04);
+}
+
+.previewRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: 0.875rem var(--graphite-space-05) var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  font-weight: 400;
+  color: var(--graphite-on-surface);
+}
+
+.nameLink {
+  color: inherit;
+  text-decoration: none;
+
+  // The whole card is the target, not just the name.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.cardLinked {
+  position: relative;
+}
+
+// An ungoverned card has nothing to preview and nothing to open, so its
+// preview area says what the kit has instead of standing empty.
+.absent {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+  text-align: center;
+}
+
+// Below md the preview area is a strip, not a 270px tile: two cards to a
+// screen is what the eye needs to compare.
+@media (max-width: 671px) {
+  .card {
+    min-height: 0;
+  }
+
+  .preview {
+    min-height: 9rem;
+  }
+}

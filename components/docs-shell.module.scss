@@ -158,7 +158,9 @@
 }
 
 @media (min-width: 1312px) {
-  .shell {
+  // Only a page that has an on-this-page rail gets the third column. Without
+  // one the content takes the width, as on the Components index.
+  .withToc {
     grid-template-columns: 16rem minmax(0, 1fr) 15rem;
   }
 
