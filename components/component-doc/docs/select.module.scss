@@ -1,0 +1,16 @@
+// Select's own page parts: a width for the field, and the forced focus state.
+// The component exposes no data-slot hooks, so focus reaches the trigger as the
+// span that wraps the native select, which is the component's own structure,
+// and forces the declarations `.wrap:focus-within` carries. Nothing here
+// restyles it.
+
+// The field fills its container; a demo reads better at a form's width.
+.field {
+  width: 100%;
+  max-width: 20rem;
+}
+
+.forceFocus span:has(> select) {
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}

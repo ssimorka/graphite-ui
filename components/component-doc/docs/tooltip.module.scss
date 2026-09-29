@@ -1,0 +1,49 @@
+// Tooltip's own page parts: room around an open bubble, and the anatomy
+// markers. Nothing here restyles the component.
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.still {
+  display: inline-flex;
+}
+
+// The bubble is absolutely positioned, so the stage reserves the space it
+// opens into on every side.
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 9rem;
+}
+
+.anatomy {
+  padding: 3.5rem 0 0 2rem;
+}
+
+.markContent {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markTrigger {
+  top: 4.75rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+// On a phone a centred trigger leaves too little room beside it for a side
+// placement, so the trigger moves to the far edge and the bubble opens across.
+@media (max-width: 671px) {
+  .stageLeft {
+    justify-content: flex-end;
+  }
+
+  .stageRight {
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,9 @@
+// Navigation Menu's own page parts: the forced Focus row. The component exposes
+// no data-slot hooks and renders nothing interactive but its links, so this
+// reaches the first link structurally and sets the same declarations
+// `.link:focus-visible` carries in components/ui/navigation-menu.module.scss.
+
+.forceFocus li:first-child > a {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}

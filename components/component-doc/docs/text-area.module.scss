@@ -1,0 +1,16 @@
+// Text area's own page parts: the forced Focus row. The component exposes no
+// data-slot hooks, so this reaches the textarea element and sets the same
+// declarations `.textarea:focus-visible` carries in
+// components/ui/text-area.module.scss. Nothing here restyles it.
+
+.forceFocus textarea {
+  outline: none;
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}
+
+// Sizing only. Text area's root carries no width, so in a flex cell it shrinks
+// to the textarea's intrinsic size; this lets it take the row instead.
+.full {
+  width: 100%;
+}

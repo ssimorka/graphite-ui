@@ -1,0 +1,21 @@
+// Data table's own page parts: a measure for the small tables, and the forced
+// states. The table exposes no data-slot hooks, so these reach its rows and
+// sort buttons by element, and force the same declarations
+// data-table.module.scss puts on .row:hover and .sortButton:focus-visible.
+// Nothing here restyles the component.
+
+// Surfaces size to their content, so a percentage width would collapse to the
+// cells. A fixed measure, capped at the container, reads as a table.
+.measure {
+  width: 32rem;
+  max-width: 100%;
+}
+
+.forceHover tbody tr {
+  background: var(--graphite-surface-variant);
+}
+
+.forceFocus thead th:first-child button {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}

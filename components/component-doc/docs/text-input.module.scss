@@ -1,0 +1,9 @@
+// Text input's own page parts: the forced Focus row. The component exposes no
+// data-slot hooks, so this reaches its field wrapper structurally (the span
+// that holds the input) and sets the same two declarations `.wrap:focus-within`
+// carries in components/ui/text-input.module.scss. Nothing here restyles it.
+
+.forceFocus span:has(> input) {
+  border-color: var(--graphite-primary);
+  box-shadow: 0 0 0 1px var(--graphite-primary);
+}

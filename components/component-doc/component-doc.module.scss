@@ -1,6 +1,7 @@
-// The Accordion component page (Graphite UI Site 11814:18). Only what is
-// specific to this component lives here; the parts every component page shares
-// are in components/component-page.
+// Every component page's layout, from the Accordion page (Graphite UI Site
+// 11814:18). The tables and chips are in components/component-page; this is
+// the page around them. What a single component needs (forced states, anatomy
+// markers) lives beside its config in ./docs.
 
 .page {
   display: flex;
@@ -67,11 +68,19 @@
   gap: var(--graphite-space-04);
 }
 
+// Controls sit to the right, each the width of the kit's one Size select, and
+// wrap when a page has more than fits.
 .controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  max-width: 10rem;
-  margin-left: auto;
+  gap: var(--graphite-space-04);
+
+  // Doubled so it outranks a control's own width: 100% (Select's root), which
+  // would otherwise win or lose on stylesheet order.
+  &#{&} > * {
+    width: 10rem;
+  }
 }
 
 .previewSurface {
@@ -121,23 +130,6 @@
   color: var(--graphite-on-primary);
   font-size: var(--graphite-text-caption-2-size);
   font-weight: 500;
-}
-
-.markTrigger {
-  top: 1.25rem;
-  left: -2.25rem;
-  transform: translateY(-50%);
-}
-
-.markIndicator {
-  top: 1.25rem;
-  right: -2.25rem;
-  transform: translateY(-50%);
-}
-
-.markPanel {
-  top: 4.25rem;
-  left: -2.25rem;
 }
 
 .slotList {
@@ -238,19 +230,18 @@
   }
 }
 
+.matrixCell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
 .matrixLabel {
   font-size: var(--graphite-text-caption-1-size);
   line-height: var(--graphite-text-caption-1-line-height);
   color: var(--graphite-on-surface-variant);
-}
-
-.forceHover [data-slot='accordion-trigger'] {
-  background: var(--graphite-surface-variant);
-}
-
-.forceFocus [data-slot='accordion-trigger'] {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: -2px;
 }
 
 // ------------------------------------------------------------------ TOC footer

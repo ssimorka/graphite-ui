@@ -1,0 +1,17 @@
+// Contained list's own page parts: a full-width stack for the rows, and the
+// forced Hover row. The row exposes no data-slot hook, so the page wraps it
+// and forces the declaration contained-list.module.scss puts on
+// .interactive:hover. Nothing here restyles the component.
+
+.list {
+  display: flex;
+  flex-direction: column;
+  // A preview surface sizes to its content, so a percentage width collapses to
+  // the row's text. A fixed measure, capped at the container, reads as a list.
+  width: 32rem;
+  max-width: 100%;
+}
+
+.forceHover .list > * {
+  background: var(--graphite-surface-variant);
+}

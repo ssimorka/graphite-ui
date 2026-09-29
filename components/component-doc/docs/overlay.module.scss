@@ -1,0 +1,25 @@
+// Overlay's own page parts: the demo's layout and its focus readout. Nothing
+// here restyles a component.
+
+.demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  // The panel opens below the trigger, over the readout; this keeps it inside
+  // the preview rather than over the next section.
+  padding-bottom: 6rem;
+}
+
+.readout {
+  margin: 0;
+  max-width: 28rem;
+  text-align: center;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.matrix {
+  width: 100%;
+}

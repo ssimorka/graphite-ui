@@ -1,0 +1,8 @@
+// Checkbox's own page parts: the forced focus state. The component exposes no
+// data-slot hooks, so this reaches the painted box as the span that follows the
+// native input, which is the component's own structure, and forces the same
+// declaration `.native:focus-visible + .box` carries. Nothing here restyles it.
+
+.forceFocus input[type='checkbox'] + span {
+  box-shadow: 0 0 0 2px var(--graphite-focus);
+}
