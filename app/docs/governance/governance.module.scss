@@ -1,0 +1,318 @@
+// The Governance page. Adapted from the Installation page's module (the
+// Getting started pattern); the shared pieces live in components/doc-blocks and
+// components/component-page.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Prose under a block: body/2, with inline code set in the mono face.
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+.link {
+  color: var(--graphite-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--graphite-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+}
+
+.fields tbody th {
+  width: 160px;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  vertical-align: top;
+}
+
+.fields td,
+.checks td {
+  vertical-align: top;
+}
+
+.checks tbody th {
+  vertical-align: top;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  white-space: nowrap;
+}
+
+// Below md the three columns stack, per the kit's "Table row · Small": the
+// check's name on its own line, then what it compares, then what it proves.
+@media (max-width: 671px) {
+  .fields,
+  .checks {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    tr {
+      display: flex;
+      flex-direction: column;
+      gap: var(--graphite-space-02);
+      padding: var(--graphite-space-04) var(--graphite-space-05);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      width: auto;
+      padding: 0;
+      border: 0;
+    }
+  }
+}
+
+.subhead {
+  margin: var(--graphite-space-03) 0 0;
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+// Prohibitions quoted from a contract: set off by a rule, as a quotation.
+.quoted {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: 0 0 0 var(--graphite-space-06);
+  max-width: 44rem;
+  border-left: 2px solid var(--graphite-outline);
+  list-style: none;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+// ------------------------------------------------------------------ rules
+.rules {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-05) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.ruleNumber {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-title-2-size);
+  line-height: var(--graphite-text-title-2-line-height);
+  color: var(--graphite-primary);
+}
+
+.ruleText {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+.questions {
+  list-style: decimal;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding-left: var(--graphite-space-06);
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  strong {
+    font-weight: 600;
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ------------------------------------------------------------------ stats
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--graphite-surface-variant);
+  border: 1px solid var(--graphite-surface-variant);
+
+  @media (max-width: 671px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface);
+
+  dt {
+    font-size: var(--graphite-text-caption-1-size);
+    line-height: var(--graphite-text-caption-1-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--graphite-text-title-1-size);
+    line-height: var(--graphite-text-title-1-line-height);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

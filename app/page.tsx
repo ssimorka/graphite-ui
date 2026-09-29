@@ -20,7 +20,7 @@ export default function Page() {
   return (
     <main id="main-content" className="page-main">
       {/* Section order is the kit's, 01 through 07. */}
-      <Hero />
+      <Hero governed={readKitStats().governed} />
 
       <ComponentWall contracts={contracts} />
 

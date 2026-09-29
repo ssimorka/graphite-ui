@@ -1,0 +1,234 @@
+// The Radius page. Page frame adapted from installation.module.scss; the
+// swatches and the rounding preview are this page's own.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  scroll-margin-top: 5rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: 0.9em;
+    color: var(--graphite-on-surface);
+  }
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ------------------------------------------------------------- swatches
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--graphite-space-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.swatchItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  min-width: 0;
+}
+
+// Wider than tall, so `full` reads as the pill it is and not a circle.
+.swatch {
+  display: block;
+  height: var(--graphite-space-10);
+  margin-bottom: var(--graphite-space-03);
+  background: var(--graphite-primary-container);
+  border: 1px solid var(--graphite-primary);
+}
+
+.swatchName {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.swatchValue {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-primary);
+}
+
+.missing {
+  color: var(--graphite-danger);
+}
+
+// -------------------------------------------------------------- preview
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+}
+
+.previewStage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-06);
+  background: var(--graphite-background);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.previewRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-04);
+}
+
+.previewCaption {
+  margin: 0;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// --------------------------------------------------------------- rules
+.rules {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.side {
+  padding: 1.125rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  border-top-width: 3px;
+}
+
+// The heading word carries the meaning; the top rule only reinforces it.
+.do {
+  border-top-color: var(--graphite-success);
+}
+
+.dont {
+  border-top-color: var(--graphite-danger);
+}
+
+.sideLabel {
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.sideList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0 0 0 var(--graphite-space-05);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    overflow-wrap: anywhere;
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}

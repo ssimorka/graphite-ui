@@ -1,0 +1,20 @@
+.note {
+  padding: var(--graphite-space-05);
+  background: var(--graphite-primary-container);
+  border-left: 3px solid var(--graphite-primary);
+}
+
+.title {
+  margin: 0 0 var(--graphite-space-02);
+  font-size: var(--graphite-text-title-4-size);
+  font-weight: var(--graphite-text-weight-semibold);
+  line-height: var(--graphite-text-title-4-line-height);
+  color: var(--graphite-on-primary-container);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-primary-container);
+}
