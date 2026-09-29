@@ -142,7 +142,9 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
                     <span className={styles.slotMarker} aria-hidden="true">{i + 1}</span>
                     <span className={styles.slotName}>{slot.name}</span>
                     <span className={styles.slotReq}>{slot.required ? 'Required' : 'Optional'}</span>
-                    <span className={styles.slotNotes}>{slot.notes}</span>
+                    <span className={styles.slotNotes}>
+                      {slot.inheritedFrom ? `${slot.notes} (from ${slot.inheritedFrom})` : slot.notes}
+                    </span>
                   </li>
                 ))}
               </ol>
@@ -199,7 +201,7 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
                 p.name,
                 p.type || '—',
                 p.default || '—',
-                p.notes,
+                p.inheritedFrom ? `${p.notes} (from ${p.inheritedFrom})` : p.notes,
               ])}
             />
           </section>
@@ -211,11 +213,15 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
             />
             <TokenTable
               rows={contract.tokens.map((t) =>
-                // An inherited set has no single role to paint, so it is named
-                // by where it comes from and gets the empty swatch.
-                t.inheritedFrom
+                // An inherited row that names no contract has no role to paint, so
+                // it is named by where it comes from and gets the empty swatch.
+                !t.name
                   ? { name: `from ${t.inheritedFrom}`, usage: t.usage, swatch: null }
-                  : { name: t.name, usage: t.usage, swatch: swatch(t.name) },
+                  : {
+                      name: t.name,
+                      usage: t.inheritedFrom ? `${t.usage} (from ${t.inheritedFrom})` : t.usage,
+                      swatch: swatch(t.name),
+                    },
               )}
             />
           </section>

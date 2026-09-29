@@ -76,7 +76,9 @@
   justify-content: flex-end;
   gap: var(--graphite-space-04);
 
-  > * {
+  // Doubled so it outranks a control's own width: 100% (Select's root), which
+  // would otherwise win or lose on stylesheet order.
+  &#{&} > * {
     width: 10rem;
   }
 }

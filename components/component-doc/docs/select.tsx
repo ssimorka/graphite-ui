@@ -59,9 +59,6 @@ export function selectDoc(): ComponentDocConfig {
       { label: 'Disabled', node: field({ state: 'disabled' }) },
       { label: 'Error', node: field({ state: 'error', errorText: 'Choose an option to continue.' }) },
     ],
-    // The contract's first token row inherits Text input's set rather than
-    // naming a role, so it has no swatch of its own to paint.
-    swatches: { '': null },
     dos: [
       'Use a select for a long list of choices where only one can hold, such as a country or a region.',
       'Match its size to the text inputs in the same form. The two share one size scale.',

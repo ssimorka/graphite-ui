@@ -1,0 +1,75 @@
+// Menu's own page parts: room for an open list to open into, and the forced
+// states. The matrix forces the same declarations the item's :hover and
+// :focus-visible carry (components/ui/menu.module.scss), reached through the
+// item's role. Nothing here restyles the component.
+
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-04);
+}
+
+// The list is absolutely positioned, so the preview reserves the side it
+// opens into rather than letting it spill over the next section.
+.roomBelow {
+  padding-bottom: 11rem;
+}
+
+.roomAbove {
+  padding-top: 11rem;
+}
+
+.readout {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 17rem;
+}
+
+.stageTop {
+  align-items: flex-end;
+}
+
+// One trigger and a one-item list.
+.cell {
+  min-height: 6.5rem;
+}
+
+.anatomy {
+  min-height: 16rem;
+}
+
+.markTrigger {
+  top: 1.25rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markItems {
+  top: 4.25rem;
+  left: -2.25rem;
+}
+
+.markSeparator {
+  top: 10.4rem;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.forceHover [role='menuitem']:not(:disabled) {
+  background: var(--graphite-surface-variant);
+}
+
+.forceFocus [role='menuitem'] {
+  background: var(--graphite-surface-variant);
+  outline: none;
+}

@@ -13,18 +13,27 @@ import path from 'node:path'
  * reads exactly that, so it stays free of a YAML dependency. Server-only.
  */
 
-export type ContractSlot = { name: string; required: boolean; notes: string }
+export type ContractSlot = {
+  name: string
+  required: boolean
+  notes: string
+  /** The contract this row was inherited from, when it was. */
+  inheritedFrom?: string
+}
 export type ContractProp = {
   name: string
   type: string
   default: string
   notes: string
+  inheritedFrom?: string
 }
 export type ContractToken = {
   name: string
   usage: string
-  /** Set when the contract borrows another component's tokens wholesale
-   *  (`- inherited_from: Text input`) rather than naming a role. */
+  /** The contract this row was inherited from, when it was. An
+   *  `inherited_from` that names no contract file (Select's "Text input" does;
+   *  "Wave 5 shared Overlay base" does not) stays a single row of its own with
+   *  an empty `name`. */
   inheritedFrom?: string
 }
 
@@ -71,11 +80,47 @@ function readStrings(lines: string[], key: string): string[] {
   return out
 }
 
+const slugOf = (component: string) => component.toLowerCase().replace(/\s+/g, '-')
+
+const contractPath = (slug: string) =>
+  path.join(process.cwd(), 'docs', 'contracts', `${slug}.md`)
+
+/**
+ * Expand `- inherited_from: X` rows into X's own rows, each marked with where it
+ * came from, so Text area's page lists Text input's slots, props and tokens
+ * rather than a blank row. Recursive, with a guard against a cycle. A name with
+ * no contract file is left as the single marker row.
+ */
+function expand<T extends { name: string; inheritedFrom?: string }>(
+  items: Item[],
+  map: (item: Item) => T,
+  pick: (doc: ContractDoc) => T[],
+  seen: Set<string>,
+): T[] {
+  const rows = items.flatMap((item): T[] => {
+    const from = item.inherited_from
+    if (!from) return [map(item)]
+    const slug = slugOf(from)
+    if (seen.has(slug) || !fs.existsSync(contractPath(slug))) {
+      return [{ ...map(item), inheritedFrom: from }]
+    }
+    return pick(readContract(slug, new Set([...seen, slug]))).map((row) => ({
+      ...row,
+      inheritedFrom: row.inheritedFrom ?? from,
+    }))
+  })
+  // A component's own row outranks one it inherited under the same name
+  // (Select restates on-surface-variant with its own usage).
+  const own = new Set(rows.filter((r) => !r.inheritedFrom && r.name).map((r) => r.name))
+  return rows.filter((r) => !(r.inheritedFrom && own.has(r.name)))
+}
+
 export function readContractDoc(slug: string): ContractDoc {
-  const src = fs.readFileSync(
-    path.join(process.cwd(), 'docs', 'contracts', `${slug}.md`),
-    'utf8',
-  )
+  return readContract(slug, new Set([slug]))
+}
+
+function readContract(slug: string, seen: Set<string>): ContractDoc {
+  const src = fs.readFileSync(contractPath(slug), 'utf8')
   const fm = src.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ''
   const lines = fm.split(/\r?\n/)
   const scalar = (k: string) =>
@@ -85,22 +130,24 @@ export function readContractDoc(slug: string): ContractDoc {
     component: scalar('component'),
     version: scalar('version'),
     wave: scalar('wave'),
-    slots: readList(lines, 'slots').map((s) => ({
-      name: s.name ?? '',
-      required: s.required === 'true',
-      notes: s.notes ?? '',
-    })),
-    props: readList(lines, 'props').map((p) => ({
-      name: p.name ?? '',
-      type: p.type ?? '',
-      default: p.default ?? '',
-      notes: p.notes ?? '',
-    })),
-    tokens: readList(lines, 'tokens').map((t) => ({
-      name: t.name ?? '',
-      usage: t.usage ?? '',
-      ...(t.inherited_from ? { inheritedFrom: t.inherited_from } : {}),
-    })),
+    slots: expand<ContractSlot>(
+      readList(lines, 'slots'),
+      (s) => ({ name: s.name ?? '', required: s.required === 'true', notes: s.notes ?? '' }),
+      (d) => d.slots,
+      seen,
+    ),
+    props: expand<ContractProp>(
+      readList(lines, 'props'),
+      (p) => ({ name: p.name ?? '', type: p.type ?? '', default: p.default ?? '', notes: p.notes ?? '' }),
+      (d) => d.props,
+      seen,
+    ),
+    tokens: expand<ContractToken>(
+      readList(lines, 'tokens'),
+      (t) => ({ name: t.name ?? '', usage: t.usage ?? '' }),
+      (d) => d.tokens,
+      seen,
+    ),
     compositionRules: readStrings(lines, 'composition_rules'),
     prohibitions: readStrings(lines, 'prohibitions'),
   }
