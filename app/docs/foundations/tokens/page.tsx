@@ -5,15 +5,15 @@ import { SiteFooter } from '@/components/sections/site-footer'
 
 // PLACEHOLDER: replaced by the real page.
 export const metadata: Metadata = {
-  title: 'Introduction · Graphite UI',
-  description: 'Introduction.',
+  title: 'Tokens · Graphite UI',
+  description: 'Tokens.',
 }
 
-export default function IntroductionPage() {
+export default function TokensPage() {
   return (
     <main id="main-content" className="page-main">
       <DocsShell nav={DOCS_NAV}>
-        <h1>Introduction</h1>
+        <h1>Tokens</h1>
       </DocsShell>
       <SiteFooter />
     </main>

@@ -17,7 +17,7 @@ const loadIndex = () =>
   }))
 
 // What an empty box offers: the pages people land on first.
-const START = ['/docs/installation', '/docs', '/docs/foundations/color', '/gallery', '/create']
+const START = ['/docs', '/docs/installation', '/docs/theming', '/docs/foundations/color', '/gallery', '/create']
 
 /**
  * The documentation search: a dialog with one combobox and its results. Built

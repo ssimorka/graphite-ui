@@ -44,7 +44,7 @@ export function ThemeCta() {
                 </a>
               </Button>
               <Button variant="ghost" size="lg" asChild>
-                <a href="/docs">
+                <a href="/docs/theming">
                   Read how theming works
                   <Book />
                 </a>

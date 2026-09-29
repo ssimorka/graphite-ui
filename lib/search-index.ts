@@ -9,7 +9,7 @@ import {
   INSTALLATION_TOC,
 } from '@/components/docs-nav'
 import { readContractDoc } from '@/lib/contract-doc'
-import { metadata as docsMeta } from '@/app/docs/page'
+import { metadata as themingMeta } from '@/app/docs/theming/page'
 import { metadata as installMeta } from '@/app/docs/installation/page'
 import { metadata as rampsMeta } from '@/app/docs/foundations/color/page'
 import { metadata as createMeta } from '@/app/create/page'
@@ -125,7 +125,7 @@ function componentPage(c: ComponentDocConfig): SearchEntry[] {
 export function buildSearchIndex(): SearchEntry[] {
   return [
     ...docsPage('/docs/installation', installMeta, INSTALLATION_TOC),
-    ...docsPage('/docs', docsMeta, COLOR_DOCS_TOC, 'Docs', 'Theming'),
+    ...docsPage('/docs/theming', themingMeta, COLOR_DOCS_TOC),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),
     ...docsPage('/gallery', galleryMeta, [], 'Docs'),
     ...docsPage('/create', createMeta, [], 'Tool', 'Create a theme'),

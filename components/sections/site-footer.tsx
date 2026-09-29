@@ -17,9 +17,9 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     links: [
       { label: 'Introduction', href: '/docs' },
       { label: 'Installation', href: '/docs/installation' },
-      { label: 'Quick start', href: '/docs/installation' },
-      { label: 'Theming', href: '/docs' },
-      { label: 'Accessibility', href: '/docs' },
+      { label: 'Quick start', href: '/docs/quick-start' },
+      { label: 'Theming', href: '/docs/theming' },
+      { label: 'Accessibility', href: '/docs/accessibility' },
     ],
   },
   {
@@ -34,18 +34,18 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: 'Foundations',
     links: [
-      { label: 'Color', href: `${REPO}/blob/main/docs/color.md` },
-      { label: 'Typography', href: `${REPO}/blob/main/docs/contracts/foundations/typography.md` },
-      { label: 'Spacing', href: `${REPO}/tree/main/docs/contracts/foundations` },
-      { label: 'Radius', href: `${REPO}/tree/main/docs/contracts/foundations` },
-      { label: 'Layout & grid', href: `${REPO}/tree/main/docs/contracts/foundations` },
+      { label: 'Color', href: '/docs/foundations/color' },
+      { label: 'Typography', href: '/docs/foundations/typography' },
+      { label: 'Spacing', href: '/docs/foundations/spacing' },
+      { label: 'Radius', href: '/docs/foundations/radius' },
+      { label: 'Layout & grid', href: '/docs/foundations/layout' },
     ],
   },
   {
     heading: 'Resources',
     links: [
       { label: 'GitHub', href: REPO },
-      { label: 'Governance rules', href: `${REPO}/blob/main/docs/contracts/README.md` },
+      { label: 'Governance rules', href: '/docs/governance' },
       { label: 'Licence', href: `${REPO}/blob/main/LICENSE` },
     ],
   },

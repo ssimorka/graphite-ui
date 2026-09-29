@@ -10,16 +10,26 @@ export const DOCS_NAV: DocsNavGroup[] = [
   {
     label: 'Getting started',
     items: [
+      { href: '/docs', label: 'Introduction' },
       { href: '/docs/installation', label: 'Installation' },
-      // The color essay: how a source becomes ramps and roles. It was labelled
-      // Color until Foundations gave that name to the ramps page; the kit's
-      // Installation next-steps card already calls it Theming.
-      { href: '/docs', label: 'Theming' },
+      { href: '/docs/quick-start', label: 'Quick start' },
+      // The color essay: how a source becomes ramps and roles. The kit's
+      // Installation next-steps card calls it Theming.
+      { href: '/docs/theming', label: 'Theming' },
+      { href: '/docs/accessibility', label: 'Accessibility' },
+      { href: '/docs/governance', label: 'Governance' },
     ],
   },
   {
     label: 'Foundations',
-    items: [{ href: '/docs/foundations/color', label: 'Color' }],
+    items: [
+      { href: '/docs/foundations/color', label: 'Color' },
+      { href: '/docs/foundations/typography', label: 'Typography' },
+      { href: '/docs/foundations/spacing', label: 'Spacing' },
+      { href: '/docs/foundations/radius', label: 'Radius' },
+      { href: '/docs/foundations/layout', label: 'Layout & grid' },
+      { href: '/docs/foundations/tokens', label: 'Tokens' },
+    ],
   },
   {
     // /gallery is the Components index; every governed component has a page
