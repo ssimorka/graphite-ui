@@ -1,0 +1,10 @@
+// Radio button group's own page parts: the forced focus state. The component
+// exposes no data-slot hooks, so this reaches the painted dot as the span that
+// follows the native input, which is the component's own structure, and forces
+// the declarations `.native:focus-visible + .dot` carries. Only the first option
+// is forced, because focus sits on one radio at a time.
+
+.forceFocus fieldset > div > span:first-child input[type='radio'] + span {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}

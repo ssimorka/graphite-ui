@@ -1,0 +1,27 @@
+// Breadcrumb's own page parts: the anatomy markers and the forced Hover row.
+// The component exposes no data-slot hooks; its links are the only anchors it
+// renders, so the forced state reaches them structurally and sets the one
+// declaration `.link:hover` carries in components/ui/breadcrumb.module.scss.
+
+// The trail is only as wide as its crumbs, so the markers are placed against
+// the trail itself rather than the diagram's full width.
+.trail {
+  position: relative;
+  display: inline-block;
+}
+
+.markList {
+  top: 50%;
+  left: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.markCurrent {
+  top: 50%;
+  right: -2.25rem;
+  transform: translateY(-50%);
+}
+
+.forceHover a {
+  text-decoration: underline;
+}

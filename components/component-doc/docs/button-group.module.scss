@@ -1,0 +1,10 @@
+// Button Group's own page parts. The group never wraps (it is horizontal by
+// definition), so on a phone a three-action row is wider than the demo. The
+// demo scrolls inside itself instead of widening the page. Nothing here
+// restyles the component.
+.scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  // Room for the buttons' focus rings, which sit 2px outside them.
+  padding: var(--graphite-space-01);
+}

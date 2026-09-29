@@ -1,0 +1,39 @@
+// Button's own page parts: the forced states. Each row forces the same
+// declarations button.module.scss puts on its pseudo-classes. The variant
+// classes there are hashed, so each demo button also carries one of the
+// `is*` hooks below to say which variant it is. Nothing here restyles the
+// component; it only holds a state still long enough to look at.
+
+.forceHover {
+  .isPrimary { background: var(--graphite-primary-hover); }
+  .isSecondary {
+    background: var(--graphite-secondary-hover);
+    border-color: var(--graphite-secondary-hover);
+  }
+  .isGhost { background: var(--graphite-surface-variant); }
+  .isDanger { background: var(--graphite-danger-hover); }
+}
+
+.forcePressed {
+  [data-slot='button'] { transform: translateY(1px); }
+  .isPrimary { background: var(--graphite-primary-pressed); }
+  .isSecondary {
+    background: var(--graphite-secondary-pressed);
+    border-color: var(--graphite-secondary-pressed);
+  }
+  .isGhost { background: var(--graphite-surface-variant); }
+  .isDanger { background: var(--graphite-danger-pressed); }
+}
+
+.forceFocus [data-slot='button'] {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// A row of buttons that wraps on a narrow screen instead of overflowing.
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-04);
+}

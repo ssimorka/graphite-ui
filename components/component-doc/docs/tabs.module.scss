@@ -1,0 +1,23 @@
+// Tabs' own page parts: the forced Focus row. Tabs exposes no data-slot hooks,
+// so the rule reaches the selected tab through its ARIA attributes, and forces
+// the same declarations tabs.module.scss puts on :focus-visible. Nothing here
+// restyles the component.
+
+.forceFocus [role='tab'][aria-selected='true'] {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// Surfaces size to their content, so a percentage width would collapse to the
+// labels. A fixed measure, capped at the container, lets the rule the list sits
+// on read as a rule.
+.full {
+  width: 32rem;
+  max-width: 100%;
+}
+
+// Vertical tabs need a panel with some height, or the side rule is one tab tall.
+.tallPanel {
+  margin: 0;
+  min-height: 6rem;
+}

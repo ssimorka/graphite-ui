@@ -210,11 +210,13 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
               lede="Every swatch is live. Change the source color in the header and this table repaints, because it reads the same roles the component does."
             />
             <TokenTable
-              rows={contract.tokens.map((t) => ({
-                name: t.name,
-                usage: t.usage,
-                swatch: swatch(t.name),
-              }))}
+              rows={contract.tokens.map((t) =>
+                // An inherited set has no single role to paint, so it is named
+                // by where it comes from and gets the empty swatch.
+                t.inheritedFrom
+                  ? { name: `from ${t.inheritedFrom}`, usage: t.usage, swatch: null }
+                  : { name: t.name, usage: t.usage, swatch: swatch(t.name) },
+              )}
             />
           </section>
 

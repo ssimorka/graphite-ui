@@ -1,0 +1,8 @@
+// Typography's own page parts. The inverted variant only makes sense on the
+// surface it exists for, so the demo sits on a primary fill. Nothing here
+// restyles the component.
+.onPrimary {
+  width: 100%;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-primary);
+}

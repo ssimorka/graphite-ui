@@ -20,7 +20,13 @@ export type ContractProp = {
   default: string
   notes: string
 }
-export type ContractToken = { name: string; usage: string }
+export type ContractToken = {
+  name: string
+  usage: string
+  /** Set when the contract borrows another component's tokens wholesale
+   *  (`- inherited_from: Text input`) rather than naming a role. */
+  inheritedFrom?: string
+}
 
 export type ContractDoc = {
   component: string
@@ -93,6 +99,7 @@ export function readContractDoc(slug: string): ContractDoc {
     tokens: readList(lines, 'tokens').map((t) => ({
       name: t.name ?? '',
       usage: t.usage ?? '',
+      ...(t.inherited_from ? { inheritedFrom: t.inherited_from } : {}),
     })),
     compositionRules: readStrings(lines, 'composition_rules'),
     prohibitions: readStrings(lines, 'prohibitions'),
