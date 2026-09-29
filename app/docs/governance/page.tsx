@@ -233,17 +233,17 @@ export default function GovernancePage() {
                 { label: 'Contract', tone: 'name' },
                 { label: 'Version', tone: 'type' },
                 { label: 'Wave', tone: 'muted' },
-                { label: 'Slots · props · tokens', tone: 'muted' },
-                { label: 'Rules · prohibitions', tone: 'muted' },
+                { label: 'Declares', tone: 'muted' },
+                { label: 'Composition', tone: 'muted' },
               ]}
               rows={contracts.map((c) => [
                 <a key={c.slug} className={styles.link} href={`/docs/components/${c.slug}`}>
                   {c.component}
                 </a>,
-                c.version,
-                c.wave,
-                `${c.slots} · ${c.props} · ${c.tokens}`,
-                `${c.rules} · ${c.prohibitions}`,
+                `v${c.version}`,
+                `Wave ${c.wave}`,
+                `${c.slots} ${c.slots === 1 ? 'slot' : 'slots'} · ${c.props} ${c.props === 1 ? 'prop' : 'props'} · ${c.tokens} ${c.tokens === 1 ? 'token' : 'tokens'}`,
+                `${c.rules} ${c.rules === 1 ? 'rule' : 'rules'} · ${c.prohibitions} ${c.prohibitions === 1 ? 'prohibition' : 'prohibitions'}`,
               ])}
             />
             <p className={styles.note}>
