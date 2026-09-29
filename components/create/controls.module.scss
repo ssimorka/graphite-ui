@@ -104,6 +104,16 @@
   gap: var(--graphite-space-04);
   padding: 0.625rem var(--graphite-space-04);
   border: 1px solid var(--graphite-outline);
+
+  // The whole field reads as the input, so it takes the focus ring.
+  &:has(.hex:focus) {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+
+  &[data-invalid] {
+    border-color: var(--graphite-danger);
+  }
 }
 
 .current {
@@ -115,6 +125,12 @@
 
 .hex {
   flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  text-transform: uppercase;
   font-family: var(--graphite-font-mono), monospace;
   font-size: var(--graphite-text-code-1-size);
   line-height: var(--graphite-text-code-1-line-height);
