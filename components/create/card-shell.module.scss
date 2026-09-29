@@ -1,0 +1,44 @@
+// The shell every Create-page example sits in. Colours are generated roles, so
+// a card recolours with the source; nothing here is a hex.
+//
+// Cards are fluid: the preview is 364px wide in a two-column layout and as
+// narrow as 288px on a phone, so an example should not assume a width.
+
+.card {
+  display: flex;
+  flex-direction: column;
+  // Both follow the builder's density; the fallbacks are the default step.
+  gap: var(--card-gap, var(--graphite-space-05));
+  min-width: 0;
+  padding: var(--card-pad, var(--graphite-space-06));
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+  // Break out of any inherited Carbon reset so an example reads the builder's
+  // type choice, which the preview sets on its root.
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}

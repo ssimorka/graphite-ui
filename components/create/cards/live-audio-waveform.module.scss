@@ -1,0 +1,39 @@
+.wave {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.bar {
+  flex: none;
+  width: 3px;
+  border-radius: 1.5px;
+  background: var(--graphite-primary);
+  transform-origin: center;
+  animation: pulse 900ms ease-in-out infinite alternate;
+}
+
+.paused .bar {
+  animation-play-state: paused;
+}
+
+@keyframes pulse {
+  from { transform: scaleY(0.55); }
+  to { transform: scaleY(1.2); }
+}
+
+// Purely decorative motion stops for anyone who asks the system for less.
+@media (prefers-reduced-motion: reduce) {
+  .bar { animation: none; }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.actions > * { min-width: 0; }

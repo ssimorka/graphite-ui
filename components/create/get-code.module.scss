@@ -1,0 +1,57 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.lede {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// The exported CSS is long. Cap it so the dialog stays a dialog, and let the
+// snippet scroll inside.
+.snippet {
+
+  pre {
+    max-height: 22rem;
+    overflow: auto;
+  }
+}
+
+.formats {
+  display: flex;
+  gap: var(--graphite-space-03);
+}
+
+// The same square chip as the preview toolbar.
+.chip {
+  padding: 2px 7px;
+  border: 1px solid var(--graphite-outline);
+  background: transparent;
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--graphite-primary-container);
+    border-color: var(--graphite-primary);
+    color: var(--graphite-primary);
+  }
+}

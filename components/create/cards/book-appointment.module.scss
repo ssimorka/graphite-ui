@@ -1,0 +1,44 @@
+.date {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+// The kit's Choice chip: square, 1px outline, 12/6 padding.
+.chip {
+  padding: 6px var(--graphite-space-04);
+  border: 1px solid var(--graphite-outline);
+  border-radius: 0;
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+.selected {
+  background: var(--graphite-primary);
+  border-color: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+.book {
+  width: 100%;
+  min-width: 0;
+  justify-content: flex-start;
+}

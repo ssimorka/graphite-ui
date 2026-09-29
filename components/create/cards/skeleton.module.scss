@@ -1,0 +1,77 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.block {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: var(--graphite-surface-variant);
+
+  // The kit's skeleton state: a soft sweep of the primary container.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--graphite-primary-container);
+    opacity: 0.5;
+    transform: translateX(-100%);
+    animation: sweep 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after { animation: none; opacity: 0; }
+  }
+}
+
+@keyframes sweep {
+  to { transform: translateX(100%); }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
+.avatar {
+  flex: none;
+  width: var(--graphite-space-08);
+  height: var(--graphite-space-08);
+  border-radius: 50%;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  flex: 1;
+  min-width: 0;
+}
+
+.lineLg { height: 16px; width: min(180px, 100%); }
+.lineSm { height: 12px; width: min(120px, 66%); }
+
+.paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.text { height: 12px; width: 100%; }
+.short { width: min(250px, 70%); }
+
+.buttons {
+  display: flex;
+  gap: var(--graphite-space-03);
+}
+
+.button {
+  flex: 0 1 124px;
+  height: var(--graphite-space-07);
+  min-width: 0;
+}

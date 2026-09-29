@@ -1,0 +1,22 @@
+// The kit's image slot is a flat primary field (the design fills it with the dark theme primary).
+.image {
+  height: 175px;
+  background: var(--graphite-primary);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.button {
+  min-width: 0;
+  // Label left, icon in the slot the 64px inset reserves.
+  justify-content: space-between;
+  gap: var(--graphite-space-06);
+  padding-right: var(--graphite-space-05);
+}

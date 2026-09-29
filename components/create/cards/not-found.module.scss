@@ -1,0 +1,43 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--graphite-space-04);
+  min-height: 288px;
+  min-width: 0;
+  padding: var(--graphite-space-05);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.description {
+  margin: 0;
+  max-width: 100%;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.search {
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+
+.link {
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-primary);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+  &:focus-visible { outline: 2px solid var(--graphite-focus); outline-offset: 2px; }
+}

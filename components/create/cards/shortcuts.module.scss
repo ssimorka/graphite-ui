@@ -1,0 +1,56 @@
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.label {
+  min-width: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.keys {
+  display: flex;
+  gap: var(--graphite-space-02);
+  flex-shrink: 0;
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--graphite-space-01) var(--graphite-space-03);
+  font-family: inherit;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  color: var(--graphite-on-surface);
+  background: var(--graphite-surface-variant);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--graphite-surface-variant);
+}

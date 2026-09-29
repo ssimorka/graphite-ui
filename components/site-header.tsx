@@ -12,8 +12,8 @@ import { DOCS_NAV } from '@/components/docs-nav'
 import styles from './site-header.module.scss'
 
 // The kit's header nav, with every label pointed at something that exists:
-// `#patterns` is a real section of the color docs, and Create resolves to the
-// theme section on the home page, which is the builder this site has.
+// `#patterns` is a real section of the color docs, and Create is the theme
+// builder.
 //
 // Root-relative throughout: the header is shared between / and /docs, so a
 // bare `#patterns` would resolve against whichever page you are on.
@@ -21,7 +21,7 @@ const NAV_ITEMS: [NavItem, ...NavItem[]] = [
   { href: '/docs', label: 'Docs' },
   { href: '/gallery', label: 'Components' },
   { href: '/docs#patterns', label: 'Patterns' },
-  { href: '/#theme', label: 'Create' },
+  { href: '/create', label: 'Create' },
 ]
 
 // Only route items can be "current". An item carrying a hash lives on a page

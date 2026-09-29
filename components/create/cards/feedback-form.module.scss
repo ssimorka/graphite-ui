@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.submit {
+  width: 100%;
+}

@@ -1,0 +1,57 @@
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.check {
+  flex: none;
+  margin-top: 0;
+  color: var(--graphite-on-surface);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-03);
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.text {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  // The lead phrases read at full strength, as in the design.
+  strong {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+}
+
+.tag {
+  max-width: 100%;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--graphite-space-03);
+}

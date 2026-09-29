@@ -1,0 +1,5 @@
+// Doubled selector so the full width wins over the button's own width rule
+// whatever order the stylesheets load in.
+.full.full {
+  width: 100%;
+}
