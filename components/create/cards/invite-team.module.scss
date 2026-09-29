@@ -1,0 +1,54 @@
+.invitee {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.email {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+// Fixed-ish role column that gives way on a phone.
+.role {
+  flex: 0 0 128px;
+  min-width: 0;
+}
+
+.full {
+  width: 100%;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--graphite-surface-variant);
+}
+
+.link {
+  position: relative;
+  min-width: 0;
+}
+
+// Sits over the input's trailing edge, level with its 48px field.
+.copy {
+  position: absolute;
+  right: var(--graphite-space-04);
+  bottom: 0;
+  height: calc(var(--graphite-space-08) + 2px);
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}

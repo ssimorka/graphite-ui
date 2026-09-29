@@ -1,0 +1,29 @@
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.label {
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  color: var(--graphite-on-surface-variant);
+  white-space: nowrap;
+}

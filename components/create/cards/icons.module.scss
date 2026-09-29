@@ -1,0 +1,18 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
+.cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--graphite-space-07);
+  height: var(--graphite-space-07);
+  border: 1px solid var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+
+  svg { fill: currentColor; }
+}

@@ -1,0 +1,183 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+// Delete is a danger label on a ghost ground in the kit.
+.delete {
+  background: transparent;
+  color: var(--graphite-danger);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  padding: var(--graphite-space-05);
+  border: 1px solid var(--graphite-surface-variant);
+  min-width: 0;
+}
+
+.itemText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--graphite-space-01);
+  min-width: 0;
+}
+
+.itemTitle {
+  margin: 0;
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.itemBody {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.sliderLabel {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.sliderRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.rail {
+  display: flex;
+  flex: 1 1 140px;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+  color: var(--graphite-on-surface);
+}
+
+.range {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 14px;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--graphite-on-surface) var(--fill),
+    var(--graphite-surface-variant) var(--fill)
+  );
+}
+
+.range::-moz-range-track {
+  height: 2px;
+  background: var(--graphite-surface-variant);
+}
+
+.range::-moz-range-progress {
+  height: 2px;
+  background: var(--graphite-on-surface);
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--graphite-on-surface);
+}
+
+.range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--graphite-on-surface);
+}
+
+.range:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 4px;
+}
+
+.number {
+  flex: 1 1 64px;
+  min-width: 0;
+  height: var(--graphite-space-09);
+  padding: 0 var(--graphite-space-05);
+  border: 0;
+  border-bottom: 1px solid var(--graphite-outline);
+  border-radius: 0;
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+  font: inherit;
+}
+
+.number:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
+}
+
+// No Tag variant draws the kit's outlined badge, so it is built here.
+.outlineTag {
+  display: inline-flex;
+  align-items: center;
+  min-width: var(--graphite-space-06);
+  padding: 0 var(--graphite-space-02);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-radius-full);
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  font-size: 0.75rem;
+  line-height: calc(var(--graphite-space-06) - 2px);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-03) var(--graphite-space-04);
+  min-width: 0;
+}
+
+.spacer {
+  flex: 1 1 0;
+}
+
+.groupMain {
+  padding-right: var(--graphite-space-05);
+}

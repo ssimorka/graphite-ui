@@ -1,0 +1,34 @@
+.eyebrow,
+.title,
+.body {
+  margin: 0;
+  font-family: var(--graphite-font-2);
+}
+
+.eyebrow {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  color: var(--graphite-on-surface-variant);
+}
+
+.title {
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.body {
+  max-width: 760px;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.button {
+  align-self: stretch;
+  min-width: 0;
+  justify-content: flex-start;
+  text-align: left;
+}

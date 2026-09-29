@@ -1,0 +1,83 @@
+// The Create page (Graphite UI Site 11835:286204 at X-Large, 11853:2067 Medium,
+// 11856:2238 Small). At xl the controls sit beside the preview (392 and 800, a
+// 24px gap, inside 48px margins). Below that the preview comes first and the
+// controls become a compact bar under it.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-07);
+  max-width: 82rem; // 1312px
+  margin: 0 auto;
+  padding: 1.25rem var(--graphite-space-05) var(--graphite-space-10);
+
+  @media (min-width: 672px) {
+    padding: 1.75rem var(--graphite-space-06) var(--graphite-space-10);
+  }
+
+  @media (min-width: 1312px) {
+    padding: 2.25rem 3rem 5rem;
+  }
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+
+  @media (min-width: 672px) {
+    font-size: var(--graphite-text-heading-4-size);
+    line-height: var(--graphite-text-heading-4-line-height);
+  }
+}
+
+.lede {
+  margin: 0;
+  max-width: 47.5rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+
+  @media (min-width: 1312px) {
+    display: grid;
+    grid-template-columns: 24.5rem minmax(0, 1fr); // 392px
+    gap: var(--graphite-space-06);
+    align-items: start;
+  }
+}
+
+// The full panel is the xl layout; the compact bar is everything below it.
+.panel {
+  display: none;
+
+  @media (min-width: 1312px) {
+    display: block;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  min-width: 0;
+}
+
+.bar {
+  @media (min-width: 1312px) {
+    display: none;
+  }
+}

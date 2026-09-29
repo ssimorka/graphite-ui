@@ -1,0 +1,41 @@
+.week {
+  display: flex;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.day {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-03);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.label {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 28px;
+  height: 64px;
+  background: var(--graphite-surface-variant);
+}
+
+.fill {
+  display: block;
+  width: 100%;
+  background: var(--graphite-primary);
+}
+
+.cta {
+  width: 100%;
+}

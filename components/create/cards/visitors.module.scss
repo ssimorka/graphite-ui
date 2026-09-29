@@ -1,0 +1,28 @@
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.grow {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: 157px;
+}
+
+.area {
+  fill: var(--graphite-primary);
+  fill-opacity: 0.16;
+}
+
+.line {
+  fill: none;
+  stroke: var(--graphite-primary);
+  stroke-width: 2;
+}

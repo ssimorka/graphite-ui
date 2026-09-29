@@ -1,0 +1,497 @@
+// The Create page's controls (Graphite UI Site 11835:286491 for the desktop
+// panel, 13304:5391 for the compact bar, 13316:5853 for the sheets). Colours are
+// generated roles; the kit's outlineSubtle is surfaceVariant here.
+
+// --------------------------------------------------------------------- panel
+.panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  padding: 1.125rem var(--graphite-space-06);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-04);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.label {
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.lock {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--graphite-on-surface);
+  }
+
+  // Locked reads in the primary role and in the word, not the hue alone.
+  &[aria-pressed='true'] {
+    color: var(--graphite-primary);
+    font-weight: 600;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.caption {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// --------------------------------------------------------------------- field
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  padding: 0.625rem var(--graphite-space-04);
+  border: 1px solid var(--graphite-outline);
+}
+
+.current {
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.hex {
+  flex: 1;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-1-size);
+  line-height: var(--graphite-text-code-1-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.pick {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-primary);
+  font: inherit;
+  font-size: var(--graphite-text-body-2-size);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.presets {
+  display: flex;
+  gap: var(--graphite-space-03);
+}
+
+.preset {
+  flex: 1;
+  min-width: 0;
+  height: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--graphite-surface-variant);
+  cursor: pointer;
+
+  // The chosen preset carries a heavier ring, so selection is not colour alone.
+  &[aria-pressed='true'] {
+    border: 2px solid var(--graphite-on-surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// --------------------------------------------------------------------- chips
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// Two rows of four, as the kit lays the eight radius steps.
+.radii {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--graphite-space-03);
+}
+
+// "Choice chip" in the kit: 12 / 6 inset, an outline, filled primary when chosen.
+.chip {
+  display: inline-flex;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 1px solid var(--graphite-outline);
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--graphite-primary);
+    border-color: var(--graphite-primary);
+    color: var(--graphite-on-primary);
+  }
+}
+
+.chipGrow {
+  min-width: 0;
+  padding-inline: var(--graphite-space-03);
+}
+
+// ------------------------------------------------------------------ typeface
+.face {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-04);
+  padding: 0.5625rem var(--graphite-space-04);
+  border-bottom: 1px solid var(--graphite-outline);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.faceLabel {
+  color: var(--graphite-on-surface-variant);
+}
+
+.faceRole {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+}
+
+.select {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  text-align: right;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ------------------------------------------------------------- derived roles
+.roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+.role {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 4.75rem;
+}
+
+.roleSwatch {
+  height: 1.375rem;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.roleName {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+// A proposal, said in the warning role and in words.
+.proposed {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-warning);
+}
+
+// ------------------------------------------------------------------- actions
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1.125rem var(--graphite-space-06) 1.25rem;
+}
+
+.actionRow {
+  display: flex;
+  gap: 0.625rem;
+
+  > * {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// The kit's Shuffle and Reset are outlined in primary. Button has no outlined
+// variant, so this extends the ghost one; className is merged after the recipe.
+.outlined {
+  border: 1px solid var(--graphite-primary);
+  color: var(--graphite-primary);
+}
+
+// ---------------------------------------------------------------- compact bar
+// Below xl: nine 144px pickers in a scrolling rail, and a footer (Graphite UI
+// Site 13304:5391, and 13304:5484 for Small).
+.bar {
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.rail {
+  display: flex;
+  gap: 0.625rem;
+  padding: var(--graphite-space-04);
+  overflow-x: auto;
+  // Scroll padding so a picker does not stop flush under the edge.
+  scroll-padding: var(--graphite-space-04);
+}
+
+.picker {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  width: 9rem;
+  padding: 0.625rem 0.625rem 0.625rem var(--graphite-space-04);
+  border: 1px solid var(--graphite-outline);
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.pickerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.pickerLabel {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.pickerValue {
+  overflow: hidden;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.indicator {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.25rem;
+  font-size: var(--graphite-text-body-2-size);
+}
+
+.dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 1px solid var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-4);
+}
+
+.barFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-04);
+  border-top: 1px solid var(--graphite-surface-variant);
+
+  @media (min-width: 672px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}
+
+.barButton {
+  @media (min-width: 672px) {
+    width: 9.375rem;
+  }
+}
+
+// -------------------------------------------------------------------- sheets
+// The kit's Sheet: a scrim and a panel from the bottom edge, rounded at the top,
+// with a grabber. It is site chrome on the Overlay base (Escape and outside click
+// dismiss, focus returns to the picker), not a new component.
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--graphite-scrim);
+}
+
+.sheet {
+  position: fixed;
+  z-index: 61;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 80vh;
+  padding: var(--graphite-space-04) 0 1.25rem;
+  overflow-y: auto;
+  background: var(--graphite-surface);
+  border-top: 1px solid var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-16) var(--graphite-radius-16) 0 0;
+  outline: none;
+}
+
+.grabber {
+  flex: none;
+  width: 2.25rem;
+  height: 4px;
+  background: var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-2);
+}
+
+.sheetTitle {
+  width: 100%;
+  margin: 0;
+  padding: var(--graphite-space-04) 1.25rem var(--graphite-space-03);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  width: 100%;
+  padding: var(--graphite-space-04) 1.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--graphite-surface-variant);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+}
+
+.optionSwatch {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-4);
+}
+
+.optionLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

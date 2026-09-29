@@ -1,0 +1,86 @@
+// The Create page's preview (Graphite UI Site 11835:286490): a device toolbar
+// over a bordered field holding the examples in two columns.
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
+// The same square chip the components index uses for its filters.
+.toolbar {
+  display: flex;
+  gap: var(--graphite-space-03);
+  background: var(--graphite-background);
+  width: fit-content;
+}
+
+.chip {
+  padding: 2px 7px;
+  border: 1px solid var(--graphite-outline);
+  background: var(--graphite-background);
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--graphite-primary-container);
+    border-color: var(--graphite-primary);
+    color: var(--graphite-primary);
+  }
+}
+
+// The stage centres a narrower frame when Tablet or Mobile is chosen.
+.stage {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.frame {
+  width: 100%;
+  min-width: 0;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-background);
+  border: 1px solid var(--graphite-surface-variant);
+
+  @media (min-width: 672px) {
+    padding: var(--graphite-space-06);
+  }
+  // The frame's own size is what decides the layout inside it.
+  transition: max-width var(--graphite-motion-base) var(--graphite-motion-ease);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--graphite-space-06);
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame {
+    transition: none;
+  }
+}

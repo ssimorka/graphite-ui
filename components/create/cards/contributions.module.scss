@@ -1,0 +1,21 @@
+// Doubled selector so the full width wins over the button's own width rule
+// whatever order the stylesheets load in.
+.full.full {
+  width: 100%;
+}
+
+// The Checkbox puts help text beside its label, so the help sits below the row
+// here to match the design.
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.help {
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}

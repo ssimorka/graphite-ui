@@ -1,0 +1,17 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-04);
+
+  > * {
+    flex: 1 1 120px;
+    min-width: 0;
+  }
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--graphite-space-03);
+}

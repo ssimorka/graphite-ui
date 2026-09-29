@@ -1,0 +1,39 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--graphite-space-04);
+  min-height: 192px;
+  padding: var(--graphite-space-05);
+  min-width: 0;
+}
+
+.title {
+  align-self: stretch;
+  margin: 0;
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.body {
+  align-self: stretch;
+  margin: 0;
+  max-width: 760px;
+  text-align: center;
+  font-family: var(--graphite-font-2);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.button {
+  align-self: stretch;
+  min-width: 0;
+  white-space: normal;
+  justify-content: flex-start;
+  text-align: left;
+}

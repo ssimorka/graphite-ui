@@ -1,0 +1,60 @@
+.plot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 110px;
+  min-width: 0;
+}
+
+.bar {
+  display: flex;
+  flex-direction: column-reverse;
+  flex: 0 1 28px;
+  min-width: 0;
+}
+
+.segment { display: block; }
+.deep { background: var(--graphite-primary); }
+.light { background: var(--graphite-secondary); }
+.rem { background: var(--graphite-on-surface-variant); }
+
+.stats {
+  display: flex;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  min-width: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  flex: 1 1 0;
+  gap: var(--graphite-space-01);
+  min-width: 0;
+  text-align: center;
+}
+
+.value {
+  margin: 0;
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.label {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+}
+
+// Ghost's label is primary in the kit; trim the reserved icon inset here.
+.details { padding-right: var(--graphite-space-05); }

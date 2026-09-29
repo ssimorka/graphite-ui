@@ -1,0 +1,33 @@
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+// The word carries the result; the hue only reinforces it.
+.pass {
+  color: var(--graphite-success);
+}
+
+.fail {
+  color: var(--graphite-danger);
+  font-weight: 600;
+}
+
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
