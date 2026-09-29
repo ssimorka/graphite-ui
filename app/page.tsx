@@ -36,7 +36,7 @@ export default function Page() {
       <ThemeCta />
       <TwoDoors />
 
-      <Faq />
+      <Faq governed={contractList.length} />
       <SiteFooter />
     </main>
   )

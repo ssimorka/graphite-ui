@@ -1,0 +1,334 @@
+// Shared parts of a component page, from the kit's Site pages
+// (Graphite UI Site 11814:17). The kit's outlineSubtle is bound to surfaceVariant
+// in this system, so every subtle border and rule here reads that role.
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------ reference table
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-background);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+    font-weight: 400;
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+  }
+}
+
+// Cell voices. Name is the loudest, type carries the primary role so the eye can
+// find it, muted is the default column, text is prose.
+.name,
+.type,
+.muted {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+}
+
+.name {
+  color: var(--graphite-on-surface);
+}
+
+.type {
+  color: var(--graphite-primary);
+}
+
+.muted {
+  color: var(--graphite-on-surface-variant);
+}
+
+.text {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.rowHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+@media (max-width: 671px) {
+  .table {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    tr {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--graphite-space-02) var(--graphite-space-04);
+      padding: var(--graphite-space-04) var(--graphite-space-05);
+      border-bottom: 1px solid var(--graphite-surface-variant);
+    }
+
+    th,
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    // The name, and the last (prose) cell, each take a full line; what is
+    // between them wraps as one meta line.
+    tr > :first-child,
+    tr > :last-child {
+      flex: 1 1 100%;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- token table
+.tokens {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.token {
+  display: grid;
+  grid-template-columns: auto minmax(0, 13.125rem) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 671px) {
+    grid-template-columns: auto minmax(0, 1fr);
+
+    .tokenUsage {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+.swatch {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.swatchNone {
+  border-style: dashed;
+  border-color: var(--graphite-outline);
+}
+
+.tokenName {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+  overflow-wrap: anywhere;
+}
+
+.tokenUsage {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ------------------------------------------------------------------- do / don't
+.doDont {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.side {
+  padding: 1.125rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  border-top-width: 3px;
+}
+
+// The heading word carries the meaning; the top rule only reinforces it.
+.do {
+  border-top-color: var(--graphite-success);
+}
+
+.dont {
+  border-top-color: var(--graphite-danger);
+}
+
+.sideLabel {
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.sideList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    position: relative;
+    padding-left: var(--graphite-space-05);
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      background: currentColor;
+      opacity: 0.5;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------- notes
+.notes {
+  margin: 0;
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.note {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-02);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  dt {
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface);
+  }
+
+  dd {
+    margin: 0;
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+
+  @media (min-width: 672px) {
+    grid-template-columns: 8.75rem minmax(0, 1fr);
+    gap: var(--graphite-space-05);
+  }
+}
+
+// -------------------------------------------------------------------- related
+.related {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.relatedLink {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  height: 100%;
+  padding: 0.75rem 0.875rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--graphite-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.relatedTitle {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-primary);
+}
+
+.relatedWhy {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// -------------------------------------------------------------------- surface
+.surfaceWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin: 0;
+}
+
+.surfaceLabel {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.surface {
+  padding: 1.75rem var(--graphite-space-05);
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+
+  @media (min-width: 672px) {
+    padding: 1.75rem var(--graphite-space-07);
+  }
+}

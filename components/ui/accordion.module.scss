@@ -1,0 +1,136 @@
+// Accordion — docs/contracts/accordion.md
+//
+// Geometry from the kit's Site page (Graphite UI Site 11814:17): a 16px
+// horizontal inset, a 32 / 40 / 48 trigger, and a panel inset 16 left and 48
+// right so a line of copy never runs under the indicator.
+//
+// The rule between items is `surface-variant`: the kit's outlineSubtle binds it
+// in this system, and hover is a tone step on the same role.
+
+.accordion {
+  --accordion-min: var(--graphite-space-08); // md, 40
+  --accordion-inset: var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.sm { --accordion-min: var(--graphite-space-07); }
+.md { --accordion-min: var(--graphite-space-08); }
+.lg { --accordion-min: var(--graphite-space-09); }
+
+// Flush drops the outer rules and the horizontal inset, so the list sits inside
+// a container that already has its own edge.
+.flush {
+  --accordion-inset: 0;
+  border-bottom: 0;
+
+  .item:first-child {
+    border-top: 0;
+  }
+}
+
+.item {
+  border-top: 1px solid var(--graphite-surface-variant);
+  background: var(--graphite-surface);
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.trigger {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  width: 100%;
+  min-height: var(--accordion-min);
+  padding: 0 var(--accordion-inset);
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+
+  &:hover:not(:disabled) {
+    background: var(--graphite-surface-variant);
+  }
+
+  // Never removed, only moved: inset so the ring is not clipped by the list.
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    color: var(--graphite-primary-disabled-content);
+    cursor: not-allowed;
+  }
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.indicator {
+  flex: none;
+  color: var(--graphite-on-surface-variant);
+  transition: transform var(--graphite-motion-base) var(--graphite-motion-ease);
+}
+
+.item[data-state='open'] .indicator {
+  transform: rotate(180deg);
+}
+
+// Alignment: the indicator goes first. Reordering with `order` keeps the DOM,
+// and so the reading order for a screen reader, the same in both.
+.left .indicator {
+  order: -1;
+}
+
+// ------------------------------------------------------------------- panel
+// Height animates through a grid track, 0fr to 1fr, which needs no measured
+// pixel value and so no script.
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--graphite-motion-base)
+    var(--graphite-motion-ease);
+}
+
+.panel[data-state='open'] {
+  grid-template-rows: 1fr;
+}
+
+.clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content {
+  padding: var(--graphite-space-03) var(--graphite-space-09)
+    var(--graphite-space-06) var(--accordion-inset);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.left .content {
+  // With the indicator on the left the copy lines up under the label, not the
+  // glyph, and there is nothing at the right edge to clear.
+  padding-left: calc(var(--accordion-inset) + var(--graphite-space-05) + 16px);
+  padding-right: var(--graphite-space-05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .indicator,
+  .trigger {
+    transition: none;
+  }
+}

@@ -1,15 +1,17 @@
 'use client'
 
-import { Grid, Column, Accordion, AccordionItem } from '@carbon/react'
+import { Grid, Column } from '@carbon/react'
+import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Reveal } from '@/components/reveal'
+import { spell } from '@/lib/spell'
 
 // The kit draws only the first answer open; the other four questions are
 // collapsed, so their copy is written here against what the repo actually
 // does rather than invented.
-const FAQS = [
+const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: 'Twenty-two components carry a versioned contract and are checked against the kit on every build. The kit ships more than that, and anything without a contract is labelled ungoverned on its own page rather than left for you to find out.',
+    a: `${spell(governed)} components carry a versioned contract and are checked against the kit on every build. The kit ships more than that, and anything without a contract is labelled ungoverned on its own page rather than left for you to find out.`,
   },
   {
     q: 'Does it require Carbon?',
@@ -30,7 +32,7 @@ const FAQS = [
 ]
 
 /** Kit section "06 FAQ" (11865:3162). */
-export function Faq() {
+export function Faq({ governed }: { governed: number }) {
   return (
     <section className="section section--faq" id="faq">
       <Grid>
@@ -39,9 +41,15 @@ export function Faq() {
             <h2 className="section__title faq__title">
               Questions people actually ask
             </h2>
-            <Accordion size="lg" className="faq__accordion">
-              {FAQS.map((item) => (
-                <AccordionItem key={item.q} title={item.q}>
+            <Accordion
+              type="single"
+              collapsible
+              size="lg"
+              defaultValue="faq-0"
+              className="faq__accordion"
+            >
+              {faqs(governed).map((item, i) => (
+                <AccordionItem key={item.q} value={`faq-${i}`} title={item.q}>
                   <p className="faq__answer">{item.a}</p>
                 </AccordionItem>
               ))}

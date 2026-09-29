@@ -40,7 +40,7 @@ background-blend-mode: multiply;`,
 
 <Accordion type="single" collapsible>
   <AccordionItem value="ready" title="Is Graphite UI production ready?">
-    Twenty-two components carry a versioned contract.
+    Every component carries a versioned contract.
   </AccordionItem>
 </Accordion>`,
 ]
