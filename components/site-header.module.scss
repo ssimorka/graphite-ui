@@ -307,6 +307,20 @@
 // Matched on the element rather than the class because NavigationMenu's are
 // CSS-module-hashed and not addressable from outside. `:where` holds the
 // specificity at zero so the component's own focus and current rules still win.
+.mobileGroup {
+  margin-top: var(--graphite-space-06);
+}
+
+.mobileGroupLabel {
+  margin: 0 0 var(--graphite-space-03);
+  padding: 0 var(--graphite-space-03);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  line-height: var(--graphite-text-code-3-line-height);
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
 .mobileNav :where(a) {
   display: flex;
   align-items: center;

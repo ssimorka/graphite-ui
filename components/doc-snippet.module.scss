@@ -1,0 +1,53 @@
+// Code snippet, docs chrome. Kit geometry: a layer-01 field with a 16px inset,
+// 12/16 mono, and a 32px ghost button pinned to the top right.
+
+.snippet {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.pre {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: var(--graphite-space-05) var(--graphite-space-09) var(--graphite-space-05)
+    var(--graphite-space-05);
+  overflow-x: auto;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  line-height: var(--graphite-text-code-3-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font: inherit;
+    white-space: pre;
+  }
+}
+
+.copy {
+  position: absolute;
+  top: var(--graphite-space-03);
+  right: var(--graphite-space-03);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--graphite-surface-variant);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+}

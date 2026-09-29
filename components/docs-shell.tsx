@@ -24,14 +24,15 @@ const NO_TOC: TocItem[] = []
 /**
  * Marks the section currently under the top of the viewport.
  *
- * rootMargin pins the observation band just under the fixed 48px header and
+ * rootMargin pins the observation band just under the fixed 64px header and
  * well above the fold, so "current" means the heading you have most recently
  * scrolled past rather than whatever happens to be centred. Without the
  * negative bottom the last few short sections would all qualify at once.
  *
  * Written in px, not rem: IntersectionObserver rejects any other unit at
- * construction time. 48px is the header height that site-header.module.scss
- * sets and .page-main offsets by, so all three have to agree.
+ * construction time. 64px is the header height that site-header.module.scss
+ * sets and .page-main offsets by, so all three have to agree. (This said 48
+ * while the header was 64, which put the band under the header's lower edge.)
  */
 function useScrollSpy(items: TocItem[]) {
   const [active, setActive] = useState<string | null>(null)
@@ -70,7 +71,7 @@ function useScrollSpy(items: TocItem[]) {
     const observer = new IntersectionObserver((entries) => {
       for (const e of entries) seen.set(e.target.id, e.isIntersecting)
       pick()
-    }, { rootMargin: '-48px 0px -70% 0px' })
+    }, { rootMargin: '-64px 0px -70% 0px' })
 
     const nodes = ids
       .map((id) => document.getElementById(id))
@@ -104,10 +105,13 @@ function useScrollSpy(items: TocItem[]) {
 export function DocsShell({
   nav,
   toc,
+  tocFooter,
   children,
 }: {
   nav: DocsNavGroup[]
   toc?: TocItem[]
+  /** Sits under the on-this-page list: the kit's "Contract footnote". */
+  tocFooter?: ReactNode
   children: ReactNode
 }) {
   const pathname = usePathname()
@@ -156,6 +160,7 @@ export function DocsShell({
               )
             })}
           </ul>
+          {tocFooter}
         </nav>
       ) : null}
     </div>

@@ -1,0 +1,194 @@
+// Docs-site chrome, from the kit's Site pages (Graphite UI Site 11814:17).
+//
+// Every colour is a generated role. The kit's outline-subtle is bound to
+// surfaceVariant in this system, so subtle borders read that role.
+
+.sectionHeading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+  scroll-margin-top: 5rem; // 64px header plus breathing room for anchor jumps
+}
+
+.sectionLede {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ---------------------------------------------------------------- badges
+.badge {
+  display: inline-flex;
+  align-items: flex-start;
+  padding: 2px 7px;
+  border: 1px solid;
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.success {
+  background: var(--graphite-success-container);
+  border-color: var(--graphite-success);
+  color: var(--graphite-success);
+}
+
+.neutral {
+  border-color: var(--graphite-outline);
+  color: var(--graphite-on-surface-variant);
+}
+
+.primary {
+  background: var(--graphite-primary-container);
+  border-color: var(--graphite-primary);
+  color: var(--graphite-primary);
+}
+
+// ----------------------------------------------------------------- steps
+.step {
+  display: flex;
+  gap: var(--graphite-space-05);
+  align-items: flex-start;
+}
+
+.marker {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--graphite-radius-full);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  font-size: var(--graphite-text-caption-2-size);
+  font-weight: 500;
+}
+
+.stepBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  min-width: 0;
+
+  > p {
+    margin: 0;
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+}
+
+.stepTitle {
+  margin: 0;
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// --------------------------------------------------------------- callout
+.callout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  padding: 1.25rem 1.375rem 1.375rem;
+  background: var(--graphite-surface);
+  border-left: 3px solid var(--graphite-primary);
+}
+
+.calloutTitle,
+.calloutBody {
+  margin: 0;
+}
+
+.calloutTitle {
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.calloutBody {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ------------------------------------------------------------- next cards
+// One column at 320, three from 672: the kit's Medium frame already has all
+// three abreast.
+.nextCards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--graphite-space-05);
+  }
+}
+
+.nextCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: 1.125rem 1.125rem 1.25rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+}
+
+.nextLink {
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-primary);
+  text-decoration: none;
+  white-space: pre-wrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.nextBody {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}

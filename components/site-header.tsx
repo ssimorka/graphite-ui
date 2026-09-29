@@ -8,6 +8,7 @@ import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { Modal } from '@/components/ui/modal'
+import { DOCS_NAV } from '@/components/docs-nav'
 import styles from './site-header.module.scss'
 
 // The kit's header nav, with every label pointed at something that exists:
@@ -164,6 +165,25 @@ export function SiteHeader() {
             }}
           >
             <NavigationMenu items={items} orientation="vertical" label="Main" />
+            {/* The docs sidebar is hidden below lg, as in the kit's Medium and
+                Small frames, so its links live here instead. */}
+            {pathname.startsWith('/docs')
+              ? DOCS_NAV.map((group) => (
+                  <div key={group.label} className={styles.mobileGroup}>
+                    <p className={styles.mobileGroupLabel}>{group.label}</p>
+                    <NavigationMenu
+                      label={group.label}
+                      orientation="vertical"
+                      items={
+                        group.items.map((item) => ({
+                          ...item,
+                          current: pathname === item.href,
+                        })) as [NavItem, ...NavItem[]]
+                      }
+                    />
+                  </div>
+                ))
+              : null}
           </div>
         }
       />
