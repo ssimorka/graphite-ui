@@ -87,6 +87,16 @@
 
   @media (min-width: 1312px) {
     display: block;
+    // Stays in view while the preview scrolls. 4rem clears the fixed header
+    // (the value .cap-sticky uses), plus the gutter so it does not touch it.
+    // With several sections open the panel outgrows the viewport, so it
+    // scrolls inside itself rather than running off the bottom.
+    position: sticky;
+    top: calc(4rem + var(--graphite-space-06));
+    max-height: calc(100vh - 4rem - 2 * var(--graphite-space-06));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
   }
 }
 
