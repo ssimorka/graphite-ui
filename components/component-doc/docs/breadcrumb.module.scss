@@ -1,4 +1,5 @@
-// Breadcrumb's own page parts: the anatomy markers and the forced Hover row.
+// Breadcrumb's own page parts: the anatomy markers and the forced Hover and
+// Focus rows.
 // The component exposes no data-slot hooks; its links are the only anchors it
 // renders, so the forced state reaches them structurally and sets the one
 // declaration `.link:hover` carries in components/ui/breadcrumb.module.scss.
@@ -24,4 +25,11 @@
 
 .forceHover a {
   text-decoration: underline;
+}
+
+// Mirrors `.link:focus-visible` on the first crumb only, so the row shows one
+// ring as a keyboard reader would see it.
+.forceFocus li:first-child a {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
 }

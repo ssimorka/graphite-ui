@@ -1,6 +1,6 @@
 ---
 component: Menu
-version: 1.3.0
+version: 1.3.1
 wave: 5
 slots:
   - name: Trigger
@@ -12,6 +12,7 @@ slots:
     required: false
   - name: Sub-menus
     required: false
+    notes: Not implemented. An item cannot open a nested menu; the items type has no field for one. Recorded here so the slot does not read as shipped.
 props:
   - name: placement
 tokens:
@@ -42,7 +43,7 @@ prohibitions:
 > All five below share one base pattern: a `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component). Define that shared base once as an internal "Overlay" contract, then each component below only needs to declare what's different.
 
 ### Menu
-- **Slots:** Trigger (required), menu items (required, minimum 1), optional separators and sub-menus.
+- **Slots:** Trigger (required), menu items (required, minimum 1), optional separators and sub-menus. Sub-menus are not implemented yet.
 - **Props:** placement.
 - **Tokens:** Same as Popover, plus `on-surface` for item labels, `surface-variant` for the hover and focus tone-step, `danger` for destructive items, and the spacing scale for padding.
 - **Composition rules:** Contained list hover/focus state uses the same tone-step logic as Button hover, not a separate highlight convention.

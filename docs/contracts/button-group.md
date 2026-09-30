@@ -1,6 +1,6 @@
 ---
 component: Button Group
-version: 1.0.0
+version: 1.0.1
 wave: 0
 slots:
   - name: Actions
@@ -13,7 +13,7 @@ tokens:
   - name: spacing
     usage: Gap between actions.
 composition_rules:
-  - "Enforces Button's one-primary-action rule by refusing to render: more than one child with `variant=\"primary\"` throws, naming the count and pointing at this contract. The rule is checked, not documented and hoped for."
+  - "Enforces Button's one-primary-action rule by refusing to render: more than one child with `variant=\"primary\"` throws, naming the count and pointing at this contract. Fragments are unwrapped before counting, so a footer passed as `<>...</>` is checked button by button. Any other wrapper element is counted as itself and hides what is inside it, so Buttons go in as direct children or inside fragments. The rule is checked, not documented and hoped for."
   - Modal wraps its footer in this rather than trusting each caller, so the rule holds wherever a footer is used instead of only where someone remembers it.
   - Horizontal by definition. A vertical stack of actions is a layout decision belonging to whatever contains the group.
 prohibitions:
@@ -38,7 +38,9 @@ file.
   color of its own: a group is an arrangement, and the buttons inside it carry
   every visual decision.
 - **Composition rules:** More than one child with `variant="primary"` throws.
-  Modal wraps its footer in this, so the rule holds wherever a
+  Fragments are unwrapped before the count (Modal's callers pass their footer
+  as one); any other wrapper element hides its contents from the check, so
+  Buttons go in directly. Modal wraps its footer in this, so the rule holds wherever a
   footer is used. Horizontal by definition.
 - **Prohibitions:** No second primary. No orientation prop. No per-instance
   spacing override.

@@ -4,6 +4,8 @@
 //
 // The control keeps a minimum touch target even though the painted box is
 // smaller, which is the same rule Button follows.
+.field { @include parts.control-stack; }
+
 .row {
   display: inline-flex;
   align-items: center;
@@ -53,6 +55,21 @@
 .native:disabled + .box {
   background: var(--graphite-primary-disabled);
   border-color: var(--graphite-primary-disabled-content);
+}
+
+// Error takes the same danger border Text input does: the edge goes danger and
+// a 1px ring doubles it, so it still reads over the primary fill when checked.
+// The focus ring stacks outside it rather than replacing it, so a keyboard
+// user in the error state still sees where they are.
+.errored .native:enabled + .box {
+  border-color: var(--graphite-danger);
+  box-shadow: 0 0 0 1px var(--graphite-danger);
+}
+
+.errored .native:enabled:focus-visible + .box {
+  box-shadow:
+    0 0 0 1px var(--graphite-danger),
+    0 0 0 3px var(--graphite-focus);
 }
 
 // Check: two borders rotated into a tick. Hidden until :checked.

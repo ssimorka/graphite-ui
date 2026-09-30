@@ -19,7 +19,6 @@
   line-height: 1.35;
   white-space: normal;
   width: max-content;
-  pointer-events: none;
   // Opacity only. Each placement class below carries its own transform, and an
   // animated transform would overwrite the placement rather than offset from
   // it. There is no exit: the bubble unmounts on close.
@@ -37,6 +36,19 @@
     animation: none;
   }
 }
+
+// The bubble takes the pointer (WCAG 1.4.13), and it sits inside the wrapper,
+// so moving onto it does not count as leaving. This strip spans the gap back to
+// the trigger, so the pointer never crosses bare page on the way.
+.tip::after {
+  content: '';
+  position: absolute;
+}
+
+.top::after { top: 100%; left: 0; right: 0; height: var(--graphite-space-02); }
+.bottom::after { bottom: 100%; left: 0; right: 0; height: var(--graphite-space-02); }
+.left::after { left: 100%; top: 0; bottom: 0; width: var(--graphite-space-02); }
+.right::after { right: 100%; top: 0; bottom: 0; width: var(--graphite-space-02); }
 
 .top { bottom: 100%; left: 50%; transform: translate(-50%, calc(-1 * var(--graphite-space-02))); }
 .bottom { top: 100%; left: 50%; transform: translate(-50%, var(--graphite-space-02)); }

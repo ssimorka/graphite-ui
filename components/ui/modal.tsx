@@ -8,7 +8,7 @@ import styles from './modal.module.scss'
 
 const InsideDialog = createContext(false)
 
-/** Contract: docs/contracts/modal.md (1.4.2) */
+/** Contract: docs/contracts/modal.md (1.5.0) */
 type ModalProps = {
   open: boolean
   onClose: () => void
@@ -44,20 +44,22 @@ export function Modal({
   }
 
   // Always traps focus, and the shared base always returns focus to the
-  // trigger on close. Neither is optional for a Modal.
+  // trigger on close. Neither is optional for a Modal. The scrim is simply
+  // outside the dialog, so the base's outside press is the scrim click, and
+  // dismissible switches it off along with Escape.
   const ref = useOverlay<HTMLDivElement>({
     open,
-    onDismiss: onClose,
+    onDismiss: () => onClose(),
     trapFocus: true,
     escape: dismissible,
-    outside: false,
+    outside: dismissible,
   })
 
   if (!open) return null
 
   return (
     <InsideDialog.Provider value={true}>
-      <div className={styles.scrim} onClick={dismissible ? onClose : undefined}>
+      <div className={styles.scrim}>
         <div
           ref={ref}
           role="dialog"
@@ -65,7 +67,6 @@ export function Modal({
           aria-labelledby={`${id}-title`}
           className={`${styles.dialog} ${styles[size]}`}
           tabIndex={-1}
-          onClick={(e) => e.stopPropagation()}
         >
           <h2 id={`${id}-title`} className={styles.title}>
             {title}

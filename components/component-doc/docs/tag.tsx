@@ -23,7 +23,7 @@ export function tagDoc(): ComponentDocConfig {
     anatomyLede:
       'One slot: a short string or a number. The pill shape comes from the full radius, so the ends stay round at any label length.',
     variantsLede:
-      'Five variants, each a container role and its matching on-container label. Neutral is the default. A number over the cap shows as 99+.',
+      'Five variants, each a container role and its matching on-container label. Neutral is the default. A number over max (99 by default) shows as 99+.',
     variants: [
       { label: 'Variant: Neutral (default)', node: <Tag>Draft</Tag> },
       { label: 'Variant: Primary', node: <Tag variant="primary">New</Tag> },
@@ -47,10 +47,10 @@ export function tagDoc(): ComponentDocConfig {
     a11y: [
       ['Roles', 'A plain span with no role, read inline as text. There is nothing to operate, so it takes no tab stop.'],
       ['Colour', 'The variant colour is a second signal, never the only one. A source colour near a status hue collapses primary and danger, so the label text has to carry the meaning.'],
-      ['Counts', 'When a count is capped, the full number goes into aria-label. A span with no role is not reliably named by every screen reader, so where the exact figure matters, state it in text as well.'],
+      ['Counts', 'When a count is capped, the visible 99+ is aria-hidden and the full number is rendered as visually hidden text, so every screen reader reads the exact figure.'],
       ['Contrast', 'Each variant pairs a container role with its own on-container role, and those pairs are measured at the theme’s target, AA or AAA.'],
     ],
-    parityLede: `The kit's Tag page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets, one of them a private close button. The code exposes ${props} prop. This table is where those two facts are reconciled instead of quietly diverging.`,
+    parityLede: `The kit's Tag page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets, one of them a private close button. The code exposes ${props} ${props === 1 ? 'prop' : 'props'}. This table is where those two facts are reconciled instead of quietly diverging.`,
     parity: [
       ['Color', 'Blue · Teal · Green · Purple · Red · Gray · High contrast · Outline', 'variant', 'From Tag - Read-only. Gray is neutral, Purple is primary, Red is danger, Green is success. Blue, Teal, High contrast and Outline have no counterpart. Warning has no kit colour.'],
       ['Size', 'Small · Medium · Large', '—', 'One size in code, 24px high, which is the kit’s Medium.'],

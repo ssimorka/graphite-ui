@@ -78,9 +78,11 @@ type TriggerProps = Parameters<ComponentProps<typeof Menu>['trigger']>[0]
 
 /**
  * Menu has no defaultOpen, so a still opens itself once on mount by calling
- * the same onClick its trigger would. The ref guard stops Strict Mode's
- * double-run from toggling it shut again. After that it is the real Menu: a
- * press outside or Escape closes it, and the trigger opens it again.
+ * the same onClick its trigger would. Called without an event, that open does
+ * not move focus into the list, which is what keeps eight stills from fighting
+ * over focus on load. The ref guard stops Strict Mode's double-run from
+ * toggling it shut again. After that it is the real Menu: a press outside or
+ * Escape closes it, and the trigger opens it again.
  */
 function OpenOnMount(props: TriggerProps) {
   const opened = useRef(false)

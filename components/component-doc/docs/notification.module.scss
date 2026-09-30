@@ -1,6 +1,7 @@
 // Notification's own page parts: one measure for the variant cells, so the four
-// read as a set rather than four widths set by their copy. Notification has no
-// interactive state, so there are no forced states here.
+// read as a set rather than four widths set by their copy. The only interactive
+// part is the optional close button, which the live preview shows working, so
+// there are no forced states here.
 
 .measure {
   width: 28rem;

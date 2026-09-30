@@ -4,7 +4,7 @@ import { useId } from 'react'
 import { fieldMessage } from '@/lib/field-message'
 import styles from './toggle.module.scss'
 
-/** Contract: docs/contracts/toggle.md (2.1.0) */
+/** Contract: docs/contracts/toggle.md (2.1.1) */
 type ToggleProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
@@ -44,27 +44,33 @@ export function Toggle({
     errorText,
   )
 
+  // The message sits under the row rather than inside it, which is where the
+  // kit draws Helper / Error text. Inside the no-wrap row it landed beside the
+  // label and pushed long copy off the side.
   return (
-    <span className={styles.row}>
-      <span className={styles.control}>
-        <input
-          type="checkbox"
-          role="switch"
-          id={inputId}
-          name={name}
-          className={styles.native}
-          checked={checked}
-          disabled={disabled}
-          onChange={(e) => onChange?.(e.target.checked)}
-          aria-describedby={describedBy}
-        />
-        <span className={styles.track} aria-hidden="true">
-          <span className={styles.thumb} />
+    <span className={`${styles.field} ${errored ? styles.errored : ''}`}>
+      <span className={styles.row}>
+        <span className={styles.control}>
+          <input
+            type="checkbox"
+            role="switch"
+            id={inputId}
+            name={name}
+            className={styles.native}
+            checked={checked}
+            disabled={disabled}
+            onChange={(e) => onChange?.(e.target.checked)}
+            aria-invalid={errored || undefined}
+            aria-describedby={describedBy}
+          />
+          <span className={styles.track} aria-hidden="true">
+            <span className={styles.thumb} />
+          </span>
         </span>
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
       </span>
-      <label htmlFor={inputId} className={styles.label}>
-        {label}
-      </label>
       {message ? (
         <span
           id={messageId}

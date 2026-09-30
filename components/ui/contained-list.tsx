@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import styles from './contained-list.module.scss'
 
-/** Contract: docs/contracts/contained-list.md (1.2.0) */
+/** Contract: docs/contracts/contained-list.md (1.3.0) */
 type ContainedListProps = {
   /** Typography by convention; the row does not impose a variant on it. */
   title: ReactNode
@@ -15,7 +15,11 @@ type ContainedListProps = {
    */
   trailing?: ReactNode
   density?: 'compact' | 'default'
-  /** Adds the hover tone-step. Only set it when the row really is clickable. */
+  /**
+   * Visual only: the hover tone-step and a pointer. The row takes no role,
+   * focus or click handler, because it has no onClick path to give one to. The
+   * caller supplies the link or button that answers the click.
+   */
   interactive?: boolean
 }
 

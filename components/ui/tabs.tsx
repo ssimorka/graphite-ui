@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import styles from './tabs.module.scss'
 
@@ -10,7 +10,7 @@ export type Tab = {
   panel: ReactNode
 }
 
-/** Contract: docs/contracts/tabs.md (1.1.0) */
+/** Contract: docs/contracts/tabs.md (1.1.1) */
 type TabsProps = {
   /** The tuple makes the contract's two-tab minimum a compile error. */
   tabs: [Tab, Tab, ...Tab[]]
@@ -22,10 +22,14 @@ export function Tabs({ tabs, defaultTabId, orientation = 'horizontal' }: TabsPro
   const uid = useId()
   const [active, setActive] = useState(defaultTabId ?? tabs[0].id)
 
-  const move = (delta: number) => {
-    const i = tabs.findIndex((t) => t.id === active)
-    const next = tabs[(i + delta + tabs.length) % tabs.length]
+  const refs = useRef(new Map<string, HTMLButtonElement>())
+
+  // Automatic activation: focus and selection move together. Moving only the
+  // selection strands focus on a tab that has just left the Tab order.
+  const select = (index: number) => {
+    const next = tabs[(index + tabs.length) % tabs.length]
     setActive(next.id)
+    refs.current.get(next.id)?.focus()
   }
 
   return (
@@ -35,10 +39,18 @@ export function Tabs({ tabs, defaultTabId, orientation = 'horizontal' }: TabsPro
         aria-orientation={orientation}
         className={styles.list}
         onKeyDown={(e) => {
+          const i = tabs.findIndex((t) => t.id === active)
           const prev = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp'
           const next = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown'
-          if (e.key === next) { e.preventDefault(); move(1) }
-          if (e.key === prev) { e.preventDefault(); move(-1) }
+          const to =
+            e.key === next ? i + 1
+            : e.key === prev ? i - 1
+            : e.key === 'Home' ? 0
+            : e.key === 'End' ? tabs.length - 1
+            : null
+          if (to === null) return
+          e.preventDefault()
+          select(to)
         }}
       >
         {tabs.map((tab) => (
@@ -48,6 +60,10 @@ export function Tabs({ tabs, defaultTabId, orientation = 'horizontal' }: TabsPro
             role="tab"
             id={`${uid}-${tab.id}-tab`}
             aria-controls={`${uid}-${tab.id}-panel`}
+            ref={(el) => {
+              if (el) refs.current.set(tab.id, el)
+              else refs.current.delete(tab.id)
+            }}
             aria-selected={tab.id === active}
             tabIndex={tab.id === active ? 0 : -1}
             className={`${styles.tab} ${tab.id === active ? styles.active : ''}`}

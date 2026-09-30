@@ -29,8 +29,8 @@ export function overlayDoc(): ComponentDocConfig {
           ]}
           rows={[
             ['Modal', 'When dismissible', 'The scrim, when dismissible', 'Always'],
-            ['Popover', 'Yes', 'Yes, the trigger included', 'When modal'],
-            ['Menu', 'Yes', 'Yes. Choosing an item closes it too', 'No'],
+            ['Popover', 'Yes', 'Yes. Its own trigger toggles it instead', 'When modal'],
+            ['Menu', 'Yes', 'Yes. Its trigger toggles it, and choosing an item closes it', 'No'],
             ['Tooltip', 'Yes', 'No. It closes on pointer leave and blur', 'No'],
           ]}
         />
@@ -49,12 +49,12 @@ export function overlayDoc(): ComponentDocConfig {
       'Send focus somewhere new on close. It goes back to whatever held it when the overlay opened, every time.',
     ],
     a11y: [
-      ['Escape', 'Every open overlay that honours Escape listens for it on the document, and they all close together. The contract asks for the outermost to close first; the hook does not order them yet.'],
-      ['Focus return', 'When an overlay closes, focus goes back to whatever held it when the overlay opened, whether it was trapped or not.'],
-      ['Trapping', 'With trapFocus on, the overlay takes focus as it opens, and Tab and Shift+Tab wrap between its first and last focusable elements.'],
-      ['Outside press', 'With outside on, a pointer press anywhere outside the overlay’s element closes it. The trigger counts as outside.'],
+      ['Escape', 'Open overlays stack in the order they opened, and Escape closes only the top one, so each press peels off one layer. A Modal with dismissible off still takes the press, so nothing beneath it closes either.'],
+      ['Focus return', 'When an overlay closes, focus goes back to whatever held it when the overlay opened, whether it was trapped or not. The exception is focus the reader has already moved elsewhere: Tab away from a Tooltip’s trigger and focus stays where the Tab put it.'],
+      ['Trapping', 'With trapFocus on, the overlay takes focus as it opens, and Tab and Shift+Tab wrap between its first and last focusable elements. Only the topmost trap wraps Tab.'],
+      ['Outside press', 'With outside on, a press outside the overlay closes it. The control that opened it does not count as outside, so its own click can toggle it shut. A press inside an overlay stacked above does not count either, so a Menu in a Modal closes on a press elsewhere in the Modal while the Modal stays. Nothing reaches past a trapping overlay.'],
       ['Roles', 'The hook sets no roles and no labels. Each overlay adds its own: dialog, menu or tooltip.'],
-      ['Re-renders', 'The hook re-runs whenever the onDismiss it is given changes, and every overlay passes an inline one. So if an open overlay re-renders, focus goes back to where it was when the overlay opened, and a trapped one takes focus again. Keep state that changes while it is open inside its content.'],
+      ['Re-renders', 'An open overlay can re-render freely. The hook reads the latest onDismiss when it needs it, so an inline one is fine, and focus stays where the reader put it.'],
     ],
     related: [
       { href: '/docs/components/modal', title: 'Modal', why: 'always traps focus' },

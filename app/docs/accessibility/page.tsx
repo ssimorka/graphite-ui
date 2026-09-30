@@ -422,69 +422,34 @@ export default function AccessibilityPage() {
           <section id="known-gaps" className={styles.block}>
             <SectionHeading
               title="Known gaps"
-              lede="Found while writing the component pages and this one, and not yet fixed."
+              lede="What is still open. The first pass of these pages found more; overlay stacking, Tabs and Menu keyboard support, the Breadcrumb focus ring, form error borders and the font fallback have since been fixed."
             />
             <ul className={styles.gaps}>
               <li>
-                <strong>Escape closes every open overlay at once.</strong> The
-                contract asks for the outermost to close first; the shared hook
-                does not order them yet. See{' '}
-                <a className={styles.link} href="/docs/components/overlay#accessibility">
-                  Overlay
-                </a>
-                .
-              </li>
-              <li>
-                <strong>Tabs&rsquo; arrow keys leave focus behind.</strong> They
-                change the selection without moving focus, so the ring can sit
-                on a tab that is no longer selected. See{' '}
-                <a className={styles.link} href="/docs/components/tabs#accessibility">
-                  Tabs
-                </a>
-                .
-              </li>
-              <li>
-                <strong>Menu has no arrow-key navigation.</strong> Tab moves
-                through the items in order instead. See{' '}
-                <a className={styles.link} href="/docs/components/menu#accessibility">
+                <strong>Menu has no sub-menus.</strong> The contract names the
+                slot, but nested menus are not built, so a Menu is one level
+                deep. See{' '}
+                <a className={styles.link} href="/docs/components/menu#anatomy">
                   Menu
                 </a>
                 .
               </li>
               <li>
-                <strong>Breadcrumb links lack the focus ring.</strong> They take
-                the browser&rsquo;s default outline rather than{' '}
-                <code>--graphite-focus</code>. See{' '}
+                <strong>Breadcrumb&rsquo;s overflow expands in place.</strong> The
+                collapsed crumbs are reachable, but the kit opens them in a menu
+                and the code shows them inline. See{' '}
                 <a className={styles.link} href="/docs/components/breadcrumb#accessibility">
                   Breadcrumb
                 </a>
                 .
               </li>
               <li>
-                <strong>Checkbox, Radio and Toggle have no error border.</strong>{' '}
-                Their error state is the message alone. See{' '}
-                <a className={styles.link} href="/docs/components/checkbox#accessibility">
-                  Checkbox
-                </a>
-                ,{' '}
-                <a className={styles.link} href="/docs/components/radio-button-group#accessibility">
-                  Radio button group
-                </a>{' '}
-                and{' '}
-                <a className={styles.link} href="/docs/components/toggle#accessibility">
-                  Toggle
-                </a>
-                .
-              </li>
-              <li>
-                <strong>
-                  <code>--graphite-font-1</code> and <code>--graphite-font-2</code>{' '}
-                  have no fallback stack.
-                </strong>{' '}
-                Both name IBM Plex Sans and nothing after it, so if the font
-                fails to load the browser&rsquo;s default face takes over. See{' '}
-                <a className={styles.link} href="/docs/foundations/typography">
-                  Typography
+                <strong>An interactive Contained list row is visual only.</strong>{' '}
+                <code>interactive</code> adds hover and a pointer; the row takes
+                no focus, so the caller supplies the link or button inside it.
+                See{' '}
+                <a className={styles.link} href="/docs/components/contained-list#accessibility">
+                  Contained list
                 </a>
                 .
               </li>

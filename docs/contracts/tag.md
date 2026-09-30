@@ -1,6 +1,6 @@
 ---
 component: Tag
-version: 2.3.0
+version: 2.4.0
 wave: 1
 slots:
   - name: Label
@@ -9,6 +9,10 @@ slots:
 props:
   - name: variant
     values: [neutral, primary, danger, warning, success]
+  - name: max
+    type: number
+    default: "99"
+    notes: The cap for a numeric label. A number above it shows as the cap with a plus (99+), and the full number stays in the accessibility tree as visually hidden text.
 tokens:
   - name: danger-container
     usage: Background on the danger variant.
@@ -43,7 +47,7 @@ prohibitions:
 
 ### Tag
 - **Slots:** Label (required, short text or number).
-- **Props:** variant (neutral, primary, danger, warning, success).
+- **Props:** variant (neutral, primary, danger, warning, success); `max` (number, default 99), the cap for a numeric label.
 - **Tokens:** `primary` with `on-primary` for the emphasis variant, `on-surface`/`surface` for neutral, and `danger-container`/`warning-container`/`success-container` with the matching `on-*-container` for status variants.
-- **Composition rules:** Numeric badges cap display at a defined max (e.g. "99+") rather than overflowing their container.
+- **Composition rules:** Numeric badges cap display at a defined max (e.g. "99+") rather than overflowing their container. The visible "99+" is hidden from assistive tech and the full number is read instead, as text.
 - **Prohibitions:** No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex.

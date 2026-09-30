@@ -1,9 +1,11 @@
 @use './form-parts' as parts;
 
-// Switch — docs/contracts/switch.md
+// Toggle — docs/contracts/toggle.md
 //
 // On is `primary` and off is `outline`, moving on the same ramp as Button's
 // active state rather than borrowing a separate green/gray convention.
+.field { @include parts.control-stack; }
+
 .row {
   display: inline-flex;
   align-items: center;
@@ -65,6 +67,27 @@
 
 .native:disabled + .track {
   background: var(--graphite-primary-disabled);
+}
+
+// The kit keeps one disabled track for on and off and lets the thumb carry the
+// difference, so the thumb has to be visible: disabled content on the disabled
+// fill, rather than surface, which all but vanished on it in light theme. Its
+// position is then what tells disabled-on from disabled-off.
+.native:disabled + .track .thumb {
+  background: var(--graphite-primary-disabled-content);
+}
+
+// Error draws the danger edge Text input uses. The track has no border to
+// recolor, so the ring is 2px, the same weight as Text input's border plus its
+// 1px shadow. Focus stacks outside it rather than replacing it.
+.errored .native:enabled + .track {
+  box-shadow: 0 0 0 2px var(--graphite-danger);
+}
+
+.errored .native:enabled:focus-visible + .track {
+  box-shadow:
+    0 0 0 2px var(--graphite-danger),
+    0 0 0 4px var(--graphite-focus);
 }
 
 @media (prefers-reduced-motion: reduce) {

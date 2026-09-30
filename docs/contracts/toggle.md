@@ -1,6 +1,6 @@
 ---
 component: Toggle
-version: 2.1.0
+version: 2.1.1
 wave: 2
 slots:
   - name: Label
@@ -20,11 +20,11 @@ props:
     notes: Its presence resolves the error state, so error text and error styling cannot be shown apart. This was Field's guarantee and it survives Field.
 tokens:
   - name: primary
-    usage: Fill when on.
+    usage: Fill when on. Its disabled state is the track when disabled, on or off alike as the kit draws it, and its disabled content is the thumb, so the thumb stays visible and its position still tells on from off.
   - name: outline
     usage: Fill when off. Same tone-step logic as Button's active state, not a separate green/gray convention.
   - name: surface
-    usage: Thumb, which must read against both the on and off track.
+    usage: Thumb while enabled, which must read against both the on and off track.
   - name: spacing
     usage: Track and thumb dimensions.
   - name: radius
@@ -34,7 +34,7 @@ tokens:
   - name: on-surface
     usage: The required-field indicator beside the label.
   - name: danger
-    usage: Error text, taking the same role as the control's error border so the two cannot drift apart.
+    usage: Error ring around the track, and error text. One role for both, so the two cannot drift apart.
   - name: motion
     usage: Duration for the track fill and the thumb travel. The easing stays a plain ease rather than the settle curve, because a switch is a short mechanical move and not something entering the viewport.
 composition_rules:

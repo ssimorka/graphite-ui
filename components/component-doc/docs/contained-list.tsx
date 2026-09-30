@@ -52,7 +52,7 @@ export function containedListDoc(): ComponentDocConfig {
     anatomyLede:
       'Four slots, of which only the title is required. Title and description each stay on one line and truncate, so a row never grows taller than its density allows.',
     variantsLede:
-      'Density is the contract’s one prop. It sets the row’s padding from the density steps; the height follows the content.',
+      'Density sets the row’s padding from the density steps; the height follows the content. Interactive is the other prop, and it only changes the hover, so it appears under States.',
     variants: [
       { label: 'Density: Default', node: row({ density: 'default' }) },
       { label: 'Density: Compact', node: row({ density: 'compact' }) },
@@ -66,7 +66,7 @@ export function containedListDoc(): ComponentDocConfig {
     dos: [
       'Put a Tag, an icon or a short code in the leading slot. It is a marker, not a second title.',
       'Keep the trailing slot to one control cluster: a Tag, one Button, or a Menu.',
-      'Set interactive only when clicking the row really does something, and make that something a real link or button.',
+      'Set interactive only when clicking the row really does something, and supply that something: wrap the row in a link, or put the Button in the trailing slot.',
       'Build list views and table rows from this row, so a hover change lands everywhere at once.',
     ],
     donts: [
@@ -77,12 +77,12 @@ export function containedListDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Roles', 'The row is a plain container with no role. Wrap the rows in a list element, or a table, when the structure matters to the reader.'],
-      ['Keyboard', 'The row itself is never focusable, even when interactive. Anything that should respond to a click needs a real link or button inside the title or trailing slot.'],
-      ['Focus', 'Focus belongs to the control in the trailing slot, which brings its own ring.'],
+      ['Keyboard', 'The row itself is never focusable, even when interactive: the prop is visual only. Keyboard access comes from the link that wraps the row or the control in its trailing slot.'],
+      ['Focus', 'Focus belongs to the caller’s link or the control in the trailing slot, which brings its own ring.'],
       ['Contrast', 'Title is on-surface and description on-surface-variant, one tone step lower. Both are measured against surface at the theme’s target.'],
       ['Truncation', 'Title and description clip with an ellipsis. The full text is still in the DOM, so assistive tech reads all of it.'],
     ],
-    parityLede: `The kit's Contained list page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets. One is public; the rest are the private row, cell and title items it is built from. The code is the row alone and exposes the contract's one prop.`,
+    parityLede: `The kit's Contained list page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets. One is public; the rest are the private row, cell and title items it is built from. The code is the row alone and exposes two props, density and interactive.`,
     parity: [
       ['Type', 'On page · Disclosed', '—', 'Where the list’s title bar sits. The code is the row; the list and its heading are the caller’s.'],
       ['Size', 'Small · Medium · Large · Extra large', 'density', 'Drawn on the row item as four heights. The code has two density steps of padding and lets the content set the height.'],

@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-version: 1.5.0
+version: 1.5.1
 wave: 5
 slots:
   - name: Trigger
@@ -30,6 +30,8 @@ composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
   - Never contains interactive content — a Tooltip you can click into is a Popover.
+  - `aria-describedby` goes on the trigger itself, the element that takes focus, and keeps any description the trigger already had.
+  - The pointer can move from the trigger onto the bubble without it closing (WCAG 1.4.13, hoverable).
 prohibitions:
   - No tooltip as the only source of critical information — it must be supplementary to visible content.
 ---

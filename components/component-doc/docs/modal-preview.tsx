@@ -103,15 +103,9 @@ const noop = () => {}
  * transform makes it the containing block for the fixed scrim, so the picture
  * sits in the page instead of covering it. `inert` keeps the Modal from taking
  * focus on mount (which would scroll the page to it), and dismissible={false}
- * keeps these pictures from registering Escape handlers of their own.
+ * keeps these pictures from answering Escape or outside presses.
  */
-export function ModalStill({
-  size = 'md',
-  withFooter = true,
-}: {
-  size?: Size
-  withFooter?: boolean
-}) {
+export function ModalStill({ size = 'md' }: { size?: Size }) {
   return (
     <div className={styles.stage} inert>
       <Modal
@@ -121,7 +115,7 @@ export function ModalStill({
         title={TITLE}
         body={BODY}
         size={size}
-        footer={withFooter ? footer(noop) : undefined}
+        footer={footer(noop)}
       />
     </div>
   )

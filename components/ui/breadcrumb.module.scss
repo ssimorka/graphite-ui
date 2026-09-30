@@ -14,6 +14,12 @@
   min-width: 0;
 }
 
+// Expanded on request, the full trail may wrap: the reader asked for every
+// crumb, and a trail pushed off the edge would hide them again.
+.expanded {
+  flex-wrap: wrap;
+}
+
 .crumb {
   display: inline-flex;
   align-items: center;
@@ -29,6 +35,21 @@
 
 .link:hover {
   text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// The overflow is a real button so the crumbs behind it can be reached; it
+// wears the link's look so the trail reads as one row of steps.
+.overflow {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
 }
 
 // The current page: full strength, and heavier, so it reads as a destination

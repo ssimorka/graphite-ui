@@ -89,9 +89,9 @@ export function tabsDoc(): ComponentDocConfig {
       'Key a panel on the active tab or render it conditionally yourself. That remounts the panel and throws away any form state inside it.',
     ],
     a11y: [
-      ['Keyboard', 'Only the selected tab is in the Tab order. Left and Right (Up and Down when vertical) select the previous or next tab and wrap at the ends. Home and End are not bound.'],
+      ['Keyboard', 'Only the selected tab is in the Tab order. Left and Right (Up and Down when vertical) select the previous or next tab and wrap at the ends. Home and End select the first and last. Selection follows focus, so the panel changes as soon as a tab is reached.'],
       ['Roles', <>The list is a <code>tablist</code> with <code>aria-orientation</code>. Each tab is a button with <code>role=&quot;tab&quot;</code>, <code>aria-selected</code> and <code>aria-controls</code>; each panel is a <code>tabpanel</code> labelled by its tab.</>],
-      ['Focus', <>The focus ring is <code>--graphite-focus</code>, inset so it stays inside the tab. The arrow keys change the selection but do not yet move focus with it, so the ring can sit on a tab that is no longer selected.</>],
+      ['Focus', <>The focus ring is <code>--graphite-focus</code>, inset so it stays inside the tab. The arrow keys move focus and the selection together, so the ring is always on the selected tab.</>],
       ['Contrast', 'The selected label is on-surface and the rest are on-surface-variant, one tone step lower. Both are measured against surface at the theme’s target.'],
       ['Panels', 'Inactive panels are hidden with the hidden attribute, not unmounted, so assistive tech skips them and their state survives.'],
       ['Motion', 'Nothing animates. The indicator moves instantly, so there is nothing for reduced motion to switch off.'],

@@ -176,9 +176,18 @@
   // per the kit: font-1 is display, headings and titles 1-2; font-2 is
   // titles 3-5, body and component text. Keeping both means the pair can
   // diverge later without a rename sweep.
-  --graphite-font-1: 'IBM Plex Sans';
-  --graphite-font-2: 'IBM Plex Sans';
-  --graphite-font-mono: 'IBM Plex Mono';
+  //
+  // Each is a stack, not a single name: wherever Plex fails to load (a
+  // blocked font CDN, a strict CSP, an offline preview) text used to fall to
+  // the browser default, which is a serif. The first family is the kit's, and
+  // it is the one token-drift checks; the rest are system faces of the same
+  // kind, so a missing Plex degrades to a sans or a mono, never a serif.
+  --graphite-font-1: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --graphite-font-2: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --graphite-font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo,
+    Consolas, 'Liberation Mono', monospace;
 
   // Weights. The kit stores Figma style names ("SemiBold"); CSS wants
   // numbers, so the mapping happens here rather than at every call site.

@@ -5,7 +5,6 @@ import { TextArea } from '@/components/ui/text-area'
 import type { FieldSize } from '@/components/ui/text-input'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
-import styles from './text-area.module.scss'
 
 type Resize = 'vertical' | 'none'
 type DemoState = 'default' | 'disabled' | 'error'
@@ -73,16 +72,14 @@ export function TextAreaPreview() {
         </>
       }
       preview={
-        <div className={styles.full}>
-          <TextArea
-            label={LABEL}
-            size={size}
-            resize={resize}
-            state={state === 'disabled' ? 'disabled' : 'default'}
-            helpText={HELP}
-            errorText={state === 'error' ? ERROR : undefined}
-          />
-        </div>
+        <TextArea
+          label={LABEL}
+          size={size}
+          resize={resize}
+          state={state === 'disabled' ? 'disabled' : 'default'}
+          helpText={HELP}
+          errorText={state === 'error' ? ERROR : undefined}
+        />
       }
       code={codeFor(size, resize, state)}
     />

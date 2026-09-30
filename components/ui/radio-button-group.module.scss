@@ -1,6 +1,6 @@
 @use './form-parts' as parts;
 
-// Radio Group — docs/contracts/radio-group.md
+// Radio button group — docs/contracts/radio-button-group.md
 .group {
   border: 0;
   margin: 0;
@@ -72,6 +72,21 @@
 .native:disabled + .dot {
   border-color: var(--graphite-primary-disabled-content);
   box-shadow: none;
+}
+
+// Error rings every option in danger, as the kit's Invalid group does, not only
+// the selected one: the error belongs to the group's answer. The ring is the
+// danger border plus a 1px inset, the same 2px weight as Text input's error
+// edge. The selected option keeps its primary centre inside it.
+.errored .native:enabled + .dot {
+  border-color: var(--graphite-danger);
+  box-shadow: inset 0 0 0 1px var(--graphite-danger);
+}
+
+.errored .native:enabled:checked + .dot {
+  box-shadow:
+    inset 0 0 0 1px var(--graphite-danger),
+    inset 0 0 0 5px var(--graphite-primary);
 }
 
 .label { @include parts.field-label; }

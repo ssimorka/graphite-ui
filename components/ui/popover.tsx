@@ -1,13 +1,13 @@
 'use client'
 
-import { createContext, useContext, useId, useState } from 'react'
+import { createContext, useContext, useId, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useOverlay } from './overlay'
 import styles from './popover.module.scss'
 
 const InsidePopover = createContext(false)
 
-/** Contract: docs/contracts/popover.md (1.5.0) */
+/** Contract: docs/contracts/popover.md (1.6.0) */
 type PopoverProps = {
   trigger: (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => ReactNode
   /** May contain interactive elements — that is what separates it from Tooltip. */
@@ -17,6 +17,12 @@ type PopoverProps = {
   modal?: boolean
   /** Starts open. For documentation surfaces that need to show the open state. */
   defaultOpen?: boolean
+  /**
+   * The accessible name of a modal Popover's dialog. A dialog needs one, and
+   * the trigger is not it: the trigger names the action, this names the panel.
+   * Ignored without modal, since the panel then has no role to name.
+   */
+  label?: string
 }
 
 export function Popover({
@@ -25,10 +31,12 @@ export function Popover({
   placement = 'bottom',
   modal = false,
   defaultOpen = false,
+  label,
 }: PopoverProps) {
   const id = useId()
   const [open, setOpen] = useState(defaultOpen)
   const nested = useContext(InsidePopover)
+  const wrap = useRef<HTMLSpanElement>(null)
 
   // Prohibition enforced, not described. Note this fires when the inner
   // Popover mounts — that is, when the outer one opens — not at build time
@@ -42,16 +50,24 @@ export function Popover({
   }
 
   // Dismiss comes entirely from the shared Overlay base — no custom close
-  // behavior per instance, which the composition rule requires.
+  // behavior per instance, which the composition rule requires. The base
+  // already treats the control that opened an overlay as inside it, so a press
+  // on the trigger is left to the trigger's click, which toggles. A Popover
+  // that starts open through defaultOpen was opened by nothing, though, so it
+  // names its own trigger here; otherwise the base would close it on
+  // pointerdown and the click would open it straight back up.
   const ref = useOverlay<HTMLDivElement>({
     open,
-    onDismiss: () => setOpen(false),
+    onDismiss: (e) => {
+      if (e.type === 'pointerdown' && wrap.current?.contains(e.target as Node)) return
+      setOpen(false)
+    },
     trapFocus: modal,
   })
 
   return (
     <InsidePopover.Provider value={true}>
-      <span className={styles.wrap}>
+      <span ref={wrap} className={styles.wrap}>
         {trigger({
           onClick: () => setOpen((v) => !v),
           'aria-expanded': open,
@@ -64,6 +80,7 @@ export function Popover({
             className={`${styles.panel} ${styles[placement]}`}
             role={modal ? 'dialog' : undefined}
             aria-modal={modal || undefined}
+            aria-label={modal ? label : undefined}
             tabIndex={-1}
           >
             {children}

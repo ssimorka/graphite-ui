@@ -43,7 +43,7 @@ export function popoverDoc(): ComponentDocConfig {
     dos: [
       'Use a Popover when the reader needs to act on what is inside it: toggle a filter, pick an option, fill one field.',
       'Render the trigger as a Button and spread the props the Popover hands you, so aria-expanded and aria-controls land on the real control.',
-      'Turn modal on when the content is a small task the reader should finish or dismiss before moving on.',
+      'Turn modal on when the content is a small task the reader should finish or dismiss before moving on, and give it a label so the dialog has a name.',
       'Choose the placement with the most room around the trigger. The panel will not move itself back on screen.',
     ],
     donts: [
@@ -54,14 +54,14 @@ export function popoverDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Keyboard', 'Enter and Space on the trigger open it. The panel follows the trigger in the document, so Tab moves into it. Escape closes it from anywhere.'],
-      ['Roles', <>The trigger gets <code>aria-expanded</code> and <code>aria-controls</code>. With modal on, the panel is <code>role=&quot;dialog&quot;</code> with <code>aria-modal</code>; there is no label prop, so that dialog has no name of its own. Without modal it has no role.</>],
-      ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes. If the component that renders the Popover re-renders while it is open, focus also jumps back to the trigger, so keep state that changes inside the content.'],
-      ['Pointer', 'A press anywhere outside the panel closes it. The trigger counts as outside, so pressing it again closes the panel and the click reopens it: Escape or a press elsewhere is the way out. There is no close button of its own.'],
+      ['Roles', <>The trigger gets <code>aria-expanded</code> and <code>aria-controls</code>. With modal on, the panel is <code>role=&quot;dialog&quot;</code> with <code>aria-modal</code>; name it with the <code>label</code> prop. Without modal it has no role, and label is ignored.</>],
+      ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes. The content can be controlled from outside: a re-render while it is open leaves focus alone.'],
+      ['Pointer', 'Pressing the trigger again closes it, and so does a press anywhere outside the panel. There is no close button of its own.'],
       ['Contrast', <>The panel is <code>surface-elevated</code> with an <code>outline</code> edge. In Light the elevated surface matches the page, so the edge is what separates them.</>],
       ['Motion', 'It fades in on the fast motion step and appears at once under prefers-reduced-motion. It does not animate out.'],
     ],
     parityLede:
-      'The kit’s Popover page draws three public sets: the popover itself, a Tab tip, and the Popover item its variants are built from. The code exposes three props. Most of the kit’s axes are placement, and the rest are states or styles the code settles one way.',
+      'The kit’s Popover page draws three public sets: the popover itself, a Tab tip, and the Popover item its variants are built from. The code exposes four props, and label has no kit axis because a name is not drawn. Most of the kit’s axes are placement, and the rest are states or styles the code settles one way.',
     parity: [
       ['Position', 'Top · Bottom · Left · Right', 'placement', 'One to one.'],
       ['Alignment', 'Start · Center · End', '—', 'No counterpart. The code always aligns the panel to the trigger’s start edge (left for Top and Bottom, top for Left and Right).'],

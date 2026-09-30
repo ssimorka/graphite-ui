@@ -4,7 +4,7 @@ import { useEffect, useId, useRef } from 'react'
 import { fieldMessage } from '@/lib/field-message'
 import styles from './checkbox.module.scss'
 
-/** Contract: docs/contracts/checkbox.md (2.0.0) */
+/** Contract: docs/contracts/checkbox.md (2.0.1) */
 type CheckboxProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
@@ -50,29 +50,35 @@ export function Checkbox({
     if (ref.current) ref.current.indeterminate = indeterminate
   }, [indeterminate])
 
+  // The message sits under the row rather than inside it, which is where the
+  // kit draws Helper / Error text. Inside the no-wrap row it landed beside the
+  // label and pushed long copy off the side.
   return (
-    <span className={styles.row}>
-      <span className={styles.control}>
-        <input
-          ref={ref}
-          type="checkbox"
-          id={inputId}
-          name={name}
-          className={styles.native}
-          checked={checked}
-          disabled={disabled}
-          onChange={(e) => onChange?.(e.target.checked)}
-          aria-describedby={describedBy}
-        />
-        <span className={styles.box} aria-hidden="true">
-          {/* Indeterminate is its own glyph, not a recolored check: the
-              contract requires it to read differently from both states. */}
-          <span className={indeterminate ? styles.dash : styles.check} />
+    <span className={`${styles.field} ${errored ? styles.errored : ''}`}>
+      <span className={styles.row}>
+        <span className={styles.control}>
+          <input
+            ref={ref}
+            type="checkbox"
+            id={inputId}
+            name={name}
+            className={styles.native}
+            checked={checked}
+            disabled={disabled}
+            onChange={(e) => onChange?.(e.target.checked)}
+            aria-invalid={errored || undefined}
+            aria-describedby={describedBy}
+          />
+          <span className={styles.box} aria-hidden="true">
+            {/* Indeterminate is its own glyph, not a recolored check: the
+                contract requires it to read differently from both states. */}
+            <span className={indeterminate ? styles.dash : styles.check} />
+          </span>
         </span>
+        <label htmlFor={inputId} className={styles.label}>
+          {label}
+        </label>
       </span>
-      <label htmlFor={inputId} className={styles.label}>
-        {label}
-      </label>
       {message ? (
         <span
           id={messageId}

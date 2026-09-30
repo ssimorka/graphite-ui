@@ -8,9 +8,3 @@
   border-color: var(--graphite-primary);
   box-shadow: 0 0 0 1px var(--graphite-primary);
 }
-
-// Sizing only. Text area's root carries no width, so in a flex cell it shrinks
-// to the textarea's intrinsic size; this lets it take the row instead.
-.full {
-  width: 100%;
-}

@@ -1,6 +1,6 @@
 ---
 component: Tabs
-version: 1.1.0
+version: 1.1.1
 wave: 4
 slots:
   - name: Tab list

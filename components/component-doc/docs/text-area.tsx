@@ -3,18 +3,14 @@ import type { ComponentDocConfig } from '../types'
 import styles from './text-area.module.scss'
 import { TextAreaPreview } from './text-area-preview'
 
-// A matrix cell is a flex row, and Text area's root has no width of its own,
-// so each cell gets a full-width wrapper.
 const cell = (props: { state?: 'disabled' | 'invalid'; errorText?: string }) => (
-  <div className={styles.full}>
-    <TextArea
-      label="Label"
-      placeholder="Placeholder text"
-      helpText={props.errorText ? undefined : 'Helper text'}
-      state={props.state}
-      errorText={props.errorText}
-    />
-  </div>
+  <TextArea
+    label="Label"
+    placeholder="Placeholder text"
+    helpText={props.errorText ? undefined : 'Helper text'}
+    state={props.state}
+    errorText={props.errorText}
+  />
 )
 
 export function textAreaDoc(): ComponentDocConfig {
