@@ -250,13 +250,11 @@ export function ExportExcerpt() {
     // One role in full, so the three variables each role carries are visible.
     const excerpt = [
       firstBlock[0],
-      // The exporter writes a family's base state under the family's own name,
-      // so --cts-primary appears twice with the same value; show it once.
-      ...new Set(firstBlock.filter((l) => /--cts-primary(-ramp|-tone)?:/.test(l))),
+      ...firstBlock.filter((l) => /--cts-primary(-ramp|-tone)?:/.test(l)),
       '  …',
       '}',
     ].join('\n')
-    const json = buildJson(bundle) as unknown as Record<string, Record<string, unknown>>
+    const json = buildJson(bundle)
     return {
       selectors,
       declCount: decls.length,

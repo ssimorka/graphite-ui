@@ -1,6 +1,6 @@
 ---
 foundation: Typography
-version: 1.1.0
+version: 1.1.1
 source: Graphite UI Kit › Graphite Typography (65 variables, Desktop/Mobile)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -73,19 +73,20 @@ exactly a kit step and now use the local `text()` mixin, which reads
 | `body-02` | `body-2` | 5 |
 | `code-01` | `code-3` (+ `--graphite-font-mono`) | 4 |
 
-19 stay on Carbon because the kit cannot express them, not because nobody got
-to them:
+13 stay on Carbon because the kit cannot express them, not because nobody got
+to them (13 as of 2026-09-30, down from 19; `token-drift` prints the current
+count and split on every run, and that output is the authority, not this line):
 
-- **8 fluid styles.** Carbon's `fluid-*` tokens compile to
+- **4 fluid styles.** Carbon's `fluid-*` tokens compile to
   `calc(Nrem + Nvw)` with a different formula per breakpoint band — genuine
   continuous interpolation. The hero title ramps 32.6px → 60px across the
   viewport. Two discrete modes cannot reproduce that; forcing it would replace
   a ramp with a step.
-- **11 at sizes with no kit step.** `heading-compact-01` and
+- **9 at sizes with no kit step.** For example `heading-compact-01` and
   `body-compact-01` are 14/18, `heading-03` is 20/28, `heading-04` is 28/36.
   The kit has no 18px line height, and its sizes jump 18 → 24 → 32.
 
-`token-drift` reports the 19 on every run so the exception stays visible.
+`token-drift` reports them on every run so the exception stays visible.
 
 **Letter-spacing has no token, and is carried by hand.** The kit models family,
 weight, size and line height — not tracking. Carbon set small values on some

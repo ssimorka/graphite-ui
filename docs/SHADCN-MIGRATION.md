@@ -93,11 +93,14 @@ the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
   hand-listed binding table CLAUDE.md flags as driftable. Simplification, not
   just a reskin.
 - **De-Carbon must not be done before fixing `token-drift`.**
-  `scripts/token-drift.mjs:402` reads
+  `scripts/token-drift.mjs` reads
   `node_modules/.pnpm/@carbon+grid@11.56.0/.../_config.scss` at a hardcoded
-  path, and *warns rather than fails* when it misses. Dropping `@carbon/react`
-  would therefore silence a governance check while CI stays green. Inline the
-  grid values into the snapshot, and make a miss fail, before removing Carbon.
+  path. A miss now fails the check rather than warning (half of this item is
+  done), so dropping `@carbon/react` would turn CI red rather than silently
+  skip the breakpoint check. The other half is still open: inline the grid
+  values into the snapshot, so the check no longer depends on Carbon's
+  install layout (it already fails on an npm install, which has no `.pnpm`
+  directory), before removing Carbon.
 - The keep/drop call on the ~40 Carbon component sets in the kit is already
   tracked on the Figma side. This plan defers to it rather than restating it.
 - **Scope note.** Nothing in *this plan* writes to the Figma file. That is not

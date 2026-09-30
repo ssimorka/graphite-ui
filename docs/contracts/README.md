@@ -17,7 +17,7 @@ a contract is now a description of the kit rather than an authority over it, so 
 is a bug in the contract, not in Figma.
 
 **Rules:**
-1. Every component has one contract file (`/contracts/<component>.md`) in the same repo as the site.
+1. Every component has one contract file (`docs/contracts/<component>.md`) in the same repo as the site.
 2. No component code changes without a matching contract update first, even for one-line fixes.
 3. Each contract is versioned (semver). A prohibition change is breaking. A new optional slot is minor. A copy/description edit is a patch.
 4. A drift check script reads each contract's declared token dependencies and verifies the component's actual code references those exact variable names, nothing else. Fails the build on mismatch.
@@ -352,7 +352,7 @@ None. This wave held Field, which wrapped Label, an input atom and help/error te
 Accordion, Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu is complete but was never inverted, because the kit is silent on it rather than in disagreement — see #113 and the application-shells bullet above.
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
-Overlay (internal: the shared pattern the other five implement), Tooltip, Popover, Menu, Modal, Notification
+Overlay (internal: the shared pattern the others implement), Tooltip, Popover, Menu, Modal, and Notification. Notification ships in this wave but is inline, not an overlay: it traps nothing and does not use the Overlay hook (see its contract, 2.3.0).
 
 **Wave 6 — Data display**
 Data table
@@ -380,9 +380,3 @@ unaffected by them.
 Note that `typography` appears in both places and means two different things:
 `typography.md` here is the **component**, `foundations/typography.md` is the
 **scale it draws from**.
-
----
-
-## Note on contract file location
-
-Governance rule 1 above states the path as `/contracts/<component>.md`. In this repository the contracts live at `docs/contracts/<component>.md`. The rule's intent — one contract file per component, in the same repo as the site — holds; only the directory differs. Update rule 1 in a patch-level revision if you want the written path to match reality.
