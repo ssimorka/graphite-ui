@@ -4,33 +4,42 @@ The ideas and architecture behind this project, for anyone extending it beyond t
 
 ## Stack
 
-- **Next.js 16 (App Router)** — file-based routing under `app/`, React Server Components by default, client interactivity opted into per-file with `'use client'`.
-- **React 19**
-- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`) — IBM's open-source component library and design language, providing the `Header`, `Grid`/`Column`, `Tile`, `Button`, `Accordion`, `ContentSwitcher`, etc. used throughout.
-- **Sass (SCSS)** — Carbon ships its styles as Sass source, so the project compiles `.scss` rather than consuming pre-built CSS, which lets it override Carbon's design tokens directly.
-- **TypeScript** throughout.
+- **Next.js 16 (App Router)**: file-based routing under `app/`, React Server Components by default, client interactivity opted into per file with `'use client'`.
+- **React 19**, **TypeScript** throughout, **Sass (SCSS)** with CSS Modules for component and page styles.
+- **The color engine** (`lib/color.js`, typed by `lib/color.d.ts`): one source hex becomes perceptual ramps in OKLab, semantic roles for light and dark, interaction states, and measured contrast pairings.
+- **Governed components** (`components/ui/`): 22 components and the shared Overlay hook, each implementing a versioned contract in `docs/contracts/`.
+- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and icons. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
 
-There is no database, API layer, or auth — this is a static marketing site.
+There is no database, API layer or auth. Every route is prerendered at build time.
 
 ## App Router structure
 
 ```
 app/
-  layout.tsx     — root HTML shell, metadata, ThemeProvider + SiteHeader
-  page.tsx       — the single route ("/"), composes all sections
-  globals.scss   — Carbon import + every custom style in the project
+  layout.tsx             root HTML shell, metadata, ThemeProvider, SiteHeader
+  page.tsx               the home page
+  docs/                  Getting started and Foundations pages
+    components/[slug]/   every component page, from one template
+  gallery/               the Components index
+  create/                the theme builder
+  search-index.json/     the search index, a static route
+  globals.scss           Carbon import, the static --graphite-* foundations, site styles
 components/
-  site-header.tsx, theme-provider.tsx, reveal.tsx, use-reveal.ts
-  sections/      — one file per landing-page section
+  ui/                    the governed components
+  component-doc/         the component page template and one config per component
+  search/                the search dialog and its ranking
+  sections/              home page sections and the site footer
+  theme-provider.tsx     source color, theme and contrast level; stamps the variables
+lib/                     the color engine, contract and kit readers
 ```
 
-Everything under `components/` that touches state, refs, or browser APIs (`useState`, `IntersectionObserver`, pointer events) is marked `'use client'`. There are currently no server components doing data fetching — every section is client-rendered because they all use hooks or Carbon components that require the DOM.
+Server components do read data, at build time: the docs pages read the contracts (`lib/contract-doc.ts`, `lib/contracts.ts`), the Figma snapshots (`lib/kit-page.ts`, `lib/kit-stats.ts`) and the stylesheets, so counts and tables on the site are derived from the repo rather than typed. Anything with state, refs or browser APIs is a client component.
 
 ## Carbon Design System integration
 
-### Why Carbon
+### Why Carbon, and what is left of it
 
-Carbon is IBM's design system: a shared visual language (spacing scale, type scale, color tokens, grid) plus a React component library implementing it. Using it means layout and components (buttons, tiles, accordions, the 16-column grid) come pre-built and pre-themed, and the project's job is mostly composition + copy + light restyling, not building primitives from scratch.
+The site started on Carbon, IBM's design system: its grid, type scale, color tokens and React components came pre-built and pre-themed. Graphite has since replaced the component layer with its own governed components, and the Figma kit (not Carbon) is the canonical design. What remains is below, and each remaining use is on the migration list in [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md).
 
 ### The Sass entry point
 
@@ -44,18 +53,13 @@ pulls in Carbon's entire style layer in one shot — reset, IBM Plex font-face d
 
 ### Theming (light/dark)
 
-Carbon ships several built-in "theme zones" (`white`, `g10`, `g90`, `g100` — white through near-black). This project only uses two: `white` (light) and `g100` (dark, the default). Two things make runtime theme switching work together:
+Two layers make a theme, and only one of them is Carbon's.
 
-1. **CSS side** (`globals.scss`):
-   ```scss
-   :root, :root.cds--white { @include theme.theme(themes.$white); }
-   :root.cds--g100          { @include theme.theme(themes.$g100); }
-   ```
-   Each theme is emitted as a block of CSS custom properties (`--cds-background`, `--cds-text-primary`, etc.) scoped to a class on `<html>`. Component styles and this project's own CSS consume those variables, so nothing needs to be re-styled per theme — swapping the class swaps every color.
+1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`white` for light, `g100` for dark, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 52 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring and the scrim) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
 
-2. **React side** (`components/theme-provider.tsx`): a small context holds the current theme name and a `toggleTheme` function. On change, it adds/removes the `cds--white`/`cds--g100` class on `document.documentElement` (so the CSS above takes effect) and wraps children in Carbon's own `<GlobalTheme>` component (so Carbon's React components, e.g. tooltips, are aware of the active theme for anything they don't drive purely from CSS variables).
+2. **Carbon's theme zones.** `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still toggles the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 
-`app/layout.tsx` hardcodes `className="cds--g100"` on `<html>` for the first paint (avoiding a flash of unthemed content), and `suppressHydrationWarning` because the class is then owned by client-side state after hydration.
+`app/layout.tsx` sets `className="cds--g100"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density) do not vary by theme and are declared once in `globals.scss`.
 
 ### Grid system
 
@@ -88,14 +92,11 @@ The hero's motion effects are hand-rolled, not a library:
 
 ## Build/dev tooling notes
 
-- **Package manager**: the project is pinned to **pnpm** (`pnpm-lock.yaml`, `pnpm-workspace.yaml`). Using `npm install` will still work but ignores the lockfile and can drift dependency versions — prefer `pnpm install`.
-- **Windows + Turbopack caveat**: Next.js 16's default dev server (Turbopack) fails to compile `globals.scss` on Windows with `Can't find stylesheet to import`, due to a path-resolution bug in the `resolve-url-loader` compatibility shim it uses for Sass. The workaround used in this project is running the classic webpack dev server instead:
-  ```bash
-  npx next dev --webpack
-  ```
-  This does **not** affect production builds — Vercel's Linux build environment compiles the same Turbopack pipeline without issue, so `next build` / deployed builds are unaffected.
-- **pnpm build scripts**: pnpm blocks postinstall scripts by default for supply-chain safety. This repo's only postinstall scripts are IBM's `ibmtelemetry` (anonymous usage analytics, opt-out via `IBM_TELEMETRY_DISABLED=true`) and native binary builds for `sharp`/`@parcel/watcher`. Run `pnpm approve-builds --all` once after a fresh clone.
+- **Package manager**: pinned to **pnpm** (`pnpm-lock.yaml`). `npm install` ignores the lockfile and can drift dependency versions. CI pins Node 24 and pnpm 10.
+- **Webpack, not Turbopack**: Turbopack fails on this project's Sass, so both scripts pass `--webpack` (`next dev --webpack`, `next build --webpack`). This is not a Windows-only issue and it is not dev-only: leave the flag on both.
+- **pnpm build scripts**: pnpm blocks postinstall scripts by default. This repo's are IBM's `ibmtelemetry` (anonymous usage analytics, opt out with `IBM_TELEMETRY_DISABLED=true`) and native builds for `sharp` / `@parcel/watcher`. Run `pnpm approve-builds --all` once after a fresh clone.
+- **Governance checks**: `pnpm drift-check`, `pnpm token-drift`, `pnpm component-doc-drift` and their self-tests run in CI as the `governance` job, which `main` requires. See `/docs/governance`.
 
 ## Deployment
 
-The project deploys to **Vercel** (same team that maintains Next.js, zero-config for the App Router). Production builds are static — `next build` output shows every route as `○ (Static)` / prerendered, since there's no server-side data fetching. See the main repo README/PR history for the live URL and Vercel project link.
+The project deploys to **Vercel** (same team that maintains Next.js, zero-config for the App Router). Production builds are static: every route is prerendered, including the component pages (`generateStaticParams`) and the search index (`force-static`). The data they read is read at build time. See the main repo README/PR history for the live URL and Vercel project link.

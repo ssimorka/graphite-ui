@@ -133,6 +133,7 @@ export type PrimaryStates = FamilyStates
 export interface States {
   primary: FamilyStates
   secondary: FamilyStates
+  danger: FamilyStates
   /** The page-level focus ring — primary's, not a third value. */
   focus: StateEntry
 }
@@ -148,7 +149,7 @@ export interface ExportBundle {
 
 export declare const TONE_STOPS: number[]
 export declare const STATUS_NAMES: StatusName[]
-export declare const STATE_FAMILIES: readonly ['primary', 'secondary']
+export declare const STATE_FAMILIES: readonly ['primary', 'secondary', 'danger']
 
 export declare function normalizeHex(hex: string): string
 export declare function hexToRgb(hex: string): Rgb
@@ -176,7 +177,18 @@ export declare function buildStates(
 ): States
 
 export declare function buildCss(bundle: ExportBundle): string
-export declare function buildJson(bundle: ExportBundle): string
+/** The JSON export: an object, which callers stringify themselves. */
+export interface ExportJson {
+  source: string
+  primitives: Record<'accent' | 'secondary' | 'neutral' | 'neutralVariant', { tone: number; value: string; source: boolean }[]>
+  semantic: Record<'light' | 'dark', {
+    tokens: Record<string, { value: string; ramp: string; tone: number }>
+    contrast: unknown
+    states: Record<string, unknown>
+  }>
+}
+
+export declare function buildJson(bundle: ExportBundle): ExportJson
 
 /** CSS colour for the modal scrim: alpha over the darkest neutral, so it
  *  carries the source colour. Not a token — it has no `on-` partner and enters

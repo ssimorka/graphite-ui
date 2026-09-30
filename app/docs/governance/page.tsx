@@ -43,9 +43,9 @@ const RULES: { n: number; text: ReactNode; href?: string }[] = [
     n: 1,
     text: (
       <>
-        Every component has one contract file, in the same repo as the site. The
-        README writes the path as <code>/contracts/&lt;component&gt;.md</code>;
-        here they live in <code>docs/contracts/</code>.
+        Every component has one contract file,{' '}
+        <code>docs/contracts/&lt;component&gt;.md</code>, in the same repo as the
+        site.
       </>
     ),
     href: '#contracts',

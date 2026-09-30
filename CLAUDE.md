@@ -20,14 +20,15 @@ a browser result.
 
 ## Known, verified findings — don't re-derive these
 
-- **Auto-fix on-colors toggle is a no-op.** Swept 96 hues × light/dark ×
-  AA/AAA through `buildTheme` — no pairing ever fails, so `autoFix` never
-  has anything to fix. Re-verified 2026-08-22 with the secondary family
-  added: 6144 pairs, still zero failures and zero repairs. The wiring is correct (flows into `buildTheme`,
-  re-renders on toggle); the *engine* just never produces a failing pair
-  at any tested input. Confirmed correct behavior, not a bug — but don't
-  assume the toggle does something visible without retesting the actual
-  input hex.
+- **Auto-fix never has anything to fix, and its toggle is gone.** Swept 96
+  hues × light/dark × AA/AAA through `buildTheme` with auto-fix off: 6,144
+  pairs, zero failures, so zero repairs. First found 2026-08-22; the
+  Accessibility page (`/docs/accessibility`) now reruns that sweep at build
+  time and prints the result. The "Auto-fix on-colors" toggle was removed as
+  a control the visitor did not really have (see the comment in
+  `components/color-picker.tsx`). `buildTheme` still defaults `autoFix` to
+  true, so the repair path stays armed for an input the sweep does not
+  cover. Don't reintroduce a toggle without first finding a hex that fails.
 - **`tsc --noEmit` is clean (0 errors).** This note previously recorded 39
   pre-existing errors from `lib/color.js` being untyped; `lib/color.d.ts`
   now exists and clears them. Verified 2026-08-19.
@@ -207,15 +208,18 @@ a trace, which is what "no bypass" is meant to cost.
 ## Architecture notes
 
 - `components/theme-provider.tsx` is the single source of truth for
-  `sourceHex`, `theme` (`'white' | 'g100'`), `level` (AA/AAA), and
-  `autoFix`. It computes `lightBundle`/`darkBundle` (tokens + contrast +
-  states) via `lib/color.js` and stamps 101 CSS vars onto `<html>` on every
-  change: 45 `--graphite-*` (32 token roles, plus 6 states each for the
-  `primary` and `secondary` families, plus `--graphite-focus`) and 56
-  `--cds-*`. The counts are worth keeping straight — `--graphite-*` is the
-  primary namespace and is derived from the engine's token keys, so it
-  cannot drift; `--cds-*` is Carbon's compatibility layer and is a
-  hand-listed binding table that can.
+  `sourceHex`, `theme` (`'white' | 'g100'`) and `level` (AA/AAA). (It used to
+  hold `autoFix` too; the toggle was removed as a no-op, see above.) It
+  computes `lightBundle`/`darkBundle` (tokens + contrast + states) via
+  `lib/color.js` and stamps 111 CSS vars onto `<html>` on every change: 52
+  `--graphite-*` (32 token roles, 6 states each for the `primary`,
+  `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`
+  and `--graphite-scrim`) and 59 `--cds-*`. Verified 2026-09-30 by reading
+  `<html>`'s inline style. The counts are worth keeping straight —
+  `--graphite-*` is the primary namespace and is derived from the engine's
+  token keys, so it cannot drift; `--cds-*` is Carbon's compatibility layer
+  and is a hand-listed binding table that can. The Tokens foundation page
+  (`/docs/foundations/tokens`) reads the stamped set back live.
 - `COVER_SOURCE_HEX` (`#5e44aa`) is the seeded default source color,
   sampled from the kit cover image's dominant hue bucket — not
   arbitrary, and should stay in sync with `public/graphite/cover.jpg` if
@@ -229,6 +233,3 @@ a trace, which is what "no bypass" is meant to cost.
   ported to match `carbon-token-studio/src/App.jsx` functionally, not
   just visually. If asked to add Studio parity again, diff against that
   file directly rather than guessing.
-- Light/Dark tabs in the Contrast panel *are* the site theme switch
-  (`modeIndex` derives from `theme`, not separate local state) — by
-  design, per explicit request.
