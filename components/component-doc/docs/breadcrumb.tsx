@@ -55,7 +55,7 @@ export function breadcrumbDoc(): ComponentDocConfig {
       },
     ],
     statesLede:
-      'Hover and Focus are forced here with the declarations their pseudo-classes carry: an underline, and the --graphite-focus ring the other components use.',
+      'Hover and Focus are forced here with the declarations their pseudo-classes carry: an underline, and the focus ring the other components use.',
     states: [
       { label: 'Enabled', node: three },
       { label: 'Hover', node: three, className: styles.forceHover },

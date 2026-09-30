@@ -40,6 +40,28 @@ const owner = (honours: (l: Layer) => boolean) => {
   return null
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
+// The control the current pointer press landed on, kept so an overlay can tell
+// which control opened it. Focus alone cannot say: Safari does not focus a
+// button when it is clicked. It lasts only until the click has been handled,
+// and a key press clears it, so an overlay opened any other way falls back to
+// whatever holds focus rather than to a control pressed long before.
+let pressed: HTMLElement | null = null
+if (typeof document !== 'undefined') {
+  document.addEventListener(
+    'pointerdown',
+    (e) => {
+      const t = e.target instanceof Element ? e.target : null
+      pressed = (t?.closest<HTMLElement>(`${FOCUSABLE}, [role="button"]`) ?? null)
+    },
+    true,
+  )
+  document.addEventListener('click', () => setTimeout(() => (pressed = null)), true)
+  document.addEventListener('keydown', () => (pressed = null), true)
+}
+
 /**
  * The one dismiss implementation. Every overlay calls this rather than wiring
  * its own listeners, which is what stops five components drifting into five
@@ -68,7 +90,21 @@ export function useOverlay<T extends HTMLElement>({
     if (!open) return
 
     // Remember the trigger before focus moves, so it can be restored on close.
-    restoreTo.current = document.activeElement as HTMLElement | null
+    const focused = document.activeElement as HTMLElement | null
+    const held = focused && focused !== document.body ? focused : null
+    restoreTo.current = held ?? pressed
+    // The control that opened it: the one just pressed, else the one focused.
+    const opener = (pressed?.isConnected ? pressed : null) ?? held
+    const el = ref.current
+
+    // Whether focus has been inside the overlay since it opened. On close,
+    // focus is only taken back if it was: a Tooltip that closes because its
+    // trigger lost focus must not pull focus back to that trigger, or Tab
+    // could never leave it.
+    let focusInside = !!el && el.contains(document.activeElement)
+    const onFocusIn = (e: FocusEvent) => {
+      focusInside = !!el && el.contains(e.target as Node)
+    }
 
     const layer: Layer = { el: () => ref.current, trapFocus, escape, outside }
     stack.push(layer)
@@ -86,9 +122,7 @@ export function useOverlay<T extends HTMLElement>({
       // not trap, so it does not take the Modal's trap away either.
       if (owner(() => false) !== layer) return
 
-      const focusable = ref.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      )
+      const focusable = ref.current.querySelectorAll<HTMLElement>(FOCUSABLE)
       if (focusable.length === 0) return
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
@@ -106,9 +140,14 @@ export function useOverlay<T extends HTMLElement>({
     // can be pressed. A press inside a layer above does not count as outside
     // this one, so a Menu open inside a Modal closes on a press elsewhere in
     // the Modal and the Modal stays, while a press on the scrim closes both.
+    //
+    // The control that opened the overlay is not outside it either. Its own
+    // click toggles the overlay closed; closing here as well would have that
+    // click open it straight back up.
     const onPointerDown = (e: PointerEvent) => {
       if (!outside || !ref.current) return
       const target = e.target as Node
+      if (opener?.contains(target)) return
       for (let i = stack.indexOf(layer) + 1; i < stack.length; i++) {
         const above = stack[i]
         if (above.trapFocus || above.el()?.contains(target)) return
@@ -118,16 +157,30 @@ export function useOverlay<T extends HTMLElement>({
 
     document.addEventListener('keydown', onKeyDown, true)
     document.addEventListener('pointerdown', onPointerDown, true)
+    document.addEventListener('focusin', onFocusIn)
 
-    if (trapFocus) ref.current?.focus()
+    if (trapFocus) {
+      ref.current?.focus()
+      focusInside = true
+    }
 
     return () => {
       document.removeEventListener('keydown', onKeyDown, true)
       document.removeEventListener('pointerdown', onPointerDown, true)
+      document.removeEventListener('focusin', onFocusIn)
       const i = stack.indexOf(layer)
       if (i !== -1) stack.splice(i, 1)
-      // Focus returns to the trigger on close, in every case.
-      restoreTo.current?.focus?.()
+      // Focus returns to the trigger on close. Straight away if it was inside
+      // the overlay, so a Tab that closed it carries on from the trigger.
+      const to = restoreTo.current
+      if (focusInside) to?.focus?.()
+      // And once the gesture has finished, if nothing holds it. A press on a
+      // Modal's scrim closes it on pointerdown, and the mousedown after that
+      // lands on nothing and drops focus to the page.
+      setTimeout(() => {
+        const now = document.activeElement
+        if (!now || now === document.body) to?.focus?.()
+      })
     }
   }, [open, trapFocus, escape, outside])
 
