@@ -50,10 +50,12 @@ export function Popover({
   }
 
   // Dismiss comes entirely from the shared Overlay base — no custom close
-  // behavior per instance, which the composition rule requires. The one thing
-  // Popover decides is that its own trigger is not "outside": a press there is
-  // left to the trigger's click, which toggles. Were the base to close the
-  // panel on pointerdown, that click would open it straight back up.
+  // behavior per instance, which the composition rule requires. The base
+  // already treats the control that opened an overlay as inside it, so a press
+  // on the trigger is left to the trigger's click, which toggles. A Popover
+  // that starts open through defaultOpen was opened by nothing, though, so it
+  // names its own trigger here; otherwise the base would close it on
+  // pointerdown and the click would open it straight back up.
   const ref = useOverlay<HTMLDivElement>({
     open,
     onDismiss: (e) => {
