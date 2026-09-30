@@ -205,7 +205,12 @@ function checkTypography() {
     if (name.startsWith('family/')) {
       // `family/font-1` -> `--graphite-font-1`; `family/mono` -> `--graphite-font-mono`
       const key = name.replace('family/', '').replace(/^font-/, '')
-      const got = (families.get(key) || '').replace(/^'|'$/g, '')
+      // A family is a stack; the kit names one face. Compare the first entry,
+      // which is the one the kit's value describes, and let the fallbacks be.
+      const got = (families.get(key) || '')
+        .split(',')[0]
+        .trim()
+        .replace(/^'|'$/g, '')
       if (!families.has(key))
         errors.push(`typography: --graphite-font-${key} is not declared`)
       else if (got !== D)

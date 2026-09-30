@@ -97,8 +97,8 @@ const cases = [
     name: 'family drifts',
     mutate: (s) =>
       s.replace(
-        "--graphite-font-mono: 'IBM Plex Mono';",
-        "--graphite-font-mono: 'Courier New';",
+        "--graphite-font-mono: 'IBM Plex Mono',",
+        "--graphite-font-mono: 'Courier New',",
       ),
     expect: /--graphite-font-mono is Courier New, kit says IBM Plex Mono/,
   },

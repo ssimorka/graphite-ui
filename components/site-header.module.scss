@@ -160,6 +160,9 @@
   gap: var(--graphite-space-04);
   height: 100%;
 
+  // token-drift-allow: content threshold, not a system breakpoint. Below
+  // 400px the utility rail (menu, brand, search, theme, source chip) only
+  // fits 320 with the gaps tightened.
   @media (max-width: 399px) {
     gap: var(--graphite-space-02);
   }
@@ -361,6 +364,8 @@
 
   // Search took a slot in the utility rail, and 320px cannot hold four. The
   // footer carries the same GitHub link, so the header's copy goes first.
+  // token-drift-allow: content threshold, not a system breakpoint. The
+  // width at which four utility controls stop fitting beside the brand.
   @media (max-width: 479px) {
     display: none;
   }
