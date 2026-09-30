@@ -1,11 +1,11 @@
 'use client'
 
-import { useId, useRef, useState } from 'react'
+import { cloneElement, useId, useRef, useState } from 'react'
 import type { ReactElement } from 'react'
 import { useOverlay } from './overlay'
 import styles from './tooltip.module.scss'
 
-/** Contract: docs/contracts/tooltip.md (1.5.0) */
+/** Contract: docs/contracts/tooltip.md (1.5.1) */
 type TooltipProps = {
   /** Any focusable element. Hover alone would strand keyboard users. */
   children: ReactElement<Record<string, unknown>>
@@ -29,7 +29,8 @@ export function Tooltip({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Non-modal: no focus trap, and no click-outside — a tooltip is dismissed by
-  // leaving it, not by clicking elsewhere. Escape still closes it.
+  // leaving it, not by clicking elsewhere. Escape still closes it. The bubble
+  // sits inside the wrapper, so the pointer can move onto it without leaving.
   const ref = useOverlay<HTMLSpanElement>({
     open,
     onDismiss: () => setOpen(false),
@@ -55,8 +56,15 @@ export function Tooltip({
       onBlurCapture={hide}
     >
       {/* describedby, not labelledby: the contract says a tooltip must be
-          supplementary, never the only source of the information. */}
-      <span aria-describedby={open ? id : undefined}>{children}</span>
+          supplementary, never the only source of the information. It goes on
+          the child itself, because that is the element that takes focus and
+          the one a screen reader describes; on a wrapper it was never read.
+          Any describedby the child already carries is kept alongside it. */}
+      {cloneElement(children, {
+        'aria-describedby':
+          [children.props['aria-describedby'], open ? id : null].filter(Boolean).join(' ') ||
+          undefined,
+      })}
       {open ? (
         <span ref={ref} id={id} role="tooltip" className={`${styles.tip} ${styles[placement]}`}>
           {content}

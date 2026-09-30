@@ -41,12 +41,20 @@ export function checkboxDoc(): ComponentDocConfig {
       },
     ],
     statesLede:
-      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here. The kit draws no hover state for a checkbox and the code has none. Error is not a prop of its own: passing errorText is what puts the control in it.',
+      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here. The kit draws no hover state for a checkbox and the code has none. Error is not a prop of its own: passing errorText is what puts the control in it, and the box takes a danger border the way Text input takes its error edge.',
     states: [
       { label: 'Enabled', node: cell({}) },
       { label: 'Focus', node: cell({}), className: styles.forceFocus },
       { label: 'Disabled', node: cell({ disabled: true }) },
-      { label: 'Error', node: <Checkbox label="Accept the terms" errorText="Accept the terms to continue." /> },
+      {
+        label: 'Error',
+        node: (
+          <>
+            <Checkbox label="Accept the terms" errorText="Accept the terms to continue." />
+            <Checkbox label="Checked" checked errorText="Checked keeps its fill inside the border." />
+          </>
+        ),
+      },
     ],
     dos: [
       'Use a checkbox when each option stands alone and any number of them can be on, including none.',
@@ -62,9 +70,9 @@ export function checkboxDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Keyboard', 'It is a native checkbox, so Tab reaches it and Space toggles it. Clicking the label toggles it too.'],
-      ['Roles', 'A native input of type checkbox. Indeterminate is written to the DOM property, so assistive tech announces it as mixed rather than unchecked.'],
+      ['Roles', <>A native input of type checkbox. Indeterminate is written to the DOM property, so assistive tech announces it as mixed rather than unchecked. In error the input carries <code>aria-invalid</code>.</>],
       ['Labels', <>The label is a real <code>label</code> tied to the input. Help and error text are linked with <code>aria-describedby</code>, and error text is announced as it appears.</>],
-      ['Focus', <>A 2px ring in <code>--graphite-focus</code> around the box, on keyboard focus only.</>],
+      ['Focus', <>A 2px ring in <code>--graphite-focus</code> around the box, on keyboard focus only. In error it sits outside the danger border rather than replacing it.</>],
       ['Target', 'The painted box is 20px. The input underneath covers a 32px square, so the target does not shrink with the drawing.'],
     ],
     parityLede:
@@ -72,7 +80,7 @@ export function checkboxDoc(): ComponentDocConfig {
     parity: [
       ['Selection', 'Unchecked · Checked · Indeterminate', 'checked, indeterminate', 'Two booleans. When both are set, the dash wins.'],
       ['State', 'Enabled · Focus · Disabled', 'disabled', 'Focus is :focus-visible, a pseudo-class (governance rule 7). Disabled is the disabled prop.'],
-      ['State', 'Invalid', 'errorText', 'Its presence is the error state. There is no separate flag to set.'],
+      ['State', 'Invalid', 'errorText', 'Its presence is the error state. There is no separate flag to set. The box takes a danger border, as the kit draws it.'],
       ['State', 'Warning · Read-only · Skeleton', '—', 'No counterpart in code.'],
       ['Group: Horizontal', 'False · True', '—', 'There is no checkbox group component. Lay checkboxes out in your own container.'],
     ],

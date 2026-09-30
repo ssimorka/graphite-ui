@@ -28,8 +28,8 @@ function codeFor(variant: Variant, content: Content) {
 }
 
 /**
- * Variant is the one contract prop. The Label control shows the other thing a
- * tag does on its own, capping a large count at 99+.
+ * Variant is the contract prop worth a control. The Label control shows what
+ * the other one, max, does at its default: a large count caps at 99+.
  */
 export function TagPreview() {
   const [variant, setVariant] = useState<Variant>('primary')

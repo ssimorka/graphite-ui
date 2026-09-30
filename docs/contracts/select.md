@@ -1,6 +1,6 @@
 ---
 component: Select
-version: 2.0.0
+version: 2.1.0
 wave: 2
 slots:
   - name: Label
@@ -28,6 +28,8 @@ tokens:
     usage: Closed trigger.
   - name: on-surface-variant
     usage: Label and helper text, which the kit binds to onSurfaceVariant rather than onSurface.
+  - name: surface-variant
+    usage: Trigger fill on hover. The kit draws a Hover state for Select (field-hover) that Text input does not have, so this is Select's own addition to the inherited set.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Depends on the overlay elevation pattern from Wave 5 — flag this as a soft dependency even though Select ships in Wave 2, since its open state borrows Wave 5's surface treatment. Build the trigger first, wire the menu once Wave 5 lands.
@@ -38,6 +40,6 @@ prohibitions:
 ### Select
 - **Slots:** Label (required), option list (required, minimum 2 options).
 - **Props:** size (sm, md, lg), state (default, disabled, error).
-- **Tokens:** Same as Text input for the closed trigger. The open menu is the browser's own and takes no token from this system — see the composition rule.
+- **Tokens:** Same as Text input for the closed trigger, plus `surface-variant` for the trigger's hover fill, which the kit draws for Select and not for Text input. The open menu is the browser's own and takes no token from this system — see the composition rule.
 - **Composition rules:** The soft dependency on Wave 5's overlay surface resolved the other way. Wave 5 has landed, and Select still renders a native `select`: the platform menu is what keeps type-ahead, arrow keys and mobile pickers working, which its prohibition exists to protect. Replacing it with an overlay-surfaced listbox would mean rebuilding all of that as a combobox, and would be a contract change here rather than a free upgrade.
 - **Prohibitions:** No native-select-breaking custom styling that loses keyboard navigation.

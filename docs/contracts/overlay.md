@@ -1,6 +1,6 @@
 ---
 component: Overlay
-version: 1.1.0
+version: 1.2.0
 wave: 5
 internal: true
 slots: []
@@ -18,6 +18,9 @@ composition_rules:
   - There is no exit transition, deliberately. Every overlay unmounts its content on close, and Popover depends on that: its no-nesting prohibition is enforced by a throw that only fires because content does not exist until it is open. Holding a closed overlay mounted to animate it out would move that throw to prerender.
   - Focus returns to the element that opened the overlay when it closes, in every case, trapped or not.
   - Escape dismisses any overlay that is dismissible at all, and it is always the outermost open overlay that closes first.
+  - Open overlays form a stack in the order they opened. Escape reaches only the most recently opened overlay that honours it or traps focus, so each press closes one layer. A trapping overlay that does not honour Escape (a Modal with dismissible off) still takes the press, so nothing beneath it closes.
+  - An outside press closes every overlay it lands outside of, stopping at the first trapping overlay above. A press inside an overlay stacked above does not count as outside the ones below it, so a Menu open in a Modal closes on a press elsewhere in the Modal and the Modal stays.
+  - Only the most recently opened trapping overlay wraps Tab.
 prohibitions:
   - No overlay defines its own dismiss behavior. An overlay that needs a different one is a different component, not a variant.
 ---
@@ -43,8 +46,9 @@ The source document asks for it directly:
   each overlay in its own contract, so no overlay can quietly use a token it
   has not declared.
 - **Composition rules:** Focus always returns to the trigger on close. Escape
-  always closes the outermost open overlay first. Dismiss behavior comes from
-  here, never from the component.
+  always closes the outermost open overlay first, one per press. An outside
+  press closes what it lands outside of, but never reaches past a trapping
+  overlay. Dismiss behavior comes from here, never from the component.
 - **Prohibitions:** No overlay defines its own dismiss behavior. One that needs
   a different pattern is a different component, not a variant of this one.
 

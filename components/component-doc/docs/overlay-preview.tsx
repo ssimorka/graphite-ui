@@ -6,17 +6,19 @@ import { Popover } from '@/components/ui/popover'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 import { ThemeOptions } from './popover-preview'
+import type { Themes } from './popover-preview'
 import styles from './overlay.module.scss'
 
 const TRIGGER = 'Open panel'
 
 function codeFor(trap: boolean) {
   const modal = trap ? '\n  modal' : ''
+  const label = trap ? '\n  label="Theme filter"' : ''
   return `// Popover calls useOverlay({ open, onDismiss, trapFocus: ${trap} })
-<Popover${modal}
+<Popover${modal}${label}
   trigger={(props) => <Button {...props}>${TRIGGER}</Button>}
 >
-  <ThemeOptions store={store} />
+  <ThemeOptions value={themes} onChange={setThemes} />
 </Popover>`
 }
 
@@ -33,9 +35,9 @@ function describe(el: Element | null, root: HTMLElement | null): string {
 }
 
 /**
- * The readout keeps its own state. If it lived in OverlayPreview, every focus
- * change would re-render the open Popover, and useOverlay's effect (keyed on
- * the inline onDismiss Popover creates) would re-run and pull focus back.
+ * The readout keeps its own state only so it can listen for focus on the
+ * document. Re-rendering the open Popover would be harmless: the base does not
+ * re-run its effect on a re-render, so focus is never pulled back.
  */
 function FocusReadout({ root }: { root: { current: HTMLElement | null } }) {
   const [focus, setFocus] = useState('nothing (the page)')
@@ -69,7 +71,7 @@ function FocusReadout({ root }: { root: { current: HTMLElement | null } }) {
  */
 export function OverlayPreview() {
   const [trap, setTrap] = useState(false)
-  const store = useRef({ light: true, dark: false })
+  const [themes, setThemes] = useState<Themes>({ light: true, dark: false })
   const root = useRef<HTMLDivElement>(null)
 
   return (
@@ -90,9 +92,10 @@ export function OverlayPreview() {
         <div ref={root} className={styles.demo}>
           <Popover
             modal={trap}
+            label={trap ? 'Theme filter' : undefined}
             trigger={(props) => <Button {...props}>{TRIGGER}</Button>}
           >
-            <ThemeOptions store={store} />
+            <ThemeOptions value={themes} onChange={setThemes} />
           </Popover>
           <FocusReadout root={root} />
         </div>

@@ -7,7 +7,7 @@ import { cn } from '@/lib/cn'
 import styles from './button-group.module.scss'
 
 /**
- * Contract: docs/contracts/button-group.md (1.0.0)
+ * Contract: docs/contracts/button-group.md (1.0.1)
  *
  * Enforces the one-primary-action rule. Card and Dialog wrap their footers in
  * this, so the rule holds wherever a footer is used rather than only where
@@ -18,8 +18,8 @@ export type ButtonGroupProps = ComponentPropsWithRef<'div'>
 // Children.toArray flattens arrays but keeps a fragment as one child, so a
 // footer passed as <>...</> (Modal's, from every caller) would hide both of its
 // buttons from the count. Fragments are unwrapped recursively; any other
-// element is counted as itself, so a wrapper div still hides what is inside
-// it, which the contract's prohibition covers in words.
+// element is counted as itself, so a wrapper element still hides what is
+// inside it. The contract says so rather than pretending the check reaches.
 function countPrimaries(children: ReactNode): number {
   let n = 0
   for (const child of Children.toArray(children)) {

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { CheckmarkFilled, ErrorFilled, InformationFilled, WarningFilled } from '@carbon/icons-react'
+import { Button } from '@/components/ui/button'
 import { Notification } from '@/components/ui/notification'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
@@ -16,23 +17,27 @@ const ICONS = {
   success: { name: 'CheckmarkFilled', node: <CheckmarkFilled size={20} /> },
 }
 
-function codeFor(variant: Variant, icon: boolean, m: DemoMessage) {
+function codeFor(variant: Variant, icon: boolean, close: boolean, m: DemoMessage) {
   const variantProp = variant === 'info' ? '' : `\n  variant="${variant}"`
   const iconProp = icon ? `\n  icon={<${ICONS[variant].name} size={20} />}` : ''
   const importLine = icon
     ? `import { ${ICONS[variant].name} } from '@carbon/icons-react'\n\n`
     : ''
-  return `${importLine}<Notification${variantProp}${iconProp}\n  title="${m.title}"\n  body="${m.body}"\n/>`
+  const closeProp = close ? '\n  onClose={() => setOpen(false)}' : ''
+  return `${importLine}<Notification${variantProp}${iconProp}\n  title="${m.title}"\n  body="${m.body}"${closeProp}\n/>`
 }
 
 /**
- * Variant is the contract's one prop. The icon slot is optional, so it gets a
- * control too; the message changes with the variant, because a warning and a
- * success should never share copy.
+ * Variant and the optional close button are the contract's props. The icon
+ * slot is optional, so it gets a control too; the message changes with the
+ * variant, because a warning and a success should never share copy. Dismissing
+ * the demo leaves a way to bring it back, or the preview would be empty.
  */
 export function NotificationPreview({ messages }: { messages: Record<Variant, DemoMessage> }) {
   const [variant, setVariant] = useState<Variant>('info')
   const [icon, setIcon] = useState(true)
+  const [close, setClose] = useState(true)
+  const [open, setOpen] = useState(true)
   const m = messages[variant]
 
   return (
@@ -61,17 +66,37 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
               { value: 'false', label: 'Hidden' },
             ]}
           />
+          <Select
+            label="Close button"
+            size="sm"
+            value={close ? 'true' : 'false'}
+            onChange={(v) => {
+              setClose(v === 'true')
+              setOpen(true)
+            }}
+            options={[
+              { value: 'true', label: 'Shown' },
+              { value: 'false', label: 'Hidden' },
+            ]}
+          />
         </>
       }
       preview={
-        <Notification
-          variant={variant}
-          icon={icon ? ICONS[variant].node : undefined}
-          title={m.title}
-          body={m.body}
-        />
+        open ? (
+          <Notification
+            variant={variant}
+            icon={icon ? ICONS[variant].node : undefined}
+            title={m.title}
+            body={m.body}
+            onClose={close ? () => setOpen(false) : undefined}
+          />
+        ) : (
+          <Button size="sm" onClick={() => setOpen(true)}>
+            Show again
+          </Button>
+        )
       }
-      code={codeFor(variant, icon, m)}
+      code={codeFor(variant, icon, close, m)}
     />
   )
 }

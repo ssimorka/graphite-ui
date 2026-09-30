@@ -1,6 +1,6 @@
 ---
 component: Text area
-version: 2.0.0
+version: 2.0.1
 wave: 2
 inherits: Text input
 slots:

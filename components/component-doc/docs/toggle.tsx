@@ -40,14 +40,19 @@ export function toggleDoc(): ComponentDocConfig {
       },
     ],
     statesLede:
-      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here. The kit draws no hover state for a toggle and the code has none. Error is not a prop of its own: passing errorText is what puts the control in it.',
+      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here. The kit draws no hover state for a toggle and the code has none. Disabled keeps one track for on and off, as the kit draws it, and turns the thumb to disabled content so its position still shows which is which. Error is not a prop of its own: passing errorText is what puts the control in it, and the track takes a danger ring.',
     states: [
       { label: 'Enabled', node: cell() },
       { label: 'Focus', node: cell(), className: styles.forceFocus },
       { label: 'Disabled', node: cell({ disabled: true }) },
       {
         label: 'Error',
-        node: <Toggle label="Email notifications" errorText="Add an email address to turn this on." />,
+        node: (
+          <>
+            <Toggle label="Email notifications" errorText="Add an email address to turn this on." />
+            <Toggle label="Label" checked errorText="On keeps its fill inside the ring." />
+          </>
+        ),
       },
     ],
     dos: [
@@ -63,10 +68,10 @@ export function toggleDoc(): ComponentDocConfig {
       'Recolor the on track green. On is primary and off is outline, the same ramp as the rest of the controls.',
     ],
     a11y: [
-      ['Roles', <>A native checkbox with <code>role=&quot;switch&quot;</code>, so a screen reader announces a switch that is on or off rather than a checkbox.</>],
+      ['Roles', <>A native checkbox with <code>role=&quot;switch&quot;</code>, so a screen reader announces a switch that is on or off rather than a checkbox. In error the input carries <code>aria-invalid</code>.</>],
       ['Keyboard', 'Tab reaches it and Space flips it, as with any native checkbox. Clicking the label flips it too.'],
       ['Labels', <>The label is a real <code>label</code> tied to the input. Help and error text are linked with <code>aria-describedby</code>, and error text is announced as it appears.</>],
-      ['Focus', <>A 2px ring in <code>--graphite-focus</code> around the track, on keyboard focus only.</>],
+      ['Focus', <>A 2px ring in <code>--graphite-focus</code> around the track, on keyboard focus only. In error it sits outside the danger ring rather than replacing it.</>],
       ['Motion', <>The track fill and the thumb travel run on <code>--graphite-motion-fast</code> and stop animating under prefers-reduced-motion.</>],
       ['Target', 'The track is 48 by 24, the kit’s default size. The input under it is the full width and 32px tall.'],
     ],
@@ -74,8 +79,8 @@ export function toggleDoc(): ComponentDocConfig {
       ['Toggled', 'False · True', 'checked', 'One to one.'],
       ['Size', 'Default · Small', '—', 'Default only. The code draws the 48 by 24 track and has no small switch.'],
       ['Toggle only', 'False · True', '—', 'No counterpart. The label is required, so there is no bare switch.'],
-      ['State', 'Enabled · Focus · Disabled', 'disabled', 'Focus is :focus-visible, a pseudo-class (governance rule 7). Disabled is the disabled prop.'],
-      ['State', 'Read-only · Skeleton', '—', 'No counterpart in code. The kit has no error state for a toggle; the code’s errorText is its own.'],
+      ['State', 'Enabled · Focus · Disabled', 'disabled', 'Focus is :focus-visible, a pseudo-class (governance rule 7). Disabled is the disabled prop: one track for on and off, with the thumb in disabled content.'],
+      ['State', 'Read-only · Skeleton', '—', 'No counterpart in code. The kit has no error state for a toggle; the code’s errorText and its danger ring are its own.'],
     ],
     related: [
       { href: '/docs/components/checkbox', title: 'Checkbox', why: 'when the change waits for a submit' },

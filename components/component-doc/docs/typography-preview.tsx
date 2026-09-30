@@ -24,8 +24,10 @@ function codeFor(variant: Variant, weight: Weight) {
 }
 
 /**
- * The contract's two props. The option labels name the element each variant
- * renders, because the variant is a structural choice before it is a size.
+ * Variant and weight, the two props that change the text itself. Inverted
+ * only reads on a primary fill, so the Variants section shows it there. The
+ * option labels name the element each variant renders, because the variant is
+ * a structural choice before it is a size.
  */
 export function TypographyPreview() {
   const [variant, setVariant] = useState<Variant>('heading-2')

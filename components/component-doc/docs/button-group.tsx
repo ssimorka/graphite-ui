@@ -27,13 +27,13 @@ export function buttonGroupDoc(): ComponentDocConfig {
       'One slot, two or more Buttons. The group adds a gap from the spacing scale and no colour of its own: every visual decision belongs to the buttons inside it.',
     dos: [
       'Wrap every footer or toolbar in a group, so the one-primary rule is checked instead of remembered.',
-      'Pass the Buttons as direct children. The check reads direct children only.',
+      'Pass the Buttons as direct children or inside a fragment. Fragments are unwrapped before the count, so a footer passed as <>…</> is still checked.',
       'Leave the group with no primary when no action is clearly the main one.',
       'Stack actions vertically in the container’s own layout when a narrow space needs it.',
     ],
     donts: [
       'Add a second primary. It throws at render, naming the count, and that is the intended outcome.',
-      'Wrap a primary Button in another element to get past the check. It will get past it, and the rule will still be broken.',
+      'Wrap a Button in a div or span. The check does not look inside other elements, so a second primary in there slips past it and the rule is still broken.',
       'Override the gap on one instance. Two footers in one product should not disagree about spacing.',
       'Use a group for a single button. A group of one is just a Button.',
     ],

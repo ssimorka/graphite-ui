@@ -1,6 +1,6 @@
 ---
 component: Modal
-version: 1.4.2
+version: 1.5.0
 wave: 5
 slots:
   - name: Title
@@ -28,10 +28,14 @@ tokens:
     usage: Padding and size steps.
   - name: radius
     usage: Panel corner.
+  - name: motion
+    usage: The entrance fade on the scrim, shared with the other overlays. Opacity only, and no exit, since the Modal unmounts on close.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
   - Always traps focus, always returns focus to the trigger on close.
+  - The scrim click is the shared base's outside press, not a handler of the Modal's own. dismissible switches it off together with Escape.
+  - Size caps the width at 384 (sm), 512 (md) and 672 (lg), each wide enough for a Cancel and a primary action side by side. Large is the kit's 671 frame on the grid.
   - Footer follows Button's one-primary-action rule, wrapped in the same ButtonGroup that enforces it.
 prohibitions:
   - No Modal opened from within another Modal — stack depth of one.
@@ -44,7 +48,7 @@ prohibitions:
 ### Modal
 - **Slots:** Title (required), body (required), footer actions (optional, typically Button).
 - **Props:** size (sm, md, lg), dismissible (boolean).
-- **Tokens:** `surface-elevated`, `on-surface` text, `outline` footer divider, and a full-screen `scrim` at a defined opacity over the base surface; the spacing scale for padding and size steps.
+- **Tokens:** `surface-elevated`, `on-surface` text, `outline` footer divider, and a full-screen `scrim` at a defined opacity over the base surface; the spacing scale for padding and size steps; the shared `motion` fade on entrance.
 - **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's one-primary-action rule, wrapped in the same ButtonGroup that enforces it.
 - **Prohibitions:** No Modal opened from within another Modal — stack depth of one.
 

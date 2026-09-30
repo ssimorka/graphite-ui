@@ -57,7 +57,7 @@ export function radioButtonGroupDoc(): ComponentDocConfig {
       { label: 'Orientation: Horizontal', node: group('horizontal') },
     ],
     statesLede:
-      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here on the first option. The kit draws no hover state and the code has none. Disabled works on the whole group or on one option.',
+      'Focus is a pseudo-class in the code and a variant in the kit, so the page forces it here on the first option. The kit draws no hover state and the code has none. Disabled works on the whole group or on one option. In error every option’s ring turns danger, as the kit draws its Invalid group, and the selected one keeps its primary centre.',
     states: [
       { label: 'Enabled', node: group('enabled') },
       { label: 'Focus', node: group('focus'), className: styles.forceFocus },
@@ -96,7 +96,7 @@ export function radioButtonGroupDoc(): ComponentDocConfig {
       ['Selected', 'False · True', 'value', 'The group owns selection. An option is selected when its value matches.'],
       ['Position', 'Left · Right', '—', 'Which side the label sits on. The code always puts the label after the control.'],
       ['State', 'Enabled · Focus · Disabled', 'disabled', 'Focus is :focus-visible, a pseudo-class (governance rule 7). Disabled is the group prop or option.disabled.'],
-      ['State', 'Invalid', 'errorText', 'Its presence is the error state. There is no separate flag to set.'],
+      ['State', 'Invalid', 'errorText', 'Its presence is the error state. There is no separate flag to set. Every ring turns danger, as the kit draws it.'],
       ['State', 'Warning · Read-only · Skeleton', '—', 'No counterpart in code.'],
     ],
     related: [

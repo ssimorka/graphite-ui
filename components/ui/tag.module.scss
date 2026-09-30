@@ -43,3 +43,14 @@
   background: var(--graphite-success-container);
   color: var(--graphite-on-success-container);
 }
+
+// The full count behind a capped badge: in the accessibility tree, off the
+// page. Clipped rather than display:none, which would hide it from both.
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

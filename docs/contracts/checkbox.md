@@ -1,6 +1,6 @@
 ---
 component: Checkbox
-version: 2.0.0
+version: 2.0.1
 wave: 2
 slots:
   - name: Label
@@ -35,7 +35,7 @@ tokens:
   - name: on-surface
     usage: The required-field indicator beside the label.
   - name: danger
-    usage: Error text, taking the same role as the control's error border so the two cannot drift apart.
+    usage: Error border on the box, and error text. One role for both, so the two cannot drift apart. The border is drawn the way Text input draws its error edge.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Indeterminate state is visually distinct from both checked and unchecked, not a color swap — a distinct glyph (dash) inside the same box.

@@ -1,6 +1,6 @@
 @use './form-parts' as parts;
 
-// Textarea — docs/contracts/textarea.md
+// Text area — docs/contracts/text-area.md
 //
 // Growth stops at max-height and hands over to a scrollbar. The contract
 // forbids growing past a defined maximum without an explicit scroll
@@ -44,6 +44,7 @@
 .md { min-height: var(--graphite-space-10); font-size: 0.875rem; }
 .lg { min-height: var(--graphite-space-11); font-size: 1rem; }
 
+.field { @include parts.field-stack; }
 .label { @include parts.field-label; }
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }

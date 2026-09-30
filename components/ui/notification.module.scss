@@ -1,7 +1,7 @@
-// Alert — docs/contracts/alert.md
+// Notification — docs/contracts/notification.md
 //
-// Not elevated. The Wave 5 preamble groups Alert with the overlays, but its
-// own contract puts it inline and persistent, so it takes plain `surface`
+// Not elevated. The Wave 5 preamble groups Notification with the overlays, but
+// its own contract puts it inline and persistent, so it takes plain `surface`
 // rather than the elevated overlay surface.
 .alert {
   display: flex;
@@ -22,7 +22,31 @@
 }
 
 .content {
+  flex: 1 1 auto;
   min-width: 0;
+}
+
+// Takes the text colour of whichever variant it sits on, so it needs no
+// status role of its own and stays legible on every container.
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  // Pulled into the padding so the glyph lines up with the icon and title
+  // rather than pushing the row taller than its text.
+  margin: calc(-1 * var(--graphite-space-02));
+  padding: var(--graphite-space-02);
+  border: 0;
+  border-radius: var(--graphite-radius-none);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: -2px;
 }
 
 .title {
@@ -39,10 +63,20 @@
   background: var(--graphite-surface);
 }
 
+// The icon takes the base status role, the same one as the edge, so the glyph
+// and the border agree about which status this is.
+.info .icon {
+  color: var(--graphite-info);
+}
+
 .danger {
   background: var(--graphite-danger-container);
   color: var(--graphite-on-danger-container);
   border-color: var(--graphite-danger);
+}
+
+.danger .icon {
+  color: var(--graphite-danger);
 }
 
 .warning {
@@ -51,8 +85,16 @@
   border-color: var(--graphite-warning);
 }
 
+.warning .icon {
+  color: var(--graphite-warning);
+}
+
 .success {
   background: var(--graphite-success-container);
   color: var(--graphite-on-success-container);
   border-color: var(--graphite-success);
+}
+
+.success .icon {
+  color: var(--graphite-success);
 }

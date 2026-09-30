@@ -19,6 +19,18 @@
   width: 100%;
 }
 
+// The same stack for a control that sits beside its label (Checkbox, Toggle):
+// the row is the control and its label, and the supporting text drops below
+// it, where the kit draws Helper / Error text. Inline rather than full width,
+// so the hit area of the row does not stretch across the container.
+@mixin control-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-02);
+  max-width: 100%;
+}
+
 // Prohibitions carried over from the old Label contract: no color other than
 // on-surface, and nothing that could be mistaken for a tooltip trigger — no
 // underline, no dotted border, no help cursor.

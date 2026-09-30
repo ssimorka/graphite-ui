@@ -8,6 +8,22 @@
   justify-content: center;
   padding: var(--graphite-space-05);
   background: var(--graphite-scrim);
+  // The shared overlay entrance, on the scrim so the panel fades in with it.
+  // Opacity only and no exit, as the Overlay contract sets out: the Modal
+  // unmounts on close.
+  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim {
+    animation: none;
+  }
 }
 
 .dialog {
@@ -28,9 +44,12 @@
   outline: none;
 }
 
-.sm { max-width: var(--graphite-space-13); }
-.md { max-width: calc(var(--graphite-space-13) * 1.5); }
-.lg { max-width: calc(var(--graphite-space-13) * 2); }
+// 384, 512 and 672. Large is the kit's 671 frame, rounded to the grid. The kit
+// draws every size at that one width, so Small and Medium are set to hold a
+// Cancel and a primary action side by side, which the old 160 and 240 did not.
+.sm { max-width: calc(var(--graphite-space-13) * 2.4); }
+.md { max-width: calc(var(--graphite-space-13) * 3.2); }
+.lg { max-width: calc(var(--graphite-space-13) * 4.2); }
 
 .title {
   margin: 0;

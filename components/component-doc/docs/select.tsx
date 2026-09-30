@@ -52,9 +52,10 @@ export function selectDoc(): ComponentDocConfig {
       { label: 'Size: Large', node: field({ size: 'lg' }) },
     ],
     statesLede:
-      'Disabled and error are values of the state prop; focus is a pseudo-class, so the page forces it here. The kit also draws Hover, and the code has no hover rule for it yet. Open is not drawn, because the open menu belongs to the browser.',
+      'Disabled and error are values of the state prop. Hover and focus are pseudo-classes, so the page forces them here. Hover steps the fill to surfaceVariant, the kit’s field hover. Open is not drawn, because the open menu belongs to the browser.',
     states: [
       { label: 'Enabled', node: field() },
+      { label: 'Hover', node: field(), className: styles.forceHover },
       { label: 'Focus', node: field(), className: styles.forceFocus },
       { label: 'Disabled', node: field({ state: 'disabled' }) },
       { label: 'Error', node: field({ state: 'error', errorText: 'Choose an option to continue.' }) },
@@ -82,7 +83,7 @@ export function selectDoc(): ComponentDocConfig {
       ['Size', 'Small · Medium · Large', 'size', 'sm, md and lg. One to one.'],
       ['Style', 'Default · Inline', '—', 'Default only. The code has no inline select.'],
       ['State', 'Enabled · Disabled · Error', 'state', 'One to one. Error also follows from errorText.'],
-      ['State', 'Focus · Hover', '—', 'Pseudo-classes (governance rule 7). Focus is :focus-within on the trigger. Hover has no rule in code yet.'],
+      ['State', 'Focus · Hover', '—', 'Pseudo-classes (governance rule 7). Hover is :hover on the trigger and steps the fill to surfaceVariant. Focus is :focus-within.'],
       ['Open', 'False · True', '—', 'The kit also draws it as State=Open. The open menu is the browser’s, so it is runtime state with nothing to draw.'],
       ['State', 'Warning · Read-only · Skeleton', '—', 'No counterpart in code.'],
       ['Set', 'Select - Fluid', '—', 'No counterpart. The code has one field layout.'],

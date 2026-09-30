@@ -18,11 +18,11 @@ export function menuDoc(): ComponentDocConfig {
     lede: 'A list of actions that opens from a trigger. Use it to gather commands that act on one thing; use a Select when the reader is choosing a value, and a Popover when the content is more than a list.',
     description:
       'A list of actions that opens from a trigger. Anatomy, placements, item states, API, tokens and accessibility, generated from the contract.',
-    tocNote: 'Menu has no defaultOpen, so the lists on this page open themselves once through their own trigger. Click away and they close like any other.',
+    tocNote: 'Menu has no defaultOpen, so the lists on this page open themselves once through their own trigger, without taking focus. Click away and they close like any other.',
     livePreview: <MenuPreview />,
     install: "import { Menu } from '@/components/ui/menu'\nimport type { MenuItem } from '@/components/ui/menu'",
     anatomyLede:
-      'A trigger you render, then items and separators passed as data. Items are buttons the Menu draws for you, so every one of them has the same padding, hover and focus.',
+      'A trigger you render, then items and separators passed as data. Spread the props the trigger receives onto it, so it gets the click, the arrow keys and the ARIA state. Items are buttons the Menu draws for you, so every one of them has the same padding, hover and focus. The contract also lists sub-menus as an optional slot; they are not built yet, so an item cannot open a nested list.',
     anatomy: (
       <div className={styles.anatomy}>
         <span className={`${shared.marker} ${styles.markTrigger}`} aria-hidden="true">1</span>
@@ -73,10 +73,10 @@ export function menuDoc(): ComponentDocConfig {
       'Rely on hover to reveal items. Everything the Menu can do is in the list when it opens.',
     ],
     a11y: [
-      ['Keyboard', 'Enter and Space on the trigger open it. Focus stays on the trigger, and Tab then moves through the items in order; there is no arrow-key navigation yet. Escape closes it.'],
+      ['Keyboard', 'Enter, Space or Down Arrow on the trigger opens the menu on its first item, and Up Arrow opens it on its last. Down and Up move between items and wrap at the ends; Home and End jump to the first and last. Enter or Space chooses an item. Escape closes the menu, and so does Tab, which then carries on to whatever follows the trigger.'],
       ['Roles', <>The list is <code>role=&quot;menu&quot;</code> and each item <code>role=&quot;menuitem&quot;</code>. The trigger gets <code>aria-haspopup=&quot;menu&quot;</code> and <code>aria-expanded</code>.</>],
-      ['Focus', <>A focused item fills with <code>surface-variant</code>, the same step as hover, with no ring. When the menu closes, focus goes back to the trigger.</>],
-      ['Choosing', 'Choosing an item runs its onSelect and closes the menu. Disabled items are real disabled buttons, so they cannot be focused or chosen.'],
+      ['Focus', <>Opening the menu moves focus to an item. Every item is <code>tabindex=&quot;-1&quot;</code>, so the whole menu is one Tab stop and the arrow keys do the rest. A focused item fills with <code>surface-variant</code>, the same step as hover, with no ring. When the menu closes, focus goes back to the trigger.</>],
+      ['Choosing', 'Choosing an item runs its onSelect and closes the menu. Disabled items are real disabled buttons, so the arrow keys skip them and they cannot be chosen.'],
       ['Contrast', <>Labels are <code>on-surface</code> and destructive labels <code>danger</code>, on <code>surface-elevated</code>, with an <code>outline</code> edge.</>],
       ['Motion', 'The list fades in on the fast motion step and appears at once under prefers-reduced-motion.'],
     ],

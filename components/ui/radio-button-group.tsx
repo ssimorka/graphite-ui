@@ -10,7 +10,7 @@ export type RadioOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/radio-button-group.md (2.0.0) */
+/** Contract: docs/contracts/radio-button-group.md (2.0.1) */
 type RadioButtonGroupProps = {
   /** Namespaces the option ids and binds the radios into one group. */
   name: string
@@ -50,7 +50,7 @@ export function RadioButtonGroup({
 
   return (
     <fieldset
-      className={styles.group}
+      className={`${styles.group} ${errored ? styles.errored : ''}`}
       disabled={disabled}
       aria-describedby={describedBy}
     >

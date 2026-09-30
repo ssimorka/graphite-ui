@@ -22,8 +22,8 @@ function codeFor(density: Density, interactive: boolean, rows: DemoRow[]) {
 }
 
 /**
- * Density is the contract's one prop. Interactive is the code's addition: it
- * only adds the hover tone-step, so the control says what it does.
+ * Density and interactive, the contract's two props. Interactive only adds
+ * the hover tone-step, so the control says what it does.
  */
 export function ContainedListPreview({ rows }: { rows: DemoRow[] }) {
   const [density, setDensity] = useState<Density>('default')
