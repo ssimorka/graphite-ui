@@ -54,9 +54,9 @@ export function tooltipDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Keyboard', 'It opens when the trigger takes focus, after the same delay as hover, and closes on blur or Escape.'],
-      ['Roles', <>The bubble is <code>role=&quot;tooltip&quot;</code>. While it is open, <code>aria-describedby</code> points at it from a span around the trigger, not from the focusable element itself, so some screen readers will not announce it. Keep the trigger’s own name complete.</>],
+      ['Roles', <>The bubble is <code>role=&quot;tooltip&quot;</code>. While it is open, the trigger itself carries <code>aria-describedby</code> pointing at it, alongside any description the trigger already had. It describes; it does not name, so keep the trigger’s own name complete.</>],
       ['Focus', 'It never takes focus and never traps it. The trigger keeps focus the whole time.'],
-      ['Pointer', 'It closes as the pointer leaves the trigger. The bubble ignores the pointer, so it cannot be hovered to keep it open; keep the text short enough to read in passing.'],
+      ['Pointer', 'The pointer can move from the trigger onto the bubble and it stays open, so it can be read at any speed or magnified. It closes once the pointer leaves both.'],
       ['Contrast', <>Text is <code>on-surface</code> on <code>surface-elevated</code>, with an <code>outline</code> edge. The edge is required: in Light the bubble would otherwise match the page.</>],
       ['Motion', 'It fades in on the fast motion step, opacity only, and appears at once under prefers-reduced-motion.'],
     ],
