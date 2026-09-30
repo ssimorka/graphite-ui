@@ -2,6 +2,9 @@
 // like a command palette: under the header, centred, never taller than the
 // viewport. There is no kit frame for results, so it borrows the kit's parts:
 // the header's search field, the elevated overlay surface and its outline edge.
+// The chips borrow Tag - Dismissible and Tag - Selectable from the kit: the
+// governed Tag is a read-only badge, so the interactive forms are drawn here
+// on the same roles rather than invented.
 
 .scrim {
   position: fixed;
@@ -18,7 +21,9 @@
   display: flex;
   flex-direction: column;
   width: min(40rem, calc(100vw - 2 * var(--graphite-space-05)));
-  max-height: calc(100dvh - 6rem);
+  // A fixed height rather than one that follows the results, so the panel does
+  // not jump on every keystroke, and the explainer above the footer has room.
+  height: min(36rem, calc(100dvh - 6rem));
   transform: translateX(-50%);
   background: var(--graphite-surface-elevated);
   border: 1px solid var(--graphite-outline);
@@ -30,6 +35,16 @@
 
   @media (prefers-reduced-motion: no-preference) {
     animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+  }
+
+  // Below md it takes the whole screen, the way search does on a phone: the
+  // keyboard covers half the viewport, and a floating card would lose the rest.
+  @media (max-width: 671.98px) {
+    inset: 0;
+    width: auto;
+    height: auto;
+    transform: none;
+    border: 0;
   }
 }
 
@@ -56,6 +71,65 @@
 .icon {
   flex: none;
   color: var(--graphite-on-surface-variant);
+}
+
+// The input sits over a copy of its own text with the completion after it, so
+// the suggestion reads as the rest of what you are typing.
+.inputWrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.ghost {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: pre;
+  pointer-events: none;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.typed {
+  visibility: hidden;
+}
+
+.clear {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--graphite-on-surface-variant);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-on-surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+}
+
+// Esc on a keyboard, a Cancel button on touch. Doubled class to outrank the
+// Button's own display.
+.cancel.cancel {
+  flex: none;
+
+  @media (hover: hover) and (pointer: fine) {
+    display: none;
+  }
 }
 
 .input {
@@ -88,11 +162,134 @@
 
 .esc {
   flex: none;
+
+  @media not ((hover: hover) and (pointer: fine)) {
+    display: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Refining: how the query was read, then the categories it found.
+.refine {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.understood,
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+.refineLabel {
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.note {
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.chip,
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  min-height: 1.5rem;
+  padding: 0 var(--graphite-space-03);
+  background: var(--graphite-surface-variant);
+  border: 1px solid transparent;
+  border-radius: var(--graphite-radius-full);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 1px;
+  }
+}
+
+.chip {
+  padding-right: var(--graphite-space-02);
+  background: var(--graphite-primary-container);
+  color: var(--graphite-on-primary-container);
+}
+
+.filter {
+  border-color: var(--graphite-outline);
+  background: none;
+
+  &:hover {
+    background: var(--graphite-surface-variant);
+  }
+
+  &[aria-pressed='true'] {
+    background: var(--graphite-on-surface);
+    border-color: var(--graphite-on-surface);
+    color: var(--graphite-surface-elevated);
+  }
+}
+
+.count {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-caption-1-size);
+  opacity: 0.8;
+}
+
+.textButton {
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-primary);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+.group + .group {
+  margin-top: var(--graphite-space-02);
+}
+
+.groupHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--graphite-space-04) var(--graphite-space-05) var(--graphite-space-02);
 }
 
 .groupLabel {
-  margin: 0;
-  padding: var(--graphite-space-04) var(--graphite-space-05) var(--graphite-space-02);
   font-size: var(--graphite-text-caption-1-size);
   line-height: var(--graphite-text-caption-1-line-height);
   letter-spacing: 0.32px;
@@ -108,6 +305,23 @@
   list-style: none;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+// Suggested, recent and related searches: one line, an icon naming which.
+.queryOption {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+  border-left: 2px solid transparent;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+
+  &[aria-selected='true'] {
+    background: var(--graphite-surface-variant);
+    border-left-color: var(--graphite-primary);
+  }
 }
 
 // Title and kind share the first line; the snippet runs under them.
@@ -136,10 +350,23 @@
   color: var(--graphite-on-surface-variant);
 }
 
-.kind {
+.option > :nth-child(2) {
   align-self: start;
+}
+
+// The best match gets its snippet in full and says why it ranked first.
+.best {
+  padding-block: var(--graphite-space-05);
+
+  .snippet {
+    -webkit-line-clamp: 3;
+  }
+}
+
+.reason {
+  grid-column: 1 / -1;
   font-size: var(--graphite-text-caption-1-size);
-  line-height: var(--graphite-text-body-2-line-height);
+  line-height: var(--graphite-text-caption-1-line-height);
   color: var(--graphite-on-surface-variant);
 }
 
@@ -152,23 +379,124 @@
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
   color: var(--graphite-on-surface-variant);
+
+  mark {
+    background: none;
+    font-weight: 600;
+    color: var(--graphite-on-surface);
+  }
 }
 
-.status {
-  margin: 0;
-  padding: var(--graphite-space-07) var(--graphite-space-05);
+// No results, and the error: what happened, then a way on.
+.empty,
+.message {
+  padding: var(--graphite-space-06) var(--graphite-space-05) var(--graphite-space-03);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-04);
+  padding-bottom: var(--graphite-space-06);
+}
+
+.messageTitle {
+  margin: 0 0 var(--graphite-space-02);
   font-size: var(--graphite-text-body-2-size);
   line-height: var(--graphite-text-body-2-line-height);
+  font-weight: 500;
+}
+
+.messageBody {
+  margin: 0;
+  max-width: 34rem;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
   color: var(--graphite-on-surface-variant);
 }
 
-.footer {
-  display: none;
-  flex: none;
-  gap: var(--graphite-space-05);
+.quickLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03) var(--graphite-space-05);
   margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--graphite-text-body-3-size);
+
+  a {
+    color: var(--graphite-primary);
+  }
+}
+
+// Processing: skeleton rows the shape of results, and an inline loading line
+// after the kit's Inline loading.
+.loading {
+  flex: 1;
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+}
+
+.loadingLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--graphite-surface-variant);
+  border-top-color: var(--graphite-primary);
+  border-radius: var(--graphite-radius-full);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: spin 690ms linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-04) 0;
+
+  span {
+    display: block;
+    height: 0.75rem;
+    width: 40%;
+    background: var(--graphite-surface-variant);
+  }
+
+  span + span {
+    width: 85%;
+  }
+}
+
+.footer {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-05);
   padding: var(--graphite-space-03) var(--graphite-space-05);
   border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.keys {
+  display: none;
+  gap: var(--graphite-space-05);
+  margin: 0;
   font-size: var(--graphite-text-caption-1-size);
   line-height: var(--graphite-text-caption-1-line-height);
   color: var(--graphite-on-surface-variant);
@@ -177,4 +505,44 @@
   @media (hover: hover) and (pointer: fine) {
     display: flex;
   }
+}
+
+// After the kit's AI explainability popover: title, description, numbered
+// steps, the data it reads. Plain type, no AI styling, since no AI is used.
+.explain {
+  width: min(22rem, calc(100vw - 2 * var(--graphite-space-05)));
+  padding: var(--graphite-space-05);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  p,
+  li {
+    margin: 0 0 var(--graphite-space-03);
+    font-size: var(--graphite-text-body-3-size);
+    line-height: var(--graphite-text-body-3-line-height);
+  }
+
+  ol {
+    margin: 0 0 var(--graphite-space-04);
+    padding-left: var(--graphite-space-05);
+    list-style: decimal;
+  }
+
+}
+
+.explain .explainTitle {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  font-weight: 500;
+  color: var(--graphite-on-surface);
+}
+
+.explain .explainHead {
+  margin-top: var(--graphite-space-04);
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  letter-spacing: 0.32px;
+  text-transform: uppercase;
 }

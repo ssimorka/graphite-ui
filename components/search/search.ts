@@ -1,6 +1,11 @@
 import type { SearchEntry } from '@/lib/search-index'
 
-export type SearchHit = { entry: SearchEntry; snippet: string }
+export type SearchHit = {
+  entry: SearchEntry
+  snippet: string
+  /** How well it matched, per query word, so matches on different queries compare. */
+  score?: number
+}
 
 const norm = (s: string) => s.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
 
@@ -64,12 +69,12 @@ export function search(entries: SearchEntry[], query: string, limit = 12): Searc
   return scored
     .sort((a, b) => b.score - a.score || a.entry.page.localeCompare(b.entry.page))
     .slice(0, limit)
-    .map(({ entry }) => {
+    .map(({ entry, score }) => {
       // Jump the snippet to a match only for words the title did not already
       // show. A hit on "Color ramps" should open on its first line, not on
       // wherever "color" next appears in the prose.
       const named = norm(`${entry.page} ${entry.section}`)
       const rest = words.filter((w) => !named.includes(w))
-      return { entry, snippet: snippetOf(entry.text, rest) }
+      return { entry, snippet: snippetOf(entry.text, rest), score: score / words.length }
     })
 }
