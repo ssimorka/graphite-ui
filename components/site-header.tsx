@@ -13,27 +13,17 @@ import { SearchPalette } from '@/components/search/search-palette'
 import styles from './site-header.module.scss'
 
 // The kit's header nav, with every label pointed at something that exists:
-// `#patterns` is a real section of the color docs, and Create is the theme
-// builder.
-//
-// Root-relative throughout: the header is shared between / and /docs, so a
-// bare `#patterns` would resolve against whichever page you are on.
+// Create is the theme builder.
 const NAV_ITEMS: [NavItem, ...NavItem[]] = [
   { href: '/docs', label: 'Docs' },
   { href: '/gallery', label: 'Components' },
-  { href: '/docs/theming#patterns', label: 'Patterns' },
   { href: '/create', label: 'Create' },
 ]
 
-// Only route items can be "current". An item carrying a hash lives on a page
-// it shares with another entry, so matching on pathname alone would mark two
-// current at once and emit two aria-current="page" on one nav.
 function withCurrent(pathname: string): [NavItem, ...NavItem[]] {
   return NAV_ITEMS.map((item) => ({
     ...item,
-    current:
-      !item.href.includes('#') &&
-      (pathname === item.href || pathname.startsWith(`${item.href}/`)),
+    current: pathname === item.href || pathname.startsWith(`${item.href}/`),
   })) as [NavItem, ...NavItem[]]
 }
 
