@@ -42,7 +42,18 @@ export function ComponentWall({
       <li className={styles.card}>
         <div className={styles.preview}>{children}</div>
         <div className={styles.meta}>
-          <p className={styles.name}>{name}</p>
+          {/* The name is the link and its overlay stretches over the card, so
+              the whole card opens the component's page. The specimens stay
+              live above that overlay: see .preview in the stylesheet. */}
+          <p className={styles.name}>
+            {meta ? (
+              <a className={styles.nameLink} href={`/docs/components/${meta.slug}`}>
+                {name}
+              </a>
+            ) : (
+              name
+            )}
+          </p>
           <div className={styles.badges}>
             {/* The kit bakes each version into the design. Reading the
                 contract instead means the badge cannot go stale: the kit

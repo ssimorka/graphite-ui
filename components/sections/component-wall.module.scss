@@ -80,6 +80,7 @@
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--graphite-surface);
@@ -140,6 +141,40 @@
 // preview's width rather than allowed to set the card's.
 .preview > * {
   max-width: 100%;
+}
+
+// The card is one link (the name's overlay, below), but the specimens are live
+// and must stay clickable. So the preview sits above the overlay and lets
+// presses through, and only the specimen itself takes them back: a press on
+// the empty preview reaches the link, a press on the toggle works the toggle.
+.preview {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.preview > * {
+  pointer-events: auto;
+}
+
+.nameLink {
+  color: inherit;
+  text-decoration: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
 }
 
 .meta {
