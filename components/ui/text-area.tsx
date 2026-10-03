@@ -6,7 +6,7 @@ import type { FieldSize, FieldState } from './text-input'
 import { fieldMessage } from '@/lib/field-message'
 import styles from './text-area.module.scss'
 
-/** Contract: docs/contracts/text-area.md (2.0.1) — inherits Text input's contract. */
+/** Contract: docs/contracts/text-area.md (2.1.0) — inherits Text input's contract. */
 type TextAreaProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string

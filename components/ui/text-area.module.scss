@@ -1,4 +1,5 @@
 @use './form-parts' as parts;
+@use './field-shell' as shell;
 
 // Text area — docs/contracts/text-area.md
 //
@@ -12,40 +13,37 @@
   overflow-y: auto;
   // The kit insets Text area evenly at 16 on all four sides.
   padding: var(--graphite-space-05);
-  background: var(--graphite-surface);
-  color: var(--graphite-on-surface);
-  border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-none);
-  font: inherit;
+  font-family: inherit;
+  // The shared field shell (_form-parts.scss).
+  @include shell.field-shell;
 }
 
-.textarea:focus-visible {
-  outline: none;
-  border-color: var(--graphite-primary);
-  box-shadow: 0 0 0 1px var(--graphite-primary);
-}
+.textarea:focus-visible { @include shell.field-shell-focus; }
 
 .errored,
-.errored:focus-visible {
-  border-color: var(--graphite-danger);
-  box-shadow: 0 0 0 1px var(--graphite-danger);
-}
+.errored:focus-visible { @include shell.field-shell-error; }
 
-.textarea:disabled {
-  background: var(--graphite-primary-disabled);
-  color: var(--graphite-primary-disabled-content);
-  cursor: not-allowed;
-}
+.textarea:disabled { @include shell.field-shell-disabled; }
+
+.textarea:read-only:not(:disabled) { @include shell.field-shell-readonly(outline-subtle); }
+
+.textarea::placeholder { @include shell.field-placeholder; }
 
 .vertical { resize: vertical; }
 .none { resize: none; }
 
-.sm { min-height: var(--graphite-space-09); font-size: 0.8125rem; }
-.md { min-height: var(--graphite-space-10); font-size: 0.875rem; }
-.lg { min-height: var(--graphite-space-11); font-size: 1rem; }
+// Size is height only: the kit sets the value in Body/3 at every size.
+.sm { min-height: var(--graphite-space-09); }
+.md { min-height: var(--graphite-space-10); }
+.lg { min-height: var(--graphite-space-11); }
 
 .field { @include parts.field-stack; }
-.label { @include parts.field-label; }
+.label {
+  @include parts.field-label;
+  @include parts.field-label-above;
+}
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+
+.field:has(.textarea:disabled) :is(.label, .indicator, .help) { @include parts.field-dimmed; }

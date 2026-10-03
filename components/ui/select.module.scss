@@ -1,4 +1,5 @@
 @use './form-parts' as parts;
+@use './field-shell' as shell;
 
 // Select — docs/contracts/select.md
 //
@@ -13,32 +14,26 @@
 }
 
 .wrap {
+  @include shell.field-shell;
   position: relative;
   display: inline-flex;
   align-items: center;
   width: 100%;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-none);
 }
 
 // The kit draws a Hover state that Text input does not have: the trigger fill
-// steps to field-hover. surfaceVariant is that step here, the same one Data
-// table rows and Contained list items take on hover.
+// steps to `field-hover`, which resolves to elevation/02, the elevation
+// ladder's hover rung.
 .wrap:hover:has(.select:enabled) {
-  background: var(--graphite-surface-variant);
+  background: var(--graphite-elevation-02);
 }
 
-.wrap:focus-within {
-  border-color: var(--graphite-primary);
-  box-shadow: 0 0 0 1px var(--graphite-primary);
-}
+.wrap:focus-within { @include shell.field-shell-focus; }
 
 .errored,
-.errored:focus-within {
-  border-color: var(--graphite-danger);
-  box-shadow: 0 0 0 1px var(--graphite-danger);
-}
+.errored:focus-within { @include shell.field-shell-error; }
+
+.wrap:has(.select:disabled) { @include shell.field-shell-disabled; }
 
 .select {
   appearance: none;
@@ -71,11 +66,17 @@
   pointer-events: none;
 }
 
-.sm { min-height: var(--graphite-space-07); font-size: 0.8125rem; }
-.md { min-height: var(--graphite-space-08); font-size: 0.875rem; }
-.lg { min-height: var(--graphite-space-09); font-size: 1rem; }
+// Size is height only: the kit sets the value in Body/3 at every size.
+.sm { min-height: var(--graphite-space-07); }
+.md { min-height: var(--graphite-space-08); }
+.lg { min-height: var(--graphite-space-09); }
 
-.label { @include parts.field-label; }
+.label {
+  @include parts.field-label;
+  @include parts.field-label-above;
+}
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+
+.field:has(.select:disabled) :is(.label, .indicator, .help) { @include parts.field-dimmed; }

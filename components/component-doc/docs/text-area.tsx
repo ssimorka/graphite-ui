@@ -56,7 +56,7 @@ export function textAreaDoc(): ComponentDocConfig {
       'Pick the size from the answer you expect. A large field invites a longer answer, a small one a sentence.',
       'Leave resize on vertical unless the layout below the field cannot move.',
       'Say in the helper text what a good answer includes, like steps to reproduce, rather than repeating the label.',
-      'Pass errorText to show an error, so the message and the red border arrive together.',
+      'Pass errorText to show an error, so the message and the red ring arrive together.',
     ],
     donts: [
       'Allow horizontal or both-way resize. The prop does not offer it, because a wider field breaks its container.',
@@ -68,7 +68,7 @@ export function textAreaDoc(): ComponentDocConfig {
       ['Labels', 'The label is a real label element tied to the textarea by id, generated when you do not pass one.'],
       ['Supporting text', 'Help or error text is linked through aria-describedby. Error text carries role="alert", so it is announced when it appears.'],
       ['Validity', 'Error and Invalid both set aria-invalid. The required asterisk is hidden; the native required attribute is what gets read.'],
-      ['Focus', 'A primary border on :focus-visible, drawn by the browser’s real focus rather than a prop.'],
+      ['Focus', 'The kit’s 2px ring inside the field on :focus-visible, drawn by the browser’s real focus rather than a prop.'],
       ['Overflow', 'Past its maximum height the field scrolls, so long text stays reachable by keyboard and by scroll without moving the page.'],
     ],
     parity: [

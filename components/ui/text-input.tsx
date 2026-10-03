@@ -8,7 +8,7 @@ import styles from './text-input.module.scss'
 export type FieldState = 'default' | 'disabled' | 'error' | 'invalid'
 export type FieldSize = 'sm' | 'md' | 'lg'
 
-/** Contract: docs/contracts/text-input.md (2.0.0) */
+/** Contract: docs/contracts/text-input.md (2.1.0) */
 type TextInputProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string

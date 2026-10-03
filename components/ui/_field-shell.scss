@@ -1,0 +1,58 @@
+// The field shell: the box a value is typed or chosen into (Text input,
+// Text area, Select). Its own partial rather than part of _form-parts.scss,
+// because drift-check attributes everything a partial declares to every
+// stylesheet that @uses it, and Checkbox, Radio and Toggle share the label
+// mixins but have no field shell.
+//
+// As the kit draws it on every Default set:
+//
+// - Fill: `Field/field-01` -> elevation/01, so a field reads as one layer up.
+// - Edge: one 1px rule on the bottom only, `outlineStrong`, inside. Not a box:
+//   the kit has no top, left or right edge at rest.
+// - Focus: a 2px ring inside all four sides in the primary family's focus
+//   colour. Error: the same ring in danger, kept on focus (the kit has no
+//   Error + Focus variant; holding the error is the code's own call).
+// - Value: Body/3 at every size. Size changes the height, never the type.
+//
+// Inset box-shadows rather than borders, so swapping the rest rule for a ring
+// never moves the content by a pixel. The transparent outline is what
+// forced-colours mode turns into a visible ring, since it drops box-shadows.
+@mixin field-shell {
+  background: var(--graphite-elevation-01);
+  color: var(--graphite-on-surface);
+  border: 0;
+  border-radius: var(--graphite-radius-none);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline-strong);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+@mixin field-shell-focus {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+@mixin field-shell-error {
+  box-shadow: inset 0 0 0 2px var(--graphite-danger);
+}
+
+// Disabled keeps the field's fill and loses its edge, as the kit draws it.
+@mixin field-shell-disabled {
+  box-shadow: none;
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+// Read-only: no fill, and a quieter bottom rule. The kit binds `outlineSubtle`
+// on Text input and Text area but plain `outline` on Select, so the edge is a
+// parameter rather than normalised.
+@mixin field-shell-readonly($edge: outline-subtle) {
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--graphite-#{$edge});
+}
+
+@mixin field-placeholder {
+  color: var(--graphite-outline-strong);
+  opacity: 1;
+}
