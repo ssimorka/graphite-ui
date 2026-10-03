@@ -164,12 +164,39 @@
 }
 
 .nextCard {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-03);
   padding: 1.125rem 1.125rem 1.25rem;
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-surface-variant);
+  // As the home page's component wall: the menu shadow at rest, and on hover
+  // the rule steps up to outline over the same 300ms ease-out, the kit's .md
+  // hover timing, while the contents drop 4px (the wall's specimens drop 12,
+  // which is too far for a block of text).
+  box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+  transition:
+    border-color 300ms ease-out,
+    padding 300ms ease-out;
+
+  &:hover {
+    border-color: var(--graphite-outline);
+    // The drop is padding traded from bottom to top, not a transform: a
+    // transform on the title would make it the containing block for its own
+    // card-sized ::after, shrinking the target under the pointer mid-hover.
+    // The card's height does not change.
+    padding-top: calc(1.125rem + 4px);
+    padding-bottom: calc(1.25rem - 4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover {
+      padding: 1.125rem 1.125rem 1.25rem;
+    }
+  }
 }
 
 .nextLink {
@@ -179,6 +206,13 @@
   color: var(--graphite-primary);
   text-decoration: none;
   white-space: pre-wrap;
+
+  // The whole card is the target, not just the title.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
 
   &:hover {
     text-decoration: underline;
