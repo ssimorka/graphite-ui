@@ -11,9 +11,12 @@ const OPTIONS: [SelectOption, SelectOption] = [
 const field = (
   props: {
     size?: 'sm' | 'md' | 'lg'
+    layout?: 'fixed' | 'inline' | 'fluid'
     state?: 'default' | 'disabled' | 'error'
+    readOnly?: boolean
     helpText?: string
     errorText?: string
+    warningText?: string
   } = {},
 ) => (
   <div className={styles.field}>
@@ -22,9 +25,12 @@ const field = (
       options={OPTIONS}
       value="a"
       size={props.size}
+      layout={props.layout}
       state={props.state}
+      readOnly={props.readOnly}
       helpText={props.helpText}
       errorText={props.errorText}
+      warningText={props.warningText}
     />
   </div>
 )
@@ -45,20 +51,24 @@ export function selectDoc(): ComponentDocConfig {
     anatomyLede:
       'The closed trigger is the only part the system draws. The option list is the browser’s own, so it takes no token from this system.',
     variantsLede:
-      'Size is the one variant prop, and it shares its scale with Text input, so a select and the inputs beside it line up.',
+      'Size shares its scale with Text input, so a select and the inputs beside it line up. Layout gives the kit’s Default, Inline and Fluid shapes.',
     variants: [
       { label: 'Size: Small', node: field({ size: 'sm' }) },
       { label: 'Size: Medium', node: field({ size: 'md' }) },
       { label: 'Size: Large', node: field({ size: 'lg' }) },
+      { label: 'Layout: Inline', node: field({ layout: 'inline', helpText: 'Helper text' }) },
+      { label: 'Layout: Fluid', node: field({ layout: 'fluid' }) },
     ],
     statesLede:
-      'Disabled and error are values of the state prop. Hover and focus are pseudo-classes, so the page forces them here. Hover steps the fill to elevation-02, the kit’s field hover. Open is not drawn, because the open menu belongs to the browser.',
+      'Disabled and error are values of the state prop. Hover and focus are pseudo-classes, so the page forces them here. Hover steps the fill to elevation-02, the kit’s field hover. Error and Warning draw the kit’s status icon before the chevron. Open is not drawn: the kit’s own Open state is a mock of the browser’s menu, which is what opens.',
     states: [
       { label: 'Enabled', node: field() },
       { label: 'Hover', node: field(), className: styles.forceHover },
       { label: 'Focus', node: field(), className: styles.forceFocus },
       { label: 'Disabled', node: field({ state: 'disabled' }) },
       { label: 'Error', node: field({ state: 'error', errorText: 'Choose an option to continue.' }) },
+      { label: 'Warning', node: field({ warningText: 'This option is being retired.' }) },
+      { label: 'Read-only', node: field({ readOnly: true }) },
     ],
     dos: [
       'Use a select for a long list of choices where only one can hold, such as a country or a region.',
@@ -74,19 +84,21 @@ export function selectDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Keyboard', 'A native select: Tab reaches it, the arrow keys change the value, typing jumps to a matching option, and the platform opens its own menu.'],
-      ['Roles', <>The browser supplies the roles. When the field is in error it carries <code>aria-invalid</code>.</>],
+      ['Roles', <>The browser supplies the roles. When the field is in error it carries <code>aria-invalid</code>; read-only carries <code>aria-readonly</code> and stays focusable, but will not open or change.</>],
       ['Labels', <>The label is a real <code>label</code> tied to the select. Help and error text are linked with <code>aria-describedby</code>, and error text is announced as it appears.</>],
       ['Focus', <>A 2px ring inside the trigger in <code>primary</code>’s focus colour while the field has focus, replacing the browser outline. In error it stays <code>danger</code>.</>],
       ['Mobile', 'On touch devices the platform shows its own picker, sized for fingers, which a custom list would have to rebuild.'],
     ],
     parity: [
       ['Size', 'Small · Medium · Large', 'size', 'sm, md and lg. One to one.'],
-      ['Style', 'Default · Inline', '—', 'Default only. The code has no inline select.'],
-      ['State', 'Enabled · Disabled · Error', 'state', 'One to one. Error also follows from errorText.'],
+      ['Style', 'Default · Inline', 'layout', 'Both. Inline’s trigger has no fill or edge at rest and hugs its value, with the label and message beside it.'],
+      ['State', 'Enabled · Disabled · Error · Warning', 'state', 'Error and Warning follow errorText and warningText and draw the status icon 8 before the chevron. Disabled fills the trigger with the disabled tone, as Select’s own set draws it.'],
+      ['State', 'Read-only', 'readOnly', 'A native select has no readonly, so the trigger stays focusable with aria-readonly and refuses to open or change. No fill, a plain outline rule.'],
       ['State', 'Focus · Hover', '—', 'Pseudo-classes (governance rule 7). Hover is :hover on the trigger and steps the fill to elevation-02. Focus is :focus-within.'],
       ['Open', 'False · True', '—', 'The kit also draws it as State=Open. The open menu is the browser’s, so it is runtime state with nothing to draw.'],
-      ['State', 'Warning · Read-only · Skeleton', '—', 'No counterpart in code.'],
-      ['Set', 'Select - Fluid', '—', 'No counterpart. The code has one field layout.'],
+      ['State', 'Skeleton', '—', 'No counterpart by rule.'],
+      ['Set', 'Select - Fluid', 'layout="fluid"', 'A 64px box, the label inside, the value row at 18, a plain outline rule.'],
+      ['Trigger value', 'Empty in every variant but Read-only', '—', 'The kit draws no value in the trigger except in Read-only, a slip; the code shows the value, styled as Read-only draws it.'],
     ],
     related: [
       { href: '/docs/components/text-input', title: 'Text input', why: 'the trigger’s treatment and sizes' },
