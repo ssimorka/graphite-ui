@@ -1,3 +1,5 @@
+@use './drop-panel' as drop;
+
 // Site chrome — the app shell's header bar.
 //
 // Deliberately not a CSS module under components/ui/: navigation-menu.md's
@@ -325,10 +327,15 @@
 // geometry, which the contract keeps.
 //
 // Matched on the element rather than the class because NavigationMenu's are
-// CSS-module-hashed and not addressable from outside. `:where` holds the
-// specificity at zero so the component's own focus and current rules still win.
+// CSS-module-hashed and not addressable from outside. It has to outrank the
+// component's `.link { display: block }`, or the row grows to 48px with its
+// text stuck at the top. It sets nothing the component's focus or current
+// rules do, so those still apply.
+//
+// A group sits closer to its own links than to the group above: 16px over the
+// label (plus the last row's centring slack), 8px under it.
 .mobileGroup {
-  margin-top: var(--graphite-space-06);
+  margin-top: var(--graphite-space-05);
 }
 
 .mobileGroupLabel {
@@ -341,13 +348,15 @@
   color: var(--graphite-on-surface-variant);
 }
 
-.mobileNav :where(a) {
+.mobileNav a {
   display: flex;
   align-items: center;
   min-height: 48px;
 }
 
 // -------------------------------------------------------------- mobile tray
+@include drop.defs;
+
 // Slides in from the left under the bar. The panel lands with a little
 // overshoot, then its groups cascade in behind it, one beat per group and a
 // shorter one per link. Out is a quick, plain slide: nobody wants to wait for
@@ -386,10 +395,15 @@ $tray-bleed: 2rem;
     var(--graphite-space-08) calc(#{$tray-bleed} + var(--graphite-space-04));
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: var(--graphite-surface-elevated);
-  border-right: 1px solid var(--graphite-surface-variant);
-  color: var(--graphite-on-surface);
-  animation: tray-in 560ms $tray-spring both;
+  // The same AI layer as search and the color picker: tinted from the foot
+  // up, its right edge shading down to primary.
+  @include drop.layer;
+  border: 0;
+  border-right: 1px solid transparent;
+  // The glow waits for the slide to land, then rises.
+  animation:
+    tray-in 560ms $tray-spring both,
+    glow 900ms var(--graphite-motion-ease) 380ms both;
 }
 
 .trayPanel:focus-visible {

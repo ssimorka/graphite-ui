@@ -4,8 +4,7 @@ import { search, type SearchHit } from './search'
 // Everything here runs in the browser over the static index. There is no model
 // and no server: "understanding" a query means recognising the names the index
 // already knows (pages, sections, props, tokens) and the everyday words people
-// use for them. That is enough to make a question work like a search, and it is
-// exactly what the "How search works" panel says it does.
+// use for them. That is enough to make a question work like a search.
 
 export type Category = 'Components' | 'Foundations' | 'Guides' | 'Tools'
 export const CATEGORIES: Category[] = ['Components', 'Foundations', 'Guides', 'Tools']

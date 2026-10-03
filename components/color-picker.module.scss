@@ -1,18 +1,40 @@
-// Source-color popover in the header. Same surface as the governed Popover
-// (docs/contracts/popover.md): surface-elevated, an outline border, square
-// corners. It is site chrome rather than a Popover instance because it anchors
-// to the header chip and owns its own outside-click handling.
+@use './drop-panel' as drop;
+
+// Source-color popover in the header. It drops from the chip like the search
+// panel beside it; the shared shape and motion are in ./_drop-panel.scss. It
+// is site chrome rather than a Popover instance because it anchors to the
+// header chip and owns its own outside-click handling.
+@include drop.defs;
+
 .panel {
+  @include drop.surface;
+  @include drop.motion(calc(100% - var(--trigger-w) / 2));
   position: absolute;
-  top: calc(100% + var(--graphite-space-03));
+  top: calc(100% + var(--graphite-space-04));
   right: 0;
   z-index: 50;
-  width: 13.75rem;
-  padding: var(--graphite-space-04) var(--graphite-space-05);
-  background: var(--graphite-surface-elevated);
-  border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-none);
-  color: var(--graphite-on-surface);
+  width: 15rem;
+  padding: var(--graphite-space-05) var(--graphite-space-05) 0;
+
+  &::before {
+    @include drop.caret(calc(100% - var(--trigger-w) / 2));
+  }
+}
+
+// Picker, hex row, controls, footer: each rises in behind the drop.
+.section {
+  @include drop.cascade($count: 4);
+}
+
+// The footer bar runs edge to edge under the padding, so the action can sit
+// in the corner the way the kit's does.
+.footer {
+  display: flex;
+  margin: var(--graphite-space-05) calc(var(--graphite-space-05) * -1) 0;
+}
+
+.footerAction {
+  @include drop.action;
 }
 
 // --- HSV picker. Its gradients and marker positions are computed per render,
@@ -80,8 +102,3 @@
   outline-offset: 2px;
 }
 
-// --- Surprise me: the popover's closing action, full width.
-.surprise {
-  width: 100%;
-  margin-top: var(--graphite-space-05);
-}

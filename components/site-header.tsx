@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { Asleep, Light, Menu, Close, LogoGithub, Search } from '@carbon/icons-react'
@@ -116,6 +116,16 @@ export function SiteHeader() {
   // Stable, because the Overlay hook re-runs on a new onDismiss and would send
   // focus back to the trigger while someone is typing.
   const closeSearch = useCallback(() => setSearchOpen(false), [])
+  // The palette drops from whichever trigger is on screen: the field from lg,
+  // the icon button below it. ⌘K opens it from the same place.
+  const searchField = useRef<HTMLButtonElement>(null)
+  const searchIcon = useRef<HTMLButtonElement>(null)
+  const searchAnchor = useCallback(
+    () =>
+      [searchField.current, searchIcon.current].find((el) => el && el.offsetParent !== null) ??
+      null,
+    [],
+  )
   const pathname = usePathname()
   const items = withCurrent(pathname)
 
@@ -200,6 +210,7 @@ export function SiteHeader() {
               lg the kit hides the field; the icon button stands in for it. */}
           <button
             type="button"
+            ref={searchField}
             className={styles.search}
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+K Meta+K /"
@@ -213,6 +224,7 @@ export function SiteHeader() {
           </button>
           <button
             type="button"
+            ref={searchIcon}
             className={`${styles.action} ${styles.searchButton}`}
             aria-label="Search documentation"
             aria-haspopup="dialog"
@@ -292,7 +304,7 @@ export function SiteHeader() {
             : null}
         </div>
       </Tray>
-      <SearchPalette open={searchOpen} onClose={closeSearch} />
+      <SearchPalette open={searchOpen} onClose={closeSearch} anchor={searchAnchor} />
     </header>
   )
 }
