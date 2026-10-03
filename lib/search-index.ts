@@ -3,13 +3,10 @@ import type { Metadata } from 'next'
 import { COMPONENT_DOCS } from '@/components/component-doc/registry'
 import { componentToc } from '@/components/component-doc/component-doc-page'
 import type { ComponentDocConfig } from '@/components/component-doc/types'
-import {
-  COLOR_DOCS_TOC,
-  COLOR_RAMPS_TOC,
-  INSTALLATION_TOC,
-} from '@/components/docs-nav'
+import { COLOR_RAMPS_TOC, INSTALLATION_TOC } from '@/components/docs-nav'
 import { readContractDoc } from '@/lib/contract-doc'
 import { metadata as themingMeta } from '@/app/docs/theming/page'
+import { TOC as themingToc } from '@/app/docs/theming/toc'
 import { metadata as installMeta } from '@/app/docs/installation/page'
 import { metadata as rampsMeta } from '@/app/docs/foundations/color/page'
 import { metadata as createMeta } from '@/app/create/page'
@@ -145,7 +142,7 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs', introMeta, introToc, 'Docs', 'Introduction'),
     ...docsPage('/docs/installation', installMeta, INSTALLATION_TOC),
     ...docsPage('/docs/quick-start', quickStartMeta, quickStartToc),
-    ...docsPage('/docs/theming', themingMeta, COLOR_DOCS_TOC),
+    ...docsPage('/docs/theming', themingMeta, themingToc),
     ...docsPage('/docs/accessibility', a11yMeta, a11yToc),
     ...docsPage('/docs/governance', governanceMeta, governanceToc),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),

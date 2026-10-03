@@ -1,0 +1,502 @@
+// The Theming page. Adapted from the Accessibility page's module (the Getting
+// started pattern); the shared pieces live in components/doc-blocks and
+// components/component-page.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+// Prose under a block: body/2, with inline code set in the mono face.
+.note {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+.link {
+  color: var(--graphite-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--graphite-primary-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: 2px;
+  }
+}
+
+// ----------------------------------------------------------------- tables
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  th,
+  td {
+    padding: var(--graphite-space-04) var(--graphite-space-05);
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--graphite-surface-variant);
+  }
+
+  th {
+    font-weight: 400;
+    color: var(--graphite-on-surface);
+  }
+
+  td {
+    color: var(--graphite-on-surface-variant);
+  }
+
+  thead th {
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+  }
+}
+
+// The static tables are three short columns; the first names the row. Below
+// md the padding tightens, and like the live tables they scroll in their own
+// box rather than break a role name mid-word.
+.table tbody th code {
+  color: var(--graphite-on-surface);
+}
+
+@media (max-width: 671px) {
+  .table th,
+  .table td {
+    padding: var(--graphite-space-03);
+  }
+}
+
+// -------------------------------------------------------------------- TOC
+.footnote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-06);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+
+  p {
+    margin: 0;
+  }
+}
+
+.footnoteHead {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.footnoteBody {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ------------------------------------------------------------------- prose
+.note strong {
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+// A heading inside a block. The block's gap is sized for sections of content,
+// so the negative bottom margin keeps a subheading next to what it heads.
+.subheading {
+  margin: var(--graphite-space-03) 0 calc(-1 * var(--graphite-space-03));
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+// The note under a table: quieter than prose, since it qualifies the table.
+.caption {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.list,
+.ordered {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding-left: var(--graphite-space-06);
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  strong {
+    font-weight: 600;
+    color: var(--graphite-on-surface);
+  }
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}
+
+.list {
+  list-style: disc;
+}
+
+.ordered {
+  list-style: decimal;
+}
+
+.label {
+  margin: var(--graphite-space-03) 0 0;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-2-size);
+  line-height: var(--graphite-text-code-2-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+  margin: 0;
+
+  code {
+    padding: var(--graphite-space-01) var(--graphite-space-03);
+    background: var(--graphite-surface-variant);
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-3-size);
+    line-height: var(--graphite-text-code-3-line-height);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// --------------------------------------------------------------- pipeline
+// Five numbered steps, with the same 20px marker as the Step block.
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.pipelineStep {
+  display: flex;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-05) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.marker {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: var(--graphite-space-01);
+  border-radius: var(--graphite-radius-full);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+  font-size: var(--graphite-text-caption-2-size);
+  font-weight: 500;
+}
+
+.pipelineBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+}
+
+.pipelineName {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.pipelineDetail {
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ------------------------------------------------------------ live values
+// Role tables are four columns of swatches; below md they scroll inside their
+// own box rather than pushing the page sideways.
+.scroll {
+  max-width: 100%;
+  overflow-x: auto;
+
+  table {
+    min-width: 36rem;
+  }
+}
+
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+.swatch {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--graphite-outline);
+}
+
+.valueText {
+  display: flex;
+  flex-direction: column;
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    line-height: var(--graphite-text-code-2-line-height);
+    color: var(--graphite-on-surface);
+  }
+}
+
+.meta {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  white-space: nowrap;
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
+
+// ---------------------------------------------------------------- patterns
+.ratio {
+  display: flex;
+  height: 2.5rem;
+  overflow: hidden;
+
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-caption-1-size);
+    line-height: var(--graphite-text-caption-1-line-height);
+    letter-spacing: 0.32px;
+    text-transform: uppercase;
+  }
+}
+
+.ratioNeutral {
+  flex: 6;
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+}
+
+.ratioAccent {
+  flex: 3;
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+// Painted inline from the live secondary and onSecondary roles.
+.ratioPop {
+  flex: 1;
+}
+
+.spans {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--graphite-space-06);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.spanBox {
+  display: block;
+  background: var(--graphite-primary-container);
+  border: 1px solid var(--graphite-outline);
+}
+
+.spanLabel,
+.tileLabel {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  letter-spacing: 0.32px;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--graphite-space-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1056px) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.tileCanvas {
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid var(--graphite-surface-variant);
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.tileLabel {
+  display: flex;
+  gap: var(--graphite-space-02);
+  margin: 0;
+}
+
+.tileNum {
+  color: var(--graphite-primary);
+}
+
+// ---------------------------------------------------------------- glossary
+.glossary {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.glossaryItem {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-04) 0;
+  border-bottom: 1px solid var(--graphite-surface-variant);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+
+  dt {
+    font-weight: 600;
+    color: var(--graphite-on-surface);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--graphite-on-surface-variant);
+  }
+
+  @media (max-width: 671px) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--graphite-space-01);
+  }
+}

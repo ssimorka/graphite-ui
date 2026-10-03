@@ -150,6 +150,7 @@ export interface ExportBundle {
 export declare const TONE_STOPS: number[]
 export declare const STATUS_NAMES: StatusName[]
 export declare const STATE_FAMILIES: readonly ['primary', 'secondary', 'danger']
+export declare const STATE_DELTAS: { hover: number; pressed: number; selected: number }
 
 export declare function normalizeHex(hex: string): string
 export declare function hexToRgb(hex: string): Rgb
