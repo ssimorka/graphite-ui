@@ -1,47 +1,150 @@
-// Badge — docs/contracts/badge.md
+// Tag — docs/contracts/tag.md
 //
-// Every variant draws from a generated role. There are no hex values in this
-// file, which is the whole point of the prohibition.
-.badge {
+// The kit's Tag - Read-only, Tag - Selectable and Tag - Operational (Graphite
+// UI Kit 16031:269750, 46254:7550, 46254:10165). Every colour draws from a
+// generated role; there are no hex values in this file, which is the whole
+// point of the prohibition.
+
+// ---------------------------------------------------------------- the pill
+// One pill for all three sets: a full radius, a 12/16 Regular label inset 8
+// (12 at Large), and a height per size: 18 / 24 / 32. The kit sits its label
+// 1px above centre (a Carbon artefact in the Label frame's padding); centred
+// here, and recorded.
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: var(--tag-h);
+  // A single digit stays round.
+  min-width: var(--tag-h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--graphite-radius-full);
+  font: inherit;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  font-weight: 400;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.sm { --tag-h: 1.125rem; --tag-inset: var(--graphite-space-03); --tag-lead: var(--graphite-space-02); --tag-close-pad: 1px; --tag-close-overlap: calc(-1 * var(--graphite-space-02)); }
+.md { --tag-h: var(--graphite-space-06); --tag-inset: var(--graphite-space-03); --tag-lead: var(--graphite-space-02); --tag-close-pad: var(--graphite-space-02); --tag-close-overlap: calc(-1 * var(--graphite-space-02)); }
+.lg { --tag-h: var(--graphite-space-07); --tag-inset: var(--graphite-space-04); --tag-lead: var(--graphite-space-03); --tag-close-pad: var(--graphite-space-03); --tag-close-overlap: calc(-1 * var(--graphite-space-03)); }
+
+.label {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--graphite-space-06);
-  padding: 0 var(--graphite-space-02);
-  border-radius: var(--graphite-radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: var(--graphite-space-06);
-  white-space: nowrap;
+  flex: 1;
+  padding: 0 var(--tag-inset);
 }
 
-.neutral {
-  // The kit's Gray tag: surfaceVariant, not surface.
+// The leading icon: 16px, inset 4 (8 at Large), and the label overlaps its
+// wrapper by 6, so the text starts 4px after the glyph, as the kit stacks it.
+.icon {
+  display: inline-flex;
+  flex: none;
+  padding-left: var(--tag-lead);
+  margin-right: -6px;
+}
+
+// The close button: a circle the tag's height with the 16px cross inside,
+// overlapping the label by 4 (8 at Large). It takes the tag's own fill.
+.close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--tag-h);
+  height: var(--tag-h);
+  margin-left: var(--tag-close-overlap);
+  padding: var(--tag-close-pad);
+  border: 0;
+  border-radius: var(--graphite-radius-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+// The kit's Tag focus is a primary ring rather than the focus step every
+// other component uses: a 1px stroke inside the close button, and a 2px ring
+// 1px outside the Selectable and Operational pills. Followed as drawn.
+.close:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--graphite-primary);
+}
+
+.close:disabled {
+  background: var(--graphite-surface);
+  cursor: not-allowed;
+}
+
+// ------------------------------------------------------------------ colours
+// Every Read-only colour is a container role and its on-container label, so a
+// tag never reads as heavy as a filled Button.
+.neutral { background: var(--graphite-surface-variant); color: var(--graphite-on-surface-variant); }
+.primary { background: var(--graphite-primary-container); color: var(--graphite-on-primary-container); }
+.secondary { background: var(--graphite-secondary-container); color: var(--graphite-on-secondary-container); }
+.info { background: var(--graphite-info-container); color: var(--graphite-on-info-container); }
+.success { background: var(--graphite-success-container); color: var(--graphite-on-success-container); }
+.danger { background: var(--graphite-danger-container); color: var(--graphite-on-danger-container); }
+.warning { background: var(--graphite-warning-container); color: var(--graphite-on-warning-container); }
+// High contrast is the inverse pair; Outline is the page with a 1px edge.
+.highContrast { background: var(--graphite-on-background); color: var(--graphite-background); }
+.outline { background: var(--graphite-surface); color: var(--graphite-on-surface); box-shadow: inset 0 0 0 1px var(--graphite-outline); }
+
+// Disabled, for every colour: the disabled fill with a 1px edge in the same
+// tone, and the disabled label.
+.disabled,
+.operational:disabled {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+  box-shadow: inset 0 0 0 1px var(--graphite-primary-disabled);
+}
+
+// ------------------------------------------------------------- selectable
+.selectable {
   background: var(--graphite-surface-variant);
   color: var(--graphite-on-surface-variant);
+  box-shadow: inset 0 0 0 1px var(--graphite-outline);
+  cursor: pointer;
 }
 
-.primary {
-  // The kit's Purple tag is primaryContainer, not the full-strength primary.
-  // Every colour in Tag - Read-only is a container role, so a tag never reads
-  // as heavy as a filled Button.
+.selectable[aria-pressed='true'] {
   background: var(--graphite-primary-container);
   color: var(--graphite-on-primary-container);
+  box-shadow: none;
 }
 
-.danger {
-  background: var(--graphite-danger-container);
-  color: var(--graphite-on-danger-container);
+.selectable:disabled {
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-primary-disabled-content);
+  box-shadow: inset 0 0 0 1px var(--graphite-primary-disabled);
+  cursor: not-allowed;
 }
 
-.warning {
-  background: var(--graphite-warning-container);
-  color: var(--graphite-on-warning-container);
-}
+// ------------------------------------------------------------ operational
+// The container fill plus a 1px edge in the colour at full strength.
+.operational { cursor: pointer; }
+.operational.neutral { box-shadow: inset 0 0 0 1px var(--graphite-outline); }
+.operational.primary { box-shadow: inset 0 0 0 1px var(--graphite-primary); }
+.operational.secondary { box-shadow: inset 0 0 0 1px var(--graphite-secondary); }
+.operational.info { box-shadow: inset 0 0 0 1px var(--graphite-info); }
+.operational.success { box-shadow: inset 0 0 0 1px var(--graphite-success); }
+.operational.danger { box-shadow: inset 0 0 0 1px var(--graphite-danger); }
 
-.success {
-  background: var(--graphite-success-container);
-  color: var(--graphite-on-success-container);
+// The kit fills only Purple and Red on hover; the other four are drawn
+// identical to rest, and are left that way. Purple's hover label is bound to
+// the disabled tone on a primary fill, a slip: the label is on-primary, as on
+// Button. Red takes on-primary for the same reason.
+.operational.primary:hover:not(:disabled) { background: var(--graphite-primary); color: var(--graphite-on-primary); }
+.operational.danger:hover:not(:disabled) { background: var(--graphite-danger); color: var(--graphite-on-primary); }
+.operational:disabled { cursor: not-allowed; }
+
+.selectable:focus-visible,
+.operational:focus-visible {
+  outline: 2px solid var(--graphite-primary);
+  outline-offset: 1px;
 }
 
 // The full count behind a capped badge: in the accessibility tree, off the
