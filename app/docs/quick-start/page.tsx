@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -168,13 +168,7 @@ export default function QuickStartPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Getting started' },
-                { label: 'Quick start' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/quick-start')} />
             <h1 className={styles.title}>Quick start</h1>
             <p className={styles.lede}>
               Six steps from a running project to a themed screen and a theme

@@ -1,0 +1,168 @@
+// The header's drop panels: search and the source-color picker, plus the
+// mobile nav tray, which shares the layer and the glow but slides in. Shaped after
+// the kit's explainability popover (57561:3509): a caret on the trigger, 8px
+// corners, a footer bar ending in a filled action. The background is the kit's
+// AI layer (51447:122453), a surface that warms into a tint at its foot, drawn
+// on `primary` so it follows the source.
+//
+// Both are site chrome, so this lives beside them rather than in components/ui.
+// A module that uses it includes `defs` once at its root: keyframes are scoped
+// per CSS module, so each needs its own copy.
+
+$spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+@mixin defs {
+  // How far up the panel the tint at its foot reaches. Registered so it can
+  // be animated: the glow rises once the panel has landed.
+  @property --glow {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 40%;
+  }
+
+  // Down out of the trigger: small and tucked against the caret, a touch of
+  // overshoot, then settled.
+  @keyframes drop {
+    from {
+      opacity: 0;
+      transform: translateY(-1rem) scale(0.9);
+    }
+    40% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes caret {
+    from {
+      transform: rotate(45deg) scale(0);
+    }
+  }
+
+  // The tint climbs from the foot, overshoots, and settles back to rest.
+  @keyframes glow {
+    from {
+      --glow: 0%;
+    }
+    60% {
+      --glow: 55%;
+    }
+  }
+
+  // Each section rises into place a beat after the one above it.
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+}
+
+// The AI layer: the elevated surface, tinted from the foot up, inside an edge
+// that runs from outline at the top to primary at the bottom. The edge shows
+// wherever the including rule gives a (transparent) border.
+@mixin layer {
+  background:
+    linear-gradient(
+        to top,
+        color-mix(in srgb, var(--graphite-primary) 22%, transparent),
+        transparent var(--glow)
+      )
+      padding-box,
+    linear-gradient(var(--graphite-surface-elevated), var(--graphite-surface-elevated)) padding-box,
+    linear-gradient(
+        to bottom,
+        var(--graphite-outline),
+        color-mix(in srgb, var(--graphite-primary) 70%, var(--graphite-outline))
+      )
+      border-box;
+  border-color: transparent;
+  color: var(--graphite-on-surface);
+}
+
+// The dropping panels: the layer with its edge all round and 8px corners.
+@mixin surface {
+  @include layer;
+  border: 1px solid transparent;
+  border-radius: var(--graphite-radius-8);
+}
+
+// The entrance. `$origin` is where the caret meets the panel's top edge, so
+// the panel grows out of the point it hangs from.
+@mixin motion($origin) {
+  transform-origin: $origin 0;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation:
+      drop 520ms $spring both,
+      glow 900ms var(--graphite-motion-ease) 220ms both;
+  }
+}
+
+// The caret: a square turned to a point, wearing the panel's top edge. Include
+// inside `&::before`; `$x` is the caret's centre from the panel's left.
+@mixin caret($x) {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: calc(#{$x} - 6px);
+  width: 12px;
+  height: 12px;
+  background: var(--graphite-surface-elevated);
+  border: 1px solid var(--graphite-outline);
+  border-right: 0;
+  border-bottom: 0;
+  transform: rotate(45deg);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: caret 360ms $spring 180ms both;
+  }
+}
+
+// Sections cascading in behind the drop. Include on the section selector.
+@mixin cascade($count: 8, $start: 180ms, $step: 60ms) {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: rise 420ms var(--graphite-motion-ease) both;
+
+    @for $i from 1 through $count {
+      &:nth-child(#{$i}) {
+        animation-delay: $start + ($i - 1) * $step;
+      }
+    }
+  }
+}
+
+// The kit's footer action: a filled block in the bottom-right corner, label
+// first and its icon pushed to the far end.
+@mixin action {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-07);
+  min-width: 10rem;
+  min-height: 3rem;
+  margin-left: auto;
+  padding: 0 var(--graphite-space-05);
+  background: var(--graphite-primary);
+  border: 0;
+  border-bottom-right-radius: calc(var(--graphite-radius-8) - 1px);
+  color: var(--graphite-on-primary);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+
+  &:hover {
+    background: var(--graphite-primary-hover);
+  }
+
+  &:active {
+    background: var(--graphite-primary-pressed);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -4px;
+  }
+}

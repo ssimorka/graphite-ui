@@ -1,13 +1,14 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { Asleep, Light, Menu, Close, LogoGithub, Search } from '@carbon/icons-react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
-import { Modal } from '@/components/ui/modal'
+import { useOverlay } from '@/components/ui/overlay'
 import { DOCS_NAV } from '@/components/docs-nav'
 import { SearchPalette } from '@/components/search/search-palette'
 import styles from './site-header.module.scss'
@@ -25,6 +26,60 @@ function withCurrent(pathname: string): [NavItem, ...NavItem[]] {
     ...item,
     current: pathname === item.href || pathname.startsWith(`${item.href}/`),
   })) as [NavItem, ...NavItem[]]
+}
+
+/**
+ * The mobile nav tray: slides in from the left under the bar, so the menu
+ * button stays in view as its close control.
+ *
+ * Dismissal and the focus trap come from the shared Overlay base, as they did
+ * when this was a Modal. What differs is the exit: Overlays unmount on close
+ * with no exit motion, because Popover's nesting throw depends on it. The tray
+ * has no such throw, so it stays mounted (and inert) through its slide-out.
+ */
+function Tray({
+  open,
+  onClose,
+  children,
+}: {
+  open: boolean
+  onClose: () => void
+  children: ReactNode
+}) {
+  const [mounted, setMounted] = useState(open)
+  if (open && !mounted) setMounted(true)
+
+  // A timer rather than animationend, which a background tab may never fire.
+  // Just past the 220ms slide-out in site-header.module.scss.
+  useEffect(() => {
+    if (open || !mounted) return
+    const t = setTimeout(() => setMounted(false), 260)
+    return () => clearTimeout(t)
+  }, [open, mounted])
+
+  const ref = useOverlay<HTMLDivElement>({
+    open,
+    onDismiss: () => onClose(),
+    trapFocus: true,
+  })
+
+  if (!mounted) return null
+
+  return (
+    <div className={styles.tray} data-state={open ? 'open' : 'closed'} inert={!open}>
+      <div className={styles.trayScrim} aria-hidden="true" />
+      <div
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        tabIndex={-1}
+        className={styles.trayPanel}
+      >
+        {children}
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -48,10 +103,29 @@ export function SiteHeader() {
   const { theme, toggleTheme, sourceHex, setSourceHex } = useTheme()
   const isDark = theme === 'g100'
   const [menuOpen, setMenuOpen] = useState(false)
+  const [menuToggled, setMenuToggled] = useState(false)
+  // The menu button goes away at lg, so an open tray would be left with no
+  // way to close it but Escape.
+  useEffect(() => {
+    const lg = window.matchMedia('(min-width: 1056px)')
+    const close = () => lg.matches && setMenuOpen(false)
+    lg.addEventListener('change', close)
+    return () => lg.removeEventListener('change', close)
+  }, [])
   const [searchOpen, setSearchOpen] = useState(false)
   // Stable, because the Overlay hook re-runs on a new onDismiss and would send
   // focus back to the trigger while someone is typing.
   const closeSearch = useCallback(() => setSearchOpen(false), [])
+  // The palette drops from whichever trigger is on screen: the field from lg,
+  // the icon button below it. ⌘K opens it from the same place.
+  const searchField = useRef<HTMLButtonElement>(null)
+  const searchIcon = useRef<HTMLButtonElement>(null)
+  const searchAnchor = useCallback(
+    () =>
+      [searchField.current, searchIcon.current].find((el) => el && el.offsetParent !== null) ??
+      null,
+    [],
+  )
   const pathname = usePathname()
   const items = withCurrent(pathname)
 
@@ -94,9 +168,19 @@ export function SiteHeader() {
           className={`${styles.action} ${styles.menuButton}`}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((v) => !v)}
+          onClick={() => {
+            setMenuToggled(true)
+            setMenuOpen((v) => !v)
+          }}
         >
-          {menuOpen ? <Close size={20} /> : <Menu size={20} />}
+          {/* Keyed, so each swap remounts and spins the new glyph in. Not on
+              first paint: only once the button has been used. */}
+          <span
+            key={menuOpen ? 'close' : 'menu'}
+            className={menuToggled ? styles.menuIconSpin : styles.menuIcon}
+          >
+            {menuOpen ? <Close size={20} /> : <Menu size={20} />}
+          </span>
         </button>
 
         <a className={styles.brand} href="/">
@@ -126,6 +210,7 @@ export function SiteHeader() {
               lg the kit hides the field; the icon button stands in for it. */}
           <button
             type="button"
+            ref={searchField}
             className={styles.search}
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+K Meta+K /"
@@ -139,6 +224,7 @@ export function SiteHeader() {
           </button>
           <button
             type="button"
+            ref={searchIcon}
             className={`${styles.action} ${styles.searchButton}`}
             aria-label="Search documentation"
             aria-haspopup="dialog"
@@ -178,47 +264,47 @@ export function SiteHeader() {
 
         </div>
       </div>
-      {/* Mobile nav is a Modal, not a Sheet: the migration plan spends its one
-          new-contract budget on Accordion, so this reuses what already has a
-          contract. Dismissal on link click is delegated here rather than added
-          to NavigationMenu as a prop, which would be a contract change for a
-          concern that belongs to the shell — and the same-page anchors are the
-          case that needs it, since they navigate without a page load. */}
-      <Modal
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        title="Menu"
-        body={
-          <div
-            className={styles.mobileNav}
-            onClick={(e) => {
-              if ((e.target as HTMLElement).closest('a')) setMenuOpen(false)
-            }}
-          >
+      {/* Mobile nav is a tray, not a Modal and not a Sheet: a collapsible side
+          panel is site chrome by navigation-menu.md's own prohibition, so it
+          lives here and costs no new contract. Dismissal on link click is
+          delegated here rather than added to NavigationMenu as a prop, which
+          would be a contract change for a concern that belongs to the shell. */}
+      <Tray open={menuOpen} onClose={() => setMenuOpen(false)}>
+        <div
+          className={styles.mobileNav}
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest('a')) setMenuOpen(false)
+          }}
+        >
+          <div className={styles.trayGroup} style={{ '--g': 0 } as CSSProperties}>
             <NavigationMenu items={items} orientation="vertical" label="Main" />
-            {/* The docs sidebar is hidden below lg, as in the kit's Medium and
-                Small frames, so its links live here instead. */}
-            {pathname.startsWith('/docs')
-              ? DOCS_NAV.map((group) => (
-                  <div key={group.label} className={styles.mobileGroup}>
-                    <p className={styles.mobileGroupLabel}>{group.label}</p>
-                    <NavigationMenu
-                      label={group.label}
-                      orientation="vertical"
-                      items={
-                        group.items.map((item) => ({
-                          ...item,
-                          current: pathname === item.href,
-                        })) as [NavItem, ...NavItem[]]
-                      }
-                    />
-                  </div>
-                ))
-              : null}
           </div>
-        }
-      />
-      <SearchPalette open={searchOpen} onClose={closeSearch} />
+          {/* The docs sidebar is hidden below lg, as in the kit's Medium and
+              Small frames, so its links live here instead. */}
+          {pathname.startsWith('/docs')
+            ? DOCS_NAV.map((group, i) => (
+                <div
+                  key={group.label}
+                  className={`${styles.mobileGroup} ${styles.trayGroup}`}
+                  style={{ '--g': i + 1 } as CSSProperties}
+                >
+                  <p className={styles.mobileGroupLabel}>{group.label}</p>
+                  <NavigationMenu
+                    label={group.label}
+                    orientation="vertical"
+                    items={
+                      group.items.map((item) => ({
+                        ...item,
+                        current: pathname === item.href,
+                      })) as [NavItem, ...NavItem[]]
+                    }
+                  />
+                </div>
+              ))
+            : null}
+        </div>
+      </Tray>
+      <SearchPalette open={searchOpen} onClose={closeSearch} anchor={searchAnchor} />
     </header>
   )
 }

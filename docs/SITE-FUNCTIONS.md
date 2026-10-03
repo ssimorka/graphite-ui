@@ -21,9 +21,9 @@ keeps the current counts.
 64px tall and fixed:
 - **Brand**, linking to `/`. Below 672px only the wordmark shows.
 - **Nav**: Docs (`/docs`), Components (`/gallery`), Create (`/create`). Inline
-  from 1056px. Below that a
-  Menu button opens a `Modal` holding the same links as a vertical
-  `NavigationMenu`, plus the docs sidebar groups on docs pages.
+  from 1056px. Below that a Menu button opens a tray, sliding in from the left
+  under the bar, holding the same links as a vertical `NavigationMenu`, plus the
+  docs sidebar groups on docs pages.
 - **Search**: a "Search docs" field from 1056px and an icon button below it. Both
   open the search palette, as do ⌘K / Ctrl K and `/`.
 - **GitHub** link, hidden below 480px.

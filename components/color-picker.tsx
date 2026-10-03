@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
-import { Button } from '@/components/ui/button'
+import { Shuffle } from '@carbon/icons-react'
 import { Select } from '@/components/ui/select'
 import styles from './color-picker.module.scss'
 
@@ -249,11 +250,19 @@ export function ColorPickerPopover({
 
       {/* Popover */}
       {open && (
-        <div ref={popoverRef} className={styles.panel}>
-          <HsvPicker hex={activeHex} onChange={handleHsvChange} />
+        <div
+          ref={popoverRef}
+          className={styles.panel}
+          // The caret sits on the chip's centre, and the panel is right-aligned
+          // to the chip, so the chip's width is all it needs.
+          style={{ '--trigger-w': `${buttonRef.current?.offsetWidth ?? 0}px` } as CSSProperties}
+        >
+          <div className={styles.section}>
+            <HsvPicker hex={activeHex} onChange={handleHsvChange} />
+          </div>
 
           {/* Hex input + swatch preview */}
-          <div className={styles.hexRow}>
+          <div className={`${styles.section} ${styles.hexRow}`}>
             <div
               className={styles.preview}
               style={{ background: activeHex }}
@@ -269,7 +278,7 @@ export function ColorPickerPopover({
 
           {/* Generation controls. They shape what the engine emits from this
               color, so they belong with the color rather than in one view. */}
-          <div className="source-controls">
+          <div className={`${styles.section} source-controls`}>
             <Select
               id="level-select"
               size="sm"
@@ -294,20 +303,22 @@ export function ColorPickerPopover({
             </p>
           </div>
 
-          {/* Surprise me — the primary action of the popover, so it closes
-              out the panel rather than sitting above the controls it affects. */}
-          <Button
-            variant="primary"
-            size="sm"
-            className={styles.surprise}
-            onClick={() => {
-              const hex = nextSurpriseHex()
-              setInput(hex)
-              onChange(hex)
-            }}
-          >
-            Surprise me
-          </Button>
+          {/* Surprise me: the popover's primary action, as the kit's filled
+              footer block in the bottom-right corner. */}
+          <div className={`${styles.section} ${styles.footer}`}>
+            <button
+              type="button"
+              className={styles.footerAction}
+              onClick={() => {
+                const hex = nextSurpriseHex()
+                setInput(hex)
+                onChange(hex)
+              }}
+            >
+              Surprise me
+              <Shuffle size={16} aria-hidden="true" />
+            </button>
+          </div>
         </div>
       )}
     </div>

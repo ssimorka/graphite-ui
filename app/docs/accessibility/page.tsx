@@ -3,7 +3,7 @@ import path from 'node:path'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Tag } from '@/components/ui/tag'
@@ -136,13 +136,7 @@ export default function AccessibilityPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Getting started' },
-                { label: 'Accessibility' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/accessibility')} />
             <h1 className={styles.title}>Accessibility</h1>
             <p className={styles.lede}>
               Contrast is enforced when colors are generated, not audited

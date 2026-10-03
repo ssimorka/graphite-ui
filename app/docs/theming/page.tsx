@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import {
@@ -256,13 +256,7 @@ export default function ThemingPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Getting started' },
-                { label: 'Theming' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/theming')} />
             <h1 className={styles.title}>Theming</h1>
             <p className={styles.lede}>
               Pick one color. Graphite builds the whole palette from it: every

@@ -1,19 +1,29 @@
-// The documentation search. Site chrome on the Overlay base, sized and placed
-// like a command palette: under the header, centred, never taller than the
-// viewport. There is no kit frame for results, so it borrows the kit's parts:
-// the header's search field, the elevated overlay surface and its outline edge.
+@use '../drop-panel' as drop;
+
+// The documentation search. Site chrome on the Overlay base. From md it drops
+// from the header's search trigger like the source-color picker beside it;
+// the shared shape and motion are in ../_drop-panel.scss. There is no kit frame
+// for results, so the rest borrows the kit's parts: the header's search field
+// and the elevated overlay surface.
 // The chips borrow Tag - Dismissible and Tag - Selectable from the kit: the
 // governed Tag is a read-only badge, so the interactive forms are drawn here
 // on the same roles rather than invented.
+
+@include drop.defs;
 
 .scrim {
   position: fixed;
   inset: 0;
   z-index: 9000;
   background: var(--graphite-scrim);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: in var(--graphite-motion-base) var(--graphite-motion-ease) both;
+  }
 }
 
 .panel {
+  @include drop.surface;
   position: fixed;
   z-index: 9001;
   top: 4.5rem;
@@ -22,12 +32,9 @@
   flex-direction: column;
   width: min(40rem, calc(100vw - 2 * var(--graphite-space-05)));
   // A fixed height rather than one that follows the results, so the panel does
-  // not jump on every keystroke, and the explainer above the footer has room.
+  // not jump on every keystroke.
   height: min(36rem, calc(100dvh - 6rem));
   transform: translateX(-50%);
-  background: var(--graphite-surface-elevated);
-  border: 1px solid var(--graphite-outline);
-  color: var(--graphite-on-surface);
 
   &:focus {
     outline: none;
@@ -35,6 +42,19 @@
 
   @media (prefers-reduced-motion: no-preference) {
     animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+  }
+
+  // Hung from the trigger: placed by the component, which sets --top, --left
+  // and --caret. Centring no longer needs transform, so the drop can use it.
+  &[data-anchored] {
+    @include drop.motion(var(--caret));
+    top: var(--top);
+    left: var(--left);
+    transform: none;
+  }
+
+  &[data-anchored]::before {
+    @include drop.caret(var(--caret));
   }
 
   // Below md it takes the whole screen, the way search does on a phone: the
@@ -45,10 +65,21 @@
     height: auto;
     transform: none;
     border: 0;
+    border-radius: 0;
+
+    // Full screen has no trigger to drop from: it fades, as before.
+    &[data-anchored] {
+      inset: 0;
+      animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+    }
+
+    &[data-anchored]::before {
+      display: none;
+    }
   }
 }
 
-// Opacity only: the panel carries its centring in transform.
+// Opacity only: the centred fallback carries its centring in transform.
 @keyframes in {
   from {
     opacity: 0;
@@ -279,8 +310,17 @@
 }
 
 .group + .group {
-  margin-top: var(--graphite-space-02);
+  margin-top: var(--graphite-space-03);
+  padding-top: var(--graphite-space-02);
+  border-top: 1px solid var(--graphite-surface-variant);
 }
+
+// Groups cascade in behind the drop. Only on open: the panel remounts then,
+// and typing re-renders without restarting it.
+.panel[data-anchored] .group {
+  @include drop.cascade;
+}
+
 
 .groupHead {
   display: flex;
@@ -486,11 +526,25 @@
 .footer {
   display: flex;
   flex: none;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: var(--graphite-space-05);
-  padding: var(--graphite-space-03) var(--graphite-space-05);
+  min-height: 3rem;
+  padding-left: var(--graphite-space-05);
   border-top: 1px solid var(--graphite-surface-variant);
+
+  .keys {
+    align-self: center;
+  }
+}
+
+// Search, Enter's twin, as the kit's footer action.
+.footerAction {
+  @include drop.action;
+
+  @media (max-width: 671.98px) {
+    border-radius: 0;
+  }
 }
 
 .keys {
@@ -505,44 +559,4 @@
   @media (hover: hover) and (pointer: fine) {
     display: flex;
   }
-}
-
-// After the kit's AI explainability popover: title, description, numbered
-// steps, the data it reads. Plain type, no AI styling, since no AI is used.
-.explain {
-  width: min(22rem, calc(100vw - 2 * var(--graphite-space-05)));
-  padding: var(--graphite-space-05);
-  font-size: var(--graphite-text-body-3-size);
-  line-height: var(--graphite-text-body-3-line-height);
-  color: var(--graphite-on-surface-variant);
-
-  p,
-  li {
-    margin: 0 0 var(--graphite-space-03);
-    font-size: var(--graphite-text-body-3-size);
-    line-height: var(--graphite-text-body-3-line-height);
-  }
-
-  ol {
-    margin: 0 0 var(--graphite-space-04);
-    padding-left: var(--graphite-space-05);
-    list-style: decimal;
-  }
-
-}
-
-.explain .explainTitle {
-  font-size: var(--graphite-text-body-2-size);
-  line-height: var(--graphite-text-body-2-line-height);
-  font-weight: 500;
-  color: var(--graphite-on-surface);
-}
-
-.explain .explainHead {
-  margin-top: var(--graphite-space-04);
-  color: var(--graphite-on-surface);
-  font-size: var(--graphite-text-caption-1-size);
-  line-height: var(--graphite-text-caption-1-line-height);
-  letter-spacing: 0.32px;
-  text-transform: uppercase;
 }

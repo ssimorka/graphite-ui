@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV, INSTALLATION_TOC } from '@/components/docs-nav'
+import { DOCS_NAV, INSTALLATION_TOC, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -68,13 +68,7 @@ export default function InstallationPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Getting started' },
-                { label: 'Installation' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/installation')} />
             <h1 className={styles.title}>Installation</h1>
             <p className={styles.lede}>
               Graphite ships as a published Figma library and a governed React

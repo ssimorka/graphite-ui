@@ -1,11 +1,10 @@
 'use client'
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { ArrowRight, Close, Renew, Search, Time } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
-import { Popover } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Tag } from '@/components/ui/tag'
 import type { SearchEntry } from '@/lib/search-index'
@@ -86,13 +85,48 @@ function highlight(text: string, words: string[]) {
  *
  * It reads questions as well as keywords, but everything it does is the
  * keyword index plus the rules in ./understand, run in the browser. The copy
- * says so, and nothing here borrows the kit's AI label or AI layer, which the
- * kit reserves for features an AI model actually powers.
+ * says so. The panel wears the AI layer's tinted background as a look, by
+ * request, but not the AI label, which is the kit's actual claim that a model
+ * is involved; "How search works" says plainly that none is.
  */
-export function SearchPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function SearchPalette({
+  open,
+  onClose,
+  anchor,
+}: {
+  open: boolean
+  onClose: () => void
+  /** The control the panel drops from. Without one it centres under the bar. */
+  anchor?: () => HTMLElement | null
+}) {
   const router = useRouter()
   const pathname = usePathname() ?? '/'
   const ref = useOverlay<HTMLDivElement>({ open, onDismiss: onClose, trapFocus: true })
+
+  // Hung under the trigger, its caret on the trigger's centre, and slid along
+  // to stay 16px inside the viewport. Measured before paint so the drop starts
+  // from the right place. Below md the panel is full screen and ignores this.
+  const [place, setPlace] = useState<CSSProperties | undefined>()
+  useLayoutEffect(() => {
+    if (!open) return
+    const measure = () => {
+      const a = anchor?.()
+      const panel = ref.current
+      if (!a || !panel) return setPlace(undefined)
+      const r = a.getBoundingClientRect()
+      const mid = r.left + r.width / 2
+      const w = panel.offsetWidth
+      const left = Math.min(Math.max(16, mid - w / 2), window.innerWidth - 16 - w)
+      setPlace({
+        '--top': `${r.bottom + 12}px`,
+        '--left': `${left}px`,
+        '--caret': `${mid - left}px`,
+      } as CSSProperties)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [open, anchor, ref])
   const input = useRef<HTMLInputElement>(null)
   const listId = useId()
   const [index, setIndex] = useState<SearchEntry[] | null>(null)
@@ -273,6 +307,8 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
         aria-label="Search documentation"
         tabIndex={-1}
         className={styles.panel}
+        data-anchored={place ? '' : undefined}
+        style={place}
       >
         <div className={styles.field}>
           <Search size={16} className={styles.icon} aria-hidden="true" />
@@ -533,7 +569,6 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
         )}
 
         <div className={styles.footer}>
-          <HowSearchWorks index={index} />
           <p className={styles.keys} aria-hidden="true">
             <span>
               <kbd>↑</kbd> <kbd>↓</kbd> move
@@ -545,53 +580,18 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
               <kbd>Tab</kbd> complete
             </span>
           </p>
+          {/* The kit's footer action. It does what Enter does: opens the
+              highlighted result, or runs the highlighted suggestion. */}
+          <button
+            type="button"
+            className={styles.footerAction}
+            onClick={() => (items[active] ? choose(items[active]) : input.current?.focus())}
+          >
+            Search
+            <Search size={16} aria-hidden="true" />
+          </button>
         </div>
       </div>
     </>
-  )
-}
-
-/**
- * What search does and does not do, laid out like the kit's AI explainability
- * popover (a title, a plain description, numbered steps, the data it uses)
- * because that is the kit's pattern for explaining a system's reasoning. The
- * content is the honest version: there is no model, so it names none.
- */
-function HowSearchWorks({ index }: { index: SearchEntry[] | null }) {
-  const pages = index?.filter((e) => !e.section).length
-  const sections = index?.filter((e) => e.section).length
-  return (
-    <Popover
-      placement="top"
-      modal
-      label="How search works"
-      trigger={(t) => (
-        <button type="button" className={styles.textButton} {...t}>
-          How search works
-        </button>
-      )}
-    >
-      <div className={styles.explain}>
-        <p className={styles.explainTitle}>How search works</p>
-        <p>
-          Search reads your words, works out which page and section you mean, and ranks what
-          matches. It runs in your browser. There is no AI model behind it.
-        </p>
-        <p className={styles.explainHead}>How it works</p>
-        <ol>
-          <li>Question words like “how” and “which” are set aside.</li>
-          <li>A component or page name narrows results to that page.</li>
-          <li>Words like “props”, “keyboard” or “tokens” put that section first.</li>
-          <li>Titles count most, then prop and token names, then page text.</li>
-        </ol>
-        <p className={styles.explainHead}>What it searches</p>
-        <p>
-          {pages && sections
-            ? `${pages} pages and ${sections} sections of these docs, built when the site is built.`
-            : 'The pages and sections of these docs, built when the site is built.'}{' '}
-          Recent searches stay in this browser.
-        </p>
-      </div>
-    </Popover>
   )
 }

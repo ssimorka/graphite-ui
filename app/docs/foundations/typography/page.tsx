@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import {
@@ -90,13 +90,7 @@ export default function TypographyPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Foundations' },
-                { label: 'Typography' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/foundations/typography')} />
             <h1 className={styles.title}>Typography</h1>
             <p className={styles.lede}>
               Graphite&rsquo;s type scale is the kit&rsquo;s Graphite

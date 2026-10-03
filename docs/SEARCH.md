@@ -13,15 +13,20 @@ does, and never to claim more than that.
   reason under the best match.
 - `components/search/search-palette.tsx`: the dialog and its states.
 
-## One rule first: no AI styling
+## AI styling, and what replaced the rule
 
-The kit's AI label, AI layer and explainability popover are for features an AI
-model powers. The kit says so directly ("Don't reuse the AI label styling for
-non-AI features", "Don't show a Confidence score you can't back"). Search uses
-none of the AI styling. It borrows the *structure* of the explainability
-popover for an honest "How search works" panel, which says in plain words that
-there is no AI model. If search is ever backed by a model, that is the moment
-to add the AI label, and only to the parts the model produces.
+This section used to be a rule: the kit's AI label, AI layer and explainability
+popover are for features an AI model powers ("Don't reuse the AI label styling
+for non-AI features"), so search used none of them and carried an honest "How
+search works" panel saying there is no model.
+
+Both halves have since been reversed by request. The panel now wears the AI
+layer's tinted background and edge, drawn on `primary`, and drops from the
+header like the explainability popover. The "How search works" panel was
+removed. Search still never shows the AI label, which is the kit's actual claim
+that a model is involved, and still has no model. With the disclosure gone,
+nothing on screen says so: if that matters again, the cheapest fix is one line
+of copy in the footer, not the old popover.
 
 ## States
 
@@ -112,11 +117,6 @@ degradation. Component: Button (secondary, sm) and links.
 added while typing: results are instant, and a spinner there would pretend
 to work that is not happening. Pattern: skeleton loading. Component: styled
 after kit Inline loading, with skeleton rows the shape of results.
-
-**How search works.** A popover laid out like the kit's explainability
-popover: title, description, numbered steps, what it searches (page and
-section counts read from the index). Pattern: system explanation. Component:
-Popover (modal, top).
 
 ## Accessibility and layout
 

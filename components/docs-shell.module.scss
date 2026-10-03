@@ -18,7 +18,7 @@
 // Small: 20 / 16 / 40. Medium: 28 / 24 / 56. XL: 40 / 48 / 80.
 .content {
   min-width: 0;
-  padding: 1.25rem var(--graphite-space-05) var(--graphite-space-08);
+  padding: 1.25rem calc(var(--graphite-space-06) - 4px) var(--graphite-space-08);
 }
 
 // ------------------------------------------------------------------- rails
@@ -102,7 +102,7 @@
 // ------------------------------------------------------------- wide layouts
 @media (min-width: 672px) {
   .content {
-    padding: 1.75rem var(--graphite-space-06) 3.5rem;
+    padding: 1.75rem calc(var(--graphite-space-06) - 4px) 3.5rem;
   }
 }
 

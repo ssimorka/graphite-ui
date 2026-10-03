@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -183,13 +183,7 @@ export default function LayoutPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Foundations' },
-                { label: 'Layout & grid' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/foundations/layout')} />
             <h1 className={styles.title}>Layout &amp; grid</h1>
             <p className={styles.lede}>
               {spell(rows.length)} breakpoints from the kit, a {cellPx}px grid the
