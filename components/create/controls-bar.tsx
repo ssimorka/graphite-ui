@@ -7,6 +7,7 @@ import { BODY_FONTS, CODE_FONTS, HEADING_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
 import type { Control, ControlId } from './controls-model'
 import { GetCodeDialog } from './get-code'
+import { Toast, useCopy } from '@/components/studio'
 import styles from './controls.module.scss'
 
 const FONT_SETS: Partial<Record<ControlId, typeof HEADING_FONTS>> = {
@@ -46,6 +47,11 @@ function OptionSheet({
   onClose: () => void
 }) {
   const ref = useOverlay<HTMLDivElement>({ open: true, onDismiss: onClose, trapFocus: true })
+  const { toast, copy } = useCopy()
+  // The source's swatches copy rather than choose, as on the desktop panel:
+  // each is derived from the source, so choosing one rebuilt every ramp and
+  // replaced the whole list. The sheet stays open, so several can be copied.
+  const copies = control.id === 'source'
 
   return (
     <>
@@ -80,7 +86,9 @@ function OptionSheet({
                 key={o.key}
                 type="button"
                 className={styles.option}
+                aria-label={copies ? `Copy ${o.label}, ${o.key.toUpperCase()}` : undefined}
                 onClick={() => {
+                  if (copies) return copy(o.key, o.key.toUpperCase())
                   control.select(o.key)
                   onClose()
                 }}
@@ -89,7 +97,13 @@ function OptionSheet({
                   <span className={styles.optionSwatch} style={{ background: o.swatch }} aria-hidden="true" />
                 ) : null}
                 <span className={styles.optionLabel}>{o.label}</span>
-                {control.selected === o.key ? <span aria-label="Selected">✓</span> : null}
+                {copies ? (
+                  <span className={styles.optionHex} aria-hidden="true">
+                    {o.key.toUpperCase()}
+                  </span>
+                ) : control.selected === o.key ? (
+                  <span aria-label="Selected">✓</span>
+                ) : null}
               </button>
             ))}
             {control.id === 'source' ? (
@@ -104,6 +118,7 @@ function OptionSheet({
                 <span className={styles.optionLabel}>Custom hex…</span>
               </button>
             ) : null}
+            <Toast message={toast} />
           </>
         )}
       </div>
