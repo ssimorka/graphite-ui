@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Modal } from '@/components/ui/modal'
+import { Modal, ModalInPlace } from '@/components/ui/modal'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 import styles from './modal.module.scss'
@@ -101,22 +101,25 @@ const noop = () => {}
 /**
  * An open Modal held in a box, for the anatomy and variants. The stage's
  * transform makes it the containing block for the fixed scrim, so the picture
- * sits in the page instead of covering it. `inert` keeps the Modal from taking
+ * sits in the page instead of covering it; ModalInPlace keeps it out of the
+ * portal so the stage gets the chance. `inert` keeps the Modal from taking
  * focus on mount (which would scroll the page to it), and dismissible={false}
  * keeps these pictures from answering Escape or outside presses.
  */
 export function ModalStill({ size = 'md' }: { size?: Size }) {
   return (
     <div className={styles.stage} inert>
-      <Modal
-        open
-        onClose={noop}
-        dismissible={false}
-        title={TITLE}
-        body={BODY}
-        size={size}
-        footer={footer(noop)}
-      />
+      <ModalInPlace.Provider value={true}>
+        <Modal
+          open
+          onClose={noop}
+          dismissible={false}
+          title={TITLE}
+          body={BODY}
+          size={size}
+          footer={footer(noop)}
+        />
+      </ModalInPlace.Provider>
     </div>
   )
 }

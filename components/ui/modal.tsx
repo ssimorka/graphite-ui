@@ -1,12 +1,22 @@
 'use client'
 
 import { createContext, useContext, useId } from 'react'
+import { createPortal } from 'react-dom'
 import type { ReactNode } from 'react'
 import { ButtonGroup } from './button-group'
 import { useOverlay } from './overlay'
 import styles from './modal.module.scss'
 
 const InsideDialog = createContext(false)
+
+/**
+ * Renders a Modal where it is written instead of on `<body>`. Only for the
+ * docs' stills, whose stage contains the fixed scrim on purpose. Everywhere
+ * else the portal is what makes the scrim full-screen: any sticky, transformed
+ * or isolated ancestor would otherwise scope its z-index and let the page paint
+ * over it, as the Create panel's sticky aside did.
+ */
+export const ModalInPlace = createContext(false)
 
 /** Contract: docs/contracts/modal.md (1.5.0) */
 type ModalProps = {
@@ -32,6 +42,7 @@ export function Modal({
 }: ModalProps) {
   const id = useId()
   const nested = useContext(InsideDialog)
+  const inPlace = useContext(ModalInPlace)
 
   // Stack depth of one, enforced. Like Popover, this fires when the inner
   // Modal opens rather than at build time, since a closed Modal renders
@@ -57,7 +68,7 @@ export function Modal({
 
   if (!open) return null
 
-  return (
+  const modal = (
     <InsideDialog.Provider value={true}>
       <div className={styles.scrim}>
         <div
@@ -81,4 +92,10 @@ export function Modal({
       </div>
     </InsideDialog.Provider>
   )
+
+  // A Modal is only open in response to the visitor, so it never renders on
+  // the server outside a still, and document is there for the portal.
+  return inPlace || typeof document === 'undefined'
+    ? modal
+    : createPortal(modal, document.body)
 }
