@@ -171,6 +171,15 @@ a browser result.
   and names none of them), and `page.loadAsync()` is what lets one `use_figma`
   call read many pages — `setCurrentPageAsync` is capped at one per call and
   `loadAllPagesAsync` is unsupported by the MCP tool.
+- **The docs header wash is capped by a contrast sweep, not by eye.** The
+  accent mesh behind the top of docs pages measured 1.66:1 against body text
+  at full strength in dark mode. Swept 2026-10-03: 288 sources (96 hues × 3
+  saturations) through `makeRamps` / `buildTheme`, `onSurface`,
+  `onSurfaceVariant` and `primary` against the wash at its worst point (full
+  glow, fade ignored). The strengths in `WASH_OPACITY` (`docs-shell.tsx`) are
+  tied to the visitor's contrast target: AA light 0.3 / dark 0.4 (worst 5.29 /
+  5.11:1), AAA light 0.1 / dark 0.2 (worst 7.16 / 7.32:1). Don't raise them
+  without rerunning the sweep.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
