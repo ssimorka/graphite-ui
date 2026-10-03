@@ -1,6 +1,11 @@
 @use './form-parts' as parts;
 
 // Radio button group — docs/contracts/radio-button-group.md
+//
+// The kit's Radio button group (Graphite UI Kit 2927:28166) and the Radio
+// button it is built from (2930:23442): an 18px on-surface ring inside a 20px
+// frame, an 8px on-surface dot when selected, Body/3 option labels in 22px
+// rows 8 apart (16 across), and the group label 8 above them.
 .group {
   border: 0;
   margin: 0;
@@ -9,87 +14,132 @@
 }
 
 .legend {
+  @include parts.field-label;
   padding: 0;
   margin-bottom: var(--graphite-space-03);
-  color: var(--graphite-on-surface);
-  font-size: 0.875rem;
-  font-weight: 500;
 }
 
 .options {
   display: flex;
-  gap: var(--graphite-space-04);
 }
 
-.vertical { flex-direction: column; }
-.horizontal { flex-direction: row; flex-wrap: wrap; }
+.vertical { flex-direction: column; gap: var(--graphite-space-03); }
+.horizontal { flex-direction: row; flex-wrap: wrap; gap: var(--graphite-space-05); }
 
 .row {
   display: inline-flex;
   align-items: center;
   gap: var(--graphite-space-03);
+  min-height: 22px;
 }
 
+// The kit's Position=Right: the label first, the radio after it.
+.right {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+// The drawn frame is 20px, which is also where the focus ring sits; the native
+// input reaches 6px past it on every side, so the hit area keeps the 32px
+// minimum Checkbox and Button keep, without spacing the rows 32 apart.
 .control {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  min-width: var(--graphite-space-07);
-  min-height: var(--graphite-space-07);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
 }
 
 .native {
   position: absolute;
-  inset: 0;
+  inset: -6px;
+  width: auto;
+  height: auto;
   margin: 0;
   opacity: 0;
   cursor: pointer;
 }
 
 .dot {
-  // 20px, matching Checkbox and the kit.
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--graphite-outline);
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--graphite-on-surface);
   border-radius: 50%;
   pointer-events: none;
 }
 
-// Selected is a filled centre drawn with an inset shadow, so the ring stays
-// visible rather than the whole control flooding with color.
-.native:checked + .dot {
-  border-color: var(--graphite-primary);
-  box-shadow: inset 0 0 0 4px var(--graphite-primary);
+// Selected is the ring plus an 8px dot, both on-surface, as the kit draws it.
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--graphite-on-surface);
+  opacity: 0;
 }
 
-.native:focus-visible + .dot {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
+.native:checked + .dot::after { opacity: 1; }
+
+// 2px outside the 20px frame, in the primary family's focus step. The
+// transparent outline is for forced colours, where box-shadow is dropped.
+.control:has(.native:focus-visible) {
+  box-shadow: 0 0 0 2px var(--graphite-primary-focus);
+  outline: 2px solid transparent;
 }
 
-.native:disabled + .dot {
-  border-color: var(--graphite-primary-disabled-content);
-  box-shadow: none;
+// Disabled keeps the selection visible: the ring and the dot both take the
+// disabled content tone, and so does the option's label.
+.native:disabled + .dot { border-color: var(--graphite-primary-disabled-content); }
+.native:disabled + .dot::after { background: var(--graphite-primary-disabled-content); }
+.native:disabled { cursor: not-allowed; }
+.row:has(.native:disabled) .optionLabel { @include parts.field-dimmed; }
+.group:disabled .legend { @include parts.field-dimmed; }
+
+// Error rings every option in danger at the ring's own weight, as the kit's
+// Invalid group does; the selected dot stays on-surface.
+.errored .native:enabled + .dot { border-color: var(--graphite-danger); }
+
+// Read-only: the rings quieten to the disabled content tone, the dot and the
+// labels do not, because the answer is still there to be read.
+.readOnly .native:enabled + .dot { border-color: var(--graphite-primary-disabled-content); }
+.readOnly .native { cursor: default; }
+
+.optionLabel {
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
 }
 
-// Error rings every option in danger, as the kit's Invalid group does, not only
-// the selected one: the error belongs to the group's answer. The ring is the
-// danger border plus a 1px inset, the same 2px weight as Text input's error
-// edge. The selected option keeps its primary centre inside it.
-.errored .native:enabled + .dot {
-  border-color: var(--graphite-danger);
-  box-shadow: inset 0 0 0 1px var(--graphite-danger);
+// The message row, 8 below the options. Help text sits flush; error and
+// warning lead with the kit's 16px status icon, 2 in, the text 10 after it.
+.help,
+.error,
+.warningText {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: var(--graphite-space-03);
 }
 
-.errored .native:enabled:checked + .dot {
-  box-shadow:
-    inset 0 0 0 1px var(--graphite-danger),
-    inset 0 0 0 5px var(--graphite-primary);
-}
-
-.label { @include parts.field-label; }
-.indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
+
+.status {
+  flex: none;
+  margin-left: var(--graphite-space-01);
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warningText .status {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
+}
