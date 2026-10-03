@@ -6,6 +6,7 @@ export const TOC: TocItem[] = [
   { href: '#layers', label: 'Three layers' },
   { href: '#color-roles', label: 'Color roles' },
   { href: '#states', label: 'Interaction states' },
+  { href: '#ladders', label: 'Elevation and outline' },
   { href: '#foundations', label: 'Foundation tokens' },
   { href: '#carbon', label: 'Carbon compatibility' },
   { href: '#export', label: 'Exporting' },

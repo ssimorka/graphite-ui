@@ -25,6 +25,7 @@ import {
   CarbonLayer,
   ExportExcerpt,
   RoleCount,
+  LadderTable,
   RoleTable,
   StampedSummary,
   StateFamilies,
@@ -219,6 +220,24 @@ export default function TokensPage() {
               }
             />
             <StateTable />
+          </section>
+
+          <section id="ladders" className={styles.block}>
+            <SectionHeading
+              title="Elevation and outline ladders"
+              lede={
+                <>
+                  Two short ladders the kit files beside the roles rather than among
+                  them. Elevation runs from the ground (00) through the resting
+                  layer (01) to hover (02) and pressed (03); in light, 01 equals
+                  the ground, because the ramp has no tone between 98 and 90.
+                  Outline strength runs from subtle, for decorative rules, to
+                  strong, for load-bearing edges such as a field&rsquo;s bottom
+                  rule.
+                </>
+              }
+            />
+            <LadderTable />
             <StampedSummary />
           </section>
 

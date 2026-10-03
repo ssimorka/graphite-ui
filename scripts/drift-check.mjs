@@ -121,6 +121,11 @@ async function readTokenModel() {
   for (const family of mod.STATE_FAMILIES)
     for (const v of familyStateVars(family)) bind(family, v)
   bind('primary', '--graphite-focus')
+  // The ladders. Outline strength belongs to the outline role, the way states
+  // belong to their family; elevation is declared as a ladder of its own.
+  for (const name of Object.keys(mod.LADDERS.light)) {
+    bind(name.startsWith('outline-') ? 'outline' : 'elevation', `--graphite-${name}`)
+  }
   const statics = readStaticVars()
   for (const v of statics.spacing) bind('spacing', v)
   for (const v of statics.radius) bind('radius', v)

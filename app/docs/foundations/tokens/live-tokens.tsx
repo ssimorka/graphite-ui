@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   buildCss,
   buildJson,
+  buildLadders,
   scrimFor,
   STATE_FAMILIES,
 } from '@/lib/color.js'
@@ -141,6 +142,20 @@ export function StateTable() {
       caption="Interaction state variables, light and dark"
     />
   )
+}
+
+/** The elevation and outline ladders, read from the engine's LADDERS. */
+export function LadderTable() {
+  const { ramps } = useTheme()
+  if (!ramps) return null
+  const light = buildLadders(ramps, 'light')
+  const dark = buildLadders(ramps, 'dark')
+  const rows: Row[] = (Object.keys(light) as (keyof typeof light)[]).map((name) => ({
+    name: `--graphite-${name}`,
+    light: fromToken(light[name]),
+    dark: fromToken(dark[name]),
+  }))
+  return <LiveTable rows={rows} caption="Elevation and outline ladders, light and dark" />
 }
 
 /** The families that carry states, read from the engine's STATE_FAMILIES. */

@@ -55,7 +55,7 @@ pulls in Carbon's entire style layer in one shot — reset, IBM Plex font-face d
 
 Two layers make a theme, and only one of them is Carbon's.
 
-1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`white` for light, `g100` for dark, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 52 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring and the scrim) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
+1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`white` for light, `g100` for dark, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
 
 2. **Carbon's theme zones.** `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still toggles the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 

@@ -177,6 +177,15 @@ export declare function buildStates(
   mode: ThemeMode,
 ): States
 
+export type LadderName =
+  | 'elevation-00' | 'elevation-01' | 'elevation-02' | 'elevation-03'
+  | 'outline-subtle' | 'outline-strong'
+export type Ladders = Record<LadderName, { ramp: RampName; tone: number; hex: string }>
+
+/** The elevation and outline ladders the kit files beside the roles. */
+export declare const LADDERS: Record<ThemeMode, Record<LadderName, { ramp: RampName; tone: number }>>
+export declare function buildLadders(ramps: Ramps, mode: ThemeMode): Ladders
+
 export declare function buildCss(bundle: ExportBundle): string
 /** The JSON export: an object, which callers stringify themselves. */
 export interface ExportJson {
@@ -186,6 +195,7 @@ export interface ExportJson {
     tokens: Record<string, { value: string; ramp: string; tone: number }>
     contrast: unknown
     states: Record<string, unknown>
+    ladders: Record<LadderName, { value: string; ramp: string; tone: number }>
   }>
 }
 
