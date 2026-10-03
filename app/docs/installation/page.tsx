@@ -23,9 +23,9 @@ export const metadata: Metadata = {
 }
 
 // Kept in step with the README's Getting started and Scripts tables, which are
-// the same facts stated for someone already inside the repo. The kit frame
-// (Graphite UI Site 11857:2470) says Node 20 and pnpm 9; CI pins 24 and 10, so
-// the page says what CI runs.
+// the same facts stated for someone already inside the repo. Versions are what
+// CI pins (Node 24, pnpm 10); the kit frame (Graphite UI Site 11857:2470) said
+// 20 and 9 until it was corrected to match on 2026-10-02.
 
 // The three gates the kit lists. typecheck and the two self-tests run in the
 // same job and are named under the table rather than given rows of their own.

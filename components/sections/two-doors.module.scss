@@ -38,7 +38,9 @@
   grid-template-columns: 1fr;
   gap: var(--graphite-space-06);
 
-  @media (min-width: 64rem) {
+  // The kit's lg stop. It draws the doors side by side at X-Large and stacked
+  // at Medium; 64rem (1024px) split them at a width the kit has no stop for.
+  @media (min-width: 1056px) {
     grid-template-columns: 1fr 1fr;
   }
 }
