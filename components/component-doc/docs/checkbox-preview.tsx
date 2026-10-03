@@ -6,16 +6,19 @@ import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 
 type Selection = 'unchecked' | 'checked' | 'indeterminate'
-type State = 'enabled' | 'disabled' | 'error'
+type State = 'enabled' | 'disabled' | 'read-only' | 'warning' | 'error'
 
 const LABEL = 'Save as default address'
 const ERROR = 'Choose whether to keep this address.'
+const WARNING = 'This address has not been confirmed.'
 
 function codeFor(selection: Selection, state: State) {
   const lines = [`  label="${LABEL}"`]
   if (selection === 'checked') lines.push('  checked')
   if (selection === 'indeterminate') lines.push('  indeterminate')
   if (state === 'disabled') lines.push('  disabled')
+  if (state === 'read-only') lines.push('  readOnly')
+  if (state === 'warning') lines.push(`  warningText="${WARNING}"`)
   if (state === 'error') lines.push(`  errorText="${ERROR}"`)
   lines.push('  onChange={setChecked}')
   return `<Checkbox\n${lines.join('\n')}\n/>`
@@ -23,7 +26,7 @@ function codeFor(selection: Selection, state: State) {
 
 /**
  * Selection and State are the kit's two axes on the Checkbox set, cut down to
- * the values the code has. Clicking the box moves Selection too, so the
+ * every value but Skeleton. Clicking the box moves Selection too, so the
  * control and the preview never disagree.
  */
 export function CheckboxPreview() {
@@ -53,6 +56,8 @@ export function CheckboxPreview() {
             options={[
               { value: 'enabled', label: 'Enabled' },
               { value: 'disabled', label: 'Disabled' },
+              { value: 'read-only', label: 'Read-only' },
+              { value: 'warning', label: 'Warning' },
               { value: 'error', label: 'Error' },
             ]}
           />
@@ -64,6 +69,8 @@ export function CheckboxPreview() {
           checked={selection === 'checked'}
           indeterminate={selection === 'indeterminate'}
           disabled={state === 'disabled'}
+          readOnly={state === 'read-only'}
+          warningText={state === 'warning' ? WARNING : undefined}
           errorText={state === 'error' ? ERROR : undefined}
           onChange={(c) => setSelection(c ? 'checked' : 'unchecked')}
         />

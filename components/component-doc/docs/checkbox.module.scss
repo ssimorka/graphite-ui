@@ -1,8 +1,18 @@
-// Checkbox's own page parts: the forced focus state. The component exposes no
-// data-slot hooks, so this reaches the painted box as the span that follows the
-// native input, which is the component's own structure, and forces the same
-// declaration `.native:focus-visible + .box` carries. Nothing here restyles it.
+// Checkbox's own page parts: the forced focus state, and a column for the
+// Indented example. The component exposes no data-slot hooks, so this reaches
+// the 20px frame as the span that holds the native input, which is the
+// component's own structure, and forces the same declarations
+// `.control:has(.native:focus-visible)` carries. Nothing here restyles it.
 
-.forceFocus input[type='checkbox'] + span {
-  box-shadow: 0 0 0 2px var(--graphite-focus);
+.forceFocus span:has(> input[type='checkbox']) {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -1px;
+}
+
+// The kit's Checkbox group stacks rows 8 apart; the page has no group
+// component to do it, so the Indented example does it here.
+.stack {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
 }
