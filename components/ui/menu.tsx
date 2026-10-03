@@ -2,14 +2,33 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
+import { KitIcon } from '@/components/kit-icon'
 import { useOverlay } from './overlay'
 import styles from './menu.module.scss'
 
 export type MenuItem =
-  | { kind?: 'item'; label: string; onSelect: () => void; disabled?: boolean; destructive?: boolean }
+  | {
+      kind?: 'item'
+      label: string
+      onSelect: () => void
+      disabled?: boolean
+      /**
+       * The kit's Delete row: neutral at rest with the trailing delete icon,
+       * filled with danger on hover. The icon is what keeps it from reading as
+       * a neutral action, which the contract forbids.
+       */
+      destructive?: boolean
+      /** The kit's Shortcut combo, shown in the trailing slot. Display only. */
+      shortcut?: string
+      /**
+       * The kit's Selected: a leading check. Setting it on any item makes the
+       * item a menuitemcheckbox, and indents every row so the labels align.
+       */
+      selected?: boolean
+    }
   | { kind: 'separator' }
 
-/** Contract: docs/contracts/menu.md (1.4.0) */
+/** Contract: docs/contracts/menu.md (2.0.0) */
 type MenuProps = {
   trigger: (props: {
     onClick: () => void
@@ -20,9 +39,11 @@ type MenuProps = {
   /** At least one item. Separators do not count toward that on their own. */
   items: [MenuItem, ...MenuItem[]]
   placement?: 'bottom' | 'top'
+  /** The kit's Size: rows of 50, 42, 34 and 26. */
+  size?: 'lg' | 'md' | 'sm' | 'xs'
 }
 
-export function Menu({ trigger, items, placement = 'bottom' }: MenuProps) {
+export function Menu({ trigger, items, placement = 'bottom', size = 'md' }: MenuProps) {
   const id = useId()
   const [open, setOpen] = useState(false)
   // Which item takes focus when the menu opens, or null for a menu opened by
@@ -34,7 +55,15 @@ export function Menu({ trigger, items, placement = 'bottom' }: MenuProps) {
   const ref = useOverlay<HTMLDivElement>({ open, onDismiss: close })
 
   const enabledItems = () =>
-    Array.from(ref.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)') ?? [])
+    Array.from(
+      ref.current?.querySelectorAll<HTMLButtonElement>(
+        ':is([role="menuitem"], [role="menuitemcheckbox"]):not(:disabled)',
+      ) ?? [],
+    )
+
+  // The kit's Indented: once any row can carry the check, every row keeps its
+  // leading slot, so the labels line up.
+  const indented = items.some((item) => item.kind !== 'separator' && item.selected !== undefined)
 
   // Declared after useOverlay so its effect runs second: the hook has already
   // recorded the trigger as the place to return focus to.
@@ -96,7 +125,7 @@ export function Menu({ trigger, items, placement = 'bottom' }: MenuProps) {
           ref={ref}
           id={id}
           role="menu"
-          className={`${styles.menu} ${styles[placement]}`}
+          className={`${styles.menu} ${styles[placement]} ${styles[size]}`}
           onKeyDown={onMenuKeyDown}
         >
           {items.map((item, i) =>
@@ -106,7 +135,8 @@ export function Menu({ trigger, items, placement = 'bottom' }: MenuProps) {
               <button
                 key={item.label}
                 type="button"
-                role="menuitem"
+                role={item.selected !== undefined ? 'menuitemcheckbox' : 'menuitem'}
+                aria-checked={item.selected}
                 tabIndex={-1}
                 disabled={item.disabled}
                 // Destructive items are visually distinct. The contract's older
@@ -118,7 +148,18 @@ export function Menu({ trigger, items, placement = 'bottom' }: MenuProps) {
                   setOpen(false)
                 }}
               >
-                {item.label}
+                {indented ? (
+                  <span className={styles.lead} aria-hidden="true">
+                    {item.selected ? <KitIcon name="check" /> : null}
+                  </span>
+                ) : null}
+                <span className={styles.label}>{item.label}</span>
+                {item.shortcut ? <span className={styles.trail}>{item.shortcut}</span> : null}
+                {item.destructive ? (
+                  <span className={styles.trail} aria-hidden="true">
+                    <KitIcon name="delete" />
+                  </span>
+                ) : null}
               </button>
             ),
           )}

@@ -10,57 +10,108 @@ import { DemoFrame } from '../demo-frame'
 import styles from './menu.module.scss'
 
 type Placement = 'bottom' | 'top'
+type Size = 'lg' | 'md' | 'sm' | 'xs'
+type Fn = 'simple' | 'complex'
 
 const TRIGGER = 'Theme actions'
 
-function codeFor(placement: Placement) {
-  const placementProp = placement === 'bottom' ? '' : `\n  placement="${placement}"`
-  return `<Menu${placementProp}
-  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}
-  items={[
-    { label: 'Rename', onSelect: rename },
+function codeFor(placement: Placement, size: Size, fn: Fn) {
+  const props = [
+    ...(placement === 'bottom' ? [] : [`  placement="${placement}"`]),
+    ...(size === 'md' ? [] : [`  size="${size}"`]),
+  ]
+  const head = props.length ? `\n${props.join('\n')}` : ''
+  const items =
+    fn === 'complex'
+      ? `    { label: 'Rename', onSelect: rename, shortcut: 'R' },
+    { label: 'Duplicate', onSelect: duplicate, shortcut: 'D' },
+    { label: 'Pinned', onSelect: togglePin, selected: pinned },
+    { kind: 'separator' },
+    { label: 'Delete', onSelect: remove, destructive: true },`
+      : `    { label: 'Rename', onSelect: rename },
     { label: 'Duplicate', onSelect: duplicate },
     { label: 'Export', onSelect: exportTheme, disabled: true },
     { kind: 'separator' },
-    { label: 'Delete', onSelect: remove, destructive: true },
+    { label: 'Delete', onSelect: remove, destructive: true },`
+  return `<Menu${head}
+  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}
+  items={[
+${items}
   ]}
 />`
 }
 
 /**
- * Placement is the contract's one prop. The readout under the trigger shows
- * that choosing an item runs its onSelect and then closes the menu.
+ * Placement, Size and Function. The readout under the trigger shows that
+ * choosing an item runs its onSelect and then closes the menu.
  */
 export function MenuPreview() {
   const [placement, setPlacement] = useState<Placement>('bottom')
+  const [size, setSize] = useState<Size>('md')
+  const [fn, setFn] = useState<Fn>('simple')
+  const [pinned, setPinned] = useState(true)
   const [chosen, setChosen] = useState<string | null>(null)
 
-  const items: [MenuItem, ...MenuItem[]] = [
-    { label: 'Rename', onSelect: () => setChosen('Rename') },
-    { label: 'Duplicate', onSelect: () => setChosen('Duplicate') },
-    { label: 'Export', onSelect: () => setChosen('Export'), disabled: true },
-    { kind: 'separator' },
-    { label: 'Delete', onSelect: () => setChosen('Delete'), destructive: true },
-  ]
+  const items: [MenuItem, ...MenuItem[]] =
+    fn === 'complex'
+      ? [
+          { label: 'Rename', onSelect: () => setChosen('Rename'), shortcut: 'R' },
+          { label: 'Duplicate', onSelect: () => setChosen('Duplicate'), shortcut: 'D' },
+          { label: 'Pinned', onSelect: () => setPinned((p) => !p), selected: pinned },
+          { kind: 'separator' },
+          { label: 'Delete', onSelect: () => setChosen('Delete'), destructive: true },
+        ]
+      : [
+          { label: 'Rename', onSelect: () => setChosen('Rename') },
+          { label: 'Duplicate', onSelect: () => setChosen('Duplicate') },
+          { label: 'Export', onSelect: () => setChosen('Export'), disabled: true },
+          { kind: 'separator' },
+          { label: 'Delete', onSelect: () => setChosen('Delete'), destructive: true },
+        ]
 
   return (
     <DemoFrame
       controls={
-        <Select
-          label="Placement"
-          size="sm"
-          value={placement}
-          onChange={(v) => setPlacement(v as Placement)}
-          options={[
-            { value: 'bottom', label: 'Bottom' },
-            { value: 'top', label: 'Top' },
-          ]}
-        />
+        <>
+          <Select
+            label="Placement"
+            size="sm"
+            value={placement}
+            onChange={(v) => setPlacement(v as Placement)}
+            options={[
+              { value: 'bottom', label: 'Bottom' },
+              { value: 'top', label: 'Top' },
+            ]}
+          />
+          <Select
+            label="Size"
+            size="sm"
+            value={size}
+            onChange={(v) => setSize(v as Size)}
+            options={[
+              { value: 'lg', label: 'Large' },
+              { value: 'md', label: 'Medium' },
+              { value: 'sm', label: 'Small' },
+              { value: 'xs', label: 'Extra small' },
+            ]}
+          />
+          <Select
+            label="Function"
+            size="sm"
+            value={fn}
+            onChange={(v) => setFn(v as Fn)}
+            options={[
+              { value: 'simple', label: 'Simple' },
+              { value: 'complex', label: 'Complex' },
+            ]}
+          />
+        </>
       }
       preview={
         <div className={`${styles.center} ${placement === 'top' ? styles.roomAbove : styles.roomBelow}`}>
           <Menu
             placement={placement}
+            size={size}
             trigger={(props) => <Button {...props}>{TRIGGER}</Button>}
             items={items}
           />
@@ -69,7 +120,7 @@ export function MenuPreview() {
           </p>
         </div>
       }
-      code={codeFor(placement)}
+      code={codeFor(placement, size, fn)}
     />
   )
 }
@@ -105,11 +156,29 @@ const STILL_ITEMS: [MenuItem, ...MenuItem[]] = [
   { label: 'Delete', onSelect: noop, destructive: true },
 ]
 
+const COMPLEX_ITEMS: [MenuItem, ...MenuItem[]] = [
+  { label: 'Rename', onSelect: noop, shortcut: 'R' },
+  { label: 'Pinned', onSelect: noop, selected: true },
+  { label: 'Archived', onSelect: noop, selected: false },
+  { kind: 'separator' },
+  { label: 'Delete', onSelect: noop, destructive: true },
+]
+
+const SHORT_ITEMS: [MenuItem, ...MenuItem[]] = [
+  { label: 'Rename', onSelect: noop },
+  { label: 'Duplicate', onSelect: noop },
+]
+
 export function MenuStill({
   placement = 'bottom',
+  size,
+  list = 'simple',
   item,
 }: {
   placement?: Placement
+  size?: Size
+  /** Which list: the full simple one, the Complex one, or two rows for sizes. */
+  list?: Fn | 'short'
   /** One item instead of the full list, for the states matrix. */
   item?: 'enabled' | 'disabled' | 'destructive'
 }) {
@@ -119,8 +188,8 @@ export function MenuStill({
           ? { label: 'Delete', onSelect: noop, destructive: true }
           : { label: 'Rename', onSelect: noop, disabled: item === 'disabled' },
       ]
-    : STILL_ITEMS
+    : list === 'complex' ? COMPLEX_ITEMS : list === 'short' ? SHORT_ITEMS : STILL_ITEMS
   return (
-    <Menu placement={placement} trigger={(props) => <OpenOnMount {...props} />} items={items} />
+    <Menu placement={placement} size={size} trigger={(props) => <OpenOnMount {...props} />} items={items} />
   )
 }
