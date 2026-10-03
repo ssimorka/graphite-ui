@@ -56,7 +56,7 @@ Chroma is also clamped per tone to whatever the sRGB gamut actually allows. Near
 
 ### 3. Semantic tokens
 
-This is the layer you design with. Each theme maps the twenty-seven roles onto specific ramp tones. The mapping differs per theme; the role names do not.
+This is the layer you design with. Each theme maps the thirty-two roles onto specific ramp tones. The mapping differs per theme; the role names do not.
 
 The `on` prefix is the system's core convention: **`onX` is the content color guaranteed to be legible on `X`.** `onSurface` is what you put on `surface`. That pairing is not a suggestion. It is verified by contrast check at generation time.
 
@@ -81,7 +81,7 @@ The provenance variables are worth knowing about. Every token is auditable back 
 
 > **In short:** every color in the interface has a job: page background, body text, button fill, error message. You pick the job; the system picks the value.
 
-Twenty-seven roles, generated per theme. Values below are from the default source `#5e44aa`. They illustrate the structure; they are not fixed system colors. Change the source and every hex changes; the roles and their relationships do not.
+Thirty-two roles, generated per theme. Values below are from the default source `#5e44aa`. They illustrate the structure; they are not fixed system colors. Change the source and every hex changes; the roles and their relationships do not.
 
 ### Surfaces and backgrounds
 
@@ -90,6 +90,7 @@ Twenty-seven roles, generated per theme. Values below are from the default sourc
 | `background` | The page itself | `neutral 98` · `#f8f8fc` | `neutral 18.2` · `#121215` |
 | `surface` | Default container: cards, panels, sheets | `neutral 98` · `#f8f8fc` | `neutral 18.2` · `#121215` |
 | `surfaceVariant` | Secondary surface: fields, hover fills, selected rows, tag backgrounds | `neutralVariant 90` · `#dedcea` | `neutralVariant 30` · `#2e2c37` |
+| `surfaceElevated` | Raised container, such as a dialog | `neutral 100` · `#ffffff` | `neutral 24.2` · `#201f23` |
 
 Note that `background` and `surface` resolve to the **same value** in both themes. This is deliberate: Graphite UI separates layers with borders and surface *variants*, not with shading. See [Color hierarchy](#color-hierarchy).
 
@@ -130,13 +131,24 @@ The pairing rule is strict: `onPrimary` goes on `primary`; `onPrimaryContainer` 
 
 `primary` inverts direction between themes, dark accent on light and light accent on dark, which is why hard-coding a brand hex breaks in one theme or the other.
 
+### Secondary actions
+
+| Role | Purpose | Light | Dark |
+|---|---|---|---|
+| `secondary` | Secondary buttons and accents | `secondary 40` · `#005542` | `secondary 80` · `#7dd1b6` |
+| `onSecondary` | Content on a secondary fill | `secondary 98` · `#e7fff6` | `secondary 20` · `#001c14` |
+| `secondaryContainer` | Low-emphasis secondary fill | `secondary 90` · `#9ef2d6` | `secondary 30` · `#00372a` |
+| `onSecondaryContainer` | Content on `secondaryContainer` | `secondary 10` · `#000503` | `secondary 90` · `#9ef2d6` |
+
+Secondary is derived from the source too, at hue −120° and chroma × 0.585, so it reads as a partner to `primary` rather than a second brand. Same four-role shape, same pairing rule.
+
 ### Status and feedback
 
 Four statuses, each with the same four-role shape as the primary family: a base, its on-color, a container, and the container's on-color.
 
 | Role | Purpose | Light | Dark |
 |---|---|---|---|
-| `error` | Errors, destructive actions, invalid input | `error 40` · `#880c06` | `error 80` · `#ffa192` |
+| `danger` | Errors, destructive actions, invalid input | `danger 40` · `#880c06` | `danger 80` · `#ffa192` |
 | `warning` | Warnings, risky but permitted actions | `warning 40` · `#733300` | `warning 80` · `#ffa570` |
 | `success` | Confirmation, completion, valid input | `success 40` · `#00572f` | `success 80` · `#5adb91` |
 | `info` | Neutral information, tips, in-progress states | `info 40` · `#00478a` | `info 80` · `#8fc1ff` |
@@ -145,7 +157,7 @@ Each also has `on<Status>`, `<status>Container`, and `on<Status>Container`, at t
 
 **Hue is fixed; chroma is not.** Status has to stay recognizable, since red must read as error whatever the source color is, so each status hue is pinned to an anchor rather than derived from the input. Chroma still tracks the source, clamped to 0.10–0.20, so statuses carry the same intensity as the rest of the system. A near-gray source still yields a legible red rather than a gray one; a neon source doesn't produce a garish one.
 
-**The collision case.** Because the hues are fixed, a source color sitting on a status hue collapses the distinction: a red brand resolves `primary` and `error` to nearly the same value. Nothing in the system can prevent this, which is the strongest argument for the rule below: never let color alone carry the meaning.
+**The collision case.** Because the hues are fixed, a source color sitting on a status hue collapses the distinction: a red brand resolves `primary` and `danger` to nearly the same value. Nothing in the system can prevent this, which is the strongest argument for the rule below: never let color alone carry the meaning.
 
 Containers work exactly like `primaryContainer`: a low-emphasis fill for banners, table rows, and tags, with its on-color for the text inside.
 
@@ -155,9 +167,8 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 
 | Need | Current state | What to do today |
 |---|---|---|
-| **Secondary actions** | No `secondary` role is generated. | Build secondary buttons from `outline` (border) + `primary` (label) on a transparent or `surface` fill. Keep it consistent across the product. |
 | **Links** | No distinct link role. Links bind to `primary`, with hover bound to the primary hover state. | Rely on underline plus `primary` for link affordance. Do not introduce a separate link color. |
-| **Overlay / scrim / elevation** | No overlay, scrim, or elevation token. The system has no shading-based elevation model. | Express elevation with `outline` and `surfaceVariant`. Modal scrims currently have no system value. |
+| **Elevation scale** | One raised surface (`surfaceElevated`) and no elevation scale. The system has no shading-based elevation model. | Express elevation with `outline`, `surfaceVariant` and `surfaceElevated`. The modal scrim is generated from the neutral ramp, as `--graphite-scrim`. |
 
 ---
 
@@ -251,7 +262,7 @@ Notes on each:
 - **Disabled leaves the accent ramp entirely.** Both the fill and its content drop to Neutral. This is the one state where the element deliberately loses its brand color: disabled elements should not compete for attention. The disabled pairing is intentionally low-contrast and is **not** contrast-checked. It is exempt under WCAG, and it must never be the only signal that a control is unavailable.
 - **Focus is a separate ring token, not a fill change.** It does not replace the base color; it draws a ring around the element in its own accent tone, so a focused button is still recognizably a button in its current state. Focus stacks with hover, pressed, and selected.
 
-**Error, warning, and success are roles, not states.** A field that fails validation takes `error` for its border and message; it does not get an "error hover." The two compose: a destructive button still hovers and presses along its own ramp.
+**Danger, warning, and success are roles, not states.** A field that fails validation takes `danger` for its border and message; it does not get an "error hover." The two compose: a destructive button still hovers and presses along its own ramp.
 
 ---
 
@@ -275,7 +286,7 @@ Fourteen pairings are checked on every generation, in both themes:
 | `onSurfaceVariant` on `surfaceVariant` | 4.5:1 / 7:1 |
 | `onBackground` on `background` | 4.5:1 / 7:1 |
 | `outline` on `surface` | 3:1 (non-text UI) |
-| `onError` on `error`, `onErrorContainer` on `errorContainer` | 4.5:1 / 7:1 |
+| `onDanger` on `danger`, `onDangerContainer` on `dangerContainer` | 4.5:1 / 7:1 |
 | `onWarning` on `warning`, `onWarningContainer` on `warningContainer` | 4.5:1 / 7:1 |
 | `onSuccess` on `success`, `onSuccessContainer` on `successContainer` | 4.5:1 / 7:1 |
 | `onInfo` on `info`, `onInfoContainer` on `infoContainer` | 4.5:1 / 7:1 |
@@ -302,7 +313,7 @@ Every interactive element needs a visible focus indicator. Use the focus ring to
 This applies with unusual force here, for two system-specific reasons:
 
 1. **The source color is user-chosen.** You cannot assume the accent is blue, or warm, or dark. Any meaning you attach to a specific hue will be wrong for some source colors.
-2. **Status hue can collide with the source.** Status hues are fixed, so a source color sitting on one of them resolves `primary` and that status to nearly the same value. A red brand makes `primary` and `error` near-identical. Hue alone cannot carry the distinction.
+2. **Status hue can collide with the source.** Status hues are fixed, so a source color sitting on one of them resolves `primary` and that status to nearly the same value. A red brand makes `primary` and `danger` near-identical. Hue alone cannot carry the distinction.
 
 Always pair color with a second signal: an icon, a label, a change of weight, a position, or a border.
 
@@ -328,7 +339,7 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 - **Don't apply raw hex values to components.** A hex is a snapshot of one source color in one theme. It will be wrong the moment either changes.
 - **Don't reference primitives directly.** `accent 40` is a color without meaning. If you find yourself wanting a specific ramp stop, the role you need is either missing from the system or you are reaching for the wrong one. Raise it rather than hard-coding around it.
-- **Don't invent status colors from the accent or neutral ramps.** Use `error`, `warning`, `success`, and `info`. A red-ish accent does not make an error color, and a green borrowed from a component library will not track the source. It reads as a foreign color pasted onto a generated theme.
+- **Don't invent status colors from the accent or neutral ramps.** Use `danger`, `warning`, `success`, and `info`. A red-ish accent does not make an error color, and a green borrowed from a component library will not track the source. It reads as a foreign color pasted onto a generated theme.
 - **Don't use `primaryContainer` as a general surface.** It signals accent or selection. Used as a card background it makes everything look selected.
 - **Don't nest three or more surface levels.** There is no third value to resolve to.
 - **Don't rely on color alone** for state, status, or selection.
@@ -359,19 +370,19 @@ Work down this order. Stop at the first match.
 
 ### Complete token reference
 
-**Semantic roles**, 27 per theme:
+**Semantic roles**, 32 per theme:
 
-`primary` · `onPrimary` · `primaryContainer` · `onPrimaryContainer` · `surface` · `onSurface` · `surfaceVariant` · `onSurfaceVariant` · `outline` · `background` · `onBackground`
+`primary` · `onPrimary` · `primaryContainer` · `onPrimaryContainer` · `secondary` · `onSecondary` · `secondaryContainer` · `onSecondaryContainer` · `surface` · `surfaceElevated` · `onSurface` · `surfaceVariant` · `onSurfaceVariant` · `outline` · `background` · `onBackground`
 
 Status, each with the same four-role shape:
 
-`error` · `onError` · `errorContainer` · `onErrorContainer` · `warning` · `onWarning` · `warningContainer` · `onWarningContainer` · `success` · `onSuccess` · `successContainer` · `onSuccessContainer` · `info` · `onInfo` · `infoContainer` · `onInfoContainer`
+`danger` · `onDanger` · `dangerContainer` · `onDangerContainer` · `warning` · `onWarning` · `warningContainer` · `onWarningContainer` · `success` · `onSuccess` · `successContainer` · `onSuccessContainer` · `info` · `onInfo` · `infoContainer` · `onInfoContainer`
 
-**Interaction states**, 6 per theme:
+**Interaction states**, 6 each for `primary`, `secondary` and `danger`:
 
-`primary` (base) · `primary-hover` · `primary-pressed` · `primary-selected` · `primary-disabled` (+ `primary-disabled-content`) · `focus-ring`
+`base` · `hover` · `pressed` · `selected` · `disabled` (+ disabled content) · `focus`. The page-level focus ring is primary's.
 
-**Primitives**, 7 ramps × 10 stops, exported for reference and tooling. Available to inspect and copy; not for direct use in designs.
+**Primitives**, 8 ramps × 10 stops, exported for reference and tooling. Available to inspect and copy; not for direct use in designs.
 
 ### Using tokens in Figma
 

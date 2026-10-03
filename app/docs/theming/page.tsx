@@ -8,7 +8,7 @@ import { DOCS_NAV, COLOR_DOCS_TOC } from '@/components/docs-nav'
 export const metadata: Metadata = {
   title: 'Theming · Graphite UI',
   description:
-    'How the Graphite UI color system works: four perceptual ramps plus four status ramps from one source color, twenty-seven semantic roles per theme, contrast-checked pairings, interaction states, and the twenty-tile pattern library.',
+    'How the Graphite UI color system works: four perceptual ramps plus four status ramps from one source color, thirty-two semantic roles per theme, contrast-checked pairings, interaction states, and the twenty-tile pattern library.',
 }
 
 export default function ThemingPage() {

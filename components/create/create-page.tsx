@@ -21,7 +21,7 @@ export function CreatePage() {
           <header className={styles.head}>
             <h1 className={styles.title}>Create a theme</h1>
             <p className={styles.lede}>
-              Pick one color. Graphite resolves seven ramps and thirty-two semantic
+              Pick one color. Graphite resolves eight ramps and thirty-two semantic
               roles from it, in both themes, and checks every pairing as it goes.
               Everything below the source is derived, which is the point: you are
               choosing a system, not painting components.

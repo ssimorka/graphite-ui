@@ -32,8 +32,8 @@ export function ThemeCta() {
               </h2>
               <p className={styles.body}>
                 The builder derives a full theme from any color, holds it to your
-                contrast target as it goes, and hands you CSS variables, JSON
-                tokens or Figma variables at the end.
+                contrast target as it goes, and hands you CSS variables or JSON
+                tokens at the end.
               </p>
             </div>
             <div className={styles.ctas}>

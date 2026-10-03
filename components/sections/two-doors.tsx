@@ -79,7 +79,7 @@ export function TwoDoors() {
                   </p>
                   <Button variant="secondary" asChild>
                     <a
-                      href="https://www.figma.com/design/7acsVKpgQlYTbOxuPIrCce/Graphite-UI-Site"
+                      href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
