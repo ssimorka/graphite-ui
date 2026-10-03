@@ -37,7 +37,8 @@ export const DENSITIES = [
 export type DensityKey = (typeof DENSITIES)[number]['key']
 
 // The kit's three icon families (Graphite UI Kit, Foundations: Icons), all in
-// their straight-corner cut, which is the one the kit draws with.
+// their straight-corner cut, which is the one the kit draws with. Mocked in
+// Graphite UI Site as Controls section — Icons and Sheet — Icons.
 export const ICON_FAMILIES: { key: IconSet; label: string }[] = [
   { key: 'regular', label: 'Regular' },
   { key: 'bold', label: 'Bold' },

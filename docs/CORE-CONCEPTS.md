@@ -8,7 +8,7 @@ The ideas and architecture behind this project, for anyone extending it beyond t
 - **React 19**, **TypeScript** throughout, **Sass (SCSS)** with CSS Modules for component and page styles.
 - **The color engine** (`lib/color.js`, typed by `lib/color.d.ts`): one source hex becomes perceptual ramps in OKLab, semantic roles for light and dark, interaction states, and measured contrast pairings.
 - **Governed components** (`components/ui/`): 22 components and the shared Overlay hook, each implementing a versioned contract in `docs/contracts/`.
-- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and icons. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
+- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and the chrome's icons. The Create preview draws the kit's own icons instead: Regular, Bold and Solid, exported from the Figma kit into `lib/kit-icons.ts` and rendered by `components/kit-icon.tsx`. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
 
 There is no database, API layer or auth. Every route is prerendered at build time.
 
@@ -30,7 +30,7 @@ components/
   search/                the search dialog and its ranking
   sections/              home page sections and the site footer
   theme-provider.tsx     source color, theme and contrast level; stamps the variables
-lib/                     the color engine, contract and kit readers
+lib/                     the color engine, contract and kit readers, the kit's icon paths
 ```
 
 Server components do read data, at build time: the docs pages read the contracts (`lib/contract-doc.ts`, `lib/contracts.ts`), the Figma snapshots (`lib/kit-page.ts`, `lib/kit-stats.ts`) and the stylesheets, so counts and tables on the site are derived from the repo rather than typed. Anything with state, refs or browser APIs is a client component.
