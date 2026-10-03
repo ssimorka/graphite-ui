@@ -34,12 +34,12 @@ const PIPELINE = [
   {
     step: 'Raw shades',
     detail:
-      'Seven strips of ten shades each, dark to light. Three built from your color, four fixed ones for danger, warning, success, and info.',
+      'Eight strips of ten shades each, dark to light. Four built from your color, and four for danger, warning, success, and info, whose hue stays fixed.',
   },
   {
     step: 'Named colors',
     detail:
-      'Twenty-seven jobs, such as page background, body text, and button fill. Each gets a shade, and each is checked for readability.',
+      'Thirty-two jobs, such as page background, body text, and button fill. Each gets a shade, and each is checked for readability.',
   },
   {
     step: 'States',
@@ -75,7 +75,7 @@ const RAMPS = [
     use: 'Page backgrounds, primary surfaces, primary text',
   },
   {
-    name: 'Error / Warning / Success / Info',
+    name: 'Danger / Warning / Success / Info',
     chroma: 'Tracks your color, within limits',
     use: 'Status and feedback. Hue is fixed per status, not derived',
   },
@@ -91,6 +91,10 @@ const ROLE_GROUPS = [
       {
         name: 'surfaceVariant',
         purpose: 'Secondary surface: fields, hover fills, selected rows, tags',
+      },
+      {
+        name: 'surfaceElevated',
+        purpose: 'Raised container, such as a dialog',
       },
     ],
   },
@@ -130,6 +134,22 @@ const ROLE_GROUPS = [
     ],
   },
   {
+    title: 'Secondary actions',
+    note: 'Secondary is derived from your color too, at hue −120° and a little over half the chroma, so it reads as a partner to primary rather than a second brand. Same four-role shape, same pairing rule.',
+    roles: [
+      { name: 'secondary', purpose: 'Secondary buttons and accents' },
+      { name: 'onSecondary', purpose: 'Content on a secondary fill' },
+      {
+        name: 'secondaryContainer',
+        purpose: 'Low-emphasis secondary fill',
+      },
+      {
+        name: 'onSecondaryContainer',
+        purpose: 'Content on secondaryContainer',
+      },
+    ],
+  },
+  {
     title: 'Status and feedback',
     note: 'Hue is fixed per status so red still reads as danger whatever the source is; chroma tracks the source so statuses carry the same intensity as the rest of the system. Containers work exactly like primaryContainer: a low-emphasis fill for banners, rows, and tags.',
     roles: [
@@ -159,22 +179,16 @@ const ROLE_GROUPS = [
 // find the right token.
 const GAPS = [
   {
-    need: 'Secondary actions',
-    state: 'No secondary role is generated.',
-    today:
-      'Build secondary buttons from outline (border) plus primary (label) on a transparent or surface fill. Keep it consistent across the product.',
-  },
-  {
     need: 'Links',
     state: 'No distinct link role. Links bind to primary.',
     today:
       'Rely on underline plus primary for link affordance. Do not introduce a separate link color.',
   },
   {
-    need: 'Overlay, scrim, elevation',
-    state: 'No overlay or elevation token. The system has no shading-based elevation model.',
+    need: 'Elevation scale',
+    state: 'One raised surface (surfaceElevated) and no elevation scale. The system has no shading-based elevation model.',
     today:
-      'Express elevation with outline and surfaceVariant. Modal scrims currently have no system value.',
+      'Express elevation with outline, surfaceVariant and surfaceElevated. The modal scrim is generated from the neutral ramp, as --graphite-scrim.',
   },
 ]
 
@@ -550,7 +564,7 @@ export function ColorDocs() {
                 picks the value.
               </InShort>
               <p className="docpage__body">
-                There are twenty-seven of these jobs, and each theme fills them
+                There are thirty-two of these jobs, and each theme fills them
                 in. One naming rule explains most of the list: a name starting
                 with <code>on</code> is what goes <em>on top of</em> something
                 else. <code>onSurface</code> is the text color for anything
@@ -1080,14 +1094,19 @@ export function ColorDocs() {
               </ol>
 
               <h3 className="doc-subheading">Complete reference</h3>
-              <p className="doc-reference-label">Semantic roles: 27 per theme</p>
+              <p className="doc-reference-label">Semantic roles: 32 per theme</p>
               <p className="doc-chips">
                 {[
                   'primary',
                   'onPrimary',
                   'primaryContainer',
                   'onPrimaryContainer',
+                  'secondary',
+                  'onSecondary',
+                  'secondaryContainer',
+                  'onSecondaryContainer',
                   'surface',
+                  'surfaceElevated',
                   'onSurface',
                   'surfaceVariant',
                   'onSurfaceVariant',
@@ -1115,16 +1134,16 @@ export function ColorDocs() {
                 ))}
               </p>
               <p className="doc-reference-label">
-                Interaction states: 6 per theme
+                Interaction states: 6 each for primary, secondary and danger
               </p>
               <p className="doc-chips">
                 {[
-                  'primary',
-                  'primary-hover',
-                  'primary-pressed',
-                  'primary-selected',
-                  'primary-disabled',
-                  'focus-ring',
+                  'base',
+                  'hover',
+                  'pressed',
+                  'selected',
+                  'disabled',
+                  'focus',
                 ].map((name) => (
                   <code key={name}>{name}</code>
                 ))}
