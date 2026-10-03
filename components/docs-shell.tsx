@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { MeshGradient } from '@/components/mesh-gradient'
+import { useTheme } from '@/components/theme-provider'
 import styles from './docs-shell.module.scss'
 
 export type DocsNavGroup = {
@@ -35,6 +36,20 @@ const NO_TOC: TocItem[] = []
  * sets and .page-main offsets by, so all three have to agree. (This said 48
  * while the header was 64, which put the band under the header's lower edge.)
  */
+// How strong the header wash may be, by the visitor's contrast target and the
+// mode. Swept 2026-10-03 over 288 sources (96 hues at three saturations)
+// through makeRamps / buildTheme, with onSurface, onSurfaceVariant and primary
+// measured against the wash at its worst point (the glow at full strength,
+// ignoring the fade): these are the strongest steps that keep every case
+// above the target with room to spare.
+//   AA:  light 0.3 -> 5.29:1 worst, dark 0.4 -> 5.11:1 worst
+//   AAA: light 0.1 -> 7.16:1 worst, dark 0.2 -> 7.32:1 worst
+// Full strength in dark measured 1.66:1, which is why it is capped at all.
+const WASH_OPACITY = {
+  AA: { white: 0.3, g100: 0.4 },
+  AAA: { white: 0.1, g100: 0.2 },
+} as const
+
 function useScrollSpy(items: TocItem[]) {
   const [active, setActive] = useState<string | null>(null)
 
@@ -57,13 +72,15 @@ function useScrollSpy(items: TocItem[]) {
       // Document order, so the highlight walks down the list as you scroll
       // rather than jumping to whichever entry happened to fire last.
       const hits = ids.filter((id) => seen.get(id))
-      // Nothing in the band means the reader is above the first section, at
-      // the page head. Clearing rather than holding the last value matters:
-      // the sections are contiguous, so the only way to have no hit is to be
-      // outside them all, and a stale highlight there names a section the
-      // reader has scrolled away from.
+      // Nothing in the band means the reader is outside every section. Above
+      // the first, at the page head, the first entry is what they are about
+      // to read, so it takes the highlight rather than leaving the list blank.
+      // Anywhere else it clears rather than holding the last value: a stale
+      // highlight names a section the reader has scrolled away from.
       if (!hits.length) {
-        setActive(null)
+        const first = document.getElementById(ids[0])
+        const aboveFirst = !!first && first.getBoundingClientRect().top > 64
+        setActive(aboveFirst ? ids[0] : null)
         return
       }
       setActive(atBottom() ? hits[hits.length - 1] : hits[0])
@@ -123,9 +140,23 @@ export function DocsShell({
 }) {
   const pathname = usePathname()
   const active = useScrollSpy(toc ?? NO_TOC)
+  const { theme, level } = useTheme()
 
   return (
     <div className={`${styles.shell} ${toc?.length ? styles.withToc : ''}`}>
+      {/* The home band's accent mesh, washed behind the top of every docs
+          page and faded out before the reading starts. On the shell rather
+          than the content column, so it runs under the on-this-page rail to
+          the window's edge instead of stopping where the rail begins. */}
+      {wash ? (
+        <div
+          className={styles.wash}
+          aria-hidden="true"
+          style={{ opacity: WASH_OPACITY[level][theme] }}
+        >
+          <MeshGradient family="accent" className={styles.washMesh} />
+        </div>
+      ) : null}
       <aside className={`${styles.rail} ${styles.sidebar}`}>
         {nav.map((group) => (
           <div key={group.label} className={styles.group}>
@@ -145,13 +176,6 @@ export function DocsShell({
       </aside>
 
       <div className={styles.content}>
-        {/* The home band's accent mesh, washed behind the top of every docs
-            page and faded out before the reading starts. */}
-        {wash ? (
-          <div className={styles.wash} aria-hidden="true">
-            <MeshGradient family="accent" className={styles.washMesh} />
-          </div>
-        ) : null}
         {children}
       </div>
 

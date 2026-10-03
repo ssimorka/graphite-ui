@@ -10,6 +10,9 @@
 // nothing in here knows what the content is.
 
 .shell {
+  position: relative;
+  // Keeps the wash's negative z-index inside the shell, under its columns.
+  isolation: isolate;
   display: block;
   max-width: 96rem;
   margin: 0 auto;
@@ -17,9 +20,6 @@
 
 // Small: 20 / 16 / 40. Medium: 28 / 24 / 56. XL: 40 / 48 / 80.
 .content {
-  position: relative;
-  // Keeps the wash's negative z-index inside this column, under its text.
-  isolation: isolate;
   min-width: 0;
   padding: 1.25rem calc(var(--graphite-space-06) - 4px) var(--graphite-space-08);
 }
@@ -27,9 +27,16 @@
 // The header wash: the accent mesh behind the breadcrumb, title and lede,
 // fading to the plain page by 30rem so body text never sits on it. It follows
 // the source and the mode because the mesh does.
+//
+// It spans the content and the on-this-page rail, and past the shell's 96rem
+// cap out to the window's right edge (body clips the overflow), so the glow
+// never ends on a hard line. From lg it starts after the sidebar, which stays
+// plain.
 .wash {
   position: absolute;
-  inset: 0 0 auto;
+  top: 0;
+  left: 0;
+  right: calc((100% - 100vw) / 2);
   z-index: -1;
   height: 30rem;
   overflow: hidden;
@@ -37,12 +44,11 @@
   pointer-events: none;
   mask-image: linear-gradient(to bottom, #000 35%, transparent);
 
-  // Light mode mirrors the mesh, which turns its glow into a mid-tone purple
-  // right under the lede's dark grey: about 4:1 at full strength, and it read
-  // as muddy. At 40% the ground stays near the page colour and the lede is
-  // back around 9:1, with the tint still there.
-  :global(.cds--white) & {
-    opacity: 0.4;
+  // Its opacity is set inline from the contrast target and mode, against a
+  // sweep of every hue: see WASH_OPACITY in docs-shell.tsx.
+
+  @media (min-width: 1056px) {
+    left: 16rem;
   }
 }
 
