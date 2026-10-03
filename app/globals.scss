@@ -1047,17 +1047,36 @@ body {
     @media (prefers-reduced-motion: no-preference) {
       animation: rise 420ms var(--graphite-motion-ease) 780ms both;
     }
+
+    // Below md the two cannot share a row without the hint wrapping into a
+    // column of five lines, so they stack: the hint above, the action as a
+    // full-width bar along the foot.
+    @media (max-width: 671.98px) {
+      flex-direction: column;
+      gap: 0;
+    }
   }
 
   .ramp-stack__hint {
     align-self: center;
     margin: 0;
     padding: var(--graphite-space-03) 0 var(--graphite-space-03) var(--graphite-space-06);
+
+    @media (max-width: 671.98px) {
+      align-self: stretch;
+      padding: var(--graphite-space-04) var(--graphite-space-06);
+    }
   }
 
   .hero__strip-cta {
     @include drop.action;
     text-decoration: none;
+
+    // Full width, so it takes both bottom corners.
+    @media (max-width: 671.98px) {
+      margin-left: 0;
+      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+    }
   }
 
   .ramp__label {
