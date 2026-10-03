@@ -1,7 +1,10 @@
-// Dropdown Menu — docs/contracts/dropdown-menu.md
+// Menu — docs/contracts/menu.md
 //
-// Item hover and focus move on the same tone step Button uses, rather than a
-// highlight convention invented for menus.
+// The kit's Menu (Graphite UI Kit 31131:96397), built from its private Menu
+// list item: full-width rows on Popover's surface, Body/3 labels in
+// onSurfaceVariant, hover on the elevation ladder's next rung, focus as a
+// 2px ring inside the row. The rows run edge to edge, with 4 above the first
+// and below the last.
 .wrap {
   position: relative;
   display: inline-flex;
@@ -10,12 +13,13 @@
 .menu {
   position: absolute;
   z-index: 20;
-  min-width: var(--graphite-space-12);
-  padding: var(--graphite-space-02);
+  // 160, the kit's Simple menu; the Complex one grows to its content.
+  min-width: var(--graphite-space-13);
+  padding: var(--graphite-space-02) 0;
   display: flex;
   flex-direction: column;
   // Popover's surface, which Menu inherits: elevation-01 and the overlay
-  // shadow, no edge (popover.md 2.0.0). The rest of Menu's kit parity is #231.
+  // shadow, no edge (popover.md 2.0.0).
   background: var(--graphite-elevation-01);
   box-shadow: var(--graphite-shadow-overlay);
   border-radius: var(--graphite-radius-none);
@@ -41,37 +45,84 @@
 
 .item {
   appearance: none;
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  width: 100%;
   border: 0;
   background: transparent;
   font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
   text-align: left;
+  white-space: nowrap;
   cursor: pointer;
-  color: var(--graphite-on-surface);
-  // Items inset 16 horizontally with an 8 gap, per the kit's menu list
-  // item. Square, like the panel that holds them.
-  padding: var(--graphite-space-02) var(--graphite-space-05);
-  gap: var(--graphite-space-03);
+  color: var(--graphite-on-surface-variant);
+  padding-inline: var(--graphite-space-05);
   border-radius: var(--graphite-radius-none);
 }
 
-.item:hover:not(:disabled),
+// The kit's Size, as row padding around a 20px line. The rows come out 50,
+// 42, 34 and 26: two over Carbon's, because the kit kept Carbon's padding
+// and set the label in Body/3. Recorded as drawn, as Button's are.
+.lg .item { padding-block: 15px; }
+.md .item { padding-block: 11px; }
+.sm .item { padding-block: 7px; }
+.xs .item { padding-block: 3px; }
+
+.label { flex: 1; }
+
+// The trailing slot (shortcut or the delete icon) sits 16 after the label:
+// the row's 8 gap and 8 more.
+.trail {
+  display: inline-flex;
+  margin-inline-start: var(--graphite-space-03);
+}
+
+// The leading slot: 16 for the check, so indented rows align.
+.lead {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  color: var(--graphite-on-surface);
+}
+
+// Hover is the elevation ladder's next rung, the kit's layer-hover-01, the
+// same tone-step move as Button's hover.
+.item:hover:not(:disabled) {
+  background: var(--graphite-elevation-02);
+  color: var(--graphite-on-surface);
+}
+
+// Focus is a 2px ring inside the row, with no fill of its own; with hover it
+// keeps the hover fill. The transparent outline is for forced colours.
 .item:focus-visible {
-  background: var(--graphite-surface-variant);
-  outline: none;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
 }
 
 .item:disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  color: var(--graphite-primary-disabled-content);
 }
 
-// A destructive item may never read as a neutral one.
-.destructive {
-  color: var(--graphite-danger);
+// Destructive: neutral at rest, set apart by its trailing delete icon; the
+// kit's Danger hover fills the row. The kit's label there is text-on-color,
+// which resolves to onPrimary; on a danger fill the right role is on-danger.
+.destructive .trail { color: var(--graphite-on-surface); }
+
+.destructive:hover:not(:disabled) {
+  background: var(--graphite-danger);
+  color: var(--graphite-on-danger);
 }
 
+.destructive:hover:not(:disabled) .trail { color: var(--graphite-on-danger); }
+
+// The kit's Divider: a line on the next row's top edge, then that row's 4px
+// top spacer.
 .separator {
   height: 1px;
-  margin: var(--graphite-space-02) 0;
-  background: var(--graphite-outline);
+  margin: 0 0 var(--graphite-space-02);
+  background: var(--graphite-outline-subtle);
 }

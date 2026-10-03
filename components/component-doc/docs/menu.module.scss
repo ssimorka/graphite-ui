@@ -13,11 +13,11 @@
 // The list is absolutely positioned, so the preview reserves the side it
 // opens into rather than letting it spill over the next section.
 .roomBelow {
-  padding-bottom: 11rem;
+  padding-bottom: 17rem;
 }
 
 .roomAbove {
-  padding-top: 11rem;
+  padding-top: 17rem;
 }
 
 .readout {
@@ -32,7 +32,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  min-height: 12rem;
+  min-height: 15rem;
 }
 
 .stageTop {
@@ -41,11 +41,11 @@
 
 // One trigger and a one-item list.
 .cell {
-  min-height: 6.5rem;
+  min-height: 6.75rem;
 }
 
 .anatomy {
-  min-height: 10.5rem;
+  min-height: 14.5rem;
 }
 
 .markTrigger {
@@ -55,22 +55,30 @@
 }
 
 .markItems {
-  top: 3.95rem;
+  top: 4.45rem;
   left: -2.25rem;
   transform: translateY(-50%);
 }
 
 .markSeparator {
-  top: 8rem;
+  top: 11rem;
   left: -2.25rem;
   transform: translateY(-50%);
 }
 
 .forceHover [role='menuitem']:not(:disabled) {
-  background: var(--graphite-surface-variant);
+  background: var(--graphite-elevation-02);
+  color: var(--graphite-on-surface);
 }
 
 .forceFocus [role='menuitem'] {
-  background: var(--graphite-surface-variant);
-  outline: none;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.forceDanger [role='menuitem'],
+.forceDanger [role='menuitem'] > span {
+  background: var(--graphite-danger);
+  color: var(--graphite-on-danger);
 }

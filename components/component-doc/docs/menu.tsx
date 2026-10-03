@@ -9,6 +9,12 @@ const cell = (item: 'enabled' | 'disabled' | 'destructive') => (
   </div>
 )
 
+const sized = (size: 'lg' | 'md' | 'sm' | 'xs') => (
+  <div className={styles.stage}>
+    <MenuStill size={size} list="short" />
+  </div>
+)
+
 export function menuDoc(): ComponentDocConfig {
   return {
     slug: 'menu',
@@ -32,7 +38,7 @@ export function menuDoc(): ComponentDocConfig {
       </div>
     ),
     variantsLede:
-      'Placement is the contract’s one prop. The list opens below or above the trigger, aligned to its start edge, and does not flip on its own.',
+      'Placement opens the list below or above the trigger, aligned to its start edge; it does not flip on its own. Size sets the row height, from 50 down to 26. The kit’s Complex function is what the items hold: a trailing shortcut, and a leading check that indents every row.',
     variants: [
       {
         label: 'Placement: Bottom',
@@ -50,42 +56,61 @@ export function menuDoc(): ComponentDocConfig {
           </div>
         ),
       },
+      { label: 'Size: Large', node: sized('lg') },
+      { label: 'Size: Medium', node: sized('md') },
+      { label: 'Size: Small', node: sized('sm') },
+      { label: 'Size: Extra small', node: sized('xs') },
+      {
+        label: 'Function: Complex',
+        node: (
+          <div className={styles.stage}>
+            <MenuStill list="complex" />
+          </div>
+        ),
+      },
     ],
     statesLede:
-      'Item states, the ones the kit draws on its private menu list item. Hover and focus are the same surface-variant step Button uses, so focus is a change of fill rather than a ring. A destructive item stays in danger through every state.',
+      'Item states, the ones the kit draws on its private menu list item. Hover steps the row to elevation-02, the same tone-step move Button makes, and lifts the label to on-surface. Focus is a 2px ring inside the row; with hover it keeps the hover fill. A destructive row is neutral at rest, set apart by its delete icon, and fills with danger on hover.',
     states: [
       { label: 'Enabled', node: cell('enabled') },
       { label: 'Hover', node: cell('enabled'), className: styles.forceHover },
       { label: 'Focus', node: cell('enabled'), className: styles.forceFocus },
+      { label: 'Focus + Hover', node: cell('enabled'), className: `${styles.forceHover} ${styles.forceFocus}` },
       { label: 'Disabled', node: cell('disabled') },
-      { label: 'Danger hover', node: cell('destructive'), className: styles.forceHover },
+      { label: 'Destructive', node: cell('destructive') },
+      { label: 'Danger hover', node: cell('destructive'), className: styles.forceDanger },
+      { label: 'Danger hover + Focus', node: cell('destructive'), className: `${styles.forceDanger} ${styles.forceFocus}` },
     ],
     dos: [
       'Keep a Menu to actions on one object, such as rename, duplicate and delete for one theme.',
-      'Mark delete and remove as destructive, and let the label say what goes. The colour alone cannot carry it.',
+      'Mark delete and remove as destructive, and let the label say what goes. The icon and the hover fill set it apart; the words still have to say it.',
       'Group related items with a separator, and put the destructive ones last.',
       'Disable an item that does not apply right now instead of removing it, so the list keeps its shape.',
     ],
     donts: [
       'Style a destructive item like a neutral one. It must never read as a harmless choice.',
       'Use a Menu to pick a value that stays chosen. That is a Select.',
-      'Put fields or checkboxes in the list. Items are labels and handlers only, and richer content belongs in a Popover.',
+      'Put fields in the list. Items are labels, a shortcut or a check, and handlers; richer content belongs in a Popover.',
       'Rely on hover to reveal items. Everything the Menu can do is in the list when it opens.',
     ],
     a11y: [
       ['Keyboard', 'Enter, Space or Down Arrow on the trigger opens the menu on its first item, and Up Arrow opens it on its last. Down and Up move between items and wrap at the ends; Home and End jump to the first and last. Enter or Space chooses an item. Escape closes the menu, and so does Tab, which then carries on to whatever follows the trigger.'],
-      ['Roles', <>The list is <code>role=&quot;menu&quot;</code> and each item <code>role=&quot;menuitem&quot;</code>. The trigger gets <code>aria-haspopup=&quot;menu&quot;</code> and <code>aria-expanded</code>.</>],
-      ['Focus', <>Opening the menu moves focus to an item. Every item is <code>tabindex=&quot;-1&quot;</code>, so the whole menu is one Tab stop and the arrow keys do the rest. A focused item fills with <code>surface-variant</code>, the same step as hover, with no ring. When the menu closes, focus goes back to the trigger.</>],
+      ['Roles', <>The list is <code>role=&quot;menu&quot;</code> and each item <code>role=&quot;menuitem&quot;</code>, or <code>menuitemcheckbox</code> with <code>aria-checked</code> when it carries selected. The trigger gets <code>aria-haspopup=&quot;menu&quot;</code> and <code>aria-expanded</code>.</>],
+      ['Focus', <>Opening the menu moves focus to an item. Every item is <code>tabindex=&quot;-1&quot;</code>, so the whole menu is one Tab stop and the arrow keys do the rest. A focused item takes a 2px <code>primary-focus</code> ring inside its edge. When the menu closes, focus goes back to the trigger.</>],
       ['Choosing', 'Choosing an item runs its onSelect and closes the menu. Disabled items are real disabled buttons, so the arrow keys skip them and they cannot be chosen.'],
-      ['Contrast', <>Labels are <code>on-surface</code> and destructive labels <code>danger</code>, on <code>elevation-01</code>, lifted by <code>shadow-overlay</code> with no edge.</>],
+      ['Contrast', <>Labels are <code>on-surface-variant</code> at rest and <code>on-surface</code> on hover, on <code>elevation-01</code>, lifted by <code>shadow-overlay</code> with no edge. A destructive row on hover is <code>on-danger</code> on <code>danger</code>.</>],
       ['Motion', 'The list fades in on the fast motion step and appears at once under prefers-reduced-motion.'],
     ],
     parityLede:
-      'The kit’s Menu page has one public set, Menu, built from a private menu list item that carries the item states shown above. The code exposes one prop, because nearly everything the kit varies is composition.',
+      'The kit’s Menu page has one public set, Menu, built from a private menu list item that carries the item states shown above. Size is a prop; Function is what the items hold.',
     parity: [
       ['Function', 'Simple · Complex', 'items', 'No switch. How much the list holds comes from the items you pass, separators included.'],
-      ['Size', 'Large · Medium · Small · Extra small', '—', 'No counterpart. Items have one size, set on the spacing scale.'],
-      ['Item state', 'Enabled → Danger hover + Focus (private set)', '—', 'Pseudo-classes in code, plus disabled and destructive on each item. Governance rule 7: a State=Hover variant is not an instruction to add a hover prop.'],
+      ['Size', 'Large · Medium · Small · Extra small', 'size', 'lg, md, sm and xs: rows of 50, 42, 34 and 26. Two over Carbon’s, because the kit kept Carbon’s padding around Body/3; built as drawn.'],
+      ['Delete', 'True · False', 'destructive', 'The trailing delete icon at rest and the danger fill on hover. The kit’s label there is text-on-color (onPrimary); the code uses on-danger, the right role on a danger fill.'],
+      ['Item: Shortcuts or Trigger', 'Shortcut combo · Caret', 'shortcut', 'The shortcut is text in the trailing slot; the kit draws a modifier glyph and a letter. Caret is a sub-menu trigger, which is not built.'],
+      ['Item: Selected · Indented', 'True · False', 'selected', 'A leading check. Setting selected on any item indents every row, so the labels align.'],
+      ['Item: Divider', 'True · False', '{ kind: separator }', 'A 1px outline-subtle line on the next row’s top edge, then 4.'],
+      ['Item state', 'Enabled → Danger hover + Focus (private set)', '—', 'Pseudo-classes in code, plus disabled and destructive on each item. Governance rule 7: a State=Hover variant is not an instruction to add a hover prop. The private set names one state Focus twice; the one with the hover fill is Focus + Hover.'],
     ],
     related: [
       { href: '/docs/components/popover', title: 'Popover', why: 'when the content is more than a list' },
