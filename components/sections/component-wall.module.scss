@@ -11,7 +11,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  padding: var(--graphite-space-11) 0;
+  padding: var(--band-pad) 0;
   // Plain outline, not the usual subtle one: surfaceVariant is the binding for
   // outline-subtle everywhere else, and it is this section's fill now, so a
   // subtle rule here would be the same colour as the field it sits on.

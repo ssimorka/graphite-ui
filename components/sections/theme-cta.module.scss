@@ -11,9 +11,9 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  // 80px, the band padding every sibling uses. The kit frame had 72px, off the
-  // spacing scale and off the band rhythm; it was moved to 80 to match.
-  padding: var(--graphite-space-11) 0;
+  // The band rhythm every sibling uses (44 / 56 / 80). The kit frame had 72px
+  // at X-Large, off the scale and off the rhythm; it was moved to 80 to match.
+  padding: var(--band-pad) 0;
   background: var(--graphite-background);
   border-top: 1px solid var(--graphite-surface-variant);
   border-bottom: 1px solid var(--graphite-surface-variant);

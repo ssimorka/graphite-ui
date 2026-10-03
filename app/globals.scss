@@ -99,6 +99,12 @@
   --graphite-space-12: 6rem; // 96px
   --graphite-space-13: 10rem; // 160px
 
+  // Home band padding, top and bottom. The kit's own rhythm: 44 at Small, 56 at
+  // Medium, 80 from lg. 44 and 56 are not spacing steps; they are the kit's
+  // values, and the kit is canonical, so they are written here once rather than
+  // snapped to the scale. Stepped up below, after the breakpoint module loads.
+  --band-pad: 2.75rem; // 44px
+
   // Breakpoints, from the kit's `Breakpoint` collection. lg and xl are kept
   // as two tokens rather than one lg-xl: in the kit they live in a separate
   // `Breakpoint LG–XL` collection that the main one aliases into per mode,
@@ -258,6 +264,17 @@
   --graphite-text-title-4-line-height: 1.5rem; // 24px
   --graphite-text-title-5-size: 0.875rem; // 14px
   --graphite-text-title-5-line-height: 1.25rem; // 20px
+}
+
+// --band-pad steps up at the kit's md and lg stops.
+:root {
+  @include breakpoint.breakpoint(md) {
+    --band-pad: 3.5rem; // 56px
+  }
+
+  @include breakpoint.breakpoint(lg) {
+    --band-pad: var(--graphite-space-11); // 80px
+  }
 }
 
 // Mobile mode from the kit. Only the steps that actually differ are
@@ -806,17 +823,15 @@ body {
   --py: 0; // pointer y offset, -0.5..0.5
   position: relative;
   overflow: hidden;
-  padding: var(--graphite-space-07) 0 var(--graphite-space-07);
+  // The band rhythm below lg; the kit gives the hero 96 above it, top and
+  // bottom alike.
+  padding: var(--band-pad) 0;
   background: var(--cds-background);
   border-bottom: 1px solid var(--graphite-surface-variant);
   isolation: isolate;
 
-  @include breakpoint.breakpoint(md) {
-    padding: var(--graphite-space-10) 0 var(--graphite-space-09);
-  }
-
   @include breakpoint.breakpoint(lg) {
-    padding: var(--graphite-space-12) 0 var(--graphite-space-10);
+    padding: var(--graphite-space-12) 0;
   }
 }
 
@@ -1453,6 +1468,13 @@ $cap-dwell: 500px;
 // Below lg the stacked layout renders instead, with all six capabilities open
 // at once and nothing to select, so none of this applies there: .cap-sticky is
 // an ordinary div and the section keeps its own height.
+//
+// That own height starts from the band rhythm rather than .section's docs-page
+// padding. From lg the pane carries the padding instead, below.
+.section--capabilities {
+  padding: var(--band-pad) 0;
+}
+
 @include breakpoint.breakpoint(lg) {
   .section--capabilities {
     // One dwell of scrolling per panel, on top of the pane that stays put.
@@ -2328,6 +2350,8 @@ $cap-dwell: 500px;
 // FAQ
 // ---------------------------------------------------------------------------
 .section--faq {
+  // The band rhythm, not .section's docs-page padding.
+  padding: var(--band-pad) 0;
   row-gap: var(--graphite-space-07);
   // Kit 11865:3162 fills this with surfaceVariant. The field, and only the
   // field: not a band class, which would rebind the role variables for every
