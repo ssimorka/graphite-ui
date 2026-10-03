@@ -134,7 +134,7 @@ export function accordionDoc(): ComponentDocConfig {
       ['Alignment', 'Right · Left', 'align', 'One to one.'],
       ['Flush', 'False · True', 'flush', 'One to one.'],
       ['Expanded', 'False · True', '—', 'Runtime state, not a prop. The kit draws it because Figma has no other way to show it.'],
-      ['State', 'Enabled → Skeleton', '—', 'Pseudo-classes in code. Governance rule 7: a State=Hover variant is not an instruction to add a hover prop. Skeleton has no counterpart: nothing in an accordion loads asynchronously.'],
+      ['State', 'Enabled → Skeleton', '—', 'Pseudo-classes in code. Governance rule 7: a State=Hover variant is not an instruction to add a hover prop. Hover fills elevation-02, the kit’s layer-hover-01. Disabled dims the title, copy and chevron; the kit leaves the chevron at full strength, which the code treats as a slip. Skeleton has no counterpart: nothing in an accordion loads asynchronously.'],
       ['Slot', 'Boolean + swap', 'children', 'Composition. The caller passes content instead of choosing from a fixed pair.'],
     ],
     related: [

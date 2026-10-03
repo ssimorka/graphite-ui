@@ -10,12 +10,12 @@ import {
 } from 'react'
 import type { ComponentPropsWithRef, ReactNode } from 'react'
 import { cva } from 'class-variance-authority'
-import { ChevronDown } from '@carbon/icons-react'
 import { cn } from '@/lib/cn'
+import { KitIcon } from '@/components/kit-icon'
 import styles from './accordion.module.scss'
 
 /**
- * Contract: docs/contracts/accordion.md (1.0.0)
+ * Contract: docs/contracts/accordion.md (1.1.0)
  *
  * The recipe, the root, the item, and the two parts an item is made of. The
  * trigger is a real button that owns the expanded state; the panel is labelled
@@ -183,6 +183,7 @@ export function AccordionItem({
       <div
         data-slot="accordion-item"
         data-state={open ? 'open' : 'closed'}
+        data-disabled={disabled ? '' : undefined}
         className={cn(styles.item, className)}
         {...props}
       >
@@ -227,10 +228,10 @@ export function AccordionTrigger({
         <span className={styles.label}>{children}</span>
         {/* Decorative: the state is aria-expanded, and the panel opening is the
             layout change that carries it for everyone else. */}
-        <ChevronDown
+        <KitIcon
+          name="angle-small-down"
           size={16}
           className={styles.indicator}
-          aria-hidden="true"
           data-slot="accordion-indicator"
         />
       </button>
