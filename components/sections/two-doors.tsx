@@ -24,10 +24,8 @@ const DOOR_TOKENS: { role: string; use: string }[] = [
 // CSS" output and the third is a usage sample, which is a fair picture of
 // what crossing from design into code actually looks like.
 //
-// The Accordion import is forward-looking: there is no
-// components/ui/accordion yet and no contract for one. It is the single new
-// component docs/SHADCN-MIGRATION.md budgets for, so the kit is drawing what
-// is planned rather than what ships today.
+// The usage sample is the shipped API: components/ui/accordion, contract
+// 1.0.0, the one new component docs/SHADCN-MIGRATION.md budgeted for.
 const CODE_BLOCKS = [
   `display: flex;
 width: 401px;
@@ -79,7 +77,7 @@ export function TwoDoors() {
                   </p>
                   <Button variant="secondary" asChild>
                     <a
-                      href="https://www.figma.com/design/7acsVKpgQlYTbOxuPIrCce/Graphite-UI-Site"
+                      href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
                       target="_blank"
                       rel="noopener noreferrer"
                     >

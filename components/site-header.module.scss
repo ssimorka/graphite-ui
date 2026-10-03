@@ -275,8 +275,8 @@
   outline-offset: 2px;
 }
 
-// A square action tile, sized to the bar. 3rem is both the header height and
-// a comfortable touch target, so the two constraints agree here.
+// A square action tile: 3rem, a comfortable touch target, centred in the
+// 4rem bar.
 .action {
   display: flex;
   align-items: center;

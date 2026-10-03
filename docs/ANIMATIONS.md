@@ -14,8 +14,8 @@ Five, all declared on `:root` in `app/globals.scss`.
 
 | Token | Value | Used by |
 |---|---|---|
-| `--graphite-motion-fast` | 120ms | Button, Toggle, the three overlays, hero spotlight |
-| `--graphite-motion-base` | 240ms | Capabilities carousel item state and body reveal, ramp swatch and Info card hovers |
+| `--graphite-motion-fast` | 120ms | Button, Toggle, the four overlay entrances, Accordion trigger, search palette, header nav and controls, footer links, hero spotlight |
+| `--graphite-motion-base` | 240ms | Accordion panel and chevron, Capabilities carousel item state and body reveal, ramp swatch and Info card hovers, Create preview |
 | `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep |
 | `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
 | `--graphite-motion-indeterminate-ease` | `cubic-bezier(0.65, 0, 0.35, 1)` | The sweep only |
@@ -51,10 +51,10 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Hero parallax | `.hero__spotlight`, `.hero__grid-lines` | continuous | — | `pointermove` + `scroll` via rAF |
 | Band grid parallax | `.page-bands__grid` | continuous | — | `scroll` via rAF, from `page-bands.tsx` |
 | Spotlight tracking | `.hero__spotlight` | `fast` | linear | Pointer position rewrite |
-| View-switch fade | `.showcase__frame`, `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={active.key}` |
+| View-switch fade | `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={item.key}` |
 | Cover reveal | `.art__cover` / `cover-in` | 320ms | ease | Mount, one-shot |
 | Cover hint | `.art__cover-hint` | 160ms | ease | Hover / focus on the cover |
-| Carousel dwell rail | `.cap-item__fill` | 7000ms | linear | rAF, the same clock that advances the carousel |
+| Carousel rail fill | `.cap-item__fill` | scroll-driven | — | `scroll` via rAF, the same reading that picks the panel |
 | Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | settle | Mount, when the item becomes active |
 | Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | ease | Selection change, hover |
 | Theme swap | `html`, `body`, `.cds--*` | 180ms | ease | Theme toggle |
@@ -62,9 +62,11 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Wall card hover | `.card`, `.card .preview` | 300ms | ease-out | Pointer over a component card |
 | Info card hover | `.door`, `.door .artefact` | `base` | ease-out | Pointer over a door |
 | Header nav hover | `.navLink`, `.navIndicator` | `fast` | settle | Pointer over a nav item |
+| Search palette | `search-palette.module.scss` / `in`, `spin` | `fast` fade; 690ms spinner | settle; linear | Open; while a query resolves. Applied only under `no-preference` |
+| Create preview cards | `live-audio-waveform` / `pulse`, `skeleton` / `sweep` | 900ms; 1.6s | — | Infinite, inside the Create preview |
 
-The 700ms, 900ms, 500ms, 320ms, 300ms, 200ms, 180ms and 160ms values are
-literals. They have no token, and minting one per call site would trade a
+The 700ms, 900ms, 690ms, 500ms, 320ms, 300ms, 200ms, 180ms and 160ms values,
+and the 1.6s sweep, are literals. They have no token, and minting one per call site would trade a
 readable number for an indirection that explains nothing.
 
 **The hover durations come from the kit, not from here.** `Read Me — Hover
@@ -83,17 +85,17 @@ governance rule 7's tie-break says the code keeps its own where the kit has no
 opinion. They are listed above so the difference is on the record rather than
 discovered later.
 
-**Stagger.** `Reveal` fires flat everywhere except the Capabilities proof strip,
-which staggers `delay={i * 80}`. Every other use passes no delay.
+**No stagger.** `Reveal` fires flat everywhere. Nothing passes a `delay`, so
+there is no staggered entrance on the site today.
 
-**The dwell rail is not a CSS animation.** `.cap-item__fill` is written from the
-animation frame in `capabilities.tsx` rather than given a keyframe, because the
-bar and the advance have to be the same clock: a keyframe would drift from the
-timer and promise a moment the carousel does not turn on. Its only CSS is the
-resting `scaleY(0)`. That is also why pausing is exact rather than a
-`animation-play-state` approximation, and why the carousel simply does not run
-under `prefers-reduced-motion` — the component drops the timer, leaving the rail
-as a static position marker.
+**The carousel has no timer.** From 1056px, 03 Capabilities is a tall scroll
+track (`$cap-dwell`, 500px per capability) with its content stuck to the
+viewport, and reading position picks the panel. `.cap-item__fill` is written
+from the same scroll reading rather than given a keyframe, so the rail cannot
+show a different progress than the one doing the selecting. Its only CSS is the
+resting `scaleY(0)`. Nothing advances on its own, so there is no pause control:
+the reader is what moves it. Below 1056px all six capabilities render stacked
+and open, with no rail, count or selection.
 
 ## Component motion
 
@@ -107,12 +109,15 @@ the marketing page.
 | Tooltip | entrance fade, `overlay-in` | `fast` | settle |
 | Popover | entrance fade, `overlay-in` | `fast` | settle |
 | Menu | entrance fade, `overlay-in` | `fast` | settle |
+| Modal | entrance fade on the scrim, `overlay-in` | `fast` | settle |
+| Accordion | panel height via `grid-template-rows` 0fr → 1fr, chevron rotates 180° | `base` | settle |
+| Accordion trigger | background on hover | `fast` | ease |
 | Progress, determinate | width | 200ms | ease |
 | Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | `indeterminate-ease` |
 
 ### The overlay entrance
 
-Stated once in `docs/contracts/overlay.md`; Tooltip, Popover and Menu each
+Stated once in `docs/contracts/overlay.md`; Tooltip, Popover, Menu and Modal each
 declare `motion` in their own contract so `drift-check` can hold them to it,
 exactly as they each declare their own surface rather than inheriting it
 silently.
@@ -121,18 +126,19 @@ silently.
 per side, so an animation that moved would overwrite the position it was moving
 to — animations beat regular declarations.
 
-**No exit.** All three unmount their content on close, so an exit is not
+**No exit.** All four unmount their content on close, so an exit is not
 reachable from CSS. It is also not free: Popover's no-nesting prohibition is a
 throw that stays off the prerender path only because content does not exist until
 the Popover is open. Holding a closed overlay mounted to animate it out would
 move that throw to build time.
 
 Each stylesheet defines its own `overlay-in`. CSS Modules scopes keyframe names,
-so the three compile to distinct identifiers and cannot collide.
+so the four compile to distinct identifiers and cannot collide.
 
 ## Reduced motion
 
-Eleven blocks. Everything that moves is covered.
+Everything that moves is covered. The table groups the blocks by what they
+neutralise rather than counting them.
 
 | Where | Treatment |
 |---|---|
@@ -142,21 +148,24 @@ Eleven blocks. Everything that moves is covered.
 | `.page-bands__grid` | Listener never attaches, so `--sy` holds at 0 |
 | `.art__cover` | `animation: none` |
 | `.art__cover-hint` | Travel removed, fade kept |
-| `.showcase__frame` | `animation: none` |
 | `.cap-stage__frame`, `.cap-item__reveal` | `animation: none` |
+| `.ramp-swatch` | Transition removed; the scale stays, as it is the whole affordance |
+| Wall card, Info card | Transitions and movement removed; the border change stays |
 | Button | Transition and press displacement removed |
 | Toggle | Transitions removed |
-| Tooltip, Popover, Menu | `animation: none` |
+| Tooltip, Popover, Menu, Modal | `animation: none` |
+| Accordion | Panel opens without a transition |
+| Search palette | Fade and spinner removed |
+| Create preview, waveform, skeleton | Transitions and loops removed |
 | Progress | Determinate transition removed; the sweep stretches to 3s |
 
-Four are handled in JavaScript rather than CSS, which is why the block count
-does not move when one is added. `use-reveal.ts` reports visible immediately, so
+Four are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible immediately, so
 the observer never runs. `hero.tsx` and `page-bands.tsx` each return before
 attaching their scroll listener, so `--sy` stays at its default and the effect
 never exists — the band grid needs no rule of its own for the same reason the
-hero's parallax needs one only for its transitions. `capabilities.tsx` never
-starts the dwell timer, so the carousel holds on whichever item you select and
-its pause control is not rendered: there is nothing left to pause.
+hero's parallax needs one only for its transitions. `capabilities.tsx` needs no
+more than its smooth scroll switched off: the carousel is driven by the reader's
+own scrolling, so under reduced motion clicking a title jumps to its panel.
 
 **The progress sweep slows rather than stops.** A frozen indeterminate bar reads
 as a broken one, so it stretches to 3s and stays legible.
@@ -200,5 +209,4 @@ a.finish(); a.play()
 
 ## Open
 
-- **Dialog has no scrim fade.** Tracked as #41/#42.
 - **The kit has no motion variables**, so none of this is bindable design-side.

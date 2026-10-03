@@ -1,15 +1,11 @@
 'use client'
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  type CSSProperties,
-} from 'react'
-import { Dropdown } from '@carbon/react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
+import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import styles from './color-picker.module.scss'
 
 const HUE_GRADIENT =
   'linear-gradient(to right, hsl(0,100%,50%), hsl(60,100%,50%), hsl(120,100%,50%), hsl(180,100%,50%), hsl(240,100%,50%), hsl(300,100%,50%), hsl(360,100%,50%))'
@@ -97,22 +93,13 @@ function HsvPicker({
   }
 
   const hueHex = hsvToHex({ h: hsv.h, s: 1, v: 1 })
-  const dot: CSSProperties = {
-    position: 'absolute',
-    width: 13,
-    height: 13,
-    borderRadius: '50%',
-    border: '2px solid #fff',
-    boxShadow: '0 0 0 1px rgba(0,0,0,0.4)',
-    transform: 'translate(-50%,-50%)',
-    pointerEvents: 'none',
-  }
 
   return (
     <div>
       {/* SV pad */}
       <div
         ref={svRef}
+        className={styles.pad}
         onPointerDown={(e) => {
           capture(e)
           fromSv(e.clientX, e.clientY)
@@ -124,17 +111,12 @@ function HsvPicker({
         onPointerUp={release}
         onPointerCancel={release}
         style={{
-          position: 'relative',
-          width: '100%',
-          height: 128,
-          borderRadius: 3,
-          cursor: 'crosshair',
           background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), ${hueHex}`,
         }}
       >
         <div
+          className={styles.marker}
           style={{
-            ...dot,
             left: `${hsv.s * 100}%`,
             top: `${(1 - hsv.v) * 100}%`,
             background: hex,
@@ -145,6 +127,7 @@ function HsvPicker({
       {/* Hue strip */}
       <div
         ref={hueRef}
+        className={styles.hue}
         onPointerDown={(e) => {
           capture(e)
           fromHue(e.clientX)
@@ -155,19 +138,11 @@ function HsvPicker({
         }}
         onPointerUp={release}
         onPointerCancel={release}
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: 14,
-          marginTop: 10,
-          borderRadius: 7,
-          cursor: 'pointer',
-          background: HUE_GRADIENT,
-        }}
+        style={{ background: HUE_GRADIENT }}
       >
         <div
+          className={styles.marker}
           style={{
-            ...dot,
             left: `${(hsv.h / 360) * 100}%`,
             top: '50%',
             background: hueHex,
@@ -249,9 +224,8 @@ export function ColorPickerPopover({
   return (
     <div className="site-header__source-wrap">
       {/* The whole chip opens the popover, not just the swatch, so the click
-          target matches the visible control. Named so the home page's theme
-          section can open it rather than linking at a builder route that does
-          not exist yet. */}
+          target matches the visible control. Named so the Create page's
+          "Custom hex…" can open it. */}
       <button
         ref={buttonRef}
         id={SOURCE_TRIGGER_ID}
@@ -275,73 +249,37 @@ export function ColorPickerPopover({
 
       {/* Popover */}
       {open && (
-        <div
-          ref={popoverRef}
-          style={{
-            position: 'absolute',
-            top: 'calc(100% + 10px)',
-            right: 0,
-            width: 220,
-            background: 'var(--cds-layer-01, #262626)',
-            border: '1px solid var(--cds-border-subtle, #393939)',
-            borderRadius: 4,
-            padding: '12px 14px',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-            zIndex: 9999,
-          }}
-        >
+        <div ref={popoverRef} className={styles.panel}>
           <HsvPicker hex={activeHex} onChange={handleHsvChange} />
 
           {/* Hex input + swatch preview */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              marginTop: 10,
-            }}
-          >
+          <div className={styles.hexRow}>
             <div
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: 3,
-                background: activeHex,
-                flexShrink: 0,
-                border: '1px solid var(--cds-border-subtle, #393939)',
-              }}
+              className={styles.preview}
+              style={{ background: activeHex }}
             />
             <input
+              className={styles.hexInput}
               value={input}
               onChange={handleInputChange}
               spellCheck={false}
-              style={{
-                flex: 1,
-                background: 'transparent',
-                border: 'none',
-                borderBottom: '1px solid var(--cds-border-subtle, #393939)',
-                color: 'var(--cds-text-primary, #f4f4f4)',
-                fontFamily: 'inherit',
-                fontSize: 12,
-                padding: '2px 0',
-                outline: 'none',
-              }}
+              aria-label="Source color hex"
             />
           </div>
 
           {/* Generation controls. They shape what the engine emits from this
               color, so they belong with the color rather than in one view. */}
           <div className="source-controls">
-            <Dropdown
+            <Select
               id="level-select"
               size="sm"
-              titleText="Target level"
               label="Target level"
-              items={['AA', 'AAA']}
-              selectedItem={level}
-              onChange={({ selectedItem }) =>
-                setLevel((selectedItem as ContrastLevel) ?? 'AA')
-              }
+              options={[
+                { value: 'AA', label: 'AA' },
+                { value: 'AAA', label: 'AAA' },
+              ]}
+              value={level}
+              onChange={(v) => setLevel(v as ContrastLevel)}
             />
             {/* Was an "Auto-fix on-colors" toggle. The fix is real but has
                 never been observed to fire — a sweep of 96 hues across both
@@ -358,29 +296,18 @@ export function ColorPickerPopover({
 
           {/* Surprise me — the primary action of the popover, so it closes
               out the panel rather than sitting above the controls it affects. */}
-          <button
+          <Button
+            variant="primary"
+            size="sm"
+            className={styles.surprise}
             onClick={() => {
               const hex = nextSurpriseHex()
               setInput(hex)
               onChange(hex)
             }}
-            style={{
-              display: 'block',
-              width: '100%',
-              marginTop: 12,
-              padding: '7px 0',
-              background: 'var(--cds-button-primary)',
-              border: 'none',
-              borderRadius: 3,
-              color: 'var(--cds-text-on-color, #fff)',
-              fontSize: 11,
-              fontWeight: 600,
-              cursor: 'pointer',
-              letterSpacing: '0.04em',
-            }}
           >
-            ✦ Surprise me
-          </button>
+            Surprise me
+          </Button>
         </div>
       )}
     </div>
