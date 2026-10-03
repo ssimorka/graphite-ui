@@ -30,7 +30,7 @@
   align-items: center;
   gap: var(--graphite-space-06);
   height: 100%;
-  padding: 0 var(--graphite-space-06);
+  padding: 0 calc(var(--graphite-space-06) - 4px);
 }
 
 // ---------------------------------------------------------------- skip link
@@ -92,9 +92,9 @@
 
 // ---------------------------------------------------------------------- nav
 // Carbon hid its HeaderNavigation below lg (1056px) and offered a SideNav as
-// the fallback. The same split survives, with a Modal as the fallback: the
-// migration plan spends its one new-component budget on Accordion, so mobile
-// nav reuses Modal rather than introducing Sheet.
+// the fallback. The same split survives, with a tray as the fallback: site
+// chrome rather than a Sheet, since the migration plan spends its one
+// new-component budget on Accordion.
 .nav {
   display: none;
   min-width: 0;
@@ -318,7 +318,7 @@
 
 // --------------------------------------------------------------- mobile nav
 // NavigationMenu sizes its links for a dense list; reached by thumb in the
-// Modal panel they need a full touch target. This replaces the rule that used
+// tray they need a full touch target. This replaces the rule that used
 // to qualify Carbon's `.cds--side-nav a.cds--header__menu-item`, and is an
 // improvement on it: the target belongs to this panel, not to every nav on the
 // site, so it is scoped here rather than pushed into the component's own
@@ -345,6 +345,141 @@
   display: flex;
   align-items: center;
   min-height: 48px;
+}
+
+// -------------------------------------------------------------- mobile tray
+// Slides in from the left under the bar. The panel lands with a little
+// overshoot, then its groups cascade in behind it, one beat per group and a
+// shorter one per link. Out is a quick, plain slide: nobody wants to wait for
+// a menu they have finished with.
+$tray-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+// Hidden off the left edge, so the overshoot past zero shows more panel
+// rather than a sliver of page. The 12px left inset plus the links' own 8px
+// puts their text on the bar's 20px gutter.
+$tray-bleed: 2rem;
+
+.tray {
+  position: fixed;
+  inset: 4rem 0 0 0;
+}
+
+.tray[data-state='closed'] {
+  pointer-events: none;
+}
+
+.trayScrim {
+  position: absolute;
+  inset: 0;
+  background: var(--graphite-scrim);
+  animation: tray-fade-in var(--graphite-motion-base) var(--graphite-motion-ease) both;
+}
+
+.tray[data-state='closed'] .trayScrim {
+  animation: tray-fade-out 200ms ease-in both;
+}
+
+.trayPanel {
+  position: absolute;
+  inset: 0 auto 0 calc(#{$tray-bleed} * -1);
+  width: calc(min(20rem, 85vw) + #{$tray-bleed});
+  padding: var(--graphite-space-05) var(--graphite-space-05)
+    var(--graphite-space-08) calc(#{$tray-bleed} + var(--graphite-space-04));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--graphite-surface-elevated);
+  border-right: 1px solid var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+  animation: tray-in 560ms $tray-spring both;
+}
+
+.trayPanel:focus-visible {
+  outline: none;
+}
+
+.tray[data-state='closed'] .trayPanel {
+  animation: tray-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+// `--g` is the group's index, set inline; `--n` the link's within it.
+.trayGroup :where(li),
+.trayGroup .mobileGroupLabel {
+  animation: tray-item-in 420ms var(--graphite-motion-ease) both;
+  animation-delay: calc(140ms + var(--g, 0) * 70ms + var(--n, 0) * 30ms);
+}
+
+.trayGroup .mobileGroupLabel {
+  --n: -1;
+}
+
+@for $i from 1 through 12 {
+  .trayGroup :where(li:nth-child(#{$i})) {
+    --n: #{$i - 1};
+  }
+}
+
+@keyframes tray-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes tray-out {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes tray-item-in {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+@keyframes tray-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes tray-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+// The menu glyph spins in on each swap: a quarter turn and a pop.
+.menuIcon,
+.menuIconSpin {
+  display: flex;
+}
+
+.menuIconSpin {
+  animation: menu-icon-in 360ms $tray-spring both;
+}
+
+@keyframes menu-icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+}
+
+// Reduced motion trades the slide and the cascade for a plain fade.
+@media (prefers-reduced-motion: reduce) {
+  .trayPanel {
+    animation: tray-fade-in var(--graphite-motion-fast) linear both;
+  }
+
+  .tray[data-state='closed'] .trayPanel {
+    animation: tray-fade-out var(--graphite-motion-fast) linear both;
+  }
+
+  .trayGroup :where(li),
+  .trayGroup .mobileGroupLabel,
+  .menuIconSpin {
+    animation: none;
+  }
 }
 
 // Brand mark — kit header (11862:2928). A 22px image, cover-fitted. Sized on both axes so a failed
