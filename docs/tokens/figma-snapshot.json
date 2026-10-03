@@ -1933,18 +1933,18 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/neutral/400"
-                }
-              ]
-            },
-            "Dark": {
               "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Primitives/neutral/600"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#808084",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -2059,18 +2059,18 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/neutral/400"
-                }
-              ]
-            },
-            "Dark": {
               "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Primitives/neutral/600"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#808084",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -2227,18 +2227,18 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
+              "value": "#47474b",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/neutral/400"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
             "Dark": {
-              "value": "#2e2d31",
+              "value": "#808084",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/neutral/700"
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -2353,10 +2353,10 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#636367",
+              "value": "#47474b",
               "aliasChain": [
                 {
-                  "ref": "Graphite Primitives/neutral/500"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
@@ -2479,18 +2479,18 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/neutral/400"
-                }
-              ]
-            },
-            "Dark": {
               "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Primitives/neutral/600"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#808084",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -2605,18 +2605,18 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
-              "aliasChain": [
-                {
-                  "ref": "Graphite Primitives/neutral/400"
-                }
-              ]
-            },
-            "Dark": {
               "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Primitives/neutral/600"
+                }
+              ]
+            },
+            "Dark": {
+              "value": "#808084",
+              "aliasChain": [
+                {
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -4065,26 +4065,26 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
+              "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/400"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
             "Dark": {
-              "value": "#2e2d31",
+              "value": "#808084",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/700"
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -4181,26 +4181,26 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
+              "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/400"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
             "Dark": {
-              "value": "#2e2d31",
+              "value": "#808084",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/700"
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -7532,26 +7532,26 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
+              "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/400"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
             "Dark": {
-              "value": "#2e2d31",
+              "value": "#808084",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/700"
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
@@ -7561,26 +7561,26 @@
           "type": "COLOR",
           "values": {
             "Light": {
-              "value": "#808084",
+              "value": "#47474b",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Light"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/400"
+                  "ref": "Graphite Primitives/neutral/600"
                 }
               ]
             },
             "Dark": {
-              "value": "#2e2d31",
+              "value": "#808084",
               "aliasChain": [
                 {
                   "ref": "Graphite Semantic/state/primary-disabled-content",
                   "mode": "Dark"
                 },
                 {
-                  "ref": "Graphite Primitives/neutral/700"
+                  "ref": "Graphite Primitives/neutral/400"
                 }
               ]
             }
