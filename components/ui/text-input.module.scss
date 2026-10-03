@@ -4,20 +4,29 @@
 // Text input — docs/contracts/text-input.md
 //
 // The label and supporting text live here rather than in a wrapper: the kit
-// builds them into Text input as `Label text` and `Helper / Error text`
-// properties, and ships no standalone label or field component.
+// builds them into Text input as `Label text` and `Helper / Error / Warning
+// text` properties, and ships no standalone label or field component.
 //
-// The field shell is the shared one (_form-parts.scss): elevation-01 fill,
+// The field shell is the shared one (_field-shell.scss): elevation-01 fill,
 // a bottom-only outline-strong rule, an inside focus ring in the primary
 // family's focus colour.
 .wrap {
   @include shell.field-shell;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--graphite-space-03);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
   // A 16px inset, per the kit's Text input.
   padding: 0 var(--graphite-space-05);
+}
+
+// The value, any affixes and the status icon, 16px apart, as the kit's
+// `Text input` frame spaces its text and icon group.
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  min-width: 0;
 }
 
 .wrap:focus-within { @include shell.field-shell-focus; }
@@ -57,6 +66,20 @@
   color: var(--graphite-on-surface);
 }
 
+// The kit's status icon, 16px from the right edge: the triangle in the
+// state's colour, the "!" in the colour that reads on it.
+.status {
+  flex: none;
+
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warning .status {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
+}
+
 // Size is height only: the kit sets the value in Body/3 at every size.
 .sm { min-height: var(--graphite-space-07); }
 .md { min-height: var(--graphite-space-08); }
@@ -70,5 +93,68 @@
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
 
-.field:has(.input:disabled) :is(.label, .indicator, .help) { @include parts.field-dimmed; }
+// The kit's count: Caption/1 at the right end of the label row, 8px clear.
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  @include parts.field-label-above;
+
+  .label { margin-bottom: 0; }
+}
+
+.count {
+  @include parts.field-help;
+  flex: none;
+}
+
+.isDisabled :is(.label, .indicator, .help, .count) { @include parts.field-dimmed; }
+
+// ------------------------------------------------------------------- inline
+// The kit's Inline style: label, field and message in one row, 8 apart, the
+// label and message centred on the field. Built at the Fixed heights; the kit
+// draws Inline Medium at 48, which reads as a Carbon leftover.
+.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--graphite-space-03);
+
+  .label,
+  .labelRow { margin-bottom: 0; }
+
+  .wrap { flex: 1 1 auto; }
+
+  :is(.help, .error, .warningText) { flex: none; }
+}
+
+// -------------------------------------------------------------------- fluid
+// The kit's Text input - Fluid set: one 64px box, the label inside at the top,
+// 13/16 padding, 4 between label and value, and a plain outline rule on the
+// bottom rather than outline-strong.
+.fluid .wrap {
+  justify-content: flex-start;
+  gap: var(--graphite-space-02);
+  min-height: var(--graphite-space-10);
+  padding: 13px var(--graphite-space-05);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+}
+
+.fluid .wrap:focus-within { @include shell.field-shell-focus; }
+.fluid .errored,
+.fluid .errored:focus-within { @include shell.field-shell-error; }
+.fluid .wrap:has(.input:disabled) { @include shell.field-shell-disabled; }
+
+// The kit holds the value row at 18 with the 20px line overflowing it, which
+// is how its box comes to 64 (13 + 16 + 4 + 18 + 13).
+.fluid .row { height: 1.125rem; }
+
+.fluidLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+
+  .label { margin-bottom: 0; }
+}

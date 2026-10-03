@@ -1,9 +1,9 @@
 // Text input's own page parts: the forced Focus row. The component exposes no
 // data-slot hooks, so this reaches its field wrapper structurally (the span
-// that holds the input) and sets the same two declarations `.wrap:focus-within`
+// around the row that holds the input) and sets the same two declarations `.wrap:focus-within`
 // carries in components/ui/text-input.module.scss, through the same shared
 // mixin, so the forced row cannot drift from the real one. Nothing here
 // restyles it.
 @use '../../ui/field-shell' as shell;
 
-.forceFocus span:has(> input) { @include shell.field-shell-focus; }
+.forceFocus span:has(> span > input) { @include shell.field-shell-focus; }
