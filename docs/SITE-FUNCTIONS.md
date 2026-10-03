@@ -20,8 +20,8 @@ keeps the current counts.
 **`SiteHeader`** ([`components/site-header.tsx`](../components/site-header.tsx)),
 64px tall and fixed:
 - **Brand**, linking to `/`. Below 672px only the wordmark shows.
-- **Nav**: Docs (`/docs`), Components (`/gallery`), Patterns
-  (`/docs/theming#patterns`), Create (`/create`). Inline from 1056px. Below that a
+- **Nav**: Docs (`/docs`), Components (`/gallery`), Create (`/create`). Inline
+  from 1056px. Below that a
   Menu button opens a `Modal` holding the same links as a vertical
   `NavigationMenu`, plus the docs sidebar groups on docs pages.
 - **Search**: a "Search docs" field from 1056px and an icon button below it. Both
