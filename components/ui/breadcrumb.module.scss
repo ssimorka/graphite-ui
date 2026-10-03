@@ -1,12 +1,31 @@
 // Breadcrumb — docs/contracts/breadcrumb.md
 //
+// The kit's Breadcrumb (Graphite UI Kit 11479:54258) and its _Breadcrumb item
+// set: Body/3 throughout, link crumbs in primary and underlined, the current
+// page and the "/" separators in on-surface, 8px either side of a separator.
 // The separator is defined once here, not passed per instance, so every trail
 // in the product reads the same.
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+// The kit's Show Icon: a 16px glyph, on-surface, 8px before the first crumb.
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--graphite-on-surface);
+}
+
 .list {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  // 8, per the kit's Breadcrumb item.
+  // 8, per the kit's Breadcrumb wrapper.
   gap: var(--graphite-space-03);
   margin: 0;
   padding: 0;
@@ -14,54 +33,66 @@
   min-width: 0;
 }
 
-// Expanded on request, the full trail may wrap: the reader asked for every
-// crumb, and a trail pushed off the edge would hide them again.
-.expanded {
-  flex-wrap: wrap;
-}
-
 .crumb {
   display: inline-flex;
   align-items: center;
-  gap: var(--graphite-space-02);
+  // 8 from a label to its separator, per the kit's item frame.
+  gap: var(--graphite-space-03);
   min-width: 0;
 }
 
+// Underlined at rest, as the item set draws every link state. The composite
+// Breadcrumb overrides its first crumb to no underline, which reads as a slip
+// in one instance; the set is the more specific artefact.
 .link {
-  color: var(--graphite-on-surface-variant);
-  text-decoration: none;
+  color: var(--graphite-primary);
+  text-decoration: underline;
   white-space: nowrap;
 }
 
-.link:hover {
-  text-decoration: underline;
+.link:hover { color: var(--graphite-primary-hover); }
+.link:active { color: var(--graphite-on-surface); }
+
+// The kit's focus and active ring: 1px, outside, on the label. A 1px inline
+// pad keeps the ring off the glyphs; the matching negative margin keeps the
+// trail from moving when focus arrives.
+.link:focus-visible,
+.overflow:focus-visible {
+  outline: 1px solid var(--graphite-focus);
+  outline-offset: 0;
+  padding-inline: 1px;
+  margin-inline: -1px;
 }
 
-.link:focus-visible {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
-}
-
-// The overflow is a real button so the crumbs behind it can be reached; it
-// wears the link's look so the trail reads as one row of steps.
+// The overflow: the kit's 12px fi-rs-menu-dots, sitting on the text baseline
+// (a 4px top pad in a 16px box) rather than centred, in link colour. It opens
+// a Menu of the hidden crumbs.
 .overflow {
+  display: inline-flex;
+  align-items: flex-end;
+  height: 1rem;
   padding: 0;
   border: 0;
   background: none;
-  font: inherit;
+  color: var(--graphite-primary);
   cursor: pointer;
 }
 
-// The current page: full strength, and heavier, so it reads as a destination
-// rather than another step.
+.overflow:hover {
+  color: var(--graphite-primary-hover);
+  box-shadow: inset 0 -1px 0 var(--graphite-primary-hover);
+}
+
+// The current page: on-surface and Regular, as the kit draws it. The kit's
+// Current state also keeps the link underline, which would make "here" look
+// clickable; recorded as a slip rather than copied.
 .current {
   color: var(--graphite-on-surface);
-  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .separator {
-  color: var(--graphite-on-surface-variant);
+  color: var(--graphite-on-surface);
 }

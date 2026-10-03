@@ -24,12 +24,14 @@
 }
 
 .forceHover a {
-  text-decoration: underline;
+  color: var(--graphite-primary-hover);
 }
 
 // Mirrors `.link:focus-visible` on the first crumb only, so the row shows one
 // ring as a keyboard reader would see it.
 .forceFocus li:first-child a {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
+  outline: 1px solid var(--graphite-focus);
+  outline-offset: 0;
+  padding-inline: 1px;
+  margin-inline: -1px;
 }
