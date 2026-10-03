@@ -1,6 +1,6 @@
 ---
 component: Text input
-version: 2.1.0
+version: 2.2.0
 wave: 2
 slots:
   - name: Value
@@ -22,11 +22,18 @@ props:
   - name: size
     values: [sm, md, lg]
   - name: state
-    values: [default, focus, disabled, error, invalid]
+    values: [default, focus, disabled, error, invalid, warning]
+  - name: layout
+    values: [fixed, inline, fluid]
+    notes: The kit's Style axis and its second set. Fixed puts the label above the field; Inline beside it, with the message to the field's right; Fluid is the kit's Text input - Fluid, one 64px box with the label inside. Inline is built at the Fixed heights (32/40/48); the kit's Inline Medium at 48 reads as a Carbon leftover.
   - name: label
     notes: Required. There is no shape in which this control exists unlabelled, and no wrapper left to supply one.
   - name: helpText
-    notes: Supporting copy. Suppressed while errorText is present.
+    notes: Supporting copy. Suppressed while errorText or warningText is present.
+  - name: warningText
+    notes: Its presence resolves the warning state, the same way errorText resolves error, and an error outranks it. The edge stays the rest rule; the warning is carried by the status icon and the message.
+  - name: showCount
+    notes: The kit's Show count. A running "n/max" at the right of the label row, driven by maxLength.
   - name: errorText
     notes: Its presence resolves the error state, so error text and error styling cannot be shown apart. This was Field's guarantee and it survives Field.
 tokens:
@@ -37,7 +44,13 @@ tokens:
   - name: primary
     usage: The focus ring, through the family's focus step: 2px inside all four sides.
   - name: danger
-    usage: The error ring, 2px inside, and the error text.
+    usage: The error ring, 2px inside, the error text, and the error status icon's triangle.
+  - name: warning
+    usage: The warning status icon's triangle.
+  - name: on-warning
+    usage: The "!" on the warning status icon.
+  - name: background
+    usage: The "!" on the error status icon, which the kit cuts out of the triangle to show what is behind it.
   - name: on-surface
     usage: Value text.
   - name: text
@@ -60,5 +73,6 @@ prohibitions:
 - **Props:** type (text, email, password, number, etc.), size (sm, md, lg), state (default, focus, disabled, error, invalid).
 - **Tokens:** `elevation-01` fill, `on-surface` value text in Body/3 at every size, an `outline-strong` rule on the bottom edge only (and as the placeholder colour), the `primary` family's focus ring and a `danger` error ring, both 2px inside; the spacing scale for padding and height.
 - **The shell is the kit's** (governance rule 7, measured in #220): a bottom-only rule rather than a box, an inside ring rather than an outside one, and one type size across sizes. Disabled keeps the fill, drops the rule and dims the label and helper with the value. Read-only (the native attribute) clears the fill and quietens the rule to `outline-subtle`. The shell is shared with Text area and Select through `_field-shell.scss`.
+- **Status, count and layouts** (#225): Error and Warning draw the kit's 16px status icon (Warning--alt--filled, a triangle with the "!" cut out) 16px from the right edge, and the value, affixes and icon sit 16 apart. Warning text is Helper Text in `on-surface`; the colour is carried by the icon. `showCount` puts the kit's count at the right of the label row. `layout` gives the kit's Inline style and its Fluid set.
 - **Composition rules:** Focus is the primary family's focus ring, 2px inside, the geometry Button uses. Error is the same ring in danger and holds through focus.
 - **Prohibitions:** No placeholder text used as a label substitute. The label is required on the control itself, never optional as a stand-in.
