@@ -451,8 +451,8 @@ export function SearchPalette({
               page.
             </p>
             <Button variant="secondary" size="sm" onClick={load}>
-              <Renew size={16} aria-hidden="true" />
               Try again
+              <Renew size={16} aria-hidden="true" />
             </Button>
             <ul className={styles.quickLinks}>
               {START.map(([href, title]) => (

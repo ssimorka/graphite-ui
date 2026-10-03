@@ -12,15 +12,26 @@ const HOOK: Record<ButtonVariant, string> = {
   secondary: styles.isSecondary,
   ghost: styles.isGhost,
   danger: styles.isDanger,
+  'danger-ghost': styles.isDangerGhost,
+}
+
+const NAME: Record<ButtonVariant, string> = {
+  primary: 'Primary',
+  secondary: 'Secondary',
+  ghost: 'Ghost',
+  danger: 'Danger',
+  'danger-ghost': 'Danger ghost',
 }
 
 // One row of the state matrix: every variant in the same state, so a reader
 // compares the tone steps across variants rather than one button at a time.
+// Each carries the kit's trailing icon, as the kit's Text + Icon type does.
 const row = (props: { disabled?: boolean }) => (
   <div className={styles.row}>
-    {(['primary', 'secondary', 'ghost', 'danger'] as const).map((v) => (
+    {(Object.keys(NAME) as ButtonVariant[]).map((v) => (
       <Button key={v} variant={v} className={HOOK[v]} disabled={props.disabled}>
-        {v[0].toUpperCase() + v.slice(1)}
+        {NAME[v]}
+        <Add />
       </Button>
     ))}
   </div>
@@ -45,12 +56,13 @@ export function buttonDoc(): ComponentDocConfig {
     anatomyLede:
       'One slot. The label and any icons are children, so a caller composes them instead of picking from a fixed leading and trailing pair. The wide right inset is the kit’s: it reserves room for a trailing icon.',
     variantsLede:
-      'Two props carry the kit’s axes. Variant says how much the action matters; size sets the height, and the icon size makes the button square.',
+      'Two props carry the kit’s axes. Variant says how much the action matters; size sets the height, and the icon size makes the button square. On the filled styles a trailing icon sits in the slot the wide right inset reserves, 16px from the edge; on the ghost styles it follows the label.',
     variants: [
-      { label: 'Variant: Primary', node: <Button variant="primary">Save changes</Button> },
-      { label: 'Variant: Secondary (default)', node: <Button>Export</Button> },
-      { label: 'Variant: Ghost', node: <Button variant="ghost">Cancel</Button> },
-      { label: 'Variant: Danger', node: <Button variant="danger">Delete project</Button> },
+      { label: 'Variant: Primary', node: <Button variant="primary">Save changes<Add /></Button> },
+      { label: 'Variant: Secondary (default)', node: <Button>Export<Add /></Button> },
+      { label: 'Variant: Ghost', node: <Button variant="ghost">Cancel<Add /></Button> },
+      { label: 'Variant: Danger', node: <Button variant="danger">Delete project<Add /></Button> },
+      { label: 'Variant: Danger ghost', node: <Button variant="danger-ghost">Remove<Add /></Button> },
       { label: 'Size: Small', node: <Button size="sm">Export</Button> },
       { label: 'Size: Medium (default)', node: <Button size="md">Export</Button> },
       { label: 'Size: Large', node: <Button size="lg">Export</Button> },
@@ -84,7 +96,7 @@ export function buttonDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Keyboard', 'A native button element, so Enter and Space both activate it. The type defaults to button, so it will not submit a form unless you ask it to.'],
-      ['Focus', <>A 2px ring in <code>--graphite-focus</code>, offset 2px, on <code>:focus-visible</code>. A mouse click does not show it; a keyboard does.</>],
+      ['Focus', <>The kit’s ring, on <code>:focus-visible</code>: 2px inside the edge in the style’s own focus colour (<code>--graphite-primary-focus</code>, <code>-secondary-focus</code> or <code>-danger-focus</code>), with a 1px line of the page background inside it on the filled styles. A mouse click does not show it; a keyboard does. In forced-colours mode a system ring replaces it.</>],
       ['Labels', 'The icon size changes the shape, never the naming requirement. The component does not check for an aria-label, so the caller must pass one.'],
       ['Disabled', 'Uses the native disabled attribute, which removes the button from the tab order. If a reader needs to learn why an action is unavailable, say so in text nearby.'],
       ['Contrast', 'Every filled style puts on-primary on its fill, and those pairs are measured at the theme’s target, AA or AAA.'],
@@ -92,7 +104,7 @@ export function buttonDoc(): ComponentDocConfig {
     ],
     parityLede: `The kit's Button page ships ${kit?.variants ?? 'many'} variants in ${kit?.sets ?? 'one'} set. The code exposes ${props} props. This table is where those two facts are reconciled instead of quietly diverging.`,
     parity: [
-      ['Style', 'Primary · Secondary · Ghost · Danger primary · Danger ghost', 'variant', 'Four of five. Danger primary is danger. Danger ghost has no counterpart in code.'],
+      ['Style', 'Primary · Secondary · Ghost · Danger primary · Danger ghost', 'variant', 'All five. Danger primary is danger; Danger ghost is danger-ghost. The kit binds Secondary’s focus ring to success’s, which the code reads as a slip and draws in secondary’s.'],
       ['Size', 'Small · Medium · Large · Extra large · 2x large · Expressive', 'size', 'Small, Medium and Large map to sm, md and lg at the kit’s 32, 42 and 50px. The three larger sizes have no counterpart.'],
       ['Type', 'Text + Icon · Icon only', 'size="icon"', 'Icon only is the icon size. The kit sizes it per Size; the code has one square, 40px.'],
       ['State', 'Enabled · Hover · Active · Focus · Disabled · Skeleton', '—', 'Pseudo-classes in code, per governance rule 7. Disabled is the native attribute. Skeleton has no counterpart.'],
