@@ -208,6 +208,11 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--graphite-space-04);
+  transition: transform 300ms ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .previewRow {
@@ -271,6 +276,16 @@
 
 .cardLinked:hover {
   --glow: 75%;
+
+  // The specimen drops 4px, as on the docs' "next" cards. A transform is safe
+  // here: the link and its overlay live in the foot, not in the preview.
+  .previewInner {
+    transform: translateY(4px);
+
+    @media (prefers-reduced-motion: reduce) {
+      transform: none;
+    }
+  }
 
   .cta {
     background: var(--graphite-primary-hover);
