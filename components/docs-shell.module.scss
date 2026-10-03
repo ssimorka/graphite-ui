@@ -17,8 +17,45 @@
 
 // Small: 20 / 16 / 40. Medium: 28 / 24 / 56. XL: 40 / 48 / 80.
 .content {
+  position: relative;
+  // Keeps the wash's negative z-index inside this column, under its text.
+  isolation: isolate;
   min-width: 0;
   padding: 1.25rem calc(var(--graphite-space-06) - 4px) var(--graphite-space-08);
+}
+
+// The header wash: the accent mesh behind the breadcrumb, title and lede,
+// fading to the plain page by 30rem so body text never sits on it. It follows
+// the source and the mode because the mesh does.
+.wash {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 30rem;
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+
+  // Light mode mirrors the mesh, which turns its glow into a mid-tone purple
+  // right under the lede's dark grey: about 4:1 at full strength, and it read
+  // as muddy. At 40% the ground stays near the page colour and the lede is
+  // back around 9:1, with the tint still there.
+  :global(.cds--white) & {
+    opacity: 0.4;
+  }
+}
+
+// The mesh is the kit's 3126 x 1885 canvas with its glow near (2100, 1250).
+// Pinned so that glow lands at the top right of the column, with the dark
+// streaks off to the left, rather than centred where the column would only
+// see the dark middle of it.
+// Scoped under .wash so it outranks the mesh's own centring whichever
+// stylesheet loads last.
+.wash .washMesh {
+  top: -1050px;
+  left: calc(100% - 2050px);
+  transform: none;
 }
 
 // ------------------------------------------------------------------- rails

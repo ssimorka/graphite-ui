@@ -3,6 +3,11 @@
 // The kit lays a 48px hairline grid behind the whole main column. Two
 // gradients do it here rather than a hundred positioned rules; the line colour
 // is surfaceVariant, which is this system's binding for outline-subtle.
+//
+// The grid is fixed to the viewport, so the page scrolls over a ground that
+// stays put: a quiet parallax that also sells the cards as lifted off it.
+// iOS Safari ignores fixed backgrounds and scrolls it with the page instead,
+// which is just the old behaviour.
 
 .index {
   display: flex;
@@ -14,6 +19,7 @@
     linear-gradient(to right, var(--graphite-surface-variant) 1px, transparent 1px),
     linear-gradient(to bottom, var(--graphite-surface-variant) 1px, transparent 1px);
   background-size: 48px 48px;
+  background-attachment: fixed;
 
   @media (min-width: 672px) {
     margin: -1.75rem calc(-1 * var(--graphite-space-06)) 0;
@@ -30,10 +36,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-05);
-  // The grid is decoration; text over it needs the page colour behind it.
-  > * {
-    background: var(--graphite-background);
-  }
 }
 
 .title {
@@ -149,7 +151,6 @@
 .sorted {
   width: fit-content;
   margin: 0;
-  background: var(--graphite-background);
   font-size: var(--graphite-text-body-2-size);
   line-height: var(--graphite-text-body-2-line-height);
   color: var(--graphite-on-surface-variant);
@@ -171,6 +172,11 @@
   min-height: 16.875rem;
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-surface-variant);
+  // The same lift as the Create page's samples: a tight contact shadow and a
+  // wide soft one, black at low strength so it reads in both themes.
+  box-shadow:
+    0 1px 2px color-mix(in srgb, #000 12%, transparent),
+    0 8px 24px color-mix(in srgb, #000 14%, transparent);
 }
 
 .preview {

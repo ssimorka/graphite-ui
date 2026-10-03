@@ -21,7 +21,7 @@ export default function GalleryPage() {
   const contracts = readContracts()
   return (
     <main id="main-content" className="page-main">
-      <DocsShell nav={DOCS_NAV}>
+      <DocsShell nav={DOCS_NAV} wash={false}>
         <ComponentsIndex
           contracts={contracts}
           stats={readKitStats()}

@@ -42,7 +42,14 @@ const RECIPE: Record<MeshFamily, { a: number; b: number; c: number }> = {
   accent: { a: STOP[500], b: STOP[100], c: STOP[900] },
 }
 
-export function MeshGradient({ family }: { family: MeshFamily }) {
+export function MeshGradient({
+  family,
+  className,
+}: {
+  family: MeshFamily
+  /** Repositions the canvas, as the docs header wash does. */
+  className?: string
+}) {
   const { sourceHex, theme } = useTheme()
   const stops = makeRamps(sourceHex || COVER_SOURCE_HEX)[family].stops
   const light = theme === 'white'
@@ -58,7 +65,7 @@ export function MeshGradient({ family }: { family: MeshFamily }) {
 
   return (
     <div
-      className={`${styles.mesh} ${styles[family]}`}
+      className={`${styles.mesh} ${styles[family]} ${className ?? ''}`}
       style={vars}
       aria-hidden="true"
     />
