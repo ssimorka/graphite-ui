@@ -41,7 +41,6 @@ export function ReportBugCard() {
         label="Steps to reproduce"
         placeholder={'1. Go to\n2. Click on\n3. Observe...'}
         rows={5}
-        size="lg"
       />
       <div className={styles.foot}>
         <Button size="lg">Attach File</Button>

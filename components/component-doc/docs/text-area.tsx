@@ -3,13 +3,17 @@ import type { ComponentDocConfig } from '../types'
 import styles from './text-area.module.scss'
 import { TextAreaPreview } from './text-area-preview'
 
-const cell = (props: { state?: 'disabled' | 'invalid'; errorText?: string }) => (
+const cell = (props: { state?: 'disabled' | 'invalid'; errorText?: string; warningText?: string; readOnly?: boolean }) => (
   <TextArea
     label="Label"
     placeholder="Placeholder text"
-    helpText={props.errorText ? undefined : 'Helper text'}
+    maxLength={100}
+    helpText={props.errorText || props.warningText ? undefined : 'Helper text'}
     state={props.state}
     errorText={props.errorText}
+    warningText={props.warningText}
+    readOnly={props.readOnly}
+    defaultValue={props.readOnly ? 'Read-only value' : undefined}
   />
 )
 
@@ -33,27 +37,30 @@ export function textAreaDoc(): ComponentDocConfig {
         label="Label"
         defaultValue="Value. The field grows as you drag its corner, up to a fixed height, and scrolls after that."
         helpText="Supporting text"
+        maxLength={300}
       />
     ),
     variantsLede:
-      'Size sets the starting height and the type size. Resize decides whether the reader can drag it taller; it can never be dragged wider.',
+      'One height, as the kit draws it: 142 at least, the value in Body/3. Layout gives the kit’s two sets, Default and Fluid. Resize decides whether the reader can drag it taller; it can never be dragged wider. The count shows whenever maxLength is set.',
     variants: [
-      { label: 'Size: Small', node: <TextArea size="sm" label="Label" placeholder="Placeholder text" /> },
-      { label: 'Size: Medium', node: <TextArea size="md" label="Label" placeholder="Placeholder text" /> },
-      { label: 'Size: Large', node: <TextArea size="lg" label="Label" placeholder="Placeholder text" /> },
+      { label: 'Layout: Fixed (default)', node: <TextArea label="Label" placeholder="Placeholder text" maxLength={100} /> },
+      { label: 'Layout: Fluid', node: <TextArea layout="fluid" label="Label" placeholder="Placeholder text" maxLength={100} /> },
+      { label: 'Fluid with an error', node: <TextArea layout="fluid" label="Label" placeholder="Placeholder text" maxLength={100} errorText="Error message" /> },
       { label: 'Resize: None', node: <TextArea resize="none" label="Label" placeholder="Placeholder text" /> },
     ],
     statesLede:
-      'Focus is forced here with the declarations :focus-visible carries; it is never a prop. There is no Hover row because the field has no hover style. Error comes from passing errorText, and Invalid is the same styling without a message.',
+      'Focus is forced here with the declarations :focus-visible carries; it is never a prop. There is no Hover row because the field has no hover style. Error and Warning come from errorText and warningText and draw the kit’s status icon in the top-right corner; Invalid is the error ring without a message. Read-only is the native attribute.',
     states: [
       { label: 'Enabled', node: cell({}) },
       { label: 'Focus', node: cell({}), className: styles.forceFocus },
       { label: 'Disabled', node: cell({ state: 'disabled' }) },
       { label: 'Error', node: cell({ errorText: 'Error message' }) },
+      { label: 'Warning', node: cell({ warningText: 'Warning message' }) },
+      { label: 'Read-only', node: cell({ readOnly: true }) },
       { label: 'Invalid', node: cell({ state: 'invalid' }) },
     ],
     dos: [
-      'Pick the size from the answer you expect. A large field invites a longer answer, a small one a sentence.',
+      'Set rows when the answer you expect is longer than the kit’s 142px field. It only ever grows taller.',
       'Leave resize on vertical unless the layout below the field cannot move.',
       'Say in the helper text what a good answer includes, like steps to reproduce, rather than repeating the label.',
       'Pass errorText to show an error, so the message and the red ring arrive together.',
@@ -66,16 +73,17 @@ export function textAreaDoc(): ComponentDocConfig {
     ],
     a11y: [
       ['Labels', 'The label is a real label element tied to the textarea by id, generated when you do not pass one.'],
-      ['Supporting text', 'Help or error text is linked through aria-describedby. Error text carries role="alert", so it is announced when it appears.'],
+      ['Supporting text', 'Help, warning or error text is linked through aria-describedby. Error text carries role="alert", so it is announced when it appears. The status icon and the count are decorative.'],
       ['Validity', 'Error and Invalid both set aria-invalid. The required asterisk is hidden; the native required attribute is what gets read.'],
       ['Focus', 'The kit’s 2px ring inside the field on :focus-visible, drawn by the browser’s real focus rather than a prop.'],
       ['Overflow', 'Past its maximum height the field scrolls, so long text stays reachable by keyboard and by scroll without moving the page.'],
     ],
     parity: [
-      ['State', 'Enabled · Focus · Error · Warning · Disabled · Read-only · Skeleton', 'state', 'Disabled and Error map to prop values, and Error also follows errorText. Focus is :focus-visible, per governance rule 7. Warning and Skeleton have no counterpart. readOnly passes through but has no style of its own.'],
+      ['State', 'Enabled · Focus · Error · Warning · Disabled · Read-only · Skeleton', 'state', 'Error and Warning follow errorText and warningText and draw the kit’s status icon. Disabled maps to the prop; Read-only is the native readOnly. Focus is :focus-visible, per governance rule 7. Skeleton has no counterpart.'],
+      ['Show count', 'Boolean, on by default', 'showCount', 'On by default, as the kit has it, and shown whenever maxLength is set.'],
       ['Text filled', 'False · True', '—', 'Runtime state: whether the field has a value.'],
-      ['Fluid (set)', 'Enabled → Read-only', '—', 'The kit’s second public set, with the label inside the field. No counterpart in code.'],
-      ['Size', '—', 'size', 'The kit draws one height. The code keeps three, inherited from Text input: where the kit has no opinion, the code keeps its own.'],
+      ['Fluid (set)', 'Enabled → Read-only', 'layout="fluid"', 'The kit’s second public set: the label row inside the box, and the message inside too, under a divider.'],
+      ['Size', '—', '—', 'None. The kit draws one height, 142 at least, with the value in Body/3; the size prop went in 3.0.0.'],
       ['Resize handle', 'Private build block', 'resize', 'The kit draws the handle; the code turns it on or off. Vertical is the only direction either one offers.'],
     ],
     related: [

@@ -3,47 +3,129 @@
 
 // Text area — docs/contracts/text-area.md
 //
+// The kit's Text area - Default (Graphite UI Kit 14494:263111): one field, no
+// Size axis, 142px at least, Body/3, inset 16 on all four sides, under the
+// shared field shell (_field-shell.scss) carried by the wrapper so the status
+// icon can sit inside it.
+//
 // Growth stops at max-height and hands over to a scrollbar. The contract
 // forbids growing past a defined maximum without an explicit scroll
-// affordance, so the two are set together and neither is optional.
+// affordance, so the two are set together and neither is optional. The kit
+// draws no maximum; 320 is the code's own, set well clear of the kit's 142
+// minimum so the field can actually grow.
+.wrap {
+  @include shell.field-shell;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.wrap:focus-within { @include shell.field-shell-focus; }
+
+.errored,
+.errored:focus-within { @include shell.field-shell-error; }
+
+.wrap:has(.textarea:disabled) { @include shell.field-shell-disabled; }
+
+.wrap:has(.textarea:read-only:not(:disabled)) { @include shell.field-shell-readonly(outline-subtle); }
+
 .textarea {
   display: block;
   width: 100%;
-  max-height: var(--graphite-space-13);
+  // The kit's `_Text area min-height`: 142.
+  min-height: 8.875rem;
+  max-height: calc(var(--graphite-space-13) * 2);
   overflow-y: auto;
-  // The kit insets Text area evenly at 16 on all four sides.
   padding: var(--graphite-space-05);
-  font-family: inherit;
-  // The shared field shell (_form-parts.scss).
-  @include shell.field-shell;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
 }
 
-.textarea:focus-visible { @include shell.field-shell-focus; }
+.textarea:focus { outline: none; }
 
-.errored,
-.errored:focus-visible { @include shell.field-shell-error; }
-
-.textarea:disabled { @include shell.field-shell-disabled; }
-
-.textarea:read-only:not(:disabled) { @include shell.field-shell-readonly(outline-subtle); }
+.textarea:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
 
 .textarea::placeholder { @include shell.field-placeholder; }
 
-.vertical { resize: vertical; }
-.none { resize: none; }
+// The status icon sits 16 from the top and the right, and the text column
+// gives it that room: 16 + 16 + 16.
+.withStatus { padding-right: var(--graphite-space-09); }
 
-// Size is height only: the kit sets the value in Body/3 at every size.
-.sm { min-height: var(--graphite-space-09); }
-.md { min-height: var(--graphite-space-10); }
-.lg { min-height: var(--graphite-space-11); }
+.status {
+  position: absolute;
+  top: var(--graphite-space-05);
+  right: var(--graphite-space-05);
+
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warning .status {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
+}
+
+// The native grip. The kit draws an 8px diagonal in onSurfaceVariant, which
+// only a non-standard ::-webkit-resizer could style, so the browser's own
+// stands in for it.
+.vertical .textarea { resize: vertical; }
+.none .textarea { resize: none; }
 
 .field { @include parts.field-stack; }
-.label {
-  @include parts.field-label;
-  @include parts.field-label-above;
-}
+.label { @include parts.field-label; }
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
 
-.field:has(.textarea:disabled) :is(.label, .indicator, .help) { @include parts.field-dimmed; }
+// The label row: the label, and the kit's count at the right end after 8.
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  @include parts.field-label-above;
+}
+
+.count {
+  @include parts.field-help;
+  flex: none;
+}
+
+.isDisabled :is(.label, .indicator, .help, .count) { @include parts.field-dimmed; }
+
+// -------------------------------------------------------------------- fluid
+// The kit's Text area - Fluid: the label row inside the box (13 from the top,
+// 16 in), the text 4 below it with no top inset, and the message inside the
+// box too, under a divider, with the status icon at the end of its row.
+.fluid .labelRow {
+  margin-bottom: 0;
+  padding: 13px var(--graphite-space-05) 0;
+}
+
+.fluid .textarea {
+  min-height: 6.3125rem;
+  margin-top: var(--graphite-space-02);
+  padding-top: 0;
+}
+
+.fluidMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  // The kit's divider frame: 4 below the text, 9 above the rule, 4 + 4 under
+  // it, then the message row with 4 beneath. 13 + 1 + 8 + 16 + 8 = 46.
+  margin: 13px var(--graphite-space-05) var(--graphite-space-03);
+  padding-top: var(--graphite-space-03);
+  border-top: 1px solid var(--graphite-outline-subtle);
+
+  > :first-child { flex: 1; }
+
+  .status { position: static; }
+}
