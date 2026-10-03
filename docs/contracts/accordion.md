@@ -1,6 +1,6 @@
 ---
 component: Accordion
-version: 1.0.0
+version: 1.1.0
 wave: 4
 slots:
   - name: Trigger
@@ -40,20 +40,18 @@ props:
     type: string
     notes: Merged after the variant recipe, so a caller can extend without forking.
 tokens:
-  - name: surface
-    usage: Panel and trigger background.
   - name: on-surface
-    usage: Trigger label.
-  - name: on-surface-variant
-    usage: Panel body copy, and the indicator glyph.
-  - name: surface-variant
-    usage: The rule between items, the outer border when flush is false, and the trigger hover background. The kit's outlineSubtle binds surfaceVariant in this system, so all three are one role. Hover is a tone step on the resting fill, never a new color.
+    usage: Trigger label, panel copy and the indicator glyph, all Text/text-primary and Icon/icon-primary in the kit.
+  - name: outline
+    usage: The rule between items and the outer rule when flush is false, through its subtle step (the kit's Border/border-subtle-00).
+  - name: elevation
+    usage: The trigger's hover fill, elevation-02 (the kit's Layer/layer-hover-01). The item itself is transparent.
   - name: primary
-    usage: The focus ring on the trigger, through the page-level focus variable.
+    usage: The focus ring on the trigger, through the page-level focus variable, and the disabled title, copy and indicator, through its disabled-content step.
   - name: spacing
     usage: Trigger and panel padding.
   - name: text
-    usage: Trigger label and panel copy, on the body ladder.
+    usage: Trigger label and panel copy, both Body/3 at every size; size changes the trigger height only.
   - name: motion
     usage: The panel's open and close transition, on the settle curve.
 composition_rules:
@@ -71,7 +69,7 @@ prohibitions:
 ### Accordion
 - **Slots:** Trigger (required, the `title` of an item, or the trigger part when composing by hand), Indicator (required), Panel (required), Panel control (optional, one control inside the panel).
 - **Props:** type (single, multiple), collapsible, size (sm, md, lg), flush, align (left, right), className.
-- **Tokens:** `surface`, `on-surface`, `on-surface-variant`, `surface-variant` for the fills, text and rules; `primary` only for the focus ring; `spacing`, `text` and `motion` for geometry and the transition.
+- **Tokens:** `on-surface` for the title, copy and indicator; `outline-subtle` for the rules; `elevation-02` for the hover fill on a transparent item; `primary` for the focus ring and the disabled tone; `spacing`, `text` (Body/3) and `motion` for geometry, type and the transition.
 - **Composition rules:** A trigger and its panel are one pair, labelled to each other. `multiple` for independent panels, `single` where opening one makes the others irrelevant.
 - **Prohibitions:** No hiding required content, no nesting, no non-button trigger, no open state carried by the indicator alone, no hardcoded motion.
 
@@ -79,4 +77,4 @@ prohibitions:
 The kit gives the optional panel control the name of its instance-swap slot. This contract names it for what it is, because `drift-check` treats a capitalised word that matches a component export as a dependency the contract must declare, and that word is also the name of a utility export.
 
 ### Where this came from
-Adopted under rule 6's demand test: the home page's FAQ used Carbon's Accordion, and it is the one new contract `docs/SHADCN-MIGRATION.md` budgets for. The shape is the kit's Site design (Graphite UI Site 11814:17, "Component page — Accordion"), which draws Size (Small, Medium, Large), Alignment (Right, Left), Flush and Expanded across 5 sets and 120 variants. The Graphite kit has no governed Accordion set yet, so under rule 8 this contract is authoritative until it does.
+Adopted under rule 6's demand test: the home page's FAQ used Carbon's Accordion, and it is the one new contract `docs/SHADCN-MIGRATION.md` budgets for. The shape is the kit's Site design (Graphite UI Site 11814:17, "Component page — Accordion"), which draws Size (Small, Medium, Large), Alignment (Right, Left), Flush and Expanded across 5 sets and 120 variants. The kit now has that set, `Accordion item` (`2154:8478`, 120 variants), so rule 8 question 1 applies and the kit wins (#222): title and copy are Body/3 on-surface, the indicator is the kit's `fi-rs-angle-small-down` on-surface, hover is elevation-02, the item is transparent, flush keeps each item's top rule and drops only the inset, and a disabled item dims its copy. One kit slip is recorded rather than copied: the kit leaves the disabled chevron at full strength, and the code dims it with the title.
