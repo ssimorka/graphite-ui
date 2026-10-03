@@ -93,7 +93,10 @@ a browser result.
 - **The kit contradicts itself, and rule 7 has a tie-break for it.** Three
   times in one pass: the type specimen says `Input Label` is 12/12 while every
   component renders 12/16; `surfaceElevated` is described as the overlay
-  surface while those overlays bind `Layer/layer-01`; and the kit is simply
+  surface while those overlays bound `Layer/layer-01` (since resolved:
+  `layer-01` now aliases `elevation/01`, the same stops, so overlays bind
+  `elevation-01` plus the kit's shadow, with no edge — `overlay.md` 2.0.0,
+  D2 on #219); and the kit is simply
   silent where the code has behaviour Figma cannot express. The rule is *the
   more specific artefact wins*, and *where the kit has no opinion the code
   keeps its own* — see "When the kit is not of one mind" in

@@ -179,6 +179,13 @@
   // which is why the scrim stayed put while every other role moved.
   --graphite-scrim: rgb(3 3 5 / 0.7);
 
+  // The overlay lift: the kit's `Shadows/Menu` effect style, 0 2 6 at 30%
+  // black, on Menu and Popover. It is what separates an overlay from the page
+  // in Light, where elevation-01 equals the ground, so overlays draw no edge
+  // (overlay.md 2.0.0). Fixed rather than generated: the kit's style is plain
+  // black, in both themes.
+  --graphite-shadow-overlay: 0 2px 6px rgb(0 0 0 / 0.3);
+
   // Families. font-1 and font-2 share a value today but are two roles,
   // per the kit: font-1 is display, headings and titles 1-2; font-2 is
   // titles 3-5, body and component text. Keeping both means the pair can

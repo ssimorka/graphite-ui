@@ -41,10 +41,12 @@ being decided", not "more recently edited".
   form component renders its label at 12/16. The components won — they are
   what the label actually looks like. See #137.
 - `surfaceElevated`'s description reads *"Shared overlay surface: Tooltip,
-  Popover, Dropdown Menu, Dialog"*, while those same Carbon component sets fill
-  with `Layer/layer-01`, which resolves to `surface`. The variable won — it was
-  authored for those four in #92, where the bindings are un-migrated Carbon.
-  See #139 and `overlay.md`.
+  Popover, Dropdown Menu, Dialog"*, while those same component sets filled
+  with `Layer/layer-01`, which then resolved to `surface`. The variable won,
+  because it was authored for those four in #92 (#139). **Since resolved in
+  the kit:** `layer-01` now resolves to `elevation/01`, on the same stops as
+  `surfaceElevated`, so the two agree and overlays bind `elevation-01` with
+  the kit's shadow and no edge. See `overlay.md` 2.0.0.
 
 **Where the kit has no opinion, the code keeps its own.** This is not a
 disagreement and rule 7 does not reach it. The kit models static frames, so it

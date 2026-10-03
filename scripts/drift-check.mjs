@@ -135,6 +135,7 @@ async function readTokenModel() {
   for (const v of statics.density) bind('density', v)
   for (const v of statics.motion) bind('motion', v)
   for (const v of statics.scrim) bind('scrim', v)
+  for (const v of statics.shadow) bind('shadow', v)
   return { roleToVars, varToRole }
 }
 
@@ -157,6 +158,7 @@ function readStaticVars() {
     density: decls(/--graphite-density-[a-z-]+(?=\s*:)/g),
     motion: decls(/--graphite-motion-[a-z-]+(?=\s*:)/g),
     scrim: decls(/--graphite-scrim(?=\s*:)/g),
+    shadow: decls(/--graphite-shadow-[a-z-]+(?=\s*:)/g),
   }
 }
 
