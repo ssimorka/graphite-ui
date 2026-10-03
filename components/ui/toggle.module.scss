@@ -58,7 +58,10 @@
 }
 
 .native:checked + .track .thumb {
-  transform: translateX(calc(var(--graphite-space-09) - var(--graphite-space-05)));
+  // Track width less both insets less the thumb, which is the track's height
+  // less both insets: width - height, 24px. It was width - 16px, 8px too far,
+  // which pushed the thumb 5px past the track's right edge.
+  transform: translateX(calc(var(--graphite-space-09) - var(--graphite-space-06)));
 }
 
 .native:focus-visible + .track {
