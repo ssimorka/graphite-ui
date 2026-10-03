@@ -2,7 +2,9 @@
 .scrim {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  // Above the site header (8000), below search (9000) and the copy toast
+  // (9500), so a copy from inside the dialog still shows its confirmation.
+  z-index: 8500;
   display: flex;
   align-items: center;
   justify-content: center;

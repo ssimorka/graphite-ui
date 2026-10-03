@@ -8,10 +8,10 @@
 // drops in from the top like search; the bar and its sheets, which live at the
 // bottom of the screen, rise from the bottom instead.
 //
-// The panel and the bar hold position: fixed children (the sheets, the Get
-// the code dialog), and a transform would trap those inside them. So their
-// entrances fill `backwards` only: the transform exists while the animation
-// runs and is gone the moment it ends.
+// The bar holds position: fixed children (the sheets), and a transform would
+// trap those inside it, so its entrance, like the panel's, fills `backwards`
+// only: the transform exists while the animation runs and is gone the moment
+// it ends. The Get the code dialog portals to <body> and is out of reach.
 
 @include drop.defs;
 
@@ -45,8 +45,8 @@
       glow 900ms var(--graphite-motion-ease) 220ms both;
   }
 
-  // Sections and actions only: the Get the code dialog is a child too, and a
-  // cascade on it would animate its fixed scrim whenever it opened.
+  // Sections and actions only, so the cascade reaches nothing else the
+  // panel holds.
   > .section,
   > .actions {
     @include drop.cascade($count: 12, $step: 40ms);
