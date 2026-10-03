@@ -41,19 +41,11 @@ export function ComponentWall({
     return (
       <li className={styles.card}>
         <div className={styles.preview}>{children}</div>
+        {/* The card's foot: the contract badge, then the component's name as
+            the filled corner action. That action is the link, and its overlay
+            stretches over the card so the whole card opens the page. The
+            specimens stay live above the overlay: see .preview. */}
         <div className={styles.meta}>
-          {/* The name is the link and its overlay stretches over the card, so
-              the whole card opens the component's page. The specimens stay
-              live above that overlay: see .preview in the stylesheet. */}
-          <p className={styles.name}>
-            {meta ? (
-              <a className={styles.nameLink} href={`/docs/components/${meta.slug}`}>
-                {name}
-              </a>
-            ) : (
-              name
-            )}
-          </p>
           <div className={styles.badges}>
             {/* The kit bakes each version into the design. Reading the
                 contract instead means the badge cannot go stale: the kit
@@ -62,6 +54,14 @@ export function ComponentWall({
               {meta ? `Contract ${meta.version}` : 'Ungoverned'}
             </span>
           </div>
+          {meta ? (
+            <a className={styles.cta} href={`/docs/components/${meta.slug}`}>
+              {name}
+              <span aria-hidden="true">→</span>
+            </a>
+          ) : (
+            <p className={styles.name}>{name}</p>
+          )}
         </div>
       </li>
     )

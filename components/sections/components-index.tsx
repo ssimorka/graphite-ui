@@ -241,24 +241,28 @@ export function ComponentsIndex({
                 </p>
               )}
             </div>
+            {/* The card's foot: the status badge, then the component's name as
+                the filled corner action. Governed, that action is the link,
+                and its overlay stretches over the card. Ungoverned, there is
+                no page to open, so the same block stands disabled. */}
             <div className={styles.meta}>
-              <h2 className={styles.name}>
-                {card.kind === 'governed' ? (
-                  <a
-                    className={styles.nameLink}
-                    href={`/docs/components/${card.meta.slug}`}
-                  >
-                    {card.name}
-                  </a>
-                ) : (
-                  card.name
-                )}
-              </h2>
               {card.kind === 'governed' ? (
                 <StatusBadge tone="success">{`Contract ${card.meta.version}`}</StatusBadge>
               ) : (
                 <StatusBadge tone="neutral">Ungoverned</StatusBadge>
               )}
+              <h2 className={styles.ctaHeading}>
+                {card.kind === 'governed' ? (
+                  <a className={styles.cta} href={`/docs/components/${card.meta.slug}`}>
+                    {card.name}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                ) : (
+                  <span className={`${styles.cta} ${styles.ctaDisabled}`}>
+                    {card.name}
+                  </span>
+                )}
+              </h2>
             </div>
           </li>
         ))}

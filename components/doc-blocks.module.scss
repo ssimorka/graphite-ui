@@ -1,3 +1,7 @@
+@use './drop-panel' as drop;
+
+@include drop.defs;
+
 // Docs-site chrome, from the kit's Site pages (Graphite UI Site 11814:17).
 //
 // Every colour is a generated role. The kit's outline-subtle is bound to
@@ -164,37 +168,40 @@
 }
 
 .nextCard {
+  // The header panels' AI layer (./_drop-panel.scss): tinted from the foot on
+  // primary, 8px corners, an edge shading to primary. Swept against all 288
+  // test sources, the weakest text on the tint at full strength is 5.08:1
+  // (dark) and 5.94:1 (light), so it holds AA even where the glow is deepest.
+  @include drop.surface;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-03);
-  padding: 1.125rem 1.125rem 1.25rem;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
-  // As the home page's component wall: the menu shadow at rest, and on hover
-  // the rule steps up to outline over the same 300ms ease-out, the kit's .md
-  // hover timing, while the contents drop 4px (the wall's specimens drop 12,
-  // which is too far for a block of text).
+  // The foot keeps 3rem clear for the corner action, plus the usual gap.
+  padding: 1.125rem 1.125rem calc(3rem + var(--graphite-space-04));
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
+  // On hover the glow climbs the card and the contents drop 4px, over the
+  // home wall's 300ms ease-out. --glow is a registered property, so it eases
+  // like any other value.
   transition:
-    border-color 300ms ease-out,
+    --glow 300ms ease-out,
     padding 300ms ease-out;
 
   &:hover {
-    border-color: var(--graphite-outline);
+    --glow: 75%;
     // The drop is padding traded from bottom to top, not a transform: a
     // transform on the title would make it the containing block for its own
     // card-sized ::after, shrinking the target under the pointer mid-hover.
     // The card's height does not change.
     padding-top: calc(1.125rem + 4px);
-    padding-bottom: calc(1.25rem - 4px);
+    padding-bottom: calc(3rem + var(--graphite-space-04) - 4px);
   }
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
 
     &:hover {
-      padding: 1.125rem 1.125rem 1.25rem;
+      padding: 1.125rem 1.125rem calc(3rem + var(--graphite-space-04));
     }
   }
 }
@@ -203,7 +210,8 @@
   font-size: var(--graphite-text-title-4-size);
   line-height: var(--graphite-text-title-4-line-height);
   font-weight: 600;
-  color: var(--graphite-primary);
+  // The title reads as the card's name now; primary belongs to the action.
+  color: var(--graphite-on-surface);
   text-decoration: none;
   white-space: pre-wrap;
 
@@ -221,6 +229,23 @@
   &:focus-visible {
     outline: 2px solid var(--graphite-focus);
     outline-offset: 2px;
+  }
+}
+
+// The filled corner action, as on the search panel, the color picker and the
+// home strip. Pinned to the corner rather than in the flow, so the 4px hover
+// drop moves the text and leaves the action where it is. Decorative: the
+// title's overlay is the link, so hover is read off the card.
+.nextCta {
+  @include drop.action;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 7.5rem;
+  pointer-events: none;
+
+  .nextCard:hover & {
+    background: var(--graphite-primary-hover);
   }
 }
 
