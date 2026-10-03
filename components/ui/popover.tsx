@@ -7,12 +7,23 @@ import styles from './popover.module.scss'
 
 const InsidePopover = createContext(false)
 
-/** Contract: docs/contracts/popover.md (1.6.0) */
+/** Contract: docs/contracts/popover.md (2.0.0) */
 type PopoverProps = {
   trigger: (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => ReactNode
   /** May contain interactive elements — that is what separates it from Tooltip. */
   children: ReactNode
   placement?: 'top' | 'bottom' | 'left' | 'right'
+  /**
+   * The kit's Alignment: where the panel sits along the trigger. The caret
+   * stays on the trigger's centre; Start and End put it 16 from that edge.
+   */
+  align?: 'start' | 'center' | 'end'
+  /**
+   * The kit's two sets. Tab tip joins the open trigger to the panel with no
+   * gap and no caret, under one shadow; it opens below only, aligned to the
+   * trigger's start or end edge.
+   */
+  variant?: 'default' | 'tab-tip'
   /** Modal popovers trap focus. Non-modal ones do not. */
   modal?: boolean
   /** Starts open. For documentation surfaces that need to show the open state. */
@@ -29,6 +40,8 @@ export function Popover({
   trigger,
   children,
   placement = 'bottom',
+  align = 'center',
+  variant = 'default',
   modal = false,
   defaultOpen = false,
   label,
@@ -65,19 +78,31 @@ export function Popover({
     trapFocus: modal,
   })
 
+  const tabTip = variant === 'tab-tip'
+  const triggerEl = trigger({
+    onClick: () => setOpen((v) => !v),
+    'aria-expanded': open,
+    'aria-controls': id,
+  })
+  // Tab tip draws below only, and has no Center: it hangs from an edge.
+  const side = tabTip ? 'bottom' : placement
+  const edge = tabTip && align === 'center' ? 'start' : align
+
   return (
     <InsidePopover.Provider value={true}>
-      <span ref={wrap} className={styles.wrap}>
-        {trigger({
-          onClick: () => setOpen((v) => !v),
-          'aria-expanded': open,
-          'aria-controls': id,
-        })}
+      <span
+        ref={wrap}
+        className={[styles.wrap, tabTip ? styles.tabTip : '', tabTip && open ? styles.joined : ''].join(' ')}
+      >
+        {/* The tab tip's trigger takes the panel's fill when open, so the two
+            read as one shape. The trigger is the caller's, so the fill sits
+            on a span behind it. */}
+        {tabTip ? <span className={styles.tip}>{triggerEl}</span> : triggerEl}
         {open ? (
           <div
             ref={ref}
             id={id}
-            className={`${styles.panel} ${styles[placement]}`}
+            className={[styles.panel, styles[side], styles[edge]].join(' ')}
             role={modal ? 'dialog' : undefined}
             aria-modal={modal || undefined}
             aria-label={modal ? label : undefined}

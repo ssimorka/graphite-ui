@@ -14,8 +14,10 @@
   padding: var(--graphite-space-02);
   display: flex;
   flex-direction: column;
-  background: var(--graphite-surface-elevated);
-  border: 1px solid var(--graphite-outline);
+  // Popover's surface, which Menu inherits: elevation-01 and the overlay
+  // shadow, no edge (popover.md 2.0.0). The rest of Menu's kit parity is #231.
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
   border-radius: var(--graphite-radius-none);
   // The shared overlay entrance, same as Popover and Tooltip. Opacity only,
   // and no exit: the menu unmounts on close.

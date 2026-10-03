@@ -77,7 +77,7 @@ export function menuDoc(): ComponentDocConfig {
       ['Roles', <>The list is <code>role=&quot;menu&quot;</code> and each item <code>role=&quot;menuitem&quot;</code>. The trigger gets <code>aria-haspopup=&quot;menu&quot;</code> and <code>aria-expanded</code>.</>],
       ['Focus', <>Opening the menu moves focus to an item. Every item is <code>tabindex=&quot;-1&quot;</code>, so the whole menu is one Tab stop and the arrow keys do the rest. A focused item fills with <code>surface-variant</code>, the same step as hover, with no ring. When the menu closes, focus goes back to the trigger.</>],
       ['Choosing', 'Choosing an item runs its onSelect and closes the menu. Disabled items are real disabled buttons, so the arrow keys skip them and they cannot be chosen.'],
-      ['Contrast', <>Labels are <code>on-surface</code> and destructive labels <code>danger</code>, on <code>surface-elevated</code>, with an <code>outline</code> edge.</>],
+      ['Contrast', <>Labels are <code>on-surface</code> and destructive labels <code>danger</code>, on <code>elevation-01</code>, lifted by <code>shadow-overlay</code> with no edge.</>],
       ['Motion', 'The list fades in on the fast motion step and appears at once under prefers-reduced-motion.'],
     ],
     parityLede:

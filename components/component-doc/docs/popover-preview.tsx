@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { KitIcon } from '@/components/kit-icon'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Popover } from '@/components/ui/popover'
 import { Select } from '@/components/ui/select'
@@ -9,14 +10,24 @@ import { DemoFrame } from '../demo-frame'
 import styles from './popover.module.scss'
 
 type Placement = 'top' | 'bottom' | 'left' | 'right'
+type Align = 'start' | 'center' | 'end'
+type Variant = 'default' | 'tab-tip'
 
 const TRIGGER = 'Filter themes'
 
-function codeFor(placement: Placement, modal: boolean) {
+function codeFor(placement: Placement, align: Align, variant: Variant, modal: boolean) {
+  const tabTip = variant === 'tab-tip'
   const props = [
-    ...(placement === 'bottom' ? [] : [`  placement="${placement}"`]),
+    ...(tabTip ? ['  variant="tab-tip"'] : placement === 'bottom' ? [] : [`  placement="${placement}"`]),
+    ...(align === 'center' ? [] : [`  align="${align}"`]),
     ...(modal ? ['  modal', '  label="Theme filter"'] : []),
-    `  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}`,
+    tabTip
+      ? `  trigger={(props) => (
+    <Button {...props} variant="ghost" size="icon-lg" aria-label="${TRIGGER}">
+      <KitIcon name="settings" />
+    </Button>
+  )}`
+      : `  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}`,
   ]
   return `const [themes, setThemes] = useState({ light: true, dark: false })\n\n<Popover\n${props.join('\n')}\n>\n  <ThemeOptions value={themes} onChange={setThemes} />\n</Popover>`
 }
@@ -37,14 +48,25 @@ export function ThemeOptions({ value, onChange }: { value: Themes; onChange: (ne
   )
 }
 
+/** The Tab tip's trigger: the kit's 48px ghost icon-only button. */
+export const tabTipTrigger = (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => (
+  <Button {...props} variant="ghost" size="icon-lg" aria-label={TRIGGER}>
+    <KitIcon name="settings" />
+  </Button>
+)
+
 /**
- * Placement and Modal, the two props that change what a reader sees or can do.
+ * Placement, Alignment, the set and Modal: the props that change what a
+ * reader sees or can do.
  * The checkboxes are there because interactive content is what separates a
  * Popover from a Tooltip.
  */
 export function PopoverPreview() {
   const [placement, setPlacement] = useState<Placement>('bottom')
+  const [align, setAlign] = useState<Align>('center')
+  const [variant, setVariant] = useState<Variant>('default')
   const [modal, setModal] = useState(false)
+  const tabTip = variant === 'tab-tip'
   const [themes, setThemes] = useState<Themes>({ light: true, dark: false })
 
   return (
@@ -64,6 +86,30 @@ export function PopoverPreview() {
             ]}
           />
           <Select
+            label="Alignment"
+            size="sm"
+            value={align}
+            onChange={(v) => setAlign(v as Align)}
+            options={[
+              { value: 'start', label: 'Start' },
+              { value: 'center', label: 'Center', disabled: tabTip },
+              { value: 'end', label: 'End' },
+            ]}
+          />
+          <Select
+            label="Set"
+            size="sm"
+            value={variant}
+            onChange={(v) => {
+              setVariant(v as Variant)
+              if (v === 'tab-tip' && align === 'center') setAlign('start')
+            }}
+            options={[
+              { value: 'default', label: 'Popover' },
+              { value: 'tab-tip', label: 'Tab tip' },
+            ]}
+          />
+          <Select
             label="Modal"
             size="sm"
             value={modal ? 'on' : 'off'}
@@ -79,15 +125,17 @@ export function PopoverPreview() {
         <div className={styles.center}>
           <Popover
             placement={placement}
+            align={align}
+            variant={variant}
             modal={modal}
             label={modal ? 'Theme filter' : undefined}
-            trigger={(props) => <Button {...props}>{TRIGGER}</Button>}
+            trigger={tabTip ? tabTipTrigger : (props) => <Button {...props}>{TRIGGER}</Button>}
           >
             <ThemeOptions value={themes} onChange={setThemes} />
           </Popover>
         </div>
       }
-      code={codeFor(placement, modal)}
+      code={codeFor(placement, align, variant, modal)}
     />
   )
 }
@@ -98,13 +146,23 @@ export function PopoverPreview() {
  * outside, press its trigger or press Escape and it closes, and its trigger
  * opens it again.
  */
-export function PopoverStill({ placement = 'bottom' }: { placement?: Placement }) {
+export function PopoverStill({
+  placement = 'bottom',
+  align = 'center',
+  variant = 'default',
+}: {
+  placement?: Placement
+  align?: Align
+  variant?: Variant
+}) {
   const [themes, setThemes] = useState<Themes>({ light: true, dark: false })
   return (
     <Popover
       defaultOpen
       placement={placement}
-      trigger={(props) => <Button {...props}>{TRIGGER}</Button>}
+      align={align}
+      variant={variant}
+      trigger={variant === 'tab-tip' ? tabTipTrigger : (props) => <Button {...props}>{TRIGGER}</Button>}
     >
       <ThemeOptions value={themes} onChange={setThemes} />
     </Popover>
