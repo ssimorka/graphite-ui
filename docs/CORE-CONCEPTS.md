@@ -61,17 +61,25 @@ Two layers make a theme, and only one of them is Carbon's.
 
 `app/layout.tsx` sets `className="cds--g100"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density) do not vary by theme and are declared once in `globals.scss`.
 
-### Grid system
+### Layout and the grid
 
-Carbon's grid (`Grid`, `Column`) is a 16-column responsive grid with named breakpoints (`sm`, `md`, `lg`, etc.). Sections use it like:
+"The grid" means three different things on this site, and only one of them is Carbon's.
 
-```tsx
-<Grid>
-  <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>...</Column>
-</Grid>
-```
+1. **Carbon's `Grid` / `Column`, on the home page only.** The seven sections in `components/sections/` still wrap their content in Carbon's 16-column grid, and nothing else on the site does. Most use it only as a centered container with Carbon's gutters, spanning every column:
 
-meaning: full-width on small screens, 8 of 8 columns on medium, and 10-of-16 centered (offset 3) on large screens. This is how every section controls its max content width and centering without custom media queries.
+   ```tsx
+   <Grid>
+     <Column sm={4} md={8} lg={16}>...</Column>
+   </Grid>
+   ```
+
+   Two use real columns. The hero's headline block is 10 of 16, centered (`lg={{ span: 10, offset: 3 }}`), and Capabilities splits its list and stage 6 + 10 from `lg`. Replacing these is part of de-Carboning (see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md)). That work is blocked on `token-drift` no longer reading Carbon's grid config for the breakpoint check.
+
+2. **Page stylesheets everywhere else.** `DocsShell` (sidebar, content, On this page rail), the Create page's controls-and-preview split, and the components index's auto-fill card grid are CSS grids in their own module stylesheets. Their widths come from those stylesheets, not from a column count. `/docs/foundations/layout` reads the values back from the stylesheets, so it cannot drift from them.
+
+3. **The 48px grid backdrop.** The ruled cells behind the hero, the Capabilities band and the Create page are decoration (`background-size: 3rem 3rem`). Nothing snaps to them.
+
+All three share the kit's breakpoints: `sm` 320, `md` 672, `lg` 1056, `xl` 1312. Carbon uses the same widths but calls the 1312 stop `xlg`. `token-drift` warns on any `@media` width that isn't one of these stops.
 
 ## Scroll-reveal animation system
 
@@ -80,7 +88,7 @@ A small, dependency-free "fade up on scroll" system built from two pieces:
 - **`useReveal()`** ([`components/use-reveal.ts`](../components/use-reveal.ts)) — attaches an `IntersectionObserver` to a ref; once 15% of the element is visible, it flips `visible` to `true` and disconnects (one-shot, not re-triggered on scroll-away). If the user has `prefers-reduced-motion: reduce` set, it skips the observer entirely and reveals immediately.
 - **`<Reveal>`** ([`components/reveal.tsx`](../components/reveal.tsx)) — a wrapper component that applies a `reveal` class (and `is-visible` once triggered) plus an optional `transition-delay` for staggering. The actual animation (`opacity` + `translateY`) lives in `globals.scss` under `.reveal` / `.reveal.is-visible`.
 
-Sections stagger multiple children by passing an increasing `delay` (e.g. `delay={i * 80}`), so grids of cards fade in sequentially rather than all at once.
+`delay` is supported but nothing passes one today, so every reveal on the site fires flat.
 
 ## Hero motion (parallax/spotlight)
 
