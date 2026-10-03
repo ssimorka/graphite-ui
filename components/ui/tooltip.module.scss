@@ -1,27 +1,39 @@
 // Tooltip — docs/contracts/tooltip.md
+//
+// The kit's Tooltip (Graphite UI Kit 3684:40507): an inverse bubble, the
+// kit's background-inverse fill with icon-inverse text, no edge, a 2px
+// corner, Tooltip type (12/16 Medium), and a caret on the trigger. Its Type
+// sets the padding, the caret and the gap (overlay.md 2.0.0: Tooltip is the
+// overlay the kit draws inverse).
 .wrap {
   position: relative;
   display: inline-flex;
 }
 
 .tip {
+  // The gap from the trigger to the caret's tip, and the caret's size.
+  --gap: var(--graphite-space-03);
+  --caret-w: 12px;
+  --caret-h: 6px;
+  --off: calc(var(--gap) + var(--caret-h));
+
   position: absolute;
   z-index: 10;
-  max-width: var(--graphite-space-13);
-  // 2 / 16, per the kit's Tooltip body item.
-  padding: var(--graphite-space-01) var(--graphite-space-05);
-  background: var(--graphite-surface-elevated);
-  color: var(--graphite-on-surface);
-  border: 1px solid var(--graphite-outline);
+  // 288. The kit's text runs to any width; the code wraps where Carbon does.
+  max-width: 18rem;
+  width: max-content;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
   // The one overlay the kit does not make square: its body carries 2.
   border-radius: var(--graphite-radius-2);
-  font-size: 0.8125rem;
-  line-height: 1.35;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: var(--graphite-text-weight-medium);
   white-space: normal;
-  width: max-content;
-  // Opacity only. Each placement class below carries its own transform, and an
-  // animated transform would overwrite the placement rather than offset from
-  // it. There is no exit: the bubble unmounts on close.
+  // Opacity only. The centred placements carry a transform, and an animated
+  // transform would overwrite it rather than offset from it. There is no
+  // exit: the bubble unmounts on close.
   animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
 }
 
@@ -37,6 +49,56 @@
   }
 }
 
+// --------------------------------------------------------------------- types
+// Definition: 8 / 16, the large caret 4 away.
+.definition {
+  --gap: var(--graphite-space-02);
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+}
+
+// Icon button: 2 / 16 and at least 64 wide, the small caret 4 away.
+.icon {
+  --gap: var(--graphite-space-02);
+  --caret-w: 8px;
+  --caret-h: 4px;
+  min-width: var(--graphite-space-10);
+  padding: var(--graphite-space-01) var(--graphite-space-05);
+  text-align: center;
+}
+
+// --------------------------------------------------------------------- sides
+.top { bottom: calc(100% + var(--off)); }
+.bottom { top: calc(100% + var(--off)); }
+.left { right: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); }
+.right { left: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); }
+
+// The caret, in the bubble's fill.
+.tip::before {
+  content: '';
+  position: absolute;
+  background: inherit;
+}
+
+.top::before,
+.bottom::before { width: var(--caret-w); height: var(--caret-h); }
+.left::before,
+.right::before { width: var(--caret-h); height: var(--caret-w); top: calc(50% - var(--caret-w) / 2); }
+
+.top::before { top: 100%; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.bottom::before { bottom: 100%; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.left::before { left: 100%; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.right::before { right: 100%; clip-path: polygon(100% 0, 100% 100%, 0 50%); }
+
+// ----------------------------------------------------------------- alignment
+// Start and End put the caret 16 from that edge of the bubble and the caret
+// on the trigger's centre.
+:is(.top, .bottom).center { left: 50%; transform: translateX(-50%); }
+:is(.top, .bottom).center::before { left: calc(50% - var(--caret-w) / 2); }
+:is(.top, .bottom).start { left: calc(50% - 16px - var(--caret-w) / 2); }
+:is(.top, .bottom).start::before { left: 16px; }
+:is(.top, .bottom).end { right: calc(50% - 16px - var(--caret-w) / 2); }
+:is(.top, .bottom).end::before { right: 16px; }
+
 // The bubble takes the pointer (WCAG 1.4.13), and it sits inside the wrapper,
 // so moving onto it does not count as leaving. This strip spans the gap back to
 // the trigger, so the pointer never crosses bare page on the way.
@@ -45,12 +107,31 @@
   position: absolute;
 }
 
-.top::after { top: 100%; left: 0; right: 0; height: var(--graphite-space-02); }
-.bottom::after { bottom: 100%; left: 0; right: 0; height: var(--graphite-space-02); }
-.left::after { left: 100%; top: 0; bottom: 0; width: var(--graphite-space-02); }
-.right::after { right: 100%; top: 0; bottom: 0; width: var(--graphite-space-02); }
+.top::after { top: 100%; left: 0; right: 0; height: var(--off); }
+.bottom::after { bottom: 100%; left: 0; right: 0; height: var(--off); }
+.left::after { left: 100%; top: 0; bottom: 0; width: var(--off); }
+.right::after { right: 100%; top: 0; bottom: 0; width: var(--off); }
 
-.top { bottom: 100%; left: 50%; transform: translate(-50%, calc(-1 * var(--graphite-space-02))); }
-.bottom { top: 100%; left: 50%; transform: translate(-50%, var(--graphite-space-02)); }
-.left { right: 100%; top: 50%; transform: translate(calc(-1 * var(--graphite-space-02)), -50%); }
-.right { left: 100%; top: 50%; transform: translate(var(--graphite-space-02), -50%); }
+// ---------------------------------------------------------------------- term
+// The kit's Definition trigger: the term in Tooltip type, on-surface-variant,
+// over a 1px dotted rule in secondary that turns primary on hover and focus.
+.term {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px dotted var(--graphite-secondary);
+  background: transparent;
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: var(--graphite-text-weight-medium);
+}
+
+.term:hover,
+.term:focus-visible { border-bottom-color: var(--graphite-primary); }
+
+.term:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: 1px;
+}
