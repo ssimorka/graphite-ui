@@ -81,6 +81,9 @@ function OptionSheet({
           </>
         ) : (
           <>
+            {copies ? (
+              <p className={styles.sheetCaption}>Select a stop to copy its hex</p>
+            ) : null}
             {control.options.map((o) => (
               <button
                 key={o.key}
@@ -106,16 +109,21 @@ function OptionSheet({
                 ) : null}
               </button>
             ))}
-            {control.id === 'source' ? (
+            {/* Picking a source is the sheet's one real choice, so it closes
+                the list as the filled action. The stops above only copy. */}
+            {copies ? (
               <button
                 type="button"
-                className={styles.option}
+                className={styles.customHex}
                 onClick={() => {
                   onClose()
                   openSourcePicker()
                 }}
               >
-                <span className={styles.optionLabel}>Custom hex…</span>
+                <span className={styles.optionSwatch} style={{ background: control.value }} aria-hidden="true" />
+                <span className={styles.optionLabel}>Pick color</span>
+                <span className={styles.customHexValue}>{control.value.toUpperCase()}</span>
+                <span aria-hidden="true">→</span>
               </button>
             ) : null}
             <Toast message={toast} />

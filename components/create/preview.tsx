@@ -6,6 +6,10 @@ import { CARDS } from './cards'
 import type { CardEntry } from './cards'
 import { DEVICES, useBuilder } from './builder'
 import type { DeviceKey } from './builder'
+import { Button } from '@/components/ui/button'
+import { Tabs } from '@/components/ui/tabs'
+import { GenerativeArt } from '@/components/generative-art'
+import type { GenerativeArtHandle } from '@/components/generative-art'
 import styles from './preview.module.scss'
 
 // The kit's single-column order for Small (Graphite UI Site 11856:2265). It is
@@ -82,6 +86,9 @@ function useBalancedColumns(ids: string[], count: number) {
     const el = ref.current
     if (!el) return
     const balance = () => {
+      // Hidden behind the Patterns tab, every card measures 0, and a deal made
+      // from that would show for a frame on the way back. Keep the last one.
+      if (!el.offsetParent) return
       const cards = el.querySelectorAll<HTMLElement>('[data-card]')
       if (cards.length !== ids.length) return
       const height = new Map<string, number>()
@@ -168,12 +175,55 @@ function renderCard(c: CardEntry) {
 }
 
 /**
- * The preview: a device toolbar and the examples, dealt into one to three
- * columns of near equal height. Everything in it reads the builder's scoped variables (radius, type),
- * and the theme comes from the site's own provider, so the source, theme and
- * contrast target repaint it without any prop.
+ * The preview: two tabs over the same theme. Components is the examples; Patterns
+ * is the generative composition built from the same source. Both read the
+ * site's own provider, so the source, theme and contrast target repaint them
+ * without any prop.
  */
 export function Preview() {
+  return (
+    <section className={styles.preview} aria-label="Preview">
+      <Tabs
+        tabs={[
+          { id: 'components', label: 'Components', panel: <Samples /> },
+          { id: 'patterns', label: 'Patterns', panel: <Patterns /> },
+        ]}
+      />
+    </section>
+  )
+}
+
+/**
+ * The pattern generator: the 60/30/10 composition (see buildPalette in
+ * generative-art.tsx), redrawn from the source on every change. Selecting a
+ * panel reshuffles just that panel; Regenerate deals a new layout.
+ */
+function Patterns() {
+  const [art, setArt] = useState<GenerativeArtHandle | null>(null)
+  return (
+    <div className={styles.tabPanel}>
+      <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Pattern">
+        <Button size="sm" onClick={() => art?.regenerate()} disabled={!art}>
+          Regenerate
+        </Button>
+        <Button size="sm" variant="ghost" onClick={() => art?.exportPng()} disabled={!art}>
+          Export PNG
+        </Button>
+        <p className={styles.hint}>Select a panel to reshuffle it.</p>
+      </div>
+      <div className={styles.art}>
+        <GenerativeArt interactive cover={false} onReady={setArt} />
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The examples, under a device toolbar, dealt into one to three columns of
+ * near equal height. Everything in it reads the builder's scoped variables
+ * (radius, type).
+ */
+function Samples() {
   const { device, setDevice, previewStyle, density } = useBuilder()
   const { ref, width } = useFrameWidth()
 
@@ -191,8 +241,8 @@ export function Preview() {
   const { ref: dealRef, columns } = useBalancedColumns(order, count)
 
   return (
-    <section className={styles.preview} aria-label="Preview">
-      <div className={styles.toolbar} role="group" aria-label="Preview size">
+    <div className={styles.tabPanel}>
+      <div className={`${styles.toolbar} ${styles.devices}`} role="group" aria-label="Preview size">
         {DEVICES.map((d) => (
           <button
             key={d.key}
@@ -236,6 +286,6 @@ export function Preview() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

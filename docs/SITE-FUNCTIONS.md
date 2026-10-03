@@ -127,11 +127,16 @@ sheets rise from the bottom, the panel drops in.
   Shuffle, Reset and Get the code. Source, theme, contrast and radius can be
   locked against Shuffle. The bar's footer is Reset, Shuffle and the filled
   Get the code; below 672px Reset and Shuffle are icons that share the width.
-- **Preview**: a Desktop / Tablet / Mobile toolbar (from 1056px only) over a
+- **Preview**: two tabs, Components and Patterns, in the governed `Tabs`.
+- **Components**: a Desktop / Tablet / Mobile toolbar (from 1056px only) over a
   rack of example cards with no frame of their own, on the page grid, which is
   fixed to the viewport. Cards carry a drop shadow and are dealt into one to
   three columns balanced by measured height. Radius, density and fonts are
   scoped to the preview.
+- **Patterns**: the generative composition (`GenerativeArt` in
+  [`components/generative-art.tsx`](../components/generative-art.tsx)) at 16:9,
+  repainted from the source and theme. Selecting a panel reshuffles it;
+  Regenerate deals a new layout and Export PNG saves it at 1600 × 900.
 - **Get the code**: CSS or JSON, from `buildCss` / `buildJson` in `lib/color.js`,
   copied or downloaded.
 

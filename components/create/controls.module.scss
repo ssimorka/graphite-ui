@@ -646,6 +646,42 @@
   white-space: nowrap;
 }
 
+// The source sheet's action: the drop panel's filled block, full width at the
+// foot of the list, so it reads as the sheet's one choice and not a list row.
+.customHex {
+  @include drop.action;
+  justify-content: flex-start;
+  gap: var(--graphite-space-04);
+  width: calc(100% - 2.5rem);
+  margin: var(--graphite-space-05) 1.25rem 0;
+  border-radius: var(--graphite-radius-8);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  text-align: left;
+
+  .optionSwatch {
+    border-color: var(--graphite-on-primary);
+  }
+
+  @include drop.cascade($count: 14, $start: 160ms, $step: 30ms);
+}
+
+.customHexValue {
+  flex: none;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-1-size);
+  line-height: var(--graphite-text-code-1-line-height);
+}
+
+.sheetCaption {
+  width: 100%;
+  margin: 0;
+  padding: var(--graphite-space-03) 1.25rem;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
 // The hex a source swatch copies, shown so the tap has a visible payload.
 .optionHex {
   flex: none;

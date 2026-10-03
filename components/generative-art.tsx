@@ -558,11 +558,14 @@ export type GenerativeArtHandle = {
 export function GenerativeArt({
   className,
   interactive = false,
+  cover = interactive,
   onReady,
 }: {
   className?: string
   /** Enables click-to-shuffle on individual panels. */
   interactive?: boolean
+  /** Greets the first view with the kit cover. Off where the grid is the point. */
+  cover?: boolean
   /** Receives the imperative handle for Regenerate / Export PNG toolbars. */
   onReady?: (handle: GenerativeArtHandle) => void
 }) {
@@ -772,7 +775,7 @@ export function GenerativeArt({
 
       {/* The kit cover, restored as the splash it is on the original tool:
           it sits over the canvas until dismissed, then reveals the live grid. */}
-      {interactive && showCover && (
+      {interactive && cover && showCover && (
         <button
           type="button"
           className="art__cover"
