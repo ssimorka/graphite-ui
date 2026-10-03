@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
-import { useTheme, type ContrastLevel } from '@/components/theme-provider'
-import { Shuffle } from '@carbon/icons-react'
+import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
+import { Reset, Shuffle } from '@carbon/icons-react'
 import { Select } from '@/components/ui/select'
 import styles from './color-picker.module.scss'
 
@@ -306,6 +306,22 @@ export function ColorPickerPopover({
           {/* Surprise me: the popover's primary action, as the kit's filled
               footer block in the bottom-right corner. */}
           <div className={`${styles.section} ${styles.footer}`}>
+            {/* Back to the seeded source and AA. The choice persists across
+                pages now, so it needs a way home. Light/dark is the toggle
+                beside the chip, and is left alone. */}
+            <button
+              type="button"
+              className={styles.reset}
+              disabled={normalizeHex(value) === COVER_SOURCE_HEX && level === 'AA'}
+              onClick={() => {
+                setInput(COVER_SOURCE_HEX)
+                onChange(COVER_SOURCE_HEX)
+                setLevel('AA')
+              }}
+            >
+              <Reset size={16} aria-hidden="true" />
+              Reset
+            </button>
             <button
               type="button"
               className={styles.footerAction}

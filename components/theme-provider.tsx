@@ -1,10 +1,12 @@
 'use client'
 
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
+import { THEME_CHOICE_KEY, THEME_PAINT_KEY } from '@/lib/theme-storage'
 import {
   createContext,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -227,6 +229,31 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<CarbonTheme>('g100')
   const [sourceHex, setSourceHexRaw] = useState(COVER_SOURCE_HEX)
   const [level, setLevel] = useState<ContrastLevel>('AA')
+  // Whether the stored choice has been read. The server renders the defaults,
+  // so the first client render must too; the stored choice is applied in a
+  // layout effect straight after, before paint. Nothing is stamped or saved
+  // until then, or the defaults would overwrite what was stored.
+  const [restored, setRestored] = useState(false)
+
+  useLayoutEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(THEME_CHOICE_KEY) ?? 'null')
+      if (saved && typeof saved === 'object') {
+        if (typeof saved.sourceHex === 'string' && HEX_RE.test(saved.sourceHex))
+          setSourceHexRaw(normalizeHex(saved.sourceHex))
+        if (saved.theme === 'white' || saved.theme === 'g100') setTheme(saved.theme)
+        if (saved.level === 'AA' || saved.level === 'AAA') setLevel(saved.level)
+      }
+    } catch {}
+    setRestored(true)
+  }, [])
+
+  useEffect(() => {
+    if (!restored) return
+    try {
+      localStorage.setItem(THEME_CHOICE_KEY, JSON.stringify({ sourceHex, theme, level }))
+    } catch {}
+  }, [restored, sourceHex, theme, level])
 
   const setSourceHex = (hex: string) => {
     if (HEX_RE.test(hex.trim())) setSourceHexRaw(normalizeHex(hex))
@@ -269,6 +296,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // its token already reads the new one. Killing transitions for one frame
   // makes every token-driven surface repaint atomically and correctly.
   useEffect(() => {
+    if (!restored) return
     const root = document.documentElement
     root.classList.add('is-retheming')
 
@@ -291,6 +319,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       for (const [prop, value] of Object.entries(vars)) {
         root.style.setProperty(prop, value)
       }
+      // For the next page load's inline script (lib/theme-storage.ts).
+      try {
+        localStorage.setItem(THEME_PAINT_KEY, JSON.stringify({ cls: `cds--${theme}`, vars }))
+      } catch {}
     }
 
     // Force a synchronous style flush so the new values are committed while
@@ -299,7 +331,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // tab, where frames are throttled and the callback may never run.
     void root.offsetHeight
     root.classList.remove('is-retheming')
-  }, [theme, light, dark, lightStates, darkStates, sourceHex, ramps])
+  }, [restored, theme, light, dark, lightStates, darkStates, sourceHex, ramps])
 
   const toggleTheme = () => setTheme((t) => (t === 'white' ? 'g100' : 'white'))
 
