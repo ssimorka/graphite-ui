@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
 import { nextSurpriseHex } from '@/components/color-picker'
+import { Toast, useCopy } from '@/components/studio'
 import { Button } from '@/components/ui/button'
 import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'
@@ -14,7 +15,7 @@ import styles from './controls.module.scss'
 
 // The kit's own words for what each control means (Graphite UI Site 13294:*).
 const CAPTIONS: Record<string, string> = {
-  source: 'The only free input. The swatches are your ramps at tone 500 and follow your pick; any hex works.',
+  source: 'The only free input; any hex works. The swatches are your ramps at tone 500: click one to copy its hex.',
   contrast: 'Every pairing is measured against this as the theme resolves.',
   radius: 'The kit’s eight steps. The components are square-cornered by default because the kit is.',
   typeface:
@@ -187,6 +188,7 @@ export function ControlsPanel() {
   const b = useBuilder()
   const [open, setOpen] = useState<Record<string, boolean>>({ source: true })
   const [codeOpen, setCodeOpen] = useState(false)
+  const { toast, copy } = useCopy()
 
   const by = (id: Control['id']) => controls.find((c) => c.id === id)!
   const flip = (id: string) => setOpen((o) => ({ ...o, [id]: !o[id] }))
@@ -217,20 +219,25 @@ export function ControlsPanel() {
       >
         <p className={styles.caption}>{CAPTIONS.source}</p>
         <HexField value={source.value} onChange={(hex) => source.select(hex)} />
-        <div className={styles.presets} role="group" aria-label="Presets">
+        {/* Copy, not choose. Each swatch is derived from the current source,
+            so choosing one rebuilt every ramp and replaced all eight swatches,
+            which read as the row inventing colours. Copying leaves the source
+            alone. The ring still marks the source's own swatch. */}
+        <div className={styles.presets} role="group" aria-label="Ramp swatches">
           {source.options.map((o) => (
             <button
               key={o.key}
               type="button"
               className={styles.preset}
-              aria-pressed={source.selected === o.key}
-              aria-label={o.label}
-              title={o.label}
+              data-source={source.selected === o.key ? '' : undefined}
+              aria-label={`Copy ${o.label}, ${o.key.toUpperCase()}`}
+              title={`${o.label} · ${o.key.toUpperCase()} · click to copy`}
               style={{ background: o.swatch }}
-              onClick={() => source.select(o.key)}
+              onClick={() => copy(o.key, o.key.toUpperCase())}
             />
           ))}
         </div>
+        <Toast message={toast} />
       </Section>
 
       <Section label="Theme" open={!!open.theme} onToggle={() => flip('theme')} lock={lockOf(theme)}>

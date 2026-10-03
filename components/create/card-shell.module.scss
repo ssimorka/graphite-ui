@@ -13,6 +13,12 @@
   padding: var(--card-pad, var(--graphite-space-06));
   background: var(--graphite-surface);
   border: 1px solid var(--graphite-surface-variant);
+  // Lifts the samples off the page's grid now the preview frame has no fill: a
+  // tight contact shadow and a wide soft one. Black at low strength, so it
+  // reads in both themes without tinting the card.
+  box-shadow:
+    0 1px 2px color-mix(in srgb, #000 12%, transparent),
+    0 8px 24px color-mix(in srgb, #000 14%, transparent);
   color: var(--graphite-on-surface);
   // Break out of any inherited Carbon reset so an example reads the builder's
   // type choice, which the preview sets on its root.

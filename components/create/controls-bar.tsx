@@ -145,13 +145,26 @@ export function ControlsBar() {
         ))}
       </div>
       <div className={styles.barFooter}>
-        <button type="button" className={`${styles.barQuiet} ${styles.barReset}`} onClick={b.reset}>
+        {/* Below md the footer is too narrow for three labels, so Reset and
+            Shuffle drop to icons there. The label stays in the DOM as their
+            accessible name, and the title shows it on hover. */}
+        <button
+          type="button"
+          className={`${styles.barQuiet} ${styles.barReset}`}
+          title="Reset"
+          onClick={b.reset}
+        >
           <Reset size={16} aria-hidden="true" />
-          Reset
+          <span className={styles.barLabel}>Reset</span>
         </button>
-        <button type="button" className={`${styles.barQuiet} ${styles.barShuffle}`} onClick={b.shuffle}>
+        <button
+          type="button"
+          className={`${styles.barQuiet} ${styles.barShuffle}`}
+          title="Shuffle"
+          onClick={b.shuffle}
+        >
           <Shuffle size={16} aria-hidden="true" />
-          Shuffle
+          <span className={styles.barLabel}>Shuffle</span>
         </button>
         <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
           Get the code
