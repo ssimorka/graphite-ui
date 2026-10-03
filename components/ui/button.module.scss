@@ -50,10 +50,10 @@
 // left-aligned and the icon sits at the far end rather than against the text.
 // The kit has no leading icon, and CSS cannot tell one from a trailing icon
 // beside a bare text label anyway, so an icon in a labelled filled button is
-// the trailing one. The icon size keeps its glyph centred in the square.
-.primary:not(.icon) > svg,
-.secondary:not(.icon) > svg,
-.danger:not(.icon) > svg {
+// the trailing one. The icon-only sizes (.square) keep their glyph centred.
+.primary:not(.square) > svg,
+.secondary:not(.square) > svg,
+.danger:not(.square) > svg {
   position: absolute;
   top: 50%;
   right: var(--graphite-space-05);
@@ -186,13 +186,49 @@
 .md { min-height: calc(var(--graphite-space-08) + 2px); font-size: 0.875rem; line-height: 1.25rem; }
 .lg { min-height: calc(var(--graphite-space-09) + 2px); font-size: 0.875rem; line-height: 1.25rem; }
 
-// Square, for a button whose whole content is an icon. Its accessible name
-// still has to come from somewhere — the contract forbids relying on the glyph.
-.icon {
-  min-height: var(--graphite-space-08);
-  width: var(--graphite-space-08);
-  padding: 0;
+// Extra large (66) and 2x large (82), the same +2 over the grid. These are the
+// kit's tall buttons: the label and icon sit at the top, 16px down, rather
+// than centred, and the extra height falls below them.
+.xl,
+.xxl {
+  align-items: flex-start;
+  padding-top: var(--graphite-space-05);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
+
+.xl { min-height: calc(var(--graphite-space-10) + 2px); }
+.xxl { min-height: calc(var(--graphite-space-11) + 2px); }
+
+.primary.xl > svg,
+.secondary.xl > svg,
+.danger.xl > svg,
+.primary.xxl > svg,
+.secondary.xxl > svg,
+.danger.xxl > svg {
+  top: var(--graphite-space-05);
+  transform: none;
+}
+
+// Expressive: Large's 50px with the kit's larger label, Button/1 16/24.
+.expressive { min-height: calc(var(--graphite-space-09) + 2px); font-size: 1rem; line-height: 1.5rem; }
+
+// The kit's ghost Expressive holds its glyph in a 20px spacer, which puts it
+// 12px after the label where every other ghost size has 8. Built as drawn;
+// it reads like Carbon's old 20px expressive icon left in place.
+.ghost.expressive,
+.dangerGhost.expressive { gap: var(--graphite-space-04); }
+
+// Square, for a button whose whole content is an icon, at every size the kit
+// draws one: 32, 40, 48, 64 and Expressive's 44. These sit on the grid, unlike
+// the text sizes. The glyph stays 16px. Its accessible name still has to come
+// from somewhere: the contract forbids relying on the glyph.
+.square { padding: 0; }
+.iconSm { min-height: var(--graphite-space-07); width: var(--graphite-space-07); }
+.icon { min-height: var(--graphite-space-08); width: var(--graphite-space-08); }
+.iconLg { min-height: var(--graphite-space-09); width: var(--graphite-space-09); }
+.iconXl { min-height: var(--graphite-space-10); width: var(--graphite-space-10); }
+.iconExpressive { min-height: 2.75rem; width: 2.75rem; }
 
 // Forced colours drop backgrounds, so a borderless button would lose its
 // edge. The system draws one there instead.
