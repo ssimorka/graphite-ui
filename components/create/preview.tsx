@@ -8,6 +8,7 @@ import { DEVICES, useBuilder } from './builder'
 import type { DeviceKey } from './builder'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@/components/ui/tabs'
+import { IconSetProvider } from '@/components/kit-icon'
 import { GenerativeArt } from '@/components/generative-art'
 import type { GenerativeArtHandle } from '@/components/generative-art'
 import styles from './preview.module.scss'
@@ -228,7 +229,7 @@ function Patterns() {
  * (radius, type).
  */
 function Samples() {
-  const { device, setDevice, previewStyle, density } = useBuilder()
+  const { device, setDevice, previewStyle, density, iconSet } = useBuilder()
   const { ref, width } = useFrameWidth()
 
   const wide = width >= WIDE_EXAMPLES_AT
@@ -273,21 +274,23 @@ function Samples() {
             } as CSSProperties
           }
         >
-          <div
-            ref={dealRef}
-            className={styles.columns}
-            style={{ '--columns': count } as CSSProperties}
-          >
-            {columns.map((ids, i) => (
-              <div key={i} className={styles.column}>
-                {ids.map((id) => (
-                  <div key={id} data-card={id}>
-                    {renderCard(byId.get(id)!)}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+          <IconSetProvider set={iconSet}>
+            <div
+              ref={dealRef}
+              className={styles.columns}
+              style={{ '--columns': count } as CSSProperties}
+            >
+              {columns.map((ids, i) => (
+                <div key={i} className={styles.column}>
+                  {ids.map((id) => (
+                    <div key={id} data-card={id}>
+                      {renderCard(byId.get(id)!)}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </IconSetProvider>
         </div>
       </div>
     </div>

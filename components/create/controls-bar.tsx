@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
+import { KitIcon } from '@/components/kit-icon'
+import type { IconSet } from '@/lib/kit-icons'
 import { BODY_FONTS, CODE_FONTS, HEADING_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
 import type { Control, ControlId } from './controls-model'
@@ -16,7 +18,7 @@ const FONT_SETS: Partial<Record<ControlId, typeof HEADING_FONTS>> = {
   code: CODE_FONTS,
 }
 
-/** What sits at the trailing edge of a picker: a swatch, an Aa specimen or a caret. */
+/** What sits at the trailing edge of a picker: a swatch, an Aa specimen, an icon or a caret. */
 function Indicator({ control }: { control: Control }) {
   if (control.id === 'source') {
     return <span className={styles.dot} style={{ background: control.value }} />
@@ -24,6 +26,10 @@ function Indicator({ control }: { control: Control }) {
   if (control.id === 'theme') {
     // The surface role of the theme being previewed, so it reads light or dark.
     return <span className={styles.dot} style={{ background: 'var(--graphite-surface-variant)' }} />
+  }
+  if (control.id === 'icons') {
+    // The family itself, as the fonts show their face.
+    return <KitIcon name="settings" set={control.selected as IconSet} />
   }
   const fonts = FONT_SETS[control.id]
   if (fonts) {

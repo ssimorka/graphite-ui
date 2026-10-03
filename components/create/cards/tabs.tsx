@@ -1,4 +1,4 @@
-import { Add, DataBase, OverflowMenuHorizontal } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@/components/ui/tabs'
@@ -15,16 +15,16 @@ function CodespacesPanel() {
           <p className={styles.caption}>Your workspaces in the cloud</p>
         </div>
         <Button variant="ghost" size="icon" aria-label="Add codespace">
-          <Add size={16} />
+          <KitIcon name="plus" size={16} />
         </Button>
         <Button variant="ghost" size="icon" aria-label="More options">
-          <OverflowMenuHorizontal size={16} />
+          <KitIcon name="menu-dots" size={16} />
         </Button>
       </div>
       <hr className={styles.divider} />
       <div className={styles.empty}>
         <span className={styles.cell}>
-          <DataBase size={24} aria-hidden="true" />
+          <KitIcon name="database" size={24} aria-hidden="true" />
         </span>
         <p className={styles.title}>No codespaces</p>
         <p className={`${styles.caption} ${styles.center}`}>

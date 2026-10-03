@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, ChevronDown } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
@@ -79,7 +79,7 @@ export function KitchenSinkCard() {
         placeholder="Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        trailing={<Search size={16} aria-hidden="true" />}
+        trailing={<KitIcon name="search" size={16} aria-hidden="true" />}
       />
 
       <TextArea
@@ -115,7 +115,7 @@ export function KitchenSinkCard() {
         <ButtonGroup>
           <Button className={styles.groupMain}>Button Group</Button>
           <Button size="icon" aria-label="More options">
-            <ChevronDown aria-hidden="true" />
+            <KitIcon name="angle-small-down" aria-hidden="true" />
           </Button>
         </ButtonGroup>
         <span className={styles.spacer} />

@@ -47,6 +47,8 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
       { label: 'GitHub', href: REPO },
       { label: 'Governance rules', href: '/docs/governance' },
       { label: 'Licence', href: `${REPO}/blob/main/LICENSE` },
+      // The kit's icons are Flaticon's UIcons; their free licence asks for this.
+      { label: 'Icons: UIcons by Flaticon', href: 'https://www.flaticon.com/uicons' },
     ],
   },
 ]

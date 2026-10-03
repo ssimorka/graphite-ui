@@ -18,6 +18,7 @@ const CAPTIONS: Record<string, string> = {
   source: 'The only free input; any hex works. The swatches are your ramps at tone 500: click one to copy its hex.',
   contrast: 'Every pairing is measured against this as the theme resolves.',
   radius: 'The kit’s eight steps. The components are square-cornered by default because the kit is.',
+  icons: 'The kit’s three icon families, in the straight cut the kit draws with. Swaps every icon in the preview.',
   typeface:
     'font-1 and font-2 are two roles that happen to hold the same family today. The kit says they may diverge, so the builder lets them.',
   derived:
@@ -202,6 +203,7 @@ export function ControlsPanel() {
   const contrast = by('contrast')
   const radius = by('radius')
   const density = by('density')
+  const icons = by('icons')
 
   const faces = [
     { c: by('headings'), name: 'Headings', role: 'font-1' },
@@ -262,6 +264,11 @@ export function ControlsPanel() {
 
       <Section label="Density" open={!!open.density} onToggle={() => flip('density')}>
         <ChipRow control={density} />
+      </Section>
+
+      <Section label="Icons" open={!!open.icons} onToggle={() => flip('icons')}>
+        <p className={styles.caption}>{CAPTIONS.icons}</p>
+        <ChipRow control={icons} />
       </Section>
 
       <Section label="Typeface" open={!!open.typeface} onToggle={() => flip('typeface')}>
