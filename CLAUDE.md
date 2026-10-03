@@ -215,7 +215,11 @@ a trace, which is what "no bypass" is meant to cost.
   `--graphite-*` (32 token roles, 6 states each for the `primary`,
   `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`
   and `--graphite-scrim`) and 59 `--cds-*`. Verified 2026-09-30 by reading
-  `<html>`'s inline style. The counts are worth keeping straight —
+  `<html>`'s inline style. The choice (`sourceHex`, `theme`, `level`)
+  persists in `localStorage`, because most site links are plain anchors and
+  every click is a full load; an inline `<head>` script re-applies the last
+  stamped vars before first paint so there is no flash of the default (keys
+  and script in `lib/theme-storage.ts`). The counts are worth keeping straight —
   `--graphite-*` is the primary namespace and is derived from the engine's
   token keys, so it cannot drift; `--cds-*` is Carbon's compatibility layer
   and is a hand-listed binding table that can. The Tokens foundation page

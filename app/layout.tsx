@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SiteHeader } from '@/components/site-header'
+import { THEME_RESTORE_SCRIPT } from '@/lib/theme-storage'
 import './globals.scss'
 
 export const metadata: Metadata = {
@@ -34,6 +35,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="cds--g100" suppressHydrationWarning>
+      <head>
+        {/* Puts the visitor's last colors back before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_RESTORE_SCRIPT }} />
+      </head>
       <body>
         <ThemeProvider>
           <SiteHeader />

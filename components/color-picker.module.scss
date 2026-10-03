@@ -13,7 +13,8 @@
   top: calc(100% + var(--graphite-space-04));
   right: 0;
   z-index: 50;
-  width: 15rem;
+  // Wide enough for the footer's Reset beside the 10rem Surprise me block.
+  width: 17.5rem;
   padding: var(--graphite-space-05) var(--graphite-space-05) 0;
 
   &::before {
@@ -35,6 +36,38 @@
 
 .footerAction {
   @include drop.action;
+}
+
+// The quiet half of the footer: a text action on the tinted strip, left of
+// the filled one.
+.reset {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-02);
+  padding: 0 var(--graphite-space-05);
+  background: none;
+  border: 0;
+  border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+  color: var(--graphite-on-surface-variant);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--graphite-on-surface);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -4px;
+  }
+
+  &:disabled {
+    color: var(--graphite-primary-disabled-content);
+    cursor: default;
+  }
 }
 
 // --- HSV picker. Its gradients and marker positions are computed per render,
