@@ -125,10 +125,14 @@ after kit Inline loading, with skeleton rows the shape of results.
   Tab accepts a completion, Escape closes.
 - A polite live region announces counts, scope, filters and did-you-mean.
 - Chips and filters are real buttons with names ("Stop limiting to Tabs").
-- The panel has a fixed height on desktop so it does not jump while typing.
-  Below 672px it becomes a full-screen sheet with a Cancel button, and the
-  keyboard hints are hidden on touch.
-- Motion is opacity only and respects reduced motion.
+- From 672px the panel drops from the header's search trigger with a caret,
+  slid along to stay 16px inside the window, with a fixed height so it does not
+  jump while typing. Below 672px it becomes a full-screen sheet with a Cancel
+  button, and the keyboard hints are hidden on touch.
+- The footer is the keyboard hints and a filled Search action, which does what
+  Enter does.
+- It drops in with a spring, the tint rises and the result groups cascade; on
+  phones it fades. Reduced motion turns all of it off.
 
 ## Limits worth knowing
 
