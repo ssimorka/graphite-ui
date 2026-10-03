@@ -1,3 +1,5 @@
+@use '../drop-panel' as drop;
+
 // The Components index, from the kit's Site page (Graphite UI Site 11830:433).
 //
 // The kit lays a 48px hairline grid behind the whole main column. Two
@@ -166,12 +168,20 @@
   list-style: none;
 }
 
+@include drop.defs;
+
 .card {
+  // The header panels' AI layer (../_drop-panel.scss), as the home wall and
+  // the docs' "next" cards wear it: tinted from the foot on primary, 8px
+  // corners, an edge shading to primary. Swept against all 288 test sources,
+  // the weakest text on the tint at full strength is 5.08:1, so it holds AA.
+  @include drop.surface;
   display: flex;
   flex-direction: column;
   min-height: 16.875rem;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
+  // Lets the foot ask how wide its own card is: see .meta.
+  container-type: inline-size;
+  transition: --glow 300ms ease-out;
   // The same lift as the Create page's samples: a tight contact shadow and a
   // wide soft one, black at low strength so it reads in both themes.
   box-shadow:
@@ -208,42 +218,82 @@
 
 .meta {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--graphite-space-03);
-  padding: 0.875rem var(--graphite-space-05) var(--graphite-space-05);
+  padding: 0 0 0 var(--graphite-space-05);
   border-top: 1px solid var(--graphite-surface-variant);
+
+  // Too narrow for the badge and a long name on one line: the badge takes its
+  // own row and the action becomes a full-width bar along the foot.
+  @container (width < 300px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+
+    > :first-child {
+      align-self: flex-start;
+      margin: var(--graphite-space-04) var(--graphite-space-05);
+    }
+
+    .ctaHeading {
+      margin-left: 0;
+    }
+
+    .cta {
+      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+    }
+  }
 }
 
-.name {
-  margin: 0;
-  font-size: var(--graphite-text-body-1-size);
-  line-height: var(--graphite-text-body-1-line-height);
-  font-weight: 400;
-  color: var(--graphite-on-surface);
+.ctaHeading {
+  display: flex;
+  margin: 0 0 0 auto;
+  font: inherit;
 }
 
-.nameLink {
-  color: inherit;
+// The component's name as the filled corner action, as on the home wall. It
+// is the card's link, so it stays in the flow: positioned, it would become the
+// containing block for its own ::after and the overlay would shrink to it.
+.cta {
+  @include drop.action;
+  flex: 1;
+  gap: var(--graphite-space-04);
   text-decoration: none;
 
-  // The whole card is the target, not just the name.
   &::after {
     content: '';
     position: absolute;
     inset: 0;
   }
+}
 
-  &:hover {
-    text-decoration: underline;
-  }
+.cardLinked:hover {
+  --glow: 75%;
 
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
+  .cta {
+    background: var(--graphite-primary-hover);
   }
 }
 
-.cardLinked {
+// Ungoverned: the same block, disabled, because there is no page to open. Not
+// a link and no overlay, so the card does nothing when pressed.
+.ctaDisabled {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+  cursor: default;
+
+  &::after {
+    content: none;
+  }
+
+  &:hover {
+    background: var(--graphite-primary-disabled);
+  }
+}
+
+.card {
   position: relative;
 }
 

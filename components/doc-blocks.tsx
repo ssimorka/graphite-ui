@@ -107,11 +107,18 @@ export function NextCard({
 }) {
   return (
     <li className={styles.nextCard}>
+      {/* The title is the link, and its overlay makes the whole card the
+          target. The corner block is the same filled action as the search
+          panel and the Create bar wear, drawn for the eye only: it sits under
+          the overlay, so it is not a second link to the same place. */}
       <a className={styles.nextLink} href={href}>
         {title}
-        <span aria-hidden="true">{'  →'}</span>
       </a>
       <p className={styles.nextBody}>{children}</p>
+      <span className={styles.nextCta} aria-hidden="true">
+        Read
+        <span>→</span>
+      </span>
     </li>
   )
 }

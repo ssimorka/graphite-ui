@@ -1,3 +1,5 @@
+@use '../drop-panel' as drop;
+
 // Component wall — kit "02 Component wall" (11863:2973).
 //
 // Uses the same --graphite-* tokens the components themselves do. That is the
@@ -79,26 +81,34 @@
   }
 }
 
+@include drop.defs;
+
 .card {
+  // The header panels' AI layer (../_drop-panel.scss), as the docs' "next"
+  // cards wear it: tinted from the foot on primary, 8px corners, an edge
+  // shading to primary. Swept against all 288 test sources, the weakest text
+  // on the tint at full strength is 5.08:1, so it holds AA.
+  @include drop.surface;
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
+  // Lets the foot ask how wide its own card is: see .meta.
+  container-type: inline-size;
   // Shadows/Menu
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
-  // Hover states .md gives this 300ms ease-out, moving border and preview
+  // Hover states .md gives this 300ms ease-out, moving the glow and preview
   // together. 300ms is not a token: only fast (120), base (240) and
   // indeterminate (1400) are, so it is a literal here the way the other
-  // one-off durations on this page are.
-  transition: border-color 300ms ease-out;
+  // one-off durations on this page are. --glow is a registered property, so
+  // it eases like any other value.
+  transition: --glow 300ms ease-out;
 }
 
 // The kit takes the rule from border-disabled to outline-strong. The engine
 // has one outline role, so rest sits on surfaceVariant (the outline-subtle
 // hex) and hover steps up to it.
 .card:hover {
-  border-color: var(--graphite-outline);
+  --glow: 75%;
 }
 
 // The frame, its fill and its radius do not move; only the artwork inside
@@ -157,8 +167,46 @@
   pointer-events: auto;
 }
 
-.nameLink {
-  color: inherit;
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  padding: 0 0 0 var(--graphite-space-05);
+  border-top: 1px solid var(--graphite-surface-variant);
+
+  // Too narrow for the badge and the longest names on one line (cards run
+  // to 226px between lg and the four-column width): the badge takes its own
+  // row and the action becomes a full-width bar along the foot.
+  @container (width < 260px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+
+    .badges {
+      padding: var(--graphite-space-04) var(--graphite-space-05);
+    }
+
+    .cta {
+      margin-left: 0;
+      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+    }
+  }
+}
+
+// The component's name as the filled corner action, as on the docs' "next"
+// cards and the header panels. It is the card's link, so it stays in the flow
+// (flush in the corner by the strip's own geometry, not absolutely placed):
+// positioned, it would become the containing block for its own ::after and
+// the overlay would shrink to the button.
+.cta {
+  @include drop.action;
+  // Tighter than the panels' footer action: it shares a 260px strip with the
+  // contract badge, and "Notification" has to fit beside it on one line.
+  gap: var(--graphite-space-03);
+  min-width: 0;
+  padding: 0 var(--graphite-space-04);
   text-decoration: none;
 
   &::after {
@@ -167,22 +215,9 @@
     inset: 0;
   }
 
-  &:hover {
-    text-decoration: underline;
+  .card:hover & {
+    background: var(--graphite-primary-hover);
   }
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
-}
-
-.meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-03);
-  padding: var(--graphite-space-05);
-  border-top: 1px solid var(--graphite-surface-variant);
 }
 
 .name {
@@ -201,6 +236,8 @@
 // Status badge: the version is spelled out in the label, so the color is
 // reinforcement rather than the only thing carrying the meaning.
 .badge {
+  // One line always: a badge broken over two reads as two badges.
+  white-space: nowrap;
   font-size: var(--graphite-text-caption-2-size);
   line-height: var(--graphite-text-caption-2-line-height);
   font-weight: var(--graphite-text-weight-medium);
