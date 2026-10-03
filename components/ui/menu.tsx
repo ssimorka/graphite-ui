@@ -9,7 +9,7 @@ export type MenuItem =
   | { kind?: 'item'; label: string; onSelect: () => void; disabled?: boolean; destructive?: boolean }
   | { kind: 'separator' }
 
-/** Contract: docs/contracts/menu.md (1.3.1) */
+/** Contract: docs/contracts/menu.md (1.4.0) */
 type MenuProps = {
   trigger: (props: {
     onClick: () => void

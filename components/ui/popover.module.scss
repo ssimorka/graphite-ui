@@ -1,4 +1,9 @@
 // Popover — docs/contracts/popover.md
+//
+// The kit's Popover (Graphite UI Kit 9125:400576), built from its Popover
+// item: an elevation-01 panel, square, padded 16, with no edge and the kit's
+// overlay shadow, and a 12×6 caret on the trigger's centre. The caret's base
+// is 4 from the trigger, so the panel starts 10 out.
 .wrap {
   position: relative;
   display: inline-flex;
@@ -10,9 +15,11 @@
   min-width: var(--graphite-space-12);
   // 16, per the kit's Popover content.
   padding: var(--graphite-space-05);
-  background: var(--graphite-surface-elevated);
-  border: 1px solid var(--graphite-outline);
+  background: var(--graphite-elevation-01);
   border-radius: var(--graphite-radius-none);
+  // A filter rather than a box-shadow, so the caret and the panel cast one
+  // shadow between them instead of two that overlap at the joint.
+  filter: drop-shadow(var(--graphite-shadow-overlay));
   // The shared overlay entrance. Opacity only, matching Tooltip, and no exit:
   // the panel unmounts on close, which is what keeps the no-nesting throw off
   // the prerender path.
@@ -35,7 +42,70 @@
   outline: none;
 }
 
-.top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); }
-.bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
-.left { right: 100%; top: 0; margin-right: var(--graphite-space-02); }
-.right { left: 100%; top: 0; margin-left: var(--graphite-space-02); }
+// The caret, in the panel's own fill.
+.panel::before {
+  content: '';
+  position: absolute;
+  background: inherit;
+}
+
+// ------------------------------------------------------------------- sides
+// 10 out: the 4px gap and the 6px caret.
+.top { bottom: calc(100% + 10px); }
+.bottom { top: calc(100% + 10px); }
+.left { right: calc(100% + 10px); }
+.right { left: calc(100% + 10px); }
+
+.top::before,
+.bottom::before { width: 12px; height: 6px; }
+.left::before,
+.right::before { width: 6px; height: 12px; }
+
+.top::before { top: 100%; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.bottom::before { bottom: 100%; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.left::before { left: 100%; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.right::before { right: 100%; clip-path: polygon(100% 0, 100% 100%, 0 50%); }
+
+// --------------------------------------------------------------- alignment
+// Start and End put the caret 16 from that edge of the panel and the caret on
+// the trigger's centre, so the panel overhangs the trigger by 22 less than
+// half its size: 6 on the kit's 32px trigger.
+:is(.top, .bottom).start { left: calc(50% - 22px); }
+:is(.top, .bottom).start::before { left: 16px; }
+:is(.top, .bottom).center { left: 50%; transform: translateX(-50%); }
+:is(.top, .bottom).center::before { left: calc(50% - 6px); }
+:is(.top, .bottom).end { right: calc(50% - 22px); }
+:is(.top, .bottom).end::before { right: 16px; }
+
+:is(.left, .right).start { top: calc(50% - 22px); }
+:is(.left, .right).start::before { top: 16px; }
+:is(.left, .right).center { top: 50%; transform: translateY(-50%); }
+:is(.left, .right).center::before { top: calc(50% - 6px); }
+:is(.left, .right).end { bottom: calc(50% - 22px); }
+:is(.left, .right).end::before { bottom: 16px; }
+
+// ----------------------------------------------------------------- tab tip
+// The kit's Popover - Tab tip: the open trigger takes the panel's fill and
+// the panel hangs from it with no gap and no caret, aligned to the trigger's
+// edge. The shadow moves to the wrap, so trigger and panel cast one.
+.tip {
+  display: inline-flex;
+}
+
+.joined .tip { background: var(--graphite-elevation-01); }
+// The filter makes the wrap a stacking context, so it takes the panel's
+// z-index itself or the page after it would paint over the panel.
+.joined {
+  z-index: 20;
+  filter: drop-shadow(var(--graphite-shadow-overlay));
+}
+
+.tabTip .panel {
+  top: 100%;
+  filter: none;
+  transform: none;
+}
+
+.tabTip .panel::before { content: none; }
+.tabTip .start { left: 0; }
+.tabTip .end { left: auto; right: 0; }

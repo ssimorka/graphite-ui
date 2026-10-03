@@ -1,6 +1,6 @@
 ---
 component: Menu
-version: 1.3.1
+version: 1.4.0
 wave: 5
 slots:
   - name: Trigger
@@ -17,7 +17,9 @@ props:
   - name: placement
 tokens:
   - inherited_from: Popover
-    usage: Elevated `surface`, `outline` edge.
+    usage: The `elevation-01` surface and the `shadow-overlay` lift, with no edge (Popover 2.0.0).
+  - name: outline
+    usage: The separator rule. No longer the panel's edge, which went with Popover's in 2.0.0.
   - name: on-surface
     usage: Contained list labels.
   - name: surface-variant

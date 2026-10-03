@@ -39,7 +39,7 @@ export function overlayDoc(): ComponentDocConfig {
     dos: [
       'Call useOverlay from any new floating surface, and pass it switches rather than adding listeners of your own.',
       'Turn trapFocus on for anything that blocks the page, and leave it off for anything the reader can ignore.',
-      'Declare surface-elevated and outline in the new overlay’s own contract. In Light the elevated surface matches the page, so the edge is what makes it visible.',
+      'Declare elevation and shadow in the new overlay’s own contract: elevation-01 for the surface and shadow-overlay for the lift, with no edge, as the kit draws its overlays.',
       'Unmount the content on close, as the four existing overlays do. Their no-nesting checks depend on it.',
     ],
     donts: [

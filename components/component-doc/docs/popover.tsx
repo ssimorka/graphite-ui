@@ -3,11 +3,15 @@ import shared from '../component-doc.module.scss'
 import styles from './popover.module.scss'
 import { PopoverPreview, PopoverStill } from './popover-preview'
 
-const still = (placement: 'top' | 'bottom' | 'left' | 'right') => (
+const still = (
+  placement: 'top' | 'bottom' | 'left' | 'right',
+  align: 'start' | 'center' | 'end' = 'center',
+  variant: 'default' | 'tab-tip' = 'default',
+) => (
   <div
     className={`${styles.stage} ${placement === 'left' ? styles.stageLeft : ''} ${placement === 'right' ? styles.stageRight : ''}`}
   >
-    <PopoverStill placement={placement} />
+    <PopoverStill placement={placement} align={align} variant={variant} />
   </div>
 )
 
@@ -33,12 +37,16 @@ export function popoverDoc(): ComponentDocConfig {
       </div>
     ),
     variantsLede:
-      'Placement is the one visual prop. The panel opens on that side of the trigger, aligned to its start edge, and does not flip when it runs out of room.',
+      'Placement chooses the side and align chooses where along the trigger the panel sits; the caret stays on the trigger’s centre either way. The panel does not flip when it runs out of room. Tab tip is the kit’s second set: the open trigger and the panel join into one shape.',
     variants: [
       { label: 'Placement: Top', node: still('top') },
       { label: 'Placement: Bottom', node: still('bottom') },
       { label: 'Placement: Left', node: still('left') },
       { label: 'Placement: Right', node: still('right') },
+      { label: 'Align: Start', node: still('bottom', 'start') },
+      { label: 'Align: End', node: still('bottom', 'end') },
+      { label: 'Tab tip: Start', node: still('bottom', 'start', 'tab-tip') },
+      { label: 'Tab tip: End', node: still('bottom', 'end', 'tab-tip') },
     ],
     dos: [
       'Use a Popover when the reader needs to act on what is inside it: toggle a filter, pick an option, fill one field.',
@@ -57,18 +65,19 @@ export function popoverDoc(): ComponentDocConfig {
       ['Roles', <>The trigger gets <code>aria-expanded</code> and <code>aria-controls</code>. With modal on, the panel is <code>role=&quot;dialog&quot;</code> with <code>aria-modal</code>; name it with the <code>label</code> prop. Without modal it has no role, and label is ignored.</>],
       ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes. The content can be controlled from outside: a re-render while it is open leaves focus alone.'],
       ['Pointer', 'Pressing the trigger again closes it, and so does a press anywhere outside the panel. There is no close button of its own.'],
-      ['Contrast', <>The panel is <code>surface-elevated</code> with an <code>outline</code> edge. In Light the elevated surface matches the page, so the edge is what separates them.</>],
+      ['Contrast', <>The panel is <code>elevation-01</code> lifted by <code>shadow-overlay</code>, with no edge, as the kit draws every overlay. The shadow is what separates it from the page in Light.</>],
       ['Motion', 'It fades in on the fast motion step and appears at once under prefers-reduced-motion. It does not animate out.'],
     ],
     parityLede:
-      'The kit’s Popover page draws three public sets: the popover itself, a Tab tip, and the Popover item its variants are built from. The code exposes four props, and label has no kit axis because a name is not drawn. Most of the kit’s axes are placement, and the rest are states or styles the code settles one way.',
+      'The kit’s Popover page draws three public sets: the popover itself, a Tab tip, and the Popover item its variants are built from. Placement, align and variant cover the drawn axes; modal and label have no kit axis because behaviour and a name are not drawn.',
     parity: [
       ['Position', 'Top · Bottom · Left · Right', 'placement', 'One to one.'],
-      ['Alignment', 'Start · Center · End', '—', 'No counterpart. The code always aligns the panel to the trigger’s start edge (left for Top and Bottom, top for Left and Right).'],
+      ['Alignment', 'Start · Center · End', 'align', 'One to one, Center by default. Start and End put the caret 16 from that edge, so on the kit’s 32px trigger the panel overhangs by 6.'],
       ['Visible', 'True · False', 'defaultOpen', 'Runtime state. The kit draws both because Figma has no other way to show it; defaultOpen only chooses where it starts.'],
-      ['Shadow', 'True · False', '—', 'No counterpart. The code separates the panel with its outline edge and no shadow, which is what the Overlay contract requires in Light.'],
-      ['Open (Tab tip)', 'True · False', '—', 'No counterpart. Tab tip is Carbon’s trigger style that joins the panel like a tab; Graphite has no such trigger.'],
-      ['Caret', '_Popover caret item (private)', '—', 'No counterpart. The panel sits a small gap from the trigger with no caret.'],
+      ['Popover item: Caret tip', 'True in every variant', '—', 'Always drawn: 12 by 6 in the panel fill, its base 4 from the trigger.'],
+      ['Popover item: Shadow', 'True in every variant', '—', 'Always drawn: shadow-overlay, with no edge. Shadow=False is drawn by no Popover variant.'],
+      ['Popover item: Zero radius', 'True in every variant', '—', 'Always square. The 2px corner behind it is drawn by no Popover variant.'],
+      ['Set', 'Popover - Tab tip', 'variant="tab-tip"', 'Alignment Start · End and Open. The open trigger takes the panel fill and joins it with no gap and no caret, under one shadow. The kit’s trigger is a 48px ghost icon-only button.'],
     ],
     related: [
       { href: '/docs/components/tooltip', title: 'Tooltip', why: 'for text only, on hover or focus' },
