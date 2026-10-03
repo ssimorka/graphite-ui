@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { TextInput } from '@/components/ui/text-input'
 import { CardShell } from '../card-shell'
 import styles from './not-found.module.scss'
@@ -21,7 +21,7 @@ export function NotFoundCard() {
             placeholder="Try searching for pages..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            trailing={<Search size={16} aria-hidden />}
+            trailing={<KitIcon name="search" size={16} aria-hidden />}
           />
         </div>
         <a

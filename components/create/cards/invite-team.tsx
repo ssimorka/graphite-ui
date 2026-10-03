@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Add, Copy } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell, CardHeader } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { TextInput } from '@/components/ui/text-input'
@@ -67,7 +67,7 @@ export function InviteTeamCard() {
         onClick={() => setInvitees((l) => [...l, { email: '', role: 'member' }])}
       >
         Add another
-        <Add size={16} aria-hidden="true" />
+        <KitIcon name="plus" size={16} aria-hidden="true" />
       </Button>
       <hr className={styles.divider} />
       <div className={styles.link}>
@@ -78,7 +78,7 @@ export function InviteTeamCard() {
           onClick={copy}
           aria-label={copied ? 'Copied' : 'Copy invite link'}
         >
-          <Copy size={16} aria-hidden="true" />
+          <KitIcon name="copy" size={16} aria-hidden="true" />
         </button>
       </div>
       <Button variant="primary" className={styles.full}>

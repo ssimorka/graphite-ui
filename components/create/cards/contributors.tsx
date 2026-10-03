@@ -1,4 +1,4 @@
-import { User } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell } from '../card-shell'
 import { Tag } from '@/components/ui/tag'
 import styles from './contributors.module.scss'
@@ -14,7 +14,7 @@ export function ContributorsCard() {
       <div className={styles.avatars} aria-hidden="true">
         {Array.from({ length: 15 }, (_, i) => (
           <span className={styles.avatar} key={i}>
-            <User size={16} />
+            <KitIcon name="user" size={16} />
           </span>
         ))}
       </div>

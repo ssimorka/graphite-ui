@@ -1,4 +1,4 @@
-import { Checkmark, Information } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell, CardHeader } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { Tag } from '@/components/ui/tag'
@@ -15,20 +15,20 @@ export function AgentCard() {
       />
       <ul className={styles.features}>
         <li className={styles.feature}>
-          <Checkmark size={16} className={styles.check} aria-hidden="true" />
+          <KitIcon name="check" size={16} className={styles.check} aria-hidden="true" />
           <p className={styles.text}>
             <strong>Code reviews</strong> with full codebase context to catch <strong>hard-to-find</strong>{' '}
             bugs.
           </p>
         </li>
         <li className={styles.feature}>
-          <Checkmark size={16} className={styles.check} aria-hidden="true" />
+          <KitIcon name="check" size={16} className={styles.check} aria-hidden="true" />
           <p className={styles.text}>
             <strong>Code suggestions</strong> validated in sandboxes before you merge.
           </p>
         </li>
         <li className={styles.feature}>
-          <Checkmark size={16} className={styles.check} aria-hidden="true" />
+          <KitIcon name="check" size={16} className={styles.check} aria-hidden="true" />
           <div className={styles.stack}>
             <p className={styles.text}>
               <strong>Root-cause analysis</strong> for production issues with deployment context.
@@ -41,7 +41,7 @@ export function AgentCard() {
       </ul>
       <Notification
         variant="info"
-        icon={<Information size={20} />}
+        icon={<KitIcon name="info" size={20} />}
         title="Trial credit"
         body="Pro teams get $100 in Vercel Agent trial credit for 2 weeks after activation."
       />

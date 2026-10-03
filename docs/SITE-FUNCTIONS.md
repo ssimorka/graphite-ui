@@ -123,7 +123,8 @@ sheets rise from the bottom, the panel drops in.
 
 - **Controls**: source color (hex, Pick, and eight ramp swatches that copy
   their hex rather than set the source), theme, contrast target, radius,
-  density, typeface (headings, body, code), the derived roles (read-only), and
+  density, icons, typeface (headings, body, code), the derived roles
+  (read-only), and
   Shuffle, Reset and Get the code. Source, theme, contrast and radius can be
   locked against Shuffle. The bar's footer is Reset, Shuffle and the filled
   Get the code; below 672px Reset and Shuffle are icons that share the width.
@@ -135,7 +136,11 @@ sheets rise from the bottom, the panel drops in.
   rack of example cards with no frame of their own, on the page grid, which is
   fixed to the viewport. Cards carry a drop shadow and are dealt into one to
   three columns balanced by measured height. Radius, density and fonts are
-  scoped to the preview.
+  scoped to the preview. **Icons** picks one of the kit's three icon families,
+  Regular, Bold or Solid, in the straight cut, and every icon in the examples
+  follows it (`KitIcon` in [`components/kit-icon.tsx`](../components/kit-icon.tsx),
+  paths in [`lib/kit-icons.ts`](../lib/kit-icons.ts), exported from the kit).
+  The site's own chrome keeps its Carbon icons.
 - **Patterns**: the generative composition (`GenerativeArt` in
   [`components/generative-art.tsx`](../components/generative-art.tsx)) at 16:9,
   repainted from the source and theme. Selecting a panel reshuffles it;

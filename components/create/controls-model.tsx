@@ -11,6 +11,7 @@ import {
   CODE_FONTS,
   DENSITIES,
   HEADING_FONTS,
+  ICON_FAMILIES,
   RADII,
   useBuilder,
 } from './builder'
@@ -22,6 +23,7 @@ export type ControlId =
   | 'contrast'
   | 'radius'
   | 'density'
+  | 'icons'
   | 'headings'
   | 'body'
   | 'code'
@@ -145,6 +147,15 @@ export function useControls(): Control[] {
       options: DENSITIES.map((d) => ({ key: d.key, label: d.label })),
       selected: b.density,
       select: (k) => b.setDensity(k as typeof b.density),
+    },
+    {
+      id: 'icons',
+      label: 'Icons',
+      heading: 'Icons',
+      value: ICON_FAMILIES.find((f) => f.key === b.iconSet)!.label,
+      options: ICON_FAMILIES.map((f) => ({ key: f.key, label: f.label })),
+      selected: b.iconSet,
+      select: (k) => b.setIconSet(k as typeof b.iconSet),
     },
     {
       id: 'headings',

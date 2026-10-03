@@ -11,6 +11,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { hsvToHex } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { useTheme } from '@/components/theme-provider'
+import type { IconSet } from '@/lib/kit-icons'
 
 // ------------------------------------------------------------------ options
 // The theme builder's small closed sets. Each is a row of choice chips in the
@@ -34,6 +35,14 @@ export const DENSITIES = [
   { key: 'spacious', label: 'Spacious' },
 ] as const
 export type DensityKey = (typeof DENSITIES)[number]['key']
+
+// The kit's three icon families (Graphite UI Kit, Foundations: Icons), all in
+// their straight-corner cut, which is the one the kit draws with.
+export const ICON_FAMILIES: { key: IconSet; label: string }[] = [
+  { key: 'regular', label: 'Regular' },
+  { key: 'bold', label: 'Bold' },
+  { key: 'solid', label: 'Solid' },
+]
 
 export const DEVICES = [
   { key: 'desktop', label: 'Desktop' },
@@ -77,6 +86,8 @@ type Builder = {
   setBodyFont: (k: string) => void
   codeFont: string
   setCodeFont: (k: string) => void
+  iconSet: IconSet
+  setIconSet: (s: IconSet) => void
   device: DeviceKey
   setDevice: (d: DeviceKey) => void
   locks: Record<LockKey, boolean>
@@ -120,6 +131,7 @@ const DEFAULTS = {
   headingFont: 'plex-sans',
   bodyFont: 'plex-sans',
   codeFont: 'plex-mono',
+  iconSet: 'regular' as IconSet,
 }
 
 export function BuilderProvider({ children }: { children: ReactNode }) {
@@ -129,6 +141,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   const [headingFont, setHeadingFont] = useState(DEFAULTS.headingFont)
   const [bodyFont, setBodyFont] = useState(DEFAULTS.bodyFont)
   const [codeFont, setCodeFont] = useState(DEFAULTS.codeFont)
+  const [iconSet, setIconSet] = useState<IconSet>(DEFAULTS.iconSet)
   const [device, setDevice] = useState<DeviceKey>('desktop')
   const [locks, setLocks] = useState<Record<LockKey, boolean>>({
     source: false,
@@ -143,7 +156,8 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   )
 
   // Shuffle randomises what is unlocked, and only the four controls the kit
-  // gives a Lock. Density and type have none, so they are not part of the dice.
+  // gives a Lock. Density, type and icons have none, so they are not part of
+  // the dice.
   const shuffle = useCallback(() => {
     if (!locks.source) {
       // A saturated, mid-value colour: a random hex is mostly muddy, and the
@@ -164,6 +178,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     setHeadingFont(DEFAULTS.headingFont)
     setBodyFont(DEFAULTS.bodyFont)
     setCodeFont(DEFAULTS.codeFont)
+    setIconSet(DEFAULTS.iconSet)
   }, [setSourceHex, setTheme, setLevel])
 
   const previewStyle = useMemo<CSSProperties>(
@@ -196,6 +211,8 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     setBodyFont,
     codeFont,
     setCodeFont,
+    iconSet,
+    setIconSet,
     device,
     setDevice,
     locks,

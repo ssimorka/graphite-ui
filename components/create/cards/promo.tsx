@@ -1,4 +1,4 @@
-import { Add } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell, CardHeader } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { Tag } from '@/components/ui/tag'
@@ -16,7 +16,7 @@ export function PromoCard() {
       <div className={styles.footer}>
         <Button variant="primary" className={styles.button}>
           Create Query
-          <Add aria-hidden="true" />
+          <KitIcon name="plus" aria-hidden="true" />
         </Button>
         <Tag>Warning</Tag>
       </div>

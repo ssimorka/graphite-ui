@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { CloudUpload } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell, CardHeader } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import styles from './file-upload.module.scss'
@@ -32,7 +32,7 @@ export function FileUploadCard() {
         }}
       >
         <span className={styles.cell}>
-          <CloudUpload size={24} aria-hidden="true" />
+          <KitIcon name="cloud-upload" size={24} aria-hidden="true" />
         </span>
         <p className={styles.title}>Upload files</p>
         <p className={styles.hint}>

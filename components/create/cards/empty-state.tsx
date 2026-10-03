@@ -1,4 +1,4 @@
-import { User } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { CardShell } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import styles from './empty-state.module.scss'
@@ -11,7 +11,7 @@ export function EmptyStateCard() {
         <div className={styles.avatars} aria-hidden="true">
           {[0, 1, 2].map((i) => (
             <span className={styles.avatar} key={i}>
-              <User size={20} />
+              <KitIcon name="user" size={20} />
             </span>
           ))}
         </div>
