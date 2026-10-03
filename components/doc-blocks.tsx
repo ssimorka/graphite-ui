@@ -108,16 +108,16 @@ export function NextCard({
   return (
     <li className={styles.nextCard}>
       {/* The title is the link, and its overlay makes the whole card the
-          target. The corner block is the same filled action as the search
-          panel and the Create bar wear, drawn for the eye only: it sits under
-          the overlay, so it is not a second link to the same place. */}
+          target. The corner block is the filled action the search panel and
+          the Create bar wear, as an arrow only: nine cards saying "Read" was
+          one word nine times. It is for the eye: it sits under the overlay,
+          so it is not a second link to the same place. */}
       <a className={styles.nextLink} href={href}>
         {title}
       </a>
       <p className={styles.nextBody}>{children}</p>
       <span className={styles.nextCta} aria-hidden="true">
-        Read
-        <span>→</span>
+        →
       </span>
     </li>
   )
