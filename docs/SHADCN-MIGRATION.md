@@ -88,8 +88,9 @@ the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
   Plex, so IBM Plex it is. This previously read as an open question between the
   kit and shadcn's Inter/Geist; with the kit canonical there is no question to
   answer.
-- Removing Carbon collapses `--cds-*` (56 vars, 124 references in
-  `globals.scss`) into the single `--graphite-*` namespace, deleting the
+- Removing Carbon collapses `--cds-*` (59 vars, 78 `var(--cds-*)` references
+  in `globals.scss` and 81 across `app/` and `components/`, counted
+  2026-10-02) into the single `--graphite-*` namespace, deleting the
   hand-listed binding table CLAUDE.md flags as driftable. Simplification, not
   just a reskin.
 - **De-Carbon must not be done before fixing `token-drift`.**
