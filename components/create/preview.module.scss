@@ -8,18 +8,53 @@
   min-width: 0;
 }
 
-// The same square chip the components index uses for its filters. Desktop
-// only: below lg the window is already the size the chips would simulate, so
-// the preview just fills it.
+// Each tab's own content: its toolbar over its stage.
+.tabPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  padding-top: var(--graphite-space-05);
+}
+
 .toolbar {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--graphite-space-03);
-  background: var(--graphite-background);
   width: fit-content;
+  max-width: 100%;
+}
+
+// The device chips are desktop only: below lg the window is already the size
+// they would simulate, so the preview just fills it.
+.devices {
+  display: none;
+  background: var(--graphite-background);
 
   @media (min-width: 1056px) {
     display: flex;
   }
+}
+
+// The pattern toolbar spans the stage so its hint can sit on the right edge.
+.patternBar {
+  width: 100%;
+}
+
+.hint {
+  margin: 0 0 0 auto;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// The composition at the 16:9 it exports at, lifted like the sample cards.
+.art {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, #000 12%, transparent),
+    0 8px 24px color-mix(in srgb, #000 14%, transparent);
 }
 
 .chip {
