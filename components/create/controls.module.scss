@@ -212,8 +212,8 @@
   border: 1px solid var(--graphite-surface-variant);
   cursor: pointer;
 
-  // The chosen preset carries a heavier ring, so selection is not colour alone.
-  &[aria-pressed='true'] {
+  // The source's own swatch carries a heavier ring, so it is not colour alone.
+  &[data-source] {
     border: 2px solid var(--graphite-on-surface);
   }
 
@@ -470,7 +470,7 @@
 
 // Reset and Shuffle are the footer's quiet actions, Get the code its filled
 // corner block, as in the search panel's footer. Reset holds the left end;
-// Shuffle sits at the right, beside Get the code.
+// Shuffle sits at the right, beside Get the code. Below md both are icons.
 .barQuiet {
   display: flex;
   align-items: center;
@@ -496,6 +496,37 @@
 
 .barReset {
   border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+}
+
+// Below md, Reset and Shuffle drop to icons so all three actions fit in one
+// row at phone width, and split the room left of Get the code between them,
+// so the whole footer is target. Their labels become visually hidden text.
+@media (max-width: 671.98px) {
+  .barQuiet {
+    position: relative;
+    flex: 1;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0;
+
+    &:hover {
+      background: var(--graphite-surface-variant);
+      text-decoration: none;
+    }
+  }
+
+  .barShuffle {
+    margin-left: 0;
+  }
+
+  .barLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 .barShuffle {
