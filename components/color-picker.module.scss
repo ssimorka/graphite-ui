@@ -1,0 +1,87 @@
+// Source-color popover in the header. Same surface as the governed Popover
+// (docs/contracts/popover.md): surface-elevated, an outline border, square
+// corners. It is site chrome rather than a Popover instance because it anchors
+// to the header chip and owns its own outside-click handling.
+.panel {
+  position: absolute;
+  top: calc(100% + var(--graphite-space-03));
+  right: 0;
+  z-index: 50;
+  width: 13.75rem;
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  background: var(--graphite-surface-elevated);
+  border: 1px solid var(--graphite-outline);
+  border-radius: var(--graphite-radius-none);
+  color: var(--graphite-on-surface);
+}
+
+// --- HSV picker. Its gradients and marker positions are computed per render,
+// so those stay inline; everything static lives here.
+.pad {
+  position: relative;
+  width: 100%;
+  height: 8rem;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.hue {
+  position: relative;
+  width: 100%;
+  height: 0.875rem;
+  margin-top: var(--graphite-space-03);
+  cursor: pointer;
+  touch-action: none;
+}
+
+// The marker sits on arbitrary color, so it keeps a fixed white ring and dark
+// halo: no theme token is guaranteed to read against every hue the pad can show.
+.marker {
+  position: absolute;
+  width: 0.8125rem;
+  height: 0.8125rem;
+  border-radius: var(--graphite-radius-full);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+// --- Hex row
+.hexRow {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  margin-top: var(--graphite-space-03);
+}
+
+.preview {
+  flex-shrink: 0;
+  width: var(--graphite-space-06);
+  height: var(--graphite-space-06);
+  border: 1px solid var(--graphite-outline);
+}
+
+.hexInput {
+  flex: 1;
+  min-width: 0;
+  padding: var(--graphite-space-01) 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--graphite-outline);
+  color: var(--graphite-on-surface);
+  font-family: var(--graphite-font-mono);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+.hexInput:focus-visible {
+  outline: 2px solid var(--graphite-focus);
+  outline-offset: 2px;
+}
+
+// --- Surprise me: the popover's closing action, full width.
+.surprise {
+  width: 100%;
+  margin-top: var(--graphite-space-05);
+}

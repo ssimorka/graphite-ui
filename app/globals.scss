@@ -597,16 +597,16 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Page bands backdrop — kit "Grid lines — full bleed" (11896:292490) and the
-// second "Hero spotlight" instance (13400:6405)
+// Page bands backdrop — kit "Grid lines — full bleed" (11896:292490)
 // ---------------------------------------------------------------------------
-// Both are parented to Main content in the kit, not to the hero, and span
-// y 1344-3942: sections 02 through 05. So they are the backdrop the middle of
-// the page sits on. The hero keeps its own pair, which are masked and
-// pointer-tracked; these are neither.
+// The kit parents the grid to 03 Capabilities alone, sized to that section, so
+// PageBands wraps that one section. It used to span 02 through 05 with a second
+// spotlight beside it; both the span and the spotlight are gone, and 02 and 04
+// carry a mesh gradient each instead. The hero keeps its own grid and
+// spotlight.
 //
-// isolation, so the z-index -3 children stay behind the four sections while
-// still painting above .page-main's own fill.
+// isolation, so the z-index -3 children stay behind the section while still
+// painting above .page-main's own fill.
 .page-bands {
   // Scroll progress past this region's top, written by page-bands.tsx. The
   // default keeps the grid still before the listener runs, and under reduced
@@ -1278,7 +1278,7 @@ body {
   gap: var(--graphite-space-04);
   margin-top: var(--graphite-space-05);
   padding-top: var(--graphite-space-04);
-  border-top: 1px solid var(--cds-border-subtle);
+  border-top: 1px solid var(--graphite-outline);
 }
 
 // Verified-contrast readout that replaced the auto-fix toggle. Deliberately
@@ -1289,7 +1289,7 @@ body {
   display: flex;
   align-items: baseline;
   gap: var(--graphite-space-02);
-  color: var(--cds-text-secondary);
+  color: var(--graphite-on-surface-variant);
 }
 
 // Centre the labels in both tab strips.
@@ -1442,8 +1442,8 @@ body {
   align-items: start;
 }
 
-// How much scrolling each capability is worth. Kept in step with DWELL_PX in
-// capabilities.tsx, which describes the same distance from the other side.
+// How much scrolling each capability is worth. The only place this distance is
+// written down: capabilities.tsx reads the track's height back from geometry.
 $cap-dwell: 500px;
 
 // Desktop only: the section is a scroll track and the content is stuck to the
@@ -1585,9 +1585,9 @@ $cap-dwell: 500px;
   }
 }
 
-// The rail is the dwell timer made visible. Its fill is written from the same
-// animation frame that advances the carousel, so the bar cannot promise a
-// different moment than the one the stage actually turns on.
+// The rail is the reading position made visible. Its fill is written from the
+// same scroll reading that picks the panel, so the bar cannot show a different
+// progress than the one doing the selecting.
 .cap-item__rail {
   position: absolute;
   left: var(--graphite-space-04);

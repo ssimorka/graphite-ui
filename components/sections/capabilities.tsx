@@ -533,8 +533,8 @@ export function Capabilities({
   }, [])
 
   // Where the track sits and how far it can be read through. Taken from live
-  // geometry rather than recomputed from DWELL_PX, so the stylesheet stays the
-  // single place the track's height is decided.
+  // geometry rather than recomputed from $cap-dwell, so the stylesheet stays
+  // the single place the track's height is decided.
   const measure = useCallback(() => {
     const track = trackRef.current
     const pane = paneRef.current
