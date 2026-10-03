@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
+import { MeshGradient } from '@/components/mesh-gradient'
 import styles from './docs-shell.module.scss'
 
 export type DocsNavGroup = {
@@ -106,12 +107,18 @@ export function DocsShell({
   nav,
   toc,
   tocFooter,
+  wash = true,
   children,
 }: {
   nav: DocsNavGroup[]
   toc?: TocItem[]
   /** Sits under the on-this-page list: the kit's "Contract footnote". */
   tocFooter?: ReactNode
+  /**
+   * The accent mesh behind the top of the page. Off for a page that brings its
+   * own ground, as the Components index does with its grid.
+   */
+  wash?: boolean
   children: ReactNode
 }) {
   const pathname = usePathname()
@@ -137,7 +144,16 @@ export function DocsShell({
         ))}
       </aside>
 
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>
+        {/* The home band's accent mesh, washed behind the top of every docs
+            page and faded out before the reading starts. */}
+        {wash ? (
+          <div className={styles.wash} aria-hidden="true">
+            <MeshGradient family="accent" className={styles.washMesh} />
+          </div>
+        ) : null}
+        {children}
+      </div>
 
       {/* Rendered only when the page offers one. A component page with three
           short sections is better off without a rail than with a stub. */}

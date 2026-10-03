@@ -21,6 +21,10 @@
     linear-gradient(to right, var(--graphite-surface-variant) 1px, transparent 1px),
     linear-gradient(to bottom, var(--graphite-surface-variant) 1px, transparent 1px);
   background-size: 3rem 3rem;
+  // Fixed to the viewport, as on the Components index: the preview and its
+  // cards scroll over a ground that stays put. iOS Safari ignores it and
+  // scrolls the grid with the page, which is the old behaviour.
+  background-attachment: fixed;
   opacity: 0.5;
   pointer-events: none;
 }
