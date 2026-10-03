@@ -3,14 +3,12 @@
 
 // Select — docs/contracts/select.md
 //
-// The closed trigger takes Input's treatment. The open menu is the browser's
-// until Wave 5 lands an overlay surface, which is the soft dependency the
-// contract calls out.
+// The kit's Select - Default (Graphite UI Kit 17650:274860): the shared field
+// shell, the kit's 16px chevron 16 from the edge, and a status icon 8 before
+// it. The open menu is the browser's own, which is also what the kit's Open
+// state draws: a mock of the platform popup, not a Graphite menu.
 .field {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--graphite-space-02);
-  width: 100%;
+  @include parts.field-stack;
 }
 
 .wrap {
@@ -24,7 +22,7 @@
 // The kit draws a Hover state that Text input does not have: the trigger fill
 // steps to `field-hover`, which resolves to elevation/02, the elevation
 // ladder's hover rung.
-.wrap:hover:has(.select:enabled) {
+.wrap:hover:has(.select:enabled):not(.readOnly) {
   background: var(--graphite-elevation-02);
 }
 
@@ -33,18 +31,33 @@
 .errored,
 .errored:focus-within { @include shell.field-shell-error; }
 
-.wrap:has(.select:disabled) { @include shell.field-shell-disabled; }
+// Select's own disabled: the kit fills the trigger with the disabled tone and
+// drops the edge, where Text input keeps its field fill. Each set is its own
+// most specific artefact.
+.wrap:has(.select:disabled) {
+  @include shell.field-shell-disabled;
+  background: var(--graphite-primary-disabled);
+}
+
+// Read-only: no fill, and a plain outline rule (Text input's is subtle).
+.readOnly { @include shell.field-shell-readonly(outline); }
+.readOnly .select { cursor: default; }
 
 .select {
   appearance: none;
   width: 100%;
+  min-height: inherit;
   border: 0;
   background: transparent;
   color: var(--graphite-on-surface);
   font: inherit;
-  padding: 0 var(--graphite-space-08) 0 var(--graphite-space-05);
+  // 16 in from the left; on the right, 16 + the 16px chevron + 16.
+  padding: 0 var(--graphite-space-09) 0 var(--graphite-space-05);
   cursor: pointer;
 }
+
+// With a status icon: 16 + chevron 16 + 8 + icon 16 + 16.
+.withStatus { padding-right: 4.5rem; }
 
 .select:focus {
   outline: none;
@@ -55,15 +68,29 @@
   cursor: not-allowed;
 }
 
-.chevron {
+// The chevron and status icon, 8 apart, the chevron 16 from the right edge.
+.icons {
   position: absolute;
-  right: var(--graphite-space-04);
-  width: 0.45rem;
-  height: 0.45rem;
-  border: solid var(--graphite-on-surface);
-  border-width: 0 1.5px 1.5px 0;
-  transform: translateY(-25%) rotate(45deg);
+  right: var(--graphite-space-05);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
   pointer-events: none;
+}
+
+.chevron { color: var(--graphite-on-surface); }
+
+.isDisabled .chevron,
+.readOnly .chevron { color: var(--graphite-primary-disabled-content); }
+
+.status {
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warning .status {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
 }
 
 // Size is height only: the kit sets the value in Body/3 at every size.
@@ -78,5 +105,60 @@
 .indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
 
-.field:has(.select:disabled) :is(.label, .indicator, .help) { @include parts.field-dimmed; }
+.isDisabled :is(.label, .indicator, .help) { @include parts.field-dimmed; }
+
+// ------------------------------------------------------------------- inline
+// The kit's Inline style: label, trigger and message in one row, 8 apart. The
+// trigger has no fill and no edge at rest and hugs its value, padded 8; it
+// takes the hover fill and the rings like the Default trigger.
+.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  width: auto;
+
+  .label { margin-bottom: 0; }
+
+  .wrap {
+    width: auto;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .wrap:focus-within { @include shell.field-shell-focus; }
+  .errored,
+  .errored:focus-within { @include shell.field-shell-error; }
+
+  .select { padding-left: var(--graphite-space-03); padding-right: var(--graphite-space-08); }
+  .withStatus { padding-right: var(--graphite-space-10); }
+  .icons { right: var(--graphite-space-03); }
+
+  :is(.help, .error, .warningText) { flex: none; }
+}
+
+// -------------------------------------------------------------------- fluid
+// The kit's Select - Fluid: one 64px box, the label inside at the top, the
+// value row held at 18 under it, a plain outline rule on the bottom.
+.fluid .wrap {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--graphite-space-02);
+  min-height: var(--graphite-space-10);
+  padding: 13px 0;
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+
+  .label {
+    margin-bottom: 0;
+    padding: 0 var(--graphite-space-05);
+  }
+
+  .select { min-height: 0; height: 1.125rem; }
+  .icons { top: 33px; }
+}
+
+.fluid .wrap:focus-within { @include shell.field-shell-focus; }
+.fluid .errored,
+.fluid .errored:focus-within { @include shell.field-shell-error; }
