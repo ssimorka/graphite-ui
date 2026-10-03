@@ -21,6 +21,7 @@
 // condition, so the mixin is the only way to write one.
 @use '@carbon/react/scss/type' as type;
 @use '@carbon/react/scss/breakpoint' as breakpoint;
+@use '../components/drop-panel' as drop;
 
 // Applies one step of the kit's type scale. This is what Carbon's
 // `type.type-style()` did, reading --graphite-text-* instead of Carbon's
@@ -996,22 +997,28 @@ body {
 }
 
 // Source strip — the hero's product shot
+//
+// Wears the header panels' AI layer (components/_drop-panel.scss): tinted
+// from the foot on `primary`, 8px corners, an edge shading to primary. It
+// rises in as before, then the tint climbs and the ramps file in one by one.
+@include drop.defs;
+
 .hero__source-strip {
   position: relative;
   margin-top: var(--graphite-space-07);
-  animation: hero-rise 900ms var(--graphite-motion-ease) both;
+  animation:
+    hero-rise 900ms var(--graphite-motion-ease) both,
+    glow 900ms var(--graphite-motion-ease) 500ms both;
 
   @include breakpoint.breakpoint(md) {
     margin-top: var(--graphite-space-10);
   }
 
-  // Kit panel: square, one strong rule, and the menu shadow rather than the
-  // deep lift the old screenshot frame used. The strip is a surface on the
-  // page, not a floating object above it.
+  // The menu shadow rather than the deep lift the old screenshot frame used:
+  // the strip is a surface on the page, not a floating object above it.
   max-width: 1000px;
   margin-inline: auto;
-  border: 1px solid var(--cds-border-strong-01);
-  background: var(--cds-background);
+  @include drop.surface;
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
 
   // Inside the strip the ramp name is a title, not the mono eyebrow the
@@ -1020,6 +1027,37 @@ body {
   .ramp-stack {
     padding: var(--graphite-space-05) var(--graphite-space-06);
     background: transparent;
+  }
+
+  // The four ramps, then the footer, each rising a beat after the last once
+  // the strip itself has landed.
+  .ramp-stack > * {
+    @include drop.cascade($count: 4, $start: 420ms, $step: 90ms);
+  }
+
+  // The footer, ruled off like the search panel's: the hint at the left, the
+  // filled action in the bottom-right corner.
+  .hero__strip-footer {
+    display: flex;
+    align-items: stretch;
+    gap: var(--graphite-space-05);
+    min-height: 3rem;
+    border-top: 1px solid var(--graphite-surface-variant);
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: rise 420ms var(--graphite-motion-ease) 780ms both;
+    }
+  }
+
+  .ramp-stack__hint {
+    align-self: center;
+    margin: 0;
+    padding: var(--graphite-space-03) 0 var(--graphite-space-03) var(--graphite-space-06);
+  }
+
+  .hero__strip-cta {
+    @include drop.action;
+    text-decoration: none;
   }
 
   .ramp__label {

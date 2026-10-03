@@ -135,10 +135,19 @@ export function Hero({ governed }: { governed: number }) {
                   onCopy={copy}
                 />
               ))}
+            </div>
+            {/* The strip's footer, as on the header panels: the hint, then
+                the filled action in the corner, which takes the visitor from
+                looking at their ramps to building with them. */}
+            <div className="hero__strip-footer">
               <p className="ramp-stack__hint">
                 Select any swatch to copy its hex. The outlined stop is where
                 your source color landed.
               </p>
+              <a className="hero__strip-cta" href="/create">
+                Create a theme
+                <ArrowRight size={16} aria-hidden="true" />
+              </a>
             </div>
           </div>
         </Column>
