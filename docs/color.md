@@ -114,9 +114,29 @@ Icons follow text. Primary icons take `onBackground`; secondary icons take `onSu
 |---|---|---|---|
 | `outline` | All borders and dividers, subtle and strong alike | `neutralVariant 50` · `#63626d` | `neutralVariant 60` · `#807e8b` |
 
-One border token covers every border in the system. Interactive borders (a focused field, a selected card) bind to `primary` instead.
+`outline` is the border role. Beside it the engine generates the kit's outline ladder, two strengths that belong to the role rather than being roles of their own:
 
-`outline` is contrast-checked against `surface` at 3:1, the WCAG threshold for non-text UI, so borders are guaranteed perceivable rather than decorative.
+| Variable | Purpose | Light | Dark |
+|---|---|---|---|
+| `--graphite-outline-subtle` | Decorative rules and container edges, low contrast by intent (~1.2:1), never the only cue | `neutralVariant 90` · `#dedcea` | `neutralVariant 30` · `#2e2c37` |
+| `--graphite-outline-strong` | Load-bearing edges: a field's bottom rule, focusable container outlines | `neutralVariant 40` · `#474651` | `neutralVariant 70` · `#9e9daa` |
+
+Interactive borders (a focused field, a selected card) bind to `primary` instead.
+
+`outline` is contrast-checked against `surface` at 3:1, the WCAG threshold for non-text UI, so borders are guaranteed perceivable rather than decorative. `outline-strong` sits a tone beyond it in both themes, so it clears the same bar.
+
+### Elevation
+
+The kit's elevation ladder, generated beside the roles the same way. Components bind it for layers and their interaction fills: a menu or popover sits on 01, a hovered row takes 02, a pressed one 03.
+
+| Variable | Purpose | Light | Dark |
+|---|---|---|---|
+| `--graphite-elevation-00` | Ground: the page itself, equal to `background` | `neutral 98` | `neutral 18` |
+| `--graphite-elevation-01` | Resting layer. In light it equals the ground, because the ramp has no tone between 98 and 90; separation is the outline's job there | `neutral 98` | `neutral 30` |
+| `--graphite-elevation-02` | Hover step | `neutral 90` | `neutral 40` |
+| `--graphite-elevation-03` | Pressed step, never a resting surface | `neutral 80` | `neutral 50` |
+
+The thirty-two roles stay thirty-two: the kit files both ladders beside its roles in Graphite Semantic, and so does the engine (`LADDERS` in `lib/color.js`).
 
 ### Primary actions
 

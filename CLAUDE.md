@@ -220,11 +220,15 @@ a trace, which is what "no bypass" is meant to cost.
   `sourceHex`, `theme` (`'white' | 'g100'`) and `level` (AA/AAA). (It used to
   hold `autoFix` too; the toggle was removed as a no-op, see above.) It
   computes `lightBundle`/`darkBundle` (tokens + contrast + states) via
-  `lib/color.js` and stamps 111 CSS vars onto `<html>` on every change: 52
+  `lib/color.js` and stamps 117 CSS vars onto `<html>` on every change: 58
   `--graphite-*` (32 token roles, 6 states each for the `primary`,
-  `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`
-  and `--graphite-scrim`) and 59 `--cds-*`. Verified 2026-09-30 by reading
-  `<html>`'s inline style. The choice (`sourceHex`, `theme`, `level`)
+  `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`,
+  `--graphite-scrim`, and the six ladder variables from `LADDERS`:
+  `elevation-00`–`03`, `outline-subtle`, `outline-strong`) and 59 `--cds-*`.
+  The ladders are not roles (the kit files them beside its 32), so "thirty-two
+  roles" in the site copy stays true; drift-check binds `outline-*` to the
+  `outline` role and `elevation-*` to a declarable `elevation`. Counts verified
+  2026-10-03 by reading `<html>`'s inline style. The choice (`sourceHex`, `theme`, `level`)
   persists in `localStorage`, because most site links are plain anchors and
   every click is a full load; an inline `<head>` script re-applies the last
   stamped vars before first paint so there is no flash of the default (keys

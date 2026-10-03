@@ -7,9 +7,10 @@ component answers to a written contract that CI checks the code against.
 ## How it works
 
 **Source-derived theming.** One hex input, resolved in OKLab and sampled at
-fixed tone stops into perceptual ramps. Each theme pass emits 52
+fixed tone stops into perceptual ramps. Each theme pass emits 58
 `--graphite-*` color variables (32 roles, six states each for the primary,
-secondary and danger families, the focus ring and the scrim), which are the
+secondary and danger families, the focus ring, the scrim, and the kit's
+elevation and outline ladders), which are the
 canonical surface, plus 59 `--cds-*` variables as a Carbon compatibility
 layer. A further 100 variables (spacing, density, radius, breakpoints,
 typography, motion) are declared statically in `app/globals.scss`, because

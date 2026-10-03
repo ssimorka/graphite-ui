@@ -16,6 +16,7 @@ import {
   makeRamps,
   buildTheme,
   buildStates,
+  buildLadders,
   normalizeHex,
   scrimFor,
   STATE_FAMILIES,
@@ -200,6 +201,11 @@ function graphiteVarsFor(
   // it is the name components already read and the one that means "focus"
   // without picking a family.
   out['--graphite-focus'] = states.focus.hex
+  // The elevation and outline ladders: beside the roles rather than among
+  // them, the way the kit files them. See LADDERS in lib/color.js.
+  for (const [name, entry] of Object.entries(buildLadders(ramps, mode))) {
+    out[`--graphite-${name}`] = entry.hex
+  }
   // Scrim is not in the token map — it is rgba over the darkest neutral rather
   // than a tone, and has no `on-` partner or contrast pairing — so it is added
   // here rather than arriving through theme.tokens. It still comes from the
