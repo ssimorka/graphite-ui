@@ -168,7 +168,7 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 | Need | Current state | What to do today |
 |---|---|---|
 | **Links** | No distinct link role. Links bind to `primary`, with hover bound to the primary hover state. | Rely on underline plus `primary` for link affordance. Do not introduce a separate link color. |
-| **Elevation scale** | One raised surface (`surfaceElevated`) and no elevation scale. The system has no shading-based elevation model. | Express elevation with `outline`, `surfaceVariant` and `surfaceElevated`. The modal scrim is generated from the neutral ramp, as `--graphite-scrim`. |
+| **Elevation scale** | No shadow or elevation scale. There is one raised surface, `surfaceElevated`, and a generated scrim (`--graphite-scrim`, on the site only: the exporter does not emit it). | Put what floats (menus, popovers, the modal panel) on `surfaceElevated` with an `outline` edge. Express every other level of depth with `outline` and `surfaceVariant`. |
 
 ---
 
@@ -364,7 +364,7 @@ Work down this order. Stop at the first match.
 2. **Ground or container?** → `background` for the page, `surface` for a container, `surfaceVariant` for a field or a distinct region.
 3. **Content?** → `onX`, matching whatever it sits on. Primary content takes `onBackground` / `onSurface`; supporting content takes `onSurfaceVariant`.
 4. **Border?** → `outline`. If the border indicates interaction or focus, `primary` or the focus ring instead.
-5. **Action?** → `primary` + `onPrimary` for full emphasis; `primaryContainer` + `onPrimaryContainer` for low-emphasis accent regions; `outline` + `primary` for secondary actions.
+5. **Action?** → `primary` + `onPrimary` for full emphasis; `secondary` for the second tier (the kit's secondary Button fills with `secondary` and keeps the `onPrimary` label); `primaryContainer` + `onPrimaryContainer` for low-emphasis accent regions.
 6. **Interactive state?** → the state token for that role, never a manually adjusted value.
 7. **No match?** The role is missing from the system. Flag it rather than working around it.
 
@@ -421,9 +421,9 @@ Every term this page uses, in plain English. Ordered the way you meet them.
 
 Points where the system's current shape limits what can be documented or designed. Listed for the system owner, not as guidance for designers using it today.
 
-**1. No secondary or tertiary action role.** Every interface needs a second tier of action. Right now designers assemble one from `outline` and `primary` by convention, which means it will be assembled differently in different files. A `secondary` / `onSecondary` pair, or a documented low-emphasis pattern, would make it consistent.
+**1. ~~No secondary action role.~~ Resolved.** The engine now generates a `secondary` family (`secondary`, `onSecondary`, `secondaryContainer`, `onSecondaryContainer`, plus hover, pressed, selected, disabled and focus states), and Button's secondary variant fills with it. The old convention of assembling one from `outline` and `primary` is retired. There is still no tertiary tier.
 
-**2. No overlay, scrim, or elevation token.** Modals, drawers, popovers, and menus all need a scrim and a way to read as raised. With `background` and `surface` sharing a value, there is currently no system answer for either.
+**2. ~~No overlay or scrim token.~~ Partly resolved.** `surfaceElevated` is the raised surface for what floats, and the scrim is generated from the darkest neutral so it tracks the source. What remains open is an elevation scale: there is one raised level, and no shadows.
 
 **3. Text hierarchy is two levels.** Primary and secondary only. Dense interfaces typically want a third, quieter tier for timestamps, counts, and metadata, such as an `onSurfaceDim` or equivalent.
 

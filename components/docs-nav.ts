@@ -67,23 +67,6 @@ export const DOCS_NAV: DocsNavGroup[] = [
   },
 ]
 
-// Page order, and it has to stay that way: the shell's scroll-spy takes the
-// first intersecting entry in this order as the current one.
-export const COLOR_DOCS_TOC: TocItem[] = [
-  { href: '#how-it-works', label: 'How color works' },
-  { href: '#roles', label: 'Color roles' },
-  { href: '#hierarchy', label: 'Color hierarchy' },
-  { href: '#themes', label: 'Themes' },
-  { href: '#states', label: 'Interaction states' },
-  { href: '#accessibility', label: 'Accessibility' },
-  { href: '#usage', label: 'Usage' },
-  { href: '#tokens', label: 'Tokens' },
-  // Pattern reference and Glossary are sibling sections on the page rather
-  // than part of ColorDocs, so they are listed by hand in page order.
-  { href: '#patterns', label: 'Pattern reference' },
-  { href: '#glossary', label: 'Glossary' },
-]
-
 // The Installation and Color ramps pages' contents. Here rather than in the
 // page files because a page may only export what Next allows, and the search
 // index reads every page's sections from this one place.

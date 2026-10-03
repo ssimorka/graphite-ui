@@ -163,12 +163,16 @@ export default function InstallationPage() {
               lede="Because the alternative silently produces a different site."
             />
             <Callout title="Turbopack breaks on this project’s Sass.">
+              {/* One fragment, so Callout reads it as one paragraph: bare mixed
+                  children arrive as an array, which it splits per item. */}
+              <>
               <code>--webpack</code> is baked into both the <code>dev</code> and{' '}
               <code>build</code> scripts, so <code>pnpm dev</code> is safe. If
               you invoke Next directly, pass the flag yourself. The port is
               hardcoded, so parallel worktrees collide on it: the second server
               attaches to the first checkout, and anything you verify in the
               browser is then testing the wrong code.
+              </>
             </Callout>
           </section>
 
