@@ -2,99 +2,99 @@
 
 // Checkbox — docs/contracts/checkbox.md
 //
-// The control keeps a minimum touch target even though the painted box is
-// smaller, which is the same rule Button follows.
-.field { @include parts.control-stack; }
+// The kit's Checkbox (Graphite UI Kit 11506:27302): a 20px glyph frame holding
+// one of Carbon's three checkbox glyphs in on-surface, a Body/3 value 8 after
+// it in a 22px row, and the message 8 below. The control keeps a 32px touch
+// target even though the drawn box is 15px, the same rule Button follows.
+.field {
+  @include parts.control-stack;
+  gap: var(--graphite-space-03);
+}
+
+// The kit's Indented: one 20px frame and its 8 gap.
+.indented { margin-inline-start: 28px; }
 
 .row {
   display: inline-flex;
   align-items: center;
   gap: var(--graphite-space-03);
+  min-height: 22px;
 }
 
+// The 20px frame is the layout box and carries the focus ring; the native
+// input reaches 6px past it on every side for the 32px target.
 .control {
   position: relative;
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   flex: none;
-  min-width: var(--graphite-space-07);
-  min-height: var(--graphite-space-07);
+  width: 20px;
+  height: 20px;
 }
 
 .native {
   position: absolute;
-  inset: 0;
+  inset: -6px;
+  width: auto;
+  height: auto;
   margin: 0;
   opacity: 0;
   cursor: pointer;
 }
 
-.box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  // 20px: the kit's box size, between space-05 (16) and space-06 (24).
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--graphite-outline);
-  border-radius: var(--graphite-radius-none);
+.glyph {
+  display: block;
   pointer-events: none;
+  fill: var(--graphite-on-surface);
 }
 
-.native:checked + .box,
-.native:indeterminate + .box {
-  background: var(--graphite-primary);
-  border-color: var(--graphite-primary);
+// A 2px stroke centred on the 20px frame, in the primary family's focus step,
+// as the kit draws Focus: 1.5 clear of the box.
+.control:has(.native:focus-visible) {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -1px;
 }
 
-.native:focus-visible + .box {
-  box-shadow: 0 0 0 2px var(--graphite-focus);
+// Invalid: the ring turns danger at its own weight, over the fill when checked.
+.errored:not(.isDisabled) .glyph [data-part='ring'] { fill: var(--graphite-danger); }
+
+// Read-only: the box quietens to the disabled tone; the mark on it does not,
+// because the answer is still there to be read.
+.readOnly .glyph [data-part='ring'] { fill: var(--graphite-primary-disabled-content); }
+.readOnly .native { cursor: default; }
+
+// Disabled: the whole glyph, the value and the message take the disabled tone.
+.isDisabled .glyph { fill: var(--graphite-primary-disabled-content); }
+.isDisabled .native { cursor: not-allowed; }
+.isDisabled :is(.label, .help) { @include parts.field-dimmed; }
+
+.label {
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
 }
 
-.native:disabled + .box {
-  background: var(--graphite-primary-disabled);
-  border-color: var(--graphite-primary-disabled-content);
+// Help text sits flush under the box; error and warning lead with the kit's
+// 16px status icon, 2 in, the text 10 after it, at 28.
+.help,
+.error,
+.warningText {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-// Error takes the same danger border Text input does: the edge goes danger and
-// a 1px ring doubles it, so it still reads over the primary fill when checked.
-// The focus ring stacks outside it rather than replacing it, so a keyboard
-// user in the error state still sees where they are.
-.errored .native:enabled + .box {
-  border-color: var(--graphite-danger);
-  box-shadow: 0 0 0 1px var(--graphite-danger);
-}
-
-.errored .native:enabled:focus-visible + .box {
-  box-shadow:
-    0 0 0 1px var(--graphite-danger),
-    0 0 0 3px var(--graphite-focus);
-}
-
-// Check: two borders rotated into a tick. Hidden until :checked.
-.check {
-  width: 0.3rem;
-  height: 0.6rem;
-  border: solid var(--graphite-on-primary);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translateY(-10%);
-  opacity: 0;
-}
-
-.native:checked + .box .check { opacity: 1; }
-
-// Dash: a distinct glyph, so indeterminate is not a color swap.
-.dash {
-  width: 0.6rem;
-  height: 2px;
-  background: var(--graphite-on-primary);
-  opacity: 0;
-}
-
-.native:indeterminate + .box .dash { opacity: 1; }
-
-.label { @include parts.field-label; }
-.indicator { @include parts.field-indicator; }
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
+
+.status {
+  flex: none;
+  margin-left: var(--graphite-space-01);
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warningText .status {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
+}
