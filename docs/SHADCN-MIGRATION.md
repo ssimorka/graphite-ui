@@ -44,7 +44,10 @@ fixed set of base colors; Graphite derives a whole theme from any source
 color. The parts exist already: `theme-provider.tsx` (sourceHex, theme, level,
 autoFix), `color-picker.tsx`, and `studio.tsx` (ramp rows, semantic table,
 states matrix, copy-to-clipboard, toast). The Radius control maps directly onto
-the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full).
+the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full). Icon Library
+has its counterpart too, though not a library picker: the Icons control
+chooses one of the kit's own three families (Regular, Bold, Solid), since the
+kit already ships them.
 
 ## Shared foundation — build once, all four use it
 
