@@ -209,10 +209,10 @@ a trace, which is what "no bypass" is meant to cost.
 - `components/theme-provider.tsx` is the single source of truth for
   `sourceHex`, `theme` (`'white' | 'g100'`), `level` (AA/AAA), and
   `autoFix`. It computes `lightBundle`/`darkBundle` (tokens + contrast +
-  states) via `lib/color.js` and stamps 101 CSS vars onto `<html>` on every
+  states) via `lib/color.js` and stamps 104 CSS vars onto `<html>` on every
   change: 45 `--graphite-*` (32 token roles, plus 6 states each for the
-  `primary` and `secondary` families, plus `--graphite-focus`) and 56
-  `--cds-*`. The counts are worth keeping straight — `--graphite-*` is the
+  `primary` and `secondary` families, plus `--graphite-focus`) and 59
+  `--cds-*` (counted from `CARBON_VAR_BINDINGS`, 2026-10-02). The counts are worth keeping straight — `--graphite-*` is the
   primary namespace and is derived from the engine's token keys, so it
   cannot drift; `--cds-*` is Carbon's compatibility layer and is a
   hand-listed binding table that can.

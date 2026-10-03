@@ -63,8 +63,10 @@ Colors follow a three-tier token architecture:
 ### Primitive Palette
 
 - **Accent** (purple): `accent/050` → `accent/900` — primary interactive elements.
-- **Secondary** (teal/green): `secondary/050` → `secondary/900` — secondary actions and accents.
+- **Secondary** (source hue −120°, teal/green at the default source): `secondary/050` → `secondary/900` — secondary actions and accents.
 - **Neutral** (gray): `neutral/050` → `neutral/900` — text, borders, and backgrounds.
+- **Neutral variant** (tinted gray): `neutralVariant/050` → `neutralVariant/900` — outlines and muted surfaces.
+- **Status**: `danger`, `warning`, `success`, `info`, each `050` → `900` — hue pinned per status, chroma follows the source.
 
 ### Semantic Roles
 
@@ -76,7 +78,7 @@ Colors follow a three-tier token architecture:
 | `primary` | Primary interactive color (accent-derived) |
 | `onPrimary` | Text/icons on primary color |
 | `secondary` | Secondary interactive color (teal-derived) |
-| `error` / `warning` / `success` / `info` | Status colors |
+| `danger` / `warning` / `success` / `info` | Status colors |
 | `outline` | Borders and dividers |
 | `onBackground` | Primary text on background |
 | `onSurface` | Primary text on surface |

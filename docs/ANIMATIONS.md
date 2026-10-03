@@ -14,7 +14,7 @@ Five, all declared on `:root` in `app/globals.scss`.
 
 | Token | Value | Used by |
 |---|---|---|
-| `--graphite-motion-fast` | 120ms | Button, Toggle, the three overlays, hero spotlight |
+| `--graphite-motion-fast` | 120ms | Button, Toggle, the three overlays, hero spotlight, header nav hover |
 | `--graphite-motion-base` | 240ms | Capabilities carousel item state and body reveal, ramp swatch and Info card hovers |
 | `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep |
 | `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
@@ -54,7 +54,7 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | View-switch fade | `.showcase__frame`, `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={active.key}` |
 | Cover reveal | `.art__cover` / `cover-in` | 320ms | ease | Mount, one-shot |
 | Cover hint | `.art__cover-hint` | 160ms | ease | Hover / focus on the cover |
-| Carousel dwell rail | `.cap-item__fill` | 7000ms | linear | rAF, the same clock that advances the carousel |
+| Carousel rail fill | `.cap-item__fill` | scroll-driven | — | `scroll` via rAF, the same reading that picks the panel |
 | Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | settle | Mount, when the item becomes active |
 | Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | ease | Selection change, hover |
 | Theme swap | `html`, `body`, `.cds--*` | 180ms | ease | Theme toggle |
@@ -83,17 +83,17 @@ governance rule 7's tie-break says the code keeps its own where the kit has no
 opinion. They are listed above so the difference is on the record rather than
 discovered later.
 
-**Stagger.** `Reveal` fires flat everywhere except the Capabilities proof strip,
-which staggers `delay={i * 80}`. Every other use passes no delay.
+**No stagger.** `Reveal` fires flat everywhere. Nothing passes a `delay`, so
+there is no staggered entrance on the site today.
 
-**The dwell rail is not a CSS animation.** `.cap-item__fill` is written from the
-animation frame in `capabilities.tsx` rather than given a keyframe, because the
-bar and the advance have to be the same clock: a keyframe would drift from the
-timer and promise a moment the carousel does not turn on. Its only CSS is the
-resting `scaleY(0)`. That is also why pausing is exact rather than a
-`animation-play-state` approximation, and why the carousel simply does not run
-under `prefers-reduced-motion` — the component drops the timer, leaving the rail
-as a static position marker.
+**The carousel has no timer.** From 1056px, 03 Capabilities is a tall scroll
+track (`$cap-dwell`, 500px per capability) with its content stuck to the
+viewport, and reading position picks the panel. `.cap-item__fill` is written
+from the same scroll reading rather than given a keyframe, so the rail cannot
+show a different progress than the one doing the selecting. Its only CSS is the
+resting `scaleY(0)`. Nothing advances on its own, so there is no pause control:
+the reader is what moves it. Below 1056px all six capabilities render stacked
+and open, with no rail, count or selection.
 
 ## Component motion
 
@@ -154,9 +154,10 @@ does not move when one is added. `use-reveal.ts` reports visible immediately, so
 the observer never runs. `hero.tsx` and `page-bands.tsx` each return before
 attaching their scroll listener, so `--sy` stays at its default and the effect
 never exists — the band grid needs no rule of its own for the same reason the
-hero's parallax needs one only for its transitions. `capabilities.tsx` never
-starts the dwell timer, so the carousel holds on whichever item you select and
-its pause control is not rendered: there is nothing left to pause.
+hero's parallax needs one only for its transitions. `capabilities.tsx` needs no
+treatment beyond its smooth scroll: the carousel is driven by the reader's own
+scrolling, so under reduced motion clicking a title jumps to its panel instead
+of smooth-scrolling there.
 
 **The progress sweep slows rather than stops.** A frozen indeterminate bar reads
 as a broken one, so it stretches to 3s and stays legible.
