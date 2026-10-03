@@ -52,7 +52,7 @@ export function selectDoc(): ComponentDocConfig {
       { label: 'Size: Large', node: field({ size: 'lg' }) },
     ],
     statesLede:
-      'Disabled and error are values of the state prop. Hover and focus are pseudo-classes, so the page forces them here. Hover steps the fill to surfaceVariant, the kit’s field hover. Open is not drawn, because the open menu belongs to the browser.',
+      'Disabled and error are values of the state prop. Hover and focus are pseudo-classes, so the page forces them here. Hover steps the fill to elevation-02, the kit’s field hover. Open is not drawn, because the open menu belongs to the browser.',
     states: [
       { label: 'Enabled', node: field() },
       { label: 'Hover', node: field(), className: styles.forceHover },
@@ -63,27 +63,27 @@ export function selectDoc(): ComponentDocConfig {
     dos: [
       'Use a select for a long list of choices where only one can hold, such as a country or a region.',
       'Match its size to the text inputs in the same form. The two share one size scale.',
-      'Show an error with errorText, so the red border always comes with the reason for it.',
+      'Show an error with errorText, so the red ring always comes with the reason for it.',
       'Keep at least two options. The type rejects fewer, because a select with one choice is a statement.',
     ],
     donts: [
       'Swap the native menu for a custom list to match the brand. Type-ahead, arrow keys and mobile pickers go with it.',
       'Try to style the open option list. It is drawn by the browser and takes no token from this system.',
       'Use a select for two or three options that fit on screen. A radio button group shows them without a click.',
-      'Set state="error" without errorText. The border says something is wrong without saying what.',
+      'Set state="error" without errorText. The ring says something is wrong without saying what.',
     ],
     a11y: [
       ['Keyboard', 'A native select: Tab reaches it, the arrow keys change the value, typing jumps to a matching option, and the platform opens its own menu.'],
       ['Roles', <>The browser supplies the roles. When the field is in error it carries <code>aria-invalid</code>.</>],
       ['Labels', <>The label is a real <code>label</code> tied to the select. Help and error text are linked with <code>aria-describedby</code>, and error text is announced as it appears.</>],
-      ['Focus', <>The border and a 1px ring turn <code>primary</code> while the field has focus, replacing the browser outline. In error they stay <code>danger</code>.</>],
+      ['Focus', <>A 2px ring inside the trigger in <code>primary</code>’s focus colour while the field has focus, replacing the browser outline. In error it stays <code>danger</code>.</>],
       ['Mobile', 'On touch devices the platform shows its own picker, sized for fingers, which a custom list would have to rebuild.'],
     ],
     parity: [
       ['Size', 'Small · Medium · Large', 'size', 'sm, md and lg. One to one.'],
       ['Style', 'Default · Inline', '—', 'Default only. The code has no inline select.'],
       ['State', 'Enabled · Disabled · Error', 'state', 'One to one. Error also follows from errorText.'],
-      ['State', 'Focus · Hover', '—', 'Pseudo-classes (governance rule 7). Hover is :hover on the trigger and steps the fill to surfaceVariant. Focus is :focus-within.'],
+      ['State', 'Focus · Hover', '—', 'Pseudo-classes (governance rule 7). Hover is :hover on the trigger and steps the fill to elevation-02. Focus is :focus-within.'],
       ['Open', 'False · True', '—', 'The kit also draws it as State=Open. The open menu is the browser’s, so it is runtime state with nothing to draw.'],
       ['State', 'Warning · Read-only · Skeleton', '—', 'No counterpart in code.'],
       ['Set', 'Select - Fluid', '—', 'No counterpart. The code has one field layout.'],

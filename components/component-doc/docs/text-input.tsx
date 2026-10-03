@@ -56,21 +56,21 @@ export function textInputDoc(): ComponentDocConfig {
     ],
     dos: [
       'Write the label as the thing being asked for, and keep it short enough to stay on one line.',
-      'Pass errorText to show an error. The red border and the message come from the same value, so they arrive together and leave together.',
+      'Pass errorText to show an error. The red ring and the message come from the same value, so they arrive together and leave together.',
       'Set type to match the answer (email, password, number), so a phone shows the right keyboard.',
       'Use the trailing slot for an action on the value, like clearing it, and give that button its own accessible name.',
     ],
     donts: [
       'Use the placeholder as the label. It disappears as soon as someone types, and the contract requires a visible label.',
-      'Mark a field invalid with nothing nearby to say why. A red border says something is wrong, not what.',
+      'Mark a field invalid with nothing nearby to say why. A red ring says something is wrong, not what.',
       'Wrap the control in a label or field of your own. The label is built in, and a second one gets read twice.',
-      'Give focus a colour of its own. The focus border is a tone step on primary, the same move Button makes on hover.',
+      'Give focus a colour of its own. The focus ring is the primary family’s focus step, the same ring Button draws.',
     ],
     a11y: [
       ['Labels', 'The label is a real label element tied to the input by id. An id is generated when you do not pass one, so the two always associate.'],
       ['Supporting text', 'Help or error text is linked through aria-describedby. Error text also carries role="alert", so it is announced when it appears.'],
       ['Validity', 'Error and Invalid both set aria-invalid. The required asterisk is hidden from assistive tech; the native required attribute is what gets read.'],
-      ['Focus', 'Focus is the browser’s own, drawn as a primary border through :focus-within. Nothing sets it by hand, so the ring and the real focus cannot disagree.'],
+      ['Focus', 'Focus is the browser’s own, drawn as the kit’s 2px ring inside the field through :focus-within. Nothing sets it by hand, so the ring and the real focus cannot disagree.'],
       ['Disabled', 'Disabled uses the native attribute, so the field leaves the tab order and is not submitted with the form.'],
     ],
     parity: [

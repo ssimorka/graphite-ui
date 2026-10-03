@@ -43,7 +43,14 @@
   color: var(--graphite-on-surface-variant);
   font-size: 0.75rem;
   line-height: 1.3333;
-  font-weight: 500;
+  // Regular, as the kit's Caption/1 and Input Label both are. It was 500.
+}
+
+// A label set above its field. The kit's `Label margin` is 8px; the stack's
+// own gap is 4 (it is also the field-to-helper gap, which the kit keeps at 4),
+// so the label carries the other 4.
+@mixin field-label-above {
+  margin-bottom: var(--graphite-space-02);
 }
 
 // Decorative only — the control's own `required` is what assistive tech reads.
@@ -55,6 +62,20 @@
   color: var(--graphite-on-surface-variant);
   font-size: 0.75rem;
   line-height: 1.3333;
+}
+
+// Warning text is the kit's Helper Text style in on-surface: the warning
+// colour is carried by the status icon, not the words.
+@mixin field-warning {
+  color: var(--graphite-on-surface);
+  font-size: 0.75rem;
+  line-height: 1.3333;
+}
+
+// Disabled dims every text part, not just the value: the kit takes label,
+// helper, count and value to the disabled content tone together.
+@mixin field-dimmed {
+  color: var(--graphite-primary-disabled-content);
 }
 
 // Error text takes the same `danger` role as the control's error border, so

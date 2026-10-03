@@ -3,7 +3,8 @@
 // The component exposes no data-slot hooks, so focus reaches the trigger as the
 // span that wraps the native select, which is the component's own structure,
 // and forces the declarations `.wrap:hover` and `.wrap:focus-within` carry. Nothing here
-// restyles it.
+// restyles it. Focus comes from the same shared mixin the component uses.
+@use '../../ui/field-shell' as shell;
 
 // The field fills its container; a demo reads better at a form's width.
 .field {
@@ -11,11 +12,8 @@
   max-width: 20rem;
 }
 
-.forceFocus span:has(> select) {
-  border-color: var(--graphite-primary);
-  box-shadow: 0 0 0 1px var(--graphite-primary);
-}
+.forceFocus span:has(> select) { @include shell.field-shell-focus; }
 
 .forceHover span:has(> select) {
-  background: var(--graphite-surface-variant);
+  background: var(--graphite-elevation-02);
 }
