@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.3.0
+version: 2.4.0
 wave: 0
 slots:
   - name: Children
@@ -8,7 +8,7 @@ slots:
     notes: The label, and any icons, as children. Icons are children rather than named slots, so a caller composes them instead of choosing from a fixed pair.
 props:
   - name: variant
-    values: [primary, secondary, ghost, danger]
+    values: [primary, secondary, ghost, danger, danger-ghost]
     notes: Defaults to secondary. A primary default would make breaking the one-primary rule the path of least resistance.
   - name: size
     values: [sm, md, lg, icon]
@@ -22,15 +22,17 @@ props:
     notes: Defaults to button, and only when this component owns the element.
 tokens:
   - name: primary
-    usage: Fill on the primary variant, and the label colour on ghost — the kit binds Style=Ghost's text to `primary`, not to a neutral.
+    usage: Fill on the primary variant, and the label colour on ghost — the kit binds Style=Ghost's text to `primary`, not to a neutral. Its hover step is ghost's label on hover and press; its focus step is the ring on primary and ghost; its disabled step is the fill on every filled style and the label on the ghost styles, which stay unfilled.
   - name: on-primary
-    usage: Label on primary, secondary and danger. One label colour across all three filled styles, as the kit has it.
+    usage: Label on primary, secondary and danger, and on danger-ghost once hover or press fills it. One label colour across the filled styles, as the kit has it.
   - name: secondary
-    usage: Fill on the secondary variant, which the kit renders filled rather than outlined.
+    usage: Fill on the secondary variant, which the kit renders filled rather than outlined. Its focus step is secondary's ring.
   - name: surface-variant
     usage: Hover and pressed background on ghost.
   - name: danger
-    usage: Fill on the destructive variant, and the tone steps it takes on hover and press.
+    usage: Fill on the destructive variant, and the tone steps it takes on hover and press. The label on danger-ghost, which takes those same steps as its fill when touched. Its focus step is the ring on both danger styles.
+  - name: background
+    usage: The 1px line inside the focus ring on the filled styles, so the ring reads against its own fill.
   - name: spacing
     usage: Padding, gap to icons, and the minimum touch target.
   - name: motion
@@ -55,21 +57,31 @@ the component API conventions in `README.md`.
 
 - **Slots:** Children (required) — the label, plus any icons, composed by the
   caller rather than chosen from a fixed leading/trailing pair.
-- **Props:** variant (primary, secondary, ghost, danger — defaults to
-  secondary), size (sm, md, lg, icon), asChild, className, type.
+- **Props:** variant (primary, secondary, ghost, danger, danger-ghost —
+  defaults to secondary), size (sm, md, lg, icon), asChild, className, type.
 - **Tokens:** `primary` fills the primary variant and also colours the ghost
   label; `secondary` fills secondary, which the kit renders filled rather than
   outlined; `danger` fills the destructive variant and supplies its hover and
   pressed steps. `on-primary` is the label on all three filled styles — one
   label colour, not one per variant. `surface-variant` is ghost's hover and
-  pressed background. The spacing scale carries padding and the minimum touch
+  pressed background, under a label that darkens a step to `primary-hover`.
+  Danger ghost is a `danger` label on nothing that fills with danger's hover
+  and pressed steps when touched. Disabled, the ghost styles stay unfilled and
+  only the label dims. The spacing scale carries padding and the minimum touch
   target, and the motion tokens carry transitions, so a button moves on the
   same curve as the page around it.
 - **Geometry follows the kit** (governance rule 7): square corners, an
-  asymmetric `0 64px 0 16px` inset that left-aligns the label and reserves the
-  trailing icon's slot, and heights of 32/42/50 for sm/md/lg. Medium and Large
-  sit two pixels off the spacing scale; that is a kit fact, recorded rather
-  than rounded away.
+  asymmetric `0 64px 0 16px` inset on the filled styles that left-aligns the
+  label and reserves the trailing icon's slot, with the icon pinned 16px from
+  the right edge inside it, and heights of 32/42/50 for sm/md/lg. The ghost
+  styles are padded 16 on both sides and let the icon follow the label at
+  8px. Icons are 16px at every size. Medium and Large sit two pixels off the
+  spacing scale; that is a kit fact, recorded rather than rounded away.
+- **Focus follows the kit too:** a 2px ring inside the edge in the style's own
+  focus colour, with a 1px background line inside it on the filled styles. The
+  kit binds Secondary's ring to `state/success-focus-ring`; every other style
+  uses its own family's, so that reads as a slip, and the code draws
+  secondary's.
 - **Composition rules:** One primary action per group — a Modal footer or a
   toolbar may hold at most one, and ButtonGroup enforces it. Hover
   and pressed are tone-step moves on the resting fill's own ramp, never a new

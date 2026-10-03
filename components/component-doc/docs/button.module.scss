@@ -6,28 +6,50 @@
 
 .forceHover {
   .isPrimary { background: var(--graphite-primary-hover); }
-  .isSecondary {
-    background: var(--graphite-secondary-hover);
-    border-color: var(--graphite-secondary-hover);
+  .isSecondary { background: var(--graphite-secondary-hover); }
+  .isGhost {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-primary-hover);
   }
-  .isGhost { background: var(--graphite-surface-variant); }
   .isDanger { background: var(--graphite-danger-hover); }
+  .isDangerGhost {
+    background: var(--graphite-danger-hover);
+    color: var(--graphite-on-primary);
+  }
 }
 
 .forcePressed {
   [data-slot='button'] { transform: translateY(1px); }
   .isPrimary { background: var(--graphite-primary-pressed); }
-  .isSecondary {
-    background: var(--graphite-secondary-pressed);
-    border-color: var(--graphite-secondary-pressed);
+  .isSecondary { background: var(--graphite-secondary-pressed); }
+  .isGhost {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-primary-hover);
   }
-  .isGhost { background: var(--graphite-surface-variant); }
   .isDanger { background: var(--graphite-danger-pressed); }
+  .isDangerGhost {
+    background: var(--graphite-danger-pressed);
+    color: var(--graphite-on-primary);
+  }
 }
 
-.forceFocus [data-slot='button'] {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
+.forceFocus {
+  .isPrimary { --ring: var(--graphite-primary-focus); }
+  .isSecondary { --ring: var(--graphite-secondary-focus); }
+  .isGhost { --ring: var(--graphite-primary-focus); }
+  .isDanger,
+  .isDangerGhost { --ring: var(--graphite-danger-focus); }
+
+  .isPrimary,
+  .isSecondary,
+  .isDanger {
+    box-shadow:
+      inset 0 0 0 2px var(--ring),
+      inset 0 0 0 3px var(--graphite-background);
+  }
+
+  .isGhost,
+  .isDangerGhost { box-shadow: inset 0 0 0 2px var(--ring); }
 }
 
 // A row of buttons that wraps on a narrow screen instead of overflowing.

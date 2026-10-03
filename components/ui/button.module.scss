@@ -7,11 +7,16 @@
 // Timing comes from the shared motion tokens, which carry the docs page's own
 // easing, so a button moves the way the page around it already does.
 .button {
+  // The containing block for the trailing icon, which the filled styles pin
+  // to the right edge (below).
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--graphite-space-02);
-  border: 1px solid transparent;
+  // No border: the kit draws none, and a transparent one still took a pixel,
+  // which put the label and icon 17px in where the kit has 16.
+  border: 0;
   // The kit is square-cornered on every Button variant.
   border-radius: var(--graphite-radius-none);
   font: inherit;
@@ -27,29 +32,57 @@
   padding: 0 var(--graphite-space-10) 0 var(--graphite-space-05);
   transition:
     background var(--graphite-motion-fast) var(--graphite-motion-ease),
-    border-color var(--graphite-motion-fast) var(--graphite-motion-ease),
     color var(--graphite-motion-fast) var(--graphite-motion-ease);
 }
 
 // Icons are children rather than slots, the way shadcn has them, so they are
-// sized here instead of through a wrapper element.
+// sized here instead of through a wrapper element. The kit draws every Button
+// icon at 16px, whatever the size, so this is a fixed size rather than 1em.
 .button svg {
-  width: 1em;
-  height: 1em;
+  width: 1rem;
+  height: 1rem;
   flex: none;
   pointer-events: none;
+}
+
+// The kit's trailing icon on the filled styles: pinned 16px from the right
+// edge, inside the 64px inset that reserves its slot, so the label stays
+// left-aligned and the icon sits at the far end rather than against the text.
+// The kit has no leading icon, and CSS cannot tell one from a trailing icon
+// beside a bare text label anyway, so an icon in a labelled filled button is
+// the trailing one. The icon size keeps its glyph centred in the square.
+.primary:not(.icon) > svg,
+.secondary:not(.icon) > svg,
+.danger:not(.icon) > svg {
+  position: absolute;
+  top: 50%;
+  right: var(--graphite-space-05);
+  transform: translateY(-50%);
 }
 
 .button:disabled {
   cursor: not-allowed;
   background: var(--graphite-primary-disabled);
   color: var(--graphite-primary-disabled-content);
-  border-color: transparent;
 }
 
+// The kit's focus: a 2px ring inside the edge in the style's own focus colour,
+// and on the filled styles a 1px line of the page background inside that, so
+// the ring reads against its own fill. Drawn with inset shadows rather than an
+// outline, because an outline cannot sit inside the box and stack. The
+// transparent outline is what forced-colours mode turns into a visible ring,
+// since it drops box-shadows.
 .button:focus-visible {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow:
+    inset 0 0 0 2px var(--ring),
+    inset 0 0 0 3px var(--graphite-background);
+}
+
+.ghost:focus-visible,
+.dangerGhost:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--ring);
 }
 
 .button:active:not(:disabled) {
@@ -59,6 +92,7 @@
 }
 
 .primary {
+  --ring: var(--graphite-primary-focus);
   background: var(--graphite-primary);
   color: var(--graphite-on-primary);
 }
@@ -73,33 +107,43 @@
 // The label stays `onPrimary` through hover and press — one label colour for
 // the variant, as the kit has it, rather than swapping to `onSecondary`.
 .secondary {
+  // The kit binds Secondary's ring to state/success-focus-ring, which reads as
+  // a slip: every other style uses its own family's ring, and secondary has
+  // one. The code takes secondary's.
+  --ring: var(--graphite-secondary-focus);
   background: var(--graphite-secondary);
   color: var(--graphite-on-primary);
-  border-color: transparent;
 }
 
 // Ghost carries the accent as its label colour, which is what the kit binds:
-// Style=Ghost resolves its text to `primary`, not to a neutral.
-.ghost {
+// Style=Ghost resolves its text to `primary`, not to a neutral. It has none of
+// the filled styles' 64px inset: the kit pads it 16 on both sides and lets the
+// icon follow the label at an 8px gap.
+.ghost,
+.dangerGhost {
+  gap: var(--graphite-space-03);
+  padding: 0 var(--graphite-space-05);
   background: transparent;
+}
+
+.ghost {
+  --ring: var(--graphite-primary-focus);
   color: var(--graphite-primary);
 }
 
-.secondary:hover:not(:disabled) {
-  background: var(--graphite-secondary-hover);
-  border-color: var(--graphite-secondary-hover);
-}
-
-.secondary:active:not(:disabled) {
-  background: var(--graphite-secondary-pressed);
-  border-color: var(--graphite-secondary-pressed);
-}
+.secondary:hover:not(:disabled) { background: var(--graphite-secondary-hover); }
+.secondary:active:not(:disabled) { background: var(--graphite-secondary-pressed); }
 
 .ghost:hover:not(:disabled),
-.ghost:active:not(:disabled) { background: var(--graphite-surface-variant); }
+.ghost:active:not(:disabled) {
+  background: var(--graphite-surface-variant);
+  // The kit darkens the label a step too, on both.
+  color: var(--graphite-primary-hover);
+}
 
 // The kit binds Danger primary's label to `onPrimary`, not `onDanger`.
 .danger {
+  --ring: var(--graphite-danger-focus);
   background: var(--graphite-danger);
   color: var(--graphite-on-primary);
 }
@@ -109,6 +153,32 @@
 // composition rule above.
 .danger:hover:not(:disabled) { background: var(--graphite-danger-hover); }
 .danger:active:not(:disabled) { background: var(--graphite-danger-pressed); }
+
+// Danger ghost: the kit's fifth style. A danger label on nothing, which fills
+// with danger's hover and pressed steps when touched, label turning
+// on-primary, so the destructive action shows its weight only on approach.
+.dangerGhost {
+  --ring: var(--graphite-danger-focus);
+  color: var(--graphite-danger);
+}
+
+.dangerGhost:hover:not(:disabled) {
+  background: var(--graphite-danger-hover);
+  color: var(--graphite-on-primary);
+}
+
+.dangerGhost:active:not(:disabled) {
+  background: var(--graphite-danger-pressed);
+  color: var(--graphite-on-primary);
+}
+
+// The ghost styles stay unfilled when disabled, as the kit draws them: only
+// the label dims, to the disabled fill's tone.
+.ghost:disabled,
+.dangerGhost:disabled {
+  background: transparent;
+  color: var(--graphite-primary-disabled);
+}
 
 .sm { min-height: var(--graphite-space-07); font-size: 0.75rem; line-height: 1rem; }
 // Kit Medium is 42px and Large 50px — both two off the spacing scale, which
@@ -122,6 +192,12 @@
   min-height: var(--graphite-space-08);
   width: var(--graphite-space-08);
   padding: 0;
+}
+
+// Forced colours drop backgrounds, so a borderless button would lose its
+// edge. The system draws one there instead.
+@media (forced-colors: active) {
+  .button { border: 1px solid ButtonText; }
 }
 
 @media (prefers-reduced-motion: reduce) {

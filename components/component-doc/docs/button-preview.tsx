@@ -14,6 +14,7 @@ const LABEL: Record<ButtonVariant, string> = {
   secondary: 'Export',
   ghost: 'Cancel',
   danger: 'Delete project',
+  'danger-ghost': 'Remove',
 }
 
 function codeFor(variant: ButtonVariant, size: Size) {
@@ -23,7 +24,10 @@ function codeFor(variant: ButtonVariant, size: Size) {
   if (size === 'icon') {
     return `<Button${variantProp}${sizeProp} aria-label="Add">\n  <Add />\n</Button>`
   }
-  return `<Button${variantProp}${sizeProp}>${LABEL[variant]}</Button>`
+  return `<Button${variantProp}${sizeProp}>
+  ${LABEL[variant]}
+  <Add />
+</Button>`
 }
 
 /**
@@ -49,6 +53,7 @@ export function ButtonPreview() {
               { value: 'secondary', label: 'Secondary' },
               { value: 'ghost', label: 'Ghost' },
               { value: 'danger', label: 'Danger' },
+              { value: 'danger-ghost', label: 'Danger ghost' },
             ]}
           />
           <Select
@@ -71,8 +76,10 @@ export function ButtonPreview() {
             <Add />
           </Button>
         ) : (
+          // With the kit's trailing icon, so the preview shows where it sits.
           <Button variant={variant} size={size}>
             {LABEL[variant]}
+            <Add />
           </Button>
         )
       }
