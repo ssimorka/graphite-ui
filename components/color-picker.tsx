@@ -1,10 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Dropdown } from '@carbon/react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, type ContrastLevel } from '@/components/theme-provider'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import styles from './color-picker.module.scss'
 
 const HUE_GRADIENT =
@@ -270,16 +270,16 @@ export function ColorPickerPopover({
           {/* Generation controls. They shape what the engine emits from this
               color, so they belong with the color rather than in one view. */}
           <div className="source-controls">
-            <Dropdown
+            <Select
               id="level-select"
               size="sm"
-              titleText="Target level"
               label="Target level"
-              items={['AA', 'AAA']}
-              selectedItem={level}
-              onChange={({ selectedItem }) =>
-                setLevel((selectedItem as ContrastLevel) ?? 'AA')
-              }
+              options={[
+                { value: 'AA', label: 'AA' },
+                { value: 'AAA', label: 'AAA' },
+              ]}
+              value={level}
+              onChange={(v) => setLevel(v as ContrastLevel)}
             />
             {/* Was an "Auto-fix on-colors" toggle. The fix is real but has
                 never been observed to fire — a sweep of 96 hues across both
