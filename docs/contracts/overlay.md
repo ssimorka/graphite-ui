@@ -1,6 +1,6 @@
 ---
 component: Overlay
-version: 1.2.0
+version: 2.0.0
 wave: 5
 internal: true
 slots: []
@@ -13,7 +13,7 @@ props:
     notes: Modal overlays trap; non-modal ones do not.
 tokens: []
 composition_rules:
-  - The elevated surface is `surface-elevated` and the edge is `outline`. Each overlay declares those in its own contract rather than inheriting them silently, so the drift check can hold it to them.
+  - The elevated surface is `elevation-01`, the kit's `Layer/layer-01`, and it is lifted by `shadow-overlay`, the kit's `Shadows/Menu` (0 2 6 at 30%), with no edge. Tooltip is the exception the kit draws: it is inverse, `on-background` fill with `background` text. Each overlay declares its surface in its own contract rather than inheriting it silently, so the drift check can hold it to it.
   - Overlays enter on one shared fade — the fast motion step on the shared easing — and each overlay declares `motion` in its own contract for the same reason it declares its surface. The fade is opacity only: Tooltip carries its placement in `transform`, a different value per side, so an entrance that moved would overwrite the position it was moving to.
   - There is no exit transition, deliberately. Every overlay unmounts its content on close, and Popover depends on that: its no-nesting prohibition is enforced by a throw that only fires because content does not exist until it is open. Holding a closed overlay mounted to animate it out would move that throw to prerender.
   - Focus returns to the element that opened the overlay when it closes, in every case, trapped or not.
@@ -42,9 +42,9 @@ The source document asks for it directly:
 - **Props:** `dismissOn` (which of Escape, click-outside and an explicit close
   control apply), `trapFocus` (modal overlays only).
 - **Tokens:** None of its own. The visual half of the shared base —
-  `surface-elevated` for the surface, `outline` for the edge — is declared by
-  each overlay in its own contract, so no overlay can quietly use a token it
-  has not declared.
+  `elevation-01` for the surface and `shadow-overlay` for the lift, or the
+  inverse pair on Tooltip — is declared by each overlay in its own contract,
+  so no overlay can quietly use a token it has not declared.
 - **Composition rules:** Focus always returns to the trigger on close. Escape
   always closes the outermost open overlay first, one per press. An outside
   press closes what it lands outside of, but never reaches past a trapping
@@ -52,40 +52,35 @@ The source document asks for it directly:
 - **Prohibitions:** No overlay defines its own dismiss behavior. One that needs
   a different pattern is a different component, not a variant of this one.
 
-### Why the code binds surfaceElevated and the kit's components do not
+### The kit's overlay model (2.0.0)
 
-Worth recording, because reading the component sets alone would suggest the
-opposite. Carbon's Popover and Menu fill with `Layer/layer-01`, which the
-binding table in `theme-provider.tsx` feeds from `surface` — not from
-`surfaceElevated`. Taken literally, governance rule 7 would move the overlays
-onto `surface`.
+Until 2.0.0 this contract put every overlay on `surface-elevated` with an
+`outline` edge, and argued against the kit's component sets to get there: they
+filled with `Layer/layer-01`, which then resolved to `surface`, while the
+`surfaceElevated` variable's description named the overlays. The variable was
+ranked the more specific artefact and won (#139).
 
-It should not. The kit's own semantic layer is explicit about this: the
-`surfaceElevated` variable's description reads *"Shared overlay surface:
-Tooltip, Popover, Dropdown Menu, Dialog."* It was added in #92 for exactly
-these four. The components still bind `layer-01` because they are Carbon's,
-un-migrated — the same reason they still carry Carbon's variant axes.
+That disagreement no longer exists in the kit. `Layer/layer-01` now resolves to
+`elevation/01`, which sits on exactly the stops `surfaceElevated` does
+(`neutral/050` Light, `neutral/700` Dark). The component sets and the variable
+say the same thing, and what they say is the elevation ladder's first rung.
+The engine's own `surface-elevated` role is the odd one out: it asks for tone
+100 Light and about 24 Dark, off the grid, so binding it is the one choice that
+matches neither. Overlays bind `elevation-01` (#241), which matches both.
 
-So the kit says two things and the more specific one wins: a variable authored
-to name these components beats a component binding inherited from Carbon. When
-those sets are eventually rebuilt they should bind `surfaceElevated`, and this
-note stops the next reader "correcting" the code toward `layer-01` in the
-meantime.
+The edge goes with it. In Light, `elevation-01` equals the ground, so an
+overlay still needs separating from the page. The kit does it with a shadow,
+`Shadows/Menu`, on Menu and Popover: no stroke at all. That is
+`--graphite-shadow-overlay`, a fixed value in `globals.scss` because the kit's
+style is plain black in both themes.
 
-### How the shared surface resolves in the kit (#92)
+**Tooltip is inverse.** Its set binds `Background/background-inverse`, which
+resolves to `onBackground`, with `Text/text-inverse` resolving to `background`:
+a dark bubble on a light page and the reverse. It needs no shadow, because the
+fill already contrasts with the page. Nothing new is generated for it; both are
+existing roles.
 
-`surfaceElevated` now exists in the kit's `Graphite Semantic` collection,
-aliased to `neutral/050` in Light and `neutral/700` in Dark — the same two
-stops `elevation/01` uses.
-
-It is snapped rather than exact. The engine asks for neutral tone 100 in Light
-and tone 24 in Dark, and neither is on the 050-900 ramp, so both were moved to
-the nearest grid stop the same way `surface` already snaps its dark ground to
-`neutral/800`. The alternative was two new intermediate primitives, which the
-ramp constraint rules out.
-
-**The consequence is load-bearing.** In Light, `surface-elevated` resolves to
-the same value as `surface`, so an overlay has no fill separation from the page
-behind it and its edge has to be drawn. That is why every overlay declares
-`outline`, Tooltip included as of 1.4.0 — an overlay that declares only
-`surface-elevated` is invisible in Light.
+Component-level parts of the model (Popover's 12×6 caret, its alignments,
+Menu's row heights) belong to those components' contracts, not this one. The
+overlays move to this model in #230 (Popover), #231 (Menu) and #232 (Tooltip).
+Until each lands, its own contract still describes what it renders.
