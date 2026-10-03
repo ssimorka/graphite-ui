@@ -40,7 +40,6 @@ export function ProfileCard() {
       />
       <TextArea
         label="Bio"
-        size="lg"
         rows={5}
         placeholder="Tell us a little bit about yourself"
         helpText="You can @mention other users and organizations to link to them."

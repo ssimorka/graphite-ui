@@ -2,34 +2,37 @@
 
 import { useState } from 'react'
 import { TextArea } from '@/components/ui/text-area'
-import type { FieldSize } from '@/components/ui/text-input'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 
 type Resize = 'vertical' | 'none'
-type DemoState = 'default' | 'disabled' | 'error'
+type DemoState = 'default' | 'disabled' | 'error' | 'warning'
+type Layout = 'fixed' | 'fluid'
 
 const LABEL = 'What went wrong?'
 const HELP = 'Steps to reproduce help us most.'
 const ERROR = 'Tell us a little about what happened.'
+const WARNING = 'Avoid pasting passwords or keys.'
 
-function codeFor(size: FieldSize, resize: Resize, state: DemoState) {
+function codeFor(layout: Layout, resize: Resize, state: DemoState) {
   const lines = [`  label="${LABEL}"`]
-  if (size !== 'md') lines.push(`  size="${size}"`)
+  if (layout !== 'fixed') lines.push(`  layout="${layout}"`)
+  lines.push('  maxLength={300}')
   if (resize !== 'vertical') lines.push(`  resize="${resize}"`)
   if (state === 'disabled') lines.push('  state="disabled"')
   lines.push(`  helpText="${HELP}"`)
   if (state === 'error') lines.push(`  errorText="${ERROR}"`)
+  if (state === 'warning') lines.push(`  warningText="${WARNING}"`)
   return `<TextArea\n${lines.join('\n')}\n/>`
 }
 
 /**
- * Size and State as Text input has them, plus resize, the one prop Text area
- * adds. Drag the corner with resize on vertical to see growth stop at the
+ * Layout and State as the kit draws them, plus resize. There is no Size: the
+ * kit draws one height. Drag the corner with resize on vertical to see growth stop at the
  * max-height and hand over to a scrollbar.
  */
 export function TextAreaPreview() {
-  const [size, setSize] = useState<FieldSize>('md')
+  const [layout, setLayout] = useState<Layout>('fixed')
   const [resize, setResize] = useState<Resize>('vertical')
   const [state, setState] = useState<DemoState>('default')
 
@@ -38,14 +41,13 @@ export function TextAreaPreview() {
       controls={
         <>
           <Select
-            label="Size"
+            label="Layout"
             size="sm"
-            value={size}
-            onChange={(v) => setSize(v as FieldSize)}
+            value={layout}
+            onChange={(v) => setLayout(v as Layout)}
             options={[
-              { value: 'sm', label: 'Small' },
-              { value: 'md', label: 'Medium' },
-              { value: 'lg', label: 'Large' },
+              { value: 'fixed', label: 'Fixed' },
+              { value: 'fluid', label: 'Fluid' },
             ]}
           />
           <Select
@@ -67,6 +69,7 @@ export function TextAreaPreview() {
               { value: 'default', label: 'Default' },
               { value: 'disabled', label: 'Disabled' },
               { value: 'error', label: 'Error' },
+              { value: 'warning', label: 'Warning' },
             ]}
           />
         </>
@@ -74,14 +77,16 @@ export function TextAreaPreview() {
       preview={
         <TextArea
           label={LABEL}
-          size={size}
+          layout={layout}
+          maxLength={300}
           resize={resize}
           state={state === 'disabled' ? 'disabled' : 'default'}
           helpText={HELP}
           errorText={state === 'error' ? ERROR : undefined}
+          warningText={state === 'warning' ? WARNING : undefined}
         />
       }
-      code={codeFor(size, resize, state)}
+      code={codeFor(layout, resize, state)}
     />
   )
 }

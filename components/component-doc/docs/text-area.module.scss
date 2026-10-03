@@ -1,8 +1,8 @@
 // Text area's own page parts: the forced Focus row. The component exposes no
-// data-slot hooks, so this reaches the textarea element and sets the same
-// declarations `.textarea:focus-visible` carries in
+// data-slot hooks, so this reaches the wrapper around the textarea and sets the same
+// declarations `.wrap:focus-within` carries in
 // components/ui/text-area.module.scss, through the same shared mixin, so the
 // forced row cannot drift from the real one. Nothing here restyles it.
 @use '../../ui/field-shell' as shell;
 
-.forceFocus textarea { @include shell.field-shell-focus; }
+.forceFocus div:has(> textarea) { @include shell.field-shell-focus; }
