@@ -7,7 +7,9 @@ import type { ButtonVariant } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 
-type Size = 'sm' | 'md' | 'lg' | 'icon'
+type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'expressive' | 'icon-sm' | 'icon' | 'icon-lg' | 'icon-xl' | 'icon-expressive'
+
+const isIcon = (s: Size) => s === 'icon' || s.startsWith('icon-')
 
 const LABEL: Record<ButtonVariant, string> = {
   primary: 'Save changes',
@@ -21,7 +23,7 @@ function codeFor(variant: ButtonVariant, size: Size) {
   // Defaults are left off, the way a caller would write it.
   const variantProp = variant === 'secondary' ? '' : ` variant="${variant}"`
   const sizeProp = size === 'md' ? '' : ` size="${size}"`
-  if (size === 'icon') {
+  if (isIcon(size)) {
     return `<Button${variantProp}${sizeProp} aria-label="Add">\n  <Add />\n</Button>`
   }
   return `<Button${variantProp}${sizeProp}>
@@ -65,14 +67,21 @@ export function ButtonPreview() {
               { value: 'sm', label: 'Small' },
               { value: 'md', label: 'Medium' },
               { value: 'lg', label: 'Large' },
-              { value: 'icon', label: 'Icon' },
+              { value: 'xl', label: 'Extra large' },
+              { value: '2xl', label: '2x large' },
+              { value: 'expressive', label: 'Expressive' },
+              { value: 'icon-sm', label: 'Icon only, Small' },
+              { value: 'icon', label: 'Icon only, Medium' },
+              { value: 'icon-lg', label: 'Icon only, Large' },
+              { value: 'icon-xl', label: 'Icon only, Extra large' },
+              { value: 'icon-expressive', label: 'Icon only, Expressive' },
             ]}
           />
         </>
       }
       preview={
-        size === 'icon' ? (
-          <Button variant={variant} size="icon" aria-label="Add">
+        isIcon(size) ? (
+          <Button variant={variant} size={size} aria-label="Add">
             <Add />
           </Button>
         ) : (

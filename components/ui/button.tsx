@@ -11,7 +11,7 @@ import { Slot } from './slot'
 import styles from './button.module.scss'
 
 /**
- * Contract: docs/contracts/button.md (2.4.0)
+ * Contract: docs/contracts/button.md (2.5.0)
  *
  * Structured after shadcn: a cva recipe, exported so siblings can borrow it,
  * with forwardRef-style ref, className passthrough, prop spread, a data-slot
@@ -31,7 +31,15 @@ export const buttonVariants = cva(styles.button, {
       sm: styles.sm,
       md: styles.md,
       lg: styles.lg,
-      icon: styles.icon,
+      xl: styles.xl,
+      '2xl': styles.xxl,
+      expressive: styles.expressive,
+      // Icon only, at each size the kit draws it. A square, not a height.
+      'icon-sm': `${styles.square} ${styles.iconSm}`,
+      icon: `${styles.square} ${styles.icon}`,
+      'icon-lg': `${styles.square} ${styles.iconLg}`,
+      'icon-xl': `${styles.square} ${styles.iconXl}`,
+      'icon-expressive': `${styles.square} ${styles.iconExpressive}`,
     },
   },
   defaultVariants: {

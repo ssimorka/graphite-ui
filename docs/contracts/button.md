@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.4.0
+version: 2.5.0
 wave: 0
 slots:
   - name: Children
@@ -11,7 +11,8 @@ props:
     values: [primary, secondary, ghost, danger, danger-ghost]
     notes: Defaults to secondary. A primary default would make breaking the one-primary rule the path of least resistance.
   - name: size
-    values: [sm, md, lg, icon]
+    values: [sm, md, lg, xl, 2xl, expressive, icon-sm, icon, icon-lg, icon-xl, icon-expressive]
+    notes: The kit's Size axis, plus Icon only at each size it draws one. Text sizes are 32/42/50/66/82 and Expressive 50 (16/24 type); icon-only squares are 32/40/48/64 and Expressive 44, on the grid where the text sizes sit 2px over it. Extra large and 2x large top-align the label and icon, 16px down.
   - name: asChild
     values: boolean
     notes: Render the button's props onto its single child instead of emitting a button element.
@@ -58,7 +59,8 @@ the component API conventions in `README.md`.
 - **Slots:** Children (required) — the label, plus any icons, composed by the
   caller rather than chosen from a fixed leading/trailing pair.
 - **Props:** variant (primary, secondary, ghost, danger, danger-ghost —
-  defaults to secondary), size (sm, md, lg, icon), asChild, className, type.
+  defaults to secondary), size (sm, md, lg, xl, 2xl, expressive, and icon-only
+  icon-sm, icon, icon-lg, icon-xl, icon-expressive), asChild, className, type.
 - **Tokens:** `primary` fills the primary variant and also colours the ghost
   label; `secondary` fills secondary, which the kit renders filled rather than
   outlined; `danger` fills the destructive variant and supplies its hover and
@@ -77,6 +79,13 @@ the component API conventions in `README.md`.
   styles are padded 16 on both sides and let the icon follow the label at
   8px. Icons are 16px at every size. Medium and Large sit two pixels off the
   spacing scale; that is a kit fact, recorded rather than rounded away.
+- **The kit's full Size axis** (#221): Extra large (66) and 2x large (82)
+  top-align the label and icon 16px down, Expressive (50) sets its label at
+  16/24, and Icon only exists at every size the kit draws it (32, 40, 48, 64,
+  44). The kit draws 2x large and the icon-only squares without the danger
+  styles; it says nothing against them, so the code allows them. Ghost
+  Expressive keeps the kit's 12px label-to-icon gap, which looks like a
+  leftover 20px icon spacer, built as drawn.
 - **Focus follows the kit too:** a 2px ring inside the edge in the style's own
   focus colour, with a 1px background line inside it on the filled styles. The
   kit binds Secondary's ring to `state/success-focus-ring`; every other style
