@@ -72,19 +72,19 @@ export const DOCS_NAV: DocsNavGroup[] = [
  * A docs page's breadcrumb trail, read from DOCS_NAV so it cannot name a group
  * or page the sidebar does not. A group crumb goes to the group's first page,
  * as Components goes to its Overview, so every crumb before "here" is a real
- * link. A crumb that would only lead back to this page is dropped: on
- * Introduction, Docs and Getting started both are /docs.
+ * link. Every page shows the full trail, Introduction included, even though
+ * there Docs and Getting started both lead back to /docs: the trail says where
+ * the page sits, and a one-crumb trail said nothing.
  */
 export function docsCrumbs(href: string): [Crumb, ...Crumb[]] {
   const group = DOCS_NAV.find((g) => g.items.some((i) => i.href === href))
   const page = group?.items.find((i) => i.href === href)
   if (!group || !page) throw new Error(`docsCrumbs: ${href} is not in DOCS_NAV`)
-  const before: Crumb[] = [
+  return [
     { label: 'Docs', href: '/docs' },
     { label: group.label, href: group.items[0].href },
-  ].filter((c) => c.href !== href)
-  const here: Crumb = { label: page.label }
-  return before.length > 0 ? [before[0], ...before.slice(1), here] : [here]
+    { label: page.label },
+  ]
 }
 
 // The Installation and Color ramps pages' contents. Here rather than in the
