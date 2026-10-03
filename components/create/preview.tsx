@@ -197,6 +197,10 @@ export function Preview() {
  * The pattern generator: the 60/30/10 composition (see buildPalette in
  * generative-art.tsx), redrawn from the source on every change. Selecting a
  * panel reshuffles just that panel; Regenerate deals a new layout.
+ *
+ * Mocked in Graphite UI Site as the "Create — Patterns tab" artboards, whose
+ * still is the Pattern composition set: one deal of the kit's Pattern Tiles
+ * per preview width.
  */
 function Patterns() {
   const [art, setArt] = useState<GenerativeArtHandle | null>(null)

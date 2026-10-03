@@ -127,6 +127,9 @@ sheets rise from the bottom, the panel drops in.
   Shuffle, Reset and Get the code. Source, theme, contrast and radius can be
   locked against Shuffle. The bar's footer is Reset, Shuffle and the filled
   Get the code; below 672px Reset and Shuffle are icons that share the width.
+  On the bar, each control opens a bottom sheet. The Source color sheet lists
+  the ramp stops to copy and ends in a filled Pick color action, which opens
+  the header's color picker.
 - **Preview**: two tabs, Components and Patterns, in the governed `Tabs`.
 - **Components**: a Desktop / Tablet / Mobile toolbar (from 1056px only) over a
   rack of example cards with no frame of their own, on the page grid, which is
@@ -136,7 +139,9 @@ sheets rise from the bottom, the panel drops in.
 - **Patterns**: the generative composition (`GenerativeArt` in
   [`components/generative-art.tsx`](../components/generative-art.tsx)) at 16:9,
   repainted from the source and theme. Selecting a panel reshuffles it;
-  Regenerate deals a new layout and Export PNG saves it at 1600 × 900.
+  Regenerate deals a new layout and Export PNG saves it at 1600 × 900. Its
+  twenty tile types are the kit's Pattern Tiles (Graphite UI Kit 11692:22);
+  the kit names one of them Download circle where the code says Circle.
 - **Get the code**: CSS or JSON, from `buildCss` / `buildJson` in `lib/color.js`,
   copied or downloaded.
 

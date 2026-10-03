@@ -436,6 +436,11 @@ function buildLayout(pal: Palette, assetsReady: boolean): Cell[] {
 
 // The pattern reference lists each type once. STANDARD weights letterform ×3
 // for the composition, so the guide uses its own de-duplicated ordering.
+//
+// These twenty are the kit's Pattern Tiles (Graphite UI Kit 11692:22), one
+// Style variant each, under the same names but one: the kit calls 'Circle'
+// 'Download circle'. The kit's tiles are images in the default source's colors;
+// these recolor from the live source, so the two match only at #5e44aa.
 const SPECIMENS: { name: string; fn?: P; asset?: 'eye' | 'mouth' }[] = [
   { name: 'Diagonal stripes', fn: pDiagonalStripes },
   { name: 'Gesture marks', fn: pGestureMarks },
