@@ -1,4 +1,8 @@
 // Two doors — kit "05 Two doors" (11864:3180).
+@use '../drop-panel' as drop;
+
+@include drop.defs;
+
 .section {
   padding: var(--band-pad) 0;
   border-bottom: 1px solid var(--graphite-surface-variant);
@@ -46,24 +50,49 @@
 }
 
 .door {
+  // The header panels' AI layer (../_drop-panel.scss), as the home wall and
+  // the docs cards wear it: tinted from the foot on primary, 8px corners, an
+  // edge shading to primary. Swept against all 288 test sources, the weakest
+  // text on the tint at full strength is 5.08:1, so it holds AA.
+  @include drop.surface;
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 19.875rem; // kit door is 318px
-  padding: var(--graphite-space-06);
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
+  padding: var(--graphite-space-06) var(--graphite-space-06) 0;
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // The artefact slides under the card's edge rather than escaping it.
   overflow: hidden;
-  transition: border-color var(--graphite-motion-base) ease-out;
+  transition: --glow var(--graphite-motion-base) ease-out;
 }
 
-// Hover states .md: the rule steps from outline-subtle to outline-strong, and
-// the artefact loses its own rule and lifts toward the card edge, 240ms
-// ease-out, which is --graphite-motion-base.
+// Hover states .md: the glow climbs the door, and the artefact loses its own
+// rule and lifts toward the card edge, 240ms ease-out, --graphite-motion-base.
 .door:hover {
-  border-color: var(--graphite-outline);
+  --glow: 75%;
+
+  .cta {
+    background: var(--graphite-primary-hover);
+  }
+}
+
+// The door's action: the filled block the other cards end in, flush in the
+// bottom-left corner. In the flow, not positioned, so its ::after resolves to
+// the door and the whole door is the target.
+.cta {
+  @include drop.action;
+  align-self: flex-start;
+  gap: var(--graphite-space-05);
+  margin: auto 0 0 calc(var(--graphite-space-06) * -1);
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+  text-decoration: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
 }
 
 .door:hover .artefact {
@@ -85,6 +114,10 @@
 .doorBody {
   position: relative;
   z-index: 1;
+  // Above the artefact for legibility, but the door's link is the press
+  // target, so text here lets presses through to the action's overlay.
+  pointer-events: none;
+  margin-bottom: var(--graphite-space-06);
   display: flex;
   flex-direction: column;
   align-items: flex-start;

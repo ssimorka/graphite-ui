@@ -2,7 +2,6 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
-import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
 import styles from './two-doors.module.scss'
@@ -75,16 +74,19 @@ export function TwoDoors() {
                     The kit is the source of truth. Where it and a contract
                     disagree, the kit wins.
                   </p>
-                  <Button variant="secondary" asChild>
-                    <a
-                      href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Open the Figma Kit
-                    </a>
-                  </Button>
                 </div>
+                {/* The door's action, as the filled block the other cards end
+                    in, here in the bottom-left corner. Its overlay makes the
+                    whole door the link. ↗ because it leaves the site. */}
+                <a
+                  className={styles.cta}
+                  href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open the Figma Kit
+                  <span aria-hidden="true">↗</span>
+                </a>
                 {/* Decorative: the door's motif is a slice of the artefact
                     behind it, bleeding off the card's clipped edge. */}
                 <div className={styles.artefact} aria-hidden="true">
@@ -110,10 +112,11 @@ export function TwoDoors() {
                     Contracts are the written spec the code is checked against,
                     and they are versioned.
                   </p>
-                  <Button variant="secondary" asChild>
-                    <a href="/gallery">See the code</a>
-                  </Button>
                 </div>
+                <a className={styles.cta} href="/gallery">
+                  See the code
+                  <span aria-hidden="true">→</span>
+                </a>
                 <div className={styles.artefact} aria-hidden="true">
                   {CODE_BLOCKS.map((block, i) => (
                     <pre key={i} className={styles.code}>
