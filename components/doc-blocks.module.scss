@@ -197,6 +197,19 @@
     padding-bottom: calc(3rem + var(--graphite-space-04) - 4px);
   }
 
+  // The foot rule, as on the home wall and the Components index: it marks off
+  // the 3rem strip the corner action sits in. Pinned, like the action, so the
+  // hover drop moves only the text.
+  &::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 3rem;
+    left: 0;
+    border-top: 1px solid var(--graphite-surface-variant);
+    pointer-events: none;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
 
@@ -241,7 +254,12 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  min-width: 7.5rem;
+  // An icon-only square: the title already names the destination.
+  justify-content: center;
+  width: 3rem;
+  min-width: 0;
+  padding: 0;
+  font-size: 1.125rem;
   pointer-events: none;
 
   .nextCard:hover & {
