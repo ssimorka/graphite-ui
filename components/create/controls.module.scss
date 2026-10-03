@@ -1,13 +1,56 @@
+@use '../drop-panel' as drop;
+
 // The Create page's controls (Graphite UI Site 11835:286491 for the desktop
 // panel, 13304:5391 for the compact bar, 13316:5853 for the sheets). Colours are
 // generated roles; the kit's outlineSubtle is surfaceVariant here.
+//
+// All three wear the header panels' AI layer (../_drop-panel.scss). The panel
+// drops in from the top like search; the bar and its sheets, which live at the
+// bottom of the screen, rise from the bottom instead.
+//
+// The panel and the bar hold position: fixed children (the sheets, the Get
+// the code dialog), and a transform would trap those inside them. So their
+// entrances fill `backwards` only: the transform exists while the animation
+// runs and is gone the moment it ends.
+
+@include drop.defs;
+
+// Up from below the fold: a spring that overshoots and settles.
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(calc(100% + 1rem));
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
 
 // --------------------------------------------------------------------- panel
 .panel {
+  @include drop.surface;
   display: flex;
   flex-direction: column;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transform-origin: 50% 0;
+    animation:
+      drop 520ms drop.$spring backwards,
+      glow 900ms var(--graphite-motion-ease) 220ms both;
+  }
+
+  // Sections and actions only: the Get the code dialog is a child too, and a
+  // cascade on it would animate its fixed scrim whenever it opened.
+  > .section,
+  > .actions {
+    @include drop.cascade($count: 12, $step: 40ms);
+  }
 }
 
 .section {
@@ -329,10 +372,20 @@
 // Below xl: nine 144px pickers in a scrolling rail, and a footer (Graphite UI
 // Site 13304:5391, and 13304:5484 for Small).
 .bar {
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
+  @include drop.surface;
   // The kit's drop shadow, which lifts the bar off the cards scrolling beneath.
   box-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation:
+      up 560ms drop.$spring backwards,
+      glow 900ms var(--graphite-motion-ease) 300ms both;
+  }
+}
+
+// The pickers file in along the rail behind the bar.
+.rail > .picker {
+  @include drop.cascade($count: 9, $start: 200ms, $step: 40ms);
 }
 
 .rail {
@@ -410,29 +463,48 @@
 
 .barFooter {
   display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-03);
-  padding: var(--graphite-space-04);
+  align-items: stretch;
+  min-height: 3rem;
   border-top: 1px solid var(--graphite-surface-variant);
+}
 
-  @media (min-width: 672px) {
-    flex-direction: row;
-    justify-content: flex-end;
+// Reset and Shuffle are the footer's quiet actions, Get the code its filled
+// corner block, as in the search panel's footer. Reset holds the left end;
+// Shuffle sits at the right, beside Get the code.
+.barQuiet {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  padding: 0 var(--graphite-space-05);
+  background: none;
+  border: 0;
+  color: var(--graphite-primary);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -4px;
   }
 }
 
-// Shuffle is the kit's fixed 150px; Get the code sizes to its label (16px in,
-// 64px for the icon), which 150px was too narrow to hold.
-.barButton {
-  @media (min-width: 672px) {
-    width: 9.375rem;
-  }
+.barReset {
+  border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
 }
 
-.barButtonCode {
-  @media (min-width: 672px) {
-    width: auto;
-  }
+.barShuffle {
+  margin-left: auto;
+}
+
+.barCode {
+  @include drop.action;
+  margin-left: 0;
 }
 
 // -------------------------------------------------------------------- sheets
@@ -444,6 +516,10 @@
   inset: 0;
   z-index: 60;
   background: var(--graphite-scrim);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade var(--graphite-motion-base) var(--graphite-motion-ease) both;
+  }
 }
 
 .sheet {
@@ -458,10 +534,26 @@
   max-height: 80vh;
   padding: var(--graphite-space-04) 0 1.25rem;
   overflow-y: auto;
-  background: var(--graphite-surface);
-  border-top: 1px solid var(--graphite-surface-variant);
+  @include drop.layer;
+  border: 0;
+  border-top: 1px solid transparent;
   border-radius: var(--graphite-radius-16) var(--graphite-radius-16) 0 0;
   outline: none;
+
+  // Sheets hold nothing fixed, so they can keep their transform: up with the
+  // spring, then the tint and the options. A 2rem hem below the screen edge
+  // means the overshoot lifts more sheet into view, not a gap under it.
+  @media (prefers-reduced-motion: no-preference) {
+    bottom: -2rem;
+    padding-bottom: calc(1.25rem + 2rem);
+    animation:
+      up 520ms drop.$spring both,
+      glow 900ms var(--graphite-motion-ease) 260ms both;
+  }
+
+  > .option {
+    @include drop.cascade($count: 12, $start: 160ms, $step: 30ms);
+  }
 }
 
 .grabber {

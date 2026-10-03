@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp, Download, Shuffle } from '@carbon/icons-react'
-import { Button } from '@/components/ui/button'
+import { ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { BODY_FONTS, CODE_FONTS, HEADING_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
@@ -146,14 +145,18 @@ export function ControlsBar() {
         ))}
       </div>
       <div className={styles.barFooter}>
-        <Button variant="ghost" className={`${styles.outlined} ${styles.barButton}`} onClick={b.shuffle}>
+        <button type="button" className={`${styles.barQuiet} ${styles.barReset}`} onClick={b.reset}>
+          <Reset size={16} aria-hidden="true" />
+          Reset
+        </button>
+        <button type="button" className={`${styles.barQuiet} ${styles.barShuffle}`} onClick={b.shuffle}>
+          <Shuffle size={16} aria-hidden="true" />
           Shuffle
-          <Shuffle />
-        </Button>
-        <Button variant="primary" className={styles.barButtonCode} onClick={() => setCodeOpen(true)}>
+        </button>
+        <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
           Get the code
-          <Download />
-        </Button>
+          <Download size={16} aria-hidden="true" />
+        </button>
       </div>
       {active ? <OptionSheet control={active} onClose={() => setSheet(null)} /> : null}
       <GetCodeDialog open={codeOpen} onClose={() => setCodeOpen(false)} />
