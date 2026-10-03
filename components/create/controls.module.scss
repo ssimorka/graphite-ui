@@ -645,3 +645,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+// The hex a source swatch copies, shown so the tap has a visible payload.
+.optionHex {
+  flex: none;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-1-size);
+  line-height: var(--graphite-text-code-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
