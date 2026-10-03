@@ -5,6 +5,7 @@
 // client shell.
 
 import type { DocsNavGroup, TocItem } from '@/components/docs-shell'
+import type { Crumb } from '@/components/ui/breadcrumb'
 
 export const DOCS_NAV: DocsNavGroup[] = [
   {
@@ -66,6 +67,25 @@ export const DOCS_NAV: DocsNavGroup[] = [
     ],
   },
 ]
+
+/**
+ * A docs page's breadcrumb trail, read from DOCS_NAV so it cannot name a group
+ * or page the sidebar does not. A group crumb goes to the group's first page,
+ * as Components goes to its Overview, so every crumb before "here" is a real
+ * link. A crumb that would only lead back to this page is dropped: on
+ * Introduction, Docs and Getting started both are /docs.
+ */
+export function docsCrumbs(href: string): [Crumb, ...Crumb[]] {
+  const group = DOCS_NAV.find((g) => g.items.some((i) => i.href === href))
+  const page = group?.items.find((i) => i.href === href)
+  if (!group || !page) throw new Error(`docsCrumbs: ${href} is not in DOCS_NAV`)
+  const before: Crumb[] = [
+    { label: 'Docs', href: '/docs' },
+    { label: group.label, href: group.items[0].href },
+  ].filter((c) => c.href !== href)
+  const here: Crumb = { label: page.label }
+  return before.length > 0 ? [before[0], ...before.slice(1), here] : [here]
+}
 
 // The Installation and Color ramps pages' contents. Here rather than in the
 // page files because a page may only export what Next allows, and the search

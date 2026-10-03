@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
@@ -149,13 +149,7 @@ export default function TokensPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Foundations' },
-                { label: 'Tokens' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/foundations/tokens')} />
             <h1 className={styles.title}>Tokens</h1>
             <p className={styles.lede}>
               The complete list of what Graphite exposes as CSS variables. Color

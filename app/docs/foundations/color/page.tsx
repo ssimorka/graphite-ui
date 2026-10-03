@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV, COLOR_RAMPS_TOC } from '@/components/docs-nav'
+import { DOCS_NAV, COLOR_RAMPS_TOC, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Callout, SectionHeading, StatusBadge } from '@/components/doc-blocks'
@@ -64,13 +64,7 @@ export default function ColorRampsPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Foundations' },
-                { label: 'Color' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/foundations/color')} />
             <h1 className={styles.title}>Color ramps</h1>
             <p className={styles.lede}>
               {spell(SOURCE_RAMPS.length)} ramps, {lower(WEIGHTS.length)} stops

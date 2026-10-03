@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV } from '@/components/docs-nav'
+import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -148,13 +148,7 @@ export default function GovernancePage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb
-              items={[
-                { label: 'Docs', href: '/docs' },
-                { label: 'Getting started' },
-                { label: 'Governance' },
-              ]}
-            />
+            <Breadcrumb items={docsCrumbs('/docs/governance')} />
             <h1 className={styles.title}>Governance</h1>
             <p className={styles.lede}>
               Graphite exists three times: as a Figma kit, as a written contract
