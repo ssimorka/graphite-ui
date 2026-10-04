@@ -53,6 +53,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/file-uploader', label: 'File uploader' },
       { href: '/docs/components/link', label: 'Link' },
       { href: '/docs/components/menu', label: 'Menu' },
+      { href: '/docs/components/menu-button', label: 'Menu buttons' },
       { href: '/docs/components/modal', label: 'Modal' },
       { href: '/docs/components/navigation-menu', label: 'Navigation menu' },
       { href: '/docs/components/notification', label: 'Notification' },

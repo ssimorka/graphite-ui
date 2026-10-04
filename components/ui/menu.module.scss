@@ -43,6 +43,12 @@
 .bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
 .top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); }
 
+// Lined up with the trigger's end rather than its start.
+.end { left: auto; right: 0; }
+
+// On its trigger with no gap, as the kit's Menu buttons draw it.
+.flush { margin-block: 0; }
+
 .item {
   appearance: none;
   display: flex;

@@ -11,7 +11,7 @@ Three related trigger components that open a Menu: `Menu button` (single trigger
 | Overflow | `3717:45725` |
 
 **Figma:** [Menu button](https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo/Graphite-UI-Kit?node-id=31420-317548)
-**Reference:** [Carbon Menu button](https://react.carbondesignsystem.com/?path=/docs/components-menubutton--overview) · [Combo button](https://react.carbaondesignsystem.com/?path=/docs/components-combobutton--overview) · [Overflow menu](https://react.carbondesignsystem.com/?path=/docs/components-overflowmenu--overview)
+**Reference:** [Carbon Menu button](https://react.carbondesignsystem.com/?path=/docs/components-menubutton--overview) · [Combo button](https://react.carbondesignsystem.com/?path=/docs/components-combobutton--overview) · [Overflow menu](https://react.carbondesignsystem.com/?path=/docs/components-overflowmenu--overview)
 
 ## Variant properties — Menu button / Combo button
 
@@ -37,6 +37,7 @@ Three related trigger components that open a Menu: `Menu button` (single trigger
 - **Combo button** — a primary action button with a secondary menu attached, for "default action + more options" patterns.
 - **Overflow** — icon-only trigger (kebab/ellipsis) for a list of secondary actions, typically in table rows or cards.
 - Match `Size` to whatever Menu size the trigger opens.
+- All three sets draw Button's default `fi-rs-plus-small` as their glyph; in code the Menu and Combo buttons draw the chevron and Overflow the menu dots (`docs/contracts/menu-button.md`).
 
 ## Do / Don't
 

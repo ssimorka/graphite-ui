@@ -11,6 +11,7 @@ import { datePickerDoc } from './docs/date-picker'
 import { fileUploaderDoc } from './docs/file-uploader'
 import { linkDoc } from './docs/link'
 import { menuDoc } from './docs/menu'
+import { menuButtonDoc } from './docs/menu-button'
 import { modalDoc } from './docs/modal'
 import { navigationMenuDoc } from './docs/navigation-menu'
 import { notificationDoc } from './docs/notification'
@@ -53,6 +54,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'file-uploader': fileUploaderDoc,
   'link': linkDoc,
   'menu': menuDoc,
+  'menu-button': menuButtonDoc,
   'modal': modalDoc,
   'navigation-menu': navigationMenuDoc,
   'notification': notificationDoc,

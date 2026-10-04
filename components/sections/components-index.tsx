@@ -18,6 +18,7 @@ import { Notification } from '@/components/ui/notification'
 import { DatePicker } from '@/components/ui/date-picker'
 import { FileUploader } from '@/components/ui/file-uploader'
 import { Link } from '@/components/ui/link'
+import { OverflowMenu } from '@/components/ui/menu-button'
 import { NumberInput } from '@/components/ui/number-input'
 import { PaginationNav } from '@/components/ui/pagination'
 import { PasswordInput } from '@/components/ui/password-input'
@@ -119,6 +120,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
     </Link>
   ),
   Menu: () => <Button>Open menu</Button>,
+  'Menu buttons': () => <OverflowMenu size="md" items={[{ label: 'Rename', onSelect: noop }]} />,
   Modal: () => <Button variant="primary">Open dialog</Button>,
   'Navigation Menu': () => (
     <NavigationMenu
