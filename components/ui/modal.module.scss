@@ -1,4 +1,11 @@
-// Dialog — docs/contracts/dialog.md
+// Modal — docs/contracts/modal.md
+//
+// The kit's Modal (Graphite UI Kit 4080:55366): a square panel on
+// `background`, as its set binds it, over the scrim, which is what separates
+// it from the page (so no edge and no shadow). A 16px header with an optional
+// label, the title in Body/1 and the close 16 from the top right; Body/3
+// content inset 16 with 48 below it; and the kit's footer, a full-bleed row of
+// 64px buttons.
 .scrim {
   position: fixed;
   inset: 0;
@@ -28,16 +35,18 @@
   }
 }
 
+// The kit's Mobile: full bleed on a narrow screen, not inset by the scrim.
+@media (max-width: 671px) {
+  .scrim { padding: 0; }
+}
+
 .dialog {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-04);
   width: 100%;
   max-height: 100%;
-  overflow: auto;
-  // 16, per the kit's Modal header.
-  padding: var(--graphite-space-05);
-  background: var(--graphite-surface-elevated);
+  overflow: hidden;
+  background: var(--graphite-background);
   color: var(--graphite-on-surface);
   border-radius: var(--graphite-radius-none);
 }
@@ -46,28 +55,119 @@
   outline: none;
 }
 
-// 384, 512 and 672. Large is the kit's 671 frame, rounded to the grid. The kit
-// draws every size at that one width, so Small and Medium are set to hold a
-// Cancel and a primary action side by side, which the old 160 and 240 did not.
+// 320, 384, 512 and 672. Large is the kit's 671 frame, rounded to the grid.
+// The kit draws every size at that one width; the code sizes them so each
+// still holds its footer's columns.
+.xs { max-width: calc(var(--graphite-space-13) * 2); }
 .sm { max-width: calc(var(--graphite-space-13) * 2.4); }
 .md { max-width: calc(var(--graphite-space-13) * 3.2); }
 .lg { max-width: calc(var(--graphite-space-13) * 4.2); }
 
+// ------------------------------------------------------------------- header
+// 16 all round; label and title 4 apart. The title stops short of the close:
+// 76 at Large and Medium, 44 at Small and Extra small.
+.header {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  // 64 without a label, as the kit draws it; 80 with one.
+  min-height: var(--graphite-space-10);
+  padding: var(--graphite-space-05);
+  padding-inline-end: calc(var(--graphite-space-05) + 76px);
+}
+
+.sm .header,
+.xs .header { padding-inline-end: calc(var(--graphite-space-05) + 44px); }
+
+.label {
+  margin: 0;
+  color: var(--graphite-on-surface-variant);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .title {
   margin: 0;
-  font-size: 1.125rem;
-  line-height: 1.3;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  font-weight: var(--graphite-text-weight-regular);
+}
+
+// The 20px glyph sits 16 from the top and right, in the 48px target around it.
+.close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: var(--graphite-on-surface);
+}
+
+// Button draws its glyphs at 16; the kit's close is 20.
+.close > svg {
+  width: 20px;
+  height: 20px;
+}
+
+// ------------------------------------------------------------------ content
+.content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 var(--graphite-space-05) var(--graphite-space-09);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+// The kit's Progress: 16 above and below, then 24 before the body.
+.progress {
+  margin: var(--graphite-space-05) 0 calc(var(--graphite-space-05) + var(--graphite-space-06));
 }
 
 .body {
   min-width: 0;
 }
 
+// ------------------------------------------------------------------- footer
+// Full bleed, no divider: equal columns 1px apart, the buttons 64 tall and
+// filling their columns. The kit's Extra large button draws 66; the footer
+// row is 64, so the buttons are held to it.
 .footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 1px;
+  align-items: stretch;
+}
+
+.footer > * {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--graphite-space-10);
+  height: var(--graphite-space-10);
+}
+
+// The kit's Inline loading, in the primary action's column.
+.loading {
+  display: inline-flex;
+  align-items: flex-start;
   gap: var(--graphite-space-03);
-  padding-top: var(--graphite-space-04);
-  border-top: 1px solid var(--graphite-outline);
+  padding: var(--graphite-space-05);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.spinner {
+  flex: none;
+  margin-top: 2px;
+  animation: modal-spin var(--graphite-motion-indeterminate) var(--graphite-motion-indeterminate-ease) infinite;
+}
+
+@keyframes modal-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 3s; }
 }
