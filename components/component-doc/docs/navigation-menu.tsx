@@ -22,7 +22,7 @@ export function navigationMenuDoc(): ComponentDocConfig {
     lede: 'A list of links to a site’s sections, laid out in a row or a column, with at most one nested level. It is the list only: a header bar, an action rail or a collapsible side panel around it is site chrome.',
     description:
       'A horizontal or vertical list of links with one optional nested level. Anatomy, orientations, states, API, tokens and accessibility, generated from the contract.',
-    tocNote: 'No kit page, by design. The kit’s only counterpart is its UI shell, which is out of scope as an application shell (#113). The docs sidebar is built from it.',
+    tocNote: 'No kit page, by design. The kit’s only counterpart is its UI shell, which is out of scope as an application shell (#113). The site header is built from it; the docs sidebar is a Tree view.',
     livePreview: <NavigationMenuPreview />,
     install:
       "import { NavigationMenu } from '@/components/ui/navigation-menu'\nimport type { NavItem, NavChild } from '@/components/ui/navigation-menu'",
@@ -105,8 +105,8 @@ export function navigationMenuDoc(): ComponentDocConfig {
     ],
     dos: [
       'Mark one item current per menu, and let the inset bar show it. It is a shape as well as a colour.',
-      'Use vertical in a sidebar and horizontal where every item fits on one row.',
-      'Pass a distinct label to each menu when a page has more than one, as the docs sidebar does per group.',
+      'Use horizontal where every item fits on one row, and vertical for a short flat list. A nested sidebar is a Tree view.',
+      'Pass a distinct label to each menu when a page has more than one.',
       'Keep nested items to the pages of their parent section, and few enough to leave the list open.',
     ],
     donts: [

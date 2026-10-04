@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
-import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
+import type { NavItem } from '@/components/ui/navigation-menu'
+import { TreeView } from '@/components/ui/tree-view'
 import { MeshGradient } from '@/components/mesh-gradient'
 import { useTheme } from '@/components/theme-provider'
 import styles from './docs-shell.module.scss'
@@ -113,8 +114,10 @@ function useScrollSpy(items: TocItem[]) {
  *
  * Site chrome, not a system component, for the reason
  * `docs/contracts/navigation-menu.md` (2.0.0) gives — a collapsible side panel
- * is chrome. The sidebar's link lists are NavigationMenu; the rails, the group
- * headings and the scroll-spy belong to the shell.
+ * is chrome. The sidebar is one Tree view: each group a branch, every page a
+ * link leaf, the current page selected. It used to be a NavigationMenu per
+ * group under a heading the shell drew; the hierarchy is what Tree view is
+ * for. The rails and the scroll-spy belong to the shell.
  *
  * Step 2 of the build order in `docs/SHADCN-MIGRATION.md`. It knows nothing
  * about its content, which is what lets `/docs/components/[slug]` reuse it
@@ -158,21 +161,21 @@ export function DocsShell({
         </div>
       ) : null}
       <aside className={`${styles.rail} ${styles.sidebar}`}>
-        {nav.map((group) => (
-          <div key={group.label} className={styles.group}>
-            <p className={styles.groupLabel}>{group.label}</p>
-            <NavigationMenu
-              label={group.label}
-              orientation="vertical"
-              items={
-                group.items.map((item) => ({
-                  ...item,
-                  current: pathname === item.href,
-                })) as [NavItem, ...NavItem[]]
-              }
-            />
-          </div>
-        ))}
+        {/* Every group starts open, so the tree hides nothing the old lists
+            showed; the reader closes what they do not need. */}
+        <nav aria-label="Docs">
+          <TreeView
+            label="Docs"
+            icons={false}
+            selected={pathname}
+            defaultExpanded={nav.map((g) => `group:${g.label}`)}
+            nodes={nav.map((g) => ({
+              id: `group:${g.label}`,
+              label: g.label,
+              children: g.items.map((item) => ({ id: item.href, label: item.label, href: item.href })),
+            }))}
+          />
+        </nav>
       </aside>
 
       <div className={styles.content}>

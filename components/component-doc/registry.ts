@@ -34,6 +34,7 @@ import { timePickerDoc } from './docs/time-picker'
 import { toastDoc } from './docs/toast'
 import { toggleDoc } from './docs/toggle'
 import { tooltipDoc } from './docs/tooltip'
+import { treeViewDoc } from './docs/tree-view'
 import { typographyDoc } from './docs/typography'
 
 /**
@@ -78,5 +79,6 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'toast': toastDoc,
   'toggle': toggleDoc,
   'tooltip': tooltipDoc,
+  'tree-view': treeViewDoc,
   'typography': typographyDoc,
 }

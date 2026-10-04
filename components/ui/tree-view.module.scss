@@ -1,0 +1,90 @@
+// Tree view — docs/contracts/tree-view.md
+//
+// The kit's Branch node item (11828:285325): a row with no fill at rest, the
+// indent from the private spacers carried in --indent, then the caret, the icon
+// and the node text 8 apart, 16 clear on the right. The kit fills the resting
+// row with layer-01, the surface Carbon assumes the tree sits on; transparent
+// reproduces that on whatever holds it (the docs sidebar sits on the page).
+// Hover and press still climb the ladder from there.
+.tree,
+.group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.node {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  height: var(--h);
+  padding: 0 var(--graphite-space-05) 0 var(--indent);
+  background: transparent;
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: var(--graphite-elevation-02);
+    color: var(--graphite-on-surface);
+  }
+
+  &:active {
+    background: var(--graphite-elevation-03);
+    color: var(--graphite-on-surface);
+  }
+
+  // The kit's Focus: a 2px ring inside the row, through primary's focus step.
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+  }
+}
+
+// Size is height only: the kit sets the text in Body/3 at both.
+.sm { --h: var(--graphite-space-07); }
+.xs { --h: var(--graphite-space-06); }
+
+// The kit's Selected: primary-container with a 4px primary bar inside the
+// left edge (its layer-selected-01 and interactive). Selected + Hover fills
+// state/primary-container-hover, which the engine does not generate, so a
+// selected row ignores hover, as Data table's selected rows do.
+.selected,
+.selected:hover,
+.selected:active {
+  background: var(--graphite-primary-container);
+  color: var(--graphite-on-surface);
+  box-shadow: inset 4px 0 0 var(--graphite-primary);
+}
+
+.selected:focus-visible {
+  box-shadow:
+    inset 4px 0 0 var(--graphite-primary),
+    inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+// Disabled: text and glyphs dim together; the row stays at rest.
+.disabled,
+.disabled:hover,
+.disabled:active {
+  background: transparent;
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+// The caret and icon take the row's colour, as the kit binds them with the
+// text (icon-secondary at rest, icon-primary on hover and selection).
+.glyph {
+  flex: none;
+}
+
+// The kit's Text overflow: one line, ending in an ellipsis.
+.text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

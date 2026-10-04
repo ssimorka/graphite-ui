@@ -32,7 +32,7 @@ Indentation spacers support 4 levels (Level 1–4) with or without an icon.
 ## Do / Don't
 
 - Do keep nesting to the 4 supported levels — deeper hierarchies should be restructured or paginated.
-- Don't use Tree view for a flat list — use List or Structured list instead, they're lighter weight.
+- Don't use Tree view for a flat list — use Contained list, or Navigation Menu for a site header. Governed by `docs/contracts/tree-view.md`; this site's docs sidebar is one.
 
 ---
 *Generated from Figma component sets `11948:286738` / `11828:285325` — regenerate if variant properties change.*

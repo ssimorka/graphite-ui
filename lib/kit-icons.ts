@@ -15,7 +15,8 @@
 // two small arrows), which the kit also draws on the Regular page only, and
 // Date picker's calendar, Password input's eye and eye-crossed, and Number
 // input's plus-small and minus-small, which the Bold and Solid pages do not
-// carry.
+// carry, and Tree view's caret-right, caret-down, folder and document, which
+// the Bold and Solid pages do not carry either.
 
 export const ICON_SETS = ['regular', 'bold', 'solid'] as const
 export type IconSet = (typeof ICON_SETS)[number]
@@ -26,11 +27,16 @@ export type KitIconName =
   | 'angle-small-down' | 'angle-small-right' | 'search' | 'settings' | 'info'
   | 'user' | 'cloud-upload' | 'database' | 'bread-slice' | 'cross-small'
   | 'delete' | 'apps-sort' | 'arrow-small-up' | 'arrow-small-down' | 'calendar'
-  | 'eye' | 'eye-crossed' | 'plus-small' | 'minus-small'
+  | 'eye' | 'eye-crossed' | 'plus-small' | 'minus-small' | 'caret-right'
+  | 'caret-down' | 'folder' | 'document'
 
 type Paths = Record<KitIconName, string[]>
 
 const regular: Paths = {
+  'caret-right': ['M6.47 12.86V3.53L10.67 7.72C10.79 7.85 10.86 8.02 10.86 8.2C10.86 8.37 10.79 8.54 10.67 8.67L6.47 12.86Z'],
+  'caret-down': ['M3.33 6H12.67L8.47 10.2C8.35 10.32 8.18 10.39 8 10.39C7.82 10.39 7.65 10.32 7.53 10.2L3.33 6Z'],
+  'folder': ['M14 2H8.16L5.49 0.67H2C1.47 0.67 0.96 0.88 0.59 1.25C0.21 1.63 0 2.14 0 2.67L0 15.33H16V4C16 3.47 15.79 2.96 15.41 2.59C15.04 2.21 14.53 2 14 2ZM2 2H5.18L7.84 3.33H14C14.18 3.33 14.35 3.4 14.47 3.53C14.6 3.65 14.67 3.82 14.67 4V4.59L1.33 4.66V2.67C1.33 2.49 1.4 2.32 1.53 2.2C1.65 2.07 1.82 2 2 2ZM1.33 14V6L14.67 5.92V14H1.33Z'],
+  'document': ['M4.67 8H11.33V9.33H4.67V8ZM4.67 12H9.33V10.67H4.67V12ZM14.67 5.06V16H1.33V2C1.33 1.47 1.54 0.96 1.92 0.59C2.29 0.21 2.8 0 3.33 0L9.61 0L14.67 5.06ZM10 4.67H12.39L10 2.28V4.67ZM13.33 14.67V6H8.67V1.33H3.33C3.16 1.33 2.99 1.4 2.86 1.53C2.74 1.65 2.67 1.82 2.67 2V14.67H13.33Z'],
   'plus-small': ['M8.67 7.33L8.67 4L7.33 4L7.33 7.33L4 7.33L4 8.67L7.33 8.67L7.33 12L8.67 12L8.67 8.67L12 8.67L12 7.33L8.67 7.33Z'],
   'minus-small': ['M12 7.33L4 7.33L4 8.67L12 8.67L12 7.33Z'],
   'eye': ['M15.88 7.45C15.3 6.17 13 2 8 2C3 2 0.7 6.17 0.12 7.45C0.04 7.63 0 7.81 0 8C0 8.19 0.04 8.38 0.12 8.55C0.7 9.83 3 14 8 14C13 14 15.3 9.83 15.88 8.55C15.96 8.37 16 8.19 16 8C16 7.81 15.96 7.63 15.88 7.45L15.88 7.45ZM8 12.67C3.8 12.67 1.83 9.09 1.33 8.01C1.83 6.91 3.8 3.33 8 3.33C12.19 3.33 14.16 6.9 14.67 8C14.16 9.1 12.19 12.67 8 12.67Z', 'M8 4.67C7.34 4.67 6.7 4.86 6.15 5.23C5.6 5.59 5.17 6.12 4.92 6.72C4.67 7.33 4.6 8 4.73 8.65C4.86 9.3 5.18 9.89 5.64 10.36C6.11 10.82 6.7 11.14 7.35 11.27C8 11.4 8.67 11.33 9.28 11.08C9.88 10.83 10.41 10.4 10.77 9.85C11.14 9.3 11.33 8.66 11.33 8C11.33 7.12 10.98 6.27 10.36 5.64C9.73 5.02 8.88 4.67 8 4.67L8 4.67ZM8 10C7.6 10 7.22 9.88 6.89 9.66C6.56 9.44 6.3 9.13 6.15 8.77C6 8.4 5.96 8 6.04 7.61C6.12 7.22 6.31 6.87 6.59 6.59C6.87 6.31 7.22 6.12 7.61 6.04C8 5.96 8.4 6 8.77 6.15C9.13 6.3 9.44 6.56 9.66 6.89C9.88 7.22 10 7.6 10 8C10 8.53 9.79 9.04 9.41 9.41C9.04 9.79 8.53 10 8 10Z'],
@@ -65,6 +71,10 @@ const regular: Paths = {
 }
 
 const bold: Paths = {
+  'caret-right': regular['caret-right'],
+  'caret-down': regular['caret-down'],
+  'folder': regular['folder'],
+  'document': regular['document'],
   'calendar': regular['calendar'],
   'eye': regular['eye'],
   'eye-crossed': regular['eye-crossed'],
@@ -99,6 +109,10 @@ const bold: Paths = {
 }
 
 const solid: Paths = {
+  'caret-right': regular['caret-right'],
+  'caret-down': regular['caret-down'],
+  'folder': regular['folder'],
+  'document': regular['document'],
   'calendar': regular['calendar'],
   'eye': regular['eye'],
   'eye-crossed': regular['eye-crossed'],
