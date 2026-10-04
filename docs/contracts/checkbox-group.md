@@ -1,5 +1,5 @@
 ---
-component: CheckboxGroup
+component: Checkbox group
 version: 1.0.0
 wave: 2
 slots:
@@ -54,7 +54,7 @@ prohibitions:
   - No single checkbox in a group. One yes-or-no question is a Checkbox.
 ---
 
-### CheckboxGroup
+### Checkbox group
 - **Slots:** Group label (required), options (required), supporting text.
 - **Props:** options, value / onChange, orientation (vertical, horizontal), label, helpText / errorText / warningText, disabled, readOnly.
 - **Tokens:** `on-surface-variant` label; the status icon's `danger`, `warning` and `on-warning`; the boxes' own.

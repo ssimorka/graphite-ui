@@ -1,5 +1,5 @@
 ---
-component: NumberInput
+component: Number input
 version: 1.0.0
 wave: 2
 slots:
@@ -30,7 +30,7 @@ prohibitions:
   - No stepper button that steps past a bound. It disables there instead.
 ---
 
-### NumberInput
+### Number input
 - **Slots:** Field (required), stepper (required).
 - **Props:** value / onChange, min / max / step; Text input's size, layout, label, supporting text, disabled and readOnly.
 - **Tokens:** `outline` dividers; the field's and Button's own.

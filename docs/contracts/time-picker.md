@@ -1,5 +1,5 @@
 ---
-component: TimePicker
+component: Time picker
 version: 1.0.0
 wave: 2
 slots:
@@ -60,7 +60,7 @@ prohibitions:
   - No time picker that turns a typed time into another value silently. The caller checks it and says so.
 ---
 
-### TimePicker
+### Time picker
 - **Slots:** Label (required), time (required), clock (required), timezone, supporting text.
 - **Props:** value / onChange, timezones, layout (fixed, fluid), size (sm, md, lg), label / timeLabel / clockLabel / timezoneLabel, helpText / errorText / warningText, disabled, readOnly.
 - **Tokens:** `on-surface-variant` label; `outline-strong` Fluid rules; the fields' own.

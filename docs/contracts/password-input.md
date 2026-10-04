@@ -1,5 +1,5 @@
 ---
-component: PasswordInput
+component: Password input
 version: 1.0.0
 wave: 2
 slots:
@@ -28,7 +28,7 @@ prohibitions:
   - No toggle that changes its accessible name with its state. The name stays "Show password"; aria-pressed carries the state.
 ---
 
-### PasswordInput
+### Password input
 - **Slots:** Field (required), show toggle (required).
 - **Props:** Text input's, less type and trailing; Show text is the reader's.
 - **Tokens:** `on-surface` eye; `primary-focus` ring; `primary-disabled-content` when disabled.

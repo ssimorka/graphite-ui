@@ -1,5 +1,5 @@
 ---
-component: DatePicker
+component: Date picker
 version: 1.0.0
 wave: 2
 slots:
@@ -70,7 +70,7 @@ prohibitions:
   - No range built from two single pickers. A range shares one calendar and one value.
 ---
 
-### DatePicker
+### Date picker
 - **Slots:** Field (required), calendar trigger, calendar, supporting text.
 - **Props:** mode (simple, single, range), layout (fixed, fluid), size (sm, md, lg), value / onChange, label / endLabel, minDate / maxDate, helpText / errorText / warningText, disabled, readOnly.
 - **Tokens:** `elevation-01` panel with the overlay `shadow`; `elevation-02` hover; `primary` selected day and today; `primary-container` range; `on-surface` and `on-surface-variant` days.
