@@ -1,7 +1,7 @@
 // Contained list's own page parts: a full-width stack for the rows, and the
-// forced Hover row. The row exposes no data-slot hook, so the page wraps it
-// and forces the declaration contained-list.module.scss puts on
-// .interactive:hover. Nothing here restyles the component.
+// forced Hover, Active and Focus rows. The row exposes no data-slot hook, so
+// the page wraps it and forces the declarations contained-list.module.scss
+// puts on those states. Nothing here restyles the component.
 
 .list {
   display: flex;
@@ -13,5 +13,17 @@
 }
 
 .forceHover .list > * {
-  background: var(--graphite-surface-variant);
+  background: var(--graphite-elevation-02);
+}
+
+.forceActive .list > * {
+  background: var(--graphite-elevation-03);
+}
+
+.forceFocus .list > * {
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+:is(.forceHover, .forceActive, .forceFocus) .list > *::after {
+  visibility: hidden;
 }

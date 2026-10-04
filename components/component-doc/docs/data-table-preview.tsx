@@ -136,7 +136,7 @@ export function DataTableSample({
       withRow && i === 0
         ? (row: DemoRow) => (
             <ContainedList
-              density="compact"
+              size="sm"
               leading={<Tag>{row.component.slice(0, 2).toUpperCase()}</Tag>}
               title={row.component}
             />

@@ -1,41 +1,71 @@
-// Item — docs/contracts/item.md
+// Contained list — docs/contracts/contained-list.md
 //
-// The row primitive Table composes from in Wave 6. Its hover is a tone-step
-// shift from surface to surface-variant, and Table reuses this exact shift
-// rather than inventing a row highlight of its own.
+// The kit's Contained list (Graphite UI Kit 16193:272726) and the row, cell
+// and title items it is built from. A row is one or more 16-inset cells at a
+// fixed height (32, 40, 48 or 64) with the trailing control flush to its
+// right edge and a 1px outline-subtle rule under it. Hover and active climb
+// the elevation ladder, the same tone-step move Button's hover makes, and the
+// rule steps aside while they show.
 .item {
+  position: relative;
   display: flex;
   align-items: center;
-  // 16, per the kit's Contained list row cell, which insets 14/16 and gaps 16.
-  gap: var(--graphite-space-05);
   width: 100%;
+  min-width: 0;
+  // The kit's rows fill a raw white, an un-migrated Carbon value; surface is
+  // the reading that works in both themes.
   background: var(--graphite-surface);
   color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+// The divider, full width or 16 in from each end.
+.item::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--graphite-outline-subtle);
+  pointer-events: none;
+}
+
+.inset::after { inset-inline: var(--graphite-space-05); }
+
+.cell {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  flex: 1 1 0;
   min-width: 0;
+  padding-inline: var(--graphite-space-05);
 }
 
-.compact { padding: var(--graphite-density-compact); }
-.default { padding: var(--graphite-density-default); }
+// The kit's four heights: a 20px line with 6, 10 or 14 above and below, and
+// Extra large a fixed 64 with the content at the top (14 above, 10 below).
+.sm { min-height: var(--graphite-space-07); }
+.md { min-height: var(--graphite-space-08); }
+.lg { min-height: var(--graphite-space-09); }
+.xl { min-height: var(--graphite-space-10); align-items: flex-start; }
 
-.interactive {
-  cursor: pointer;
-}
+.sm .cell { padding-block: 6px; }
+.md .cell { padding-block: 10px; }
+.lg .cell { padding-block: 14px; }
+.xl .cell { padding-block: 14px 10px; align-items: flex-start; }
 
-.interactive:hover {
-  background: var(--graphite-surface-variant);
-}
-
-.leading,
-.trailing {
+// The kit's marker frame is the 20px line. A taller marker, such as a Tag,
+// overhangs into the padding rather than making the row taller than its size.
+.leading {
   display: inline-flex;
   align-items: center;
   flex: none;
+  height: 20px;
 }
 
 .text {
   display: flex;
   flex-direction: column;
-  gap: var(--graphite-space-01);
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -47,7 +77,96 @@
   white-space: nowrap;
 }
 
+// The code's own second line, on the type scale: Caption/1.
 .description {
   color: var(--graphite-on-surface-variant);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+// The trailing control, flush to the row's right edge and as tall as the row.
+.trailing {
+  display: inline-flex;
+  align-items: stretch;
+  align-self: stretch;
+  flex: none;
+}
+
+.trailing > * { min-height: 100%; }
+
+// ------------------------------------------------------------------- states
+.interactive { cursor: pointer; }
+
+.interactive:hover { background: var(--graphite-elevation-02); }
+.interactive:active { background: var(--graphite-elevation-03); }
+
+// Focus belongs to the caller's link around the row: a 2px ring inside it.
+:focus-visible > .item {
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.interactive:is(:hover, :active)::after,
+:focus-visible > .item::after { visibility: hidden; }
+
+// Disabled dims the text and the marker together. The kit keeps the icon at
+// full strength while the text dims, the same slip as Accordion's chevron.
+.disabled { color: var(--graphite-primary-disabled-content); }
+.disabled :is(.description, .leading) { color: var(--graphite-primary-disabled-content); }
+
+// ------------------------------------------------------------------ header
+// The kit's title item. On page: the page's background, Title/5 SemiBold, at
+// the rows' height, with the rule under it. Disclosed: elevation-01, 32 tall,
+// Caption/1 in on-surface-variant.
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--graphite-outline-subtle);
+}
+
+.headerTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding-inline: var(--graphite-space-05);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.on-page {
+  background: var(--graphite-background);
+  color: var(--graphite-on-surface);
+}
+
+.on-page .headerTitle {
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  font-weight: var(--graphite-text-weight-semibold);
+}
+
+// On page takes the rows' height: 32, 40, and 48 for Large and Extra large.
+.on-page.xl { min-height: var(--graphite-space-09); align-items: center; }
+
+.disclosed {
+  align-items: center;
+  min-height: var(--graphite-space-07);
+  background: var(--graphite-elevation-01);
+  color: var(--graphite-on-surface-variant);
+}
+
+.disclosed .headerTitle {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: var(--graphite-text-weight-regular);
 }
