@@ -1498,6 +1498,30 @@ $cap-dwell: 500px;
     padding: var(--graphite-space-07);
   }
 
+  // The fixed 464 frame has to hold one chip per contract, 37 of them, and it
+  // centres its content, so an overflow clipped both the first row and the
+  // caption. 24 both ways (the stacked layout's request) needed 600px at the
+  // narrowest lg frame against the 398 inside it. From lg the chips sit 8 down
+  // and 12 across, padded 5 / 10; from xlg, where the frame is wider, the kit's
+  // own 7 / 12 and 8 down by 24 across. Measured at 1056 (378 of 398) and 1242
+  // (fits with room); recheck when the contract count grows.
+  .section--capabilities .cap-components {
+    gap: var(--graphite-space-03) var(--graphite-space-04);
+  }
+
+  .section--capabilities .cap-components__chip {
+    padding: 5px 10px;
+  }
+}
+
+@include breakpoint.breakpoint(xlg) {
+  .section--capabilities .cap-components {
+    gap: var(--graphite-space-03) var(--graphite-space-06); // kit 8 / 24
+  }
+
+  .section--capabilities .cap-components__chip {
+    padding: 7px var(--graphite-space-04); // kit 7 / 12
+  }
 }
 
 // Medium and Small: the kit stacks all six capabilities, each above its own
@@ -2122,7 +2146,9 @@ $cap-dwell: 500px;
 .cap-components {
   display: flex;
   flex-wrap: wrap;
-  // 24 both ways, by request. The kit draws 8 down and 24 across.
+  // 24 both ways, by request, where the stage grows to fit (the stacked md and
+  // sm layout). The kit draws 8 down and 24 across; the fixed lg frame tightens
+  // to fit, below.
   gap: var(--graphite-space-06);
   list-style: none;
   margin: 0;
