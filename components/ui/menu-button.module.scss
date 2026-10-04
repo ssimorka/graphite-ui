@@ -1,0 +1,28 @@
+// Menu buttons — docs/contracts/menu-button.md
+//
+// The kit's Menu button, Combo button and Overflow. The triggers are the
+// governed Button and the menus the governed Menu; this sheet only joins the
+// Combo button's pair and turns the chevron while its menu is open.
+
+// The Combo button's pair, 1 apart, as the kit's Button group draws it here.
+.combo {
+  display: inline-flex;
+  gap: 1px;
+}
+
+// The chevron turns over while the menu is open. The kit draws no open
+// glyph; Carbon's turns, and the code keeps its own where the kit is silent.
+// The glyph's path turns about its own box, not the svg: Button positions its
+// trailing svg with a transform, and any turn on the svg itself would carry
+// that offset round with it.
+.chevron path {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: rotate var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+[aria-expanded='true'] > .chevron path { rotate: 180deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron path { transition: none; }
+}

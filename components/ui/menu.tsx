@@ -28,7 +28,7 @@ export type MenuItem =
     }
   | { kind: 'separator' }
 
-/** Contract: docs/contracts/menu.md (2.0.0) */
+/** Contract: docs/contracts/menu.md (2.1.0) */
 type MenuProps = {
   trigger: (props: {
     onClick: () => void
@@ -39,11 +39,18 @@ type MenuProps = {
   /** At least one item. Separators do not count toward that on their own. */
   items: [MenuItem, ...MenuItem[]]
   placement?: 'bottom' | 'top'
+  /** Which edge of the trigger the menu lines up with: its start (the default) or its end. */
+  align?: 'start' | 'end'
+  /**
+   * Sits the menu on its trigger with no gap, as the kit's Menu buttons draw
+   * it (#286). Otherwise it stands 4 off.
+   */
+  flush?: boolean
   /** The kit's Size: rows of 50, 42, 34 and 26. */
   size?: 'lg' | 'md' | 'sm' | 'xs'
 }
 
-export function Menu({ trigger, items, placement = 'bottom', size = 'md' }: MenuProps) {
+export function Menu({ trigger, items, placement = 'bottom', align = 'start', flush = false, size = 'md' }: MenuProps) {
   const id = useId()
   const [open, setOpen] = useState(false)
   // Which item takes focus when the menu opens, or null for a menu opened by
@@ -125,7 +132,7 @@ export function Menu({ trigger, items, placement = 'bottom', size = 'md' }: Menu
           ref={ref}
           id={id}
           role="menu"
-          className={`${styles.menu} ${styles[placement]} ${styles[size]}`}
+          className={[styles.menu, styles[placement], styles[size], align === 'end' ? styles.end : '', flush ? styles.flush : ''].join(' ')}
           onKeyDown={onMenuKeyDown}
         >
           {items.map((item, i) =>

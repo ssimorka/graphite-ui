@@ -1,6 +1,6 @@
 ---
 component: Menu
-version: 2.0.0
+version: 2.1.0
 wave: 5
 slots:
   - name: Trigger
@@ -17,6 +17,12 @@ props:
   - name: placement
     values: [bottom, top]
     notes: Behaviour the kit does not draw; the code keeps it (rule 7's tie-break).
+  - name: align
+    values: [start, end]
+    notes: Which edge of the trigger the menu lines up with. Start by default; end is the kit's Overflow Alignment=End (#286).
+  - name: flush
+    values: boolean
+    notes: Sits the menu on its trigger with no gap, as the kit's Menu buttons draw it. Otherwise it stands 4 off.
   - name: size
     values: [lg, md, sm, xs]
     notes: The kit's Size, rows of 50, 42, 34 and 26 (Carbon's padding around Body/3, two over Carbon's rows, recorded as drawn). Medium by default, as the other form controls are.
@@ -48,6 +54,7 @@ tokens:
   - name: motion
     usage: The shared overlay entrance, inherited from Popover along with the surface. Declared here too so the drift check can hold this component to it rather than trusting the inheritance.
 composition_rules:
+  - The kit's Menu buttons (Menu button, Combo button, Overflow) are their own contract, menu-button.md (#286), which fixes the trigger and passes the rest here.
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
   - Contained list hover uses the same tone-step logic as Button hover, not a separate highlight convention. Focus is a 2px ring inside the row, as the kit draws it, with no fill of its own.

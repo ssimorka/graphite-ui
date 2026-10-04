@@ -1,0 +1,11 @@
+// Menu buttons' own page parts: room for the menu to open into, above or
+// below, and the trigger at the far edge when the menu lines up with its end.
+
+.stage {
+  display: flex;
+  align-items: flex-start;
+  min-height: 21rem;
+}
+
+.top { align-items: flex-end; }
+.end { justify-content: flex-end; }
