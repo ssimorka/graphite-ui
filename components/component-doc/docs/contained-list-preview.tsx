@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ContainedList, ContainedListHeader } from '@/components/ui/contained-list'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { Tag } from '@/components/ui/tag'
 import { KitIcon } from '@/components/kit-icon'
 import { DemoFrame } from '../demo-frame'
@@ -53,7 +53,7 @@ export function ContainedListPreview({ rows }: { rows: DemoRow[] }) {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Type"
             size="sm"
             value={kind}
@@ -63,7 +63,7 @@ export function ContainedListPreview({ rows }: { rows: DemoRow[] }) {
               { value: 'disclosed', label: 'Disclosed' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -75,7 +75,7 @@ export function ContainedListPreview({ rows }: { rows: DemoRow[] }) {
               { value: 'xl', label: 'Extra large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Interactive"
             size="sm"
             value={interactive ? 'true' : 'false'}

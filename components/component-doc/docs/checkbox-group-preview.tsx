@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { CheckboxGroup } from '@/components/ui/checkbox-group'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
@@ -38,7 +38,7 @@ export function CheckboxGroupPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Horizontal"
             size="sm"
             value={orientation === 'horizontal' ? 'true' : 'false'}
@@ -48,7 +48,7 @@ export function CheckboxGroupPreview() {
               { value: 'true', label: 'True' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

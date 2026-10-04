@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Pagination, PaginationNav } from '@/components/ui/pagination'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './pagination.module.scss'
 
@@ -30,7 +30,7 @@ export function PaginationPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Form"
             size="sm"
             value={form}
@@ -42,7 +42,7 @@ export function PaginationPreview() {
               { value: 'unbound', label: 'Table bar: Unbound' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}

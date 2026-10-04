@@ -4,7 +4,7 @@ import { useState } from 'react'
 import type { MouseEvent } from 'react'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import type { NavItem } from '@/components/ui/navigation-menu'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Orientation = 'horizontal' | 'vertical'
@@ -73,7 +73,7 @@ export function NavigationMenuPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Orientation"
             size="sm"
             value={orientation}
@@ -83,7 +83,7 @@ export function NavigationMenuPreview() {
               { value: 'vertical', label: 'Vertical' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Nested items"
             size="sm"
             value={nested ? 'on' : 'off'}

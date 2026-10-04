@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { NumberInput } from '@/components/ui/number-input'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import type { FieldLayout, FieldSize } from '@/components/ui/text-input'
 import { DemoFrame } from '../demo-frame'
 
@@ -37,7 +37,7 @@ export function NumberInputPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={layout}
@@ -47,7 +47,7 @@ export function NumberInputPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -58,7 +58,7 @@ export function NumberInputPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

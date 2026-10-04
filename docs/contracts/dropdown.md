@@ -1,6 +1,6 @@
 ---
 component: Dropdown
-version: 1.2.1
+version: 1.2.2
 wave: 2
 slots:
   - name: Label
@@ -72,7 +72,7 @@ composition_rules:
   - The multi-select form's listbox is aria-multiselectable. Enter (and Space, when not filterable) toggles the row the keyboard is on and keeps the list open; Escape closes. The count Tag is the governed Tag; its close clears every choice.
   - The combo box form is the editable ARIA combobox with list autocomplete. Typing filters and opens the list; arrows move; Enter chooses; Escape closes an open list, or clears what was typed on a closed one; the clear button is named "Clear selected item". A filter that leaves nothing shows "No matches".
   - The ARIA select-only combobox. Focus stays on the trigger; the active option is its aria-activedescendant; the list is a listbox of options. Arrow Down, Arrow Up, Enter or Space open it; arrows, Home and End move; Enter or Space chooses; Escape closes; typing jumps to the next option that starts with what was typed.
-  - Select stays the native single choice and the default. Use Dropdown when the choice needs the kit's list rather than the platform's.
+  - Select is the default single choice in a form and, since select.md 3.0.0, opens this same list through the same select-only behaviour (useSelectOnly). Use Dropdown for the kit's Dropdown sets, whose trigger differs from Select's, and for the other kinds.
   - All four of the kit's Dropdown kinds now sit on this contract: Dropdown, Combo box, Multi-select and Filterable multi-select.
 prohibitions:
   - No dropdown without a label.
@@ -83,6 +83,6 @@ prohibitions:
 - **Slots:** Label (required), trigger (required), list (required), supporting text.
 - **Props:** options, value / onChange, placeholder, size (sm, md, lg), layout (fixed, inline, fluid), helpText / errorText / warningText, disabled, readOnly.
 - **Tokens:** `surface-variant` trigger with an `outline` rule; `surface` list with the overlay `shadow`; `primary-container` selected; `on-surface` and `on-surface-variant` text.
-- **Composition rules:** The select-only combobox; Select stays the native default; the other kinds extend this contract.
+- **Composition rules:** The select-only combobox; Select is the default and shares this list and its keyboard (1.2.2, a patch: the behaviour moved into `useSelectOnly` unchanged so Select could use it, and the select-only list is now drawn on `<body>` against its trigger, so a clipping container cannot cut it off; the Combo box and Multi-select lists still open in place); the other kinds extend this contract.
 - **Prohibitions:** No unlabelled dropdown; no dropdown of actions.
 - **Kit parity** (#287, 1.0.0): the Dropdown kind, Dropdown - Default (`14032:290635`) and - Fluid (`14505:302528`), with the private menu list, list item (Single select) and chevron sets, on every axis but Skeleton, which has no counterpart by rule. 1.1.0 (#287, part 2) adds the Combo box kind, Dropdown - Combo box - Default (`14032:290976`) and - Fluid (`14505:304219`). 1.2.0 (#287, parts 3 and 4) adds Multi-select, Dropdown - Multi-select - Default (`14032:291311`) and - Fluid (`14530:300220`), and Filterable multi-select, Default (`14032:291673`) and Fluid (`45988:11486`), with the private list item's Multi-select type and the parent checkbox set. Recorded rather than copied: the Filterable multi-select sets default to State=Hover; the code has no default state to set. The kit draws the Filterable trigger's clear whenever something is chosen; here it clears what was typed and shows only while there is text, as the count Tag already clears the choice. The count Tag is the governed Tag; since #294 a one-digit count is 52 wide, as the kit draws it. Recorded rather than copied, or kept as drawn: the trigger is drawn on surface-variant with an outline rule, not the field shell's elevation-01 and outline-strong, consistently across all eight Dropdown sets, so it is kept as the Dropdown's own (rule 7). The Prompt text binds on-surface, the value's colour, where other fields' placeholders are quieter; kept as drawn. The AI layer and AI label instanced in these variants belong to the permanently ungoverned AI sets and are not built. The Fluid label's tooltip trigger is not drawn, as the other fields' Fluid labels do not take one.

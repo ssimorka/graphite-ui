@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Tabs } from '@/components/ui/tabs'
 import type { Tab } from '@/components/ui/tabs'
 import type { KitIconName } from '@/lib/kit-icons'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Orientation = 'horizontal' | 'vertical'
@@ -48,7 +48,7 @@ export function TabsPreview({ tabs }: { tabs: [DemoTab, DemoTab, ...DemoTab[]] }
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Orientation"
             size="sm"
             value={orientation}
@@ -58,23 +58,23 @@ export function TabsPreview({ tabs }: { tabs: [DemoTab, DemoTab, ...DemoTab[]] }
               { value: 'vertical', label: 'Vertical' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Style"
             size="sm"
             value={variant}
             onChange={(v) => setVariant(v as Variant)}
-            state={horizontal ? 'default' : 'disabled'}
+            disabled={!(horizontal)}
             options={[
               { value: 'line', label: 'Line' },
               { value: 'contained', label: 'Contained' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Type"
             size="sm"
             value={kind}
             onChange={(v) => setKind(v as Kind)}
-            state={horizontal ? 'default' : 'disabled'}
+            disabled={!(horizontal)}
             options={[
               { value: 'text', label: 'Text' },
               { value: 'icon', label: 'Icon only' },

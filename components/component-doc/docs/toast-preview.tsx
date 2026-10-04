@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { Toast, ToastProvider, useToast } from '@/components/ui/toast'
 import type { ToastVariant } from '@/components/ui/toast'
 import { DemoFrame } from '../demo-frame'
@@ -62,7 +62,7 @@ export function ToastPreview() {
       <DemoFrame
         controls={
           <>
-            <Select
+            <Dropdown
               label="Status"
               size="sm"
               value={variant}
@@ -74,7 +74,7 @@ export function ToastPreview() {
                 { value: 'danger', label: 'Error' },
               ]}
             />
-            <Select
+            <Dropdown
               label="High contrast"
               size="sm"
               value={highContrast ? 'true' : 'false'}
@@ -84,7 +84,7 @@ export function ToastPreview() {
                 { value: 'true', label: 'True' },
               ]}
             />
-            <Select
+            <Dropdown
               label="Actionable"
               size="sm"
               value={actionable ? 'true' : 'false'}

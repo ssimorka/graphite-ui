@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { KitIcon } from '@/components/kit-icon'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { Tooltip } from '@/components/ui/tooltip'
 import { DemoFrame } from '../demo-frame'
 import styles from './tooltip.module.scss'
@@ -62,7 +62,7 @@ export function TooltipPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Type"
             size="sm"
             value={type}
@@ -76,7 +76,7 @@ export function TooltipPreview() {
               { value: 'definition', label: 'Definition' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Placement"
             size="sm"
             value={placement}
@@ -88,19 +88,19 @@ export function TooltipPreview() {
               { value: 'right', label: 'Right', disabled: type === 'definition' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Alignment"
             size="sm"
             value={sideways ? 'center' : align}
             onChange={(v) => setAlign(v as Align)}
-            state={sideways ? 'disabled' : 'default'}
+            disabled={sideways}
             options={[
               { value: 'start', label: 'Start' },
               { value: 'center', label: 'Center' },
               { value: 'end', label: 'End' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Delay"
             size="sm"
             value={String(delay)}

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { PasswordInput } from '@/components/ui/password-input'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import type { FieldLayout, FieldSize } from '@/components/ui/text-input'
 import { DemoFrame } from '../demo-frame'
 
@@ -35,7 +35,7 @@ export function PasswordInputPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Style"
             size="sm"
             value={layout}
@@ -46,7 +46,7 @@ export function PasswordInputPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -57,7 +57,7 @@ export function PasswordInputPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

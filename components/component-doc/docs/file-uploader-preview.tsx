@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FileUploader } from '@/components/ui/file-uploader'
 import type { FileUploaderSize, UploaderFile } from '@/components/ui/file-uploader'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Type = 'button' | 'dropzone'
@@ -55,7 +55,7 @@ export function FileUploaderPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Type"
             size="sm"
             value={type}
@@ -65,7 +65,7 @@ export function FileUploaderPreview() {
               { value: 'dropzone', label: 'Drag and drop' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -76,7 +76,7 @@ export function FileUploaderPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={disabled ? 'disabled' : 'enabled'}

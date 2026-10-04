@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Search } from '@/components/ui/search'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './search.module.scss'
 
@@ -38,7 +38,7 @@ export function SearchPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={layout}
@@ -48,11 +48,11 @@ export function SearchPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
-            state={fluid ? 'disabled' : 'default'}
+            disabled={fluid}
             onChange={(v) => setSize(v as Size)}
             options={[
               { value: 'sm', label: 'Small' },
@@ -60,11 +60,11 @@ export function SearchPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Expandable"
             size="sm"
             value={expandable ? 'true' : 'false'}
-            state={fluid ? 'disabled' : 'default'}
+            disabled={fluid}
             onChange={(v) => setExpandable(v === 'true')}
             options={[
               { value: 'false', label: 'False' },

@@ -10,7 +10,7 @@ import { Search } from '@/components/ui/search'
 import { Tag } from '@/components/ui/tag'
 import { DataTable } from '@/components/ui/data-table'
 import type { Column, Sort } from '@/components/ui/data-table'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './data-table.module.scss'
 
@@ -85,7 +85,7 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Type"
             size="sm"
             value={kind}
@@ -99,7 +99,7 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
               { value: 'batch', label: 'Batch actions' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -112,7 +112,7 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
               { value: 'xl', label: 'Extra large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Sortable columns"
             size="sm"
             value={sortable ? 'true' : 'false'}

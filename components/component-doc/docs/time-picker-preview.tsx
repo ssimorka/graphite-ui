@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import type { FieldSize } from '@/components/ui/text-input'
 import { TimePicker } from '@/components/ui/time-picker'
 import type { TimeValue } from '@/components/ui/time-picker'
@@ -47,7 +47,7 @@ export function TimePickerPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Layout"
             size="sm"
             value={layout}
@@ -57,7 +57,7 @@ export function TimePickerPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -68,7 +68,7 @@ export function TimePickerPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Inputs"
             size="sm"
             value={zones ? '3' : '2'}
@@ -78,7 +78,7 @@ export function TimePickerPreview() {
               { value: '2', label: '2' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

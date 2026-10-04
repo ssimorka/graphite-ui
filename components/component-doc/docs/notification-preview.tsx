@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Notification } from '@/components/ui/notification'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 export type Variant = 'info' | 'danger' | 'warning' | 'success'
@@ -52,7 +52,7 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Status"
             size="sm"
             value={variant}
@@ -64,7 +64,7 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
               { value: 'danger', label: 'Danger', disabled: callout },
             ]}
           />
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={kind}
@@ -78,7 +78,7 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
               { value: 'callout', label: 'Callout' },
             ]}
           />
-          <Select
+          <Dropdown
             label="High contrast"
             size="sm"
             value={highContrast ? 'true' : 'false'}
@@ -88,22 +88,22 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
               { value: 'true', label: 'True' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Actionable"
             size="sm"
             value={actionable ? 'true' : 'false'}
-            state={callout ? 'disabled' : 'default'}
+            disabled={callout}
             onChange={(v) => setActionable(v === 'true')}
             options={[
               { value: 'false', label: 'False' },
               { value: 'true', label: 'True' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Close button"
             size="sm"
             value={close ? 'true' : 'false'}
-            state={callout ? 'disabled' : 'default'}
+            disabled={callout}
             onChange={(v) => {
               setClose(v === 'true')
               setOpen(true)

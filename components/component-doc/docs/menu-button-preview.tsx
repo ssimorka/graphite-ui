@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ComboButton, MenuButton, OverflowMenu } from '@/components/ui/menu-button'
 import type { MenuItem } from '@/components/ui/menu'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './menu-button.module.scss'
 
@@ -41,7 +41,7 @@ export function MenuButtonPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={form}
@@ -52,7 +52,7 @@ export function MenuButtonPreview() {
               { value: 'overflow', label: 'Overflow' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -63,7 +63,7 @@ export function MenuButtonPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Position"
             size="sm"
             value={placement}
@@ -73,7 +73,7 @@ export function MenuButtonPreview() {
               { value: 'top', label: 'Top' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Alignment"
             size="sm"
             value={align}

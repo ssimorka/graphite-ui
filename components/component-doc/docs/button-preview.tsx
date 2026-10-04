@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Add } from '@carbon/icons-react'
 import { Button } from '@/components/ui/button'
 import type { ButtonVariant } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'expressive' | 'icon-sm' | 'icon' | 'icon-lg' | 'icon-xl' | 'icon-expressive'
@@ -45,7 +45,7 @@ export function ButtonPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Variant"
             size="sm"
             value={variant}
@@ -58,7 +58,7 @@ export function ButtonPreview() {
               { value: 'danger-ghost', label: 'Danger ghost' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}

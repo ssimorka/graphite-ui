@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Link } from '@/components/ui/link'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './link.module.scss'
 
@@ -45,7 +45,7 @@ export function LinkPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Style"
             size="sm"
             value={kind}
@@ -56,7 +56,7 @@ export function LinkPreview() {
               { value: 'inline', label: 'Inline' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -67,7 +67,7 @@ export function LinkPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Inverse"
             size="sm"
             value={inverse ? 'true' : 'false'}
@@ -77,7 +77,7 @@ export function LinkPreview() {
               { value: 'true', label: 'True' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Disabled"
             size="sm"
             value={disabled ? 'true' : 'false'}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { DatePicker } from '@/components/ui/date-picker'
 import type { FieldSize } from '@/components/ui/text-input'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './date-picker.module.scss'
 
@@ -50,7 +50,7 @@ export function DatePickerPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={mode}
@@ -61,7 +61,7 @@ export function DatePickerPreview() {
               { value: 'range', label: 'Range calendar' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Layout"
             size="sm"
             value={layout}
@@ -71,7 +71,7 @@ export function DatePickerPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -82,7 +82,7 @@ export function DatePickerPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

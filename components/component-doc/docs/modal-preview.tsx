@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Modal, ModalInPlace } from '@/components/ui/modal'
 import { ProgressBar } from '@/components/ui/progress-bar'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './modal.module.scss'
 
@@ -90,7 +90,7 @@ export function ModalPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -102,7 +102,7 @@ export function ModalPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Label"
             size="sm"
             value={label ? 'yes' : 'no'}
@@ -112,7 +112,7 @@ export function ModalPreview() {
               { value: 'no', label: 'Hidden' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Actions"
             size="sm"
             value={String(actions)}
@@ -124,7 +124,7 @@ export function ModalPreview() {
               { value: 'cancel', label: '2 and Cancel' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Inline loading"
             size="sm"
             value={loading ? 'yes' : 'no'}
@@ -134,7 +134,7 @@ export function ModalPreview() {
               { value: 'yes', label: 'On' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Dismissible"
             size="sm"
             value={dismissible ? 'yes' : 'no'}

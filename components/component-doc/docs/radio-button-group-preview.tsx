@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { RadioButtonGroup, type RadioOption } from '@/components/ui/radio-button-group'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Orientation = 'vertical' | 'horizontal'
@@ -44,7 +44,7 @@ export function RadioButtonGroupPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Orientation"
             size="sm"
             value={orientation}
@@ -54,7 +54,7 @@ export function RadioButtonGroupPreview() {
               { value: 'horizontal', label: 'Horizontal' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}

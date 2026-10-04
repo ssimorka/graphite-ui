@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Size = 'sm' | 'md' | 'lg'
@@ -30,7 +30,7 @@ export function AccordionPreview({ items }: { items: DemoItem[] }) {
   return (
     <DemoFrame
       controls={
-        <Select
+        <Dropdown
           label="Size"
           size="sm"
           value={size}
