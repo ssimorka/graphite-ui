@@ -92,17 +92,24 @@ export function Callout({
   )
 }
 
-/** `columns` is the count abreast from 672 up; three unless a caller asks. */
+/**
+ * `columns` is the count abreast from 672 up; three unless a caller asks.
+ * `condensed` tightens the cards round a 32px corner action.
+ */
 export function NextCards({
   columns,
+  condensed,
   children,
 }: {
   columns?: number
+  condensed?: boolean
   children: ReactNode
 }) {
   return (
     <ul
-      className={styles.nextCards}
+      className={
+        condensed ? `${styles.nextCards} ${styles.condensed}` : styles.nextCards
+      }
       style={
         columns
           ? ({ '--next-columns': columns } as CSSProperties)
