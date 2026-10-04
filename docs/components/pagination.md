@@ -31,12 +31,12 @@ Composed from individual page-number items (`Overflow` boolean flag controls whe
 
 - **Nav** — standalone page navigation (search results, article lists).
 - **Table bar** — attached to a Data table, showing item counts and page controls inline with table actions.
-- Within Table bar: `Advanced` shows full page/item counts, `Simple` is more compact, `Unbound` for cases where the total count isn't known upfront.
+- Within Table bar: `Advanced` shows items per page, the item range and a page picker with its total; `Simple` and `Unbound` show only "Page n" and the arrows, and are drawn identically. `Unbound` is for cases where the total count isn't known upfront.
 
 ## Do / Don't
 
 - Do use Table bar pagination specifically with Data table — it's designed to sit in that toolbar context.
-- Don't build custom page-number controls — compose from `_Pagination - Nav page item` variants (Enabled, Hover, Focus, Selected).
+- Don't build custom page-number controls — compose from `_Pagination - Nav page item` variants (Enabled, Hover, Focus, Selected). In code, that is `PaginationNav` (`docs/contracts/pagination.md`).
 
 ---
 *Generated from Figma component sets `2799:20761` / `3889:50204` — regenerate if variant properties change.*

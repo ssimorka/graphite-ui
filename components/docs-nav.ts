@@ -48,6 +48,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/checkbox', label: 'Checkbox' },
       { href: '/docs/components/contained-list', label: 'Contained list' },
       { href: '/docs/components/data-table', label: 'Data table' },
+      { href: '/docs/components/link', label: 'Link' },
       { href: '/docs/components/menu', label: 'Menu' },
       { href: '/docs/components/modal', label: 'Modal' },
       { href: '/docs/components/navigation-menu', label: 'Navigation menu' },
