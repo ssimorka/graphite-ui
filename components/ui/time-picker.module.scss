@@ -1,0 +1,53 @@
+@use './form-parts' as parts;
+
+// Time picker — docs/contracts/time-picker.md
+//
+// The kit's Time picker sets. Default: the label (Caption/1,
+// on-surface-variant) 8 over a row of three, 1 apart: the time field (76, the
+// kit's _Time picker item - Fixed, growing to fit its status glyph), the
+// Clock Select (85) and the Timezone Select (127). Fluid: one 64-tall row of
+// boxes, Time and Clock 100 each and Timezone 200, each with its label inside
+// and a 1px outline-strong rule between them.
+//
+// The fields are Text input and Select; this sheet only sizes and joins them.
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  // Hugs its row: 290 in Default, 400 in Fluid, as the kit draws them.
+  width: max-content;
+  max-width: 100%;
+}
+
+.label {
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+.row {
+  display: flex;
+  gap: 1px;
+}
+
+.time { flex: none; width: 4.75rem; }
+.clock { flex: none; width: 5.3125rem; }
+.zone { flex: none; width: 7.9375rem; }
+
+// With its status glyph, the kit's time field grows to 101.
+.flagged { width: 6.3125rem; }
+
+.fluid .row { gap: 0; }
+.fluid .time,
+.fluid .clock { width: 6.25rem; }
+.fluid .zone { width: 12.5rem; }
+
+.fluid :is(.time, .clock) { box-shadow: inset -1px 0 0 var(--graphite-outline-strong); }
+
+// The message sits 8 under the row, the picker's own gap.
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
+
+.isDisabled .label { @include parts.field-dimmed; }
