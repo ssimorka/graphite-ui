@@ -46,6 +46,27 @@ const RING = `${BOX}M3.75 3.75V16.25H16.25V3.75Z`
 const TICK = 'M8.75 13.4375L5.625 10.3392L6.61925 9.375L8.75 11.466L13.3804 6.875L14.3753 7.86075Z'
 const DASH = 'M6.25 8.75H13.75V11.25H6.25Z'
 
+/**
+ * The box alone, for a row that is itself the control (Dropdown's
+ * multi-select options): the same glyphs, decorative, in currentColor.
+ */
+export function CheckboxGlyph({
+  state,
+  size = 16,
+  className,
+}: {
+  state: 'checked' | 'indeterminate' | 'unchecked'
+  size?: number
+  className?: string
+}) {
+  const mark = state === 'checked' ? TICK : state === 'indeterminate' ? DASH : null
+  return (
+    <svg className={className} width={size} height={size} viewBox="1 1 18 18" aria-hidden="true" focusable="false" fill="currentColor">
+      {mark ? <path d={`${BOX}${mark}`} fillRule="evenodd" /> : <path d={RING} fillRule="evenodd" />}
+    </svg>
+  )
+}
+
 export function Checkbox({
   id,
   label,

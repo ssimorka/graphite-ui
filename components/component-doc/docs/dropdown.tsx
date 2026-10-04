@@ -10,10 +10,10 @@ export function dropdownDoc(): ComponentDocConfig {
     lede: 'A single choice from a list the page draws itself. Use Select first: it is the native choice and works everywhere. Reach for Dropdown when the choice needs the kit’s list, with its rows, rules and selected check.',
     description:
       'A select-only combobox in Fixed, Inline and Fluid at three sizes, with the kit’s list. Anatomy, variants, states, API, tokens and accessibility, generated from the contract.',
-    tocNote: 'New in #240’s G2 wave. Dropdown and Combo box so far; Multi-select and Filterable multi-select follow.',
+    tocNote: 'New in #240’s G2 wave. All four of the kit’s Dropdown kinds: Dropdown, Combo box, Multi-select and Filterable multi-select.',
     livePreview: <DropdownPreview />,
     install:
-      "import { ComboBox, Dropdown } from '@/components/ui/dropdown'\nimport type { DropdownOption } from '@/components/ui/dropdown'",
+      "import { ComboBox, Dropdown, MultiSelect } from '@/components/ui/dropdown'\nimport type { DropdownOption } from '@/components/ui/dropdown'",
     anatomy: <DropdownStill chosen />,
     anatomyLede:
       'The label, then the trigger: the chosen value (or the Prompt text) and a chevron, on surface-variant with a rule under it. Opened, the list hangs under the trigger at its width: rows at the trigger’s height, each with a rule 16 in at its top, the chosen one filled with primary-container and checked.',
@@ -29,6 +29,10 @@ export function dropdownDoc(): ComponentDocConfig {
       { label: 'Combo box', node: <DropdownStill kind="combo" chosen /> },
       { label: 'Combo box: empty', node: <DropdownStill kind="combo" /> },
       { label: 'Combo box: Fluid', node: <DropdownStill kind="combo" layout="fluid" chosen /> },
+      { label: 'Multi-select', node: <DropdownStill kind="multi" chosen /> },
+      { label: 'Multi-select: none chosen', node: <DropdownStill kind="multi" /> },
+      { label: 'Multi-select: Fluid', node: <DropdownStill kind="multi" layout="fluid" chosen /> },
+      { label: 'Filterable multi-select', node: <DropdownStill kind="filterable" chosen /> },
     ],
     statesLede:
       'Focus and Open take the 2px focus ring. Error takes the danger ring and the status glyph before the chevron; Warning the warning glyph. Disabled takes the disabled fill. Read-only drops the fill and the chevron.',
@@ -41,6 +45,8 @@ export function dropdownDoc(): ComponentDocConfig {
       { label: 'Read-only, empty', node: <DropdownStill status="read-only" /> },
       { label: 'Combo box: Error', node: <DropdownStill kind="combo" status="error" /> },
       { label: 'Combo box: Disabled', node: <DropdownStill kind="combo" status="disabled" chosen /> },
+      { label: 'Multi-select: Error', node: <DropdownStill kind="multi" status="error" /> },
+      { label: 'Multi-select: Read-only', node: <DropdownStill kind="multi" status="read-only" chosen /> },
     ],
     dos: [
       'Start with Select. Use Dropdown when the list must look like the kit’s.',
@@ -58,6 +64,7 @@ export function dropdownDoc(): ComponentDocConfig {
       ['Roles', <>A <code>combobox</code> that opens a <code>listbox</code> of <code>option</code>s. Focus stays on the combobox; the option the keyboard is on is its <code>aria-activedescendant</code>.</>],
       ['Keyboard', 'Arrow Down, Arrow Up, Enter or Space opens. Arrows move, Home and End go to the ends, Enter or Space chooses, Escape closes. Typing jumps to the next option that starts with what was typed.'],
       ['Names', 'The combobox is named by its label and its value; the listbox by the label.'],
+      ['Multi-select', <>A listbox with <code>aria-multiselectable</code>: Enter (or Space) toggles the row the keyboard is on and keeps the list open. The count Tag’s close is “Clear all selected items”; “All” reads as checked, mixed or clear.</>],
       ['Combo box', <>An editable <code>combobox</code> with <code>aria-autocomplete=&quot;list&quot;</code>: typing filters and opens the list, arrows move, Enter chooses, Escape closes (or clears what was typed). The clear button is “Clear selected item”; a filter that leaves nothing reads “No matches”.</>],
       ['Focus', <>A 2px <code>--graphite-primary-focus</code> ring on the trigger, and inside the row the keyboard is on.</>],
     ],
@@ -73,6 +80,8 @@ export function dropdownDoc(): ComponentDocConfig {
       ['List item', 'Enabled · Hover · Selected · Selected + Hover · Disabled', 'options', 'Drawn from the active and selected option.'],
       ['Trigger', 'surface-variant · outline', '—', 'Not the field shell: all eight Dropdown sets draw it this way, so it is kept (rule 7).'],
       ['Set', 'Combo box - Default · Fluid', 'ComboBox', 'Typed to filter; the clear and divider show once a value is chosen. The kit has no Inline Combo box.'],
+      ['Set', 'Multi-select - Default · Fluid', 'MultiSelect', 'Checkbox rows; the count Tag clears the choice. selectAll adds the parent checkbox.'],
+      ['Set', 'Filterable multi-select - Default · Fluid', 'MultiSelect filterable', 'Typed to filter. The kit defaults these sets to Hover, and draws the clear whenever something is chosen; here it clears the typed filter.'],
       ['AI layer · AI label', 'Instances', '—', 'Not built: the AI sets are ungoverned.'],
     ],
     related: [

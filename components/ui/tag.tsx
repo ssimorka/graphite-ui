@@ -5,7 +5,7 @@ import { KitIcon } from '@/components/kit-icon'
 import styles from './tag.module.scss'
 
 /**
- * Contract: docs/contracts/tag.md (3.0.0)
+ * Contract: docs/contracts/tag.md (3.1.0)
  *
  * The kit's three public Tag sets: Tag - Read-only (`Tag`), Tag - Selectable
  * (`SelectableTag`) and Tag - Operational (`OperationalTag`). They share one
@@ -61,6 +61,8 @@ type TagProps = CommonProps & {
   max?: number
   /** The kit's Dismissible: a trailing close button that calls this. */
   onDismiss?: () => void
+  /** The close button's name, when "Remove" and the label would not say what it does. */
+  dismissLabel?: string
 }
 
 export function Tag({
@@ -71,6 +73,7 @@ export function Tag({
   icon,
   max = 99,
   onDismiss,
+  dismissLabel,
 }: TagProps) {
   const overflowed = typeof children === 'number' && children > max
   const label = String(children)
@@ -100,7 +103,7 @@ export function Tag({
           className={styles.close}
           onClick={onDismiss}
           disabled={disabled}
-          aria-label={`Remove ${label}`}
+          aria-label={dismissLabel ?? `Remove ${label}`}
         >
           <KitIcon name="cross-small" size={16} />
         </button>
