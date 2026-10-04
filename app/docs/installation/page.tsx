@@ -143,9 +143,10 @@ export default function InstallationPage() {
             />
             <Step n={3} title="Start the dev server">
               <p>
-                Port 3000 is hardcoded with no auto-port, so a second checkout
-                will silently attach to the first. Check which one is serving
-                before you trust what the browser shows you.
+                It starts on port 3000, or on the next free port if another
+                checkout already holds 3000. Read the address it prints before
+                you trust what the browser shows you: the old tab may still be
+                the other checkout.
               </p>
               <DocSnippet code="pnpm dev" />
             </Step>

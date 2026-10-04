@@ -193,7 +193,8 @@ export default function QuickStartPage() {
                 <a href="/docs/installation">Installation</a> describes. The
                 short version is <code>pnpm install</code> then{' '}
                 <code>pnpm dev</code>, and the server must run under webpack.
-                Everything below assumes it is up on port 3000.
+                Everything below assumes it is up, on port 3000 unless it
+                printed another.
               </p>
             </Step>
           </section>
