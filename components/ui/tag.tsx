@@ -5,7 +5,7 @@ import { KitIcon } from '@/components/kit-icon'
 import styles from './tag.module.scss'
 
 /**
- * Contract: docs/contracts/tag.md (3.1.0)
+ * Contract: docs/contracts/tag.md (3.2.0)
  *
  * The kit's three public Tag sets: Tag - Read-only (`Tag`), Tag - Selectable
  * (`SelectableTag`) and Tag - Operational (`OperationalTag`). They share one
