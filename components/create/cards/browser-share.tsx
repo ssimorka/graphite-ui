@@ -85,7 +85,9 @@ export function BrowserShareCard() {
           <span className={styles.label}>{current.name}</span>
           <span className={styles.caption}>{pct}%</span>
         </div>
-        <ProgressBar value={pct} label={`${current.name} share`} />
+        {/* The row above is the visible label, with the percentage beside it,
+            so the bar keeps its name for assistive tech only. */}
+        <ProgressBar value={pct} label={`${current.name} share`} hideLabel />
       </div>
     </CardShell>
   )

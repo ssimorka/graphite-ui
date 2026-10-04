@@ -1,18 +1,61 @@
-// Progress — docs/contracts/progress.md
+// Progress bar — docs/contracts/progress-bar.md
+//
+// The kit's Progress bar (Graphite UI Kit 9506:402924): a Body/3 label above
+// the track, 8 apart, and a 12/16 helper 8 below. The track is outline-subtle
+// (the kit's border-subtle-00) and the indicator primary, square. A finished
+// bar fills: success or danger, with the kit's status icon in the label row.
 //
 // The indeterminate timing comes from the shared motion tokens rather than a
 // number picked here, so Spinner (Tier 2) can reuse the same sweep and the two
 // cannot drift into different motion languages.
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  width: 100%;
+  min-width: 0;
+}
+
+// The label and, when finished, the status icon at its far end, 16 apart.
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.status { flex: none; }
+.success .status { fill: var(--graphite-success); }
+.error .status { fill: var(--graphite-danger); }
+
 .track {
   position: relative;
   width: 100%;
+  // Small: 4. Big: 8.
   height: var(--graphite-space-02);
-  // Square, matching the kit. Its track binds border-subtle-00 and its
-  // fill border-interactive, which resolve to outline and primary here.
+  // Square, matching the kit.
   border-radius: var(--graphite-radius-none);
-  background: var(--graphite-outline);
+  background: var(--graphite-outline-subtle);
   overflow: hidden;
 }
+
+.lg .track { height: var(--graphite-space-03); }
 
 .fill {
   height: 100%;
@@ -20,22 +63,57 @@
   background: var(--graphite-primary);
 }
 
+.success .fill { background: var(--graphite-success); }
+.error .fill { background: var(--graphite-danger); }
+
 .determinate {
-  transition: width 200ms ease;
+  transition: width var(--graphite-motion-base) var(--graphite-motion-ease);
 }
 
+// The kit's sweep: a quarter of the track, from just off its start to just
+// past its end, at a constant speed.
 .indeterminate {
-  width: 40%;
+  width: 25%;
   animation: graphite-progress-sweep var(--graphite-motion-indeterminate)
     var(--graphite-motion-indeterminate-ease) infinite;
 }
 
 @keyframes graphite-progress-sweep {
   from { transform: translateX(-100%); }
-  to { transform: translateX(250%); }
+  to { transform: translateX(400%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .indeterminate { animation-duration: 3s; }
   .determinate { transition: none; }
 }
+
+// Helper, success and error messages: 12/16. Error takes danger; the others
+// stay on-surface-variant, the colour carried by the icon and the fill.
+.message {
+  color: var(--graphite-on-surface-variant);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.error .message { color: var(--graphite-danger); }
+
+// Indent: the label in Input Label type, label and message 16 in.
+.indent .labelRow,
+.indent .message { padding-inline-start: var(--graphite-space-05); }
+
+.indent .label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+// Inline: the label hugs the start, 16 before a track that fills the rest.
+.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--graphite-space-05);
+}
+
+.inline .labelRow { flex: none; }
+.inline .label { flex: none; }
+.inline .track { flex: 1; }

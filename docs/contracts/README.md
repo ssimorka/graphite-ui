@@ -113,9 +113,16 @@ Avatar and Typography are the worked pair, and they land on opposite sides:
   of several markers. The slot took a Tag instead and the contract lost only a
   word. Illustration. Removed in `e49b422`.
 - `contained-list.md` names **Typography** as the type of its *required* title
-  slot, and `progress-bar.md` names it in the remedy to a prohibition — *"no
-  text label baked into the bar itself, pair with Typography externally."*
-  Remove Typography and a prohibition points at nothing. Dependency.
+  slot. Remove Typography and the slot has no type. Dependency.
+
+Typography used to have a second dependency: `progress-bar.md` named it in the
+remedy to a prohibition, *"no text label baked into the bar itself, pair with
+Typography externally."* Progress bar 2.0.0 (#235) paints its own label and
+helper, as the kit's set does, so that remedy is gone and the prohibition now
+says only that no text sits inside the track. One dependency is still a
+dependency: Typography passes the demand test on Contained list alone. Keep
+the two reasons apart if this is revisited; the second was always the weaker,
+since it was a prohibition's remedy rather than a slot's type.
 
 Note that neither of those is "the repo imports it". Typography is imported
 only by the gallery, and that is not what keeps it.
@@ -127,7 +134,7 @@ only by the gallery, and that is not what keeps it.
 | Separator, Avatar, Card | 3 | None; only the gallery composed them | **Removed** (#95, #97, #109) |
 | Label, Field | 2 | Answered on the form controls instead | **Absorbed** (#94, #107) |
 | Navigation Menu | 3 | `site-header.tsx`, and step 1 of `SHADCN-MIGRATION.md` | **Kept** (#113) |
-| Typography | 3 | Two contracts depend on it, one in a prohibition | **Kept** (#96) |
+| Typography | 3 | Contained list's required title slot depends on it (Progress bar's remedy, the second, retired in #235) | **Kept** (#96) |
 
 Settled in #133. The five merges that preceded the rule were each right on
 their own facts, which is why none of them felt like a violation at the time;
@@ -171,8 +178,7 @@ actually needs it.
 ### Reading a kit component that binds Carbon tokens
 
 Not every kit component binds Graphite Semantic. Several bind the Carbon
-compatibility layer instead — Progress bar's track is `Border/border-subtle-00`
-and its fill `Border/border-interactive`, Breadcrumb's link is
+compatibility layer instead — Progress bar's fill is `Border/border-interactive`, Breadcrumb's link is
 `Link/link-primary`, Contained list's rows are `Background/background`.
 
 Do not follow those into component code. Contracts forbid it, and the whole
@@ -183,7 +189,7 @@ which is what feeds those Carbon variables in the first place:
 | Kit binds | Fed by |
 |---|---|
 | `Background/background` | `background` |
-| `Border/border-subtle-00` | `outline` |
+| `Border/border-subtle-00` | `outline` in the `--cds-*` layer; the kit aliases it to `outlineSubtle`, which components bind as `outline-subtle` (D1, #241) |
 | `Border/border-interactive` | `primary` |
 | `Text/text-primary` | `onBackground` |
 | `Text/text-secondary` | `onSurfaceVariant` |

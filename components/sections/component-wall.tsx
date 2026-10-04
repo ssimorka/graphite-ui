@@ -15,7 +15,6 @@ import { Select } from '@/components/ui/select'
 import { Tag } from '@/components/ui/tag'
 import { TextInput } from '@/components/ui/text-input'
 import { Toggle } from '@/components/ui/toggle'
-import { Typography } from '@/components/ui/typography'
 import styles from './component-wall.module.scss'
 
 /**
@@ -119,15 +118,8 @@ export function ComponentWall({
                 <Notification variant="info" title="Title" body="Message" />
               </Card>
 
-              {/* ProgressBar paints no text inside the bar: its contract
-                  prohibits it and names Typography as the remedy, so the
-                  kit's label and helper line are composed around it. */}
               <Card name="Progress bar">
-                <div className={styles.stack}>
-                  <Typography>Progress bar label</Typography>
-                  <ProgressBar value={50} label="Progress bar label" />
-                  <Typography variant="caption">Optional helper text</Typography>
-                </div>
+                <ProgressBar value={50} label="Progress bar label" helperText="Optional helper text" />
               </Card>
 
               <Card name="Select">

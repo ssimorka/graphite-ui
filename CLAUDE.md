@@ -140,8 +140,10 @@ a browser result.
   **The distinction that does the work is dependency versus illustration** — if
   the reference still reads correctly after substituting something else, it was
   an illustration. Avatar was named in Contained list's *optional* leading slot
-  and a Tag replaced it; Typography is the type of its *required* title slot and
-  is the remedy in Progress bar's prohibition. "The repo imports it" is not the
+  and a Tag replaced it; Typography is the type of its *required* title slot.
+  It used to be the remedy in Progress bar's prohibition too, but Progress bar
+  2.0.0 (#235) paints its own label, so that second dependency is gone and
+  Contained list alone keeps it (D7 on #219). "The repo imports it" is not the
   test: only the gallery imports Typography.
 - **The kit's 27 unclaimed pages hold 132 component sets, not "~40".** Walked
   2026-08-28 through the Plugin API and published as

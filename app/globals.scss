@@ -156,9 +156,10 @@
 
   // Motion. Progress's indeterminate sweep is specified here rather than in
   // the component so Spinner (Tier 2) reuses the same value and the two cannot
-  // drift into different motion languages, as its contract requires.
+  // drift into different motion languages, as its contract requires. Linear,
+  // as the kit's indeterminate prototype runs it (#235).
   --graphite-motion-indeterminate: 1400ms;
-  --graphite-motion-indeterminate-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --graphite-motion-indeterminate-ease: linear;
 
   // The site's own easing and durations, lifted out of the docs page so
   // components move the way the pages around them already do rather than each
