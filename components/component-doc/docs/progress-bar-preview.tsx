@@ -2,33 +2,47 @@
 
 import { useState } from 'react'
 import { ProgressBar } from '@/components/ui/progress-bar'
-import { Typography } from '@/components/ui/typography'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
-import styles from './progress-bar.module.scss'
 
 type Variant = 'determinate' | 'indeterminate'
+type Status = 'active' | 'success' | 'error'
+type Size = 'sm' | 'lg'
+type Alignment = 'default' | 'inline' | 'indent'
 
 const TASK = 'Uploading report.pdf'
+const HELP = 'About a minute left'
+const SUCCESS = 'Upload complete'
+const ERROR = 'The upload failed. Try again.'
 
-function codeFor(variant: Variant, value: number) {
-  const caption = variant === 'determinate' ? `${TASK}, ${value}%` : TASK
-  const bar =
-    variant === 'determinate'
-      ? `<ProgressBar value={${value}} label="${TASK}" />`
-      : `<ProgressBar variant="indeterminate" label="${TASK}" />`
-  return `<Typography variant="caption">${caption}</Typography>\n${bar}`
+function codeFor(variant: Variant, value: number, status: Status, size: Size, alignment: Alignment) {
+  const props = [
+    `  label="${TASK}"`,
+    ...(status === 'active'
+      ? variant === 'determinate'
+        ? [`  value={${value}}`]
+        : ['  variant="indeterminate"']
+      : [`  status="${status}"`]),
+    ...(size === 'sm' ? [] : [`  size="${size}"`]),
+    ...(alignment === 'default' ? [] : [`  alignment="${alignment}"`]),
+    ...(alignment === 'inline' ? [] : [`  helperText="${HELP}"`]),
+    ...(status === 'success' ? [`  successText="${SUCCESS}"`] : []),
+    ...(status === 'error' ? [`  errorText="${ERROR}"`] : []),
+  ]
+  return `<ProgressBar\n${props.join('\n')}\n/>`
 }
 
 /**
- * Variant and Value, the contract's two props. The caption is Typography on
- * purpose: the contract bans text inside the bar, and this is the pairing it
- * names instead. Value is ignored while indeterminate, as the component
- * ignores it.
+ * Every kit axis: Progress (variant and value), State, Size and Alignment.
+ * Value is ignored while indeterminate or finished, as the component ignores
+ * it.
  */
 export function ProgressBarPreview() {
   const [variant, setVariant] = useState<Variant>('determinate')
   const [value, setValue] = useState(50)
+  const [status, setStatus] = useState<Status>('active')
+  const [size, setSize] = useState<Size>('sm')
+  const [alignment, setAlignment] = useState<Alignment>('default')
   const determinate = variant === 'determinate'
 
   return (
@@ -49,7 +63,7 @@ export function ProgressBarPreview() {
             label="Value"
             size="sm"
             value={String(value)}
-            state={determinate ? 'default' : 'disabled'}
+            state={determinate && status === 'active' ? 'default' : 'disabled'}
             onChange={(v) => setValue(Number(v))}
             options={[
               { value: '0', label: '0%' },
@@ -59,17 +73,54 @@ export function ProgressBarPreview() {
               { value: '100', label: '100%' },
             ]}
           />
+          <Select
+            label="State"
+            size="sm"
+            value={status}
+            onChange={(v) => setStatus(v as Status)}
+            options={[
+              { value: 'active', label: 'Active' },
+              { value: 'success', label: 'Success' },
+              { value: 'error', label: 'Error' },
+            ]}
+          />
+          <Select
+            label="Size"
+            size="sm"
+            value={size}
+            onChange={(v) => setSize(v as Size)}
+            options={[
+              { value: 'sm', label: 'Small' },
+              { value: 'lg', label: 'Big' },
+            ]}
+          />
+          <Select
+            label="Alignment"
+            size="sm"
+            value={alignment}
+            onChange={(v) => setAlignment(v as Alignment)}
+            options={[
+              { value: 'default', label: 'Default' },
+              { value: 'inline', label: 'Inline' },
+              { value: 'indent', label: 'Indent' },
+            ]}
+          />
         </>
       }
       preview={
-        <div className={styles.stack}>
-          <Typography variant="caption">
-            {determinate ? `${TASK}, ${value}%` : TASK}
-          </Typography>
-          <ProgressBar variant={variant} value={value} label={TASK} />
-        </div>
+        <ProgressBar
+          label={TASK}
+          variant={variant}
+          value={value}
+          status={status}
+          size={size}
+          alignment={alignment}
+          helperText={HELP}
+          successText={SUCCESS}
+          errorText={ERROR}
+        />
       }
-      code={codeFor(variant, value)}
+      code={codeFor(variant, value, status, size, alignment)}
     />
   )
 }

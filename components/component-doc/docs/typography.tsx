@@ -71,7 +71,7 @@ export function typographyDoc(): ComponentDocConfig {
     ],
     related: [
       { href: '/docs/components/contained-list', title: 'Contained list', why: 'its title slot is Typography' },
-      { href: '/docs/components/progress-bar', title: 'Progress bar', why: 'pairs with it for a percentage' },
+      { href: '/docs/components/contained-list', title: 'Contained list', why: 'its title slot is Typography' },
       { href: '/docs/components/accordion', title: 'Accordion', why: 'when a heading should open a section' },
       { href: '/docs/components/tag', title: 'Tag', why: 'when the text is a status' },
     ],

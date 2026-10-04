@@ -252,12 +252,3 @@
   // role looks the same and cannot drift.
   color: var(--graphite-on-success-container);
 }
-
-// Progress bar's label and helper line are separate elements by contract, so
-// the card stacks them rather than the component doing it.
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-03);
-  width: 100%;
-}
