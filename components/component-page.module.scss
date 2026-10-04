@@ -264,52 +264,6 @@
   }
 }
 
-// -------------------------------------------------------------------- related
-.related {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--graphite-space-04);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @media (min-width: 672px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.relatedLink {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-02);
-  height: 100%;
-  padding: 0.75rem 0.875rem;
-  background: var(--graphite-surface);
-  border: 1px solid var(--graphite-surface-variant);
-  text-decoration: none;
-
-  &:hover {
-    border-color: var(--graphite-primary);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
-}
-
-.relatedTitle {
-  font-size: var(--graphite-text-body-2-size);
-  line-height: var(--graphite-text-body-2-line-height);
-  color: var(--graphite-primary);
-}
-
-.relatedWhy {
-  font-size: var(--graphite-text-caption-1-size);
-  line-height: var(--graphite-text-caption-1-line-height);
-  color: var(--graphite-on-surface-variant);
-}
-
 // -------------------------------------------------------------------- surface
 .surfaceWrap {
   display: flex;

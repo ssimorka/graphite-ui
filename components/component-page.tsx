@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import styles from './component-page.module.scss'
+import { NextCards, NextCard } from './doc-blocks'
 
 // The parts every component page shares, from the kit's Site pages (Graphite UI
 // Site 11814:17). Server components: they take data, and the data comes from the
@@ -124,17 +125,16 @@ export function RelatedChips({
 }: {
   items: { href: string; title: string; why: string }[]
 }) {
+  // The same cards as the docs home's "What is here", so the two ways on to
+  // another page look like one thing.
   return (
-    <ul className={styles.related}>
+    <NextCards>
       {items.map((r) => (
-        <li key={r.title}>
-          <a className={styles.relatedLink} href={r.href}>
-            <span className={styles.relatedTitle}>{r.title}</span>
-            <span className={styles.relatedWhy}>{r.why}</span>
-          </a>
-        </li>
+        <NextCard key={r.title} href={r.href} title={r.title}>
+          {r.why}
+        </NextCard>
       ))}
-    </ul>
+    </NextCards>
   )
 }
 
