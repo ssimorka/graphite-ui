@@ -8,6 +8,7 @@ import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
+import { TreeView } from '@/components/ui/tree-view'
 import { useOverlay } from '@/components/ui/overlay'
 import { DOCS_NAV } from '@/components/docs-nav'
 import { SearchPalette } from '@/components/search/search-palette'
@@ -276,32 +277,28 @@ export function SiteHeader() {
             if ((e.target as HTMLElement).closest('a')) setMenuOpen(false)
           }}
         >
-          <div className={styles.trayGroup} style={{ '--g': 0 } as CSSProperties}>
+          <div className={`${styles.mainNav} ${styles.trayGroup}`} style={{ '--g': 0 } as CSSProperties}>
             <NavigationMenu items={items} orientation="vertical" label="Main" />
           </div>
           {/* The docs sidebar is hidden below lg, as in the kit's Medium and
-              Small frames, so its links live here instead. */}
-          {pathname.startsWith('/docs')
-            ? DOCS_NAV.map((group, i) => (
-                <div
-                  key={group.label}
-                  className={`${styles.mobileGroup} ${styles.trayGroup}`}
-                  style={{ '--g': i + 1 } as CSSProperties}
-                >
-                  <p className={styles.mobileGroupLabel}>{group.label}</p>
-                  <NavigationMenu
-                    label={group.label}
-                    orientation="vertical"
-                    items={
-                      group.items.map((item) => ({
-                        ...item,
-                        current: pathname === item.href,
-                      })) as [NavItem, ...NavItem[]]
-                    }
-                  />
-                </div>
-              ))
-            : null}
+              Small frames, so its links live here instead: the same Tree view,
+              groups as branches and pages as link leaves. The three site links
+              above stay a flat NavigationMenu, the case it keeps. */}
+          {pathname.startsWith('/docs') ? (
+            <div className={`${styles.mobileGroup} ${styles.trayGroup}`} style={{ '--g': 1 } as CSSProperties}>
+              <TreeView
+                label="Docs"
+                icons={false}
+                selected={pathname}
+                defaultExpanded={DOCS_NAV.map((g) => `group:${g.label}`)}
+                nodes={DOCS_NAV.map((g) => ({
+                  id: `group:${g.label}`,
+                  label: g.label,
+                  children: g.items.map((item) => ({ id: item.href, label: item.label, href: item.href })),
+                }))}
+              />
+            </div>
+          ) : null}
         </div>
       </Tray>
       <SearchPalette open={searchOpen} onClose={closeSearch} anchor={searchAnchor} />
