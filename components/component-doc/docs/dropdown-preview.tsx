@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { ComboBox, Dropdown } from '@/components/ui/dropdown'
+import { ComboBox, Dropdown, MultiSelect } from '@/components/ui/dropdown'
 import type { DropdownOption } from '@/components/ui/dropdown'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 import styles from './dropdown.module.scss'
 
-type Kind = 'dropdown' | 'combo'
+type Kind = 'dropdown' | 'combo' | 'multi' | 'filterable'
 type Layout = 'fixed' | 'inline' | 'fluid'
 type Size = 'sm' | 'md' | 'lg'
 type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
@@ -33,7 +33,7 @@ function codeFor(kind: Kind, layout: Layout, size: Size, status: Status) {
     status === 'disabled' ? '\n  disabled' : '',
     status === 'read-only' ? '\n  readOnly' : '',
   ].join('')
-  return `const [value, setValue] = useState<string | null>(null)\n\n<${kind === 'combo' ? 'ComboBox' : 'Dropdown'}\n  label="Theme"\n  options={options}${props}\n  value={value}\n  onChange={setValue}\n/>`
+  return `const [value, setValue] = ${kind === 'multi' || kind === 'filterable' ? 'useState<string[]>([])' : 'useState<string | null>(null)'}\n\n<${kind === 'combo' ? 'ComboBox' : kind === 'dropdown' ? 'Dropdown' : 'MultiSelect'}${kind === 'filterable' ? '\n  filterable' : ''}${kind === 'multi' || kind === 'filterable' ? '\n  selectAll' : ''}\n  label="Theme"\n  options={options}${props}\n  value={value}\n  onChange={setValue}\n/>`
 }
 
 /** Style, Size and the states, live. */
@@ -43,6 +43,7 @@ export function DropdownPreview() {
   const [size, setSize] = useState<Size>('lg')
   const [status, setStatus] = useState<Status>('enabled')
   const [value, setValue] = useState<string | null>(null)
+  const [values, setValues] = useState<string[]>([])
   return (
     <DemoFrame
       controls={
@@ -55,6 +56,8 @@ export function DropdownPreview() {
             options={[
               { value: 'dropdown', label: 'Dropdown' },
               { value: 'combo', label: 'Combo box' },
+              { value: 'multi', label: 'Multi-select' },
+              { value: 'filterable', label: 'Filterable multi-select' },
             ]}
           />
           <Select
@@ -96,7 +99,23 @@ export function DropdownPreview() {
       }
       preview={
         <div className={styles.stage}>
-          {kind === 'combo' ? (
+          {kind === 'multi' || kind === 'filterable' ? (
+            <MultiSelect
+              label="Themes"
+              options={OPTIONS}
+              value={values}
+              onChange={setValues}
+              filterable={kind === 'filterable'}
+              selectAll
+              layout={kind === 'filterable' && layout === 'inline' ? 'fixed' : layout}
+              size={size}
+              helpText="Choose any number"
+              errorText={status === 'error' ? ERROR : undefined}
+              warningText={status === 'warning' ? WARNING : undefined}
+              disabled={status === 'disabled'}
+              readOnly={status === 'read-only'}
+            />
+          ) : kind === 'combo' ? (
             <ComboBox
               label="Theme"
               options={OPTIONS}
@@ -147,9 +166,26 @@ export function DropdownStill({
   chosen?: boolean
 }) {
   const [value, setValue] = useState<string | null>(chosen ? 'dark' : null)
+  const [values, setValues] = useState<string[]>(chosen ? ['dark', 'contrast'] : [])
   return (
     <div className={layout === 'inline' ? styles.wide : styles.measure}>
-      {kind === 'combo' ? (
+      {kind === 'multi' || kind === 'filterable' ? (
+        <MultiSelect
+            label="Themes"
+            options={OPTIONS}
+            value={values}
+            onChange={setValues}
+            filterable={kind === 'filterable'}
+            selectAll
+            layout={kind === 'filterable' && layout === 'inline' ? 'fixed' : layout}
+            size={size}
+            helpText="Choose any number"
+            errorText={status === 'error' ? ERROR : undefined}
+            warningText={status === 'warning' ? WARNING : undefined}
+            disabled={status === 'disabled'}
+            readOnly={status === 'read-only'}
+        />
+      ) : kind === 'combo' ? (
         <ComboBox
             label="Theme"
             options={OPTIONS}

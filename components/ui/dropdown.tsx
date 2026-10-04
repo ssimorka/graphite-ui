@@ -4,11 +4,13 @@ import { useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { KitIcon } from '@/components/kit-icon'
 import { fieldMessage } from '@/lib/field-message'
+import { CheckboxGlyph } from './checkbox'
 import { FieldStatusIcon } from './field-status'
+import { Tag } from './tag'
 import styles from './dropdown.module.scss'
 
 /**
- * Contract: docs/contracts/dropdown.md (1.1.0)
+ * Contract: docs/contracts/dropdown.md (1.2.0)
  *
  * The kit's Dropdown - Default (14032:290635) and - Fluid (14505:302528): a
  * single choice from a list the page draws itself, which a native select
@@ -40,11 +42,16 @@ type DropdownProps = {
   id?: string
 }
 
+/** The keyboard's index for the "All" row, which sits above the options. */
+const ALL = -2
+
 /**
  * The kit's private _Dropdown menu list and list item, shared by every kind:
  * rows at the trigger's height, the rule 16 in at each top, hover and the
- * keyboard's row on surface-variant, the chosen row on primary-container with
- * the check. Focus never moves into it; the trigger owns it.
+ * keyboard's row on surface-variant, a chosen row on primary-container. Single
+ * choice trails the check; multi-select leads with the checkbox glyph and may
+ * open with the kit's parent checkbox, "All". Focus never moves into it; the
+ * trigger owns it.
  */
 function OptionList({
   id,
@@ -53,7 +60,9 @@ function OptionList({
   options,
   indexes,
   active,
-  selected,
+  isSelected,
+  multi = false,
+  all,
   onActive,
   onChoose,
 }: {
@@ -64,29 +73,55 @@ function OptionList({
   /** Which options to show, in order: all of them, or what a filter left. */
   indexes: number[]
   active: number
-  selected: number
+  isSelected: (i: number) => boolean
+  multi?: boolean
+  /** The parent checkbox row, for a multi-select that offers it. */
+  all?: { state: 'checked' | 'indeterminate' | 'unchecked'; onToggle: () => void }
   onActive: (i: number) => void
   onChoose: (i: number) => void
 }) {
   return (
-    <ul id={id} role="listbox" aria-labelledby={labelledBy} className={[styles.list, styles[size]].join(' ')}>
+    <ul
+      id={id}
+      role="listbox"
+      aria-labelledby={labelledBy}
+      aria-multiselectable={multi || undefined}
+      className={[styles.list, styles[size]].join(' ')}
+    >
+      {all ? (
+        <li
+          id={`${id}-all`}
+          role="option"
+          aria-selected={all.state === 'checked'}
+          aria-checked={all.state === 'indeterminate' ? 'mixed' : all.state === 'checked'}
+          className={[styles.option, styles.allRow, active === ALL ? styles.active : ''].join(' ')}
+          onPointerEnter={() => onActive(ALL)}
+          onPointerDown={(e) => e.preventDefault()}
+          onClick={all.onToggle}
+        >
+          <CheckboxGlyph state={all.state} className={styles.box} />
+          <span className={styles.optionLabel}>All</span>
+        </li>
+      ) : null}
       {indexes.map((i) => {
         const o = options[i]
+        const on = isSelected(i)
         return (
           <li
             key={o.value}
             id={`${id}-${i}`}
             role="option"
-            aria-selected={i === selected}
+            aria-selected={on}
             aria-disabled={o.disabled || undefined}
-            className={[styles.option, i === active ? styles.active : '', i === selected ? styles.selected : ''].join(' ')}
+            className={[styles.option, i === active ? styles.active : '', on ? styles.selected : ''].join(' ')}
             onPointerEnter={() => !o.disabled && onActive(i)}
             // Keep focus on the trigger: the listbox is never focused itself.
             onPointerDown={(e) => e.preventDefault()}
             onClick={() => onChoose(i)}
           >
+            {multi ? <CheckboxGlyph state={on ? 'checked' : 'unchecked'} className={styles.box} /> : null}
             <span className={styles.optionLabel}>{o.label}</span>
-            {i === selected ? <KitIcon name="check" className={styles.check} /> : null}
+            {!multi && on ? <KitIcon name="check" className={styles.check} /> : null}
           </li>
         )
       })}
@@ -252,7 +287,7 @@ export function Dropdown({
             options={options}
             indexes={options.map((_, i) => i)}
             active={active}
-            selected={selected}
+            isSelected={(i) => i === selected}
             onActive={setActive}
             onChoose={choose}
           />
@@ -454,9 +489,323 @@ export function ComboBox({
             options={options}
             indexes={visible}
             active={active}
-            selected={selected}
+            isSelected={(i) => i === selected}
             onActive={setActive}
             onChoose={choose}
+          />
+        ) : null}
+      </div>
+      {message ? (
+        <span
+          id={messageId}
+          className={tone === 'error' ? styles.error : tone === 'warning' ? styles.warningText : styles.help}
+          role={tone === 'error' ? 'alert' : undefined}
+        >
+          {message}
+        </span>
+      ) : null}
+    </div>
+  )
+}
+
+/**
+ * The kit's Dropdown - Multi-select (14032:291311, 14530:300220) and
+ * Dropdown - Filterable multi-select (14032:291673, 45988:11486): many choices
+ * from the kit's list, each row leading with the checkbox glyph. The trigger
+ * counts what is chosen in a dismissible high-contrast Tag that clears them
+ * all. Filterable makes the trigger a text input that filters the list, as the
+ * combo box's does; the plain one is a select-only combobox. Choosing keeps the
+ * list open, so several can be chosen in a row.
+ */
+export function MultiSelect({
+  label,
+  options,
+  value,
+  onChange,
+  filterable = false,
+  selectAll = false,
+  placeholder,
+  selectedText = 'Options selected',
+  size = 'lg',
+  layout = 'fixed',
+  helpText,
+  errorText,
+  warningText,
+  disabled = false,
+  readOnly = false,
+  id,
+}: Omit<DropdownProps, 'value' | 'onChange'> & {
+  value: string[]
+  onChange: (value: string[]) => void
+  /** The kit's Filterable multi-select: type to narrow the list. */
+  filterable?: boolean
+  /** The kit's parent checkbox, an "All" row at the top of the list. */
+  selectAll?: boolean
+  /** The kit's Selected text, beside the count once something is chosen. */
+  selectedText?: string
+}) {
+  const auto = useId()
+  const baseId = id ?? auto
+  const labelId = `${baseId}-label`
+  const valueId = `${baseId}-value`
+  const listId = `${baseId}-list`
+  const { errored, warned, tone, messageId, message, describedBy } = fieldMessage(baseId, helpText, errorText, warningText)
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState(-1)
+  const [text, setText] = useState('')
+  const root = useRef<HTMLDivElement>(null)
+  const input = useRef<HTMLInputElement>(null)
+
+  const chosen = new Set(value)
+  const query = text.trim().toLowerCase()
+  const visible = options.map((_, i) => i).filter((i) => !filterable || !query || options[i].label.toLowerCase().includes(query))
+  const enabled = visible.filter((i) => !options[i].disabled)
+  const withAll = selectAll && !query
+  const order = withAll ? [ALL, ...enabled] : enabled
+  const pickable = options.filter((o) => !o.disabled)
+  const allState = pickable.every((o) => chosen.has(o.value))
+    ? 'checked'
+    : pickable.some((o) => chosen.has(o.value))
+      ? 'indeterminate'
+      : 'unchecked'
+  const prompt = placeholder ?? (filterable ? 'Filter...' : 'Choose options')
+
+  useEffect(() => {
+    if (!open) return
+    const away = (e: PointerEvent) => {
+      if (!root.current?.contains(e.target as Node)) {
+        setOpen(false)
+        setText('')
+      }
+    }
+    document.addEventListener('pointerdown', away)
+    return () => document.removeEventListener('pointerdown', away)
+  }, [open])
+
+  useEffect(() => {
+    if (!open || active === -1) return
+    document.getElementById(active === ALL ? `${listId}-all` : `${listId}-${active}`)?.scrollIntoView({ block: 'nearest' })
+  }, [open, active, listId])
+
+  const openList = () => {
+    if (disabled || readOnly) return
+    setActive(order[0] ?? -1)
+    setOpen(true)
+  }
+  const close = () => {
+    setOpen(false)
+    setText('')
+  }
+  const toggle = (i: number) => {
+    if (i === ALL) {
+      onChange(allState === 'checked' ? [] : pickable.map((o) => o.value))
+      return
+    }
+    const o = options[i]
+    if (!o || o.disabled) return
+    onChange(chosen.has(o.value) ? value.filter((v) => v !== o.value) : [...value, o.value])
+  }
+  const step = (by: 1 | -1) => {
+    const at = order.indexOf(active)
+    if (at < 0) return by === 1 ? order[0] : order[order.length - 1]
+    return order[Math.min(order.length - 1, Math.max(0, at + by))]
+  }
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (disabled || readOnly) return
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (!open) openList()
+      else setActive(step(e.key === 'ArrowDown' ? 1 : -1) ?? -1)
+    } else if (e.key === 'Home' && open && !filterable) {
+      e.preventDefault()
+      setActive(order[0] ?? -1)
+    } else if (e.key === 'End' && open && !filterable) {
+      e.preventDefault()
+      setActive(order[order.length - 1] ?? -1)
+    } else if (e.key === 'Enter' || (e.key === ' ' && !filterable)) {
+      e.preventDefault()
+      if (!open) openList()
+      else if (active !== -1) toggle(active)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      if (open) close()
+      else setText('')
+    } else if (e.key === 'Tab') {
+      close()
+    }
+  }
+
+  const status = errored || warned
+  const count = value.length
+  const activeId = open && active !== -1 ? (active === ALL ? `${listId}-all` : `${listId}-${active}`) : undefined
+
+  const countTag =
+    count > 0 ? (
+      <span className={styles.count}>
+        <Tag
+          variant="high-contrast"
+          size="md"
+          disabled={disabled}
+          onDismiss={readOnly ? undefined : () => onChange([])}
+          dismissLabel="Clear all selected items"
+        >
+          {count}
+        </Tag>
+      </span>
+    ) : null
+
+  const trailing = (
+    <>
+      {status ? <FieldStatusIcon className={warned ? `${styles.status} ${styles.warnGlyph}` : styles.status} /> : null}
+      {filterable && text && !disabled && !readOnly ? (
+        <>
+          <button
+            type="button"
+            className={styles.clear}
+            aria-label="Clear filter"
+            onClick={(e) => {
+              e.stopPropagation()
+              setText('')
+              input.current?.focus()
+            }}
+          >
+            <KitIcon name="cross-small" />
+          </button>
+          <span className={styles.divider} aria-hidden="true" />
+        </>
+      ) : null}
+    </>
+  )
+
+  const fluidLabel =
+    layout === 'fluid' ? (
+      filterable ? (
+        <label id={labelId} htmlFor={baseId} className={styles.fluidLabel}>
+          {label}
+        </label>
+      ) : (
+        <span id={labelId} className={styles.fluidLabel}>
+          {label}
+        </span>
+      )
+    ) : null
+
+  const trigger = filterable ? (
+    <div
+      className={[styles.trigger, styles.combo, styles[size], errored ? styles.errored : '', open ? styles.open : ''].join(' ')}
+      onClick={() => input.current?.focus()}
+    >
+      {fluidLabel}
+      <span className={styles.row}>
+        {countTag}
+        <input
+          ref={input}
+          id={baseId}
+          className={styles.input}
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={open}
+          aria-controls={listId}
+          aria-activedescendant={activeId}
+          aria-describedby={describedBy}
+          aria-invalid={errored || undefined}
+          autoComplete="off"
+          placeholder={count > 0 ? selectedText : readOnly ? 'No option selected' : prompt}
+          disabled={disabled}
+          readOnly={readOnly}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value)
+            const q = e.target.value.trim().toLowerCase()
+            setActive(options.findIndex((o) => !o.disabled && (!q || o.label.toLowerCase().includes(q))))
+            if (!open) setOpen(true)
+          }}
+          onClick={() => (open ? undefined : openList())}
+          onKeyDown={onKeyDown}
+        />
+        {trailing}
+        <button
+          type="button"
+          className={styles.toggle}
+          tabIndex={-1}
+          aria-label={open ? 'Close list' : 'Open list'}
+          disabled={disabled || readOnly}
+          onClick={(e) => {
+            e.stopPropagation()
+            if (open) close()
+            else openList()
+            input.current?.focus()
+          }}
+        >
+          <KitIcon name="angle-small-down" className={styles.chevron} />
+        </button>
+      </span>
+    </div>
+  ) : (
+    <div
+      id={baseId}
+      className={[styles.trigger, styles[size], errored ? styles.errored : '', open ? styles.open : ''].join(' ')}
+      role="combobox"
+      tabIndex={disabled ? -1 : 0}
+      aria-haspopup="listbox"
+      aria-expanded={open}
+      aria-controls={listId}
+      aria-labelledby={`${labelId} ${valueId}`}
+      aria-activedescendant={activeId}
+      aria-describedby={describedBy}
+      aria-invalid={errored || undefined}
+      aria-disabled={disabled || undefined}
+      aria-readonly={readOnly || undefined}
+      onClick={(e) => {
+        // The count tag's own close button clears without opening.
+        if ((e.target as HTMLElement).closest('button')) return
+        if (open) close()
+        else openList()
+      }}
+      onKeyDown={onKeyDown}
+    >
+      {fluidLabel}
+      <span className={styles.row}>
+        {countTag}
+        <span id={valueId} className={styles.value}>
+          {count > 0 ? selectedText : readOnly ? 'No option selected' : prompt}
+        </span>
+        {trailing}
+        <KitIcon name="angle-small-down" className={styles.chevron} />
+      </span>
+    </div>
+  )
+
+  return (
+    <div
+      ref={root}
+      className={[styles.dropdown, styles[layout], disabled ? styles.isDisabled : '', readOnly ? styles.isReadOnly : ''].join(' ')}
+    >
+      {layout === 'fluid' ? null : filterable ? (
+        <label id={labelId} htmlFor={baseId} className={styles.label}>
+          {label}
+        </label>
+      ) : (
+        <span id={labelId} className={styles.label}>
+          {label}
+        </span>
+      )}
+      <div className={styles.anchor}>
+        {trigger}
+        {open ? (
+          <OptionList
+            id={listId}
+            labelledBy={labelId}
+            size={size}
+            options={options}
+            indexes={visible}
+            active={active}
+            isSelected={(i) => chosen.has(options[i].value)}
+            multi
+            all={withAll ? { state: allState, onToggle: () => toggle(ALL) } : undefined}
+            onActive={setActive}
+            onChoose={toggle}
           />
         ) : null}
       </div>

@@ -315,3 +315,30 @@
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
 }
+
+// ------------------------------------------------------------- multi-select
+// The kit's multi-select rows lead with the checkbox glyph (16, on-surface,
+// 8 before the label); the trigger counts the choice in a dismissible high
+// contrast Tag, 8 before the Selected text.
+.box {
+  flex: none;
+  color: var(--graphite-on-surface);
+}
+
+.option:has(.box) { gap: var(--graphite-space-03); }
+
+.count {
+  display: inline-flex;
+  flex: none;
+}
+
+// The kit's parent checkbox, "All": the same row, its label on-surface, and a
+// rule under it that sets it apart from the options.
+.allRow {
+  color: var(--graphite-on-surface);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+}
+
+.allRow + .option::before { display: none; }
+
+.option[aria-disabled='true'] .box { color: var(--graphite-primary-disabled-content); }

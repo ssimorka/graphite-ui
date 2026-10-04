@@ -1,6 +1,6 @@
 ---
 component: Tag
-version: 3.0.0
+version: 3.1.0
 wave: 1
 slots:
   - name: Label
@@ -26,6 +26,8 @@ props:
     notes: The cap for a numeric label. A number above it shows as the cap with a plus (99+), and the full number stays in the accessibility tree as visually hidden text.
   - name: onDismiss
     notes: The kit's Dismissible. A trailing close button, named "Remove <label>", that calls it.
+  - name: dismissLabel
+    notes: The close button's accessible name, for a dismissible tag whose label alone would not say what closing does (the multi-select's count tag, "Clear all selected items"). "Remove" and the label by default.
   - name: selected / onSelectedChange
     notes: The selectable form only, the kit's Tag - Selectable. A toggle button with aria-pressed.
   - name: onClick
