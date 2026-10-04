@@ -46,9 +46,11 @@ export function ComponentWall({
             specimens stay live above the overlay: see .preview. */}
         <div className={styles.meta}>
           <div className={styles.badges}>
-            {/* The kit bakes each version into the design. Reading the
-                contract instead means the badge cannot go stale: the kit
-                already says Toggle is 2.0.0 where the contract is 2.1.0. */}
+            {/* The version lives in the contract's front matter. The kit
+                set's description carries a copy (a `Graphite: governed`
+                line, rules 5 and 6), but that is stamped by hand and only
+                reaches consumers when the library is republished, so it can
+                lag. Reading the contract means the badge cannot go stale. */}
             <span className={styles.badge}>
               {meta ? `Contract ${meta.version}` : 'Ungoverned'}
             </span>
