@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { TextArea } from '@/components/ui/text-area'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Resize = 'vertical' | 'none'
@@ -40,7 +40,7 @@ export function TextAreaPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Layout"
             size="sm"
             value={layout}
@@ -50,7 +50,7 @@ export function TextAreaPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Resize"
             size="sm"
             value={resize}
@@ -60,7 +60,7 @@ export function TextAreaPreview() {
               { value: 'none', label: 'None' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}

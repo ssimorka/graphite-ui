@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Toggle } from '@/components/ui/toggle'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type State = 'enabled' | 'disabled' | 'read-only'
@@ -42,7 +42,7 @@ export function TogglePreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}
@@ -53,7 +53,7 @@ export function TogglePreview() {
               { value: 'read-only', label: 'Read-only' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -63,7 +63,7 @@ export function TogglePreview() {
               { value: 'sm', label: 'Small' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Toggle only"
             size="sm"
             value={only ? 'true' : 'false'}
@@ -73,7 +73,7 @@ export function TogglePreview() {
               { value: 'true', label: 'True' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Supporting text"
             size="sm"
             value={message}

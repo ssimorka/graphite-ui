@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
 import { Reset, Shuffle } from '@carbon/icons-react'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import styles from './color-picker.module.scss'
 
 const HUE_GRADIENT =
@@ -279,7 +279,7 @@ export function ColorPickerPopover({
           {/* Generation controls. They shape what the engine emits from this
               color, so they belong with the color rather than in one view. */}
           <div className={`${styles.section} source-controls`}>
-            <Select
+            <Dropdown
               id="level-select"
               size="sm"
               label="Target level"

@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { ComboBox, Dropdown, MultiSelect } from '@/components/ui/dropdown'
 import type { DropdownOption } from '@/components/ui/dropdown'
-import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 import styles from './dropdown.module.scss'
 
@@ -48,7 +47,7 @@ export function DropdownPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Kind"
             size="sm"
             value={kind}
@@ -60,7 +59,7 @@ export function DropdownPreview() {
               { value: 'filterable', label: 'Filterable multi-select' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Style"
             size="sm"
             value={layout}
@@ -71,7 +70,7 @@ export function DropdownPreview() {
               { value: 'fluid', label: 'Fluid' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -82,7 +81,7 @@ export function DropdownPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './button-group.module.scss'
 
@@ -44,7 +44,7 @@ export function ButtonGroupPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Actions"
             size="sm"
             value={count}
@@ -54,7 +54,7 @@ export function ButtonGroupPreview() {
               { value: '3', label: 'Three' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Primary"
             size="sm"
             value={primary}

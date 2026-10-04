@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { Slider } from '@/components/ui/slider'
 import { DemoFrame } from '../demo-frame'
 import styles from './slider.module.scss'
@@ -44,7 +44,7 @@ export function SliderPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={kind}
@@ -54,7 +54,7 @@ export function SliderPreview() {
               { value: 'range', label: 'Slider - Range' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Inputs"
             size="sm"
             value={inputs ? 'true' : 'false'}
@@ -64,7 +64,7 @@ export function SliderPreview() {
               { value: 'false', label: 'False' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Status"
             size="sm"
             value={status}

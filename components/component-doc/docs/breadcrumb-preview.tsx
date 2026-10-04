@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import type { Crumb } from '@/components/ui/breadcrumb'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 // Six levels of a plausible product, deepest last. The trail takes the first
@@ -41,7 +41,7 @@ export function BreadcrumbPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Length"
             size="sm"
             value={String(length)}
@@ -52,7 +52,7 @@ export function BreadcrumbPreview() {
               { value: '6', label: '6 crumbs' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Max items"
             size="sm"
             value={String(maxItems)}

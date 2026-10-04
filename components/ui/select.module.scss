@@ -54,6 +54,14 @@
   // 16 in from the left; on the right, 16 + the 16px chevron + 16.
   padding: 0 var(--graphite-space-09) 0 var(--graphite-space-05);
   cursor: pointer;
+  // The open list is the platform's, so it cannot take a token; this tells it
+  // which mode to draw in. Without it the list was light whatever the page,
+  // and the options inherited the dark theme's light text (select.md 2.4.2).
+  color-scheme: dark;
+
+  :global(:root.cds--white) & {
+    color-scheme: light;
+  }
 }
 
 // With a status icon: 16 + chevron 16 + 8 + icon 16 + 16.

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Selection = 'unchecked' | 'checked' | 'indeterminate'
@@ -37,7 +38,7 @@ export function CheckboxPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Selection"
             size="sm"
             value={selection}
@@ -48,7 +49,7 @@ export function CheckboxPreview() {
               { value: 'indeterminate', label: 'Indeterminate' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}

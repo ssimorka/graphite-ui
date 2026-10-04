@@ -5,7 +5,7 @@ import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
 import { Menu } from '@/components/ui/menu'
 import type { MenuItem } from '@/components/ui/menu'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './menu.module.scss'
 
@@ -73,7 +73,7 @@ export function MenuPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Placement"
             size="sm"
             value={placement}
@@ -83,7 +83,7 @@ export function MenuPreview() {
               { value: 'top', label: 'Top' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -95,7 +95,7 @@ export function MenuPreview() {
               { value: 'xs', label: 'Extra small' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Function"
             size="sm"
             value={fn}

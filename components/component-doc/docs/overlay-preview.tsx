@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import { ThemeOptions } from './popover-preview'
 import type { Themes } from './popover-preview'
@@ -77,7 +77,7 @@ export function OverlayPreview() {
   return (
     <DemoFrame
       controls={
-        <Select
+        <Dropdown
           label="Trap focus"
           size="sm"
           value={trap ? 'on' : 'off'}

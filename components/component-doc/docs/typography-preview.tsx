@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Typography } from '@/components/ui/typography'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Variant =
@@ -37,7 +37,7 @@ export function TypographyPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Variant"
             size="sm"
             value={variant}
@@ -52,7 +52,7 @@ export function TypographyPreview() {
               { value: 'caption', label: 'Caption (span)' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Weight"
             size="sm"
             value={weight}

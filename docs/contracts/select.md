@@ -1,6 +1,6 @@
 ---
 component: Select
-version: 2.4.1
+version: 2.4.2
 wave: 2
 slots:
   - name: Label
@@ -50,7 +50,7 @@ prohibitions:
 ### Select
 - **Slots:** Label (required), option list (required, minimum 2 options).
 - **Props:** size (sm, md, lg), state (default, disabled, error).
-- **Tokens:** Same as Text input for the closed trigger, including the shared field shell. The trigger's hover fill, which the kit draws for Select and not for Text input, is `elevation-02` (the kit's `field-hover`), the elevation ladder's hover rung; it used to be approximated with `surface-variant`. The open menu is the browser's own and takes no token from this system — see the composition rule.
+- **Tokens:** Same as Text input for the closed trigger, including the shared field shell. The trigger's hover fill, which the kit draws for Select and not for Text input, is `elevation-02` (the kit's `field-hover`), the elevation ladder's hover rung; it used to be approximated with `surface-variant`. The open menu is the browser's own and takes no token from this system — see the composition rule. It does take the page's theme: the select declares `color-scheme` dark, or light under the white theme, so the platform draws its list in the mode the page is in. Before 2.4.2 it drew a light list under the dark page's light option text, which left the options near-unreadable.
 - **The rest of the kit** (#227): the kit's 16px `fi-rs-angle-small-down` chevron 16 from the edge, dimmed when disabled or read-only; Error and Warning draw the shared status icon 8 before it. Select's own Disabled fills the trigger with the disabled tone and drops the edge (Text input keeps its fill: each set is its own most specific artefact). Read-only is no fill and a plain `outline` rule. The kit draws an empty trigger in every variant but Read-only, a slip; the value is shown, styled as Read-only draws it.
 - **Composition rules:** The soft dependency on Wave 5's overlay surface resolved the other way. Wave 5 has landed, and Select still renders a native `select`: the platform menu is what keeps type-ahead, arrow keys and mobile pickers working, which its prohibition exists to protect. Replacing it with an overlay-surfaced listbox would mean rebuilding all of that as a combobox, and would be a contract change here rather than a free upgrade.
 - **Prohibitions:** No native-select-breaking custom styling that loses keyboard navigation.

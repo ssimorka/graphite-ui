@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ProgressBar } from '@/components/ui/progress-bar'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Variant = 'determinate' | 'indeterminate'
@@ -49,7 +49,7 @@ export function ProgressBarPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Variant"
             size="sm"
             value={variant}
@@ -59,11 +59,11 @@ export function ProgressBarPreview() {
               { value: 'indeterminate', label: 'Indeterminate' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Value"
             size="sm"
             value={String(value)}
-            state={determinate && status === 'active' ? 'default' : 'disabled'}
+            disabled={!(determinate && status === 'active')}
             onChange={(v) => setValue(Number(v))}
             options={[
               { value: '0', label: '0%' },
@@ -73,7 +73,7 @@ export function ProgressBarPreview() {
               { value: '100', label: '100%' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={status}
@@ -84,7 +84,7 @@ export function ProgressBarPreview() {
               { value: 'error', label: 'Error' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -94,7 +94,7 @@ export function ProgressBarPreview() {
               { value: 'lg', label: 'Big' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Alignment"
             size="sm"
             value={alignment}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Tag } from '@/components/ui/tag'
 import type { TagSize, TagVariant } from '@/components/ui/tag'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
 type Variant = TagVariant
@@ -46,7 +46,7 @@ export function TagPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Variant"
             size="sm"
             value={variant}
@@ -63,7 +63,7 @@ export function TagPreview() {
               { value: 'outline', label: 'Outline' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -74,7 +74,7 @@ export function TagPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Label"
             size="sm"
             value={content}

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { KitIcon } from '@/components/kit-icon'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Popover } from '@/components/ui/popover'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './popover.module.scss'
 
@@ -73,7 +73,7 @@ export function PopoverPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Placement"
             size="sm"
             value={placement}
@@ -85,7 +85,7 @@ export function PopoverPreview() {
               { value: 'right', label: 'Right' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Alignment"
             size="sm"
             value={align}
@@ -96,7 +96,7 @@ export function PopoverPreview() {
               { value: 'end', label: 'End' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Set"
             size="sm"
             value={variant}
@@ -109,7 +109,7 @@ export function PopoverPreview() {
               { value: 'tab-tip', label: 'Tab tip' },
             ]}
           />
-          <Select
+          <Dropdown
             label="Modal"
             size="sm"
             value={modal ? 'on' : 'off'}

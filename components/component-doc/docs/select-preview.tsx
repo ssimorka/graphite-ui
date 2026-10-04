@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Select, type SelectOption } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './select.module.scss'
 
@@ -45,7 +46,7 @@ export function SelectPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -56,7 +57,7 @@ export function SelectPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}

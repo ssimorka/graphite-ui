@@ -2,7 +2,7 @@
 
 import { TextInput } from '@/components/ui/text-input'
 import type { FieldSize } from '@/components/ui/text-input'
-import { Select } from '@/components/ui/select'
+import { Dropdown } from '@/components/ui/dropdown'
 import { useState } from 'react'
 import { DemoFrame } from '../demo-frame'
 
@@ -36,7 +36,7 @@ export function TextInputPreview() {
     <DemoFrame
       controls={
         <>
-          <Select
+          <Dropdown
             label="Size"
             size="sm"
             value={size}
@@ -47,7 +47,7 @@ export function TextInputPreview() {
               { value: 'lg', label: 'Large' },
             ]}
           />
-          <Select
+          <Dropdown
             label="State"
             size="sm"
             value={state}
