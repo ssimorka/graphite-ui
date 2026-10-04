@@ -1,8 +1,88 @@
-// Table — docs/contracts/table.md
+// Data table — docs/contracts/data-table.md
 //
-// Item's contract applied at scale, not a separate visual system: the row
-// hover below is --graphite-surface-variant, the same token item.module.scss
-// uses, so a change to one moves the other.
+// The kit's Data table (Graphite UI Kit 4630:268268). A header block (the
+// title in Table Header 14/24 Medium, an optional Body/3 description), then
+// the toolbar or the batch actions bar, then the table: a surface-variant
+// header row in Title/5 SemiBold, body rows in Body/3 on-surface-variant with
+// a 1px outline rule at the top of each, and the pagination bar under it.
+// Size is the kit's variable modes: rows of 24, 32, 40, 48 and 64, with cells
+// padded 16 on the left and 8 on the right.
+.wrap {
+  // The cell padding above and below a 20px line, and the row height.
+  --pad-top: 14px;
+  --pad-bottom: 14px;
+  --row: var(--graphite-space-09);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+}
+
+// The kit's modes. Its padding is drawn around an 18px text frame (15 at
+// Large); the line here is 20, so each step gives up a pixel a side to hold
+// the row height. Extra large sits at the top, the room below it left for a
+// second line.
+.xs { --pad-top: 2px; --pad-bottom: 2px; --row: var(--graphite-space-06); }
+.sm { --pad-top: 6px; --pad-bottom: 6px; --row: var(--graphite-space-07); }
+.md { --pad-top: 10px; --pad-bottom: 10px; --row: var(--graphite-space-08); }
+.lg { --pad-top: 14px; --pad-bottom: 14px; --row: var(--graphite-space-09); }
+.xl { --pad-top: 16px; --pad-bottom: 28px; --row: var(--graphite-space-10); }
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--graphite-space-05) var(--graphite-space-05) var(--graphite-space-06);
+}
+
+.title {
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: 1.5rem;
+  font-weight: var(--graphite-text-weight-medium);
+}
+
+.description {
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+// The kit's Toolbar: a 48px bar of the caller's controls, end-aligned.
+.toolbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  min-height: var(--graphite-space-09);
+}
+
+// The kit's Batch actions: the count on the primary fill, its actions at the
+// end, with a Cancel that clears the selection.
+.batch {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  min-height: var(--graphite-space-09);
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+.batchCount {
+  align-self: center;
+  padding-inline: var(--graphite-space-05);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.batchActions {
+  display: flex;
+  align-items: stretch;
+}
+
+// ------------------------------------------------------------------- table
 .scroll {
   width: 100%;
   overflow-x: auto;
@@ -14,72 +94,208 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  color: var(--graphite-on-surface);
 }
 
-.caption {
+.th,
+.td {
+  height: var(--row);
+  padding: var(--pad-top) var(--graphite-space-03) var(--pad-bottom) var(--graphite-space-05);
   text-align: left;
-  padding-bottom: var(--graphite-space-03);
-  color: var(--graphite-on-surface);
-  font-weight: 600;
+  vertical-align: middle;
 }
+
+.xl :is(.th, .td) { vertical-align: top; }
 
 // Sticky is not optional. The contract forbids a table that loses its column
-// headers on scroll, so this is structural rather than a nicety.
+// headers on scroll, so this is structural rather than a nicety. The header
+// row is surface-variant, as the kit fills it. Its rule underneath is the
+// code's own: the kit draws the line at the top of the first row, which
+// scrolls away under a sticky header, so the header carries it instead.
 .th {
   position: sticky;
   top: 0;
   z-index: 1;
-  text-align: left;
-  // The kit's header cell is transparent at rest, sitting on the table's own
-  // ground. That value cannot transfer: this header is position:sticky, and a
-  // transparent sticky header lets rows scroll through it. `surface` is kept
-  // deliberately — the kit does not model scrolling, so it has no opinion here.
-  background: var(--graphite-surface);
+  background: var(--graphite-surface-variant);
   color: var(--graphite-on-surface);
-  border-bottom: 1px solid var(--graphite-outline);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  font-weight: var(--graphite-text-weight-semibold);
   white-space: nowrap;
 }
 
+// A sortable header's button is the whole cell: label at the start, the 16px
+// glyph at the end, and the cell's padding moved onto it.
+.sortableTh { padding: 0; }
+
 .sortButton {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: var(--graphite-space-02);
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  width: 100%;
+  height: var(--row);
+  padding: var(--pad-top) var(--graphite-space-03) var(--pad-bottom) var(--graphite-space-05);
   appearance: none;
-  background: transparent;
   border: 0;
+  background: transparent;
   font: inherit;
   color: inherit;
+  text-align: left;
   cursor: pointer;
-  padding: 0;
 }
 
+.xl .sortButton { align-items: flex-start; }
+
 .sortButton:focus-visible {
-  outline: 2px solid var(--graphite-focus);
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.glyph { flex: none; }
+
+// Unsorted, the sort glyph shows only on hover and focus, as the kit draws it.
+.idle { visibility: hidden; }
+.sortableTh:is(:hover, :focus-within) .idle { visibility: visible; }
+
+// The kit fills Hover, Focus and Sorted header cells surface-variant, the
+// header row's own fill, so they change nothing visible; the glyph carries
+// them. Recorded as a kit slip; the binding is kept.
+.sortableTh:hover,
+.sorted { background: var(--graphite-surface-variant); }
+
+.td {
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  // The kit's rule sits at the top of each row, drawn inside the cell so it
+  // does not add to the row's height.
+  box-shadow: inset 0 1px 0 var(--graphite-outline);
+}
+
+// The header carries the first row's rule, so the first row does not double it.
+tbody > tr:first-child > .td { box-shadow: none; }
+
+.row:hover { background: var(--graphite-surface-variant); }
+
+.selected,
+.selected:hover { background: var(--graphite-primary-container); }
+
+.disabled .td { color: var(--graphite-primary-disabled-content); }
+.disabled:hover { background: transparent; }
+
+// Zebra: alternate rows on surface-variant, and no rules. The kit's zebra and
+// hover share surface-variant, so hovering a zebra row changes nothing.
+.zebra .td { box-shadow: none; }
+.zebra tbody > tr.row:nth-of-type(even) { background: var(--graphite-surface-variant); }
+
+// ------------------------------------------------------- select and expand
+.selectCell,
+.expandCell {
+  width: 1px;
+  white-space: nowrap;
+}
+
+// The select cell: 16 in, the 20px box, and the first data cell's own 16.
+// Both lead cells centre their control in the row rather than padding it,
+// so the control's own line box cannot make the row taller than its size.
+.selectCell { padding-inline: var(--graphite-space-05) 0; }
+
+.selectCell,
+.expandCell { padding-block: 0; line-height: 0; }
+
+.xl :is(.selectCell, .expandCell) { padding-top: 14px; }
+
+// The select-all and row checkboxes keep their names but not their labels.
+.selectCell label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// Select radio: the Radio button's glyph, an 18px on-surface ring with an 8px
+// dot, in a 20px frame.
+.radio {
+  appearance: none;
+  display: inline-grid;
+  place-content: center;
+  width: 18px;
+  height: 18px;
+  margin: 1px;
+  border: 1px solid var(--graphite-on-surface);
+  border-radius: 50%;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.radio::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--graphite-on-surface);
+  opacity: 0;
+}
+
+.radio:checked::before { opacity: 1; }
+
+.radio:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: 1px;
+}
+
+.radio:disabled {
+  border-color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+// The expand cell: 48 wide, the 16px chevron, turning when the row opens.
+.expandCell { padding-inline: var(--graphite-space-05); }
+
+.expandButton {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.expandButton:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
   outline-offset: 2px;
 }
 
-// The sort-active column is marked by the primary indicator, not by color alone.
-.sorted .indicator {
-  color: var(--graphite-primary);
+.chevron { transition: transform var(--graphite-motion-fast) var(--graphite-motion-ease); }
+.open .chevron { transform: rotate(180deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron { transition: none; }
 }
 
-.td {
-  border-bottom: 1px solid var(--graphite-outline);
+.expandedContent {
+  padding: var(--graphite-space-05) var(--graphite-space-05) var(--graphite-space-06) var(--graphite-space-10);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
 }
 
-.compact .th,
-.compact .td { padding: var(--graphite-density-compact); }
-
-.default .th,
-.default .td { padding: var(--graphite-density-default); }
-
-.row:hover {
-  background: var(--graphite-surface-variant);
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
-// A sortable header takes the same surfaceVariant on hover that the kit gives
-// its Hover, Focus and Sorted header states.
-.th:has(.sortButton):hover {
-  background: var(--graphite-surface-variant);
+// ------------------------------------------------------------------ footer
+// The kit's Pagination bar, under the table on surface.
+.footer {
+  display: flex;
+  align-items: center;
+  min-height: var(--graphite-space-09);
 }

@@ -221,28 +221,41 @@ export default function SpacingPage() {
               title="Components that take density"
               lede={`Found by reading the governed component stylesheets for a density token. ${spell(consumers.length)} bind to one today.`}
             />
-            <RefTable
-              caption="Components bound to a density step"
-              columns={[
-                { label: 'Component', tone: 'name' },
-                { label: 'density prop', tone: 'type' },
-                { label: 'What it pads', tone: 'text' },
-              ]}
-              rows={consumers.map((c) => [
-                c.governed ? (
-                  <a key="l" href={`/docs/components/${c.slug}`}>
-                    {titleOf(c.slug)}
-                  </a>
-                ) : (
-                  titleOf(c.slug)
-                ),
-                c.suffixes.join(' | '),
-                c.slug === 'data-table'
-                  ? 'Header and body cells, on every side.'
-                  : 'Its own padding.',
-              ])}
-            />
-            {untaken.length ? (
+            {consumers.length === 0 ? (
+              <Callout tone="primary" title="No governed component binds to a density step today.">
+                {[
+                  <>
+                    Contained list and Data table did until they took the kit&rsquo;s own
+                    sizes, fixed row heights rather than padding steps (#238, #239). The
+                    three steps stay declared: <a href="/create">Create</a>&rsquo;s Density
+                    control re-binds <code>--graphite-density-default</code> on the preview
+                    root, and its example cards step their padding and gap with it.
+                  </>,
+                ]}
+              </Callout>
+            ) : null}
+            {consumers.length ? (
+              <RefTable
+                caption="Components bound to a density step"
+                columns={[
+                  { label: 'Component', tone: 'name' },
+                  { label: 'density prop', tone: 'type' },
+                  { label: 'What it pads', tone: 'text' },
+                ]}
+                rows={consumers.map((c) => [
+                  c.governed ? (
+                    <a key="l" href={`/docs/components/${c.slug}`}>
+                      {titleOf(c.slug)}
+                    </a>
+                  ) : (
+                    titleOf(c.slug)
+                  ),
+                  c.suffixes.join(' | '),
+                  'Its own padding.',
+                ])}
+              />
+            ) : null}
+            {consumers.length > 0 && untaken.length > 0 ? (
               <Callout
                 tone="warning"
                 title={`No component accepts ${untaken.map((u) => `density="${u}"`).join(' or ')} as a prop.`}

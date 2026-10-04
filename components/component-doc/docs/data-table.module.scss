@@ -16,6 +16,6 @@
 }
 
 .forceFocus thead th:first-child button {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: 2px;
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
 }
