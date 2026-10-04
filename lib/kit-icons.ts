@@ -12,7 +12,8 @@
 // spinner are identical to Regular's in the kit, for the same reason. Delete
 // (Menu's destructive row) is drawn on the Regular page only, so Bold and
 // Solid borrow Regular's. So do Data table's sort glyphs (apps-sort and the
-// two small arrows), which the kit also draws on the Regular page only.
+// two small arrows), which the kit also draws on the Regular page only, and
+// Date picker's calendar, which the Bold and Solid pages do not carry.
 
 export const ICON_SETS = ['regular', 'bold', 'solid'] as const
 export type IconSet = (typeof ICON_SETS)[number]
@@ -22,11 +23,12 @@ export type KitIconName =
   | 'spinner' | 'plus' | 'minus' | 'arrow-left' | 'arrow-right' | 'check'
   | 'angle-small-down' | 'angle-small-right' | 'search' | 'settings' | 'info'
   | 'user' | 'cloud-upload' | 'database' | 'bread-slice' | 'cross-small'
-  | 'delete' | 'apps-sort' | 'arrow-small-up' | 'arrow-small-down'
+  | 'delete' | 'apps-sort' | 'arrow-small-up' | 'arrow-small-down' | 'calendar'
 
 type Paths = Record<KitIconName, string[]>
 
 const regular: Paths = {
+  'calendar': ['M14 1.33L12 1.33L12 0L10.67 0L10.67 1.33L5.33 1.33L5.33 0L4 0L4 1.33L2 1.33C1.47 1.33 0.96 1.54 0.59 1.92C0.21 2.29 0 2.8 0 3.33L0 16L16 16L16 3.33C16 2.8 15.79 2.29 15.41 1.92C15.04 1.54 14.53 1.33 14 1.33ZM1.33 3.33C1.33 3.16 1.4 2.99 1.53 2.86C1.65 2.74 1.82 2.67 2 2.67L14 2.67C14.18 2.67 14.35 2.74 14.47 2.86C14.6 2.99 14.67 3.16 14.67 3.33L14.67 5.33L1.33 5.33L1.33 3.33ZM1.33 14.67L1.33 6.67L14.67 6.67L14.67 14.67L1.33 14.67Z', 'M11.33 8.67L10 8.67L10 10L11.33 10L11.33 8.67Z', 'M8.67 8.67L7.33 8.67L7.33 10L8.67 10L8.67 8.67Z', 'M6 8.67L4.67 8.67L4.67 10L6 10L6 8.67Z', 'M11.33 11.33L10 11.33L10 12.67L11.33 12.67L11.33 11.33Z', 'M8.67 11.33L7.33 11.33L7.33 12.67L8.67 12.67L8.67 11.33Z', 'M6 11.33L4.67 11.33L4.67 12.67L6 12.67L6 11.33Z'],
   'apps-sort': ['M0 2V7.33H7.33V0H2C1.47 0 0.96 0.21 0.59 0.59C0.21 0.96 0 1.47 0 2H0ZM6 6H1.33V2C1.33 1.82 1.4 1.65 1.53 1.53C1.65 1.4 1.82 1.33 2 1.33H6V6Z', 'M0 14C0 14.53 0.21 15.04 0.59 15.41C0.96 15.79 1.47 16 2 16H7.33V8.67H0V14ZM1.33 10H6V14.67H2C1.82 14.67 1.65 14.6 1.53 14.47C1.4 14.35 1.33 14.18 1.33 14V10Z', 'M13.33 14.28V1.72L15.06 3.44L16 2.5L14.08 0.58C13.71 0.21 13.2 -0 12.67 -0C12.14 -0 11.63 0.21 11.25 0.58L9.34 2.5L10.28 3.44L12 1.72V14.28L10.28 12.56L9.33 13.5L11.25 15.42C11.63 15.79 12.14 16 12.67 16C13.2 16 13.71 15.79 14.08 15.42L16 13.5L15.06 12.56L13.33 14.28Z'],
   'arrow-small-up': ['M11.8 6.59L8.94 3.72C8.69 3.47 8.35 3.33 8 3.33C7.65 3.33 7.31 3.47 7.06 3.72L4.2 6.59L5.14 7.53L7.33 5.33V12.67H8.67V5.33L10.86 7.53L11.8 6.59Z'],
   'arrow-small-down': ['M10.86 8.47L8.67 10.67V4H7.33V10.67L5.14 8.47L4.2 9.41L7.06 12.28C7.31 12.53 7.65 12.67 8 12.67C8.35 12.67 8.69 12.53 8.94 12.28L11.8 9.41L10.86 8.47Z'],
@@ -56,6 +58,7 @@ const regular: Paths = {
 }
 
 const bold: Paths = {
+  'calendar': regular['calendar'],
   'apps-sort': regular['apps-sort'],
   'arrow-small-up': regular['arrow-small-up'],
   'arrow-small-down': regular['arrow-small-down'],
@@ -85,6 +88,7 @@ const bold: Paths = {
 }
 
 const solid: Paths = {
+  'calendar': regular['calendar'],
   'apps-sort': regular['apps-sort'],
   'arrow-small-up': regular['arrow-small-up'],
   'arrow-small-down': regular['arrow-small-down'],
