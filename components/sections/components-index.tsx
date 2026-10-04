@@ -39,15 +39,40 @@ import { Typography } from '@/components/ui/typography'
 import { spell } from '@/lib/spell'
 import styles from './components-index.module.scss'
 
-type Filter = 'all' | 'governed' | 'ungoverned' | 'forms' | 'overlays'
+type Filter =
+  | 'all'
+  | 'governed'
+  | 'ungoverned'
+  | 'actions'
+  | 'primitives'
+  | 'forms'
+  | 'navigation'
+  | 'overlays'
+  | 'data'
+
+// The category chips are the contracts' waves (docs/contracts/README.md), so
+// every governed component falls in exactly one. Wave 3, form composition, is
+// empty and has no chip. A wave records build order as much as kind, which is
+// why Menu button sits under Navigation.
+const WAVES: Partial<Record<Filter, string>> = {
+  actions: '0',
+  primitives: '1',
+  forms: '2',
+  navigation: '4',
+  overlays: '5',
+  data: '6',
+}
 
 const FILTERS: { key: Filter; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'governed', label: 'Governed' },
   { key: 'ungoverned', label: 'Ungoverned' },
-  // Waves 2 and 5 in the contracts: form atoms and overlays.
+  { key: 'actions', label: 'Actions' },
+  { key: 'primitives', label: 'Primitives' },
   { key: 'forms', label: 'Forms' },
+  { key: 'navigation', label: 'Navigation' },
   { key: 'overlays', label: 'Overlays' },
+  { key: 'data', label: 'Data' },
 ]
 
 // Contracts with no surface of their own to draw. Overlay is the shared base
@@ -235,7 +260,7 @@ export function ComponentsIndex({
       if (filter === 'governed') return c.kind === 'governed'
       if (filter === 'ungoverned') return c.kind === 'ungoverned'
       if (c.kind !== 'governed') return false
-      return c.meta.wave === (filter === 'forms' ? '2' : '5')
+      return c.meta.wave === WAVES[filter]
     })
     .sort((a, b) => a.name.localeCompare(b.name))
 
