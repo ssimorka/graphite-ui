@@ -1,6 +1,6 @@
 ---
 component: Checkbox
-version: 3.0.0
+version: 3.1.0
 wave: 2
 slots:
   - name: Label
@@ -26,6 +26,9 @@ props:
     notes: Supporting copy. Suppressed while errorText or warningText is present.
   - name: warningText
     notes: Resolves the kit's Warning, outranked by an error. The box is unchanged; the warning is carried by the message's status icon.
+  - name: invalid
+    values: boolean
+    notes: The error state without a message of its own, for a box whose group carries the message (Checkbox group, #273). The ring and aria-invalid as for errorText.
   - name: errorText
     notes: Its presence resolves the error state, so error text and error styling cannot be shown apart. This was Field's guarantee and it survives Field.
 tokens:

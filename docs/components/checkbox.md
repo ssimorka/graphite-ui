@@ -20,6 +20,8 @@ Selection control for choosing one or more options from a set, or a single stand
 | State | Enabled, Read-only, Invalid, Warning |
 | Horizontal | False, True |
 
+The set draws its group label inside the first Checkbox (and the vertical Enabled variant reads "Group abel"); in code the label is the group's own legend (`docs/contracts/checkbox-group.md`).
+
 ## Other properties
 
 | Property | Type | Default |

@@ -4,6 +4,7 @@ import { breadcrumbDoc } from './docs/breadcrumb'
 import { buttonDoc } from './docs/button'
 import { buttonGroupDoc } from './docs/button-group'
 import { checkboxDoc } from './docs/checkbox'
+import { checkboxGroupDoc } from './docs/checkbox-group'
 import { containedListDoc } from './docs/contained-list'
 import { dataTableDoc } from './docs/data-table'
 import { datePickerDoc } from './docs/date-picker'
@@ -43,6 +44,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'button': buttonDoc,
   'button-group': buttonGroupDoc,
   'checkbox': checkboxDoc,
+  'checkbox-group': checkboxGroupDoc,
   'contained-list': containedListDoc,
   'data-table': dataTableDoc,
   'date-picker': datePickerDoc,
