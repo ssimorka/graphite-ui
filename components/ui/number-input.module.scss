@@ -1,0 +1,49 @@
+// Number input — docs/contracts/number-input.md
+//
+// The kit's Number input sets. The field is Text input's; this sheet draws the
+// stepper and hides the browser's own spinner. The kit's _Number input base:
+// the value 16 in, then (in Error and Warning) the status glyph, then the two
+// action items flush to the right edge, each a ghost icon-only Button square
+// at the field's height with a 1 × 20 outline divider just before it.
+
+.number { display: contents; }
+
+// The status glyph comes before the stepper, as the kit draws it, so the
+// stepper's slot moves to the end of the row and runs to the field's edge.
+.number :has(> .stepper) {
+  order: 1;
+  align-self: stretch;
+  margin-inline-end: calc(var(--graphite-space-05) * -1);
+}
+
+.number input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.number input[type='number']::-webkit-inner-spin-button,
+.number input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+}
+
+// The kit's divider: 1 × 20 in outline, in the pixel just before its button
+// (the kit draws it at x -1), so it takes no width of its own.
+.divider {
+  flex: none;
+  width: 1px;
+  height: 1.25rem;
+  margin-inline-start: -1px;
+  background: var(--graphite-outline);
+  position: relative;
+  z-index: 1;
+}
+
+// The first divider takes its own pixel, which puts the status glyph 17 from
+// the stepper, as the kit's Status frame pads it.
+.divider:first-child { margin-inline-start: 0; }

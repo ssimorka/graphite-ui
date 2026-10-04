@@ -14,6 +14,7 @@ import { menuDoc } from './docs/menu'
 import { modalDoc } from './docs/modal'
 import { navigationMenuDoc } from './docs/navigation-menu'
 import { notificationDoc } from './docs/notification'
+import { numberInputDoc } from './docs/number-input'
 import { overlayDoc } from './docs/overlay'
 import { paginationDoc } from './docs/pagination'
 import { passwordInputDoc } from './docs/password-input'
@@ -55,6 +56,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'modal': modalDoc,
   'navigation-menu': navigationMenuDoc,
   'notification': notificationDoc,
+  'number-input': numberInputDoc,
   'overlay': overlayDoc,
   'pagination': paginationDoc,
   'password-input': passwordInputDoc,
