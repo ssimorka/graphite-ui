@@ -12,11 +12,14 @@ engine ported from `carbon-token-studio`.
 npx next dev --webpack
 ```
 
-Configured in `.claude/launch.json` under the name `dev`, port 3000. The
-port is hardcoded with no `autoPort`, so parallel worktrees collide on it:
-the second server silently attaches to the first checkout, and verification
-then tests the wrong code. Check which checkout is serving before trusting
-a browser result.
+Configured in `.claude/launch.json` under the name `dev`, port 3000 with
+`autoPort: true`, so a second worktree's preview gets its own port instead of
+colliding. It used to be hardcoded with no `autoPort`, and the second server
+then silently attached to the first checkout, so verification tested the
+wrong code. Nothing needs 3000 specifically (no OAuth callbacks or webhooks),
+and the `dev` script carries no `--port` flag, so leave it that way. A tab
+already open on 3000 may still be another checkout: check which one is serving
+before trusting a browser result.
 
 ## Known, verified findings — don't re-derive these
 
