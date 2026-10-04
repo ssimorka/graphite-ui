@@ -126,9 +126,9 @@ export function RelatedChips({
   items: { href: string; title: string; why: string }[]
 }) {
   // The same cards as the docs home's "What is here", so the two ways on to
-  // another page look like one thing.
+  // another page look like one thing. One row: as many columns as cards.
   return (
-    <NextCards>
+    <NextCards columns={items.length}>
       {items.map((r) => (
         <NextCard key={r.title} href={r.href} title={r.title}>
           {r.why}

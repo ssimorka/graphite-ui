@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import styles from './doc-blocks.module.scss'
 
 // Docs-site chrome, from the kit's "Site" pages (Graphite UI Site, node
@@ -92,8 +92,26 @@ export function Callout({
   )
 }
 
-export function NextCards({ children }: { children: ReactNode }) {
-  return <ul className={styles.nextCards}>{children}</ul>
+/** `columns` is the count abreast from 672 up; three unless a caller asks. */
+export function NextCards({
+  columns,
+  children,
+}: {
+  columns?: number
+  children: ReactNode
+}) {
+  return (
+    <ul
+      className={styles.nextCards}
+      style={
+        columns
+          ? ({ '--next-columns': columns } as CSSProperties)
+          : undefined
+      }
+    >
+      {children}
+    </ul>
+  )
 }
 
 export function NextCard({
