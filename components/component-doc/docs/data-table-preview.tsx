@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { ContainedList } from '@/components/ui/contained-list'
 import { KitIcon } from '@/components/kit-icon'
+import { Pagination } from '@/components/ui/pagination'
 import { Search } from '@/components/ui/search'
 import { Tag } from '@/components/ui/tag'
 import { DataTable } from '@/components/ui/data-table'
@@ -70,6 +71,10 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
   const [kind, setKind] = useState<Kind>('default')
   const [sortable, setSortable] = useState(true)
   const [sort, setSort] = useState<Sort>({ key: 'component', direction: 'asc' })
+  const [paging, setPaging] = useState({ page: 1, pageSize: 5 })
+
+  const ordered = sortable ? sorted(rows, sort) : rows
+  const first = (paging.page - 1) * paging.pageSize
 
   const columns = HEADERS.map(([key, header]) => ({ key, header, sortable })) as [
     Column<DemoRow>,
@@ -137,7 +142,7 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
               : undefined
           }
           columns={columns}
-          rows={sortable ? sorted(rows, sort) : rows}
+          rows={ordered.slice(first, first + paging.pageSize)}
           getRowKey={(row) => row.component}
           sort={sortable ? sort : undefined}
           onSortChange={
@@ -148,6 +153,15 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
                     direction: s.key === key && s.direction === 'asc' ? 'desc' : 'asc',
                   }))
               : undefined
+          }
+          footer={
+            <Pagination
+              page={paging.page}
+              pageSize={paging.pageSize}
+              pageSizes={[5, 10, 20]}
+              totalItems={rows.length}
+              onChange={setPaging}
+            />
           }
         />
       }
@@ -236,5 +250,19 @@ export function DataTableSample({
         footer={footer}
       />
     </div>
+  )
+}
+
+/** The anatomy's footer: the table bar, owning its own page state. */
+export function DataTablePager({ totalItems }: { totalItems: number }) {
+  const [paging, setPaging] = useState({ page: 1, pageSize: 5 })
+  return (
+    <Pagination
+      page={paging.page}
+      pageSize={paging.pageSize}
+      pageSizes={[5, 10, 20]}
+      totalItems={totalItems}
+      onChange={setPaging}
+    />
   )
 }

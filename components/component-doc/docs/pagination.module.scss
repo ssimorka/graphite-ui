@@ -1,0 +1,8 @@
+// Pagination's own page parts: a measure wide enough for the table bar.
+// Nothing here restyles the component.
+
+.measure {
+  width: 52.875rem;
+  max-width: 100%;
+  overflow-x: auto;
+}

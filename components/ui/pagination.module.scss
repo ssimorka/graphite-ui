@@ -1,0 +1,153 @@
+// Pagination — docs/contracts/pagination.md
+//
+// The kit's Pagination - Nav (2799:20761) and Pagination - Table bar
+// (3889:50204).
+//
+// Nav: ghost previous and next buttons around square page items (48, 40, 32),
+// Body/3 on-surface; the current page in Title/5 SemiBold with a 16px primary
+// rule centred under it; hover elevation-02, the kit's background-hover.
+//
+// Table bar: a row on elevation-01 (layer-01) with a 1px outline-subtle rule
+// on top, its sections divided by the same rule: items per page, the range
+// shown, the page picker and its total, then the two arrows.
+.nav,
+.bar {
+  --h: var(--graphite-space-09);
+}
+
+.md { --h: var(--graphite-space-08); }
+.sm { --h: var(--graphite-space-07); }
+
+.flip { transform: scaleX(-1); }
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// ---------------------------------------------------------------------- nav
+.nav {
+  display: inline-flex;
+  align-items: center;
+}
+
+.items {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--h);
+  height: var(--h);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+}
+
+button.item:hover { background: var(--graphite-elevation-02); }
+
+button.item:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.current { font-weight: var(--graphite-text-weight-semibold); }
+
+.current::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 8px);
+  bottom: 0;
+  width: 16px;
+  height: 2px;
+  background: var(--graphite-primary);
+}
+
+// The ellipsis is drawn; a transparent native select over it opens the hidden
+// pages and takes the hover and the focus ring.
+.overflow {
+  position: relative;
+  display: inline-flex;
+}
+
+.overflowSelect {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.overflow:hover .item { background: var(--graphite-elevation-02); }
+
+.overflow:has(.overflowSelect:focus-visible) .item {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+// --------------------------------------------------------------- table bar
+// The kit draws the bar 50, 42 and 34 tall: its 48 / 40 / 32 controls plus
+// the top rule and a stray pixel, the same +2 Button carries. Built at the
+// controls' height plus the rule.
+.bar {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: calc(var(--h) + 1px);
+  background: var(--graphite-elevation-01);
+  box-shadow: inset 0 1px 0 var(--graphite-outline-subtle);
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  padding-top: 1px;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  padding-inline: var(--graphite-space-05);
+  min-width: 0;
+}
+
+// The range fills the middle, in on-surface-variant.
+.range {
+  flex: 1;
+  color: var(--graphite-on-surface-variant);
+  white-space: nowrap;
+}
+
+// The page picker sits flush to its divider, 8 in, its total 16 from the arrows.
+.pageSection {
+  padding-inline: var(--graphite-space-03) var(--graphite-space-05);
+  box-shadow: inset 1px 0 0 var(--graphite-outline-subtle);
+}
+
+// Simple and Unbound have no range, so the page label pushes to the end.
+.push { margin-inline-start: auto; }
+
+.text { white-space: nowrap; }
+
+.arrow {
+  display: flex;
+  box-shadow: inset 1px 0 0 var(--graphite-outline-subtle);
+}
+
+.step { flex: none; }
