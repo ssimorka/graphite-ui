@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { KitIcon } from '@/components/kit-icon'
 import { CardShell, CardHeader } from '../card-shell'
 import { Button } from '@/components/ui/button'
 import { Notification } from '@/components/ui/notification'
@@ -33,7 +32,6 @@ export function BookAppointmentCard() {
       </div>
       <Notification
         variant="info"
-        icon={<KitIcon name="info" size={20} />}
         title="New patient?"
         body="Please arrive 15 minutes early."
       />
