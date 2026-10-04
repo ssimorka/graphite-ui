@@ -20,6 +20,31 @@ This file sits in `kit/` rather than beside the contracts because
 every `.md` it finds there as a component contract — the same reason
 `foundations/` is its own directory.
 
+## What the kit says
+
+Rules 5 and 6 are applied in the kit itself. Since 2026-10-04 (#275) every
+public set on all 45 component pages carries one `Graphite:` line at the end of
+its description, after the kit's own text:
+
+| Line | Sets | Means |
+|---|---|---|
+| `Graphite: governed — docs/contracts/<name>.md <version>` | 78 | A contract declares the set; the version is that contract's on `main` |
+| `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` | 37 | One of the three permanent buckets below, so the reader lands here |
+
+Nothing carries the interim `Graphite: ungoverned, scheduled to build (#240)`
+any more: every set that held it has since acquired a contract. `_`-prefixed
+sets carry no line, for the reason given under "Public and private sets" below.
+
+Six of the 37 are standalone public components rather than sets (`AI label
+wrapper`, `AI layer - Border`, `AI layer - Shadow`, `AI explainability popover
+actions footer`, `UI shell - Header sub-menu`, `UI shell - Right panel`). The
+walk counted them with the sets and they are labelled the same way.
+
+The line is stamped by hand through the Plugin API, and two things follow.
+**It lags a contract bump** until someone restamps, so the contract file, not the
+kit, is where to read a version (the gallery badge does). And **consumers see it
+only after the library is republished.**
+
 ## What the walk found
 
 | | |
@@ -168,16 +193,16 @@ kit depends on.
 
 **Two sets share a name.** The Structured list page has `_Structured list header
 row item` **twice**, as two distinct sets with 2 variants each. Harmless while
-both are private, but it defeats name-based lookup — which is how the gallery
-version badge resolves, and how the `Progress bar bar` and `ContainedList`
-failures in `#134` and `#136` happened. Worth a rename if that page is ever
-touched.
+both are private, but it defeats name-based lookup of sets, which is how the
+`Progress bar bar` and `ContainedList` failures in `#134` and `#136` happened.
+(The gallery badge is not exposed: it matches contracts to kit *page* names, in
+`lib/components-index.ts`.) Worth a rename if that page is ever touched.
 
 **Accordion is bigger than an adoption note suggests.** It is the one page rule 6
 resolves to *adopt*, and it carries `Accordion item` at **120 variants** plus a
-bare `Accordion` component and three skeleton internals. Whoever writes
-`accordion.md` should size it against that, not against the one-line mention in
-`SHADCN-MIGRATION.md`.
+bare `Accordion` component and three skeleton internals. `accordion.md` was
+sized against that rather than the one-line mention in `SHADCN-MIGRATION.md`,
+and covers both public sets (#222).
 
 ## What this list does not settle
 
