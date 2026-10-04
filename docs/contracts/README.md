@@ -256,8 +256,16 @@ them.
 primitives. Three classes will never acquire one, so they are ungoverned
 permanently rather than pending:
 
-- *Application shells* — UI shell Header / Left panel / Right panel, Tree view,
-  Content switcher. These compose an application; they are not primitives.
+- *Application shells* — UI shell Header / Left panel / Right panel, Content
+  switcher. These compose an application; they are not primitives.
+
+  **Tree view came off this list on 2026-10-04.** It was filed here because
+  Carbon uses it to compose an application's file browser, but the kit draws
+  it as a primitive: a node row, and a tree of those rows, with no layout of
+  its own. It acquired a contract the way #240's buckets did, by decision:
+  the docs sidebar is a hierarchy, and Tree view is the kit's hierarchical
+  navigation (`tree-view.md`). Movement stays one-way. The other four shells
+  are unchanged and still ungoverned permanently.
 
   This bullet also settles **Navigation Menu** (#113), which is why that issue
   is not an open Wave 4 item. The six UI shell sets are the kit's only
@@ -266,7 +274,10 @@ permanently rather than pending:
   7's tie-break then applies unchanged — where the kit has no opinion, the code
   keeps its own — so there was never an inversion to perform. The two halves of
   that argument were written days apart, in #128 and #141, and neither one
-  mentioned the other. Recorded in full in `navigation-menu.md`.
+  mentioned the other. Recorded in full in `navigation-menu.md`. Tree view
+  leaving this list does not reopen it: Tree view answers the hierarchical
+  case, a docs sidebar, and the kit still draws nothing for the flat,
+  horizontal one that Navigation Menu keeps (the site header).
 - *Vendor features* — AI label, AI layer, AI explainability popover. Carbon's AI
   affordances, tied to IBM product decisions Graphite does not make. Dropping
   these also decides the fate of the `AI`, `AI presence` and `AI revert`

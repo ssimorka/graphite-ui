@@ -1,0 +1,24 @@
+// Tree view's own page parts: a measure for the tree, and the forced Hover,
+// Active and Focus rows. The rows expose no data-slot hook, so the page wraps
+// the tree and forces the declarations tree-view.module.scss puts on those
+// states. Nothing here restyles the component.
+
+.tree {
+  // A preview surface sizes to its content; the kit draws its tree 256 wide.
+  width: 16rem;
+  max-width: 100%;
+}
+
+.forceHover [role='treeitem'] {
+  background: var(--graphite-elevation-02);
+  color: var(--graphite-on-surface);
+}
+
+.forceActive [role='treeitem'] {
+  background: var(--graphite-elevation-03);
+  color: var(--graphite-on-surface);
+}
+
+.forceFocus [role='treeitem'] {
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}

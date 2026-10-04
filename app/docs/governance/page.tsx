@@ -405,7 +405,7 @@ export default function GovernancePage() {
               rows={[
                 [
                   'Application shells',
-                  'UI shell, Tree view, Content switcher',
+                  'UI shell, Content switcher',
                   'Out of scope permanently. They compose an application; they are not primitives.',
                 ],
                 [

@@ -74,29 +74,6 @@
   display: none;
 }
 
-// A group heading is not a link, so it cannot be a NavigationMenu item.
-// NavItem requires an href. The shell owns the heading and hands the component
-// the links below it, which is the same split the header uses.
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-01);
-}
-
-.group + .group {
-  margin-top: var(--graphite-space-06);
-}
-
-.groupLabel {
-  margin: 0 0 var(--graphite-space-03);
-  padding: 0;
-  font-family: var(--graphite-font-mono), monospace;
-  font-size: var(--graphite-text-code-3-size);
-  line-height: var(--graphite-text-code-3-line-height);
-  text-transform: uppercase;
-  color: var(--graphite-on-surface-variant);
-}
-
 .tocLabel {
   margin: 0 0 var(--graphite-space-04);
   font-family: var(--graphite-font-mono), monospace;
@@ -172,10 +149,11 @@
     overflow-y: auto;
   }
 
-  // Kit "Docs sidebar": 256px, 32 / 16 / 48 / 24, a 1px surfaceVariant rule.
+  // Kit "Docs sidebar": 256px and a 1px surfaceVariant rule. The Tree view
+  // inside runs edge to edge, as the kit draws its tree 256 wide, so the
+  // rail has no padding of its own; its rows carry their own indent.
   .sidebar {
-    padding: var(--graphite-space-07) var(--graphite-space-05) 3rem
-      var(--graphite-space-06);
+    padding: 0;
     border-right: 1px solid var(--graphite-surface-variant);
   }
 
@@ -183,21 +161,9 @@
     display: none;
   }
 
-  // Kit "Sidebar item": 6px / 10px, and the current page is filled with
-  // surfaceVariant rather than marked with NavigationMenu's inset bar. The kit
-  // calls the sidebar item docs chrome, so the override belongs here and not in
-  // the governed component.
-  .sidebar a {
-    padding: 6px 10px;
-    color: var(--graphite-on-surface-variant);
-    border-radius: 0;
-  }
-
-  .sidebar a[aria-current='page'] {
-    background: var(--graphite-surface-variant);
-    color: var(--graphite-on-surface);
-    box-shadow: none;
-  }
+  // The sidebar's rows are Tree view's own (tree-view.md). It used to restyle
+  // NavigationMenu's links here as the kit's "Sidebar item"; nothing in the
+  // shell overrides the tree.
 }
 
 @media (min-width: 1312px) {

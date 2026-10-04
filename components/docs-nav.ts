@@ -76,6 +76,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/toast', label: 'Toast' },
       { href: '/docs/components/toggle', label: 'Toggle' },
       { href: '/docs/components/tooltip', label: 'Tooltip' },
+      { href: '/docs/components/tree-view', label: 'Tree view' },
       { href: '/docs/components/typography', label: 'Typography' },
     ],
   },

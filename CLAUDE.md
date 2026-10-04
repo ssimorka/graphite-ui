@@ -112,8 +112,8 @@ before trusting a browser result.
   sets stay in the file and say so in their description, and movement is
   one-way. Deleting is off the table while the library is published, because
   removal is a breaking change for consumers. Three classes are ungoverned
-  permanently rather than pending — application shells (UI shell, Tree view,
-  Content switcher), Carbon's AI components, and Carbon idioms with no
+  permanently rather than pending — application shells (UI shell, Content
+  switcher), Carbon's AI components, and Carbon idioms with no
   Graphite counterpart. Don't re-argue any of this per component: that
   piecemeal drift is exactly what #124 exists to stop.
   **Amended and done 2026-10-04 (#240, closed):** the other two buckets were
@@ -123,10 +123,15 @@ before trusting a browser result.
   Dropdown in four kinds), each splitting a fold off a governed contract.
   Every one met #219's definition of done, kit description stamp included;
   only the permanent three stay ungoverned, so the Navigation Menu settlement
-  stands. That makes 36 contracts. Contract `component:` names are display
+  stands. That makes 36 contracts.
+  **Tree view left the application shells on 2026-10-04** and is governed
+  (`tree-view.md`, wave 4): the kit draws it as a primitive, and the docs
+  sidebar is now one Tree view, groups as branches and pages as link leaves.
+  That makes 37 contracts. Navigation Menu keeps the header's flat case, so
+  its settlement (below) is unchanged. Contract `component:` names are display
   names ("Checkbox group", "Menu buttons"), never PascalCase: the gallery
   keys its previews and kit-page matching on them (#296). The gallery's
-  no-contract tile is summed from the snapshot (37), not read from
+  no-contract tile is summed from the snapshot (35), not read from
   figma-only.md's 73, which records the 2026-08-28 walk.
 - **Navigation Menu is deliberately un-inverted, and that is settled.** #113
   looked like the last open Wave 4 item and was not: rule 6 (#128) puts
@@ -194,8 +199,8 @@ before trusting a browser result.
 - **Rules 5 and 6 are applied in the kit, and the stamps are manual.** Since
   2026-10-04 (#275) every public set on all 45 component pages ends its
   description with one line, after a blank line and the kit's own text:
-  `Graphite: governed — docs/contracts/<name>.md <version>` (78) or
-  `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` (37, the
+  `Graphite: governed — docs/contracts/<name>.md <version>` (80) or
+  `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` (35, the
   permanent three buckets). `_`-prefixed sets carry none. The interim
   `Graphite: ungoverned, scheduled to build (#240)` form is retired; every set
   that held it now has a contract. Recorded in "What the kit says" in

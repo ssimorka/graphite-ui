@@ -5,8 +5,9 @@ the kit's 27 unclaimed component pages, with its bucket under governance rule 6.
 
 **Dispositions amended 2026-10-04 (#240):** *In scope, awaiting demand* became
 **Build — wave G1**, *Already spoken for* became **Build — wave G2**, and two sets
-on governed pages were carried in from #219. The permanent three are unchanged.
-All of the G1, G2 and carried sets were then **built** under #240 and are stamped
+on governed pages were carried in from #219. The permanent three are unchanged,
+except that **Tree view left the application shells on 2026-10-04** and is governed
+by `tree-view.md`; see "Governed — Tree view" below. All of the G1, G2 and carried sets were then **built** under #240 and are stamped
 governed; the bucket headings below say so. The 73 counted here is the
 2026-08-28 walk; the gallery's no-contract tile is now summed from the snapshot.
 See "What the rule decides today" in `../README.md`.
@@ -28,14 +29,14 @@ its description, after the kit's own text:
 
 | Line | Sets | Means |
 |---|---|---|
-| `Graphite: governed — docs/contracts/<name>.md <version>` | 78 | A contract declares the set; the version is that contract's on `main` |
-| `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` | 37 | One of the three permanent buckets below, so the reader lands here |
+| `Graphite: governed — docs/contracts/<name>.md <version>` | 80 | A contract declares the set; the version is that contract's on `main` |
+| `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` | 35 | One of the three permanent buckets below, so the reader lands here |
 
 Nothing carries the interim `Graphite: ungoverned, scheduled to build (#240)`
 any more: every set that held it has since acquired a contract. `_`-prefixed
 sets carry no line, for the reason given under "Public and private sets" below.
 
-Six of the 37 are standalone public components rather than sets (`AI label
+Six of the 35 are standalone public components rather than sets (`AI label
 wrapper`, `AI layer - Border`, `AI layer - Shadow`, `AI explainability popover
 actions footer`, `UI shell - Header sub-menu`, `UI shell - Right panel`). The
 walk counted them with the sets and they are labelled the same way.
@@ -79,13 +80,12 @@ work for less clarity.
 
 ## Disposition
 
-### Application shells — 5 pages, 13 public / 4 private
+### Application shells — 4 pages, 11 public / 2 private
 
 *Ungoverned, permanently.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
-| Tree view | 2 | 2 | 50 |
 | Content switcher | 1 | 2 | 312 |
 | UI shell - Left panel | 2 | 0 | 36 |
 | UI shell - Header | 6 | 0 | 43 |
@@ -148,6 +148,17 @@ work for less clarity.
 |---|---|---|
 | Notification | `Notification - Toast` (`84336:35011`) | 16 |
 | Checkbox | `Checkbox group` (`11506:27535`) | 8 |
+
+### Governed — Tree view (left Application shells 2026-10-04) — 1 page, 2 public / 2 private
+
+*Governed: `tree-view.md` 1.0.0. Filed as a shell because Carbon composes an
+application's file browser from it; the kit draws it as a primitive, and the docs
+sidebar is the hierarchy it answers. See the application shells bullet in
+`../README.md`.*
+
+| Page | Public sets | Private | Variants |
+|---|---|---|---|
+| Tree view | 2 | 2 | 50 |
 
 ### Adopt — 1 page, 2 public / 3 private
 
@@ -222,7 +233,7 @@ change an answer only if deletion were on the table, and it is not.
 
 Variant counts in parentheses. `_`-prefixed sets are the kit's own internals.
 
-**Tree view** — Application shells
+**Tree view** — Governed, `tree-view.md` (was Application shells)
 
 - Public: `Branch node item` (32), `Tree view` (2)
 - Private: `_Tree view spacer - Branch node` (8), `_Tree view spacer - Leaf node` (8)

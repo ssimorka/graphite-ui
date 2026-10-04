@@ -35,6 +35,7 @@ import { Tag } from '@/components/ui/tag'
 import { TextArea } from '@/components/ui/text-area'
 import { TextInput } from '@/components/ui/text-input'
 import { Toggle } from '@/components/ui/toggle'
+import { TreeView } from '@/components/ui/tree-view'
 import { Typography } from '@/components/ui/typography'
 import { spell } from '@/lib/spell'
 import styles from './components-index.module.scss'
@@ -206,6 +207,13 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   Toast: () => <Toast variant="success" title="Changes saved" />,
   Toggle: () => <Toggle id="ix-sw" label="Label" checked onChange={noop} />,
   Tooltip: () => <Button>Hover or focus</Button>,
+  'Tree view': () => (
+    <TreeView
+      label="Example tree"
+      selected="button"
+      nodes={[{ id: 'ui', label: 'ui', children: [{ id: 'button', label: 'button.tsx' }, { id: 'tag', label: 'tag.tsx' }] }]}
+    />
+  ),
   Typography: () => (
     <div>
       <Typography variant="heading-3">Heading</Typography>
@@ -223,7 +231,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
 const KIT_PREVIEWS = new Set([
   'ai-explainability-popover', 'ai-label', 'ai-layer', 'code-snippet',
   'content-switcher', 'form', 'list', 'loading', 'progress-indicator',
-  'structured-list', 'tile', 'toggletip', 'tree-view', 'ui-shell-header',
+  'structured-list', 'tile', 'toggletip', 'ui-shell-header',
   'ui-shell-left-panel', 'ui-shell-right-panel',
 ])
 
