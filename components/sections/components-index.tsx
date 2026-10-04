@@ -189,6 +189,22 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   ),
 }
 
+// Ungoverned pages have no code to render live, so their previews are renders
+// of the kit: each page's main set at its default variant, framed on the kit's
+// background in Light and in Dark, at 2x, under public/images/kit/. They are
+// the kit's own colours, so they do not follow the source the visitor picks.
+// A page missing from this list (one the kit adds later) falls back to its
+// set count until someone renders it.
+const KIT_PREVIEWS = new Set([
+  'ai-explainability-popover', 'ai-label', 'ai-layer', 'code-snippet',
+  'content-switcher', 'form', 'list', 'loading', 'progress-indicator',
+  'structured-list', 'tile', 'toggletip', 'tree-view', 'ui-shell-header',
+  'ui-shell-left-panel', 'ui-shell-right-panel',
+])
+
+const kitSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
 type Card =
   | { kind: 'governed'; name: string; meta: ContractMeta }
   | { kind: 'ungoverned'; name: string; publicSets: number }
@@ -289,6 +305,28 @@ export function ComponentsIndex({
                 <div className={styles.previewInner} aria-hidden="true" inert>
                   {PREVIEWS[card.name]()}
                 </div>
+              ) : card.kind === 'ungoverned' && KIT_PREVIEWS.has(kitSlug(card.name)) ? (
+                <figure className={styles.kitPreview}>
+                  {/* Both themes ship; the stylesheet shows the one the
+                      page is in. Decorative: the card's name says what it is. */}
+                  <img
+                    className={styles.kitLight}
+                    src={`/images/kit/${kitSlug(card.name)}-light.png`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <img
+                    className={styles.kitDark}
+                    src={`/images/kit/${kitSlug(card.name)}-dark.png`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption className={styles.absent}>
+                    {`Kit render · ${card.publicSets} public ${card.publicSets === 1 ? 'set' : 'sets'}`}
+                  </figcaption>
+                </figure>
               ) : (
                 <p className={styles.absent}>
                   {card.kind === 'ungoverned'
