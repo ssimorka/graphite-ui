@@ -41,7 +41,6 @@ export function AgentCard() {
       </ul>
       <Notification
         variant="info"
-        icon={<KitIcon name="info" size={20} />}
         title="Trial credit"
         body="Pro teams get $100 in Vercel Agent trial credit for 2 weeks after activation."
       />

@@ -1,100 +1,122 @@
 // Notification — docs/contracts/notification.md
 //
+// The kit's Notification - Inline (Graphite UI Kit 4179:105911): the status
+// container with a 1px edge and a 3px stripe on the left, both in the status
+// role; the status icon 16 in; title (Title/5) and message (Body/3) in
+// on-surface, sharing one line while they fit; a 48px ghost close flush in
+// the top right. High contrast inverts the fill and drops the edge.
+//
 // Not elevated. The Wave 5 preamble groups Notification with the overlays, but
-// its own contract puts it inline and persistent, so it takes plain `surface`
-// rather than the elevated overlay surface.
+// its own contract puts it inline and persistent.
 .alert {
+  // The status role (edge, stripe, icon) and its container (fill), set per
+  // variant below.
+  --status: var(--graphite-info);
+  --stripe: var(--status);
+
   display: flex;
   align-items: flex-start;
-  gap: var(--graphite-space-03);
-  // 16, per the kit's Notification - Inline.
-  padding: var(--graphite-space-05);
+  min-height: var(--graphite-space-09);
+  padding-inline-start: var(--graphite-space-05);
   border-radius: var(--graphite-radius-none);
-  background: var(--graphite-surface);
   color: var(--graphite-on-surface);
-  border: 1px solid var(--graphite-outline);
+  // The stripe first, so it sits over the edge rather than under it.
+  box-shadow:
+    inset 3px 0 0 var(--stripe),
+    inset 0 0 0 1px var(--status);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
 }
 
+.info { --status: var(--graphite-info); background: var(--graphite-info-container); }
+.danger { --status: var(--graphite-danger); background: var(--graphite-danger-container); }
+.warning { --status: var(--graphite-warning); background: var(--graphite-warning-container); }
+.success { --status: var(--graphite-success); background: var(--graphite-success-container); }
+
+// The icon, 16 down (14 for the 20px glyphs), 16 before the text.
 .icon {
   display: inline-flex;
   flex: none;
-  line-height: 1;
+  padding-block: var(--graphite-space-05);
+  margin-inline-end: var(--graphite-space-05);
+  color: var(--status);
+}
+
+.info .icon,
+.warning .icon { padding-block: 14px; }
+
+.warningGlyph {
+  width: 20px;
+  height: 20px;
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
 }
 
 .content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--graphite-space-02);
   flex: 1 1 auto;
   min-width: 0;
+  padding: 14px var(--graphite-space-05) 14px 0;
 }
 
-// Takes the text colour of whichever variant it sits on, so it needs no
-// status role of its own and stays legible on every container.
-.close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.title { font-weight: var(--graphite-text-weight-semibold); }
+.body { min-width: 0; }
+
+// The kit's action: a small ghost button in Body/3, centred in the top 48 row.
+.action {
   flex: none;
-  // Pulled into the padding so the glyph lines up with the icon and title
-  // rather than pushing the row taller than its text.
-  margin: calc(-1 * var(--graphite-space-02));
-  padding: var(--graphite-space-02);
-  border: 0;
-  border-radius: var(--graphite-radius-none);
+  margin-block: var(--graphite-space-03);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.action + .close { margin-inline-start: var(--graphite-space-03); }
+
+.close { flex: none; }
+
+// --------------------------------------------------------------- high contrast
+// The inverse fill, no edge, text in background. The kit's stripe and icon
+// take the status ramp's inverse stop, which the engine does not stamp; the
+// status container is the role that points the same way on this fill (light
+// on dark in Light, dark on light in Dark). Swept: 3:1 or better everywhere.
+.highContrast {
+  --stripe: var(--status-inverse);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+  box-shadow: inset 3px 0 0 var(--stripe);
+}
+
+.highContrast.info { --status-inverse: var(--graphite-info-container); }
+.highContrast.danger { --status-inverse: var(--graphite-danger-container); }
+.highContrast.warning { --status-inverse: var(--graphite-warning-container); }
+.highContrast.success { --status-inverse: var(--graphite-success-container); }
+
+.highContrast .icon { color: var(--status-inverse); }
+.highContrast .warningGlyph [data-part='glyph'] { fill: var(--graphite-warning-container); }
+.highContrast .warningGlyph [data-part='mark'] { fill: var(--graphite-on-warning-container); }
+
+// The kit keeps a primary close glyph and link label on the inverse fill.
+// The close glyph takes background, Carbon's icon-inverse, and the action the
+// primary container, the inverse link's direction.
+// Ghost's hover fill and darker label would be wrong on the inverse fill, so
+// hover keeps the colours and only underlines the action.
+.highContrast .close,
+.highContrast .close:hover:not(:disabled) {
   background: transparent;
-  color: inherit;
-  cursor: pointer;
+  color: var(--graphite-background);
 }
 
-.close:focus-visible {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: -2px;
+.highContrast .action,
+.highContrast .action:hover:not(:disabled) {
+  background: transparent;
+  color: var(--graphite-primary-container);
 }
 
-.title {
-  margin: 0 0 var(--graphite-space-01);
-  font-weight: 600;
-}
+.highContrast .action:hover:not(:disabled) { text-decoration: underline; }
 
-.body {
-  min-width: 0;
-}
-
-// Status variants take their generated container role. No hex lives here.
-.info {
-  background: var(--graphite-surface);
-}
-
-// The icon takes the base status role, the same one as the edge, so the glyph
-// and the border agree about which status this is.
-.info .icon {
-  color: var(--graphite-info);
-}
-
-.danger {
-  background: var(--graphite-danger-container);
-  color: var(--graphite-on-danger-container);
-  border-color: var(--graphite-danger);
-}
-
-.danger .icon {
-  color: var(--graphite-danger);
-}
-
-.warning {
-  background: var(--graphite-warning-container);
-  color: var(--graphite-on-warning-container);
-  border-color: var(--graphite-warning);
-}
-
-.warning .icon {
-  color: var(--graphite-warning);
-}
-
-.success {
-  background: var(--graphite-success-container);
-  color: var(--graphite-on-success-container);
-  border-color: var(--graphite-success);
-}
-
-.success .icon {
-  color: var(--graphite-success);
-}
+// ------------------------------------------------------------------- callout
+// The kit's Callout: the same container, no close, the icon 20 at 14.
+.callout .icon { padding-block: 14px; }
