@@ -1,0 +1,6 @@
+// Date picker's own page parts: room under the live field for the calendar,
+// which is an overlay and would otherwise be clipped by the frame.
+
+.stage {
+  min-height: 27rem;
+}

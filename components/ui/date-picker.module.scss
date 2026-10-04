@@ -1,0 +1,238 @@
+@use './form-parts' as parts;
+
+// Date picker — docs/contracts/date-picker.md
+//
+// The kit's Date picker sets. The fields are the governed Text input (the
+// field shell, its sizes and its Fluid box), so this sheet draws only what is
+// the picker's own: the widths, the range's pair of fields, the calendar
+// trigger and the calendar panel.
+
+.picker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  max-width: 100%;
+}
+
+// 288 for a calendar picker, as the kit draws Single and Range; Simple date
+// hugs its value, about 120.
+.single,
+.range { width: 18rem; }
+.simple { width: 7.5rem; }
+
+// Range: two fields 2 apart (Default), or two Fluid boxes joined by a 1px
+// outline-strong rule.
+.fields {
+  display: flex;
+  gap: 2px;
+
+  > * { flex: 1 1 0; min-width: 0; }
+}
+
+.fluid .fields { gap: 0; }
+
+.divider {
+  flex: none !important;
+  width: 1px;
+  background: var(--graphite-outline-strong);
+}
+
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
+
+// The kit's 16px fi-rs-calendar, on-surface (icon-primary), as the field's
+// trailing glyph. A button when it opens the calendar.
+.icon,
+.trigger {
+  display: inline-flex;
+  color: var(--graphite-on-surface);
+}
+
+.trigger {
+  margin: -4px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+// ------------------------------------------------------------------- panel
+// The kit's _Date picker calendar: elevation-01 (layer-01) and the overlay
+// shadow (Shadows/Menu), 288 wide, padded 4 4 8 4, 4 between its rows.
+.panel {
+  position: absolute;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  width: 18rem;
+  padding: var(--graphite-space-02) var(--graphite-space-02) var(--graphite-space-03);
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+  color: var(--graphite-on-surface);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+}
+
+// The kit's _Date picker month pagination: 40 square, a 16px angle, hover
+// elevation-02 (layer-hover-01).
+.nav {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.nav:hover { background: var(--graphite-elevation-02); }
+
+.nav:focus-visible,
+.day:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.flip { transform: scaleX(-1); }
+
+// Month and year in Title/5, 4 apart. The year is the kit's editable box: a
+// 42-wide field that takes elevation-02 and the apps-sort caret while edited.
+.title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: var(--graphite-space-02);
+  font-size: var(--graphite-text-title-5-size);
+  line-height: var(--graphite-text-title-5-line-height);
+  font-weight: var(--graphite-text-weight-semibold);
+}
+
+.yearBox {
+  display: inline-flex;
+  align-items: center;
+}
+
+.year {
+  width: 42px;
+  padding: 3px var(--graphite-space-02);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.year:hover,
+.year:focus { background: var(--graphite-elevation-02); }
+
+.year:focus { outline: none; }
+
+.yearCaret {
+  visibility: hidden;
+  margin-left: 0;
+}
+
+.yearBox:focus-within .yearCaret { visibility: visible; }
+
+// -------------------------------------------------------------------- grid
+.grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 17.5rem;
+  table-layout: fixed;
+}
+
+.weekday {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  font-weight: var(--graphite-text-weight-regular);
+}
+
+.grid td { padding: 0; }
+
+// The kit's 4 gap between the weekday row and the first week.
+.grid tbody tr:first-child td { border-top: var(--graphite-space-02) solid transparent; }
+
+// The kit's _Date picker calendar day item: 40 × 40, Body/3 on-surface.
+// Hover: elevation-02. Focus: a 2px ring inside. Selected: the primary fill
+// (button-primary) with on-primary text (text-on-color). Day in range: the
+// primary container (highlight). Today: Title/5 in primary with a 4 × 4 dot
+// under the number. Days of the months either side: on-surface-variant.
+.day {
+  position: relative;
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+}
+
+.day:hover:not(:disabled) { background: var(--graphite-elevation-02); }
+
+.outside { color: var(--graphite-on-surface-variant); }
+
+.today {
+  color: var(--graphite-primary);
+  font-weight: var(--graphite-text-weight-semibold);
+}
+
+.today::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 2px);
+  bottom: 7px;
+  width: 4px;
+  height: 4px;
+  background: var(--graphite-primary);
+}
+
+.inRange,
+.inRange:hover:not(:disabled) { background: var(--graphite-primary-container); }
+
+.selected,
+.selected:hover:not(:disabled) {
+  background: var(--graphite-primary);
+  color: var(--graphite-on-primary);
+}
+
+.selected::after { background: var(--graphite-on-primary); }
+
+// While a range's end is being chosen, the day under the pointer takes the
+// focus ring, as the kit's End range hover draws it.
+.endHover {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.day:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.day:disabled::after { display: none; }
