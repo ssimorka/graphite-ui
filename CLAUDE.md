@@ -188,6 +188,26 @@ a browser result.
   and names none of them), and `page.loadAsync()` is what lets one `use_figma`
   call read many pages — `setCurrentPageAsync` is capped at one per call and
   `loadAllPagesAsync` is unsupported by the MCP tool.
+- **Rules 5 and 6 are applied in the kit, and the stamps are manual.** Since
+  2026-10-04 (#275) every public set on all 45 component pages ends its
+  description with one line, after a blank line and the kit's own text:
+  `Graphite: governed — docs/contracts/<name>.md <version>` (78) or
+  `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` (37, the
+  permanent three buckets). `_`-prefixed sets carry none. The interim
+  `Graphite: ungoverned, scheduled to build (#240)` form is retired; every set
+  that held it now has a contract. Recorded in "What the kit says" in
+  `docs/contracts/kit/figma-only.md`.
+  **No check enforces the stamp**, so it lags every contract version bump until
+  someone restamps, and consumers see it only after the library is republished.
+  Read versions from the contract (the gallery badge does), never from the kit.
+  When a contract bumps or lands, restamp in the same pass: strip any existing
+  `Graphite:` line, append the new one, and write only when the result differs.
+  Sub-sets on a governed page take that page's contract (Data table's ten item
+  sets, Popover item, Tooltip body item and so on) unless another contract cites
+  the set's node id, as `toast.md` and `checkbox-group.md` do. Ten of the
+  snapshot's "sets" are standalone `COMPONENT`s (Breadcrumb, Accordion, Vertical
+  tabs, Data table header item, six on ungoverned pages); they take a
+  description the same way, so don't filter to `COMPONENT_SET` alone.
 - **The docs header wash is capped by a contrast sweep, not by eye.** The
   accent mesh behind the top of docs pages measured 1.66:1 against body text
   at full strength in dark mode. Swept 2026-10-03: 288 sources (96 hues × 3
