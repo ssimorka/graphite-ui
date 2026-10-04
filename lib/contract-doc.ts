@@ -110,9 +110,18 @@ function expand<T extends { name: string; inheritedFrom?: string }>(
     }))
   })
   // A component's own row outranks one it inherited under the same name
-  // (Select restates on-surface-variant with its own usage).
+  // (Select restates on-surface-variant with its own usage). Between two
+  // inherited rows of one name, the first contract listed wins: two parents
+  // that share a role (Text input and Dropdown both bind outline, primary,
+  // danger...) would otherwise list it twice, under one React key.
   const own = new Set(rows.filter((r) => !r.inheritedFrom && r.name).map((r) => r.name))
-  return rows.filter((r) => !(r.inheritedFrom && own.has(r.name)))
+  const taken = new Set<string>()
+  return rows.filter((r) => {
+    if (!r.inheritedFrom || !r.name) return true
+    if (own.has(r.name) || taken.has(r.name)) return false
+    taken.add(r.name)
+    return true
+  })
 }
 
 export function readContractDoc(slug: string): ContractDoc {
