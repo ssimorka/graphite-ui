@@ -1,6 +1,6 @@
 # Dropdown
 
-Custom selection component covering single-select, combo box (filterable single), multi-select, and filterable multi-select — each in Default and Fluid layouts. Use Dropdown for &lt;10 options when you need behavior beyond native Select (filtering, multi-select).
+Custom selection component covering single-select, combo box (filterable single), multi-select, and filterable multi-select — each in Default and Fluid layouts. Select opens this same list (select.md 3.0.0); use Dropdown for its own trigger or when you need behavior beyond Select (filtering, multi-select).
 
 **Figma node IDs (page "02 Components – Dropdown"):**
 
@@ -38,7 +38,7 @@ All three follow the same Size / State / Open / Selected shape as Single select,
 
 ## When to use
 
-- **Single select** — one option, custom styling needed beyond native Select.
+- **Single select** — one option, where the Dropdown set's trigger is wanted rather than Select's field shell.
 - **Combo box** — one option, with type-to-filter.
 - **Multi-select** — multiple options via checkboxes, no filtering.
 - **Filterable multi-select** — multiple options with type-to-filter, for longer lists.
@@ -46,7 +46,7 @@ All three follow the same Size / State / Open / Selected shape as Single select,
 ## Do / Don't
 
 - Do check the specific variant's State list in Figma before coding — they aren't perfectly identical across the four types.
-- Don't use Dropdown for a short static list where native Select would do — it's heavier to implement and maintain.
+- Don't use Dropdown for a plain single choice in a form: Select opens the same list and lines up with the other fields.
 
 ---
 *Generated from Figma component sets under node `14032:*` / `14505:*` / `14530:*` / `45988:*` — regenerate if variant properties change.*

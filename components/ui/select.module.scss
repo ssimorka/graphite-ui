@@ -5,8 +5,8 @@
 //
 // The kit's Select - Default (Graphite UI Kit 17650:274860): the shared field
 // shell, the kit's 16px chevron 16 from the edge, and a status icon 8 before
-// it. The open menu is the browser's own, which is also what the kit's Open
-// state draws: a mock of the platform popup, not a Graphite menu.
+// it. Since 3.0.0 the open list is the kit's, Dropdown's own OptionList on the
+// overlay surface (./dropdown.module.scss), where it used to be the browser's.
 .field {
   @include parts.field-stack;
 }
@@ -22,7 +22,7 @@
 // The kit draws a Hover state that Text input does not have: the trigger fill
 // steps to `field-hover`, which resolves to elevation/02, the elevation
 // ladder's hover rung.
-.wrap:hover:has(.select:enabled):not(.readOnly) {
+.wrap:hover:has(.select:not(.selectDisabled)):not(.readOnly) {
   background: var(--graphite-elevation-02);
 }
 
@@ -34,7 +34,7 @@
 // Select's own disabled: the kit fills the trigger with the disabled tone and
 // drops the edge, where Text input keeps its field fill. Each set is its own
 // most specific artefact.
-.wrap:has(.select:disabled) {
+.wrap:has(.selectDisabled) {
   @include shell.field-shell-disabled;
   background: var(--graphite-primary-disabled);
 }
@@ -44,24 +44,23 @@
 .readOnly .select { cursor: default; }
 
 .select {
-  appearance: none;
+  display: flex;
+  align-items: center;
   width: 100%;
+  min-width: 0;
   min-height: inherit;
-  border: 0;
-  background: transparent;
   color: var(--graphite-on-surface);
-  font: inherit;
   // 16 in from the left; on the right, 16 + the 16px chevron + 16.
   padding: 0 var(--graphite-space-09) 0 var(--graphite-space-05);
   cursor: pointer;
-  // The open list is the platform's, so it cannot take a token; this tells it
-  // which mode to draw in. Without it the list was light whatever the page,
-  // and the options inherited the dark theme's light text (select.md 2.4.2).
-  color-scheme: dark;
+  user-select: none;
+}
 
-  :global(:root.cds--white) & {
-    color-scheme: light;
-  }
+// One line: a long label ends in an ellipsis rather than pushing the chevron.
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 // With a status icon: 16 + chevron 16 + 8 + icon 16 + 16.
@@ -71,7 +70,7 @@
   outline: none;
 }
 
-.select:disabled {
+.selectDisabled {
   color: var(--graphite-primary-disabled-content);
   cursor: not-allowed;
 }

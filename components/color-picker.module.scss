@@ -27,6 +27,15 @@
   @include drop.cascade($count: 4);
 }
 
+// The controls hold a Dropdown whose list hangs down over the footer. Each
+// section's rise animation leaves a transform, so each is its own stacking
+// context and the later footer painted over the open list whatever its
+// z-index. Lifting this section puts the whole of it, list included, on top.
+.raised {
+  position: relative;
+  z-index: 1;
+}
+
 // The footer bar runs edge to edge under the padding, so the action can sit
 // in the corner the way the kit's does.
 .footer {

@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
-import type { KeyboardEvent } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import type { CSSProperties, KeyboardEvent, RefObject } from 'react'
+import { createPortal } from 'react-dom'
 import { KitIcon } from '@/components/kit-icon'
 import { fieldMessage } from '@/lib/field-message'
 import { CheckboxGlyph } from './checkbox'
@@ -10,14 +11,14 @@ import { Tag } from './tag'
 import styles from './dropdown.module.scss'
 
 /**
- * Contract: docs/contracts/dropdown.md (1.2.1)
+ * Contract: docs/contracts/dropdown.md (1.2.2)
  *
  * The kit's Dropdown - Default (14032:290635) and - Fluid (14505:302528): a
- * single choice from a list the page draws itself, which a native select
- * cannot. The ARIA select-only combobox: focus stays on the trigger, the
- * active option is aria-activedescendant, and the list is a listbox on the
- * overlay surface. Select stays the native single choice; this is for when the
- * options need the kit's list.
+ * single choice from a list the page draws itself. The ARIA select-only
+ * combobox: focus stays on the trigger, the active option is
+ * aria-activedescendant, and the list is a listbox on the overlay surface.
+ * Select (select.md 3.0.0) opens the same list through useSelectOnly below;
+ * the two differ in their triggers, and Dropdown carries the other kinds.
  */
 
 export type DropdownOption = { value: string; label: string; disabled?: boolean }
@@ -53,7 +54,7 @@ const ALL = -2
  * open with the kit's parent checkbox, "All". Focus never moves into it; the
  * trigger owns it.
  */
-function OptionList({
+export function OptionList({
   id,
   labelledBy,
   size,
@@ -65,6 +66,8 @@ function OptionList({
   all,
   onActive,
   onChoose,
+  anchor,
+  listRef,
 }: {
   id: string
   labelledBy: string
@@ -79,14 +82,23 @@ function OptionList({
   all?: { state: 'checked' | 'indeterminate' | 'unchecked'; onToggle: () => void }
   onActive: (i: number) => void
   onChoose: (i: number) => void
+  /**
+   * The trigger's box. Given one, the list is drawn on <body> against it, so no
+   * scrolling or clipping container it sits in can cut it off.
+   */
+  anchor?: RefObject<HTMLElement | null>
+  listRef?: RefObject<HTMLUListElement | null>
 }) {
-  return (
+  const place = useFloating(anchor, listRef)
+  const list = (
     <ul
+      ref={listRef}
       id={id}
       role="listbox"
       aria-labelledby={labelledBy}
       aria-multiselectable={multi || undefined}
-      className={[styles.list, styles[size]].join(' ')}
+      className={[styles.list, styles[size], anchor ? styles.floating : ''].join(' ')}
+      style={place}
     >
       {all ? (
         <li
@@ -128,32 +140,67 @@ function OptionList({
       {indexes.length === 0 ? <li className={styles.empty} role="presentation">No matches</li> : null}
     </ul>
   )
+  return anchor ? createPortal(list, document.body) : list
 }
 
-export function Dropdown({
-  label,
+/**
+ * Where a list drawn on <body> goes: under its trigger, at least as wide as it,
+ * and above it instead when there is no room below but there is above.
+ * Followed through any scroll and resize while open.
+ */
+function useFloating(
+  anchor: RefObject<HTMLElement | null> | undefined,
+  list: RefObject<HTMLUListElement | null> | undefined,
+): CSSProperties | undefined {
+  const [place, setPlace] = useState<CSSProperties>()
+  useLayoutEffect(() => {
+    if (!anchor) return
+    const update = () => {
+      const a = anchor.current?.getBoundingClientRect()
+      if (!a) return
+      const h = list?.current?.offsetHeight ?? 0
+      const above = a.bottom + h > window.innerHeight && a.top - h >= 0
+      setPlace({ top: above ? a.top - h : a.bottom, left: a.left, minWidth: a.width })
+    }
+    update()
+    window.addEventListener('scroll', update, true)
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update, true)
+      window.removeEventListener('resize', update)
+    }
+  }, [anchor, list])
+  return place
+}
+
+/**
+ * The select-only combobox's behaviour: open and close, the keyboard's row,
+ * type-ahead, choosing, and closing on a pointer outside. Dropdown and Select
+ * (select.md 3.0.0) share it, so the two answer the keyboard identically and
+ * only their triggers differ. Focus stays on the trigger throughout.
+ */
+export function useSelectOnly<T extends HTMLElement>({
   options,
   value,
   onChange,
-  placeholder = 'Choose an option',
-  size = 'lg',
-  layout = 'fixed',
-  helpText,
-  errorText,
-  warningText,
-  disabled = false,
-  readOnly = false,
-  id,
-}: DropdownProps) {
-  const auto = useId()
-  const baseId = id ?? auto
-  const labelId = `${baseId}-label`
-  const valueId = `${baseId}-value`
-  const listId = `${baseId}-list`
-  const { errored, warned, tone, messageId, message, describedBy } = fieldMessage(baseId, helpText, errorText, warningText)
+  disabled,
+  readOnly,
+  listId,
+}: {
+  options: DropdownOption[]
+  value: string | null | undefined
+  onChange: (value: string) => void
+  disabled: boolean
+  readOnly: boolean
+  listId: string
+}) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(-1)
-  const root = useRef<HTMLDivElement>(null)
+  const root = useRef<T>(null)
+  // The trigger's box the list hangs from, and the list itself, which is drawn
+  // on <body> and so is not inside root.
+  const anchor = useRef<HTMLElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
   const typed = useRef({ text: '', at: 0 })
 
   const selected = options.findIndex((o) => o.value === value)
@@ -167,7 +214,8 @@ export function Dropdown({
   useEffect(() => {
     if (!open) return
     const away = (e: PointerEvent) => {
-      if (!root.current?.contains(e.target as Node)) setOpen(false)
+      const t = e.target as Node
+      if (!root.current?.contains(t) && !listRef.current?.contains(t)) setOpen(false)
     }
     document.addEventListener('pointerdown', away)
     return () => document.removeEventListener('pointerdown', away)
@@ -226,6 +274,41 @@ export function Dropdown({
     }
   }
 
+  const toggle = () => (open ? setOpen(false) : openList())
+
+  return { root, anchor, listRef, open, active, setActive, selected, choose, onKeyDown, toggle }
+}
+
+export function Dropdown({
+  label,
+  options,
+  value,
+  onChange,
+  placeholder = 'Choose an option',
+  size = 'lg',
+  layout = 'fixed',
+  helpText,
+  errorText,
+  warningText,
+  disabled = false,
+  readOnly = false,
+  id,
+}: DropdownProps) {
+  const auto = useId()
+  const baseId = id ?? auto
+  const labelId = `${baseId}-label`
+  const valueId = `${baseId}-value`
+  const listId = `${baseId}-list`
+  const { errored, warned, tone, messageId, message, describedBy } = fieldMessage(baseId, helpText, errorText, warningText)
+  const { root, anchor, listRef, open, active, setActive, selected, choose, onKeyDown, toggle } = useSelectOnly<HTMLDivElement>({
+    options,
+    value,
+    onChange,
+    disabled,
+    readOnly,
+    listId,
+  })
+
   const shown = selected >= 0 ? options[selected].label : readOnly ? 'No option selected' : placeholder
   const status = errored || warned
 
@@ -244,7 +327,7 @@ export function Dropdown({
       aria-invalid={errored || undefined}
       aria-disabled={disabled || undefined}
       aria-readonly={readOnly || undefined}
-      onClick={() => (open ? setOpen(false) : openList())}
+      onClick={toggle}
       onKeyDown={onKeyDown}
     >
       {layout === 'fluid' ? (
@@ -277,10 +360,12 @@ export function Dropdown({
           {label}
         </span>
       )}
-      <div className={styles.anchor}>
+      <div ref={anchor as RefObject<HTMLDivElement>} className={styles.anchor}>
         {trigger}
         {open ? (
           <OptionList
+            anchor={anchor}
+            listRef={listRef}
             id={listId}
             labelledBy={labelId}
             size={size}

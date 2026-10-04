@@ -7,7 +7,7 @@ export function dropdownDoc(): ComponentDocConfig {
     name: 'Dropdown',
     kitTitle: 'Dropdown',
     figmaNode: '14032:290635',
-    lede: 'A single choice from a list the page draws itself. Use Select first: it is the native choice and works everywhere. Reach for Dropdown when the choice needs the kit’s list, with its rows, rules and selected check.',
+    lede: 'A single choice from a list the page draws itself. Use Select first: it is the default choice in a form and opens this same list. Reach for Dropdown for the Dropdown sets’ own trigger, or for a combo box or multi-select.',
     description:
       'A select-only combobox in Fixed, Inline and Fluid at three sizes, with the kit’s list. Anatomy, variants, states, API, tokens and accessibility, generated from the contract.',
     tocNote: 'New in #240’s G2 wave. All four of the kit’s Dropdown kinds: Dropdown, Combo box, Multi-select and Filterable multi-select.',
@@ -85,7 +85,7 @@ export function dropdownDoc(): ComponentDocConfig {
       ['AI layer · AI label', 'Instances', '—', 'Not built: the AI sets are ungoverned.'],
     ],
     related: [
-      { href: '/docs/components/select', title: 'Select', why: 'the native single choice, and the default' },
+      { href: '/docs/components/select', title: 'Select', why: 'the default single choice, on the same list' },
       { href: '/docs/components/radio-button-group', title: 'Radio button group', why: 'for a few options shown at once' },
       { href: '/docs/components/menu-button', title: 'Menu buttons', why: 'for actions' },
     ],
