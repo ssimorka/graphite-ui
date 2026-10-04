@@ -8,7 +8,7 @@ The ideas and architecture behind this project, for anyone extending it beyond t
 - **React 19**, **TypeScript** throughout, **Sass (SCSS)** with CSS Modules for component and page styles.
 - **The color engine** (`lib/color.js`, typed by `lib/color.d.ts`): one source hex becomes perceptual ramps in OKLab, semantic roles for light and dark, interaction states, and measured contrast pairings.
 - **Governed components** (`components/ui/`): 22 components and the shared Overlay hook, each implementing a versioned contract in `docs/contracts/`.
-- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and the chrome's icons. The Create preview draws the kit's own icons instead: Regular, Bold and Solid, exported from the Figma kit into `lib/kit-icons.ts` and rendered by `components/kit-icon.tsx`. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
+- **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and the chrome's icons. The governed components and the Create preview draw the kit's own icons instead: Regular, Bold and Solid, exported from the Figma kit into `lib/kit-icons.ts` and rendered by `components/kit-icon.tsx`. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
 
 There is no database, API layer or auth. Every route is prerendered at build time.
 
@@ -59,7 +59,7 @@ Two layers make a theme, and only one of them is Carbon's.
 
 2. **Carbon's theme zones.** `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still toggles the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 
-`app/layout.tsx` sets `className="cds--g100"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density) do not vary by theme and are declared once in `globals.scss`.
+`app/layout.tsx` sets `className="cds--g100"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density, the overlay shadow) do not vary by theme and are declared once in `globals.scss`.
 
 ### Layout and the grid
 

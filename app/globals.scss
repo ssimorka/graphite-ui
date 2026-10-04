@@ -147,9 +147,10 @@
   // to forgive.
   --graphite-radius-full: 999px;
 
-  // Semantic density steps. Components bind here rather than reaching for a
-  // raw step, so Card's compact/default/spacious and Table's and Item's
-  // compact/default all move together from one edit.
+  // Semantic density steps. No governed component binds one since Contained
+  // list and Data table took the kit's fixed row sizes (#238, #239); they stay
+  // for the Create page's Density control, which re-binds density-default on
+  // the preview root.
   --graphite-density-compact: var(--graphite-space-03);
   --graphite-density-default: var(--graphite-space-05);
   --graphite-density-spacious: var(--graphite-space-06);

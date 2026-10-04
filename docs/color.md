@@ -15,13 +15,13 @@ It happens in five steps. Each one takes the result of the step above and adds a
 ```
 Your color              one color, chosen by the designer
       ↓
-Raw shades              7 strips × 10 shades (no meaning attached)
+Raw shades              8 strips × 10 shades (no meaning attached)
       ↓
-Named colors            27 jobs per theme (meaning, readability-checked)
+Named colors            32 jobs per theme (meaning, readability-checked)
       ↓
 States                  hover / pressed / selected / disabled / focus
       ↓
-Wired into components   51 variables the component library reads
+Wired into components   58 --graphite-* variables the components read (plus 59 --cds-* for Carbon)
 ```
 
 ### 1. The source color
@@ -62,7 +62,7 @@ The `on` prefix is the system's core convention: **`onX` is the content color gu
 
 ### 4. Component bindings
 
-Semantic tokens are stamped onto 51 CSS custom properties that the component library consumes (`--cds-text-primary`, `--cds-button-primary`, `--cds-border-subtle`, and so on). This is the layer that makes a token change repaint real components.
+Semantic tokens are stamped onto 58 `--graphite-*` custom properties, which the governed components read, and 59 `--cds-*` properties, a compatibility layer for the remaining Carbon pieces (`--cds-text-primary`, `--cds-button-primary`, and so on). This is the layer that makes a token change repaint real components.
 
 Designers do not usually touch this layer, but it explains an important constraint: several component variables share one semantic token. `--cds-text-primary` and `--cds-icon-primary` both resolve to `onBackground`, so **text and icons are the same color by construction.** If you need an icon that differs from body text, that is a system change, not a design choice you can make in a file.
 
@@ -90,7 +90,7 @@ Thirty-two roles, generated per theme. Values below are from the default source 
 | `background` | The page itself | `neutral 98` · `#f8f8fc` | `neutral 18.2` · `#121215` |
 | `surface` | Default container: cards, panels, sheets | `neutral 98` · `#f8f8fc` | `neutral 18.2` · `#121215` |
 | `surfaceVariant` | Secondary surface: fields, hover fills, selected rows, tag backgrounds | `neutralVariant 90` · `#dedcea` | `neutralVariant 30` · `#2e2c37` |
-| `surfaceElevated` | Raised container, such as a dialog | `neutral 100` · `#ffffff` | `neutral 24.2` · `#201f23` |
+| `surfaceElevated` | Raised container. No governed component binds it now: Modal's panel is `background` and overlays fill `elevation-01` | `neutral 100` · `#ffffff` | `neutral 24.2` · `#201f23` |
 
 Note that `background` and `surface` resolve to the **same value** in both themes. This is deliberate: Graphite UI separates layers with borders and surface *variants*, not with shading. See [Color hierarchy](#color-hierarchy).
 
@@ -112,7 +112,7 @@ Icons follow text. Primary icons take `onBackground`; secondary icons take `onSu
 
 | Role | Purpose | Light | Dark |
 |---|---|---|---|
-| `outline` | All borders and dividers, subtle and strong alike | `neutralVariant 50` · `#63626d` | `neutralVariant 60` · `#807e8b` |
+| `outline` | The border role; its subtle and strong strengths are the outline ladder below | `neutralVariant 50` · `#63626d` | `neutralVariant 60` · `#807e8b` |
 
 `outline` is the border role. Beside it the engine generates the kit's outline ladder, two strengths that belong to the role rather than being roles of their own:
 
@@ -132,7 +132,7 @@ The kit's elevation ladder, generated beside the roles the same way. Components 
 | Variable | Purpose | Light | Dark |
 |---|---|---|---|
 | `--graphite-elevation-00` | Ground: the page itself, equal to `background` | `neutral 98` | `neutral 18` |
-| `--graphite-elevation-01` | Resting layer. In light it equals the ground, because the ramp has no tone between 98 and 90; separation is the outline's job there | `neutral 98` | `neutral 30` |
+| `--graphite-elevation-01` | Resting layer. In light it equals the ground, because the ramp has no tone between 98 and 90; separation is the shadow's job there (`--graphite-shadow-overlay`) | `neutral 98` | `neutral 30` |
 | `--graphite-elevation-02` | Hover step | `neutral 90` | `neutral 40` |
 | `--graphite-elevation-03` | Pressed step, never a resting surface | `neutral 80` | `neutral 50` |
 
@@ -188,13 +188,13 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 | Need | Current state | What to do today |
 |---|---|---|
 | **Links** | No distinct link role. Links bind to `primary`, with hover bound to the primary hover state. | Rely on underline plus `primary` for link affordance. Do not introduce a separate link color. |
-| **Elevation scale** | No shadow or elevation scale. There is one raised surface, `surfaceElevated`, and a generated scrim (`--graphite-scrim`, on the site only: the exporter does not emit it). | Put what floats (menus, popovers, the modal panel) on `surfaceElevated` with an `outline` edge. Express every other level of depth with `outline` and `surfaceVariant`. |
+| **Elevation scale** | ~~No shadow or elevation scale.~~ Resolved (#241, #242): the elevation ladder `elevation-00`–`03`, one overlay shadow (`--graphite-shadow-overlay`), and a generated scrim (`--graphite-scrim`, on the site only: the exporter does not emit it). | Menus and popovers fill `elevation-01` with the shadow and no edge; Tooltip is inverse (`onBackground`); the Modal panel is `background` over the scrim. Hover and pressed fills climb the ladder. |
 
 ---
 
 ## Color hierarchy
 
-> **In short:** what makes one thing look like it sits on top of another. Here that comes from borders and tinted areas, not from shadows or shading.
+> **In short:** what makes one thing look like it sits on top of another. Here that comes mostly from borders and tinted areas; only overlays carry a shadow, and hover and pressed fills climb the elevation ladder.
 
 Because `background` and `surface` resolve to the same value, Graphite UI does not build depth by stacking progressively lighter or darker planes. Hierarchy comes from three other mechanisms:
 
@@ -349,7 +349,7 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 - **Do assign roles, not values.** Reach for `primary`, `onSurfaceVariant`, `outline`, never the hex they currently resolve to.
 - **Do respect `on` pairings.** `onSurface` belongs on `surface`. `onPrimary` belongs on `primary`. The contrast guarantee only holds for the pairing as defined.
-- **Do use `outline` and `surfaceVariant` for depth,** since the system has no elevation shading model.
+- **Do use `outline` and `surfaceVariant` for containment,** and the elevation ladder for layer, hover and pressed fills. Only overlays carry a shadow (`--graphite-shadow-overlay`).
 - **Do check the generated contrast panel** when you change the source color, especially at AAA or with very light or very dark sources.
 - **Do pair color with a second signal** for any state or status meaning.
 - **Do design in both themes** before handing off.
@@ -443,10 +443,10 @@ Points where the system's current shape limits what can be documented or designe
 
 **1. ~~No secondary action role.~~ Resolved.** The engine now generates a `secondary` family (`secondary`, `onSecondary`, `secondaryContainer`, `onSecondaryContainer`, plus hover, pressed, selected, disabled and focus states), and Button's secondary variant fills with it. The old convention of assembling one from `outline` and `primary` is retired. There is still no tertiary tier.
 
-**2. ~~No overlay or scrim token.~~ Partly resolved.** `surfaceElevated` is the raised surface for what floats, and the scrim is generated from the darkest neutral so it tracks the source. What remains open is an elevation scale: there is one raised level, and no shadows.
+**2. ~~No overlay or scrim token.~~ Partly resolved.** `surfaceElevated` is the raised surface for what floats, and the scrim is generated from the darkest neutral so it tracks the source. The elevation scale is resolved too: the engine generates the kit's ladder (`elevation-00`–`03`) and overlays carry `--graphite-shadow-overlay` (#241, #242).
 
 **3. Text hierarchy is two levels.** Primary and secondary only. Dense interfaces typically want a third, quieter tier for timestamps, counts, and metadata, such as an `onSurfaceDim` or equivalent.
 
-**4. `outline` covers subtle and strong borders with one value.** A divider inside a card and the border defining that card currently look identical. A second border tone would let containment and separation read differently.
+**4. ~~`outline` covers subtle and strong borders with one value.~~ Resolved (#241).** `outline-subtle` and `outline-strong` are the outline ladder, so a divider inside a card and the border defining that card can read differently.
 
 **5. The auto-fix mechanism has never been observed to fire.** A sweep of 292 source colors × both themes × both contrast levels (16,352 checks, status roles included) produced no failing pairing, so it has never had anything to correct. It is correct, just inert. The interface no longer offers it as a toggle; it reports the verified result instead. Worth revisiting only if a future role lands closer to its target.

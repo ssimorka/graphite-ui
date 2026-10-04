@@ -28,7 +28,7 @@ node `11678:251`).
 |---|---|---|---|
 | Home | `ui.shadcn.com` | `/` | Exists, Carbon-styled. Restyle. |
 | Docs | `/docs/installation` | `/docs/installation` | New. Needs the docs shell. |
-| Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | New. 28 components already exist. |
+| Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | Done: one page per governed component, 22 in all, plus the Overlay pattern. |
 | UI Generator | `/create` | `/create` | New. Engine + studio already exist. |
 
 ## What `/create` actually is
@@ -105,7 +105,8 @@ kit already ships them.
   values into the snapshot, so the check no longer depends on Carbon's
   install layout (it already fails on an npm install, which has no `.pnpm`
   directory), before removing Carbon.
-- The keep/drop call on the ~40 Carbon component sets in the kit is already
+- The keep/drop call on the kit's 132 Carbon component sets (73 public; see
+  `docs/contracts/kit/figma-only.md`) is already
   tracked on the Figma side. This plan defers to it rather than restating it.
 - **Scope note.** Nothing in *this plan* writes to the Figma file. That is not
   a statement about the project: Figma waves F1-F5 are a separate, active

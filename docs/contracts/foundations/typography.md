@@ -8,7 +8,7 @@ checked_by: scripts/token-drift.mjs
 # Verified against app/globals.scss by token-drift.mjs, so this cannot go stale
 # the way the counts in the parent README did.
 variable_count: 65  # 3 --graphite-font-*, 4 weights, 58 step values
-implemented_by: docs/contracts/typography.md (the Typography component, 1.1.0)
+implemented_by: docs/contracts/typography.md (the Typography component, 1.2.0)
 variables:
   - name: --graphite-font-1
     usage: Display, headings and titles 1-2. IBM Plex Sans.
