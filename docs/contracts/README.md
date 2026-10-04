@@ -22,9 +22,9 @@ is a bug in the contract, not in Figma.
 3. Each contract is versioned (semver). A prohibition change is breaking. A new optional slot is minor. A copy/description edit is a patch.
 4. A drift check script reads each contract's declared token dependencies and verifies the component's actual code references those exact variable names, nothing else. Fails the build on mismatch.
 5. Figma components carry the contract version number in their description field, so anyone opening the file knows which spec they're looking at.
-6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. See "Carbon-only sets in the kit" below.
+6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. Since #240, two buckets of ungoverned sets are **scheduled to build** and acquire contracts by that decision rather than by waiting for demand; three stay ungoverned permanently. See "Carbon-only sets in the kit" below.
 7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. Where **the kit disagrees with itself**, the more specific artefact wins; where the kit has **no opinion**, the code keeps its own. See "When the kit is not of one mind" below.
-8. Rules 6 and 7 say who wins; neither says what should **exist**. A governed component with no counterpart in the kit is kept only while something needs it, and rule 6's demand test decides. See "When the kit has nothing" below.
+8. Rules 6 and 7 say who wins; neither says what should **exist**. A governed component with no counterpart in the kit is kept only while something needs it, and the demand test decides. (The demand test no longer gates kit sets scheduled to build under rule 6; it still gates components the kit does not have.) See "When the kit has nothing" below.
 
 ### When the kit is not of one mind
 
@@ -263,34 +263,63 @@ permanently rather than pending:
   set to move from ungoverned to governed, which is the one-way movement rule 6
   allows.
 
-**Already spoken for.** Some Carbon sets are not separate components in
-Graphite but values on one: Number input and Password input are `type` on
-Text input; Dropdown is Select, or Menu for the menu case; Menu buttons — the
-`Menu button`, `Combo button` and `Overflow` sets #103 flagged as unaccounted —
-is Button composed with Menu, both of which are governed. These are ungoverned,
-and the fold is recorded on the governing contract so the functionality stays
-findable.
+**Build: wave G2, splitting a fold (#240).** These Carbon sets were
+"already spoken for": not separate components in Graphite but values on one.
+Number input and Password input were `type` on Text input; Dropdown was
+Select, or Menu for the menu case; Menu buttons — the `Menu button`, `Combo
+button` and `Overflow` sets #103 flagged as unaccounted — was Button composed
+with Menu. #240 schedules each to become its own governed component, so the
+fold recorded on the governing contract is replaced by a contract of its own.
+Each one decides its API boundary with the contract it splits from.
 
-**In scope, awaiting demand.** Primitives Graphite has no contract for but
-plausibly wants — Link, Search, Slider, Pagination, Date picker, File uploader.
-Ungoverned until something asks: the repo uses one, a contract references one,
-or committed work needs one. Wanting it in the abstract is not demand.
+**Build: wave G1 (#240).** Primitives Graphite had no contract for but plausibly
+wanted — Link, Search, Slider, Pagination, Date picker, File uploader. They
+used to wait for demand (the repo uses one, a contract references one, or
+committed work needs one). #240 decided to build them instead: the site is to
+be one-to-one with the kit, and these are the kit's general-purpose
+primitives. Search already had a governed dependant by then (Contained list's
+header search, #238).
 
-### The demand test runs both ways
+**Build: carried from #219.** Three sets on governed pages were left out of
+their components' parity work and scheduled with G1: **Notification - Toast**
+(its own component, with its own timing), **Checkbox group**, and the **Search**
+modes Contained list and Data table wait on.
 
-The test above decides whether an ungoverned kit set *acquires* a contract. It
-reads just as well in the other direction, deciding whether a governed
-component with no kit counterpart *keeps* one. That is rule 8, and it is
-written up under "When the kit has nothing" in the governance model rather than
-restated here.
+**Movement is still one-way, and labelling still holds.** A set scheduled to
+build stays labelled *ungoverned* in its kit description until its contract
+lands; then rule 5 replaces the label with the version, as it did for
+Contained list and Accordion.
+
+### The demand test runs both ways (and now mostly one)
+
+The test decided whether an ungoverned kit set *acquires* a contract. #240
+retired that direction for the two build buckets: they acquire contracts by
+decision, and the permanent three never do, so for kit sets the test is no
+longer consulted. It still reads in the other direction, deciding whether a
+governed component with no kit counterpart *keeps* one. That is rule 8, and it
+is written up under "When the kit has nothing" in the governance model rather
+than restated here.
 
 ### What the rule decides today
 
-Exactly one adoption, now made. **Accordion** met the demand test twice over:
-`components/sections/faq.tsx` used Carbon's, and it was the only new contract
-the docs-site work required. It has a contract (1.0.0), an implementation, and
-the FAQ is on it. Everything else on the in-scope list stays ungoverned until it
-earns a contract the same way.
+**Accordion** was the one adoption made under the demand test: it met it twice
+over (`components/sections/faq.tsx` used Carbon's, and it was the only new
+contract the docs-site work required).
+
+**Since #240 (2026-10-04)** the plan is to build, in waves:
+
+| Wave | Pages | Public sets |
+|---|---|---|
+| G1 | Link, Search, Pagination, Slider, File uploader, Date picker | 19 |
+| Carried | Notification - Toast, Checkbox group | 2 |
+| G2 | Menu buttons, Number input, Password input, Dropdown | 15 |
+
+Each one gets the full governed pipeline to #219's definition of done: a
+contract, the component at parity on every axis, a docs page, and its
+contract version stamped in the kit set's description. **Application shells,
+vendor AI features and Carbon idioms stay ungoverned permanently**, so the
+Navigation Menu settlement (#113) is unaffected: the UI shell sets remain out
+of scope, and the kit remains silent on `navigation-menu.md`.
 
 ---
 

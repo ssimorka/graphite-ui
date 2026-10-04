@@ -113,6 +113,13 @@ a browser result.
   Content switcher), Carbon's AI components, and Carbon idioms with no
   Graphite counterpart. Don't re-argue any of this per component: that
   piecemeal drift is exactly what #124 exists to stop.
+  **Amended 2026-10-04 (#240):** the other two buckets are now *scheduled to
+  build* rather than waiting for demand — G1 (Link, Search, Pagination,
+  Slider, File uploader, Date picker), then Toast and Checkbox group carried
+  from #219, then G2 (Menu buttons, Number input, Password input, Dropdown),
+  each splitting a fold off a governed contract. Each gets #219's full
+  definition of done, including the kit description stamp. The permanent three
+  are unchanged, so the Navigation Menu settlement stands.
 - **Navigation Menu is deliberately un-inverted, and that is settled.** #113
   looked like the last open Wave 4 item and was not: rule 6 (#128) puts
   Carbon's six UI shell sets out of scope by construction as application

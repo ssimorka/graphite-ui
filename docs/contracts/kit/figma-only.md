@@ -3,6 +3,11 @@
 The artefact `#103` refers to and `#124` Part B produces: every component set on
 the kit's 27 unclaimed component pages, with its bucket under governance rule 6.
 
+**Dispositions amended 2026-10-04 (#240):** *In scope, awaiting demand* became
+**Build — wave G1**, *Already spoken for* became **Build — wave G2**, and two sets
+on governed pages were carried in from #219. The permanent three are unchanged.
+See "What the rule decides today" in `../README.md`.
+
 **Derived 2026-08-28** by walking the kit (`p2jyUgkFhJd6A5M7L39Ixo`) page by page
 through the Figma Plugin API, read-only. Regenerate the same way if the kit gains
 or loses sets; nothing here is inferred from the page names.
@@ -83,9 +88,9 @@ work for less clarity.
 | Tile | 1 | 0 | 65 |
 | Code snippet | 3 | 3 | 38 |
 
-### Already spoken for — 4 pages, 15 public / 14 private
+### Build — wave G2 (was *Already spoken for*) — 4 pages, 15 public / 14 private
 
-*Ungoverned. The fold is recorded on the governing contract.*
+*Ungoverned until each contract lands. Each splits a fold recorded on a governing contract (Text input, Select, Button with Menu).*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -94,9 +99,9 @@ work for less clarity.
 | Password input | 2 | 2 | 113 |
 | Dropdown | 8 | 8 | 461 |
 
-### In scope, awaiting demand — 6 pages, 19 public / 18 private
+### Build — wave G1 (was *In scope, awaiting demand*) — 6 pages, 19 public / 18 private
 
-*Ungoverned until something asks.*
+*Ungoverned until each contract lands. Scheduled by #240, not by demand.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -107,9 +112,18 @@ work for less clarity.
 | Slider | 2 | 8 | 89 |
 | Pagination | 2 | 2 | 37 |
 
+### Build — carried from #219 — sets on governed pages
+
+*Left out of their components' parity work, scheduled with G1.*
+
+| Page | Set | Variants |
+|---|---|---|
+| Notification | `Notification - Toast` (`84336:35011`) | 16 |
+| Checkbox | `Checkbox group` (`11506:27535`) | 8 |
+
 ### Adopt — 1 page, 2 public / 3 private
 
-*Governed once its contract lands.*
+*Governed: `accordion.md`, and both public sets are covered (#222).*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -253,49 +267,49 @@ Variant counts in parentheses. `_`-prefixed sets are the kit's own internals.
 - Public: `Code snippet - Single line` (3), `Code snippet - Inline` (6), `Code snippet - Multi-line` (5)
 - Private: `_Code snippet tooltip` (7), `_Code snippet - Inline item` (5), `_Code snippet ghost button` (12)
 
-**Menu buttons** — Already spoken for
+**Menu buttons** — Build, G2
 
 - Public: `Menu button` (12), `Combo button` (12), `Overflow` (72)
 
-**Number input** — Already spoken for
+**Number input** — Build, G2
 
 - Public: `Number input - Default` (21), `Number input - Fluid` (8)
 - Private: `_Number input action item` (18), `_AI slug action item` (3), `_Revert button action item` (1), `_Number input base` (3)
 
-**Password input** — Already spoken for
+**Password input** — Build, G2
 
 - Public: `Password input - Default` (93), `Password input - Fluid` (16)
 - Private: `_Password input placeholder base` (1), `_Password input base` (3)
 
-**Dropdown** — Already spoken for
+**Dropdown** — Build, G2
 
 - Public: `Dropdown - Default` (102), `Dropdown - Fluid` (15), `Dropdown - Combo box - Default` (48), `Dropdown - Combo box - Fluid` (15), `Dropdown - Multi-select - Default` (102), `Dropdown - Multi-select  - Fluid` (17), `Dropdown - Filterable multi-select - Default` (51), `Dropdown - Filterable multi-select - Fluid` (17)
 - Private: `_Dropdown chevron` (2), `_Dropdown menu list - Default` (3), `_Dropdown list item - Default` (30), `_Dropdown parent checkbox - Default` (18), `_Dropdown list item - Fluid input` (20), `_Dropdown menu list - Fluid input` (2), `_Dropdown parent checkbox - Fluid` (12), `_Dropdown skeleton item` (7)
 
-**Link** — In scope, awaiting demand
+**Link** — Build, G1
 
 - Public: `Link` (36)
 
-**Search** — In scope, awaiting demand
+**Search** — Build, G1
 
 - Public: `Search - Default` (42), `Search - Fluid` (7)
 
-**Date picker** — In scope, awaiting demand
+**Date picker** — Build, G1
 
 - Public: `Time picker items - Fixed` (6), `Time picker items - Clock` (12), `Time picker items - Timezone` (6), `Date picker - Simple date - Default` (37), `Date picker - Simple date - Fluid` (10), `Date picker - Single calendar - Default` (39), `Date picker - Single calendar - Fluid` (12), `Date picker - Range calendar - Default` (12), `Date picker - Range calendar - Fluid` (12), `Time picker - Default` (18), `Time picker - Fluid` (12)
 - Private: `_Date picker calendar day item` (11), `_Date picker month pagination` (4), `_Date picker month year` (2), `_Date picker calendar` (1), `_Time picker item - Fixed` (21)
 
-**File uploader** — In scope, awaiting demand
+**File uploader** — Build, G1
 
 - Public: `File uploader` (18)
 - Private: `_File uploader - Drag and drop box states` (4), `_File uploader file item` (18), `_File uploader file list item` (1)
 
-**Slider** — In scope, awaiting demand
+**Slider** — Build, G1
 
 - Public: `Slider` (9), `Slider - Range` (44)
 - Private: `_Slider left rail` (2), `_Slider right rail` (1), `_Slider rail` (1), `_Slider item` (2), `_Slider skeleton item` (1), `_Slider base` (1), `_Slider - Range handle` (10), `_Slider - Range slider track` (18)
 
-**Pagination** — In scope, awaiting demand
+**Pagination** — Build, G1
 
 - Public: `Pagination - Nav` (3), `Pagination - Table bar` (9)
 - Private: `_Pagination select menu item` (1), `_Pagination - Nav page item` (24)
