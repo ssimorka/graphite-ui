@@ -7,7 +7,7 @@ import type { MenuItem } from './menu'
 import styles from './menu-button.module.scss'
 
 /**
- * Contract: docs/contracts/menu-button.md (1.0.0)
+ * Contract: docs/contracts/menu-button.md (1.0.1)
  *
  * The kit's Menu buttons page: Menu button (31420:317548), Combo button
  * (31753:68447) and Overflow (3717:45725). Each fixes the trigger, the

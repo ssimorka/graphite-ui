@@ -52,8 +52,8 @@ type Filter =
 
 // The category chips are the contracts' waves (docs/contracts/README.md), so
 // every governed component falls in exactly one. Wave 3, form composition, is
-// empty and has no chip. A wave records build order as much as kind, which is
-// why Menu button sits under Navigation.
+// empty and has no chip. A wave records build order as much as kind; Menu
+// buttons was moved to wave 0 (menu-button.md 1.0.1) so it files under Actions.
 const WAVES: Partial<Record<Filter, string>> = {
   actions: '0',
   primitives: '1',
