@@ -1,0 +1,17 @@
+// Slider's own page parts: a measure near the kit's 400 to 448, and the
+// forced states for the stills, replaying the component's own pseudo-class
+// rules. Nothing here restyles the component.
+
+.measure {
+  width: 28rem;
+  max-width: 100%;
+}
+
+.forceHover [data-part='handle'] { --d: 20px; }
+
+.forceFocus [data-part='handle'] {
+  --d: 20px;
+  background: var(--graphite-primary);
+}
+
+.forceFocus [data-part='fill'] { background: var(--graphite-primary); }

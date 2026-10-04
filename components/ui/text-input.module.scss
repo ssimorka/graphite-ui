@@ -96,6 +96,15 @@
 .warningText { @include parts.field-warning; }
 
 // The kit's count: Caption/1 at the right end of the label row, 8px clear.
+.hiddenLabel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .labelRow {
   display: flex;
   align-items: baseline;

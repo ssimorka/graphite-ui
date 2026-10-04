@@ -19,6 +19,7 @@ import { PaginationNav } from '@/components/ui/pagination'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Search } from '@/components/ui/search'
+import { Slider } from '@/components/ui/slider'
 import { Select } from '@/components/ui/select'
 import { Tabs } from '@/components/ui/tabs'
 import { Tag } from '@/components/ui/tag'
@@ -121,6 +122,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
       options={[{ value: '1', label: 'First' }, { value: '2', label: 'Second' }]}
     />
   ),
+  Slider: () => <Slider id="ix-slider" label="Label" value={40} showInputs={false} onChange={noop} />,
   Tabs: () => (
     <Tabs
       tabs={[
