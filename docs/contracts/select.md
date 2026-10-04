@@ -1,6 +1,6 @@
 ---
 component: Select
-version: 2.3.0
+version: 2.4.0
 wave: 2
 slots:
   - name: Label
@@ -20,6 +20,9 @@ props:
   - name: layout
     values: [fixed, inline, fluid]
     notes: The kit's Style axis (Default, Inline) and its Select - Fluid set. Inline's trigger has no fill and no edge at rest and hugs its value; Fluid is a 64px box with the label inside.
+  - name: hideLabel
+    values: boolean
+    notes: The kit's bare Select menu, which draws only the value (Pagination's page picker, #268). The label stays the accessible name, hidden from view; it is still required.
   - name: readOnly
     values: boolean
     notes: The kit's Read-only. A native select has no readonly attribute, so the trigger stays focusable and carries aria-readonly while refusing to open or change. It must not trade away keyboard focus.

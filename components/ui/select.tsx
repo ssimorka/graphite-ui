@@ -14,7 +14,7 @@ export type SelectOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/select.md (2.3.0) */
+/** Contract: docs/contracts/select.md (2.4.0) */
 type SelectProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
@@ -36,6 +36,12 @@ type SelectProps = {
    * change: the value can be reached and read, not edited.
    */
   readOnly?: boolean
+  /**
+   * Keeps the label as the select's accessible name and drops it from view,
+   * for the kit's bare Select menu (Pagination's page picker draws only the
+   * value). The label is still required.
+   */
+  hideLabel?: boolean
   onChange?: (value: string) => void
   name?: string
   helpText?: string
@@ -57,6 +63,7 @@ export function Select({
   layout = 'fixed',
   state = 'default',
   readOnly = false,
+  hideLabel = false,
   onChange,
   name,
   helpText,
@@ -80,7 +87,7 @@ export function Select({
   const fluid = layout === 'fluid'
 
   const labelEl = (
-    <label htmlFor={selectId} className={styles.label}>
+    <label htmlFor={selectId} className={hideLabel ? styles.hiddenLabel : styles.label}>
       {label}
     </label>
   )

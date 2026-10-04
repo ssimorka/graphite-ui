@@ -11,6 +11,7 @@ import { modalDoc } from './docs/modal'
 import { navigationMenuDoc } from './docs/navigation-menu'
 import { notificationDoc } from './docs/notification'
 import { overlayDoc } from './docs/overlay'
+import { paginationDoc } from './docs/pagination'
 import { popoverDoc } from './docs/popover'
 import { progressBarDoc } from './docs/progress-bar'
 import { radioButtonGroupDoc } from './docs/radio-button-group'
@@ -43,6 +44,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'navigation-menu': navigationMenuDoc,
   'notification': notificationDoc,
   'overlay': overlayDoc,
+  'pagination': paginationDoc,
   'popover': popoverDoc,
   'progress-bar': progressBarDoc,
   'radio-button-group': radioButtonGroupDoc,

@@ -1,7 +1,7 @@
 import { readContractDoc } from '@/lib/contract-doc'
 import type { ComponentDocConfig } from '../types'
 import styles from './data-table.module.scss'
-import { DataTablePreview, DataTableSample } from './data-table-preview'
+import { DataTablePager, DataTablePreview, DataTableSample } from './data-table-preview'
 import type { DemoRow } from './data-table-preview'
 
 // The demo rows are real: each is read from its own contract, so the table on
@@ -34,11 +34,11 @@ export function dataTableDoc(): ComponentDocConfig {
         sortable
         sort={{ key: 'component', direction: 'asc' }}
         description="Read from each component's own contract."
-        footer={`${few.length} of ${rows.length} components`}
+        footer={<DataTablePager totalItems={rows.length} />}
       />
     ),
     anatomyLede:
-      'The title (the required caption) and an optional description above; a toolbar when there is one; the surface-variant header row; body rows with a rule at the top of each; and the footer bar for pagination. The first column here returns a Contained list from its render function, which is how a row gets leading or trailing content.',
+      'The title (the required caption) and an optional description above; a toolbar when there is one; the surface-variant header row; body rows with a rule at the top of each; and the footer, which takes the Pagination table bar. The first column here returns a Contained list from its render function, which is how a row gets leading or trailing content.',
     variantsLede:
       'Size is the kit’s five modes: rows of 24, 32, 40, 48 and 64. Type is what the rows carry: a select checkbox or radio, an expand control, both, or batch actions on a selection. Sortable is a trait of each column rather than of the table.',
     variants: [
@@ -103,7 +103,7 @@ export function dataTableDoc(): ComponentDocConfig {
       ['Size', 'XS · SM · MD · LG · XL (variable modes)', 'size', 'Rows of 24, 32, 40, 48 and 64, cells padded 16 left and 8 right. The set draws one size; the modes are its variables.'],
       ['Header item: Description', 'Boolean', 'description', 'Body/3 under the title.'],
       ['Toolbar', 'Boolean', 'toolbar', 'A 48px bar of the caller’s controls: the governed Search, expandable at Large, then the actions.'],
-      ['Pagination', 'Boolean', 'footer', 'The bar under the table.'],
+      ['Pagination', 'Boolean', 'footer', 'The bar under the table: the Pagination table bar, composed into the footer.'],
       ['Body row: Zebra style', 'Boolean', 'zebra', 'Alternate rows on surface-variant, without the rules. The kit’s zebra and hover share that fill.'],
       ['Row cell: Disabled', 'State', 'isRowDisabled', 'The row dims and cannot be selected.'],
       ['Sortable', 'False · True', 'columns[].sortable', 'One to one, per column, on the header cell.'],
