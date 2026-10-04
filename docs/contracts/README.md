@@ -427,7 +427,7 @@ Overlay (internal: the shared pattern the others implement), Tooltip, Popover, M
 **Wave 6 — Data display**
 Data table
 
-Button is done and sits underneath Wave 5 (Modal confirm/cancel) as a dependency. Button Group sits beside it at wave 0 for the same reason: Modal wraps its footer in it, so it precedes Modal. Both used to name Card as well, until Card was removed (#109).
+Button is done and sits underneath Wave 5 (Modal confirm/cancel) as a dependency. Button Group sits beside it at wave 0 for the same reason: Modal wraps its footer in it, so it precedes Modal. Both used to name Card as well, until Card was removed (#109). Menu buttons joined them at wave 0 in 1.0.1: it is Button composed with Menu, so it is filed with the actions rather than by build order, which would put it after Menu in wave 5.
 
 ---
 
