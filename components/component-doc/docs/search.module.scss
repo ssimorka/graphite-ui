@@ -1,0 +1,19 @@
+// Search's own page parts: a measure for the fields, and the forced states.
+// The component exposes no data-slot hooks, so the forced rows reach its
+// field and input by structure and force the declarations search.module.scss
+// puts on :hover and :focus-within. Nothing here restyles the component.
+
+.measure {
+  width: 22.375rem;
+  max-width: 100%;
+}
+
+.forceHover [role='search'] input::placeholder {
+  color: var(--graphite-on-surface-variant);
+}
+
+.forceFocus [role='search'] > div {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}

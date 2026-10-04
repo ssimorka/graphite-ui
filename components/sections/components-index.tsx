@@ -16,6 +16,7 @@ import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Notification } from '@/components/ui/notification'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { RadioButtonGroup } from '@/components/ui/radio-button-group'
+import { Search } from '@/components/ui/search'
 import { Select } from '@/components/ui/select'
 import { Tabs } from '@/components/ui/tabs'
 import { Tag } from '@/components/ui/tag'
@@ -122,6 +123,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   ),
   Tag: () => <Tag variant="primary">Tag</Tag>,
   'Text area': () => <TextArea id="ix-ta" label="Label" defaultValue="" />,
+  Search: () => <Search id="ix-search" label="Search" placeholder="Search input text" size="md" />,
   'Text input': () => <TextInput id="ix-in" label="Label" placeholder="Placeholder text" />,
   Toggle: () => <Toggle id="ix-sw" label="Label" checked onChange={noop} />,
   Tooltip: () => <Button>Hover or focus</Button>,

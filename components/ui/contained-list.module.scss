@@ -134,6 +134,15 @@
   background: var(--graphite-outline-subtle);
 }
 
+// The header's search: room for the expanded field, the collapsed square at
+// the end of it.
+.headerSearch {
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 1 18rem;
+  min-width: 0;
+}
+
 .headerTitle {
   flex: 1 1 auto;
   min-width: 0;

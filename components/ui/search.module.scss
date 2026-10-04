@@ -1,0 +1,190 @@
+@use './field-shell' as shell;
+
+// Search — docs/contracts/search.md
+//
+// The kit's Search - Default (Graphite UI Kit 2805:21056) and Search - Fluid
+// (15503:270751). Default: the field shell at 48, 40 or 32, the 16px search
+// icon 16, 12 or 8 in, the value after it, and a 16px clear the same distance
+// from the right once there is a value. Its rest rule is plain `outline`, not
+// the shell's outline-strong, and its hover only lifts the placeholder; that
+// is how the Search set draws them. Fluid: one 64px box with the label inside,
+// the search icon at the right, and the clear beside it.
+.search {
+  // The icon inset and the field height per size.
+  --inset: var(--graphite-space-05);
+  --h: var(--graphite-space-09);
+
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+// Collapsed, it is only the square, so it does not take the row's width.
+.isCollapsed {
+  display: inline-flex;
+  width: auto;
+}
+
+.md { --inset: var(--graphite-space-04); --h: var(--graphite-space-08); }
+.sm { --inset: var(--graphite-space-03); --h: var(--graphite-space-07); }
+
+.field {
+  @include shell.field-shell;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--h);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+}
+
+.field:focus-within { @include shell.field-shell-focus; }
+
+// The Search set fills disabled with the disabled tone and drops the rule,
+// as Select's does (Text input keeps its fill).
+.isDisabled .field {
+  @include shell.field-shell-disabled;
+  background: var(--graphite-primary-disabled);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  padding-inline: var(--inset);
+  color: var(--graphite-on-surface-variant);
+}
+
+.isDisabled .icon { color: var(--graphite-primary-disabled-content); }
+
+.row {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: var(--h);
+  padding: 0 var(--inset) 0 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+}
+
+.input:focus { outline: none; }
+
+// The browser's own clear and decoration: the kit draws its own.
+.input::-webkit-search-cancel-button,
+.input::-webkit-search-decoration { appearance: none; }
+
+// The placeholder takes the shell's outline-strong, as Fluid and Text input
+// do. The Default set binds the disabled tone here, which reads as disabled;
+// recorded as a kit slip. Its Hover lifts the placeholder to
+// on-surface-variant, and nothing else changes.
+.input::placeholder { @include shell.field-placeholder; }
+.field:hover .input:enabled::placeholder { color: var(--graphite-on-surface-variant); }
+.input:disabled { cursor: not-allowed; }
+.input:disabled::placeholder { color: var(--graphite-primary-disabled-content); }
+
+// The clear: 16px, the same distance from the right as the icon is from the
+// left, in a target as tall as the field.
+.clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: calc(var(--inset) * 2 + 16px);
+  height: var(--h);
+  margin-inline-start: calc(-1 * var(--inset));
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.clear:hover:not(:disabled) { background: var(--graphite-elevation-02); }
+
+.clear:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.clear:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+// Expandable, collapsed: the icon alone in a square of the field's height,
+// transparent at rest and surface-variant on hover.
+.collapsed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--h);
+  height: var(--h);
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface-variant);
+  cursor: pointer;
+}
+
+.collapsed:hover:not(:disabled) { background: var(--graphite-surface-variant); }
+
+.collapsed:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+// -------------------------------------------------------------------- fluid
+// 64 tall: the 12/16 label 13 from the top and the value 4 under it, with the
+// search icon and, once there is a value, the clear as 40px squares hung from
+// y=23 at the right edge (13 + 16 + 4 + 20 + 11 = 64).
+.fluid .field {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--graphite-space-02);
+  min-height: var(--graphite-space-10);
+  padding: 13px 0 0 var(--graphite-space-05);
+}
+
+.label {
+  color: var(--graphite-on-surface-variant);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.isDisabled .label { color: var(--graphite-primary-disabled-content); }
+
+.fluid .row { height: 1.25rem; }
+
+.fluid .input {
+  height: 1.25rem;
+  padding: 0 var(--graphite-space-08) 0 0;
+}
+
+.fluid .input:not(:placeholder-shown) { padding-right: var(--graphite-space-11); }
+
+.fluid .clear,
+.fluidIcon {
+  position: absolute;
+  top: 23px;
+  width: var(--graphite-space-08);
+  height: var(--graphite-space-08);
+  margin: 0;
+}
+
+.fluid .clear { right: var(--graphite-space-08); }
+
+.fluidIcon {
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--graphite-on-surface-variant);
+  pointer-events: none;
+}

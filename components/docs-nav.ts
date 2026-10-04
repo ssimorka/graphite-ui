@@ -56,6 +56,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/popover', label: 'Popover' },
       { href: '/docs/components/progress-bar', label: 'Progress bar' },
       { href: '/docs/components/radio-button-group', label: 'Radio button group' },
+      { href: '/docs/components/search', label: 'Search' },
       { href: '/docs/components/select', label: 'Select' },
       { href: '/docs/components/tabs', label: 'Tabs' },
       { href: '/docs/components/tag', label: 'Tag' },
