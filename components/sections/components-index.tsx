@@ -23,6 +23,7 @@ import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Search } from '@/components/ui/search'
 import { Slider } from '@/components/ui/slider'
 import { TimePicker } from '@/components/ui/time-picker'
+import { Toast } from '@/components/ui/toast'
 import { Select } from '@/components/ui/select'
 import { Tabs } from '@/components/ui/tabs'
 import { Tag } from '@/components/ui/tag'
@@ -143,6 +144,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   Search: () => <Search id="ix-search" label="Search" placeholder="Search input text" size="md" />,
   'Text input': () => <TextInput id="ix-in" label="Label" placeholder="Placeholder text" />,
   'Time picker': () => <TimePicker id="ix-tp" label="Choose a time" size="md" value={{ time: '', period: 'AM' }} onChange={noop} />,
+  Toast: () => <Toast variant="success" title="Changes saved" />,
   Toggle: () => <Toggle id="ix-sw" label="Label" checked onChange={noop} />,
   Tooltip: () => <Button>Hover or focus</Button>,
   Typography: () => (

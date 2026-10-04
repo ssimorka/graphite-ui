@@ -1,0 +1,133 @@
+// Toast — docs/contracts/toast.md
+//
+// The kit's Notification - Toast (84336:35011): 288 wide on the status
+// container with the overlay shadow and a 3px stripe in the status role on the
+// left, no edge. The status icon 14 in from the left and top, the text 14
+// after it: title (Title/5) over message (Body/3), then the time stamp (Body/3)
+// or the action 24 below; 15 above the text and 16 under it. A 48px ghost
+// close flush in the top right. High contrast inverts the fill, as
+// Notification's does.
+
+.toast {
+  --status: var(--graphite-info);
+  --stripe: var(--status);
+
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 18rem;
+  max-width: 100%;
+  padding-inline-start: 14px;
+  border-radius: var(--graphite-radius-none);
+  color: var(--graphite-on-surface);
+  box-shadow:
+    inset 3px 0 0 var(--stripe),
+    var(--graphite-shadow-overlay);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.info { --status: var(--graphite-info); background: var(--graphite-info-container); }
+.danger { --status: var(--graphite-danger); background: var(--graphite-danger-container); }
+.warning { --status: var(--graphite-warning); background: var(--graphite-warning-container); }
+.success { --status: var(--graphite-success); background: var(--graphite-success-container); }
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  padding-top: 14px;
+  color: var(--status);
+}
+
+.content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-06);
+  min-width: 0;
+  padding: 15px 0 var(--graphite-space-05);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.title { font-weight: var(--graphite-text-weight-semibold); }
+
+// The kit's action: a small ghost button in Body/3, its label at the text's edge.
+.action {
+  margin-inline-start: calc(var(--graphite-space-05) * -1);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.close { flex: none; }
+
+// --------------------------------------------------------------- high contrast
+// As Notification's: on-background with background text, the stripe and icon
+// on the status container (the stand-in for the inverse stops, swept at 3:1
+// or better in #260), the close in background and the action in the primary
+// container.
+.highContrast {
+  --stripe: var(--status-inverse);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+}
+
+.highContrast.info { --status-inverse: var(--graphite-info-container); }
+.highContrast.danger { --status-inverse: var(--graphite-danger-container); }
+.highContrast.warning { --status-inverse: var(--graphite-warning-container); }
+.highContrast.success { --status-inverse: var(--graphite-success-container); }
+
+.highContrast .icon { color: var(--status-inverse); }
+.highContrast .icon [data-part='glyph'] { fill: var(--graphite-warning-container); }
+.highContrast .icon [data-part='mark'] { fill: var(--graphite-on-warning-container); }
+
+.highContrast .close,
+.highContrast .close:hover:not(:disabled) {
+  background: transparent;
+  color: var(--graphite-background);
+}
+
+.highContrast .action,
+.highContrast .action:hover:not(:disabled) {
+  background: transparent;
+  color: var(--graphite-primary-container);
+}
+
+.highContrast .action:hover:not(:disabled) { text-decoration: underline; }
+
+// ------------------------------------------------------------------- host
+// Top right, under the site header, 8 apart, newest on top. The region takes
+// no pointer events itself, so the page under its empty space stays usable.
+.region {
+  position: fixed;
+  top: var(--graphite-space-10);
+  right: var(--graphite-space-05);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slot {
+  pointer-events: auto;
+  animation: toast-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot { animation: none; }
+}

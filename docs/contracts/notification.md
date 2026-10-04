@@ -1,6 +1,6 @@
 ---
 component: Notification
-version: 3.0.0
+version: 3.0.1
 wave: 5
 slots:
   - name: Icon
@@ -63,7 +63,7 @@ tokens:
     usage: Container corner.
 composition_rules:
   - Not an overlay, though the source document lists it with them. It renders inline in the page flow, with nothing to trap focus in and no Escape or click-outside dismissal. Its one dismiss pattern is the explicit close control, present only when `onClose` is set.
-  - Not a toast — Notification is inline and persistent until dismissed or the condition changes. The kit's Notification - Toast set is its own component with its own timing, carried on #240.
+  - Not a toast — Notification is inline and persistent until dismissed or the condition changes. The kit's Notification - Toast set is its own component with its own timing, docs/contracts/toast.md (#272).
   - The status is said three ways: the container and its edge and stripe, the icon, and the words. Colour is never the only signal.
 prohibitions:
   - No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex. Same constraint as Tag.

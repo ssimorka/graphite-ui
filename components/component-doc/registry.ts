@@ -26,6 +26,7 @@ import { tagDoc } from './docs/tag'
 import { textAreaDoc } from './docs/text-area'
 import { textInputDoc } from './docs/text-input'
 import { timePickerDoc } from './docs/time-picker'
+import { toastDoc } from './docs/toast'
 import { toggleDoc } from './docs/toggle'
 import { tooltipDoc } from './docs/tooltip'
 import { typographyDoc } from './docs/typography'
@@ -64,6 +65,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'text-area': textAreaDoc,
   'text-input': textInputDoc,
   'time-picker': timePickerDoc,
+  'toast': toastDoc,
   'toggle': toggleDoc,
   'tooltip': tooltipDoc,
   'typography': typographyDoc,
