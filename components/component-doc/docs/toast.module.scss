@@ -1,0 +1,8 @@
+// Toast's own page parts: the live trigger above the toast it draws.
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-06);
+}

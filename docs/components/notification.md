@@ -32,6 +32,8 @@ Communicates status or feedback in three forms: Inline (embedded in page content
 
 Includes a `Time text` property (timestamp) not present on Inline.
 
+The Toast set defaults `High contrast` to True where Inline defaults it to False; the code's Toast keeps Inline's default (`docs/contracts/toast.md`). An actionable toast draws its action where the time stamp would be.
+
 ## Variant properties — Callout
 
 | Property | Options |

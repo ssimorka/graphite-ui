@@ -68,6 +68,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/text-area', label: 'Text area' },
       { href: '/docs/components/text-input', label: 'Text input' },
       { href: '/docs/components/time-picker', label: 'Time picker' },
+      { href: '/docs/components/toast', label: 'Toast' },
       { href: '/docs/components/toggle', label: 'Toggle' },
       { href: '/docs/components/tooltip', label: 'Tooltip' },
       { href: '/docs/components/typography', label: 'Typography' },

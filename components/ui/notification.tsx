@@ -4,7 +4,7 @@ import { Button } from './button'
 import { FieldStatusIcon } from './field-status'
 import styles from './notification.module.scss'
 
-/** Contract: docs/contracts/notification.md (3.0.0) */
+/** Contract: docs/contracts/notification.md (3.0.1) */
 type NotificationProps = {
   body: ReactNode
   title?: string
@@ -38,7 +38,8 @@ const KNOCKOUT = {
     'M8 1A7 7 0 1 0 8 15A7 7 0 1 0 8 1ZM7 10.8L4.5 8.3L5.3 7.5L7 9.2L10.71 5.5L11.5 6.29L7 10.8Z',
 }
 
-function StatusIcon({ variant }: { variant: NonNullable<NotificationProps['variant']> }) {
+/** Shared with Toast, which draws the same status icons. */
+export function StatusIcon({ variant }: { variant: NonNullable<NotificationProps['variant']> }) {
   if (variant === 'info') return <KitIcon name="info" size={20} />
   if (variant === 'warning') return <FieldStatusIcon className={styles.warningGlyph} />
   return (
