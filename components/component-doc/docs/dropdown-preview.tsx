@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Dropdown } from '@/components/ui/dropdown'
+import { ComboBox, Dropdown } from '@/components/ui/dropdown'
 import type { DropdownOption } from '@/components/ui/dropdown'
 import { Select } from '@/components/ui/select'
 import { DemoFrame } from '../demo-frame'
 import styles from './dropdown.module.scss'
 
+type Kind = 'dropdown' | 'combo'
 type Layout = 'fixed' | 'inline' | 'fluid'
 type Size = 'sm' | 'md' | 'lg'
 type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
@@ -23,7 +24,7 @@ const OPTIONS: DropdownOption[] = [
 const ERROR = 'Choose a theme'
 const WARNING = 'High contrast overrides your source colour'
 
-function codeFor(layout: Layout, size: Size, status: Status) {
+function codeFor(kind: Kind, layout: Layout, size: Size, status: Status) {
   const props = [
     layout === 'fixed' ? '' : `\n  layout="${layout}"`,
     layout === 'fluid' || size === 'lg' ? '' : `\n  size="${size}"`,
@@ -32,11 +33,12 @@ function codeFor(layout: Layout, size: Size, status: Status) {
     status === 'disabled' ? '\n  disabled' : '',
     status === 'read-only' ? '\n  readOnly' : '',
   ].join('')
-  return `const [value, setValue] = useState<string | null>(null)\n\n<Dropdown\n  label="Theme"\n  options={options}${props}\n  value={value}\n  onChange={setValue}\n/>`
+  return `const [value, setValue] = useState<string | null>(null)\n\n<${kind === 'combo' ? 'ComboBox' : 'Dropdown'}\n  label="Theme"\n  options={options}${props}\n  value={value}\n  onChange={setValue}\n/>`
 }
 
 /** Style, Size and the states, live. */
 export function DropdownPreview() {
+  const [kind, setKind] = useState<Kind>('dropdown')
   const [layout, setLayout] = useState<Layout>('fixed')
   const [size, setSize] = useState<Size>('lg')
   const [status, setStatus] = useState<Status>('enabled')
@@ -45,6 +47,16 @@ export function DropdownPreview() {
     <DemoFrame
       controls={
         <>
+          <Select
+            label="Kind"
+            size="sm"
+            value={kind}
+            onChange={(v) => setKind(v as Kind)}
+            options={[
+              { value: 'dropdown', label: 'Dropdown' },
+              { value: 'combo', label: 'Combo box' },
+            ]}
+          />
           <Select
             label="Style"
             size="sm"
@@ -84,6 +96,21 @@ export function DropdownPreview() {
       }
       preview={
         <div className={styles.stage}>
+          {kind === 'combo' ? (
+            <ComboBox
+              label="Theme"
+              options={OPTIONS}
+              value={value}
+              onChange={setValue}
+              layout={layout === 'inline' ? 'fixed' : layout}
+              size={size}
+              helpText="Type to filter"
+              errorText={status === 'error' ? ERROR : undefined}
+              warningText={status === 'warning' ? WARNING : undefined}
+              disabled={status === 'disabled'}
+              readOnly={status === 'read-only'}
+            />
+          ) : (
           <Dropdown
             label="Theme"
             options={OPTIONS}
@@ -97,20 +124,23 @@ export function DropdownPreview() {
             disabled={status === 'disabled'}
             readOnly={status === 'read-only'}
           />
+          )}
         </div>
       }
-      code={codeFor(layout, size, status)}
+      code={codeFor(kind, layout, size, status)}
     />
   )
 }
 
 /** A still the server-rendered page can place: it owns its own value. */
 export function DropdownStill({
+  kind = 'dropdown',
   layout = 'fixed',
   size,
   status = 'enabled',
   chosen = false,
 }: {
+  kind?: Kind
   layout?: Layout
   size?: Size
   status?: Status
@@ -119,6 +149,21 @@ export function DropdownStill({
   const [value, setValue] = useState<string | null>(chosen ? 'dark' : null)
   return (
     <div className={layout === 'inline' ? styles.wide : styles.measure}>
+      {kind === 'combo' ? (
+        <ComboBox
+            label="Theme"
+            options={OPTIONS}
+            value={value}
+            onChange={setValue}
+            layout={layout === 'inline' ? 'fixed' : layout}
+            size={size}
+            helpText="Type to filter"
+            errorText={status === 'error' ? ERROR : undefined}
+            warningText={status === 'warning' ? WARNING : undefined}
+            disabled={status === 'disabled'}
+            readOnly={status === 'read-only'}
+        />
+      ) : (
       <Dropdown
         label="Theme"
         options={OPTIONS}
@@ -132,6 +177,7 @@ export function DropdownStill({
         disabled={status === 'disabled'}
         readOnly={status === 'read-only'}
       />
+      )}
     </div>
   )
 }

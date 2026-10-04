@@ -240,3 +240,78 @@
   color: var(--graphite-primary-disabled-content);
   cursor: not-allowed;
 }
+
+// ---------------------------------------------------------------- combo box
+// The kit's Combo box: the trigger holds a text input, and once a value is
+// chosen, a 16px clear (cross-small) and a 1 × 16 outline divider before the
+// chevron, 8 apart. The ring shows while the input has focus.
+.combo { cursor: text; }
+
+.combo:focus-within {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.combo.errored:focus-within { box-shadow: inset 0 0 0 2px var(--graphite-danger); }
+
+.combo:focus-within + .list .active { box-shadow: inset 0 0 0 2px var(--graphite-primary-focus); }
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--graphite-on-surface);
+  font: inherit;
+}
+
+.input:focus { outline: none; }
+
+// The kit's empty Combo box text is on-surface-variant.
+.input::placeholder {
+  color: var(--graphite-on-surface-variant);
+  opacity: 1;
+}
+
+.input:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.clear,
+.toggle {
+  display: inline-flex;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.clear:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: 2px;
+}
+
+.toggle:disabled { cursor: inherit; }
+
+.divider {
+  flex: none;
+  width: 1px;
+  height: 1rem;
+  background: var(--graphite-outline);
+}
+
+// What the list shows when a filter leaves nothing.
+.empty {
+  display: flex;
+  align-items: center;
+  min-height: var(--h);
+  padding-inline: var(--graphite-space-05);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
