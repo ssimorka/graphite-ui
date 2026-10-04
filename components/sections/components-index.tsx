@@ -18,6 +18,7 @@ import { Notification } from '@/components/ui/notification'
 import { DatePicker } from '@/components/ui/date-picker'
 import { FileUploader } from '@/components/ui/file-uploader'
 import { Link } from '@/components/ui/link'
+import { NumberInput } from '@/components/ui/number-input'
 import { PaginationNav } from '@/components/ui/pagination'
 import { PasswordInput } from '@/components/ui/password-input'
 import { ProgressBar } from '@/components/ui/progress-bar'
@@ -126,6 +127,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
     />
   ),
   Notification: () => <Notification variant="info" title="Title" body="Message" />,
+  'Number input': () => <NumberInput id="ix-num" label="Guests" value={4} onChange={noop} />,
   Pagination: () => <PaginationNav page={1} totalPages={8} itemsShown={5} size="sm" onChange={noop} />,
   'Password input': () => <PasswordInput id="ix-pw" label="Password" defaultValue="correct horse" />,
   Popover: () => <Button>Open popover</Button>,

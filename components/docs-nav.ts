@@ -56,6 +56,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/modal', label: 'Modal' },
       { href: '/docs/components/navigation-menu', label: 'Navigation menu' },
       { href: '/docs/components/notification', label: 'Notification' },
+      { href: '/docs/components/number-input', label: 'Number input' },
       { href: '/docs/components/overlay', label: 'Overlay' },
       { href: '/docs/components/pagination', label: 'Pagination' },
       { href: '/docs/components/password-input', label: 'Password input' },
