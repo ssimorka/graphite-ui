@@ -39,7 +39,7 @@ Single-line masked field for password entry, with a show/hide text toggle.
 ## Do / Don't
 
 - Do show a visibility toggle by default — it's built into the component, not optional to add later.
-- Don't build a custom masked Text input — use this component so masking behavior stays consistent.
+- Don't build your own show/hide toggle on Text input — use this component so masking behavior stays consistent. (A plain masked Text input is still fine for a secret nobody needs to read back; see `docs/contracts/password-input.md`.)
 
 ---
 *Generated from Figma component sets `5621:280380` / `68771:7312` — regenerate if variant properties change.*

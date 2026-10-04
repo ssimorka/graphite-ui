@@ -58,6 +58,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/notification', label: 'Notification' },
       { href: '/docs/components/overlay', label: 'Overlay' },
       { href: '/docs/components/pagination', label: 'Pagination' },
+      { href: '/docs/components/password-input', label: 'Password input' },
       { href: '/docs/components/popover', label: 'Popover' },
       { href: '/docs/components/progress-bar', label: 'Progress bar' },
       { href: '/docs/components/radio-button-group', label: 'Radio button group' },

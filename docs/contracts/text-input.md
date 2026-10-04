@@ -1,6 +1,6 @@
 ---
 component: Text input
-version: 2.3.0
+version: 2.3.1
 wave: 2
 slots:
   - name: Value
@@ -19,6 +19,7 @@ slots:
 props:
   - name: type
     values: [text, email, password, number, "etc."]
+    notes: password is a plain masked field; for one the reader may need to check, use Password input (#284).
   - name: size
     values: [sm, md, lg]
   - name: state

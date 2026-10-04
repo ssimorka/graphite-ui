@@ -19,6 +19,7 @@ import { DatePicker } from '@/components/ui/date-picker'
 import { FileUploader } from '@/components/ui/file-uploader'
 import { Link } from '@/components/ui/link'
 import { PaginationNav } from '@/components/ui/pagination'
+import { PasswordInput } from '@/components/ui/password-input'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Search } from '@/components/ui/search'
@@ -126,6 +127,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   ),
   Notification: () => <Notification variant="info" title="Title" body="Message" />,
   Pagination: () => <PaginationNav page={1} totalPages={8} itemsShown={5} size="sm" onChange={noop} />,
+  'Password input': () => <PasswordInput id="ix-pw" label="Password" defaultValue="correct horse" />,
   Popover: () => <Button>Open popover</Button>,
   'Progress bar': () => <ProgressBar value={62} label="Progress bar label" />,
   'Radio button group': () => (
