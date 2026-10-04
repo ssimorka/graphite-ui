@@ -12,7 +12,7 @@ fixed tone stops into perceptual ramps. Each theme pass emits 58
 secondary and danger families, the focus ring, the scrim, and the kit's
 elevation and outline ladders), which are the
 canonical surface, plus 59 `--cds-*` variables as a Carbon compatibility
-layer. A further 100 variables (spacing, density, radius, breakpoints,
+layer. A further 102 variables (spacing, density, radius, breakpoints,
 typography, motion) are declared statically in `app/globals.scss`, because
 they do not vary by theme.
 
@@ -33,7 +33,7 @@ run in CI, and `main` requires them.
 
 ## Status
 
-23 contracts: 22 components and the shared Overlay hook they dismiss through.
+36 contracts: 35 components and the shared Overlay hook they dismiss through.
 Every contract in `docs/contracts/` has a matching implementation in
 `components/ui/` and a documentation page at `/docs/components/<name>`,
 generated from the contract.
@@ -76,9 +76,9 @@ app/
   gallery/               # The Components index
   create/                # The theme builder
   search-index.json/     # Static search index, built at build time
-  globals.scss           # The 100 static, theme-invariant variables
+  globals.scss           # The 102 static, theme-invariant variables
 components/
-  ui/                    # The 22 contracted components and the Overlay hook
+  ui/                    # The 35 contracted components and the Overlay hook
   component-doc/         # Component page template and per-component configs
   search/                # Documentation search dialog and ranking
   sections/              # Landing page sections

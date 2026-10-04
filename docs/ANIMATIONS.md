@@ -142,6 +142,10 @@ the marketing page.
 | Progress, determinate | width | `base` | settle |
 | Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
 | Modal inline loading | `modal-spin`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
+| File uploader, uploading | `uploader-spin`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
+| Toast | `toast-in`: fade and a 4px drop on arrival; none under reduced motion | `fast` | settle |
+| Dropdown list | entrance fade, `overlay-in`; the chevron turns 180° | `fast` | settle |
+| Menu buttons | the chevron turns 180° while the menu is open | `fast` | settle |
 
 ### The overlay entrance
 

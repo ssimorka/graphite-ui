@@ -5,7 +5,7 @@ import { fieldMessage } from '@/lib/field-message'
 import { FieldStatusIcon } from './field-status'
 import styles from './checkbox.module.scss'
 
-/** Contract: docs/contracts/checkbox.md (3.1.0) */
+/** Contract: docs/contracts/checkbox.md (3.1.1) */
 type CheckboxProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
