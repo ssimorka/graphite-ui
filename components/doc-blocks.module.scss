@@ -152,8 +152,10 @@
 
 // ------------------------------------------------------------- next cards
 // One column at 320, three from 672: the kit's Medium frame already has all
-// three abreast.
+// three abreast. A caller can set --next-columns: Related passes its own
+// count, so its two to four cards always fill one row.
 .nextCards {
+  --next-columns: 3;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--graphite-space-04);
@@ -162,7 +164,7 @@
   list-style: none;
 
   @media (min-width: 672px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--next-columns), minmax(0, 1fr));
     gap: var(--graphite-space-05);
   }
 }
