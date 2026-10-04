@@ -11,7 +11,7 @@ export type FieldSize = 'sm' | 'md' | 'lg'
 /** The kit's Style axis (Fixed, Inline) and its second set, Fluid. */
 export type FieldLayout = 'fixed' | 'inline' | 'fluid'
 
-/** Contract: docs/contracts/text-input.md (2.3.0) */
+/** Contract: docs/contracts/text-input.md (2.3.1) */
 type TextInputProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string

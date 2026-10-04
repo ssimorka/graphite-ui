@@ -16,6 +16,7 @@ import { navigationMenuDoc } from './docs/navigation-menu'
 import { notificationDoc } from './docs/notification'
 import { overlayDoc } from './docs/overlay'
 import { paginationDoc } from './docs/pagination'
+import { passwordInputDoc } from './docs/password-input'
 import { popoverDoc } from './docs/popover'
 import { progressBarDoc } from './docs/progress-bar'
 import { radioButtonGroupDoc } from './docs/radio-button-group'
@@ -56,6 +57,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'notification': notificationDoc,
   'overlay': overlayDoc,
   'pagination': paginationDoc,
+  'password-input': passwordInputDoc,
   'popover': popoverDoc,
   'progress-bar': progressBarDoc,
   'radio-button-group': radioButtonGroupDoc,
