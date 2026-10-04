@@ -14,11 +14,11 @@ Five, all declared on `:root` in `app/globals.scss`.
 
 | Token | Value | Used by |
 |---|---|---|
-| `--graphite-motion-fast` | 120ms | Button, Toggle, the four overlay entrances, Accordion trigger, search palette, header nav and controls, footer links, hero spotlight |
-| `--graphite-motion-base` | 240ms | Accordion panel and chevron, Capabilities carousel item state and body reveal, ramp swatch and Info card hovers, Create preview |
-| `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep |
+| `--graphite-motion-fast` | 120ms | Button, Toggle, the four overlay entrances, Accordion trigger, Data table's expand chevron, search palette, header nav and controls, footer links, hero spotlight |
+| `--graphite-motion-base` | 240ms | Accordion panel and chevron, Progress bar's determinate width, Capabilities carousel item state and body reveal, ramp swatch and Info card hovers, Create preview |
+| `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep, Modal's inline-loading spinner |
 | `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
-| `--graphite-motion-indeterminate-ease` | `cubic-bezier(0.65, 0, 0.35, 1)` | The sweep only |
+| `--graphite-motion-indeterminate-ease` | `linear` | Progress bar's sweep and Modal's inline-loading spinner |
 
 **The Figma kit has no motion variables.** None of its sixteen collections covers
 duration or easing, so a designer cannot bind one and re-invents a number per
@@ -31,14 +31,16 @@ replacing content: scroll reveal, hero rise, view-switch fade, the overlay
 entrance, the carousel's body reveal.
 
 **Plain `ease`.** Short mechanical moves that are not entrances: Toggle's track
-and thumb, Progress determinate, the cover reveal, theme and link transitions.
+and thumb, the cover reveal, theme and link transitions.
 Toggle's contract records this explicitly so the curve is not "corrected" onto
 it later.
 
-**`linear`.** One case only, `.hero__spotlight`. Its transition restarts on every
-`pointermove`, and an ease-out decelerates each hop so the light rubber-bands
-behind the cursor instead of tracking it. The duration is tokenised; the easing
-is deliberate.
+**`linear`.** Two cases. `.hero__spotlight`, as a literal: its transition
+restarts on every `pointermove`, and an ease-out decelerates each hop so the
+light rubber-bands behind the cursor instead of tracking it. And the
+indeterminate sweep, through `--graphite-motion-indeterminate-ease`: a constant
+speed, as the kit's prototype runs it (#235). It was an ease-in-out that slowed
+at each end.
 
 ## Page-level motion
 
@@ -72,7 +74,7 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Index card drop | `.previewInner` | 300ms | ease-out | Hover on a governed card, 4px |
 | Create preview cards | `live-audio-waveform` / `pulse`, `skeleton` / `sweep` | 900ms; 1.6s | — | Infinite, inside the Create preview |
 
-The 700ms, 900ms, 690ms, 500ms, 320ms, 300ms, 200ms, 180ms and 160ms values,
+The 700ms, 900ms, 690ms, 500ms, 320ms, 300ms, 180ms and 160ms values,
 and the 1.6s sweep, are literals. They have no token, and minting one per call site would trade a
 readable number for an indirection that explains nothing.
 
@@ -128,16 +130,18 @@ the marketing page.
 
 | Component | Motion | Duration | Easing |
 |---|---|---|---|
-| Button | background, border-color, color on hover/active, plus a 1px press displacement | `fast` | settle |
+| Button | background, color on hover/active, plus a 1px press displacement | `fast` | settle |
 | Toggle | track background, thumb transform | `fast` | ease |
 | Tooltip | entrance fade, `overlay-in` | `fast` | settle |
 | Popover | entrance fade, `overlay-in` | `fast` | settle |
 | Menu | entrance fade, `overlay-in` | `fast` | settle |
 | Modal | entrance fade on the scrim, `overlay-in` | `fast` | settle |
 | Accordion | panel height via `grid-template-rows` 0fr → 1fr, chevron rotates 180° | `base` | settle |
-| Accordion trigger | background on hover | `fast` | ease |
-| Progress, determinate | width | 200ms | ease |
-| Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | `indeterminate-ease` |
+| Accordion trigger | background on hover | `fast` | settle |
+| Data table expand | chevron rotates 180° | `fast` | settle |
+| Progress, determinate | width | `base` | settle |
+| Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
+| Modal inline loading | `modal-spin`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
 
 ### The overlay entrance
 
@@ -146,9 +150,9 @@ declare `motion` in their own contract so `drift-check` can hold them to it,
 exactly as they each declare their own surface rather than inheriting it
 silently.
 
-**Opacity only.** Tooltip carries its placement in `transform`, a different value
-per side, so an animation that moved would overwrite the position it was moving
-to — animations beat regular declarations.
+**Opacity only.** Tooltip carries its side placements and its centred alignment
+in `transform`, so an animation that moved would overwrite the position it was
+moving to — animations beat regular declarations.
 
 **No exit.** All four unmount their content on close, so an exit is not
 reachable from CSS. It is also not free: Popover's no-nesting prohibition is a
@@ -184,6 +188,8 @@ neutralise rather than counting them.
 | Search palette (phone) | Fade and spinner removed |
 | Create preview, waveform, skeleton | Transitions and loops removed |
 | Progress | Determinate transition removed; the sweep stretches to 3s |
+| Data table | Expand chevron transition removed |
+| Modal | Inline-loading spinner stretches to 3s |
 
 Four are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible immediately, so
 the observer never runs. `hero.tsx` and `page-bands.tsx` each return before
@@ -205,8 +211,8 @@ doing positioning, which in this codebase is common:
   transform shifts it about 83px right. The override pins
   `translate(-50%, 0)` instead, keeping the centring and dropping only the
   travel.
-- Tooltip's four placement classes each carry a different transform. This is why
-  the overlay entrance animates opacity and nothing else.
+- Tooltip's side placements and its centred alignment carry their position in a
+  transform. This is why the overlay entrance animates opacity and nothing else.
 
 Neutralise the axis that moves, not the whole property.
 

@@ -126,14 +126,14 @@ Bound to the `Radius` variable collection:
 
 | Token | Value | Use |
 |---|---|---|
-| `None` | 0px | Sharp-cornered elements |
-| `2` | 2px | Subtle rounding (tags, badges) |
-| `4` | 4px | Default component radius (inputs, cards) |
-| `6` | 6px | Medium rounding |
-| `8` | 8px | Buttons, modals |
+| `None` | 0px | Every governed component's corner: buttons, fields, overlays, modals, tables |
+| `2` | 2px | Tooltip's bubble |
+| `4` | 4px | Not used by the governed components |
+| `6` | 6px | Not used by the governed components |
+| `8` | 8px | The site's cards and panels (no governed component) |
 | `16` | 16px | Large containers, tiles |
 | `20` | 20px | Expressive elements |
-| `full` | 9999px | Pill shapes, circular avatars |
+| `full` | 999px | Pills: Toggle's track, Tag |
 
 ---
 
@@ -168,7 +168,7 @@ The `Breakpoint LG–XL` collection provides granular control (LG: 1056px, XL: 1
 ### Key Components
 
 **Button** — Primary CTA component
-- Styles: Primary (filled), Secondary (outlined), Ghost (text-only), Danger primary/ghost
+- Styles: Primary (filled), Secondary (filled, `secondary`), Ghost (text-only), Danger primary/ghost
 - Types: Text + Icon (default), Icon only (compact)
 - Sizes: Expressive → 2x large → Extra large → Large (default) → Medium → Small
 - Primary for main action, Secondary for alternatives, Ghost for tertiary
@@ -208,7 +208,9 @@ The `Breakpoint LG–XL` collection provides granular control (LG: 1056px, XL: 1
 
 ## Effects & Elevation
 
-- `Shadows/Menu` for floating menus and popovers.
+- `Shadows/Menu` for floating menus and popovers (`--graphite-shadow-overlay` in code): they fill `elevation/01` and carry no edge.
+- The elevation ladder, `elevation/00` → `03`, is the layer, hover and pressed fills; `outline-subtle` and `outline-strong` are the two border strengths.
+- Tooltip is inverse (`onBackground` with `background` text) and needs no shadow; the Modal panel is `background` over the scrim.
 - Border effects use inner shadow (`$border-subtle-01`, `$border-subtle-02`).
 - Never create custom shadows — always use an effect style.
 

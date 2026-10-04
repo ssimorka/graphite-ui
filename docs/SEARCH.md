@@ -58,7 +58,8 @@ section as removable chips, plus any rewrite ("Read “dark mode” as “themes
 or dropped word. Visible reasoning is what separates "it understood me" from
 "it got lucky", and each part can be undone. Pattern: search scope chips /
 applied filters. Component: styled after kit Tag - Dismissible on
-`primary-container`, because the governed Tag is a read-only badge.
+`primary-container`, drawn in the palette's own module. The governed Tag has
+since gained `onDismiss` (Tag 3.0.0), but the palette predates it.
 
 **Contextual prompts before typing.** On a component page the prompts are
 about that component (`tabs props`, `How do I use tabs with a keyboard?`).
@@ -142,4 +143,5 @@ after kit Inline loading, with skeleton rows the shape of results.
 - Two pages share the name Typography (the foundation and the component).
   Naming it scopes to both.
 - The Tag - Dismissible and Tag - Selectable looks are drawn in the palette's
-  module. Adding them to the governed Tag would be a minor contract bump.
+  module, though the governed Tag now provides both (`onDismiss` and
+  `SelectableTag`, Tag 3.0.0). Moving the palette onto them is open work.

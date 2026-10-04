@@ -15,9 +15,9 @@ variables:
     usage: The raw scale. 0, 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 160px.
   - name: --graphite-density-compact | -default | -spacious
     count: 3
-    usage: Semantic steps that alias into the scale. Components bind here, not to a raw step.
+    usage: Semantic steps that alias into the scale. No governed component binds one since Contained list and Data table took the kit's fixed row sizes (#238, #239); they remain for the Create page's Density control, which re-binds density-default on the preview root.
 composition_rules:
-  - Components bind to a density step where one fits. A raw step is for the cases the three semantic steps do not cover, not the default reach.
+  - Components bind the raw `--graphite-space-*` steps the kit specifies. The density steps are a preview control, not a component binding.
   - The suffix is Carbon's step index, not a pixel value. --graphite-space-02 is step 2, which is 4px.
 prohibitions:
   - Never use a spacing token as a border-radius. It is a category error the value diff cannot see, because the numbers agree. Use --graphite-radius-*.
