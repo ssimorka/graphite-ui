@@ -14,7 +14,7 @@ export type SelectOption = {
   disabled?: boolean
 }
 
-/** Contract: docs/contracts/select.md (2.4.0) */
+/** Contract: docs/contracts/select.md (2.4.1) */
 type SelectProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string

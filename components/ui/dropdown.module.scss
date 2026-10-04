@@ -1,0 +1,242 @@
+@use './form-parts' as parts;
+
+// Dropdown — docs/contracts/dropdown.md
+//
+// The kit's Dropdown sets. Not the shared field shell: every Dropdown set in
+// the kit draws its trigger on surface-variant with a 1px outline rule on the
+// bottom, where the other fields take elevation-01 and outline-strong. The kit
+// is of one mind across all eight Dropdown sets, so the trigger keeps its own
+// values (rule 7: the more specific artefact). The focus and error rings, the
+// disabled and read-only treatments are the fields' own.
+//
+// The list is the kit's private _Dropdown menu list and list item: rows at the
+// trigger's height on surface with the overlay shadow, each label in
+// on-surface-variant with a 1px outline rule 16 in at its top; hover is
+// surface-variant, selected is primary-container with a trailing check.
+
+.dropdown {
+  @include parts.field-stack;
+}
+
+.label {
+  @include parts.field-label;
+  @include parts.field-label-above;
+}
+
+.anchor { position: relative; }
+
+.trigger {
+  --h: var(--graphite-space-09);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--h);
+  padding-inline: var(--graphite-space-05);
+  background: var(--graphite-surface-variant);
+  box-shadow: inset 0 -1px 0 var(--graphite-outline);
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+  outline: none;
+}
+
+.md { --h: var(--graphite-space-08); }
+.sm { --h: var(--graphite-space-07); }
+
+.trigger:focus-visible,
+.trigger.open {
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.errored,
+.errored:focus-visible { box-shadow: inset 0 0 0 2px var(--graphite-danger); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// The kit's Prompt text is on-surface, the same as a chosen value; recorded as
+// the kit draws it.
+.prompt { color: var(--graphite-on-surface); }
+
+.chevron {
+  flex: none;
+  color: var(--graphite-on-surface);
+  transition: rotate var(--graphite-motion-fast) var(--graphite-motion-ease);
+}
+
+.open .chevron { rotate: 180deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron { transition: none; }
+}
+
+.status {
+  flex: none;
+  [data-part='glyph'] { fill: var(--graphite-danger); }
+  [data-part='mark'] { fill: var(--graphite-background); }
+}
+
+.warnGlyph {
+  [data-part='glyph'] { fill: var(--graphite-warning); }
+  [data-part='mark'] { fill: var(--graphite-on-warning); }
+}
+
+.help { @include parts.field-help; }
+.error { @include parts.field-error; }
+.warningText { @include parts.field-warning; }
+
+// ------------------------------------------------------------------- states
+// Disabled: the disabled fill and content tone, no edge.
+.isDisabled .label,
+.isDisabled .help { @include parts.field-dimmed; }
+
+.isDisabled .trigger {
+  background: var(--graphite-primary-disabled);
+  box-shadow: none;
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+.isDisabled .chevron { color: var(--graphite-primary-disabled-content); }
+
+// Read-only: no fill, the same outline rule, no chevron to suggest it opens.
+.isReadOnly .trigger {
+  background: transparent;
+  cursor: default;
+}
+
+.isReadOnly .chevron { visibility: hidden; }
+
+// ------------------------------------------------------------------- inline
+// The kit's Inline style: the label beside the trigger, 4 apart, the trigger
+// with no fill and no rule, and the message beside it, 8 apart.
+.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--graphite-space-02);
+
+  .label { margin-bottom: 0; }
+  :is(.help, .error, .warningText) { margin-inline-start: var(--graphite-space-02); }
+}
+
+.inline .trigger:not(:focus-visible):not(.open):not(.errored) {
+  background: transparent;
+  box-shadow: none;
+}
+
+// -------------------------------------------------------------------- fluid
+// The kit's Dropdown - Fluid: one 64px box, the label inside at the top,
+// 13 down, 4 above the value.
+.fluid .trigger {
+  justify-content: flex-start;
+  gap: var(--graphite-space-02);
+  min-height: var(--graphite-space-10);
+  padding-top: 13px;
+}
+
+.fluidLabel {
+  @include parts.field-label;
+}
+
+.fluid .row { height: 1.125rem; }
+
+// --------------------------------------------------------------------- list
+.list {
+  --h: var(--graphite-space-09);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  // Seven rows, as the kit draws the open list; more scroll.
+  max-height: calc(var(--h) * 7);
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--graphite-surface);
+  box-shadow: var(--graphite-shadow-overlay);
+  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list { animation: none; }
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  min-height: var(--h);
+  padding-inline: var(--graphite-space-05);
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+}
+
+// The rule 16 in at the top of each row, gone under hover and selection.
+.option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--graphite-space-05);
+  right: var(--graphite-space-05);
+  height: 1px;
+  background: var(--graphite-outline);
+}
+
+.option:first-child::before,
+.active::before,
+.selected::before { display: none; }
+
+.active {
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-on-surface);
+}
+
+.selected {
+  background: var(--graphite-primary-container);
+  color: var(--graphite-on-surface);
+}
+
+// The active row the keyboard is on: the kit's 2px focus border inside it.
+.trigger:focus-visible + .list .active,
+.open:focus-visible + .list .active {
+  box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.optionLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.check { flex: none; }
+
+.option[aria-disabled='true'] {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}

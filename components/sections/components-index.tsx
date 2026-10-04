@@ -16,6 +16,7 @@ import { ContainedList } from '@/components/ui/contained-list'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Notification } from '@/components/ui/notification'
 import { DatePicker } from '@/components/ui/date-picker'
+import { Dropdown } from '@/components/ui/dropdown'
 import { FileUploader } from '@/components/ui/file-uploader'
 import { Link } from '@/components/ui/link'
 import { OverflowMenu } from '@/components/ui/menu-button'
@@ -111,6 +112,19 @@ const PREVIEWS: Record<string, () => ReactNode> = {
     </>
   ),
   'Date picker': () => <DatePicker id="ix-dp" label="Date" size="md" value={null} onChange={noop} />,
+  Dropdown: () => (
+    <Dropdown
+      id="ix-dd"
+      label="Label"
+      size="md"
+      options={[
+        { value: 'a', label: 'Option 1' },
+        { value: 'b', label: 'Option 2' },
+      ]}
+      value="a"
+      onChange={noop}
+    />
+  ),
   'File uploader': () => (
     <FileUploader id="ix-fu" size="sm" label="Upload files" files={[{ id: 'a', name: 'cover.png' }]} onAdd={noop} onRemove={noop} />
   ),

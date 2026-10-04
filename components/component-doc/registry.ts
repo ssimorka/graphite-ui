@@ -8,6 +8,7 @@ import { checkboxGroupDoc } from './docs/checkbox-group'
 import { containedListDoc } from './docs/contained-list'
 import { dataTableDoc } from './docs/data-table'
 import { datePickerDoc } from './docs/date-picker'
+import { dropdownDoc } from './docs/dropdown'
 import { fileUploaderDoc } from './docs/file-uploader'
 import { linkDoc } from './docs/link'
 import { menuDoc } from './docs/menu'
@@ -51,6 +52,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'contained-list': containedListDoc,
   'data-table': dataTableDoc,
   'date-picker': datePickerDoc,
+  'dropdown': dropdownDoc,
   'file-uploader': fileUploaderDoc,
   'link': linkDoc,
   'menu': menuDoc,
