@@ -1,8 +1,10 @@
 'use client'
 
-import { createContext, useContext, useId } from 'react'
+import { Children, Fragment, cloneElement, createContext, isValidElement, useContext, useId } from 'react'
 import { createPortal } from 'react-dom'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactElement, ReactNode } from 'react'
+import { KitIcon } from '@/components/kit-icon'
+import { Button } from './button'
 import { ButtonGroup } from './button-group'
 import { useOverlay } from './overlay'
 import styles from './modal.module.scss'
@@ -18,25 +20,55 @@ const InsideDialog = createContext(false)
  */
 export const ModalInPlace = createContext(false)
 
-/** Contract: docs/contracts/modal.md (1.5.0) */
+/** Contract: docs/contracts/modal.md (2.0.0) */
 type ModalProps = {
   open: boolean
   onClose: () => void
   title: string
+  /** The kit's Label: a 12/16 line above the title. */
+  label?: string
   body: ReactNode
-  /** Typically Button. Wrapped in a ButtonGroup, same as Card's footer. */
+  /** The kit's Progress: a block between the header and the body. */
+  progress?: ReactNode
+  /**
+   * Buttons, laid out as the kit's footer: equal full-bleed columns 64 tall,
+   * 1px apart, from the right. A ghost button first is the kit's Cancel,
+   * pinned to the left. Wrapped in a ButtonGroup, so one primary at most.
+   */
   footer?: ReactNode
-  size?: 'sm' | 'md' | 'lg'
-  /** When false, Escape and the scrim no longer dismiss it. */
+  /**
+   * The kit's Inline loading: the primary action's column shows this text
+   * with the spinner instead of the button, while the action runs.
+   */
+  loading?: string
+  /** The kit's Size: 320, 384, 512 and 672 wide. */
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  /** When false, Escape, the scrim and the close button no longer dismiss it. */
   dismissible?: boolean
+}
+
+type FooterButton = ReactElement<{ variant?: string; size?: string; style?: CSSProperties }>
+
+// The footer's buttons, with fragments unwrapped, as ButtonGroup counts them.
+function flatten(children: ReactNode): FooterButton[] {
+  const out: FooterButton[] = []
+  for (const child of Children.toArray(children)) {
+    if (!isValidElement<{ children?: ReactNode }>(child)) continue
+    if (child.type === Fragment) out.push(...flatten(child.props.children))
+    else out.push(child as FooterButton)
+  }
+  return out
 }
 
 export function Modal({
   open,
   onClose,
   title,
+  label,
   body,
+  progress,
   footer,
+  loading,
   size = 'md',
   dismissible = true,
 }: ModalProps) {
@@ -68,6 +100,29 @@ export function Modal({
 
   if (!open) return null
 
+  // The kit's footer: one or two actions fill two columns from the right;
+  // three, or a Cancel, take four, with the Cancel pinned to the first.
+  const buttons = flatten(footer)
+  const cancel = buttons.length > 1 && buttons[0].props.variant === 'ghost'
+  const cols = buttons.length > 2 || cancel ? 4 : 2
+  const footerStyle = { '--cols': cols } as CSSProperties
+  const placed = buttons.map((b, i) => {
+    const column =
+      cancel && i === 0 ? 1 : cols - (buttons.length - 1 - i)
+    const style = { gridColumn: column } as CSSProperties
+    if (loading && b.props.variant === 'primary') {
+      return (
+        <span key={i} className={styles.loading} style={style} role="status">
+          <KitIcon name="spinner" className={styles.spinner} />
+          {loading}
+        </span>
+      )
+    }
+    // Cloned rather than wrapped, so ButtonGroup still sees each button and
+    // its one-primary check still reaches them.
+    return cloneElement(b, { key: i, size: b.props.size ?? 'xl', style })
+  })
+
   const modal = (
     <InsideDialog.Provider value={true}>
       <div className={styles.scrim}>
@@ -79,14 +134,31 @@ export function Modal({
           className={`${styles.dialog} ${styles[size]}`}
           tabIndex={-1}
         >
-          <h2 id={`${id}-title`} className={styles.title}>
-            {title}
-          </h2>
-          <div className={styles.body}>{body}</div>
-          {footer ? (
-            <div className={styles.footer}>
-              <ButtonGroup>{footer}</ButtonGroup>
-            </div>
+          <div className={styles.header}>
+            {label ? <p className={styles.label}>{label}</p> : null}
+            <h2 id={`${id}-title`} className={styles.title}>
+              {title}
+            </h2>
+            {dismissible ? (
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                className={styles.close}
+                aria-label="Close"
+                onClick={onClose}
+              >
+                <KitIcon name="cross-small" size={20} />
+              </Button>
+            ) : null}
+          </div>
+          <div className={styles.content}>
+            {progress ? <div className={styles.progress}>{progress}</div> : null}
+            <div className={styles.body}>{body}</div>
+          </div>
+          {buttons.length ? (
+            <ButtonGroup className={styles.footer} style={footerStyle}>
+              {placed}
+            </ButtonGroup>
           ) : null}
         </div>
       </div>
