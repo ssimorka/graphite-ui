@@ -338,17 +338,9 @@
   margin-top: var(--graphite-space-05);
 }
 
-.mobileGroupLabel {
-  margin: 0 0 var(--graphite-space-03);
-  padding: 0 var(--graphite-space-03);
-  font-family: var(--graphite-font-mono), monospace;
-  font-size: var(--graphite-text-code-3-size);
-  line-height: var(--graphite-text-code-3-line-height);
-  text-transform: uppercase;
-  color: var(--graphite-on-surface-variant);
-}
-
-.mobileNav a {
+// The three site links take the 48px touch rows; the docs Tree view under
+// them keeps its own rows.
+.mainNav a {
   display: flex;
   align-items: center;
   min-height: 48px;
@@ -415,14 +407,9 @@ $tray-bleed: 2rem;
 }
 
 // `--g` is the group's index, set inline; `--n` the link's within it.
-.trayGroup :where(li),
-.trayGroup .mobileGroupLabel {
+.trayGroup :where(li) {
   animation: tray-item-in 420ms var(--graphite-motion-ease) both;
   animation-delay: calc(140ms + var(--g, 0) * 70ms + var(--n, 0) * 30ms);
-}
-
-.trayGroup .mobileGroupLabel {
-  --n: -1;
 }
 
 @for $i from 1 through 12 {
@@ -490,7 +477,6 @@ $tray-bleed: 2rem;
   }
 
   .trayGroup :where(li),
-  .trayGroup .mobileGroupLabel,
   .menuIconSpin {
     animation: none;
   }
