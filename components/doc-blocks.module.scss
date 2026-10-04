@@ -175,12 +175,17 @@
   // test sources, the weakest text on the tint at full strength is 5.08:1
   // (dark) and 5.94:1 (light), so it holds AA even where the glow is deepest.
   @include drop.surface;
+  // The corner action is the kit's 48px icon-only square, the card padded
+  // 18 around it. .condensed below swaps both down.
+  --foot: 3rem;
+  --pad: 1.125rem;
+  --cta-glyph: 1.125rem;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-03);
-  // The foot keeps 3rem clear for the corner action, plus the usual gap.
-  padding: 1.125rem 1.125rem calc(3rem + var(--graphite-space-04));
+  // The foot keeps --foot clear for the corner action, plus the usual gap.
+  padding: var(--pad) var(--pad) calc(var(--foot) + var(--graphite-space-04));
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // On hover the glow climbs the card and the contents drop 4px, over the
   // home wall's 300ms ease-out. --glow is a registered property, so it eases
@@ -195,18 +200,18 @@
     // transform on the title would make it the containing block for its own
     // card-sized ::after, shrinking the target under the pointer mid-hover.
     // The card's height does not change.
-    padding-top: calc(1.125rem + 4px);
-    padding-bottom: calc(3rem + var(--graphite-space-04) - 4px);
+    padding-top: calc(var(--pad) + 4px);
+    padding-bottom: calc(var(--foot) + var(--graphite-space-04) - 4px);
   }
 
   // The foot rule, as on the home wall and the Components index: it marks off
-  // the 3rem strip the corner action sits in. Pinned, like the action, so the
+  // the --foot strip the corner action sits in. Pinned, like the action, so the
   // hover drop moves only the text.
   &::before {
     content: '';
     position: absolute;
     right: 0;
-    bottom: 3rem;
+    bottom: var(--foot);
     left: 0;
     border-top: 1px solid var(--graphite-surface-variant);
     pointer-events: none;
@@ -216,7 +221,7 @@
     transition: none;
 
     &:hover {
-      padding: 1.125rem 1.125rem calc(3rem + var(--graphite-space-04));
+      padding: var(--pad) var(--pad) calc(var(--foot) + var(--graphite-space-04));
     }
   }
 }
@@ -258,15 +263,25 @@
   bottom: 0;
   // An icon-only square: the title already names the destination.
   justify-content: center;
-  width: 3rem;
+  width: var(--foot);
+  min-height: var(--foot);
   min-width: 0;
   padding: 0;
-  font-size: 1.125rem;
+  font-size: var(--cta-glyph);
   pointer-events: none;
 
   .nextCard:hover & {
     background: var(--graphite-primary-hover);
   }
+}
+
+// Condensed: the corner action at Button's icon-sm, the kit's 32px square,
+// and the card padded 12 around it, so a row of short Related notes is not
+// mostly foot.
+.condensed .nextCard {
+  --foot: 2rem;
+  --pad: var(--graphite-space-04);
+  --cta-glyph: 1rem;
 }
 
 .nextBody {
