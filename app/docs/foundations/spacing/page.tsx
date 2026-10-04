@@ -3,8 +3,6 @@ import { DocsShell } from '@/components/docs-shell'
 import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
-import { ContainedList } from '@/components/ui/contained-list'
-import { Tag } from '@/components/ui/tag'
 import {
   Callout,
   NextCard,
@@ -12,7 +10,7 @@ import {
   SectionHeading,
   StatusBadge,
 } from '@/components/doc-blocks'
-import { RefTable, Surface } from '@/components/component-page'
+import { RefTable } from '@/components/component-page'
 import { spell } from '@/lib/spell'
 import {
   readConsumers,
@@ -241,43 +239,9 @@ export default function SpacingPage() {
                 c.suffixes.join(' | '),
                 c.slug === 'data-table'
                   ? 'Header and body cells, on every side.'
-                  : c.slug === 'contained-list'
-                    ? 'The row, on every side. Slot gaps stay on the raw scale.'
-                    : 'Its own padding.',
+                  : 'Its own padding.',
               ])}
             />
-            <div className={styles.specimens}>
-              <Surface label={'density="compact"'}>
-                <div className={styles.list}>
-                  <ContainedList
-                    density="compact"
-                    title="Spacing scale"
-                    description="Raw steps, in rem"
-                    trailing={<Tag>{scale.length}</Tag>}
-                  />
-                  <ContainedList
-                    density="compact"
-                    title="Density"
-                    description="Aliases into the scale"
-                    trailing={<Tag>{density.length}</Tag>}
-                  />
-                </div>
-              </Surface>
-              <Surface label={'density="default"'}>
-                <div className={styles.list}>
-                  <ContainedList
-                    title="Spacing scale"
-                    description="Raw steps, in rem"
-                    trailing={<Tag>{scale.length}</Tag>}
-                  />
-                  <ContainedList
-                    title="Density"
-                    description="Aliases into the scale"
-                    trailing={<Tag>{density.length}</Tag>}
-                  />
-                </div>
-              </Surface>
-            </div>
             {untaken.length ? (
               <Callout
                 tone="warning"
@@ -285,8 +249,8 @@ export default function SpacingPage() {
               >
                 {[
                   <>
-                    Both components take <code>compact</code> or{' '}
-                    <code>default</code>. The{' '}
+                    Every component that takes density takes <code>compact</code>{' '}
+                    or <code>default</code>. The{' '}
                     {untaken.map((u) => (
                       <code key={u}>--graphite-density-{u}</code>
                     ))}{' '}

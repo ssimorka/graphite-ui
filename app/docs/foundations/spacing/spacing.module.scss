@@ -228,28 +228,6 @@
   }
 }
 
-// ------------------------------------------------------------- specimens
-.specimens {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--graphite-space-05);
-
-  @media (min-width: 672px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px solid var(--graphite-surface-variant);
-
-  > * + * {
-    border-top: 1px solid var(--graphite-surface-variant);
-  }
-}
-
 // --------------------------------------------------------------- rules
 .rules {
   display: grid;
