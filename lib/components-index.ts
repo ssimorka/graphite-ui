@@ -17,7 +17,7 @@ type SnapshotPage = { id: string; name: string; sets: SnapshotSet[] }
 export type UngovernedPage = { name: string; publicSets: number }
 
 export type IndexStats = {
-  /** From docs/contracts/kit/figma-only.md, the derived disposition list. */
+  /** Public sets on the kit pages no contract claims, summed from the snapshot. */
   publicUngoverned: number | null
   ungoverned: UngovernedPage[]
 }
@@ -50,19 +50,11 @@ export function readComponentsIndex(governed: string[]): IndexStats {
     })
   }
 
-  // The doc is a table: `| — public | 73 |`. If it is ever reformatted the tile
-  // drops out rather than showing a stale or invented number.
-  let publicUngoverned: number | null = null
-  try {
-    const md = fs.readFileSync(
-      path.join(root, 'docs/contracts/kit/figma-only.md'),
-      'utf8',
-    )
-    const m = md.match(/\|\s*—\s*public\s*\|\s*(\d+)\s*\|/)
-    if (m) publicUngoverned = Number(m[1])
-  } catch {
-    // Left null.
-  }
+  // Summed from the same snapshot walk, so the tile moves as contracts land.
+  // It used to read the `| — public | 73 |` row of
+  // docs/contracts/kit/figma-only.md, the 2026-08-28 disposition count, which
+  // stopped moving once #240 began governing those sets.
+  const publicUngoverned: number | null = ungoverned.reduce((n, p) => n + p.publicSets, 0)
 
   return { publicUngoverned, ungoverned }
 }

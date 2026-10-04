@@ -1,5 +1,5 @@
 ---
-component: FileUploader
+component: File uploader
 version: 1.0.0
 wave: 2
 slots:
@@ -64,7 +64,7 @@ prohibitions:
   - No error state on a file without its message. The edge and the glyph never stand alone.
 ---
 
-### FileUploader
+### File uploader
 - **Slots:** Label (required), description, trigger (required), file list.
 - **Props:** type (button, dropzone), size (sm, md, lg), label / description, buttonLabel / dropLabel, accept / multiple, disabled, files / onAdd / onRemove.
 - **Tokens:** `elevation-01` items; `outline-strong` dashed drop edge and `primary` on drag and focus; `info` success mark; `danger` errors; `on-surface` and `on-surface-variant` text.

@@ -1,5 +1,5 @@
 ---
-component: MenuButton
+component: Menu buttons
 version: 1.0.0
 wave: 4
 slots:
@@ -39,7 +39,7 @@ prohibitions:
   - No menu button for a single action. That is a Button.
 ---
 
-### MenuButton
+### Menu buttons
 - **Slots:** Trigger (required), menu (required).
 - **Props:** items, size (sm, md, lg), placement (bottom, top), label, align (start, end), onClick / menuLabel, disabled.
 - **Tokens:** `motion` for the chevron; the Button's and Menu's own.
