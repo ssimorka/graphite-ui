@@ -18,6 +18,7 @@ import { progressBarDoc } from './docs/progress-bar'
 import { radioButtonGroupDoc } from './docs/radio-button-group'
 import { searchDoc } from './docs/search'
 import { selectDoc } from './docs/select'
+import { sliderDoc } from './docs/slider'
 import { tabsDoc } from './docs/tabs'
 import { tagDoc } from './docs/tag'
 import { textAreaDoc } from './docs/text-area'
@@ -52,6 +53,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'radio-button-group': radioButtonGroupDoc,
   'search': searchDoc,
   'select': selectDoc,
+  'slider': sliderDoc,
   'tabs': tabsDoc,
   'tag': tagDoc,
   'text-area': textAreaDoc,

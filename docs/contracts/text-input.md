@@ -1,6 +1,6 @@
 ---
 component: Text input
-version: 2.2.0
+version: 2.3.0
 wave: 2
 slots:
   - name: Value
@@ -28,6 +28,9 @@ props:
     notes: The kit's Style axis and its second set. Fixed puts the label above the field; Inline beside it, with the message to the field's right; Fluid is the kit's Text input - Fluid, one 64px box with the label inside. Inline is built at the Fixed heights (32/40/48); the kit's Inline Medium at 48 reads as a Carbon leftover.
   - name: label
     notes: Required. There is no shape in which this control exists unlabelled, and no wrapper left to supply one.
+  - name: hideLabel
+    values: boolean
+    notes: A field the kit draws bare (Slider's value inputs, #269). The label stays the accessible name, hidden from view; it is still required. Fixed layout only.
   - name: helpText
     notes: Supporting copy. Suppressed while errorText or warningText is present.
   - name: warningText

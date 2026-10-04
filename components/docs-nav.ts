@@ -60,6 +60,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/radio-button-group', label: 'Radio button group' },
       { href: '/docs/components/search', label: 'Search' },
       { href: '/docs/components/select', label: 'Select' },
+      { href: '/docs/components/slider', label: 'Slider' },
       { href: '/docs/components/tabs', label: 'Tabs' },
       { href: '/docs/components/tag', label: 'Tag' },
       { href: '/docs/components/text-area', label: 'Text area' },

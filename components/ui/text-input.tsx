@@ -11,7 +11,7 @@ export type FieldSize = 'sm' | 'md' | 'lg'
 /** The kit's Style axis (Fixed, Inline) and its second set, Fluid. */
 export type FieldLayout = 'fixed' | 'inline' | 'fluid'
 
-/** Contract: docs/contracts/text-input.md (2.2.0) */
+/** Contract: docs/contracts/text-input.md (2.3.0) */
 type TextInputProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
@@ -21,6 +21,11 @@ type TextInputProps = {
    * which this control exists without one.
    */
   label: string
+  /**
+   * Keeps the label as the accessible name but hides it from view, for a field
+   * the kit draws bare (Slider's value inputs, #269). Fixed layout only.
+   */
+  hideLabel?: boolean
   size?: FieldSize
   /**
    * Fixed puts the label above the field; Inline beside it, with the message
@@ -51,6 +56,7 @@ type TextInputProps = {
 export function TextInput({
   id,
   label,
+  hideLabel = false,
   size = 'md',
   layout = 'fixed',
   state = 'default',
@@ -86,7 +92,7 @@ export function TextInput({
   const disabled = resolved === 'disabled' || rest.disabled
 
   const labelEl = (
-    <label htmlFor={inputId} className={styles.label}>
+    <label htmlFor={inputId} className={hideLabel && layout !== 'fluid' ? styles.hiddenLabel : styles.label}>
       {label}
       {required ? (
         <span className={styles.indicator} aria-hidden="true">
@@ -137,7 +143,7 @@ export function TextInput({
             required={required}
             disabled={disabled}
             aria-invalid={errored || undefined}
-            aria-describedby={describedBy}
+            aria-describedby={[describedBy, rest['aria-describedby']].filter(Boolean).join(' ') || undefined}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setTyped(e.target.value)
               onChange?.(e)

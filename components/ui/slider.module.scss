@@ -1,0 +1,304 @@
+@use './form-parts' as parts;
+
+// Slider — docs/contracts/slider.md
+//
+// The kit's Slider (3673:40574) and Slider - Range (41061:1531): the label in
+// Input Label, 8 above; then a row, 16 apart, of the value inputs (the
+// governed Text input at Medium, 96 wide) and the track between its bounds,
+// which sit 8 either side in Body/3 on-surface. A 2×4 tick in outline-subtle
+// marks the middle, 1 above the rail.
+//
+// Each handle is a native range input laid over the track with its own
+// drawing hidden; the drawn handle reads the input's state through sibling
+// selectors, so hover, focus and press are the platform's own.
+
+.slider {
+  @include parts.field-stack;
+}
+
+.label {
+  @include parts.field-label;
+  @include parts.field-label-above;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+}
+
+// 96, the width the kit gives the Range set's inputs. The Slider set draws its
+// one input 288 wide, which leaves its rail 61; read as a hugging slip.
+.input {
+  flex: none;
+  width: 6rem;
+}
+
+.values {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  min-width: 0;
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.bound {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.help { @include parts.field-help; margin-top: var(--graphite-space-02); }
+.error { @include parts.field-error; margin-top: var(--graphite-space-02); }
+.warningText { @include parts.field-warning; margin-top: var(--graphite-space-02); }
+
+// The native inputs: full size over the track, nothing drawn.
+.native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.native::-webkit-slider-thumb {
+  appearance: none;
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+}
+
+.native::-moz-range-thumb {
+  width: var(--thumb-w);
+  height: var(--thumb-h);
+  border: 0;
+}
+
+.native:disabled { cursor: not-allowed; }
+
+// The middle tick: 2×4, its bottom 1 above the rail.
+.tick {
+  position: absolute;
+  left: calc(50% - 1px);
+  top: calc(50% - 6px);
+  width: 2px;
+  height: 4px;
+  background: var(--graphite-outline-subtle);
+  pointer-events: none;
+}
+
+// ------------------------------------------------------------------- single
+// The rail is outline-subtle; the part below the value is on-background
+// (border-inverse), as is the 14px handle. The input's thumb is 20 wide, so
+// the drawn handle and fill use the same travel, 10 in from either end.
+.track {
+  --thumb-w: 20px;
+  --thumb-h: 20px;
+  --x: calc(10px + var(--at) * (100% - 20px));
+  position: relative;
+  flex: 1;
+  height: 20px;
+  min-width: 0;
+}
+
+.rail,
+.fill {
+  position: absolute;
+  top: calc(50% - 1px);
+  height: 2px;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.rail {
+  left: 0;
+  right: 0;
+  background: var(--graphite-outline-subtle);
+}
+
+.fill {
+  left: 0;
+  width: var(--x);
+  background: var(--graphite-on-background);
+}
+
+.handle {
+  --d: 14px;
+  position: absolute;
+  top: calc(50% - var(--d) / 2);
+  left: calc(var(--x) - var(--d) / 2);
+  width: var(--d);
+  height: var(--d);
+  border-radius: 50%;
+  background: var(--graphite-on-background);
+  pointer-events: none;
+}
+
+// Hover grows the handle to 20. Focus also turns it and the fill primary;
+// press adds a ring, 1 of background then 1 of the focus colour.
+.native:hover ~ .handle { --d: 20px; }
+
+.native:focus-visible ~ .handle,
+.native:active ~ .handle {
+  --d: 20px;
+  background: var(--graphite-primary);
+}
+
+.track:has(.native:focus-visible, .native:active) .fill { background: var(--graphite-primary); }
+
+.native:active ~ .handle {
+  box-shadow: 0 0 0 1px var(--graphite-background), 0 0 0 2px var(--graphite-primary-focus);
+}
+
+// -------------------------------------------------------------------- range
+// The kit's track: a 13×16 handle each side, pointing in, with the rail
+// between their tips. The rail's ground is elevation-02 (layer-accent-01); the
+// span between the two values is on-background. Each input runs the track
+// less one handle, offset for its side, so its 13-wide thumb lands exactly
+// where its handle is drawn.
+.rangeTrack {
+  --thumb-w: 13px;
+  --thumb-h: 16px;
+  --r: calc(100% - 26px);
+  position: relative;
+  flex: 1;
+  height: 20px;
+  min-width: 0;
+}
+
+.rangeRail,
+.rangeFill {
+  position: absolute;
+  top: calc(50% - 1px);
+  height: 2px;
+  pointer-events: none;
+}
+
+.rangeRail {
+  left: 13px;
+  right: 13px;
+  background: var(--graphite-elevation-02);
+}
+
+.rangeFill {
+  left: calc(13px + var(--lo) * var(--r));
+  width: calc((var(--hi) - var(--lo)) * var(--r));
+  background: var(--graphite-on-background);
+}
+
+// Only the thumbs take the pointer, so the two inputs can overlap.
+.rangeTrack .native {
+  width: calc(100% - 13px);
+  pointer-events: none;
+}
+
+.rangeTrack .native::-webkit-slider-thumb { pointer-events: auto; }
+.rangeTrack .native::-moz-range-thumb { pointer-events: auto; }
+
+.nativeHi { left: 13px; }
+
+.glyph {
+  position: absolute;
+  top: 2px;
+  display: flex;
+  width: 13px;
+  height: 16px;
+  color: var(--graphite-on-surface);
+  pointer-events: none;
+}
+
+.glyph svg { fill: currentColor; }
+
+.glyphLo { left: calc(var(--lo) * var(--r)); }
+
+.glyphHi {
+  left: calc(13px + var(--hi) * var(--r));
+  transform: scaleX(-1);
+}
+
+// Hover: icon-secondary. Focus: primary with a 1px ring, 16 × 26 round the
+// glyph. Press: primary, and the span between turns primary too.
+.nativeLo:hover ~ .glyphLo,
+.nativeHi:hover ~ .glyphHi { color: var(--graphite-on-surface-variant); }
+
+.nativeLo:is(:focus-visible, :active) ~ .glyphLo,
+.nativeHi:is(:focus-visible, :active) ~ .glyphHi { color: var(--graphite-primary); }
+
+.nativeLo:focus-visible ~ .glyphLo::after,
+.nativeHi:focus-visible ~ .glyphHi::after {
+  content: '';
+  position: absolute;
+  inset: -5px -1.5px;
+  outline: 1px solid var(--graphite-primary-focus);
+}
+
+.rangeTrack:has(.native:active) .rangeFill { background: var(--graphite-primary); }
+
+// The value bubble over a handle, drawn when there are no inputs to read it
+// from: the kit's Tooltip, inverse, 2px corner, 12/16, a 8×4 caret.
+.tip {
+  position: absolute;
+  bottom: calc(100% + 11px);
+  left: -3px;
+  display: none;
+  min-width: 2rem;
+  padding: var(--graphite-space-01) var(--graphite-space-03);
+  border-radius: var(--graphite-radius-2);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - 4px);
+  border: 4px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--graphite-on-background);
+}
+
+// The right glyph is mirrored, so its bubble is mirrored back.
+.glyphHi .tip {
+  left: auto;
+  right: -3px;
+  transform: scaleX(-1);
+}
+
+.nativeLo:is(:hover, :focus-visible, :active) ~ .glyphLo .tip,
+.nativeHi:is(:hover, :focus-visible, :active) ~ .glyphHi .tip { display: block; }
+
+// ------------------------------------------------------------------- states
+// Disabled: the disabled family through every part (Button/button-disabled
+// for the handle, border-disabled for the fill), and no hover.
+.isDisabled :is(.label, .values) { @include parts.field-dimmed; }
+
+.isDisabled :is(.fill, .rangeFill) { background: var(--graphite-primary-disabled); }
+
+.isDisabled .handle {
+  --d: 14px;
+  background: var(--graphite-primary-disabled);
+  box-shadow: none;
+}
+
+.isDisabled .glyph { color: var(--graphite-primary-disabled-content); }
+
+.isDisabled .tip { display: none; }
+
+// Read-only: the value without a handle or the middle tick. The range keeps
+// its span between the two values.
+.isReadOnly :is(.handle, .glyph, .tick) { display: none; }
+
+.isReadOnly .native { cursor: default; }
+
+.isReadOnly .fill,
+.isReadOnly .rangeFill { background: var(--graphite-on-background); }
