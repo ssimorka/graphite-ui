@@ -2,9 +2,14 @@
 
 // Toggle — docs/contracts/toggle.md
 //
-// On is `primary` and off is `outline`, moving on the same ramp as Button's
-// active state rather than borrowing a separate green/gray convention.
-.field { @include parts.control-stack; }
+// The kit's Toggle (Graphite UI Kit 3038:25739): the label above, 16 over a
+// row of the switch and its value text, 8 apart. On is `success`, as the kit
+// binds it (D3 on #219), off is `outline`, and the thumb is `on-primary`.
+// Position, not colour, is what says on or off.
+.field {
+  @include parts.control-stack;
+  gap: var(--graphite-space-05);
+}
 
 .row {
   display: inline-flex;
@@ -17,25 +22,34 @@
   display: inline-flex;
   align-items: center;
   flex: none;
-  min-height: var(--graphite-space-07);
 }
 
+// The native input reaches past the drawn track, so the hit area keeps the
+// 32px minimum at both sizes.
 .native {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: var(--graphite-space-07);
+  transform: translateY(-50%);
   margin: 0;
   opacity: 0;
   cursor: pointer;
 }
 
 .track {
+  // Default: 48 by 24 with a 3px inset, per the kit.
+  --w: var(--graphite-space-09);
+  --h: var(--graphite-space-06);
+
   display: inline-flex;
   align-items: center;
-  // 48x24 with a 3px inset, per the kit. radius-full rather than a fixed 12,
-  // because a pill is what half of 24 means and it survives a height change.
-  width: var(--graphite-space-09);
-  height: var(--graphite-space-06);
+  width: var(--w);
+  height: var(--h);
   padding: 3px;
+  // radius-full rather than a fixed 12, because a pill is what half of the
+  // height means and it survives a size change.
   border-radius: var(--graphite-radius-full);
   background: var(--graphite-outline);
   // Duration from the shared motion tokens; the easing stays a plain ease
@@ -45,27 +59,37 @@
   pointer-events: none;
 }
 
+// Small: 32 by 16, still a 3px inset, so a 10px thumb.
+.sm .track {
+  --w: 2rem;
+  --h: var(--graphite-space-05);
+}
+
 .thumb {
-  width: calc(var(--graphite-space-06) - 6px);
-  height: calc(var(--graphite-space-06) - 6px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--h) - 6px);
+  height: calc(var(--h) - 6px);
   border-radius: 50%;
-  background: var(--graphite-surface);
+  background: var(--graphite-on-primary);
   transition: transform var(--graphite-motion-fast) ease;
 }
 
+// The Small thumb's check, in on-surface as the kit draws it.
+.check { color: var(--graphite-on-surface); }
+
 .native:checked + .track {
-  background: var(--graphite-primary);
+  background: var(--graphite-success);
 }
 
 .native:checked + .track .thumb {
-  // Track width less both insets less the thumb, which is the track's height
-  // less both insets: width - height, 24px. It was width - 16px, 8px too far,
-  // which pushed the thumb 5px past the track's right edge.
-  transform: translateX(calc(var(--graphite-space-09) - var(--graphite-space-06)));
+  // Track width less the height: both insets and the thumb's own width.
+  transform: translateX(calc(var(--w) - var(--h)));
 }
 
 .native:focus-visible + .track {
-  box-shadow: 0 0 0 2px var(--graphite-focus);
+  box-shadow: 0 0 0 2px var(--graphite-primary-focus);
 }
 
 .native:disabled + .track {
@@ -74,15 +98,26 @@
 
 // The kit keeps one disabled track for on and off and lets the thumb carry the
 // difference, so the thumb has to be visible: disabled content on the disabled
-// fill, rather than surface, which all but vanished on it in light theme. Its
-// position is then what tells disabled-on from disabled-off.
+// fill. Its position is then what tells disabled-on from disabled-off.
 .native:disabled + .track .thumb {
   background: var(--graphite-primary-disabled-content);
 }
 
-// Error draws the danger edge Text input uses. The track has no border to
-// recolor, so the ring is 2px, the same weight as Text input's border plus its
-// 1px shadow. Focus stacks outside it rather than replacing it.
+.native:disabled + .track .check { color: var(--graphite-primary-disabled); }
+.native:disabled { cursor: not-allowed; }
+
+// Read-only: no fill, a 1px rule inside the track in the disabled tone, and
+// an on-surface thumb, because the setting is still there to be read.
+.readOnly .native:enabled + .track {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--graphite-primary-disabled-content);
+}
+
+.readOnly .native:enabled + .track .thumb { background: var(--graphite-on-surface); }
+.readOnly .native { cursor: default; }
+
+// Error draws a danger ring, the code's own (the kit has no error state for a
+// toggle). Focus stacks outside it rather than replacing it.
 .errored .native:enabled + .track {
   box-shadow: 0 0 0 2px var(--graphite-danger);
 }
@@ -90,7 +125,7 @@
 .errored .native:enabled:focus-visible + .track {
   box-shadow:
     0 0 0 2px var(--graphite-danger),
-    0 0 0 4px var(--graphite-focus);
+    0 0 0 4px var(--graphite-primary-focus);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -101,6 +136,32 @@
 }
 
 .label { @include parts.field-label; }
-.indicator { @include parts.field-indicator; }
+
+// Toggle only: the label is still the switch's name, just not drawn.
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// The kit's Value: Body/3 on-surface beside the switch.
+.value {
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+// At Small the 20px line is taller than the 16px track; it overhangs rather
+// than pushing the track down, so the label stays 16 above the track.
+.sm .value { margin-block: -2px; }
+
 .help { @include parts.field-help; }
 .error { @include parts.field-error; }
+
+// Disabled dims the label and value too. The kit binds them to the disabled
+// fill step, primary-disabled, which would set the words in the track's own
+// colour; the code uses disabled content, as every other form control does.
+.isDisabled :is(.label, .value, .help) { @include parts.field-dimmed; }

@@ -1,8 +1,15 @@
-// Toggle's own page parts: the forced focus state. The component exposes no
-// data-slot hooks, so this reaches the track as the span that follows the
-// native input, which is the component's own structure, and forces the same
-// declaration `.native:focus-visible + .track` carries. Nothing here restyles it.
+// Toggle's own page parts: the forced focus state, and a row for cells that
+// show two toggles. The component exposes no data-slot hooks, so this reaches
+// the track as the span that follows the native input, which is the
+// component's own structure, and forces the same declaration
+// `.native:focus-visible + .track` carries. Nothing here restyles it.
 
 .forceFocus input[role='switch'] + span {
-  box-shadow: 0 0 0 2px var(--graphite-focus);
+  box-shadow: 0 0 0 2px var(--graphite-primary-focus);
+}
+
+.pair {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-07);
 }
