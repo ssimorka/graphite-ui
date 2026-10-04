@@ -110,7 +110,7 @@ export function treeViewDoc(): ComponentDocConfig {
       ['Focus', 'A 2px ring inside the row, through primary’s focus step. The tab stop follows the last node focused, else the selected one, else the first.'],
       ['Selection', <>The selected node carries <code>aria-selected</code>. Its ancestors open, so it is always reachable.</>],
       ['Disabled', <>A disabled node dims, carries <code>aria-disabled</code>, and stays reachable by the arrow keys so it is announced, but does not activate.</>],
-      ['Contrast', 'Text at rest is on-surface-variant on elevation-01, and on-surface on the hover, press and selected fills; each pair is measured at the theme’s target.'],
+      ['Contrast', 'Text at rest is on-surface-variant on whatever surface holds the tree, and on-surface on the hover, press and selected fills; each pair is measured at the theme’s target.'],
     ],
     parityLede: `The kit's Tree view page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets: Tree view and Branch node item, which are public, and the private Branch and Leaf spacers the rows indent with.`,
     parity: [
@@ -120,6 +120,7 @@ export function treeViewDoc(): ComponentDocConfig {
       ['Open', 'False · True', 'defaultExpanded, then the reader', 'caret-right turns to caret-down. The selected node’s ancestors open.'],
       ['State', 'Enabled · Hover · Focus · Active · Disabled', 'disabled', 'Hover, Focus and Active are pseudo-classes (governance rule 7): elevation-02 and -03, and the inset ring.'],
       ['Selected', 'False · True', 'selected', 'primary-container and a 4px primary bar inside the left edge.'],
+      ['Fill', 'layer-01', '—', 'No fill at rest. layer-01 is the surface Carbon assumes the tree sits on; transparent reproduces it on whatever holds the tree, rather than drawing a panel on the page.'],
       ['State', 'Selected + Hover', '—', 'The kit fills state/primary-container-hover, which the engine does not generate. A selected row ignores hover, as Data table’s do.'],
       ['Show Badge indicator', 'Boolean', '—', 'Defined on the set, but no layer in any variant uses it. Nothing to build.'],
       ['Levels', 'Level 1 to 4', 'any depth', 'The kit’s spacers stop at four; the code keeps the same step past them.'],

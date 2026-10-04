@@ -1,8 +1,11 @@
 // Tree view — docs/contracts/tree-view.md
 //
-// The kit's Branch node item (11828:285325): a row filled elevation-01 (the
-// kit's layer-01), the indent from the private spacers carried in --indent,
-// then the caret, the icon and the node text 8 apart, 16 clear on the right.
+// The kit's Branch node item (11828:285325): a row with no fill at rest, the
+// indent from the private spacers carried in --indent, then the caret, the icon
+// and the node text 8 apart, 16 clear on the right. The kit fills the resting
+// row with layer-01, the surface Carbon assumes the tree sits on; transparent
+// reproduces that on whatever holds it (the docs sidebar sits on the page).
+// Hover and press still climb the ladder from there.
 .tree,
 .group {
   margin: 0;
@@ -16,7 +19,7 @@
   gap: var(--graphite-space-03);
   height: var(--h);
   padding: 0 var(--graphite-space-05) 0 var(--indent);
-  background: var(--graphite-elevation-01);
+  background: transparent;
   color: var(--graphite-on-surface-variant);
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
@@ -67,7 +70,7 @@
 .disabled,
 .disabled:hover,
 .disabled:active {
-  background: var(--graphite-elevation-01);
+  background: transparent;
   color: var(--graphite-primary-disabled-content);
   cursor: not-allowed;
 }
