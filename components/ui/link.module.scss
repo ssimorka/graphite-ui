@@ -1,0 +1,82 @@
+// Link — docs/contracts/link.md
+//
+// The kit's Link (50111:991). Standalone: no underline, the label in primary
+// with an optional trailing glyph 8 after it. Hover takes primary-hover;
+// Active takes on-surface and keeps the focus ring; Focus is a 1px ring
+// outside the label in primary-focus. Visited is drawn the same as Enabled,
+// so there is no :visited rule. Disabled is primary-disabled-content.
+//
+// The kit binds the glyph to icon-interactive in every state, so it stays
+// primary while the label turns on-surface or disabled beside it. Read as a
+// slip: here the glyph follows the label.
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  color: var(--graphite-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lg {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.md {
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.sm {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.link:hover { color: var(--graphite-primary-hover); }
+
+.link:focus-visible,
+.link:active {
+  outline: 1px solid var(--graphite-primary-focus);
+  outline-offset: 0;
+}
+
+.link:active { color: var(--graphite-on-surface); }
+
+// Inline: inside running text, so it flows as text rather than as a box, and
+// is underlined, as the set's description says. (The kit's Inline property
+// shows a second, identical label layer with no underline; read as a slip.)
+.inline {
+  display: inline;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: underline;
+}
+
+// Inverse: on the inverse fill. The kit's inverse/link stops sit on the
+// accent ramp at tones the engine does not stamp; primary-container stands in
+// at rest, the stand-in Notification's action already uses, and hover and
+// active go to background, the inverse fill's own text, where the kit's hover
+// and active steps head. The ring is 1px in background, as the kit draws it.
+.inverse { color: var(--graphite-primary-container); }
+
+.inverse:hover,
+.inverse:active { color: var(--graphite-background); }
+
+.inverse:focus-visible,
+.inverse:active { outline-color: var(--graphite-background); }
+
+// Disabled: no href, so not focusable; the pseudo-class rules above are
+// overridden so nothing moves under the pointer.
+.link[aria-disabled='true'],
+.link[aria-disabled='true']:hover,
+.link[aria-disabled='true']:active {
+  color: var(--graphite-primary-disabled-content);
+  outline: none;
+  cursor: not-allowed;
+}

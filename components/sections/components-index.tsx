@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ContainedList } from '@/components/ui/contained-list'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Notification } from '@/components/ui/notification'
+import { Link } from '@/components/ui/link'
 import { PaginationNav } from '@/components/ui/pagination'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { RadioButtonGroup } from '@/components/ui/radio-button-group'
@@ -86,6 +87,11 @@ const PREVIEWS: Record<string, () => ReactNode> = {
       <ContainedList leading={<Tag>Ad</Tag>} title="Ada" />
       <ContainedList leading={<Tag>Gr</Tag>} title="Grace" />
     </>
+  ),
+  Link: () => (
+    <Link href="/docs/components" size="md" icon="arrow-right">
+      View all
+    </Link>
   ),
   Menu: () => <Button>Open menu</Button>,
   Modal: () => <Button variant="primary">Open dialog</Button>,

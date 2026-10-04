@@ -1,0 +1,59 @@
+// Link's own page parts: the inverse fill its Inverse variant sits on, the
+// running text an inline link sits in, and the forced states for the stills.
+// Nothing here restyles the component beyond replaying its own pseudo-classes.
+
+.inverseFill {
+  display: inline-block;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+}
+
+.copyLg,
+.copyMd,
+.copySm {
+  margin: 0;
+  color: var(--graphite-on-surface);
+}
+
+.copyLg {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.copyMd {
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.copySm {
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--graphite-space-07);
+}
+
+// Stills of the pseudo-class states, replaying the component's own rules.
+.forceHover a { color: var(--graphite-primary-hover); }
+
+.forceFocus a {
+  outline: 1px solid var(--graphite-primary-focus);
+  outline-offset: 0;
+}
+
+.forceActive a {
+  color: var(--graphite-on-surface);
+  outline: 1px solid var(--graphite-primary-focus);
+  outline-offset: 0;
+}
+
+.forceHover .inverseFill a,
+.forceActive .inverseFill a { color: var(--graphite-background); }
+
+.forceFocus .inverseFill a,
+.forceActive .inverseFill a { outline-color: var(--graphite-background); }
