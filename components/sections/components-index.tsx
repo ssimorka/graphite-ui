@@ -11,6 +11,7 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { Checkbox } from '@/components/ui/checkbox'
+import { CheckboxGroup } from '@/components/ui/checkbox-group'
 import { ContainedList } from '@/components/ui/contained-list'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Notification } from '@/components/ui/notification'
@@ -79,6 +80,19 @@ const PREVIEWS: Record<string, () => ReactNode> = {
     />
   ),
   Checkbox: () => <Checkbox id="ix-cb" label="Checkbox label" checked onChange={noop} />,
+  'Checkbox group': () => (
+    <CheckboxGroup
+      id="ix-cbg"
+      label="Group label"
+      orientation="horizontal"
+      options={[
+        { value: 'a', label: 'One' },
+        { value: 'b', label: 'Two' },
+      ]}
+      value={['a']}
+      onChange={noop}
+    />
+  ),
   'Contained list': () => (
     <ContainedList
       leading={<Tag>AD</Tag>}

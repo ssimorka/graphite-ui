@@ -46,6 +46,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/button', label: 'Button' },
       { href: '/docs/components/button-group', label: 'Button group' },
       { href: '/docs/components/checkbox', label: 'Checkbox' },
+      { href: '/docs/components/checkbox-group', label: 'Checkbox group' },
       { href: '/docs/components/contained-list', label: 'Contained list' },
       { href: '/docs/components/data-table', label: 'Data table' },
       { href: '/docs/components/date-picker', label: 'Date picker' },

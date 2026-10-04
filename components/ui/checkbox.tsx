@@ -5,7 +5,7 @@ import { fieldMessage } from '@/lib/field-message'
 import { FieldStatusIcon } from './field-status'
 import styles from './checkbox.module.scss'
 
-/** Contract: docs/contracts/checkbox.md (3.0.0) */
+/** Contract: docs/contracts/checkbox.md (3.1.0) */
 type CheckboxProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string
@@ -29,6 +29,11 @@ type CheckboxProps = {
   helpText?: string
   /** Its presence renders the message as an error. */
   errorText?: string
+  /**
+   * The error state without a message of its own, for a box whose group
+   * carries the message (Checkbox group, #273).
+   */
+  invalid?: boolean
   /** Its presence renders the message as a warning, unless an error outranks it. */
   warningText?: string
 }
@@ -54,16 +59,18 @@ export function Checkbox({
   helpText,
   errorText,
   warningText,
+  invalid = false,
 }: CheckboxProps) {
   const auto = useId()
   const inputId = id ?? auto
-  const { errored, tone, messageId, message, describedBy } = fieldMessage(
+  const { errored: hasErrorText, tone, messageId, message, describedBy } = fieldMessage(
     inputId,
     helpText,
     errorText,
     warningText,
   )
 
+  const errored = hasErrorText || invalid
   const ref = useRef<HTMLInputElement>(null)
 
   // `indeterminate` is a DOM property with no HTML attribute, so React cannot
