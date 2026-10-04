@@ -10,7 +10,7 @@ import { Tag } from './tag'
 import styles from './dropdown.module.scss'
 
 /**
- * Contract: docs/contracts/dropdown.md (1.2.0)
+ * Contract: docs/contracts/dropdown.md (1.2.1)
  *
  * The kit's Dropdown - Default (14032:290635) and - Fluid (14505:302528): a
  * single choice from a list the page draws itself, which a native select

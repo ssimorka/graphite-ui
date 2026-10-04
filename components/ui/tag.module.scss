@@ -14,8 +14,6 @@
   display: inline-flex;
   align-items: center;
   height: var(--tag-h);
-  // A single digit stays round.
-  min-width: var(--tag-h);
   padding: 0;
   border: 0;
   border-radius: var(--graphite-radius-full);
@@ -36,6 +34,12 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+  // The kit's Resizer: a 16px minimum inside the inset, so a one-character
+  // tag is 32 wide (40 at Large), 52 with its close (46 at Small), never
+  // round. Every one- and two-character Tag in the kit's 45 component pages
+  // is drawn this way (#294).
+  box-sizing: content-box;
+  min-width: 1rem;
   padding: 0 var(--tag-inset);
 }
 

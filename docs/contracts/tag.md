@@ -1,6 +1,6 @@
 ---
 component: Tag
-version: 3.1.0
+version: 3.2.0
 wave: 1
 slots:
   - name: Label
@@ -101,6 +101,6 @@ prohibitions:
 - **One contract, three forms, one pill.** The kit's Tag page holds three public sets, and this contract governs all three as forms of Tag, exported together from `tag.tsx` the way Accordion's parts are: the read-only tag, the kit's Tag - Read-only; the selectable form, Tag - Selectable; and the operational form, Tag - Operational (#224). They share the pill, the 12/16 Regular label and the three sizes (18 / 24 / 32).
 - **Props:** `variant` (neutral, primary, secondary, info, success, danger, warning, high-contrast, outline); `size` (sm, md, lg); `disabled`; `icon`; `max` (default 99); `onDismiss` for the kit's close button. The selectable form takes `selected` / `onSelectedChange`; the operational form takes `onClick` and the first six colours.
 - **Tokens:** every Read-only colour is a container role with its on-container label; high-contrast is the inverse pair (`on-background` / `background`) and outline is `surface` with a 1px `outline` edge. The operational form adds a 1px edge in the colour at full strength; the selectable form is `surface-variant` with an `outline` edge, `primary-container` when selected. Disabled is the disabled fill and edge with the disabled label, for every colour.
-- **Kit facts followed as drawn:** the Tag focus ring is `primary`, not the focus step; the operational form fills on hover only for primary and danger, the other four being drawn identical to rest; a single-digit count stays round. **Slips recorded, not copied:** the kit binds the hovered primary operational tag's label to the disabled tone (the code uses on-primary, as Button does), sits its label 1px above centre (centred here), and leaves an AI label switched on in one High contrast variant.
+- **Kit facts followed as drawn:** the Tag focus ring is `primary`, not the focus step; the operational form fills on hover only for primary and danger, the other four being drawn identical to rest; the label has a 16px minimum inside its inset (the kit's Resizer), so a one-character tag is 32 wide at Small and Medium and 40 at Large, 46 and 52 with its close, and never round. That was recorded here as "a single-digit count stays round" until #294, which traced it to the pre-kit code rather than any kit node. **Slips recorded, not copied:** the kit binds the hovered primary operational tag's label to the disabled tone (the code uses on-primary, as Button does), sits its label 1px above centre (centred here), and leaves an AI label switched on in one High contrast variant.
 - **Composition rules:** Numeric badges cap display at a defined max (e.g. "99+") rather than overflowing their container. The visible "99+" is hidden from assistive tech and the full number is read instead, as text.
 - **Prohibitions:** No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex.
