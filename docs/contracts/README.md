@@ -201,6 +201,27 @@ which is what feeds those Carbon variables in the first place:
 | `Text/text-secondary` | `onSurfaceVariant` |
 | `Link/link-primary` | `primary` |
 
+The kit also binds Carbon aliases the `--cds-*` layer does not carry. These
+were resolved through the kit's own alias chains, and are bound as the role
+they end at:
+
+| Kit binds | Resolves to |
+|---|---|
+| `Border/border-inverse` | `onBackground` (Slider's fill, #269) |
+| `Border/border-strong-01` | `outlineStrong` (File uploader's drop box, #270) |
+| `Layer/layer-01` | `elevation/01` |
+| `Layer accent/layer-accent-01` | `elevation/02` (Slider - Range's ground, #269) |
+| `Background/background-hover` | `elevation/02` |
+| `Background/background-inverse` | `onBackground` |
+| `Icon/icon-primary` | `onSurface` |
+| `Icon/icon-secondary` | `onSurfaceVariant` |
+| `Icon/icon-inverse` | `background` |
+| `Miscellaneous/interactive` | `primary` |
+| `Focus/focus` | `state/primary-focus-ring`, bound as `primary-focus` |
+| `Border/border-disabled`, `Button/button-disabled` | `state/primary-disabled` |
+| `Text/text-disabled`, `Icon/icon-disabled` | `state/primary-disabled-content` |
+| `Support/support-info` | `info` (File uploader's success mark, #270) |
+
 The kit is still canonical: it decides which value a component gets. The table
 only says which Graphite role produces that value, so the code can bind the
 role rather than the Carbon alias.

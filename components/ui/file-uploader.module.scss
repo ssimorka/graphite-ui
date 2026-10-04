@@ -1,0 +1,220 @@
+// File uploader — docs/contracts/file-uploader.md
+//
+// The kit's File uploader (5465:294860). A column, 16 apart: the label
+// (Input Label, on-surface, the kit's text-primary) over the description
+// (Body/3, on-surface-variant), 8 apart; then the trigger, a primary Button or
+// the drop box; then the file list, items 8 apart.
+//
+// File items are the kit's private _File uploader file item: 48, 40 or 32
+// tall on elevation-01 (layer-01), 16 in, the name in Body/3 and a 16px slot
+// at the end for the remove glyph, the spinner or the success mark. An error
+// adds a 2px danger edge, a rule inset 2 under the row and the message below.
+
+.uploader {
+  --h: var(--graphite-space-09);
+  --pad: var(--graphite-space-05);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  width: 100%;
+  max-width: 18rem;
+}
+
+.md {
+  --h: var(--graphite-space-08);
+  --pad: var(--graphite-space-04);
+}
+
+.sm {
+  --h: var(--graphite-space-07);
+  --pad: var(--graphite-space-03);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.label {
+  color: var(--graphite-on-surface);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.description {
+  margin: 0;
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.trigger { display: flex; }
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// The drop box: 100 tall at every size, a 1px dashed outline-strong edge
+// (border-strong-01), the copy in primary (link-primary). Drag-over and focus
+// are a 2px primary edge (Miscellaneous/interactive), drawn inside so nothing
+// moves.
+.drop {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 6.25rem;
+  padding: 10px var(--graphite-space-05);
+  border: 1px dashed var(--graphite-outline-strong);
+  color: var(--graphite-primary);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  cursor: pointer;
+}
+
+// 176, where the kit's 96 right pad wraps the copy.
+.dropText { max-width: 11rem; }
+
+.isOver,
+.drop:has(.fileInput:focus-visible) {
+  border-style: solid;
+  border-color: transparent;
+  box-shadow: inset 0 0 0 2px var(--graphite-primary);
+}
+
+// ------------------------------------------------------------------- items
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  background: var(--graphite-elevation-01);
+  color: var(--graphite-on-surface);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-05);
+  min-height: var(--h);
+  padding-inline: var(--graphite-space-05);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trail {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--graphite-space-03);
+}
+
+// The remove glyph, on-surface (icon-primary). Its focus ring is the kit's
+// 24 square, 4 out from the glyph. The kit puts a drop shadow on the glyph
+// and its wrapper; read as a stray and not drawn.
+.remove {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.remove:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: 2px;
+}
+
+.remove:disabled {
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}
+
+// The kit's Inline loading, Small: a 16px ring in primary.
+.loading {
+  display: inline-flex;
+  color: var(--graphite-primary);
+}
+
+.spinner {
+  animation: uploader-spin var(--graphite-motion-indeterminate) var(--graphite-motion-indeterminate-ease) infinite;
+}
+
+@keyframes uploader-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 3s; }
+}
+
+// Success: the kit binds the mark to support-info.
+.complete {
+  display: inline-flex;
+  color: var(--graphite-info);
+}
+
+.status { flex: none; }
+.status [data-part='glyph'] { fill: var(--graphite-danger); }
+.status [data-part='mark'] { fill: var(--graphite-background); }
+
+.errored { box-shadow: inset 0 0 0 2px var(--graphite-danger); }
+
+// Under the row: a 1px outline-subtle rule inset 2 each side, then the
+// message, padded as the row is (16, 12 or 8 above and below).
+.errorBody {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--pad) var(--graphite-space-05);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.errorBody::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 2px;
+  right: 2px;
+  height: 1px;
+  background: var(--graphite-outline-subtle);
+}
+
+// Error long: the one line in on-surface, the detail in danger. Error short:
+// the one line in danger.
+.errorTitle { color: var(--graphite-on-surface); }
+.errorText { color: var(--graphite-danger); }
+
+// ---------------------------------------------------------------- disabled
+// The label, description and the drop box's copy take the disabled content
+// tone; the dashed edge takes the disabled fill (border-disabled). The kit
+// colours the drop copy with the fill tone too (button-disabled), which all
+// but vanishes on the page; read as a slip.
+.isDisabled :is(.label, .description) { color: var(--graphite-primary-disabled-content); }
+
+.isDisabled .drop {
+  border-color: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+  cursor: not-allowed;
+}

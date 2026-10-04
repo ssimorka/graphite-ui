@@ -6,6 +6,7 @@ import { buttonGroupDoc } from './docs/button-group'
 import { checkboxDoc } from './docs/checkbox'
 import { containedListDoc } from './docs/contained-list'
 import { dataTableDoc } from './docs/data-table'
+import { fileUploaderDoc } from './docs/file-uploader'
 import { linkDoc } from './docs/link'
 import { menuDoc } from './docs/menu'
 import { modalDoc } from './docs/modal'
@@ -41,6 +42,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'checkbox': checkboxDoc,
   'contained-list': containedListDoc,
   'data-table': dataTableDoc,
+  'file-uploader': fileUploaderDoc,
   'link': linkDoc,
   'menu': menuDoc,
   'modal': modalDoc,

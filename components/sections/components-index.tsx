@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { ContainedList } from '@/components/ui/contained-list'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
 import { Notification } from '@/components/ui/notification'
+import { FileUploader } from '@/components/ui/file-uploader'
 import { Link } from '@/components/ui/link'
 import { PaginationNav } from '@/components/ui/pagination'
 import { ProgressBar } from '@/components/ui/progress-bar'
@@ -88,6 +89,9 @@ const PREVIEWS: Record<string, () => ReactNode> = {
       <ContainedList leading={<Tag>Ad</Tag>} title="Ada" />
       <ContainedList leading={<Tag>Gr</Tag>} title="Grace" />
     </>
+  ),
+  'File uploader': () => (
+    <FileUploader id="ix-fu" size="sm" label="Upload files" files={[{ id: 'a', name: 'cover.png' }]} onAdd={noop} onRemove={noop} />
   ),
   Link: () => (
     <Link href="/docs/components" size="md" icon="arrow-right">
