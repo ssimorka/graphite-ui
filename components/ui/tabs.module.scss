@@ -1,7 +1,9 @@
 // Tabs — docs/contracts/tabs.md
 //
-// The active tab changes color *and* carries the indicator bar. Color alone
-// would leave the state invisible to anyone who cannot separate the two tones.
+// The kit's Tabs (Graphite UI Kit 3890:50605), built from its private tab
+// items. The selected tab changes tone, takes SemiBold *and* carries its
+// indicator: colour alone would leave the state invisible to anyone who
+// cannot separate the two tones.
 .tabs {
   display: flex;
   min-width: 0;
@@ -10,65 +12,220 @@
 .horizontal { flex-direction: column; }
 .vertical { flex-direction: row; gap: var(--graphite-space-05); }
 
+.bar {
+  display: flex;
+  min-width: 0;
+}
+
 .list {
   display: flex;
-  gap: var(--graphite-space-02);
+  min-width: 0;
+  // Scrolls under the kit's Previous and Next rather than wrapping.
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.horizontal .list {
-  border-bottom: 1px solid var(--graphite-outline);
-}
-
-.vertical .list {
-  flex-direction: column;
-  border-right: 1px solid var(--graphite-outline);
-}
+.list::-webkit-scrollbar { display: none; }
 
 .tab {
   appearance: none;
-  background: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
   border: 0;
+  background: transparent;
   cursor: pointer;
   font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  white-space: nowrap;
+  text-align: left;
   color: var(--graphite-on-surface-variant);
-  // The kit's tab item is 40 tall and inset 16, with an 8 gap to its icon.
-  // Expressed as a height plus a horizontal inset rather than the kit's 11px
-  // vertical padding, which is not on the spacing scale.
-  min-height: var(--graphite-space-08);
   padding: 0 var(--graphite-space-05);
-  gap: var(--graphite-space-03);
-  position: relative;
 }
 
-.tab:focus-visible {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: -2px;
+.text { display: inline-flex; flex-direction: column; }
+
+// The label, the trailing icon and the close glyph, 8 apart.
+.labelRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
 }
+
+.tab:hover:not(:disabled) { color: var(--graphite-on-surface); }
 
 .active {
   color: var(--graphite-on-surface);
+  font-weight: var(--graphite-text-weight-semibold);
 }
 
-// Position plus color, never color alone.
-.horizontal .active::after {
-  content: '';
+.tab:disabled {
+  cursor: not-allowed;
+  color: var(--graphite-primary-disabled-content);
+}
+
+// Focus is a 2px ring inside the tab, and it replaces the tab's own rule,
+// as the kit draws it.
+.tab:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+// ---------------------------------------------------------------------- line
+// Each tab draws its own 2px rule inside its 40px box, a pixel apart, so the
+// rule breaks between tabs and ends with the last one.
+.line .list { gap: 1px; }
+
+.line .tab {
+  height: var(--graphite-space-08);
+  box-shadow: inset 0 -2px 0 var(--graphite-outline);
+}
+
+.line.lg .tab { height: var(--graphite-space-09); }
+.line .active { box-shadow: inset 0 -2px 0 var(--graphite-primary); }
+.line .tab:disabled { box-shadow: inset 0 -2px 0 var(--graphite-primary-disabled); }
+
+// ----------------------------------------------------------------- contained
+// 48 tall, no gaps, a surface-variant fill with a 1px divider on the right.
+// The selected tab lifts to surface with a 2px primary rule on top and drops
+// its divider. Hover changes the label only, as the kit has it.
+.contained .tab {
+  min-height: var(--graphite-space-09);
+  padding-block: 14px;
+  background: var(--graphite-surface-variant);
+  box-shadow: inset -1px 0 0 var(--graphite-outline);
+}
+
+.contained .active {
+  background: var(--graphite-surface);
+  box-shadow: inset 0 2px 0 var(--graphite-primary);
+}
+
+.contained .tab:disabled { background: var(--graphite-primary-disabled); }
+
+.secondary {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: var(--graphite-text-weight-regular);
+  color: var(--graphite-on-surface-variant);
+}
+
+.tab:disabled .secondary { color: inherit; }
+
+// Grid aware: the tabs share the width.
+.fullWidth .list { flex: 1; }
+.fullWidth .tab { flex: 1 1 0; }
+
+// ----------------------------------------------------------------- icon only
+// Square: 40 with a 16px icon, 48 with a 20px one.
+.iconOnly .tab {
+  justify-content: center;
+  padding: 0;
+  width: var(--graphite-space-08);
+}
+
+.iconOnly.lg .tab { width: var(--graphite-space-09); }
+
+// The kit's Badge indicator: an 8px danger dot, 8 in from the top right.
+.badge {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: var(--graphite-primary);
+  top: var(--graphite-space-03);
+  right: var(--graphite-space-03);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--graphite-danger);
 }
 
-.vertical .active::after {
+// ---------------------------------------------------------------- dismissible
+// The close glyph, with a 24px surface-variant square behind it on hover.
+.dismiss {
+  display: inline-flex;
+  padding: var(--graphite-space-02);
+  margin: calc(-1 * var(--graphite-space-02));
+}
+
+.dismiss:hover { background: var(--graphite-surface-variant); }
+
+.dismissOnHover .tab:not(:hover, :focus-visible) .dismiss { visibility: hidden; }
+
+// -------------------------------------------------------------------- scroll
+// The kit's Previous and Next. Line: a 40px ghost button whose inner edge
+// fades the list out over 16px. Contained: a 48px surface-variant square.
+.scroll {
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--graphite-space-08);
+  height: var(--graphite-space-08);
+  border: 0;
+  background: var(--graphite-background);
+  color: var(--graphite-on-surface);
+  cursor: pointer;
+}
+
+.scroll:disabled {
+  cursor: not-allowed;
+  color: var(--graphite-primary-disabled-content);
+}
+
+.scroll:focus-visible {
+  outline: 2px solid var(--graphite-primary-focus);
+  outline-offset: -2px;
+}
+
+.line .scroll::after {
   content: '';
   position: absolute;
   top: 0;
   bottom: 0;
-  right: -1px;
-  width: 2px;
-  background: var(--graphite-primary);
+  width: var(--graphite-space-05);
+  pointer-events: none;
 }
+
+.line .previous::after { left: 100%; background: linear-gradient(to right, var(--graphite-background), transparent); }
+.line .next::after { right: 100%; background: linear-gradient(to left, var(--graphite-background), transparent); }
+
+.contained .scroll {
+  width: var(--graphite-space-09);
+  height: var(--graphite-space-09);
+  background: var(--graphite-surface-variant);
+}
+
+.flip { transform: scaleX(-1); }
+
+// ------------------------------------------------------------------ vertical
+// The kit's separate vertical items: 64 tall, a surface fill, a 1px rule on
+// the right and bottom, and a 3px indicator on the left, outline at rest and
+// primary when selected. The selected tab drops its right rule, opening onto
+// the panel. Hover fills surface-variant.
+.vertical .list {
+  flex-direction: column;
+  overflow: visible;
+}
+
+.vertical .tab {
+  min-height: var(--graphite-space-10);
+  background: var(--graphite-surface);
+  border-right: 1px solid var(--graphite-outline);
+  border-bottom: 1px solid var(--graphite-outline);
+  box-shadow: inset 3px 0 0 var(--graphite-outline);
+}
+
+.vertical .tab:hover:not(:disabled, .active) { background: var(--graphite-surface-variant); }
+
+.vertical .active {
+  border-right-color: transparent;
+  box-shadow: inset 3px 0 0 var(--graphite-primary);
+}
+
+.vertical .tab:disabled { box-shadow: inset 3px 0 0 var(--graphite-primary-disabled); }
 
 .panel {
   padding-top: var(--graphite-space-04);

@@ -1,11 +1,22 @@
-// Tabs' own page parts: the forced Focus row. Tabs exposes no data-slot hooks,
-// so the rule reaches the selected tab through its ARIA attributes, and forces
-// the same declarations tabs.module.scss puts on :focus-visible. Nothing here
-// restyles the component.
+// Tabs' own page parts: the forced Focus and Hover rows. Tabs exposes no
+// data-slot hooks, so the rules reach a tab through its ARIA attributes, and
+// force the same declarations tabs.module.scss puts on :focus-visible and
+// :hover. Nothing here restyles the component.
 
 .forceFocus [role='tab'][aria-selected='true'] {
-  outline: 2px solid var(--graphite-focus);
+  outline: 2px solid var(--graphite-primary-focus);
   outline-offset: -2px;
+  box-shadow: none;
+}
+
+.forceHover [role='tab'][aria-selected='false']:not(:disabled) {
+  color: var(--graphite-on-surface);
+}
+
+// A narrow measure, so the overflow buttons appear.
+.narrow {
+  width: 14rem;
+  max-width: 100%;
 }
 
 // Surfaces size to their content, so a percentage width would collapse to the
