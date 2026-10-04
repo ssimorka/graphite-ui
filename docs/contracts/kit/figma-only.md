@@ -6,6 +6,9 @@ the kit's 27 unclaimed component pages, with its bucket under governance rule 6.
 **Dispositions amended 2026-10-04 (#240):** *In scope, awaiting demand* became
 **Build — wave G1**, *Already spoken for* became **Build — wave G2**, and two sets
 on governed pages were carried in from #219. The permanent three are unchanged.
+All of the G1, G2 and carried sets were then **built** under #240 and are stamped
+governed; the bucket headings below say so. The 73 counted here is the
+2026-08-28 walk; the gallery's no-contract tile is now summed from the snapshot.
 See "What the rule decides today" in `../README.md`.
 
 **Derived 2026-08-28** by walking the kit (`p2jyUgkFhJd6A5M7L39Ixo`) page by page
@@ -88,9 +91,9 @@ work for less clarity.
 | Tile | 1 | 0 | 65 |
 | Code snippet | 3 | 3 | 38 |
 
-### Build — wave G2 (was *Already spoken for*) — 4 pages, 15 public / 14 private
+### Built — wave G2 (#240; was *Already spoken for*) — 4 pages, 15 public / 14 private
 
-*Ungoverned until each contract lands. Each splits a fold recorded on a governing contract (Text input, Select, Button with Menu).*
+*Governed: password-input.md (#284), number-input.md (#285), menu-button.md (#286), dropdown.md (#287). Each split a fold off a governing contract (Text input, Select, Button with Menu).*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -99,9 +102,9 @@ work for less clarity.
 | Password input | 2 | 2 | 113 |
 | Dropdown | 8 | 8 | 461 |
 
-### Build — wave G1 (was *In scope, awaiting demand*) — 6 pages, 19 public / 18 private
+### Built — wave G1 (#240; was *In scope, awaiting demand*) — 6 pages, 19 public / 18 private
 
-*Ungoverned until each contract lands. Scheduled by #240, not by demand.*
+*Governed: link.md (#266), search.md (#267), pagination.md (#268), slider.md (#269), file-uploader.md (#270), date-picker.md and time-picker.md (#271). Built by decision, not by demand.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -112,9 +115,9 @@ work for less clarity.
 | Slider | 2 | 8 | 89 |
 | Pagination | 2 | 2 | 37 |
 
-### Build — carried from #219 — sets on governed pages
+### Built — carried from #219 — sets on governed pages
 
-*Left out of their components' parity work, scheduled with G1.*
+*Governed: toast.md (#272), checkbox-group.md (#273).*
 
 | Page | Set | Variants |
 |---|---|---|
@@ -138,8 +141,8 @@ category in `README.md`. Bucketed here, with the reasoning recorded once:
 
 | Page | Bucket | Why |
 |---|---|---|
-| Menu buttons | Already spoken for | `Menu button`, `Combo button` and `Overflow` are the three sets `#103` flagged as unaccounted Button neighbours. Graphite composes this as Button plus Menu; both are governed, so there is nothing left over to contract. |
-| File uploader | Awaiting demand | A Carbon primitive with no Graphite contract, same class as Date picker and Slider. Nothing asks for it today. |
+| Menu buttons | Already spoken for (now governed) | `Menu button`, `Combo button` and `Overflow` are the three sets `#103` flagged as unaccounted Button neighbours. Graphite composed this as Button plus Menu; #286 gave it its own contract, menu-button.md. |
+| File uploader | Awaiting demand (now governed) | A Carbon primitive with no Graphite contract, same class as Date picker and Slider. Built under #240 (#270): file-uploader.md. |
 | Form | Carbon idiom | A wrapper around form controls, which is the species Graphite has already declined once: Field was removed in `#135` because the kit puts label and helper text on the control itself. Adopting Form would reintroduce the wrapper by another name. |
 | List | Carbon idiom | Carbon's plain ordered/unordered list, sibling to Structured list. Contained list is the governed member of this family; `List` and `List item` are the typographic ones and have no Graphite counterpart. |
 
@@ -267,49 +270,49 @@ Variant counts in parentheses. `_`-prefixed sets are the kit's own internals.
 - Public: `Code snippet - Single line` (3), `Code snippet - Inline` (6), `Code snippet - Multi-line` (5)
 - Private: `_Code snippet tooltip` (7), `_Code snippet - Inline item` (5), `_Code snippet ghost button` (12)
 
-**Menu buttons** — Build, G2
+**Menu buttons** — Built, G2 (#286)
 
 - Public: `Menu button` (12), `Combo button` (12), `Overflow` (72)
 
-**Number input** — Build, G2
+**Number input** — Built, G2 (#285)
 
 - Public: `Number input - Default` (21), `Number input - Fluid` (8)
 - Private: `_Number input action item` (18), `_AI slug action item` (3), `_Revert button action item` (1), `_Number input base` (3)
 
-**Password input** — Build, G2
+**Password input** — Built, G2 (#284)
 
 - Public: `Password input - Default` (93), `Password input - Fluid` (16)
 - Private: `_Password input placeholder base` (1), `_Password input base` (3)
 
-**Dropdown** — Build, G2
+**Dropdown** — Built, G2 (#287)
 
 - Public: `Dropdown - Default` (102), `Dropdown - Fluid` (15), `Dropdown - Combo box - Default` (48), `Dropdown - Combo box - Fluid` (15), `Dropdown - Multi-select - Default` (102), `Dropdown - Multi-select  - Fluid` (17), `Dropdown - Filterable multi-select - Default` (51), `Dropdown - Filterable multi-select - Fluid` (17)
 - Private: `_Dropdown chevron` (2), `_Dropdown menu list - Default` (3), `_Dropdown list item - Default` (30), `_Dropdown parent checkbox - Default` (18), `_Dropdown list item - Fluid input` (20), `_Dropdown menu list - Fluid input` (2), `_Dropdown parent checkbox - Fluid` (12), `_Dropdown skeleton item` (7)
 
-**Link** — Build, G1
+**Link** — Built, G1 (#266)
 
 - Public: `Link` (36)
 
-**Search** — Build, G1
+**Search** — Built, G1 (#267)
 
 - Public: `Search - Default` (42), `Search - Fluid` (7)
 
-**Date picker** — Build, G1
+**Date picker** — Built, G1 (#271)
 
 - Public: `Time picker items - Fixed` (6), `Time picker items - Clock` (12), `Time picker items - Timezone` (6), `Date picker - Simple date - Default` (37), `Date picker - Simple date - Fluid` (10), `Date picker - Single calendar - Default` (39), `Date picker - Single calendar - Fluid` (12), `Date picker - Range calendar - Default` (12), `Date picker - Range calendar - Fluid` (12), `Time picker - Default` (18), `Time picker - Fluid` (12)
 - Private: `_Date picker calendar day item` (11), `_Date picker month pagination` (4), `_Date picker month year` (2), `_Date picker calendar` (1), `_Time picker item - Fixed` (21)
 
-**File uploader** — Build, G1
+**File uploader** — Built, G1 (#270)
 
 - Public: `File uploader` (18)
 - Private: `_File uploader - Drag and drop box states` (4), `_File uploader file item` (18), `_File uploader file list item` (1)
 
-**Slider** — Build, G1
+**Slider** — Built, G1 (#269)
 
 - Public: `Slider` (9), `Slider - Range` (44)
 - Private: `_Slider left rail` (2), `_Slider right rail` (1), `_Slider rail` (1), `_Slider item` (2), `_Slider skeleton item` (1), `_Slider base` (1), `_Slider - Range handle` (10), `_Slider - Range slider track` (18)
 
-**Pagination** — Build, G1
+**Pagination** — Built, G1 (#268)
 
 - Public: `Pagination - Nav` (3), `Pagination - Table bar` (9)
 - Private: `_Pagination select menu item` (1), `_Pagination - Nav page item` (24)

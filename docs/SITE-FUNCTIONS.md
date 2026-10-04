@@ -80,7 +80,7 @@ Foundations, Resources), a stats line, and the Built by credit.
 | `/docs/governance` | The eight governance rules, the three drift checks, and the required CI job | `app/docs/governance/` |
 | `/docs/foundations/color` | Color ramps, sampling, and the known divergence from the kit | `app/docs/foundations/color/`, `lib/ramp-divergence.ts` |
 | `/docs/foundations/typography`, `spacing`, `radius`, `layout`, `tokens` | The other foundations, read from their contracts and the token snapshot | `app/docs/foundations/*` |
-| `/docs/components/[slug]` | One page per governed component, 23 in all | `components/component-doc/` |
+| `/docs/components/[slug]` | One page per governed component, 36 in all (35 components and Overlay); the docs nav lists them under Overview | `components/component-doc/` |
 | `/search-index.json` | The static search index, built at build time | `lib/search-index.ts` |
 
 ## Home, `/`

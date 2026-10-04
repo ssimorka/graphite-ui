@@ -1,6 +1,6 @@
 ---
 component: Checkbox
-version: 3.1.0
+version: 3.1.1
 wave: 2
 slots:
   - name: Label
@@ -62,6 +62,6 @@ prohibitions:
 - **Slots:** Label (required — always paired, never a bare checkbox).
 - **Props:** checked, indeterminate, disabled, readOnly, indented, warningText.
 - **Tokens:** `on-surface` for the box (ring and knock-out fill) and the label, `primary-focus` for the ring, `danger` and `warning` for status; the spacing scale for gaps and the touch target.
-- **Kit parity** (#229, 3.0.0, a major because the primary-filled check the contract promised is gone): the box is the kit's on-surface glyph. The kit's sibling Checkbox group set has no counterpart: there is no current demand for one (rule 6), so a list of checkboxes is laid out in the caller's own container and the group set is carried on #240.
+- **Kit parity** (#229, 3.0.0, a major because the primary-filled check the contract promised is gone): the box is the kit's on-surface glyph. The kit's sibling Checkbox group set is governed by its own contract, checkbox-group.md (#273), which composes this one.
 - **Composition rules:** Indeterminate state is visually distinct from both checked and unchecked, not a color swap — a distinct glyph (dash) inside the same box.
 - **Prohibitions:** No custom checkbox smaller than the defined minimum touch target, same rule as Button.
