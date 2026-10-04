@@ -73,6 +73,16 @@ export function containedListDoc(): ComponentDocConfig {
     variants: [
       { label: 'Type: On page', node: list('on-page') },
       { label: 'Type: Disclosed', node: list('disclosed') },
+      {
+        label: 'Filterable search',
+        node: (
+          <div className={styles.list}>
+            <ContainedListHeader title="Components" search={{ label: 'Search components', placeholder: 'Search components' }} />
+            <ContainedList leading={<Tag>BT</Tag>} title="Button" trailing={action('lg')} />
+            <ContainedList leading={<Tag>TB</Tag>} title="Tabs" trailing={action('lg')} />
+          </div>
+        ),
+      },
       { label: 'Size: Small', node: row({ size: 'sm' }) },
       { label: 'Size: Medium', node: row({ size: 'md' }) },
       { label: 'Size: Large', node: row({ size: 'lg' }) },
@@ -117,10 +127,10 @@ export function containedListDoc(): ComponentDocConfig {
       ['Contrast', 'Title is on-surface and description on-surface-variant, one tone step lower. Both are measured against surface at the theme’s target.'],
       ['Truncation', 'Title and description clip with an ellipsis. The full text is still in the DOM, so assistive tech reads all of it.'],
     ],
-    parityLede: `The kit's Contained list page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets. One is public; the rest are the private row, cell and title items it is built from. The code is the row and the header, on every axis but the header’s search.`,
+    parityLede: `The kit's Contained list page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets. One is public; the rest are the private row, cell and title items it is built from. The code is the row and the header, on every axis.`,
     parity: [
       ['Type', 'On page · Disclosed', 'ContainedListHeader variant', 'The kit’s title item: Title/5 SemiBold on background at the rows’ height, or a 32px Caption/1 bar on elevation-01. One action at its right edge.'],
-      ['Search', 'Boolean', '—', 'A Search field in the header. Search is not governed yet, so this waits on it (#240).'],
+      ['Search · Filterable search', 'Boolean', 'ContainedListHeader search', 'The governed Search, expandable, sized to the bar. Filtering the rows is the caller’s.'],
       ['Size', 'Small · Medium · Large · Extra large', 'size', 'sm, md, lg and xl: 32, 40, 48 and 64. Extra large sets its content at the top.'],
       ['State', 'Enabled · Hover · Focus · Active · Disabled', 'interactive · disabled', 'Hover and Active are pseudo-classes on an interactive row (governance rule 7): elevation-02 and -03. Focus is the ring a wrapping link draws. Disabled dims text and marker; the kit keeps the icon bright, a slip.'],
       ['Item 2 · Item 3', 'Booleans', 'cells', 'Further text cells, each inset 16.'],

@@ -18,7 +18,7 @@ export type Column<T> = {
 
 export type Sort = { key: string; direction: 'asc' | 'desc' }
 
-/** Contract: docs/contracts/data-table.md (2.0.0) */
+/** Contract: docs/contracts/data-table.md (2.0.1) */
 type DataTableProps<T> = {
   /** The kit's table title, painted above the table, and its accessible name. */
   caption: string

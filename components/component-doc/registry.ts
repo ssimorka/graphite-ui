@@ -14,6 +14,7 @@ import { overlayDoc } from './docs/overlay'
 import { popoverDoc } from './docs/popover'
 import { progressBarDoc } from './docs/progress-bar'
 import { radioButtonGroupDoc } from './docs/radio-button-group'
+import { searchDoc } from './docs/search'
 import { selectDoc } from './docs/select'
 import { tabsDoc } from './docs/tabs'
 import { tagDoc } from './docs/tag'
@@ -45,6 +46,7 @@ export const COMPONENT_DOCS: Record<string, () => ComponentDocConfig> = {
   'popover': popoverDoc,
   'progress-bar': progressBarDoc,
   'radio-button-group': radioButtonGroupDoc,
+  'search': searchDoc,
   'select': selectDoc,
   'tabs': tabsDoc,
   'tag': tagDoc,

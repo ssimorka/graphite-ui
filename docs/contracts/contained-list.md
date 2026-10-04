@@ -1,6 +1,6 @@
 ---
 component: Contained list
-version: 2.0.0
+version: 2.1.0
 wave: 4
 slots:
   - name: Leading
@@ -20,7 +20,7 @@ slots:
     notes: Tag, Button, or a control, flush to the row's right edge. The kit draws a ghost icon Button at the row's height.
   - name: Header
     required: false
-    notes: The kit's list title item, a separate export that sits directly above the rows. On page is a Title/5 heading on the page's background at the rows' height, with the rule under it; Disclosed is a 32px Caption/1 bar on elevation-01. It takes one action at its right edge.
+    notes: The kit's list title item, a separate export that sits directly above the rows. On page is a Title/5 heading on the page's background at the rows' height, with the rule under it; Disclosed is a 32px Caption/1 bar on elevation-01. It takes one action at its right edge, and the kit's Filterable search, an expandable Search sized to the bar (2.1.0, #267).
 props:
   - name: size
     values: [sm, md, lg, xl]
@@ -56,7 +56,7 @@ tokens:
     usage: Row heights and padding, the 16 inset and the gaps between slots.
 composition_rules:
   - This is the row primitive Data table and any future list views should compose from, not reimplement.
-  - The kit's list Search mode is a Search field in the header. Search is not a governed component yet, so the mode waits on it (#240).
+  - The kit's list Search mode is the governed Search, expandable, in the header (2.1.0, #267). Filtering the rows is the caller's: the header reports the query and filters nothing.
   - "`interactive` is a visual signal, not behavior. A row that responds to a click gets that from an element the caller supplies: wrap the row in a link when the whole row goes somewhere, or put the Button in the trailing slot when the row has one action. Setting `interactive` without one of those promises a click that nothing answers."
 prohibitions:
   - No more than one trailing control cluster — if multiple actions are needed, use Menu (Wave 5) as the trailing slot instead of stacking buttons.

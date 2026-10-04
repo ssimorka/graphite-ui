@@ -102,7 +102,7 @@ export function dataTableDoc(): ComponentDocConfig {
       ['Skeleton', 'False · True', '—', 'No counterpart by rule. A caller that loads rows decides what to show meanwhile.'],
       ['Size', 'XS · SM · MD · LG · XL (variable modes)', 'size', 'Rows of 24, 32, 40, 48 and 64, cells padded 16 left and 8 right. The set draws one size; the modes are its variables.'],
       ['Header item: Description', 'Boolean', 'description', 'Body/3 under the title.'],
-      ['Toolbar', 'Boolean', 'toolbar', 'A 48px bar of the caller’s controls. The kit’s Search in it waits on a governed Search.'],
+      ['Toolbar', 'Boolean', 'toolbar', 'A 48px bar of the caller’s controls: the governed Search, expandable at Large, then the actions.'],
       ['Pagination', 'Boolean', 'footer', 'The bar under the table.'],
       ['Body row: Zebra style', 'Boolean', 'zebra', 'Alternate rows on surface-variant, without the rules. The kit’s zebra and hover share that fill.'],
       ['Row cell: Disabled', 'State', 'isRowDisabled', 'The row dims and cannot be selected.'],

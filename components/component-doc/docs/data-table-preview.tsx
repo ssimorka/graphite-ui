@@ -5,6 +5,7 @@ import type { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { ContainedList } from '@/components/ui/contained-list'
 import { KitIcon } from '@/components/kit-icon'
+import { Search } from '@/components/ui/search'
 import { Tag } from '@/components/ui/tag'
 import { DataTable } from '@/components/ui/data-table'
 import type { Column, Sort } from '@/components/ui/data-table'
@@ -219,6 +220,7 @@ export function DataTableSample({
         toolbar={
           toolbar ? (
             <>
+              <Search label="Search components" placeholder="Search components" expandable />
               <Button variant="ghost" size="icon-lg" aria-label="Settings">
                 <KitIcon name="settings" />
               </Button>

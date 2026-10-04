@@ -1,6 +1,6 @@
 ---
 component: Data table
-version: 2.0.0
+version: 2.0.1
 wave: 6
 slots:
   - name: Header
@@ -71,5 +71,5 @@ prohibitions:
 - **Props:** size (xs, sm, md, lg, xl), sortable columns, selectable (checkbox, radio), expandable, batchActions, zebra, isRowDisabled; toolbar and footer slots.
 - **Tokens:** `surface-variant` for the header row, row hover and zebra; `outline` for the rule at the top of each row; `on-surface` for header text and `on-surface-variant` for cells; `primary-container` for selected rows and `primary` for the batch bar; the spacing scale for row heights and cell padding.
 - **Composition rules:** Composes Contained list for rich cells. Row hover follows the table's own kit set (surface-variant), not the list's.
-- **Kit parity** (#239, 2.0.0, a major: `density` gives way to the kit's five size modes, the header row takes surface-variant, the caption becomes a painted title, and the sort glyph moves to the cell's end). Recorded rather than copied: hover, focus and sorted header cells fill surface-variant on a surface-variant row, so they change nothing visible (the glyph carries them); zebra and row hover share surface-variant; selected rows ignore hover; the size modes' padding is drawn around an 18px text frame, so each gives up a pixel a side for the 20px line. The toolbar's Search waits on a governed Search (#240); Skeleton has no counterpart by rule.
+- **Kit parity** (#239, 2.0.0, a major: `density` gives way to the kit's five size modes, the header row takes surface-variant, the caption becomes a painted title, and the sort glyph moves to the cell's end). Recorded rather than copied: hover, focus and sorted header cells fill surface-variant on a surface-variant row, so they change nothing visible (the glyph carries them); zebra and row hover share surface-variant; selected rows ignore hover; the size modes' padding is drawn around an 18px text frame, so each gives up a pixel a side for the 20px line. The toolbar composes the governed Search, expandable at Large (#267); Skeleton has no counterpart by rule.
 - **Prohibitions:** No table that loses column headers on horizontal scroll — sticky header or a defined responsive collapse pattern is required, not optional.

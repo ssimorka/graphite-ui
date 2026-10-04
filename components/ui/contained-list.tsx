@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
+import { Search } from './search'
 import styles from './contained-list.module.scss'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl'
 
-/** Contract: docs/contracts/contained-list.md (2.0.0) */
+/** Contract: docs/contracts/contained-list.md (2.1.0) */
 type ContainedListProps = {
   /** Typography by convention; the row sets it in Body/3. */
   title: ReactNode
@@ -90,6 +91,7 @@ export function ContainedListHeader({
   variant = 'on-page',
   size = 'lg',
   action,
+  search,
   as: Heading = 'h3',
 }: {
   title: ReactNode
@@ -98,12 +100,33 @@ export function ContainedListHeader({
   /** Matches the rows beneath it. Disclosed is always 32. */
   size?: Size
   action?: ReactNode
+  /**
+   * The kit's Filterable search: an expandable Search in the bar, collapsed to
+   * its icon until pressed, sized to the bar. Filtering the rows is the
+   * caller's.
+   */
+  search?: { label: string; placeholder?: string; value?: string; onChange?: (value: string) => void }
   /** The heading level, so the list sits in the page's outline. */
   as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 }) {
+  // Disclosed is always 32; On page follows the rows, Large and Extra large
+  // sharing the 48 bar.
+  const searchSize = variant === 'disclosed' ? 'sm' : size === 'xl' ? 'lg' : size
   return (
     <div className={[styles.header, styles[variant], styles[size]].join(' ')}>
       <Heading className={styles.headerTitle}>{title}</Heading>
+      {search ? (
+        <span className={styles.headerSearch}>
+          <Search
+            label={search.label}
+            placeholder={search.placeholder}
+            value={search.value}
+            onChange={search.onChange}
+            size={searchSize}
+            expandable
+          />
+        </span>
+      ) : null}
       {action ? <span className={styles.trailing}>{action}</span> : null}
     </div>
   )
