@@ -134,12 +134,16 @@ export default function IntroductionPage() {
             <Breadcrumb items={docsCrumbs('/docs')} />
             <h1 className={styles.title}>Introduction</h1>
             <p className={styles.lede}>
-              Graphite UI turns one source color into a complete design system:{' '}
-              {lower(e.ramps)} tonal ramps, {lower(e.roles)} semantic roles, a
-              light and a dark theme, and a contrast check on every pairing that
-              carries text or UI. {spell(kit.governed)} components are built on
-              those roles, each held to a written contract that CI checks the
-              code against.
+              Graphite UI turns one source color into a full theme:{' '}
+              {lower(e.ramps)} color scales, {lower(e.roles)} named roles, and
+              light and dark themes, with contrast checked on the text and UI
+              pairings. {spell(kit.governed)} components are built on those
+              roles. Each has a written spec, called a contract, that automated
+              checks hold the code to.
+            </p>
+            <p className={styles.lede}>
+              New to ramps, roles and tones? See the{' '}
+              <a href="/docs/glossary">glossary</a>.
             </p>
             <div className={styles.badges}>
               <StatusBadge tone="primary">{`${e.ramps} ramps · ${e.roles} roles`}</StatusBadge>
