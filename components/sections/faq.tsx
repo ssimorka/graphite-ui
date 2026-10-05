@@ -14,7 +14,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'Is it free, and what is it built with?',
-    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI, Simorka Designs and SD System names and logos are not included.',
+    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI, Simorka Designs and SD System names and logos are not covered by the licence.',
   },
   {
     q: 'Does it require Carbon?',
