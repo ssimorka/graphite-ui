@@ -107,7 +107,7 @@ Seven sections in the kit's order, one file each in `components/sections/`:
    theming works (`/docs/theming`), on an accent mesh gradient.
 5. **Two doors** (`two-doors.tsx`): For designers opens the Figma kit; For
    developers goes to `/gallery`. Each door follows the card pattern with its
-   action in the bottom-left corner (Open the Figma Kit ↗, See the code →), and
+   action in the bottom-left corner (Open the Figma Kit ↗, Browse the components →), and
    the whole door is the link.
 6. **FAQ** (`faq.tsx`): five questions in the governed `Accordion`.
 7. **Footer**.
