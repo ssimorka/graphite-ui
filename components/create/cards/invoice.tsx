@@ -4,14 +4,14 @@ import { Tag } from '@/components/ui/tag'
 import styles from './invoice.module.scss'
 
 const ITEMS = [
-  ['Design System License', '1', '$499.00', '$499.00'],
-  ['Priority Support', '12', '$99.00', '$1,188.00'],
-  ['Custom Components', '3', '$250.00', '$750.00'],
+  ['Flat white', '2', '$4.50', '$9.00'],
+  ['Cold brew', '1', '$5.00', '$5.00'],
+  ['Almond croissant', '3', '$4.00', '$12.00'],
 ]
 const TOTALS = [
-  ['Subtotal', '$2,437.00'],
+  ['Subtotal', '$26.00'],
   ['Tax', '$0.00'],
-  ['Total Due', '$2,437.00'],
+  ['Total Due', '$26.00'],
 ]
 
 export function InvoiceCard() {

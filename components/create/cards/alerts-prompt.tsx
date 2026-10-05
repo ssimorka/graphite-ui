@@ -11,7 +11,7 @@ export function AlertsPromptCard() {
           Automatically monitor your projects for anomalies and get notified.
         </p>
         <Button variant="primary" className={styles.button}>
-          Upgrade to Observability Plus
+          Turn on alerts
         </Button>
       </div>
     </CardShell>

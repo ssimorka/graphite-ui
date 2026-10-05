@@ -15,7 +15,7 @@ import styles from './controls.module.scss'
 
 // The kit's own words for what each control means (Graphite UI Site 13294:*).
 const CAPTIONS: Record<string, string> = {
-  source: 'The only free input; any hex works. The swatches are your ramps at tone 500: click one to copy its hex.',
+  source: 'The only free input; any hex works. The swatches show your color scales. Click one to copy its hex.',
   contrast: 'Every pairing is measured against this as the theme resolves.',
   radius: 'The kit’s eight steps. The components are square-cornered by default because the kit is.',
   icons: 'The kit’s three icon families, in the straight cut the kit draws with. Swaps every icon in the preview.',

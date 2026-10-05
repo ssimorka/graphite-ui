@@ -28,7 +28,7 @@ export function ProfileCard() {
         label="Name"
         size="lg"
         defaultValue="Taylor"
-        helpText="Your name may appear around GitHub where you contribute or are mentioned. You can remove it at any time."
+        helpText="Your name may appear around the site where you contribute or are mentioned. You can remove it at any time."
       />
       <Select
         label="Public Email"

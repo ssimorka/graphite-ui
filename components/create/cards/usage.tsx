@@ -3,12 +3,12 @@ import styles from './usage.module.scss'
 
 // [label, value, fraction of the allowance used]
 const ROWS: [string, string, number][] = [
-  ['Edge Requests', '$1.83K', 0.82],
-  ['Fast Data Transfer', '$952.51', 0.55],
-  ['Monitoring data points', '$901.20', 0.5],
-  ['Web Analytics Events', '$603.71', 0.34],
-  ['ISR Writes', '524.52K / 2M', 0.26],
-  ['Function Duration', '5.11 GB Hrs / 1K GB Hrs', 0.02],
+  ['Page views', '$1.83K', 0.82],
+  ['Data transfer', '$952.51', 0.55],
+  ['Storage', '$901.20', 0.5],
+  ['API calls', '$603.71', 0.34],
+  ['Build minutes', '524 / 2,000', 0.26],
+  ['Team seats', '1 / 50', 0.02],
 ]
 
 const R = 6
