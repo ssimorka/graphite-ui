@@ -3,15 +3,18 @@
 import { Grid, Column } from '@carbon/react'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Reveal } from '@/components/reveal'
-import { spell } from '@/lib/spell'
 
-// The kit draws only the first answer open; the other four questions are
+// The kit draws only the first answer open; the other questions are
 // collapsed, so their copy is written here against what the repo actually
 // does rather than invented.
 const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: `${spell(governed)} components carry a versioned contract and are checked against the kit on every build. The kit ships more than that, and anything without a contract is labelled ungoverned on its own page rather than left for you to find out.`,
+    a: `Not as an install yet. Today you can clone the repo, browse ${governed} React components, and export a theme as CSS or JSON. There is no npm package. Each component has a versioned spec that the code is checked against on every build.`,
+  },
+  {
+    q: 'Is it free, and what is it built with?',
+    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI, Simorka Designs and SD System names and logos are not covered by the licence.',
   },
   {
     q: 'Does it require Carbon?',

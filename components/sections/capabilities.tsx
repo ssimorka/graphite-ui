@@ -93,7 +93,7 @@ const CAPABILITIES: {
   {
     key: 'sets',
     title: '206 component sets tracked',
-    body: 'Including the 73 public sets with no contract, which are labelled rather than hidden.',
+    body: 'Including the 35 public sets with no contract, which are labelled rather than hidden.',
     caption: 'Counts from the last component-doc-drift run, not an estimate.',
   },
 ]

@@ -28,7 +28,7 @@ export function ThemeCta() {
           <Reveal>
             <div className={styles.heading}>
               <h2 className={styles.title} id="theme-title">
-                Make it yours in one control
+                Make it yours from one color
               </h2>
               <p className={styles.body}>
                 The builder derives a full theme from any color, holds it to your

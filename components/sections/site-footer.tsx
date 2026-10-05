@@ -2,7 +2,6 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Brand } from '@/components/brand'
-import { CARBON_VAR_COUNT } from '@/components/theme-provider'
 import styles from './site-footer.module.scss'
 
 // The kit's four link columns. Targets point at what exists today: the docs
@@ -65,8 +64,8 @@ export function SiteFooter() {
             <div className={styles.brandBlock}>
               <Brand />
               <p className={styles.tagline}>
-                A design system that derives itself from one decision, and
-                proves it.
+                A design system built from one color, with checks that keep
+                design and code matched.
               </p>
             </div>
 
@@ -95,18 +94,19 @@ export function SiteFooter() {
 
           <div className={styles.bar}>
             <p className={styles.stats}>
-              8 ramps · 32 roles · {CARBON_VAR_COUNT} variables · WCAG AA/AAA
+              8 color scales · 32 roles · WCAG AA and AAA
             </p>
             <div className={styles.credit}>
-              <span className={styles.creditLabel}>Built by</span>
+              <span className={styles.creditLabel}>Built by Simorka Designs</span>
               <a
                 href="https://simorkadesigns.com/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Simorka Designs"
               >
                 <img
                   src="/graphite/sd-system-logo.png"
-                  alt="SD System"
+                  alt=""
                   className={styles.creditLogo}
                 />
               </a>

@@ -61,8 +61,8 @@ export function TwoDoors() {
                 Two ways in
               </h2>
               <p className={styles.body}>
-                Designers and developers consume the same system through
-                different artefacts, and the site should not pretend otherwise.
+                Designers work from the Figma kit. Developers work from React
+                components. Both read the same tokens.
               </p>
             </div>
 
@@ -71,8 +71,8 @@ export function TwoDoors() {
                 <div className={styles.doorBody}>
                   <h3 className={styles.doorTitle}>For designers</h3>
                   <p className={styles.doorCopy}>
-                    The kit is the source of truth. Where it and a contract
-                    disagree, the kit wins.
+                    The Figma kit is the source of truth. When the kit and a
+                    component&apos;s spec disagree, the kit wins.
                   </p>
                 </div>
                 {/* The door's action, as the filled block the other cards end
@@ -109,12 +109,12 @@ export function TwoDoors() {
                 <div className={styles.doorBody}>
                   <h3 className={styles.doorTitle}>For developers</h3>
                   <p className={styles.doorCopy}>
-                    Contracts are the written spec the code is checked against,
-                    and they are versioned.
+                    Every component has a versioned written spec, called a
+                    contract. The code is checked against it on every build.
                   </p>
                 </div>
                 <a className={styles.cta} href="/gallery">
-                  See the code
+                  Browse the components
                   <span aria-hidden="true">→</span>
                 </a>
                 <div className={styles.artefact} aria-hidden="true">

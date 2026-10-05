@@ -84,22 +84,23 @@ export function Hero({ governed }: { governed: number }) {
         <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>
           <div className="hero__center">
             <Tag type="purple" size="md" className="hero__eyebrow">
-              <Gem size={16} className="hero__eyebrow-icon" /> Wave 4 · {governed}{' '}
-              governed components
+              <Gem size={16} className="hero__eyebrow-icon" /> {governed} spec-checked{' '}
+              components
             </Tag>
             <h1 className="hero__title" id="hero-title">
               One color.{' '}
               <br className="hero__title-break" />
-              A whole design system.
+              A full theme, light and dark.
             </h1>
             <p className="hero__subtitle">
-              Pick a color. Graphite resolves eight ramps, thirty-two semantic
-              roles and both themes from it, measures every pairing as it goes,
-              and keeps the Figma kit and the code provably in step.
+              Pick a color. Graphite builds eight color scales, thirty-two named
+              color roles, and light and dark themes from it. It checks text and
+              background contrast as it goes. Automated checks hold the React
+              components to the Figma kit.
             </p>
             <div className="hero__ctas">
               <Button variant="primary" size="lg" asChild>
-                <a href="/docs">
+                <a href="/docs/quick-start">
                   Get started
                   <ArrowRight />
                 </a>
