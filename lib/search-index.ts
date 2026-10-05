@@ -19,6 +19,8 @@ import { metadata as a11yMeta } from '@/app/docs/accessibility/page'
 import { TOC as a11yToc } from '@/app/docs/accessibility/toc'
 import { metadata as governanceMeta } from '@/app/docs/governance/page'
 import { TOC as governanceToc } from '@/app/docs/governance/toc'
+import { metadata as glossaryMeta } from '@/app/docs/glossary/page'
+import { TOC as glossaryToc } from '@/app/docs/glossary/toc'
 import { metadata as typeMeta } from '@/app/docs/foundations/typography/page'
 import { TOC as typeToc } from '@/app/docs/foundations/typography/toc'
 import { metadata as spacingMeta } from '@/app/docs/foundations/spacing/page'
@@ -145,6 +147,7 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs/theming', themingMeta, themingToc),
     ...docsPage('/docs/accessibility', a11yMeta, a11yToc),
     ...docsPage('/docs/governance', governanceMeta, governanceToc),
+    ...docsPage('/docs/glossary', glossaryMeta, glossaryToc),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),
     ...docsPage('/docs/foundations/typography', typeMeta, typeToc),
     ...docsPage('/docs/foundations/spacing', spacingMeta, spacingToc),

@@ -204,24 +204,6 @@ const SELECTION_ORDER = [
   'No match? The role is missing. Flag it rather than working around it.',
 ]
 
-// In the order a reader meets the terms, not alphabetical: read top to bottom
-// it doubles as a recap of the model.
-const GLOSSARY: [string, string][] = [
-  ['Source color', 'The one color you choose. Everything else on this page is calculated from it.'],
-  ['Hue', 'Which color it is: red, green, blue. Changing hue turns a red into an orange.'],
-  ['Chroma', 'How intense the color is. High chroma is vivid; zero chroma is gray.'],
-  ['Tone', 'How light or dark, from 0 (black) to 100 (white). Tone 40 is dark; tone 90 is pale.'],
-  ['Ramp', 'One hue from dark to light: the same color at ten tones, like a paint strip.'],
-  ['OKLab', 'The color model the math runs in. Equal steps in its numbers look like equal steps to the eye.'],
-  ['Primitive', 'A raw color on a ramp, with no job attached. Useful to look at, never to build with.'],
-  ['Role', 'A named color with a job, such as page background or button fill. You build with these.'],
-  ['On-color', 'The text or icon color for on top of another. onSurface goes on surface, and is guaranteed readable there.'],
-  ['Container', 'A quieter version of a color, for filling an area rather than drawing the eye.'],
-  ['Theme', 'Light or dark. Same role names in both; different values behind them.'],
-  ['Contrast ratio', 'How different two colors are in lightness, written like 4.5:1. Higher is easier to read.'],
-  ['AA / AAA', 'Two bars from the WCAG standard. AA is the common minimum; AAA is stricter.'],
-]
-
 const SPANS: [string, number, number][] = [
   ['1 × 1', 1, 1],
   ['2 × 1', 2, 1],
@@ -665,16 +647,12 @@ export default function ThemingPage() {
           <section id="glossary" className={styles.block}>
             <SectionHeading
               title="Glossary"
-              lede="Every term this page cannot avoid, in the order you meet it."
+              lede="Plain definitions for ramp, role, tone and the rest."
             />
-            <dl className={styles.glossary}>
-              {GLOSSARY.map(([term, plain]) => (
-                <div key={term} className={styles.glossaryItem}>
-                  <dt>{term}</dt>
-                  <dd>{plain}</dd>
-                </div>
-              ))}
-            </dl>
+            <p className={styles.note}>
+              Every term on this page is defined in the{' '}
+              <a href="/docs/glossary">glossary</a>.
+            </p>
           </section>
 
           <section id="next-steps" className={styles.block}>

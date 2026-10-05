@@ -218,11 +218,10 @@ export default function QuickStartPage() {
               <DocSnippet code={example('source-picker.tsx')} />
               <DocSnippet code={example('source-picker.module.scss')} />
             </Step>
-            <Callout title="The source is site-wide, and it resets on reload.">
+            <Callout title="The source is site-wide, and it stays after a reload.">
               <>
-              The provider holds it in React state, so every surface reads the
-              same value, but nothing persists it. Reloading returns to the seed,{' '}
-              <code>{COVER_SOURCE_HEX.toUpperCase()}</code>, sampled from the
+              Your browser saves it, so every page reads the same color. The
+              default is <code>{COVER_SOURCE_HEX.toUpperCase()}</code>, sampled from the
               kit&rsquo;s cover image.
               </>
             </Callout>

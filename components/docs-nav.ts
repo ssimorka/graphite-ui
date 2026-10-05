@@ -19,6 +19,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/theming', label: 'Theming' },
       { href: '/docs/accessibility', label: 'Accessibility' },
       { href: '/docs/governance', label: 'Governance' },
+      { href: '/docs/glossary', label: 'Glossary' },
     ],
   },
   {
