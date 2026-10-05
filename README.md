@@ -119,3 +119,7 @@ contract change typically trips more than one. It deliberately does not run
 ## License
 
 MIT. See [LICENSE](LICENSE). Commercial use included.
+
+The licence covers the code and documentation. The Simorka Designs name and
+logo, the SD System mark, and the Graphite UI name and logo are not included.
+See [TRADEMARKS.md](TRADEMARKS.md).
