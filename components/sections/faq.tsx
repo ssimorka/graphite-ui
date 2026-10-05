@@ -14,7 +14,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'Is it free, and what is it built with?',
-    a: 'Yes, it is free. The code is open source under the MIT licence, so you can use it in personal and commercial projects at no cost. It is built with React 19 and Next.js 16, styled with SCSS modules.',
+    a: 'Yes, it is free. The code is open source under the MIT licence, so you can use it in personal and commercial projects at no cost. The Simorka Designs brand assets, including its name and logos, are not part of that licence and may not be used. It is built with React 19 and Next.js 16, styled with SCSS modules.',
   },
   {
     q: 'Does it require Carbon?',

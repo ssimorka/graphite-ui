@@ -90,7 +90,7 @@ export function Hero({ governed }: { governed: number }) {
             <h1 className="hero__title" id="hero-title">
               One color.{' '}
               <br className="hero__title-break" />
-              A whole design system.
+              A full theme, light and dark.
             </h1>
             <p className="hero__subtitle">
               Pick a color. Graphite builds eight color scales, thirty-two named

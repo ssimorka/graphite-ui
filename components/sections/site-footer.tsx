@@ -97,15 +97,16 @@ export function SiteFooter() {
               8 color scales · 32 roles · WCAG AA and AAA
             </p>
             <div className={styles.credit}>
-              <span className={styles.creditLabel}>Built by Steph Simorka</span>
+              <span className={styles.creditLabel}>Built by Simorka Designs</span>
               <a
                 href="https://simorkadesigns.com/"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Simorka Designs"
               >
                 <img
                   src="/graphite/sd-system-logo.png"
-                  alt="Simorka Designs"
+                  alt=""
                   className={styles.creditLogo}
                 />
               </a>
