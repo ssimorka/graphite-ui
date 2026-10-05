@@ -10,8 +10,8 @@ export function PromoCard() {
     <CardShell id="promo">
       <div className={styles.image} aria-hidden="true" />
       <CardHeader
-        title="Observability Plus is replacing Monitoring"
-        description="Switch to the improved way to explore your data, with natural language. Monitoring will no longer be available on the Pro plan in November, 2025"
+        title="Reports have a new home"
+        description="Ask questions about your data in plain language. The old reports page closes next month."
       />
       <div className={styles.footer}>
         <Button variant="primary" className={styles.button}>

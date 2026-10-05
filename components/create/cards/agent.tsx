@@ -10,8 +10,8 @@ export function AgentCard() {
   return (
     <CardShell id="agent">
       <CardHeader
-        title="Ship faster & safer with Vercel Agent"
-        description="Your use is subject to Vercel's Public Beta Agreement and AI Product Terms."
+        title="Ship faster with automated review"
+        description="Review runs on every pull request."
       />
       <ul className={styles.features}>
         <li className={styles.feature}>
@@ -34,19 +34,19 @@ export function AgentCard() {
               <strong>Root-cause analysis</strong> for production issues with deployment context.
             </p>
             <span className={styles.tag}>
-              <Tag variant="primary">Requires Observability Plus</Tag>
+              <Tag variant="primary">Pro plan</Tag>
             </span>
           </div>
         </li>
       </ul>
       <Notification
         variant="info"
-        title="Trial credit"
-        body="Pro teams get $100 in Vercel Agent trial credit for 2 weeks after activation."
+        title="Free trial"
+        body="New teams get a 14-day free trial."
       />
       <div className={styles.footer}>
         <Button variant="secondary">Cancel</Button>
-        <Button variant="primary">Enable with $100 credits</Button>
+        <Button variant="primary">Start trial</Button>
       </div>
     </CardShell>
   )
