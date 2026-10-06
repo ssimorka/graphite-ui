@@ -5,7 +5,7 @@ import { makeRamps } from '@/lib/color.js'
 import type { RampName } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
-import { RampRow, Toast, useCopy } from '@/components/studio'
+import { RampRow, Toast, useCopy } from '@/components/token-panels'
 import { StatusBadge } from '@/components/doc-blocks'
 import styles from './color-page.module.scss'
 

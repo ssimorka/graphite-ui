@@ -141,6 +141,6 @@
 // The source mark is a solid white PNG, made for a permanently dark page.
 // This site's light theme needs it inverted to stay legible. Scoped through
 // :global because the theme class lives on <html>, outside this module.
-:global(:root.cds--white) .creditLogo {
+:global(:root[data-theme='light']) .creditLogo {
   filter: invert(1);
 }

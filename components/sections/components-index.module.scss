@@ -332,7 +332,7 @@
   }
 }
 
-// The page is dark (g100) unless the root carries the white theme.
+// The page is dark unless the root carries the light theme.
 .kitLight {
   display: none;
 }
@@ -341,7 +341,7 @@
   display: block;
 }
 
-:global(:root.cds--white) {
+:global(:root[data-theme='light']) {
   .kitLight {
     display: block;
   }

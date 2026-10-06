@@ -52,7 +52,7 @@ export function MeshGradient({
 }) {
   const { sourceHex, theme } = useTheme()
   const stops = makeRamps(sourceHex || COVER_SOURCE_HEX)[family].stops
-  const light = theme === 'white'
+  const light = theme === 'light'
   const pick = (i: number) => stops[light ? 9 - i : i].hex
   const r = RECIPE[family]
 

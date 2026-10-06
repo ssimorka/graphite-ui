@@ -20,8 +20,8 @@ import styles from './get-code.module.scss'
  * "Get the code": the theme as it stands, in two forms, and a download.
  *
  * The colour output is the engine's own exporter (`buildCss` and `buildJson`),
- * so what you take is exactly what the site resolves. It names roles in the
- * kit's `--cts-*` vocabulary, which is the format the exporter emits; the
+ * so what you take is exactly what the site resolves, under the same
+ * `--graphite-*` names the provider stamps and the components read; the
  * builder's own choices (radius and the three typefaces) follow as a second
  * block, so the CSS is a complete answer to what the preview shows.
  */

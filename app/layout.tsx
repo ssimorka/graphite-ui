@@ -34,7 +34,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="cds--g100" suppressHydrationWarning>
+    <html lang="en" className="cds--g100" data-theme="dark" suppressHydrationWarning>
       <head>
         {/* Puts the visitor's last colors back before first paint. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_RESTORE_SCRIPT }} />

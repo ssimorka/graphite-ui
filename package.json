@@ -14,7 +14,8 @@
     "token-drift:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/token-drift.test.mjs",
     "component-snapshot": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-snapshot.mjs",
     "component-doc-drift": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.mjs",
-    "component-doc-drift:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.test.mjs"
+    "component-doc-drift:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.test.mjs",
+    "naming-check": "node scripts/naming-check.mjs"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.82.0",

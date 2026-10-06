@@ -72,3 +72,10 @@ jobs:
       - name: Component doc drift self-test
         if: ${{ !cancelled() }}
         run: pnpm component-doc-drift:test
+
+      # One variable prefix, --graphite-. The engine's former export prefix and
+      # project name are banned from every tracked file; see the header of
+      # scripts/naming-check.mjs for why a folder list was not enough.
+      - name: "Naming check: --graphite-* is the only prefix"
+        if: ${{ !cancelled() }}
+        run: pnpm naming-check

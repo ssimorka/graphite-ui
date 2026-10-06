@@ -110,7 +110,7 @@ export function useCopy() {
 export function Toast({ message }: { message: string }) {
   if (!message) return null
   return (
-    <div className="studio-toast" role="status">
+    <div className="token-toast" role="status">
       {message}
     </div>
   )
@@ -226,7 +226,7 @@ export function SemanticTable({
     ([role]) => !STATUS_ROLE_NAMES.has(role),
   )
   return (
-    <div className="studio-table">
+    <div className="token-table">
       <Table size="lg">
         <TableHead>
           <TableRow>
@@ -245,7 +245,7 @@ export function SemanticTable({
                 <TableCell>{role}</TableCell>
                 <TableCell>
                   <span
-                    className="studio-swatch"
+                    className="token-swatch"
                     style={{ background: t.hex }}
                   />
                 </TableCell>

@@ -301,7 +301,7 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// Palette construction follows Carbon Token Studio's rules: colors are only
+// Palette construction follows the engine's rules: colors are only
 // ever sampled at the canonical TONE_STOPS, never at invented tones, and only
 // from the generated ramps — no off-system hues. The 60/30/10 weighting is
 // expressed as six neutral stops, three accent stops, and one secondary stop,
@@ -312,7 +312,7 @@ function buildPalette(sourceHex: string, isDark: boolean): Palette {
   const a = ramps.accent.tone
   const s2 = ramps.secondary.tone
 
-  // 60% neutral — the ramp's dark-to-light stops, ordered as in the studio.
+  // 60% neutral — the ramp's dark-to-light stops, ordered as in the ramp rows.
   const grays = isDark
     ? [n(10), n(20), n(30), n(60), n(90), n(20)]
     : [n(10), n(20), n(50), n(80), n(98), n(20)]
@@ -470,7 +470,7 @@ export const PATTERN_NAMES = SPECIMENS.map((s) => s.name)
 export function PatternSpecimen({ index, size = 140 }: { index: number; size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { sourceHex, theme } = useTheme()
-  const isDark = theme === 'g100'
+  const isDark = theme === 'dark'
   const activeHex = sourceHex || COVER_SOURCE_HEX
   const palette = useMemo(() => buildPalette(activeHex, isDark), [activeHex, isDark])
   const spec = SPECIMENS[index]
@@ -576,7 +576,7 @@ export function GenerativeArt({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { sourceHex, theme } = useTheme()
-  const isDark = theme === 'g100'
+  const isDark = theme === 'dark'
   const activeHex = sourceHex || COVER_SOURCE_HEX
 
   const palette = useMemo(() => buildPalette(activeHex, isDark), [activeHex, isDark])

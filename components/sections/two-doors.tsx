@@ -47,8 +47,8 @@ export function TwoDoors() {
   const { sourceHex, theme, lightBundle, darkBundle, level } = useTheme()
   const ramps = makeRamps(sourceHex || COVER_SOURCE_HEX)
   const bundle =
-    (theme === 'white' ? lightBundle : darkBundle) ??
-    buildTheme(theme === 'white' ? 'light' : 'dark', ramps, level)
+    (theme === 'light' ? lightBundle : darkBundle) ??
+    buildTheme(theme, ramps, level)
   const tokens = (bundle as { tokens: Record<string, { hex: string }> }).tokens
 
   return (

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { Grid, Column, Tag } from '@carbon/react'
 import { Gem, ArrowRight, Grid as GridIcon } from '@carbon/icons-react'
 import { Button } from '@/components/ui/button'
-import { RampRow, Toast, useCopy } from '@/components/studio'
+import { RampRow, Toast, useCopy } from '@/components/token-panels'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps } from '@/lib/color.js'
 

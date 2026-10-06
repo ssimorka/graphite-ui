@@ -3,7 +3,7 @@
 import { RefTable } from '@/components/component-page'
 import { PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
 import { CARBON_VAR_COUNT, useTheme } from '@/components/theme-provider'
-import { weightLabelFor } from '@/components/studio'
+import { weightLabelFor } from '@/components/token-panels'
 import { Tag } from '@/components/ui/tag'
 import { STATE_DELTAS, STATE_FAMILIES } from '@/lib/color.js'
 import { spell } from '@/lib/spell'
@@ -173,7 +173,7 @@ export function CurrentLevel() {
 /** The 60/30/10 rhythm, with the tenth painted from the live secondary role. */
 export function RatioBar() {
   const { theme, lightBundle, darkBundle } = useTheme()
-  const tokens = (theme === 'g100' ? darkBundle : lightBundle)?.tokens as
+  const tokens = (theme === 'dark' ? darkBundle : lightBundle)?.tokens as
     | Record<string, Entry>
     | undefined
   return (
