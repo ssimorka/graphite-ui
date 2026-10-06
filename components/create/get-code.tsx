@@ -6,6 +6,7 @@ import type { ExportBundle } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
 import { buildThemeFile } from '@/lib/theme-file'
 import { buildTailwindBridge } from '@/lib/tailwind-bridge'
+import { REGISTRY_URL, shadcnAdd } from '@/lib/registry-url'
 import type { ThemeFileFoundations } from '@/lib/theme-file'
 import { Modal } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
@@ -116,6 +117,19 @@ export function GetCodeDialog({
               beside the CSS. The JSON has the colors with where each one came
               from.
             </p>
+            <p className={styles.lede}>
+              Or install the theme and the Tailwind file with the shadcn CLI.
+              The CLI version takes your color and contrast target; radius,
+              density and type chosen here are in the download only.
+            </p>
+            <DocSnippet
+              code={
+                level === 'AAA'
+                  ? // Quoted: some shells read a bare ? as a glob.
+                    `${shadcnAdd('init')} "${REGISTRY_URL}/theme/${sourceHex.slice(1)}.json?level=AAA" ${REGISTRY_URL}/tailwind.json`
+                  : shadcnAdd('init', `theme/${sourceHex.slice(1)}`, 'tailwind')
+              }
+            />
             <div className={styles.formats} role="group" aria-label="Format">
               {(Object.keys(FORMATS) as Format[]).map((f) => (
                 <button

@@ -26,6 +26,7 @@ import {
 } from '@/lib/color.js'
 import { SaveActions } from './examples/save-actions'
 import { ReleaseNote } from './examples/release-note'
+import { shadcnAdd } from '@/lib/registry-url'
 import { TOC } from './toc'
 import styles from './quick-start.module.scss'
 
@@ -145,16 +146,8 @@ export function ThemeToggle() {
   return <button onClick={toggle}>Switch theme</button>
 }`
 
-// What Button and ButtonGroup need, from the repository. Checked by copying
-// them into a fresh create-next-app on 2026-10-06.
-const COPY_LIST = `npm i sass clsx class-variance-authority
-
-components/ui/button.tsx
-components/ui/button.module.scss
-components/ui/button-group.tsx
-components/ui/button-group.module.scss
-components/ui/slot.tsx
-lib/cn.ts`
+// The example source color in the commands. Any six-digit hex works.
+const EXAMPLE_HEX = '0f766e'
 
 export default function QuickStartPage() {
   const contracts = readContracts()
@@ -184,7 +177,7 @@ export default function QuickStartPage() {
             </p>
             <div className={styles.badges}>
               <StatusBadge tone="success">Any React project</StatusBadge>
-              <StatusBadge tone="neutral">No package to install</StatusBadge>
+              <StatusBadge tone="neutral">Installs with the shadcn CLI</StatusBadge>
             </div>
           </header>
 
@@ -193,13 +186,20 @@ export default function QuickStartPage() {
               title="Get the theme"
               lede="One color in, a whole theme out."
             />
-            <Step n={1} title="Pick a color and get the code">
+            <Step n={1} title="Set up the project">
               <p className={styles.stepText}>
-                In <a href="/create">Create</a>, pick your color, then Get the
-                code and download the CSS. It is the whole theme in one file:
-                foundations (space, radius, motion, type), then colors for
-                light and dark, all as <code>--graphite-*</code> variables. Any
-                radius, density or typeface you chose is written in.
+                One command adds a <code>components.json</code>, the theme for
+                your color and the Tailwind file. Put your own hex in place of{' '}
+                <code>{EXAMPLE_HEX}</code>.
+              </p>
+              <DocSnippet code={shadcnAdd('init', `theme/${EXAMPLE_HEX}`, 'tailwind')} />
+              <p className={styles.stepText}>
+                The theme is one plain CSS file: foundations (space, radius,
+                motion, type), then colors for light and dark, all as{' '}
+                <code>--graphite-*</code> variables. To pick the color by eye,
+                or to change radius, density or type too, use{' '}
+                <a href="/create">Create</a> and download the file from Get the
+                code instead.
               </p>
               <DocSnippet code={cssHead} />
             </Step>
@@ -210,7 +210,7 @@ export default function QuickStartPage() {
               title="Add it to your project"
               lede="Plain CSS, with your color fixed in it."
             />
-            <Step n={2} title="Import the file and load the fonts">
+            <Step n={2} title="Import the theme and load the fonts">
               <p className={styles.stepText}>
                 Import <code>graphite-theme.css</code> once, globally. Set{' '}
                 <code>data-theme</code> on <code>&lt;html&gt;</code> to pick a
@@ -235,10 +235,10 @@ export default function QuickStartPage() {
               title="Use Tailwind"
               lede="Optional. The roles as Tailwind classes."
             />
-            <Step n={3} title="Add the Tailwind file">
+            <Step n={3} title="Import the Tailwind file">
               <p className={styles.stepText}>
-                On Tailwind v4, also download the Tailwind tab from Get the code
-                and import it after the theme file. It holds no values, so dark
+                On Tailwind v4, import <code>graphite-tailwind.css</code> after
+                the theme file. It holds no values, so dark
                 theme and a new color reach every class. Write{' '}
                 <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
                 <code>p-space-05</code> or <code>text-body-3</code>. Spacing
@@ -318,18 +318,16 @@ export default function QuickStartPage() {
           <section id="add-a-component" className={styles.block}>
             <SectionHeading
               title="Add a component"
-              lede="Copied by hand today. An install command is coming."
+              lede="Each one installs with everything it uses."
             />
-            <Step n={6} title="Copy Button and ButtonGroup">
+            <Step n={6} title="Install Button and ButtonGroup">
               <p className={styles.stepText}>
                 {`Button follows its contract at ${button?.version ?? 'an unversioned state'}, and ButtonGroup at ${group?.version ?? 'an unversioned state'}.`}{' '}
-                Copy these files from the{' '}
-                <a href="https://github.com/ssimorka/graphite-ui">repository</a>{' '}
-                into the same paths, with the <code>@/</code> import alias
-                pointing at your project root (the{' '}
-                <code>create-next-app</code> default).
+                The CLI adds their files to <code>components/ui</code>, the
+                helpers they import, and <code>sass</code>,{' '}
+                <code>clsx</code> and <code>class-variance-authority</code>.
               </p>
-              <DocSnippet code={COPY_LIST} />
+              <DocSnippet code={shadcnAdd('button', 'button-group')} />
               <p className={styles.stepText}>
                 Button defaults to <code>secondary</code>, not the filled
                 primary, and ButtonGroup allows one primary.

@@ -253,8 +253,9 @@ export default function IntroductionPage() {
                 <tr>
                   <th scope="row">Distribution</th>
                   <td>
-                    No package to install yet. The theme and the Figma kit are
-                    usable today; components are copied by hand.{' '}
+                    No npm package: the theme and every component install with
+                    the shadcn CLI from Graphite&rsquo;s registry, and the Figma
+                    kit is a published library.{' '}
                     <a href="/docs/get-started">Get started</a> has the
                     details.
                   </td>
