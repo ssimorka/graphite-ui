@@ -11,6 +11,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
   {
     label: 'Getting started',
     items: [
+      { href: '/docs/get-started', label: 'Get started' },
       { href: '/docs', label: 'Introduction' },
       { href: '/docs/installation', label: 'Installation' },
       { href: '/docs/quick-start', label: 'Quick start' },
