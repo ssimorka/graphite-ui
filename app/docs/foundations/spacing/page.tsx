@@ -287,7 +287,7 @@ export default function SpacingPage() {
           <section id="rules" className={styles.block}>
             <SectionHeading
               title="Usage rules"
-              lede={`Quoted from the Spacing contract (${contract.version}), which token-drift checks against globals.scss.`}
+              lede={`Quoted from the Spacing contract (${contract.version}).`}
             />
             <div className={styles.rules}>
               <section className={`${styles.side} ${styles.do}`}>

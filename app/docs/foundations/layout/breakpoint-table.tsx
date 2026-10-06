@@ -9,8 +9,6 @@ export type BreakpointRow = {
   px: number
   /** The kit mode that holds this width, e.g. `LG (1056px)`. */
   kitMode: string
-  /** What Carbon's `$grid-breakpoints` map calls the same stop. */
-  carbon: string
 }
 
 /**
@@ -52,9 +50,6 @@ export function BreakpointTable({ rows }: { rows: BreakpointRow[] }) {
             <th scope="col" className={styles.wide}>
               Kit mode
             </th>
-            <th scope="col" className={styles.wide}>
-              Carbon
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -70,9 +65,6 @@ export function BreakpointTable({ rows }: { rows: BreakpointRow[] }) {
                 <td className={styles.value}>{r.px}px</td>
                 <td>{next ? `${r.px} to ${next.px - 1}` : `${r.px} and up`}</td>
                 <td className={styles.wide}>{r.kitMode}</td>
-                <td className={styles.wide}>
-                  <code>{r.carbon}</code>
-                </td>
               </tr>
             )
           })}

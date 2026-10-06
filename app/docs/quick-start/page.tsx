@@ -8,7 +8,6 @@ import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
 import { RefTable, Surface } from '@/components/component-page'
 import {
-  Callout,
   NextCard,
   NextCards,
   SectionHeading,
@@ -27,15 +26,13 @@ import {
 } from '@/lib/color.js'
 import { SaveActions } from './examples/save-actions'
 import { ReleaseNote } from './examples/release-note'
-import { SourcePicker } from './examples/source-picker'
-import { ThemeSwitch } from './examples/theme-switch'
 import { TOC } from './toc'
 import styles from './quick-start.module.scss'
 
 export const metadata: Metadata = {
   title: 'Quick start · Graphite UI',
   description:
-    'The shortest path to using Graphite in this repo: pick a source color, use a governed component, style with the generated variables, switch theme, and take the tokens out.',
+    'Use Graphite in your own project: take a theme from Create, add it, use the roles from CSS or Tailwind, switch theme, and add a component.',
 }
 
 const lower = (n: number) => spell(n).toLowerCase()
@@ -65,7 +62,7 @@ const STATE_SUFFIXES = [
   'focus',
 ]
 
-/** What the provider stamps onto <html>, counted from the engine's output. */
+/** The generated variables the theme file carries, counted from the engine. */
 function generatedVars() {
   const ramps = makeRamps(COVER_SOURCE_HEX)
   const light = buildTheme('light', ramps)
@@ -88,9 +85,10 @@ function generatedVars() {
 }
 
 /**
- * The theme-invariant --graphite-* declarations in globals.scss, grouped by
- * family. The generated roles also appear there as first-paint fallbacks, so
- * anything the engine emits is excluded.
+ * The theme-invariant --graphite-* declarations, grouped by family. They are
+ * the foundations the theme file writes above the colors, read from
+ * globals.scss, which is their one source. The generated roles also appear
+ * there as first-paint fallbacks, so anything the engine emits is excluded.
  */
 function staticVars(generated: Set<string>) {
   const src = read('app', 'globals.scss')
@@ -104,22 +102,6 @@ function staticVars(generated: Set<string>) {
     groups.set(family, [...(groups.get(family) ?? []), n])
   }
   return groups
-}
-
-/**
- * The useTheme() value, read from its type in theme-provider.tsx so the table
- * lists what the context actually carries. The descriptions are the part a
- * person wrote; a field that arrives without one shows an empty cell rather
- * than disappearing.
- */
-function themeApi() {
-  const src = read('components', 'theme-provider.tsx')
-  const alias = src.match(/type ThemeName = ([^\n]+)/)?.[1]?.trim() ?? ''
-  const body = src.match(/type ThemeContextValue = \{([\s\S]*?)\n\}/)?.[1] ?? ''
-  return [...body.matchAll(/^ {2}(\w+): ([^\n]+)$/gm)].map((m) => ({
-    name: m[1],
-    type: m[2].replace(/ThemeName/g, alias),
-  }))
 }
 
 // How a project uses the downloaded theme file, in a Next.js root layout.
@@ -152,19 +134,27 @@ const TAILWIND_USAGE = `/* app/globals.css */
   <h2 className="font-1 text-heading-5">Graphite on Tailwind</h2>
 </div>`
 
-const API_NOTES: Record<string, string> = {
-  theme: 'The active theme. The same two names the exported theme file uses for data-theme.',
-  toggleTheme: 'Flips between the two. This is what the header’s theme button calls.',
-  setTheme: 'Sets one directly.',
-  sourceHex: 'The current source, lower-case with a leading #.',
-  setSourceHex:
-    'Changes the source. Anything that is not a 3- or 6-digit hex is ignored.',
-  lightBundle: 'Tokens, contrast results and states for the light theme.',
-  darkBundle: 'The same for dark. Both are computed whichever theme is showing.',
-  level: 'The contrast target the engine resolves against.',
-  setLevel: 'Changes it, and every role re-resolves.',
-  ramps: 'The ramps for the current source, keyed by name.',
-}
+// Switching theme is one attribute; the theme file does the rest.
+const THEME_SWITCH = `'use client'
+
+export function ThemeToggle() {
+  const toggle = () => {
+    const root = document.documentElement
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark'
+  }
+  return <button onClick={toggle}>Switch theme</button>
+}`
+
+// What Button and ButtonGroup need, from the repository. Checked by copying
+// them into a fresh create-next-app on 2026-10-06.
+const COPY_LIST = `npm i sass clsx class-variance-authority
+
+components/ui/button.tsx
+components/ui/button.module.scss
+components/ui/button-group.tsx
+components/ui/button-group.module.scss
+components/ui/slot.tsx
+lib/cn.ts`
 
 export default function QuickStartPage() {
   const contracts = readContracts()
@@ -176,9 +166,8 @@ export default function QuickStartPage() {
   const generated = new Set([...gen.roles, ...gen.states, '--graphite-focus', '--graphite-scrim'])
   const statics = staticVars(generated)
   const staticCount = [...statics.values()].reduce((n, v) => n + v.length, 0)
-  const api = themeApi()
-  // The head of the engine's CSS export for the seed: the selector and the
-  // first role, which is enough to show the naming and the shape.
+  // The head of the color part of the theme file for the seed: the selector
+  // and the first roles, enough to show the naming and the shape.
   const cssHead = gen.css.split('\n').slice(0, 4).join('\n') + '\n  /* … */'
 
   return (
@@ -190,8 +179,8 @@ export default function QuickStartPage() {
           <div className={styles.footnote}>
             <p className={styles.footnoteHead}>{`${generated.size} generated · ${staticCount} static`}</p>
             <p className={styles.footnoteBody}>
-              The --graphite-* variables this page counts: written by the theme
-              provider on every change, or declared once in globals.scss.
+              The --graphite-* variables in a theme file: colors for your
+              source, and foundations that never change.
             </p>
           </div>
         }
@@ -201,99 +190,87 @@ export default function QuickStartPage() {
             <Breadcrumb items={docsCrumbs('/docs/quick-start')} />
             <h1 className={styles.title}>Quick start</h1>
             <p className={styles.lede}>
-              Six steps from a running project to a themed screen and a theme
-              you can take away. Every snippet on this page is a file in the
-              repo that also renders the preview beside it, so the code is known
-              to compile.
+              Graphite in your own project, from a color to a themed screen.
             </p>
             <div className={styles.badges}>
-              <StatusBadge tone="primary">In this repo</StatusBadge>
-              <StatusBadge tone="neutral">No npm package</StatusBadge>
+              <StatusBadge tone="success">Any React project</StatusBadge>
+              <StatusBadge tone="neutral">No package to install</StatusBadge>
             </div>
           </header>
 
-          <section id="run-it" className={styles.block}>
+          <section id="get-the-theme" className={styles.block}>
             <SectionHeading
-              title="Run it"
-              lede="Graphite is used from inside this repository. There is no package to install into another project yet."
+              title="Get the theme"
+              lede="One color in, a whole theme out."
             />
-            <Step n={1} title="Start the dev server">
+            <Step n={1} title="Pick a color and get the code">
               <p className={styles.stepText}>
-                Clone, install and run as{' '}
-                <a href="/docs/installation">Installation</a> describes. The
-                short version is <code>pnpm install</code> then{' '}
-                <code>pnpm dev</code>, and the server must run under webpack.
-                Everything below assumes it is up, on port 3000 unless it
-                printed another.
+                In <a href="/create">Create</a>, pick your color, then Get the
+                code and download the CSS. It is the whole theme in one file:
+                foundations (space, radius, motion, type), then colors for
+                light and dark, all as <code>--graphite-*</code> variables. Any
+                radius, density or typeface you chose is written in.
               </p>
+              <DocSnippet code={cssHead} />
             </Step>
           </section>
 
-          <section id="pick-a-color" className={styles.block}>
+          <section id="add-it" className={styles.block}>
             <SectionHeading
-              title="Pick a source color"
-              lede="One hex is the only input. Everything else on the site is resolved from it."
+              title="Add it to your project"
+              lede="Plain CSS, with your color fixed in it."
             />
-            <Step n={2} title="Set the source">
+            <Step n={2} title="Import the file and load the fonts">
               <p className={styles.stepText}>
-                The quickest way is the swatch in the header: pick a color and
-                the site repaints. <a href="/create">Create</a> does the same
-                with a live preview, presets and the rest of the theme choices
-                beside it. In code, the source lives in the theme provider and{' '}
-                <code>setSourceHex</code> changes it.
+                Import <code>graphite-theme.css</code> once, globally. Set{' '}
+                <code>data-theme</code> on <code>&lt;html&gt;</code> to pick a
+                theme, or leave it unset to follow the visitor&rsquo;s OS. To
+                change color later, make a new file in Create: every value comes
+                from the one color.
               </p>
-              <Surface label="Live: these set the site’s source color">
-                <SourcePicker />
-              </Surface>
-              <DocSnippet code={example('source-picker.tsx')} />
-              <DocSnippet code={example('source-picker.module.scss')} />
+              <p className={styles.stepText}>
+                The theme names IBM Plex but does not load it. Load it under its
+                own name, as below with Fontsource; <code>next/font</code>{' '}
+                renames fonts, so the theme would not find them. In a new{' '}
+                <code>create-next-app</code> project, clear the starter&rsquo;s{' '}
+                <code>:root</code>, <code>@theme</code> and <code>body</code>{' '}
+                rules from <code>globals.css</code>: they override the theme.
+              </p>
+              <DocSnippet code={THEME_FILE_USAGE} />
             </Step>
-            <Callout title="The source is site-wide, and it stays after a reload.">
-              <>
-              Your browser saves it, so every page reads the same color. The
-              default is <code>{COVER_SOURCE_HEX.toUpperCase()}</code>, sampled from the
-              kit&rsquo;s cover image.
-              </>
-            </Callout>
           </section>
 
-          <section id="use-a-component" className={styles.block}>
+          <section id="tailwind" className={styles.block}>
             <SectionHeading
-              title="Use a component"
-              lede="Governed components live in components/ui and import from there."
+              title="Use Tailwind"
+              lede="Optional. The roles as Tailwind classes."
             />
-            <Step n={3} title="Import a Button">
+            <Step n={3} title="Add the Tailwind file">
               <p className={styles.stepText}>
-                {`Button follows its contract at ${button?.version ?? 'an unversioned state'}, and ButtonGroup at ${group?.version ?? 'an unversioned state'}.`}{' '}
-                Button defaults to <code>secondary</code>, not the filled
-                primary, and ButtonGroup throws if it is handed a second primary:
-                one primary action per group is a contract rule, not a
-                suggestion.
+                On Tailwind v4, also download the Tailwind tab from Get the code
+                and import it after the theme file. It holds no values, so dark
+                theme and a new color reach every class. Write{' '}
+                <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
+                <code>p-space-05</code> or <code>text-body-3</code>. Spacing
+                keeps a <code>space-</code> prefix because the kit&rsquo;s 05 is
+                16px, where Tailwind&rsquo;s <code>p-5</code> is 20px. The file
+                also sets the kit&rsquo;s breakpoints; delete that block to keep
+                Tailwind&rsquo;s.
               </p>
-              <Surface label="Live">
-                <SaveActions />
-              </Surface>
-              <DocSnippet code={example('save-actions.tsx')} />
+              <DocSnippet code={TAILWIND_USAGE} />
             </Step>
-            <p className={styles.note}>
-              Neither file is a client component, so both render from a server
-              component. Pass <code>onClick</code> from a client one. The{' '}
-              <a href="/docs/components/button">Button page</a> lists every
-              variant and size, and <a href="/gallery">Components</a> lists the
-              rest.
-            </p>
           </section>
 
           <section id="style" className={styles.block}>
             <SectionHeading
-              title="Style with the variables"
-              lede="Your own components read the same --graphite-* variables the governed ones do."
+              title="Style with the roles"
+              lede="Your own components read the same --graphite-* variables."
             />
             <Step n={4} title="Write a module against the roles">
               <p className={styles.stepText}>
                 Use a role, never a hex. Here the container role and its{' '}
                 <code>on-</code> partner are a checked pairing, so the text
-                clears the contrast target for any source, in either theme.
+                clears the contrast target for any color, in either theme.
               </p>
               <Surface label="Live: change the source and this follows">
                 <ReleaseNote />
@@ -302,7 +279,7 @@ export default function QuickStartPage() {
               <DocSnippet code={example('release-note.module.scss')} />
             </Step>
             <RefTable
-              caption="The --graphite-* variables, by where they come from"
+              caption="The --graphite-* variables in a theme file"
               columns={[
                 { label: 'Group', tone: 'name' },
                 { label: 'Count', tone: 'muted' },
@@ -328,7 +305,7 @@ export default function QuickStartPage() {
               ]}
             />
             <p className={styles.note}>
-              {`Generated variables are written onto <html> by the theme provider every time the source, theme or contrast target changes: ${lower(gen.roles.length)} roles, and ${lower(STATE_SUFFIXES.length)} states for each of the ${STATE_FAMILIES.join(', ')} families. Static ones are declared once in app/globals.scss because they do not vary by theme.`}{' '}
+              {`Generated variables come from your color: ${lower(gen.roles.length)} roles, and ${lower(STATE_SUFFIXES.length)} states for each of the ${STATE_FAMILIES.join(', ')} families. Static ones are the same for every theme.`}{' '}
               <a href="/docs/foundations/tokens">Tokens</a> lists them all.
             </p>
           </section>
@@ -336,96 +313,41 @@ export default function QuickStartPage() {
           <section id="switch-theme" className={styles.block}>
             <SectionHeading
               title="Switch theme"
-              lede="Light and dark are both computed on every change, so switching is a lookup, not a rebuild."
+              lede="One attribute. The theme file holds both."
             />
-            <Step n={5} title="Read the theme from useTheme">
+            <Step n={5} title="Set data-theme">
               <p className={styles.stepText}>
-                <code>useTheme</code> is the hook the header&rsquo;s theme button
-                uses. It needs a client component.
+                Set <code>data-theme</code> to <code>light</code> or{' '}
+                <code>dark</code> on <code>&lt;html&gt;</code>, or on any element
+                to theme just that part.
               </p>
-              <Surface label="Live: switches the site theme">
-                <ThemeSwitch />
-              </Surface>
-              <DocSnippet code={example('theme-switch.tsx')} />
+              <DocSnippet code={THEME_SWITCH} />
             </Step>
-            <RefTable
-              caption="What useTheme returns"
-              columns={[
-                { label: 'Field', tone: 'name' },
-                { label: 'Type', tone: 'type' },
-                { label: 'What it is', tone: 'text' },
-              ]}
-              rows={api.map((f) => [f.name, f.type, API_NOTES[f.name] ?? ''])}
-            />
           </section>
 
-          <section id="take-the-tokens" className={styles.block}>
+          <section id="add-a-component" className={styles.block}>
             <SectionHeading
-              title="Take the tokens out"
-              lede="Create exports the theme as it stands, from the same engine the site runs."
+              title="Add a component"
+              lede="Copied by hand today. An install command is coming."
             />
-            <Step n={6} title="Open Get the code in Create">
+            <Step n={6} title="Copy Button and ButtonGroup">
               <p className={styles.stepText}>
-                In <a href="/create">Create</a>, Get the code opens the theme as
-                CSS or JSON, with a Download button. The CSS is the whole theme
-                in one file: the foundations (space, radius, motion, type), then
-                the colors, light under <code>:root</code> and{' '}
-                <code>[data-theme=&quot;light&quot;]</code>, dark under{' '}
-                <code>[data-theme=&quot;dark&quot;]</code>, all under the same{' '}
-                <code>--graphite-*</code> names the components read. Any radius,
-                density or typeface chosen in Create is written into it. The
-                JSON holds the source, the four source ramps and both
-                themes&rsquo; tokens, with the ramp and tone each came from,
-                contrast results and states.
+                {`Button follows its contract at ${button?.version ?? 'an unversioned state'}, and ButtonGroup at ${group?.version ?? 'an unversioned state'}.`}{' '}
+                Copy these files from the{' '}
+                <a href="https://github.com/ssimorka/graphite-ui">repository</a>{' '}
+                into the same paths, with the <code>@/</code> import alias
+                pointing at your project root (the{' '}
+                <code>create-next-app</code> default).
               </p>
-              <DocSnippet code={cssHead} />
-            </Step>
-            <Step n={7} title="Keep the file in your project">
+              <DocSnippet code={COPY_LIST} />
               <p className={styles.stepText}>
-                The downloaded <code>graphite-theme.css</code> needs no Graphite
-                runtime: it is plain CSS with your source color fixed in it.
-                Import it once, globally, and set <code>data-theme</code> on{' '}
-                <code>&lt;html&gt;</code> to pick a theme. Leave it unset and the
-                page follows the visitor&rsquo;s OS setting. To change the
-                source later, make a new file in Create rather than editing the
-                values: they are all derived from the one color.
+                Button defaults to <code>secondary</code>, not the filled
+                primary, and ButtonGroup allows one primary.
               </p>
-              <p className={styles.stepText}>
-                The file is required even if you also use{' '}
-                <code>ThemeProvider</code>: the provider writes colors only, and
-                the components&rsquo; spacing and type come from the file. Pass
-                the provider <code>stampVars={'{false}'}</code> so it only sets{' '}
-                <code>data-theme</code> and leaves the file&rsquo;s colors alone.
-              </p>
-              <p className={styles.stepText}>
-                The theme names IBM Plex Sans and Mono first and falls back to
-                system fonts, but does not load them. Load them under those
-                exact names, as below with Fontsource; <code>next/font</code>{' '}
-                registers fonts under a generated name, so the theme would not
-                find them. In a new{' '}
-                <code>create-next-app</code> project, also clear the
-                starter&rsquo;s own <code>:root</code>, <code>@theme</code> and{' '}
-                <code>body</code> rules from <code>globals.css</code>: they set
-                a background, text color and <code>--font-sans</code> that
-                override the theme.
-              </p>
-              <DocSnippet code={THEME_FILE_USAGE} />
-            </Step>
-            <Step n={8} title="Use the roles from Tailwind">
-              <p className={styles.stepText}>
-                On Tailwind v4, download the Tailwind tab from Get the code as
-                well. It names the same variables as Tailwind tokens and holds
-                no values, so a dark theme or a new source reaches every
-                utility. Import it after the theme file and write{' '}
-                <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
-                <code>p-space-05</code> or <code>text-body-3</code>.
-                Spacing keeps a <code>space-</code> prefix because{' '}
-                <code>p-space-05</code> is the kit&rsquo;s 16px, where
-                Tailwind&rsquo;s own <code>p-5</code> is 20px. The file also
-                swaps in the kit&rsquo;s breakpoints; delete that block to keep
-                Tailwind&rsquo;s.
-              </p>
-              <DocSnippet code={TAILWIND_USAGE} />
+              <Surface label="Live">
+                <SaveActions />
+              </Surface>
+              <DocSnippet code={example('save-actions.tsx')} />
             </Step>
           </section>
 
@@ -436,13 +358,13 @@ export default function QuickStartPage() {
             />
             <NextCards>
               <NextCard href="/docs/theming" title="Theming">
-                How the ramps and roles are derived, and which role to use where.
+                How the roles are derived, and which to use where.
               </NextCard>
               <NextCard href="/gallery" title="Components">
-                {`All ${lower(Object.keys(contracts).length)} governed components, with their contract versions.`}
+                Every component, with its contract version.
               </NextCard>
-              <NextCard href="/docs/governance" title="Governance">
-                What a change to a component has to go through before it lands.
+              <NextCard href="/docs/get-started" title="Get started">
+                What each part of Graphite gives you today.
               </NextCard>
             </NextCards>
           </section>

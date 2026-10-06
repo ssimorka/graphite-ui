@@ -16,7 +16,6 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     links: [
       { label: 'Get started', href: '/docs/get-started' },
       { label: 'Introduction', href: '/docs' },
-      { label: 'Installation', href: '/docs/installation' },
       { label: 'Quick start', href: '/docs/quick-start' },
       { label: 'Theming', href: '/docs/theming' },
       { label: 'Accessibility', href: '/docs/accessibility' },
@@ -45,7 +44,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     heading: 'Resources',
     links: [
       { label: 'GitHub', href: REPO },
-      { label: 'Governance rules', href: '/docs/governance' },
+      { label: 'Governance rules', href: '/docs/contribute/governance' },
       { label: 'Licence', href: `${REPO}/blob/main/LICENSE` },
       // The kit's icons are Flaticon's UIcons; their free licence asks for this.
       { label: 'Icons: UIcons by Flaticon', href: 'https://www.flaticon.com/uicons' },

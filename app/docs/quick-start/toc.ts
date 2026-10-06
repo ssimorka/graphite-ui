@@ -1,13 +1,13 @@
 import type { TocItem } from '@/components/docs-shell'
 
-// Page order, which the shell's scroll-spy relies on: it takes the first
-// intersecting entry in this order as the current one.
+// The Quick start page's sections, in page order. Lives beside the page so the
+// search index can import it without importing the page.
 export const TOC: TocItem[] = [
-  { href: '#run-it', label: 'Run it' },
-  { href: '#pick-a-color', label: 'Pick a source color' },
-  { href: '#use-a-component', label: 'Use a component' },
-  { href: '#style', label: 'Style with the variables' },
+  { href: '#get-the-theme', label: 'Get the theme' },
+  { href: '#add-it', label: 'Add it to your project' },
+  { href: '#tailwind', label: 'Use Tailwind' },
+  { href: '#style', label: 'Style with the roles' },
   { href: '#switch-theme', label: 'Switch theme' },
-  { href: '#take-the-tokens', label: 'Take the tokens out' },
+  { href: '#add-a-component', label: 'Add a component' },
   { href: '#next-steps', label: 'Next steps' },
 ]

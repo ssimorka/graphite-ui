@@ -126,7 +126,7 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
           <section id="installation" className={styles.block}>
             <SectionHeading
               title="Installation"
-              lede="Graphite ships as a published Figma library and a governed React implementation. There is no registry command yet, so this is an import, not an install."
+              lede="No install command yet. Copy the component from the repository into the same path, then import it. Quick start lists what Button needs."
             />
             <DocSnippet code={c.install} />
           </section>

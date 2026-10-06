@@ -5,6 +5,9 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/system/color', destination: '/docs', permanent: true },
+      // Moved under Contribute when the docs split Use from Contribute.
+      { source: '/docs/installation', destination: '/docs/contribute/run-locally', permanent: true },
+      { source: '/docs/governance', destination: '/docs/contribute/governance', permanent: true },
     ]
   },
   sassOptions: {

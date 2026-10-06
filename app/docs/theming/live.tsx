@@ -3,7 +3,6 @@
 import { RefTable } from '@/components/component-page'
 import { PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
 import { useTheme } from '@/components/theme-provider'
-import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 import { weightLabelFor } from '@/components/token-panels'
 import { Tag } from '@/components/ui/tag'
 import { STATE_DELTAS, STATE_FAMILIES } from '@/lib/color.js'
@@ -221,9 +220,6 @@ export function TileLibrary() {
 // Counts that live in client modules. A server component importing a value
 // from a 'use client' file gets a reference, not the value, so the page asks
 // for them here.
-export function CarbonVarCount() {
-  return <>{CARBON_VAR_COUNT}</>
-}
 
 export function PatternCount({ capital = false }: { capital?: boolean }) {
   const s = spell(PATTERN_NAMES.length)

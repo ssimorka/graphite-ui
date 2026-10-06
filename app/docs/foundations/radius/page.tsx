@@ -201,7 +201,7 @@ export default function RadiusPage() {
                   </em>{' '}
                   Where the kit and a contract disagree, the kit wins and the
                   contract is corrected. See{' '}
-                  <a href="/docs/governance">Governance</a>.
+                  <a href="/docs/contribute/governance">Governance</a>.
                 </>,
                 `The exceptions are deliberate and each has its own step: ${exceptions}.`,
               ]}
@@ -259,7 +259,7 @@ export default function RadiusPage() {
           <section id="rules" className={styles.block}>
             <SectionHeading
               title="Usage rules"
-              lede={`Quoted from the Radius contract (${contract.version}), which token-drift checks against globals.scss.`}
+              lede={`Quoted from the Radius contract (${contract.version}).`}
             />
             <div className={styles.rules}>
               <section className={`${styles.side} ${styles.do}`}>
@@ -283,13 +283,6 @@ export default function RadiusPage() {
                 </ul>
               </section>
             </div>
-            <p className={styles.note}>
-              That first prohibition is history as well as rule. Corners used to
-              be written with spacing tokens, and every value agreed with the
-              kit, because 4px is 4px whichever token carries it. The drift check
-              could only warn. The migration to this scale is complete, and the
-              rule stays written down because no value diff can catch it.
-            </p>
           </section>
 
           <section id="next-steps" className={styles.block}>

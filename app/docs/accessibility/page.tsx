@@ -465,8 +465,8 @@ export default function AccessibilityPage() {
               <NextCard href="/docs/theming" title="Theming">
                 How one source color becomes the roles measured above.
               </NextCard>
-              <NextCard href="/docs/governance" title="Governance">
-                Contracts, the kit, and the checks a change has to pass.
+              <NextCard href="/docs/foundations/tokens" title="Tokens">
+                Every role and state measured above, as a variable.
               </NextCard>
               <NextCard href="/gallery" title="Components">
                 {`${spell(docs.length)} governed components, each with its own Accessibility section.`}

@@ -38,11 +38,6 @@ export const metadata: Metadata = {
     'The five kit breakpoints, why they cannot drive a media query, how the docs and Create pages change at each one, and the 48px grid the site is drawn on.',
 }
 
-// Carbon's `$grid-breakpoints` names the 1312px stop `xlg` where the kit and
-// these tokens say `xl` (breakpoint.md, "Note Carbon calls the 1312px stop
-// xlg"). The other four names agree. token-drift maps between them.
-const CARBON_NAME: Record<string, string> = { xl: 'xlg' }
-
 const DOCS_SHELL = 'components/docs-shell.module.scss'
 const CREATE_PAGE = 'components/create/create-page.module.scss'
 const PREVIEW = 'components/create/preview.tsx'
@@ -121,7 +116,6 @@ export default function LayoutPage() {
       suffix: t.suffix,
       px,
       kitMode: mode ? mode.mode : 'not in kit',
-      carbon: CARBON_NAME[t.suffix] ?? t.suffix,
     }
   })
   const bp = Object.fromEntries(rows.map((r) => [r.suffix, r.px]))
@@ -176,7 +170,6 @@ export default function LayoutPage() {
             <p className={styles.footnoteHead}>{`md − 1 = ${md - 1}px`}</p>
             <p className={styles.footnoteBody}>
               A max-width bound sits one below the next breakpoint up.
-              token-drift accepts both forms.
             </p>
           </div>
         }
@@ -189,7 +182,7 @@ export default function LayoutPage() {
               {spell(rows.length)} breakpoints from the kit, a {cellPx}px grid the
               site is drawn on, and the page layouts built between them. The
               breakpoints are tokens, but a token cannot drive a media query, so
-              this page also says what keeps the literal numbers honest.
+              this page also shows what to write instead.
             </p>
             <div className={styles.badges}>
               <StatusBadge tone="primary">{`Contract ${contract.version}`}</StatusBadge>
@@ -208,9 +201,7 @@ export default function LayoutPage() {
               <code>lg</code> and <code>xl</code> are two tokens, not one. The
               kit keeps them in a separate <code>Breakpoint LG–XL</code>{' '}
               collection that the main one aliases into, and collapsing them
-              would flatten that. Carbon calls the {bp.xl}px stop{' '}
-              <code>xlg</code>, so the names do not line up when you read a
-              Carbon mixin call.
+              would flatten that.
             </p>
           </section>
 
@@ -221,8 +212,7 @@ export default function LayoutPage() {
             />
             <Callout tone="warning" title="A custom property does not resolve in an @media condition.">
               {[
-                'A rule written with var() in its condition silently never matches. Every media query in the codebase therefore carries its number literally, and the tokens exist so JavaScript can read them and so the numbers have one authoritative home.',
-                'token-drift closes the gap from two sides: it warns on any @media width that matches no kit breakpoint or one pixel below one, and it compares Carbon’s own breakpoint map against the kit, because Carbon’s breakpoint mixin compiles to a number the scan cannot see.',
+                'A rule written with var() in its condition silently never matches. Write the number literally. The tokens give the numbers one home, and JavaScript can read them.',
               ]}
             </Callout>
             <div className={styles.snippets}>
@@ -231,17 +221,10 @@ export default function LayoutPage() {
                 <DocSnippet code={'@media (max-width: var(--graphite-breakpoint-md)) {\n  /* ... */\n}'} />
               </div>
               <div>
-                <p className={styles.snippetLabel}>What the codebase writes</p>
+                <p className={styles.snippetLabel}>What to write</p>
                 <DocSnippet code={`@media (max-width: ${md - 1}px) {\n  /* ... */\n}`} />
               </div>
             </div>
-            <p className={styles.note}>
-              Not every media query is a breakpoint. The canvas toolbar splits
-              its two buttons below 419px, the width at which they stop fitting.
-              That is a content threshold, and it opts out of the check with a{' '}
-              <code>token-drift-allow: &lt;reason&gt;</code> comment above the
-              rule, so the exemption is argued where a reader will see it.
-            </p>
           </section>
 
           <section id="page-layouts" className={styles.block}>
@@ -367,7 +350,7 @@ export default function LayoutPage() {
           <section id="rules" className={styles.block}>
             <SectionHeading
               title="Usage rules"
-              lede={`Quoted from the Breakpoint contract (${contract.version}), which token-drift checks against globals.scss.`}
+              lede={`Quoted from the Breakpoint contract (${contract.version}).`}
             />
             <div className={styles.rules}>
               <section className={`${styles.side} ${styles.do}`}>

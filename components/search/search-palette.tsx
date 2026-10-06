@@ -40,8 +40,8 @@ const loadIndex = () =>
 // What an empty box offers: the pages people land on first. Titled here as
 // well as in the index, so the error state can still link to them.
 const START: [string, string][] = [
-  ['/docs', 'Introduction'],
-  ['/docs/installation', 'Installation'],
+  ['/docs/get-started', 'Get started'],
+  ['/docs/quick-start', 'Quick start'],
   ['/docs/theming', 'Theming'],
   ['/gallery', 'Components'],
   ['/create', 'Create a theme'],
