@@ -134,6 +134,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   )
 }`
 
+// The global stylesheet of a Tailwind v4 project using the bridge.
+const TAILWIND_USAGE = `/* app/globals.css */
+@import "tailwindcss";
+@import "./graphite-theme.css";
+@import "./graphite-tailwind.css";
+
+/* then, in markup */
+<div className="bg-surface text-on-surface p-space-05 rounded-none">
+  <h2 className="font-1 text-heading-5">Graphite on Tailwind</h2>
+</div>`
+
 const API_NOTES: Record<string, string> = {
   theme: 'The active theme. The same two names the exported theme file uses for data-theme.',
   toggleTheme: 'Flips between the two. This is what the header’s theme button calls.',
@@ -376,6 +387,22 @@ export default function QuickStartPage() {
                 <code>data-theme</code> and leaves the file&rsquo;s colors alone.
               </p>
               <DocSnippet code={THEME_FILE_USAGE} />
+            </Step>
+            <Step n={8} title="Use the roles from Tailwind">
+              <p className={styles.stepText}>
+                On Tailwind v4, download the Tailwind tab from Get the code as
+                well. It names the same variables as Tailwind tokens and holds
+                no values, so a dark theme or a new source reaches every
+                utility. Import it after the theme file and write{' '}
+                <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
+                <code>p-space-05</code> or <code>text-body-3</code>.
+                Spacing keeps a <code>space-</code> prefix because{' '}
+                <code>p-space-05</code> is the kit&rsquo;s 16px, where
+                Tailwind&rsquo;s own <code>p-5</code> is 20px. The file also
+                swaps in the kit&rsquo;s breakpoints; delete that block to keep
+                Tailwind&rsquo;s.
+              </p>
+              <DocSnippet code={TAILWIND_USAGE} />
             </Step>
           </section>
 

@@ -296,6 +296,14 @@ a trace, which is what "no bypass" is meant to cost.
   projects that import Create's theme file. token-drift finds `@carbon/grid`
   by module resolution through `@carbon/react` -> `@carbon/styles` and fails
   if it cannot.
+- **The Tailwind bridge is generated, and holds no values.** `lib/tailwind-bridge.ts`
+  names every `buildGraphiteVars` key and the foundations from `globals.scss` as
+  Tailwind v4 tokens under `@theme inline` (inline, so a nested `data-theme`
+  reaches utilities). Spacing is `p-space-05`, not `p-05`, because Tailwind's
+  `p-5` is a different size. Breakpoints are literals in a plain `@theme` block
+  and replace Tailwind's sm–xl. Compiled against Tailwind 4.3.3 on 2026-10-06:
+  every mapped utility resolves to its `--graphite-*` variable. Offered as the
+  Tailwind tab of Get the code.
 - Token-rewrite flicker: `theme-provider.tsx` applies an `is-retheming`
   class for one frame while `--cds-*` vars are rewritten, because Carbon
   ships `transition: background 70ms` on buttons that otherwise strand
