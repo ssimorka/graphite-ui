@@ -100,7 +100,7 @@ export function Hero({ governed }: { governed: number }) {
             </p>
             <div className="hero__ctas">
               <Button variant="primary" size="lg" asChild>
-                <a href="/docs/quick-start">
+                <a href="/docs/get-started">
                   Get started
                   <ArrowRight />
                 </a>
