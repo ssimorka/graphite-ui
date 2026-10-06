@@ -10,6 +10,11 @@ const nextConfig = {
       { source: '/docs/governance', destination: '/docs/contribute/governance', permanent: true },
     ]
   },
+  // The registry routes (app/r) read components, lib and the stylesheet's
+  // foundations at request time, so the deployment has to carry those files.
+  outputFileTracingIncludes: {
+    '/r/**': ['./components/**/*', './lib/**/*', './app/globals.scss', './app/docs/foundations/tokens/read-tokens.ts'],
+  },
   sassOptions: {
     // Carbon's published Sass still uses some patterns the latest dart-sass
     // flags as deprecated. Silence those warnings; they are upstream noise.

@@ -274,10 +274,11 @@ export default function RunLocallyPage() {
               </tbody>
             </table>
             <p className={styles.note}>
-              <code>pnpm typecheck</code>, the two checker self-tests and{' '}
+              <code>pnpm typecheck</code>, the two checker self-tests,{' '}
               <code>pnpm naming-check</code>, which keeps{' '}
-              <code>--graphite-*</code> the only variable prefix, run in the
-              same required <code>governance</code> job. <code>main</code>{' '}
+              <code>--graphite-*</code> the only variable prefix, and{' '}
+              <code>pnpm registry-check</code>, which builds every registry
+              item, run in the same required <code>governance</code> job. <code>main</code>{' '}
               is protected, so every change lands through a pull request with
               that job green, including one-line doc edits.
             </p>

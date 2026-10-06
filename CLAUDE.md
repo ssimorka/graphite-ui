@@ -330,6 +330,20 @@ a trace, which is what "no bypass" is meant to cost.
   theme never matches it), and the starter's `globals.css` rules override the
   theme. Next's default ESLint flags setState-in-effect, hence the scoped
   disable in the provider's restore effect.
+- **The registry is built from the repo on request** (`lib/registry.ts`,
+  routes in `app/r`). Items: `init` (a minimal `components.json`, so adopters
+  skip `shadcn init`, which would write shadcn's theme into `globals.css` and
+  override the Tailwind bridge), one per `components/ui/*.tsx`, the helpers
+  their imports name, `theme-provider`, `tailwind`, and `theme/<hex>.json`
+  (`?level=AAA`). Dependencies come from the files' own imports. Each `.tsx`
+  is `registry:ui` (the CLI rewrites `@/` aliases); every `.scss` is
+  `registry:file` with an `@ui/` target, because any other type runs the CLI's
+  TSX transformer over Sass. Verified with shadcn 4.21.3 in a fresh
+  create-next-app on 2026-10-06: theme, bridge and init install with no
+  components.json; components then install with their dependencies,
+  `'use client'` intact, stylesheets byte-identical. The CLI does strip a
+  component's leading comment block. `pnpm registry-check` builds every item in
+  CI through Node's type stripping plus `scripts/lib/alias-loader.mjs`.
 - Token-rewrite flicker: `theme-provider.tsx` applies an `is-retheming`
   class for one frame while `--cds-*` vars are rewritten, because Carbon
   ships `transition: background 70ms` on buttons that otherwise strand

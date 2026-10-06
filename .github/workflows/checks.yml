@@ -79,3 +79,10 @@ jobs:
       - name: "Naming check: --graphite-* is the only prefix"
         if: ${{ !cancelled() }}
         run: pnpm naming-check
+
+      # The registry behind `npx shadcn add` is built from the repo on request,
+      # so a component importing something no item provides would only fail
+      # when someone installs it. This builds every item in CI instead.
+      - name: "Registry check: every item builds and its dependencies resolve"
+        if: ${{ !cancelled() }}
+        run: pnpm registry-check

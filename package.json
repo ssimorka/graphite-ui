@@ -15,7 +15,8 @@
     "component-snapshot": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-snapshot.mjs",
     "component-doc-drift": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.mjs",
     "component-doc-drift:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.test.mjs",
-    "naming-check": "node scripts/naming-check.mjs"
+    "naming-check": "node scripts/naming-check.mjs",
+    "registry-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/registry-check.mjs"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.82.0",
