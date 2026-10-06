@@ -53,19 +53,19 @@ export const DEVICES = [
 export type DeviceKey = (typeof DEVICES)[number]['key']
 
 /**
- * Typefaces the builder offers. The kit's own type is IBM Plex (governance rule
- * 7), so this is an opt-in override of the preview and of the exported CSS, not
- * a change to the system: every option is a family that is either shipped
- * already (Plex loads with Carbon's fonts) or is on every machine.
+ * Typefaces the builder offers, one list for headings and body. The kit's own
+ * type is IBM Plex (governance rule 7), so this is an opt-in override of the
+ * preview and of the exported CSS, not a change to the system: every option is
+ * a family that is either shipped already (Plex loads with Carbon's fonts) or
+ * is on every machine.
  */
 export type FontOption = { key: string; label: string; stack: string }
-export const HEADING_FONTS: FontOption[] = [
+export const TEXT_FONTS: FontOption[] = [
   { key: 'plex-sans', label: 'IBM Plex Sans', stack: "'IBM Plex Sans', system-ui, sans-serif" },
   { key: 'plex-serif', label: 'IBM Plex Serif', stack: "'IBM Plex Serif', Georgia, serif" },
   { key: 'system', label: 'System UI', stack: 'system-ui, -apple-system, sans-serif' },
   { key: 'georgia', label: 'Georgia', stack: "Georgia, 'Times New Roman', serif" },
 ]
-export const BODY_FONTS: FontOption[] = HEADING_FONTS
 export const CODE_FONTS: FontOption[] = [
   { key: 'plex-mono', label: 'IBM Plex Mono', stack: "'IBM Plex Mono', 'Courier New', monospace" },
   { key: 'system-mono', label: 'System mono', stack: "ui-monospace, SFMono-Regular, Menlo, monospace" },
@@ -193,8 +193,8 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
         '--graphite-density-default': `var(--graphite-density-${density})`,
         '--card-pad': `var(--graphite-space-${CARD_PAD[density]})`,
         '--card-gap': `var(--graphite-space-${CARD_GAP[density]})`,
-        '--graphite-font-1': stackOf(HEADING_FONTS, headingFont),
-        '--graphite-font-2': stackOf(BODY_FONTS, bodyFont),
+        '--graphite-font-1': stackOf(TEXT_FONTS, headingFont),
+        '--graphite-font-2': stackOf(TEXT_FONTS, bodyFont),
         '--graphite-font-mono': stackOf(CODE_FONTS, codeFont),
         fontFamily: 'var(--graphite-font-2)',
       }) as CSSProperties,

@@ -7,10 +7,9 @@ import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { SOURCE_TRIGGER_ID } from '@/components/color-picker'
 import { useTheme } from '@/components/theme-provider'
 import {
-  BODY_FONTS,
   CODE_FONTS,
   DENSITIES,
-  HEADING_FONTS,
+  TEXT_FONTS,
   ICON_FAMILIES,
   RADII,
   useBuilder,
@@ -161,8 +160,8 @@ export function useControls(): Control[] {
       id: 'headings',
       label: 'Headings',
       heading: 'Headings (font-1)',
-      value: fontLabel(HEADING_FONTS, b.headingFont),
-      options: fontOptions(HEADING_FONTS),
+      value: fontLabel(TEXT_FONTS, b.headingFont),
+      options: fontOptions(TEXT_FONTS),
       selected: b.headingFont,
       select: b.setHeadingFont,
     },
@@ -170,8 +169,8 @@ export function useControls(): Control[] {
       id: 'body',
       label: 'Body',
       heading: 'Body (font-2)',
-      value: fontLabel(BODY_FONTS, b.bodyFont),
-      options: fontOptions(BODY_FONTS),
+      value: fontLabel(TEXT_FONTS, b.bodyFont),
+      options: fontOptions(TEXT_FONTS),
       selected: b.bodyFont,
       select: b.setBodyFont,
     },

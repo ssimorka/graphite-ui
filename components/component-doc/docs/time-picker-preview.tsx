@@ -9,7 +9,7 @@ import { DemoFrame } from '../demo-frame'
 
 type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
 
-export const TIMEZONES: [{ value: string; label: string }, { value: string; label: string }, ...{ value: string; label: string }[]] = [
+const TIMEZONES: [{ value: string; label: string }, { value: string; label: string }, ...{ value: string; label: string }[]] = [
   { value: 'ET', label: 'Eastern time (ET)' },
   { value: 'CT', label: 'Central time (CT)' },
   { value: 'MT', label: 'Mountain time (MT)' },

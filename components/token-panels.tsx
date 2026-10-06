@@ -1,16 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  TableCell,
-  Tag,
-} from '@carbon/react'
-import { contrastRatio, TONE_STOPS, STATUS_NAMES } from '@/lib/color.js'
+import { contrastRatio, TONE_STOPS } from '@/lib/color.js'
 
 // Display-only weight labels for the primitives grid, dark to light, in step
 // order rather than by value, so they line up with each ramp's ten stops
@@ -36,24 +27,12 @@ const RAMP_LABELS: Record<string, string> = {
   neutralVariant: 'Neutral variant',
 }
 
-const STATE_LABELS: Record<string, string> = {
-  base: 'Base',
-  hover: 'Hover',
-  pressed: 'Pressed',
-  selected: 'Selected',
-  disabled: 'Disabled',
-}
-
 // Tones that land on a primitives stop get that stop's label, so semantic and
 // state rows alias the swatch the user can actually see. State deltas and the
 // pinned dark surface tone have no matching primitive, so they show the number.
 export function weightLabelFor(tone: number): string | null {
   const i = (TONE_STOPS as number[]).findIndex((t) => Math.abs(t - tone) < 0.05)
   return i === -1 ? null : WEIGHT_LABELS[i]
-}
-
-function toneLabel(tone: number) {
-  return weightLabelFor(tone) ?? String(Math.round(tone))
 }
 
 // Picks whichever of black or white reads better on this background, so the hex
@@ -199,120 +178,6 @@ export function RampRow({
       <p className="ramp__scroll-hint" aria-hidden="true">
         {scrollHint}
       </p>
-    </div>
-  )
-}
-
-type Token = { hex: string; ramp: string; tone: number }
-type Check = { ratio: number; passes: boolean; level: string; fixed?: boolean }
-
-// The engine emits sixteen status roles alongside the eleven core ones. This
-// table is the landing page's proof that pairings are checked, not a reference
-// — the full set is documented at /docs — so status is filtered out
-// here rather than tripling the table's height with four more hue families.
-const STATUS_ROLE_NAMES = new Set(
-  (STATUS_NAMES as string[]).flatMap((name) => {
-    const Cap = name[0].toUpperCase() + name.slice(1)
-    return [name, `on${Cap}`, `${name}Container`, `on${Cap}Container`]
-  }),
-)
-
-export function SemanticTable({
-  theme,
-}: {
-  theme: { tokens: Record<string, Token>; contrast: Record<string, Check> }
-}) {
-  const rows = Object.entries(theme.tokens).filter(
-    ([role]) => !STATUS_ROLE_NAMES.has(role),
-  )
-  return (
-    <div className="token-table">
-      <Table size="lg">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Token</TableHeader>
-            <TableHeader>Swatch</TableHeader>
-            <TableHeader>Hex</TableHeader>
-            <TableHeader>Ramp / tone</TableHeader>
-            <TableHeader>Contrast</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(([role, t]) => {
-            const c = theme.contrast[role]
-            return (
-              <TableRow key={role}>
-                <TableCell>{role}</TableCell>
-                <TableCell>
-                  <span
-                    className="token-swatch"
-                    style={{ background: t.hex }}
-                  />
-                </TableCell>
-                <TableCell>{t.hex}</TableCell>
-                <TableCell>
-                  {t.ramp} {toneLabel(t.tone)}
-                </TableCell>
-                <TableCell>
-                  {c ? (
-                    <Tag type={c.passes ? 'green' : 'red'} size="sm">
-                      {c.ratio.toFixed(2)}:1 {c.passes ? 'pass' : 'fail'} (
-                      {c.level}){c.fixed ? ', auto-fixed' : ''}
-                    </Tag>
-                  ) : (
-                    <Tag type="gray" size="sm">
-                      not checked
-                    </Tag>
-                  )}
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
-    </div>
-  )
-}
-
-type StateEntry = { hex: string; ramp: string; tone: number }
-
-export function StatesMatrix({
-  states,
-}: {
-  states: { primary: Record<string, StateEntry>; focus: StateEntry }
-}) {
-  const rows = ['base', 'hover', 'pressed', 'selected', 'disabled']
-  return (
-    <div className="states-matrix">
-      {rows.map((state) => {
-        const entry = states.primary[state]
-        if (!entry) return null
-        return (
-          <div key={state} className="states-matrix__item">
-            <span
-              className="states-matrix__chip"
-              style={{ background: entry.hex }}
-            />
-            <span className="states-matrix__name">{STATE_LABELS[state]}</span>
-            <span className="states-matrix__tone">
-              {entry.ramp} {toneLabel(entry.tone)}
-            </span>
-          </div>
-        )
-      })}
-      <div className="states-matrix__item">
-        <span
-          className="states-matrix__chip"
-          style={{
-            background: 'var(--cds-layer)',
-            border: `3px solid ${states.focus.hex}`,
-          }}
-        />
-        <span className="states-matrix__name">Focus ring</span>
-        <span className="states-matrix__tone">
-          {states.focus.ramp} {toneLabel(states.focus.tone)}
-        </span>
-      </div>
     </div>
   )
 }

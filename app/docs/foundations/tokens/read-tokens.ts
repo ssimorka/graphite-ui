@@ -91,7 +91,7 @@ export type FoundationGroup = {
 
 // Order and titles are the page's. Membership is by prefix, so a token added to
 // the stylesheet lands in its group without an edit here.
-export const GROUPS: FoundationGroup[] = [
+const GROUPS: FoundationGroup[] = [
   { id: 'space', title: 'Space', test: /^--graphite-space-/ },
   { id: 'density', title: 'Density', test: /^--graphite-density-/ },
   { id: 'radius', title: 'Radius', test: /^--graphite-radius-/ },

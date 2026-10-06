@@ -458,63 +458,6 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Canvas toolbar — Regenerate / Export, carried over from the pattern tool
-// ---------------------------------------------------------------------------
-.canvas-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--graphite-space-03);
-  margin-top: var(--graphite-space-03);
-}
-
-.canvas-toolbar__hint {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--cds-text-secondary);
-}
-
-.canvas-toolbar__actions {
-  display: flex;
-  gap: var(--graphite-space-02);
-
-  // Carbon's `sm` buttons are 32px tall, which is under a comfortable touch
-  // target. Keep the compact desktop look but grow them on touch-sized
-  // viewports.
-  @media (max-width: 671px) {
-    .cds--btn {
-      min-height: 44px;
-    }
-  }
-
-  // Two full-height Carbon buttons don't fit beside each other under ~360px
-  // of usable width; splitting them 50/50 keeps both labels readable instead
-  // of letting the second one clip.
-  //
-  // token-drift-allow: content threshold, not a system breakpoint. The width
-  // is set by what this button pair needs, not by the kit's scale — the
-  // nearest stops are sm (320px), which would leave it broken on a 375px
-  // phone, and md (672px), which would split the buttons on tablets where
-  // they fit. A container query is the right long-term shape for this.
-  @media (max-width: 419px) {
-    width: 100%;
-
-    .cds--btn {
-      flex: 1;
-    }
-  }
-}
-
-.hero__canvas {
-  aspect-ratio: 16 / 10;
-  width: 100%;
-  overflow: hidden;
-}
-
-// ---------------------------------------------------------------------------
 // Generative art + kit cover splash
 // ---------------------------------------------------------------------------
 .art {
@@ -759,19 +702,6 @@ body {
   @include band(--graphite-primary-container, --graphite-on-primary-container);
 }
 
-// The 10. Secondary is the ramp the engine derives 120 degrees off the source,
-// which is what makes the vivid tenth generated rather than picked.
-.band--secondary {
-  @include band(
-    --graphite-secondary-container,
-    --graphite-on-secondary-container
-  );
-}
-
-.band--info {
-  @include band(--graphite-info-container, --graphite-on-info-container);
-}
-
 // ---------------------------------------------------------------------------
 // Shared section scaffolding
 // ---------------------------------------------------------------------------
@@ -786,25 +716,6 @@ body {
 
   @include breakpoint.breakpoint(lg) {
     padding: var(--graphite-space-12) 0;
-  }
-}
-
-.section__eyebrow {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--cds-text-secondary);
-  margin-bottom: var(--graphite-space-04);
-
-  display: inline-flex;
-  align-items: center;
-  gap: var(--graphite-space-03);
-
-  &::before {
-    content: '';
-    width: var(--graphite-space-05);
-    height: 1px;
-    background: var(--cds-border-interactive);
   }
 }
 
@@ -1296,62 +1207,6 @@ body {
   color: var(--cds-text-secondary);
 }
 
-// ---------------------------------------------------------------------------
-// Token panels — semantic tokens, interaction states, generation controls
-// ---------------------------------------------------------------------------
-.token-panel {
-  background: var(--cds-layer-01);
-  padding: var(--graphite-space-05);
-}
-
-.token-panel__heading {
-  @include type.type-style('heading-compact-01');
-  margin: var(--graphite-space-06) 0 var(--graphite-space-04);
-}
-
-.token-table {
-  overflow-x: auto;
-}
-
-.token-swatch {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  border: 1px solid var(--cds-border-subtle);
-}
-
-.states-matrix {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--graphite-space-05);
-}
-
-.states-matrix__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-02);
-  width: 88px;
-  text-align: center;
-}
-
-.states-matrix__chip {
-  display: block;
-  width: 88px;
-  height: 56px;
-  border: 1px solid var(--cds-border-subtle);
-}
-
-.states-matrix__name {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  color: var(--cds-text-primary);
-}
-
-.states-matrix__tone {
-  @include text('caption-1', $letter-spacing: 0.32px);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
-  color: var(--cds-text-secondary);
-}
-
 // Generation controls inside the source-color popover.
 .source-controls {
   display: flex;
@@ -1642,11 +1497,6 @@ $cap-dwell: 500px;
   }
 }
 
-.cap-item__icon {
-  flex: 0 0 auto;
-  fill: currentColor;
-}
-
 .cap-item__title {
   @include type.type-style('heading-03');
 }
@@ -1729,8 +1579,6 @@ $cap-dwell: 500px;
   box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
     color-mix(in srgb, #000 45%, transparent);
   overflow: hidden;
-  // Shared with .showcase__frame: the two are the same gesture, a panel
-  // replacing another in place, so they use one keyframe rather than two.
   animation: fade-swap 500ms var(--graphite-motion-ease) both;
 
   > * {
@@ -1981,92 +1829,6 @@ $cap-dwell: 500px;
   }
 }
 
-.cap-vars__code {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-03);
-  margin: 0;
-  padding: var(--graphite-space-05);
-  border: 1px solid var(--cds-border-subtle-01);
-  background: var(--cds-layer-01);
-  overflow-x: auto;
-}
-
-.cap-vars__line {
-  @include text('code-2', $family: mono);
-  display: flex;
-  align-items: center;
-  gap: var(--graphite-space-03);
-  white-space: pre;
-}
-
-.cap-vars__dot {
-  flex: 0 0 auto;
-  width: var(--graphite-space-04);
-  height: var(--graphite-space-04);
-  border: 1px solid var(--cds-border-subtle-02);
-}
-
-.cap-vars__more {
-  @include text('caption-1');
-  margin-top: var(--graphite-space-05);
-  color: var(--cds-text-secondary);
-}
-
-.cap-patterns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--graphite-space-04);
-}
-
-.cap-patterns__tile {
-  aspect-ratio: 1;
-  border: 1px solid var(--cds-border-subtle-01);
-  overflow: hidden;
-}
-
-// The pair is painted from its own bundle rather than from the page's, which
-// is the whole claim: the theme you are not currently in still resolves.
-.cap-themes {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--graphite-space-05);
-}
-
-.cap-themes__card {
-  padding: var(--graphite-space-05);
-  border: 1px solid;
-}
-
-.cap-themes__label {
-  @include text('caption-1', $family: mono);
-  margin-bottom: var(--graphite-space-04);
-}
-
-.cap-themes__surface {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-04);
-  padding: var(--graphite-space-05);
-  border: 1px solid;
-}
-
-.cap-themes__line {
-  height: var(--graphite-space-03);
-  background: currentColor;
-  opacity: 0.25;
-
-  &--short {
-    width: 60%;
-  }
-}
-
-.cap-themes__button {
-  @include text('component-button-2');
-  align-self: flex-start;
-  padding: var(--graphite-space-03) var(--graphite-space-05);
-}
-
 // --- Stage panels: source, components, checks, sets -------------------------
 // Kit 13359:7043.
 .cap-source {
@@ -2210,39 +1972,6 @@ $cap-dwell: 500px;
   color: var(--cds-text-secondary);
 }
 
-// Kit 13395:751.
-.cap-sets {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.cap-sets__row {
-  display: flex;
-  align-items: center;
-  gap: 14px; // kit 14
-  padding: 14px 0;
-  border-bottom: 1px solid var(--graphite-surface-variant);
-}
-
-.cap-sets__value {
-  // A step up from the kit's Heading/6, by request.
-  @include text('heading-5', bold);
-  flex: none;
-  width: 4rem; // kit 64
-  color: var(--graphite-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.cap-sets__label {
-  @include text('body-2');
-  flex: 1;
-  min-width: 0;
-  color: var(--cds-text-secondary);
-}
-
 @media (prefers-reduced-motion: reduce) {
   // The component drops the dwell timer entirely under reduced motion, so the
   // rail becomes a static position marker rather than a moving one. What is
@@ -2253,70 +1982,6 @@ $cap-dwell: 500px;
   }
 }
 
-// ---------------------------------------------------------------------------
-// Product showcase
-// ---------------------------------------------------------------------------
-.section--showcase {
-  background: var(--cds-layer-01);
-}
-
-.showcase__switcher {
-  max-width: 22rem;
-  margin: 0 auto var(--graphite-space-07);
-}
-
-.showcase__stage {
-  position: relative;
-  isolation: isolate;
-}
-
-.showcase__glow {
-  position: absolute;
-  inset: -10% -5% 0;
-  z-index: -1;
-  background: radial-gradient(
-    50% 60% at 50% 0%,
-    color-mix(in srgb, var(--cds-interactive) 30%, transparent),
-    transparent 70%
-  );
-  filter: blur(40px);
-  pointer-events: none;
-}
-
-.showcase__frame {
-  border: 1px solid var(--cds-border-subtle-02);
-  background: var(--cds-background);
-  padding: var(--graphite-space-03);
-  box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
-    color-mix(in srgb, #000 45%, transparent);
-  overflow: hidden;
-  animation: fade-swap 500ms var(--graphite-motion-ease) both;
-}
-
-.showcase__img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.showcase__caption {
-  margin-top: var(--graphite-space-07);
-  text-align: center;
-}
-
-.showcase__caption-title {
-  @include type.type-style('heading-04');
-  margin-bottom: var(--graphite-space-03);
-}
-
-.showcase__caption-body {
-  @include text('body-2');
-  color: var(--cds-text-secondary);
-  max-width: 40rem;
-  margin: 0 auto;
-  text-wrap: pretty;
-}
-
 @keyframes fade-swap {
   from {
     opacity: 0;
@@ -2325,12 +1990,6 @@ $cap-dwell: 500px;
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .showcase__frame {
-    animation: none;
   }
 }
 

@@ -11,7 +11,7 @@ import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 // value. That is a choice, not a claim that every possible hex is covered, and
 // the page says so.
 
-export const HUES = 96
+const HUES = 96
 export const SWEEP_SATURATION = 0.6
 export const SWEEP_VALUE = 0.7
 const MODES: ThemeMode[] = ['light', 'dark']
