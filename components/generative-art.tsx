@@ -767,7 +767,7 @@ export function GenerativeArt({
         role={interactive ? 'img' : undefined}
         aria-label={
           interactive
-            ? `Generative pattern composition built from ${activeHex}. Select a panel to reshuffle it.`
+            ? `Generative art built from ${activeHex}. Select a panel to reshuffle it.`
             : undefined
         }
         style={{

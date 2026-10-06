@@ -18,12 +18,9 @@ import { spell } from '@/lib/spell'
 import {
   ContrastTable,
   CurrentLevel,
-  PatternCount,
-  RatioBar,
   RoleTable,
   StatesTable,
   ThemePairs,
-  TileLibrary,
 } from './live'
 import { TOC } from './toc'
 import styles from './theming.module.scss'
@@ -31,7 +28,7 @@ import styles from './theming.module.scss'
 export const metadata: Metadata = {
   title: 'Theming · Graphite UI',
   description:
-    'How one source color becomes eight ramps and thirty-two roles in a light and a dark theme, with every text pairing contrast-checked, interaction states derived on the same ramps, and a twenty-tile pattern library drawn from the same palette.',
+    'How one source color becomes eight ramps and thirty-two roles in a light and a dark theme, with every text pairing contrast-checked and interaction states derived on the same ramps.',
 }
 
 const lower = (n: number) => spell(n).toLowerCase()
@@ -200,15 +197,6 @@ const SELECTION_ORDER = [
   'Status? danger, warning, success or info, with their containers for quiet fills.',
   'Interactive state? The state variable for that family, never a hand-adjusted value.',
   'No match? The role is missing. Flag it rather than working around it.',
-]
-
-const SPANS: [string, number, number][] = [
-  ['1 × 1', 1, 1],
-  ['2 × 1', 2, 1],
-  ['1 × 2', 1, 2],
-  ['2 × 2', 2, 2],
-  ['3 × 1', 3, 1],
-  ['3 × 2', 3, 2],
 ]
 
 const stateVars = STATE_FAMILIES.flatMap((f) =>
@@ -520,7 +508,7 @@ export default function ThemingPage() {
                 <code>outline</code> as text.
               </li>
               <li>
-                Text over images, gradients or generated patterns. Put a solid
+                Text over images, gradients or generative art. Put a solid
                 surface behind it.
               </li>
               <li>Disabled states, which are exempt by design.</li>
@@ -591,52 +579,6 @@ export default function ThemingPage() {
               Pick roles in a design, never primitive stops, and regenerate rather
               than hand-edit when the source changes.
             </p>
-          </section>
-
-          <section id="patterns" className={styles.block}>
-            <SectionHeading
-              title="Pattern reference"
-              lede={
-                <>
-                  <PatternCount capital /> tiles, one rulebook. Every composition
-                  draws from the same fixed library, so patterns stay
-                  recognizable however they are combined.
-                </>
-              }
-            />
-            <p className={styles.note}>
-              Define the rules and let the system execute them: the logic of Sol
-              LeWitt&rsquo;s wall drawings, applied to interface surfaces.
-            </p>
-            <h3 className={styles.subheading}>Color rhythm: 60 / 30 / 10</h3>
-            <p className={styles.note}>
-              Sixty percent neutrals, thirty percent accent, ten percent
-              secondary, the ramp the engine derives 120° off your source. Adjacent
-              panels check their neighbors so no color clusters.
-            </p>
-            <RatioBar />
-            <h3 className={styles.subheading}>Span definitions</h3>
-            <p className={styles.note}>
-              Larger cells act as anchors. Image panels always land on a large
-              span, spread across horizontal zones so no region dominates.
-            </p>
-            <ul className={styles.spans}>
-              {SPANS.map(([label, cols, rows]) => (
-                <li key={label} className={styles.span}>
-                  <span
-                    className={styles.spanBox}
-                    style={{ width: cols * 44, height: rows * 44 }}
-                    aria-hidden="true"
-                  />
-                  <span className={styles.spanLabel}>{label}</span>
-                </li>
-              ))}
-            </ul>
-            <h3 className={styles.subheading}>Tile library</h3>
-            <p className={styles.note}>
-              All <PatternCount />, drawn live from your source color.
-            </p>
-            <TileLibrary />
           </section>
 
           <section id="glossary" className={styles.block}>

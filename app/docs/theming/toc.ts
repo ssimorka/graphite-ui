@@ -11,7 +11,6 @@ export const TOC: TocItem[] = [
   { href: '#accessibility', label: 'Accessibility' },
   { href: '#usage', label: 'Usage' },
   { href: '#tokens', label: 'Tokens' },
-  { href: '#patterns', label: 'Pattern reference' },
   { href: '#glossary', label: 'Glossary' },
   { href: '#next-steps', label: 'Next steps' },
 ]

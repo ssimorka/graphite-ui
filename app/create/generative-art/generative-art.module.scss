@@ -1,0 +1,8 @@
+// The Generative Art page sits outside the docs shell, so it sets its own
+// measure and gutters. Everything inside reuses the Theming page's styles,
+// where this reference used to live.
+.main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--graphite-space-09) var(--graphite-space-05);
+}
