@@ -284,13 +284,6 @@ export function ComponentsIndex({
         </p>
       </header>
 
-      <ul className={styles.counts} aria-label="Governance counts">
-        <li className={styles.count}>
-          <span className={`${styles.figure} ${styles.figureGoverned}`}>{stats.governed}</span>
-          <span className={styles.caption}>governed components</span>
-        </li>
-      </ul>
-
       <div className={styles.filterBar}>
         <ul className={styles.filters} aria-label="Filter components">
           {FILTERS.map((f) => (

@@ -58,52 +58,6 @@
   color: var(--graphite-on-surface-variant);
 }
 
-// ----------------------------------------------------------------- counts
-.counts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border: 1px solid var(--graphite-surface-variant);
-  background: var(--graphite-surface);
-
-  @media (min-width: 672px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.count {
-  display: flex;
-  flex-direction: column;
-  gap: var(--graphite-space-03);
-  padding: 1.125rem var(--graphite-space-06);
-  border-right: 1px solid var(--graphite-surface-variant);
-  border-bottom: 1px solid var(--graphite-surface-variant);
-  margin: 0 -1px -1px 0;
-}
-
-.figure {
-  font-size: var(--graphite-text-heading-6-size);
-  line-height: var(--graphite-text-heading-6-line-height);
-  font-weight: 700;
-  color: var(--graphite-on-surface);
-}
-
-.figureGoverned {
-  color: var(--graphite-success);
-}
-
-.figurePublic {
-  color: var(--graphite-primary);
-}
-
-.caption {
-  font-size: var(--graphite-text-caption-1-size);
-  line-height: var(--graphite-text-caption-1-line-height);
-  color: var(--graphite-on-surface-variant);
-}
-
 // ---------------------------------------------------------------- filters
 .filterBar {
   display: flex;
