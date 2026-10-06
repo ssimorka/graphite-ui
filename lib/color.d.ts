@@ -186,6 +186,17 @@ export type Ladders = Record<LadderName, { ramp: RampName; tone: number; hex: st
 export declare const LADDERS: Record<ThemeMode, Record<LadderName, { ramp: RampName; tone: number }>>
 export declare function buildLadders(ramps: Ramps, mode: ThemeMode): Ladders
 
+/** A role's CSS variable: `onSurfaceVariant` -> `--graphite-on-surface-variant`. */
+export declare function graphiteVarName(role: string): string
+/** Every generated --graphite-* variable for one mode, as name -> value. The
+ *  provider stamps this set and buildCss writes it, so the two cannot differ. */
+export declare function buildGraphiteVars(
+  theme: Theme,
+  states: States,
+  ramps: Ramps,
+  mode: ThemeMode,
+): Record<string, string>
+
 export declare function buildCss(bundle: ExportBundle): string
 /** The JSON export: an object, which callers stringify themselves. */
 export interface ExportJson {

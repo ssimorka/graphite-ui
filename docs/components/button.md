@@ -36,7 +36,7 @@ Read from the component set, not from the contract. The frame itself carries no 
 
 ## Tokens
 
-Resolved from the component set's bound variables — all semantic tier, never primitives. Names below are the Figma variable names; the token export prefixes these as `--cts-*`.
+Resolved from the component set's bound variables — all semantic tier, never primitives. Names below are the Figma variable names; in code they are `--graphite-*` variables (`state/primary-hover` is `--graphite-primary-hover`).
 
 | Style | Fill | Label |
 |---|---|---|

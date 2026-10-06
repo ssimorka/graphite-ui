@@ -107,13 +107,13 @@ export function useControls(): Control[] {
       id: 'theme',
       label: 'Theme',
       heading: 'Theme',
-      value: theme === 'white' ? 'Light' : 'Dark',
+      value: theme === 'light' ? 'Light' : 'Dark',
       options: [
-        { key: 'white', label: 'Light' },
-        { key: 'g100', label: 'Dark' },
+        { key: 'light', label: 'Light' },
+        { key: 'dark', label: 'Dark' },
       ],
       selected: theme,
-      select: (k) => setTheme(k as 'white' | 'g100'),
+      select: (k) => setTheme(k as 'light' | 'dark'),
       lock: 'theme',
     },
     {

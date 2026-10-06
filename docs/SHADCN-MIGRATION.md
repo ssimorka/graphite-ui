@@ -29,7 +29,7 @@ node `11678:251`).
 | Home | `ui.shadcn.com` | `/` | Exists, Carbon-styled. Restyle. |
 | Docs | `/docs/installation` | `/docs/installation` | New. Needs the docs shell. |
 | Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | Done: one page per governed component, 35 in all, plus the Overlay pattern. |
-| UI Generator | `/create` | `/create` | New. Engine + studio already exist. |
+| UI Generator | `/create` | `/create` | New. Engine + token panels already exist. |
 
 ## What `/create` actually is
 
@@ -42,7 +42,7 @@ a Get Code button.
 Graphite's version should be stronger than the original. shadcn picks from a
 fixed set of base colors; Graphite derives a whole theme from any source
 color. The parts exist already: `theme-provider.tsx` (sourceHex, theme, level,
-autoFix), `color-picker.tsx`, and `studio.tsx` (ramp rows, semantic table,
+autoFix), `color-picker.tsx`, and `token-panels.tsx` (ramp rows, semantic table,
 states matrix, copy-to-clipboard, toast). The Radius control maps directly onto
 the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full). Icon Library
 has its counterpart too, though not a library picker: the Icons control

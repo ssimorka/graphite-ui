@@ -9,7 +9,7 @@ import { BODY_FONTS, CODE_FONTS, HEADING_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
 import type { Control, ControlId } from './controls-model'
 import { GetCodeDialog } from './get-code'
-import { Toast, useCopy } from '@/components/studio'
+import { Toast, useCopy } from '@/components/token-panels'
 import styles from './controls.module.scss'
 
 const FONT_SETS: Partial<Record<ControlId, typeof HEADING_FONTS>> = {

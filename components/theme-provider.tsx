@@ -16,13 +16,21 @@ import {
   makeRamps,
   buildTheme,
   buildStates,
-  buildLadders,
+  buildGraphiteVars,
   normalizeHex,
-  scrimFor,
-  STATE_FAMILIES,
 } from '@/lib/color.js'
 
-type CarbonTheme = 'white' | 'g100'
+// The same two names the exported theme file uses for [data-theme], so a
+// project that takes the file and the provider has one vocabulary. Carbon's
+// own names for these (white, g100) survive only as the zone class below,
+// which the site's remaining Carbon components need.
+export type ThemeName = 'light' | 'dark'
+
+const CARBON_ZONE: Record<ThemeName, string> = { light: 'cds--white', dark: 'cds--g100' }
+
+// Choices saved before the rename hold Carbon's names. Read them as the new
+// ones so a returning visitor keeps their theme.
+const LEGACY_THEME: Record<string, ThemeName> = { white: 'light', g100: 'dark' }
 
 type ColorBundle = ReturnType<typeof buildTheme> & {
   states: ReturnType<typeof buildStates>
@@ -31,9 +39,9 @@ type ColorBundle = ReturnType<typeof buildTheme> & {
 export type ContrastLevel = 'AA' | 'AAA'
 
 type ThemeContextValue = {
-  theme: CarbonTheme
+  theme: ThemeName
   toggleTheme: () => void
-  setTheme: (theme: CarbonTheme) => void
+  setTheme: (theme: ThemeName) => void
   sourceHex: string
   setSourceHex: (hex: string) => void
   lightBundle: ColorBundle | null
@@ -46,7 +54,7 @@ type ThemeContextValue = {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'g100',
+  theme: 'dark',
   toggleTheme: () => {},
   setTheme: () => {},
   sourceHex: '',
@@ -63,7 +71,6 @@ export function useTheme() {
 }
 
 type BuiltTheme = ReturnType<typeof buildTheme>
-type BuiltRamps = ReturnType<typeof makeRamps>
 type BuiltStates = ReturnType<typeof buildStates>
 type Tokens = BuiltTheme['tokens']
 
@@ -163,57 +170,12 @@ export const CARBON_VAR_COUNT = CARBON_VAR_BINDINGS.length
 // Carbon's variables are a compatibility layer: they exist so Carbon's own
 // components pick up generated values, and their names and shape are Carbon's.
 // They cannot express the full generated set — there is no Carbon slot for
-// text on a status container, for instance — so seven roles were computed and
-// dropped on every pass.
+// text on a status container, for instance.
 //
 // --graphite-* carries everything, and is what Graphite's own components read.
-// Derived from the token keys rather than hand-listed, so it cannot drift from
-// what the engine actually produces.
-
-const kebab = (s: string) =>
-  s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
-
-export const graphiteVarName = (role: string) => `--graphite-${kebab(role)}`
-
-function graphiteVarsFor(
-  theme: BuiltTheme,
-  states: BuiltStates,
-  ramps: BuiltRamps,
-  mode: 'light' | 'dark',
-) {
-  const out: Record<string, string> = {}
-  for (const [role, token] of Object.entries(theme.tokens)) {
-    out[graphiteVarName(role)] = (token as { hex: string }).hex
-  }
-  // Interaction states are tone references on the same ramp, not separate
-  // roles, so they live alongside rather than inside the token map. Driven off
-  // STATE_FAMILIES so a new family arrives here without an edit.
-  for (const family of STATE_FAMILIES) {
-    const f = states[family]
-    out[`--graphite-${family}-hover`] = f.hover.hex
-    out[`--graphite-${family}-pressed`] = f.pressed.hex
-    out[`--graphite-${family}-selected`] = f.selected.hex
-    out[`--graphite-${family}-disabled`] = f.disabled.hex
-    out[`--graphite-${family}-disabled-content`] = f.disabled.content.hex
-    out[`--graphite-${family}-focus`] = f.focus.hex
-  }
-  // The page-level ring. Same value as --graphite-primary-focus; kept because
-  // it is the name components already read and the one that means "focus"
-  // without picking a family.
-  out['--graphite-focus'] = states.focus.hex
-  // The elevation and outline ladders: beside the roles rather than among
-  // them, the way the kit files them. See LADDERS in lib/color.js.
-  for (const [name, entry] of Object.entries(buildLadders(ramps, mode))) {
-    out[`--graphite-${name}`] = entry.hex
-  }
-  // Scrim is not in the token map — it is rgba over the darkest neutral rather
-  // than a tone, and has no `on-` partner or contrast pairing — so it is added
-  // here rather than arriving through theme.tokens. It still comes from the
-  // engine, so it tracks the source colour; it used to be a fixed value in
-  // globals.scss that stayed put while every other role moved.
-  out['--graphite-scrim'] = scrimFor(ramps, mode)
-  return out
-}
+// The set comes from buildGraphiteVars in lib/color.js, the same function the
+// CSS exporter writes from, so what the site stamps and what Create hands out
+// cannot name things differently.
 
 function carbonVarsFor(theme: BuiltTheme, states: BuiltStates) {
   return Object.fromEntries(
@@ -232,7 +194,7 @@ const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
 export { COVER_SOURCE_HEX }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<CarbonTheme>('g100')
+  const [theme, setTheme] = useState<ThemeName>('dark')
   const [sourceHex, setSourceHexRaw] = useState(COVER_SOURCE_HEX)
   const [level, setLevel] = useState<ContrastLevel>('AA')
   // Whether the stored choice has been read. The server renders the defaults,
@@ -247,7 +209,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       if (saved && typeof saved === 'object') {
         if (typeof saved.sourceHex === 'string' && HEX_RE.test(saved.sourceHex))
           setSourceHexRaw(normalizeHex(saved.sourceHex))
-        if (saved.theme === 'white' || saved.theme === 'g100') setTheme(saved.theme)
+        const name = LEGACY_THEME[saved.theme] ?? saved.theme
+        if (name === 'light' || name === 'dark') setTheme(name)
         if (saved.level === 'AA' || saved.level === 'AAA') setLevel(saved.level)
       }
     } catch {}
@@ -306,28 +269,27 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement
     root.classList.add('is-retheming')
 
-    root.classList.remove('cds--white', 'cds--g100')
-    root.classList.add(`cds--${theme}`)
+    root.dataset.theme = theme
+    root.classList.remove(...Object.values(CARBON_ZONE))
+    root.classList.add(CARBON_ZONE[theme])
 
-    const activeTheme = theme === 'white' ? light : dark
-    const activeStates = theme === 'white' ? lightStates : darkStates
+    const activeTheme = theme === 'light' ? light : dark
+    const activeStates = theme === 'light' ? lightStates : darkStates
 
     if (sourceHex && activeTheme && activeStates && ramps) {
       const vars = {
         ...carbonVarsFor(activeTheme, activeStates),
-        ...graphiteVarsFor(
-          activeTheme,
-          activeStates,
-          ramps,
-          theme === 'white' ? 'light' : 'dark',
-        ),
+        ...buildGraphiteVars(activeTheme, activeStates, ramps, theme),
       }
       for (const [prop, value] of Object.entries(vars)) {
         root.style.setProperty(prop, value)
       }
       // For the next page load's inline script (lib/theme-storage.ts).
       try {
-        localStorage.setItem(THEME_PAINT_KEY, JSON.stringify({ cls: `cds--${theme}`, vars }))
+        localStorage.setItem(
+          THEME_PAINT_KEY,
+          JSON.stringify({ theme, cls: CARBON_ZONE[theme], vars }),
+        )
       } catch {}
     }
 
@@ -339,7 +301,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.classList.remove('is-retheming')
   }, [restored, theme, light, dark, lightStates, darkStates, sourceHex, ramps])
 
-  const toggleTheme = () => setTheme((t) => (t === 'white' ? 'g100' : 'white'))
+  const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
 
   return (
     <ThemeContext.Provider
@@ -356,7 +318,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         ramps,
       }}
     >
-      <GlobalTheme theme={theme}>{children}</GlobalTheme>
+      <GlobalTheme theme={theme === 'light' ? 'white' : 'g100'}>{children}</GlobalTheme>
     </ThemeContext.Provider>
   )
 }

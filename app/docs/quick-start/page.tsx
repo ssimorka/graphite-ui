@@ -114,16 +114,16 @@ function staticVars(generated: Set<string>) {
  */
 function themeApi() {
   const src = read('components', 'theme-provider.tsx')
-  const alias = src.match(/type CarbonTheme = ([^\n]+)/)?.[1]?.trim() ?? ''
+  const alias = src.match(/type ThemeName = ([^\n]+)/)?.[1]?.trim() ?? ''
   const body = src.match(/type ThemeContextValue = \{([\s\S]*?)\n\}/)?.[1] ?? ''
   return [...body.matchAll(/^ {2}(\w+): ([^\n]+)$/gm)].map((m) => ({
     name: m[1],
-    type: m[2].replace(/CarbonTheme/g, alias),
+    type: m[2].replace(/ThemeName/g, alias),
   }))
 }
 
 const API_NOTES: Record<string, string> = {
-  theme: 'The active theme. The names are Carbon’s: white is light, g100 is dark.',
+  theme: 'The active theme. The same two names the exported theme file uses for data-theme.',
   toggleTheme: 'Flips between the two. This is what the header’s theme button calls.',
   setTheme: 'Sets one directly.',
   sourceHex: 'The current source, lower-case with a leading #.',
@@ -340,24 +340,15 @@ export default function QuickStartPage() {
                 CSS or JSON, with a Download button. The CSS carries both themes,
                 light under <code>:root</code> and{' '}
                 <code>[data-theme=&quot;light&quot;]</code>, dark under{' '}
-                <code>[data-theme=&quot;dark&quot;]</code>, and each role comes
-                with its ramp and tone. A second block adds the radius and three
-                typefaces chosen in Create. The JSON holds the source, the four
-                source ramps and both themes&rsquo; tokens, contrast results and
-                states.
+                <code>[data-theme=&quot;dark&quot;]</code>, under the same{' '}
+                <code>--graphite-*</code> names the components read. A second
+                block adds the radius and three typefaces chosen in Create. The
+                JSON holds the source, the four source ramps and both
+                themes&rsquo; tokens, with the ramp and tone each came from,
+                contrast results and states.
               </p>
               <DocSnippet code={cssHead} />
             </Step>
-            <Callout tone="warning" title="The export names roles --cts-*, not --graphite-*.">
-              <>
-              That is the engine&rsquo;s exporter vocabulary, inherited from
-              Carbon Token Studio. The components in this repo read{' '}
-              <code>--graphite-*</code>, so alias or rename the exported
-              variables before pointing them at Graphite components. The
-              builder&rsquo;s radius and typeface block already uses{' '}
-              <code>--graphite-*</code> names.
-              </>
-            </Callout>
           </section>
 
           <section id="next-steps" className={styles.block}>

@@ -47,8 +47,8 @@ const NO_TOC: TocItem[] = []
 //   AAA: light 0.1 -> 7.16:1 worst, dark 0.2 -> 7.32:1 worst
 // Full strength in dark measured 1.66:1, which is why it is capped at all.
 const WASH_OPACITY = {
-  AA: { white: 0.3, g100: 0.4 },
-  AAA: { white: 0.1, g100: 0.2 },
+  AA: { light: 0.3, dark: 0.4 },
+  AAA: { light: 0.1, dark: 0.2 },
 } as const
 
 function useScrollSpy(items: TocItem[]) {

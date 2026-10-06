@@ -1,8 +1,8 @@
 # Graphite UI (helix) — working notes
 
 Next.js 16 App Router landing page for "Graphite UI" (originally scaffolded as
-"Helix," fully rebranded). Themed live off Carbon Design System via a color
-engine ported from `carbon-token-studio`.
+"Helix," fully rebranded). Themed live by its own color engine
+(`lib/color.js`), with Carbon still underneath the site chrome.
 
 ## Dev server
 
@@ -262,7 +262,8 @@ a trace, which is what "no bypass" is meant to cost.
 ## Architecture notes
 
 - `components/theme-provider.tsx` is the single source of truth for
-  `sourceHex`, `theme` (`'white' | 'g100'`) and `level` (AA/AAA). (It used to
+  `sourceHex`, `theme` (`'light' | 'dark'`, set on `<html>` as `data-theme`;
+  Carbon's `white`/`g100` survive only as the zone class) and `level` (AA/AAA). (It used to
   hold `autoFix` too; the toggle was removed as a no-op, see above.) It
   computes `lightBundle`/`darkBundle` (tokens + contrast + states) via
   `lib/color.js` and stamps 117 CSS vars onto `<html>` on every change: 58
@@ -290,8 +291,12 @@ a trace, which is what "no bypass" is meant to cost.
   class for one frame while `--cds-*` vars are rewritten, because Carbon
   ships `transition: background 70ms` on buttons that otherwise strand
   mid-transition when the underlying CSS var changes value.
-- `components/studio.tsx` holds the Carbon Token Studio–parity pieces
-  (RampRow, SemanticTable, StatesMatrix, copy-to-clipboard + toast) —
-  ported to match `carbon-token-studio/src/App.jsx` functionally, not
-  just visually. If asked to add Studio parity again, diff against that
-  file directly rather than guessing.
+- `components/token-panels.tsx` holds the token display pieces (RampRow,
+  SemanticTable, StatesMatrix, copy-to-clipboard + toast).
+- **One variable name, enforced.** The provider and Create's CSS export both
+  build `--graphite-*` from `buildGraphiteVars` in `lib/color.js`, so the file
+  an adopter downloads names exactly what components read. The export used to
+  carry a second prefix, inherited from the engine's origin, and the docs told
+  people to rename it by hand; that prefix is gone, and `scripts/naming-check.mjs`
+  fails CI if it reappears anywhere in the repo. Provenance (ramp, tone) lives
+  in the JSON export only.

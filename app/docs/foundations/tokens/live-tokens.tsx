@@ -5,15 +5,12 @@ import {
   buildCss,
   buildJson,
   buildLadders,
+  graphiteVarName,
   scrimFor,
   STATE_FAMILIES,
 } from '@/lib/color.js'
 import type { ExportBundle, StateEntry, Token } from '@/lib/color.js'
-import {
-  CARBON_VAR_COUNT,
-  graphiteVarName,
-  useTheme,
-} from '@/components/theme-provider'
+import { CARBON_VAR_COUNT, useTheme } from '@/components/theme-provider'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { DocSnippet } from '@/components/doc-snippet'
 import { StatusBadge } from '@/components/doc-blocks'
@@ -48,7 +45,7 @@ function Swatch({ cell, active }: { cell: Cell; active: boolean }) {
 
 function LiveTable({ rows, caption }: { rows: Row[]; caption: string }) {
   const { theme } = useTheme()
-  const lightActive = theme === 'white'
+  const lightActive = theme === 'light'
   return (
     <div role="table" aria-label={caption} className={styles.live}>
       <div role="row" className={`${styles.liveRow} ${styles.liveHead}`}>
@@ -260,20 +257,21 @@ export function ExportExcerpt() {
     const css = buildCss(bundle)
     const lines = css.split('\n')
     const selectors = lines.filter((l) => l.endsWith('{')).map((l) => l.slice(0, -1).trim())
-    const decls = lines.filter((l) => l.trim().startsWith('--cts-'))
     const firstBlock = lines.slice(0, lines.indexOf('}') + 1)
-    // One role in full, so the three variables each role carries are visible.
+    const isDecl = (l: string) => l.trim().startsWith('--graphite-')
+    // The primary family in full: the role, then its states.
     const excerpt = [
       firstBlock[0],
-      ...firstBlock.filter((l) => /--cts-primary(-ramp|-tone)?:/.test(l)),
+      ...firstBlock.filter((l) =>
+        /--graphite-primary(-(hover|pressed|selected|disabled|disabled-content|focus))?:/.test(l),
+      ),
       '  …',
       '}',
     ].join('\n')
     const json = buildJson(bundle)
     return {
       selectors,
-      declCount: decls.length,
-      perBlock: firstBlock.filter((l) => l.trim().startsWith('--cts-')).length,
+      perBlock: firstBlock.filter(isDecl).length,
       excerpt,
       jsonKeys: Object.keys(json),
       semanticKeys: Object.keys((json.semantic?.light ?? {}) as object),
@@ -291,9 +289,10 @@ export function ExportExcerpt() {
             <code>{s}</code>
           </span>
         ))}
-        ), {out.perBlock} declarations each: every role and state as its hex,
-        plus a <code>-ramp</code> and <code>-tone</code> companion saying where
-        it came from. The JSON carries the same values under{' '}
+        ), {out.perBlock} declarations each: every role, state, ladder step and
+        the scrim, under the same <code>--graphite-*</code> names the
+        components read. The JSON carries the same values, with the ramp and
+        tone each one came from, under{' '}
         {out.jsonKeys.map((k, i) => (
           <span key={k}>
             {i ? (i === out.jsonKeys.length - 1 ? ' and ' : ', ') : ''}

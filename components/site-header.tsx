@@ -102,7 +102,7 @@ function Tray({
  */
 export function SiteHeader() {
   const { theme, toggleTheme, sourceHex, setSourceHex } = useTheme()
-  const isDark = theme === 'g100'
+  const isDark = theme === 'dark'
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuToggled, setMenuToggled] = useState(false)
   // The menu button goes away at lg, so an open tray would be left with no

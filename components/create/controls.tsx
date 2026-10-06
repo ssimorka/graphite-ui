@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
 import { nextSurpriseHex } from '@/components/color-picker'
-import { Toast, useCopy } from '@/components/studio'
+import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
 import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'

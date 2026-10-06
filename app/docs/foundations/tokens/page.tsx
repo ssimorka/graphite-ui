@@ -310,10 +310,9 @@ export default function TokensPage() {
               }
             />
             <ExportExcerpt />
-            <Callout tone="warning" title="The export uses --cts-* names, not --graphite-*.">
+            <Callout title="Get the code adds your builder choices.">
               {[
-                'The exporter keeps the naming of Carbon Token Studio, where the engine came from. Roles map one to one (--cts-primary is --graphite-primary), but the page-level ring is --cts-focus-ring where the site says --graphite-focus, and the scrim is not exported.',
-                'Get the code appends a second block after the colors with your builder choices: the radius and the three font families, written as --graphite-* overrides with full fallback stacks.',
+                'After the colors comes a second block: the radius and the three font families chosen in Create, written as --graphite-* overrides with full fallback stacks.',
               ]}
             </Callout>
           </section>

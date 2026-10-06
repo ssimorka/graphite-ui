@@ -165,14 +165,14 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
       // builder is there to show what a good source does.
       setSourceHex(hsvToHex({ h: Math.random() * 360, s: 0.55 + Math.random() * 0.35, v: 0.6 + Math.random() * 0.3 }))
     }
-    if (!locks.theme) setTheme(pick(['white', 'g100'] as const))
+    if (!locks.theme) setTheme(pick(['light', 'dark'] as const))
     if (!locks.contrast) setLevel(pick(['AA', 'AAA'] as const))
     if (!locks.radius) setRadius(pick(RADII).key)
   }, [locks, setSourceHex, setTheme, setLevel])
 
   const reset = useCallback(() => {
     setSourceHex(COVER_SOURCE_HEX)
-    setTheme('g100')
+    setTheme('dark')
     setLevel('AA')
     setRadius(DEFAULTS.radius)
     setDensity(DEFAULTS.density)

@@ -55,11 +55,11 @@ pulls in Carbon's entire style layer in one shot — reset, IBM Plex font-face d
 
 Two layers make a theme, and only one of them is Carbon's.
 
-1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`white` for light, `g100` for dark, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
+1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`light` or `dark`, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
 
-2. **Carbon's theme zones.** `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still toggles the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
+2. **Carbon's theme zones.** The provider sets `data-theme="light"` or `"dark"` on `<html>`, the same names the exported theme file uses. `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still maps the theme onto the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 
-`app/layout.tsx` sets `className="cds--g100"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density, the overlay shadow) do not vary by theme and are declared once in `globals.scss`.
+`app/layout.tsx` sets `className="cds--g100"` and `data-theme="dark"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density, the overlay shadow) do not vary by theme and are declared once in `globals.scss`.
 
 ### Layout and the grid
 
@@ -103,7 +103,7 @@ The hero's motion effects are hand-rolled, not a library:
 - **Package manager**: pinned to **pnpm** (`pnpm-lock.yaml`). `npm install` ignores the lockfile and can drift dependency versions. CI pins Node 24 and pnpm 10.
 - **Webpack, not Turbopack**: Turbopack fails on this project's Sass, so both scripts pass `--webpack` (`next dev --webpack`, `next build --webpack`). This is not a Windows-only issue and it is not dev-only: leave the flag on both.
 - **pnpm build scripts**: pnpm blocks postinstall scripts by default. This repo's are IBM's `ibmtelemetry` (anonymous usage analytics, opt out with `IBM_TELEMETRY_DISABLED=true`) and native builds for `sharp` / `@parcel/watcher`. Run `pnpm approve-builds --all` once after a fresh clone.
-- **Governance checks**: `pnpm drift-check`, `pnpm token-drift`, `pnpm component-doc-drift` and their self-tests run in CI as the `governance` job, which `main` requires. See `/docs/governance`.
+- **Governance checks**: `pnpm drift-check`, `pnpm token-drift`, `pnpm component-doc-drift` and their self-tests, plus `pnpm naming-check` (which keeps `--graphite-*` the only variable prefix), run in CI as the `governance` job, which `main` requires. See `/docs/governance`.
 
 ## Deployment
 

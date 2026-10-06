@@ -1031,7 +1031,7 @@ body {
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
 
   // Inside the strip the ramp name is a title, not the mono eyebrow the
-  // studio and docs tables use. Scoped rather than changed globally: those
+  // token panels and docs tables use. Scoped rather than changed globally: those
   // surfaces still want the label to recede.
   .ramp-stack {
     padding: var(--graphite-space-05) var(--graphite-space-06);
@@ -1297,23 +1297,23 @@ body {
 }
 
 // ---------------------------------------------------------------------------
-// Studio panel — semantic tokens, interaction states, generation controls
+// Token panels — semantic tokens, interaction states, generation controls
 // ---------------------------------------------------------------------------
-.studio-panel {
+.token-panel {
   background: var(--cds-layer-01);
   padding: var(--graphite-space-05);
 }
 
-.studio-panel__heading {
+.token-panel__heading {
   @include type.type-style('heading-compact-01');
   margin: var(--graphite-space-06) 0 var(--graphite-space-04);
 }
 
-.studio-table {
+.token-table {
   overflow-x: auto;
 }
 
-.studio-swatch {
+.token-swatch {
   display: inline-block;
   width: 24px;
   height: 24px;
@@ -1391,7 +1391,7 @@ body {
   }
 }
 
-.studio-toast {
+.token-toast {
   position: fixed;
   bottom: var(--graphite-space-06);
   left: 50%;

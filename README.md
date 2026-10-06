@@ -83,7 +83,7 @@ components/
   search/                # Documentation search dialog and ranking
   sections/              # Landing page sections
   theme-provider.tsx     # Source of truth for source color, theme, contrast level
-  studio.tsx             # Ramp rows, semantic table, states matrix
+  token-panels.tsx       # Ramp rows, semantic table, states matrix
 lib/
   color.js               # The color engine
 docs/

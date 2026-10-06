@@ -19,10 +19,9 @@ import {
   useTheme,
   COVER_SOURCE_HEX,
   CARBON_VAR_COUNT,
-  graphiteVarName,
 } from '@/components/theme-provider'
-import { makeRamps, buildTheme } from '@/lib/color.js'
-import { WEIGHT_LABELS } from '@/components/studio'
+import { makeRamps, buildTheme, graphiteVarName } from '@/lib/color.js'
+import { WEIGHT_LABELS } from '@/components/token-panels'
 import type { KitStats } from '@/lib/kit-stats'
 import type { Ramps, Theme } from '@/lib/color.js'
 
@@ -520,7 +519,7 @@ export function Capabilities({
   // paint, and a panel that renders empty for a frame reads as broken.
   const light = (lightBundle ?? buildTheme('light', ramps, level)) as Theme
   const dark = (darkBundle ?? buildTheme('dark', ramps, level)) as Theme
-  const current = theme === 'white' ? light : dark
+  const current = theme === 'light' ? light : dark
 
   const isCarousel = useCarouselLayout()
 

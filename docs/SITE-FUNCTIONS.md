@@ -11,7 +11,7 @@ renders the fixed `SiteHeader` above `children`. It also sets the default
 `<title>` and metadata.
 
 **`ThemeProvider`** ([`components/theme-provider.tsx`](../components/theme-provider.tsx))
-holds the source color, the theme (`white` / `g100`) and the contrast level. On
+holds the source color, the theme (`light` / `dark`) and the contrast level. On
 every change it runs the engine in [`lib/color.js`](../lib/color.js) and stamps
 the result onto `<html>` as `--graphite-*` variables (the primary namespace) and
 a `--cds-*` compatibility layer for the Carbon pieces that remain. CLAUDE.md

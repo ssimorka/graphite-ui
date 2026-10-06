@@ -554,9 +554,8 @@ export default function ThemingPage() {
             <p className={styles.note}>
               Roles are camelCase in the engine and JSON (
               <code>onSurfaceVariant</code>) and kebab-case CSS variables on the
-              site (<code>--graphite-on-surface-variant</code>). The exported CSS
-              from Create uses the <code>--cts-</code> prefix instead and adds
-              each role&rsquo;s ramp and tone. The{' '}
+              site (<code>--graphite-on-surface-variant</code>). The CSS that
+              Create exports uses the same names. The{' '}
               <a className={styles.link} href="/docs/foundations/tokens">
                 Tokens
               </a>{' '}

@@ -70,10 +70,10 @@ Designers do not usually touch this layer, but it explains an important constrai
 
 The system exports in two formats:
 
-- **CSS**: custom properties prefixed `--cts-`, in kebab-case (`--cts-on-surface-variant`), scoped to `:root, [data-theme="light"]` and `[data-theme="dark"]`. Each token ships with two companion variables recording its provenance: `--cts-primary-ramp: accent` and `--cts-primary-tone: 40`.
-- **JSON**: `source`, `primitives` (all four ramps with every stop), and `semantic` (both themes, with tokens, contrast results, and states).
+- **CSS**: custom properties prefixed `--graphite-`, in kebab-case (`--graphite-on-surface-variant`), scoped to `:root, [data-theme="light"]` and `[data-theme="dark"]`. These are the same names the theme provider stamps and the components read, built by the same function, so the file needs no renaming.
+- **JSON**: `source`, `primitives` (all four ramps with every stop), and `semantic` (both themes, with tokens, contrast results, and states). Every entry carries the ramp and tone it came from.
 
-The provenance variables are worth knowing about. Every token is auditable back to a ramp and a tone, so "why is this color this color" always has an answer.
+The provenance in the JSON is worth knowing about. Every token is auditable back to a ramp and a tone, so "why is this color this color" always has an answer.
 
 ---
 
@@ -353,7 +353,7 @@ Both themes are generated from the same ramps with the same targets, so a design
 - **Do check the generated contrast panel** when you change the source color, especially at AAA or with very light or very dark sources.
 - **Do pair color with a second signal** for any state or status meaning.
 - **Do design in both themes** before handing off.
-- **Do use the tone/ramp provenance** (`--cts-primary-tone`, `--cts-primary-ramp`) when you need to explain or audit a color decision.
+- **Do use the tone/ramp provenance** (each token's `ramp` and `tone` in the JSON export) when you need to explain or audit a color decision.
 
 ### Don't
 
@@ -374,7 +374,7 @@ Both themes are generated from the same ramps with the same targets, so a design
 
 ### Naming
 
-Tokens use camelCase in JSON and JS (`onSurfaceVariant`), kebab-case in CSS with the `--cts-` prefix (`--cts-on-surface-variant`). Every token also emits its provenance: `--cts-on-surface-variant-ramp` and `--cts-on-surface-variant-tone`.
+Tokens use camelCase in JSON and JS (`onSurfaceVariant`), kebab-case in CSS with the `--graphite-` prefix (`--graphite-on-surface-variant`). The JSON export also records each token's provenance as `ramp` and `tone`.
 
 ### Choosing a token
 

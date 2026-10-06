@@ -201,8 +201,10 @@ export default function InstallationPage() {
               </tbody>
             </table>
             <p className={styles.note}>
-              <code>pnpm typecheck</code> and the two checker self-tests run in
-              the same required <code>governance</code> job. <code>main</code>{' '}
+              <code>pnpm typecheck</code>, the two checker self-tests and{' '}
+              <code>pnpm naming-check</code>, which keeps{' '}
+              <code>--graphite-*</code> the only variable prefix, run in the
+              same required <code>governance</code> job. <code>main</code>{' '}
               is protected, so every change lands through a pull request with
               that job green, including one-line doc edits.
             </p>
