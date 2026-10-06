@@ -5,6 +5,7 @@ import { buildJson } from '@/lib/color.js'
 import type { ExportBundle } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
 import { buildThemeFile } from '@/lib/theme-file'
+import { buildTailwindBridge } from '@/lib/tailwind-bridge'
 import type { ThemeFileFoundations } from '@/lib/theme-file'
 import { Modal } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
@@ -32,8 +33,18 @@ export const FoundationsContext = createContext<ThemeFileFoundations | null>(nul
  * colors, under the same `--graphite-*` names the provider stamps and the
  * components read, with the builder's choices (radius, density and the three
  * typefaces) written into the foundations. It needs no Graphite runtime, so an
- * adopter keeps it as their theme. The JSON is the engine's audit format.
+ * adopter keeps it as their theme. Tailwind is the bridge (lib/tailwind-bridge.ts)
+ * that names those variables as Tailwind tokens, alongside the CSS. The JSON
+ * is the engine's audit format.
  */
+
+// What each tab downloads as.
+const FORMATS = {
+  css: { label: 'CSS', file: 'graphite-theme.css', type: 'text/css' },
+  tailwind: { label: 'Tailwind', file: 'graphite-tailwind.css', type: 'text/css' },
+  json: { label: 'JSON', file: 'graphite-theme.json', type: 'application/json' },
+} as const
+type Format = keyof typeof FORMATS
 export function GetCodeDialog({
   open,
   onClose,
@@ -44,7 +55,7 @@ export function GetCodeDialog({
   const { sourceHex, ramps, lightBundle, darkBundle, level } = useTheme()
   const foundations = useContext(FoundationsContext)
   const b = useBuilder()
-  const [tab, setTab] = useState<'css' | 'json'>('css')
+  const [tab, setTab] = useState<Format>('css')
 
   const out = useMemo(() => {
     if (!ramps || !lightBundle || !darkBundle || !foundations) return null
@@ -72,20 +83,18 @@ export function GetCodeDialog({
     font(CODE_FONTS, b.codeFont, '--graphite-font-mono')
     return {
       css: buildThemeFile({ bundle, level, foundations, overrides }),
+      tailwind: buildTailwindBridge({ bundle, foundations }),
       json: JSON.stringify(buildJson(bundle), null, 2),
     }
   }, [sourceHex, ramps, lightBundle, darkBundle, level, foundations, b.radius, b.density, b.headingFont, b.bodyFont, b.codeFont])
 
   const download = () => {
     if (!out) return
-    const isCss = tab === 'css'
-    const blob = new Blob([isCss ? out.css : out.json], {
-      type: isCss ? 'text/css' : 'application/json',
-    })
+    const blob = new Blob([out[tab]], { type: FORMATS[tab].type })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = isCss ? 'graphite-theme.css' : 'graphite-theme.json'
+    a.download = FORMATS[tab].file
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -102,11 +111,13 @@ export function GetCodeDialog({
             <p className={styles.lede}>
               The theme as the preview shows it, for {sourceHex.toUpperCase()}.
               The CSS is one file to keep in your project: foundations and both
-              themes, with no Graphite runtime needed. The JSON has the colors
-              with where each one came from.
+              themes, with no Graphite runtime needed. Tailwind is a second
+              file that names those variables as Tailwind utilities, for use
+              beside the CSS. The JSON has the colors with where each one came
+              from.
             </p>
             <div className={styles.formats} role="group" aria-label="Format">
-              {(['css', 'json'] as const).map((f) => (
+              {(Object.keys(FORMATS) as Format[]).map((f) => (
                 <button
                   key={f}
                   type="button"
@@ -114,7 +125,7 @@ export function GetCodeDialog({
                   aria-pressed={tab === f}
                   onClick={() => setTab(f)}
                 >
-                  {f}
+                  {FORMATS[f].label}
                 </button>
               ))}
             </div>
