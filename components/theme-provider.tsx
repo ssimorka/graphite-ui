@@ -139,14 +139,18 @@ export function ThemeProvider({
   // Whether the stored choice has been read. The server renders the defaults,
   // so the first client render must too; the stored choice is applied in a
   // layout effect straight after, before paint. Nothing is stamped or saved
-  // until then, or the defaults would overwrite what was stored.
-  const [restored, setRestored] = useState(false)
+  // until then, or the defaults would overwrite what was stored. Without
+  // `persist` there is nothing to read, so it starts restored.
+  const [restored, setRestored] = useState(!persist)
 
+  // Reading localStorage is the external system this effect syncs from, and
+  // it has to land before paint, which is why the setters run here. React's
+  // lint rule against setState in an effect (on in Next's default ESLint
+  // config) cannot tell this case apart, so it is disabled for this one
+  // effect, for that reason only.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useLayoutEffect(() => {
-    if (!persist) {
-      setRestored(true)
-      return
-    }
+    if (!persist) return
     try {
       const saved = JSON.parse(localStorage.getItem(THEME_CHOICE_KEY) ?? 'null')
       if (saved && typeof saved === 'object') {
@@ -159,6 +163,7 @@ export function ThemeProvider({
     } catch {}
     setRestored(true)
   }, [persist])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!restored || !persist) return
