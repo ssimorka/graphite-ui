@@ -29,6 +29,7 @@
 import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
+import { buildGraphiteVars, buildStates, buildTheme, makeRamps } from '../lib/color.js'
 
 const ROOT = process.cwd()
 const SNAPSHOT = 'docs/tokens/figma-snapshot.json'
@@ -612,6 +613,49 @@ function checkFoundationContracts() {
   }
 }
 
+// ------------------------------------------------------- what Dev Mode says
+//
+// The kit's code syntax is the snippet Figma's Dev Mode prints when a
+// developer inspects a bound node. On 2026-10-06 it still showed the engine's
+// retired export prefix for every semantic role, and nine names differed
+// outright (error where the code says danger). Nothing here could see it,
+// because the variable snapshot does not carry code syntax.
+//
+// docs/tokens/figma-code-syntax.json now does (scripts/figma-code-syntax.js).
+// Every entry must be `var(--graphite-…)` naming a variable the code really
+// declares: one the engine generates, or one the stylesheet declares. A
+// missing file is an error, not a skip, or deleting it would turn the check
+// off with CI green. Overridable so the self-test can stage a bad copy.
+const CODE_SYNTAX = process.env.TOKEN_DRIFT_CODE_SYNTAX || 'docs/tokens/figma-code-syntax.json'
+
+function checkCodeSyntax() {
+  const file = path.isAbsolute(CODE_SYNTAX) ? CODE_SYNTAX : path.join(ROOT, CODE_SYNTAX)
+  if (!fs.existsSync(file)) {
+    errors.push(`code syntax: ${CODE_SYNTAX} not found — Dev Mode names are unverified`)
+    return 0
+  }
+  const ramps = makeRamps('#5e44aa')
+  const light = buildTheme('light', ramps)
+  const known = new Set([
+    ...Object.keys(buildGraphiteVars(light, buildStates(light.tokens, ramps, 'light'), ramps, 'light')),
+    ...[...css.matchAll(/(--graphite-[a-z0-9-]+)\s*:/g)].map((m) => m[1]),
+  ])
+  let n = 0
+  const { collections } = JSON.parse(fs.readFileSync(file, 'utf8'))
+  for (const [coll, vars] of Object.entries(collections)) {
+    for (const [name, snippet] of Object.entries(vars)) {
+      n++
+      const m = /^var\((--graphite-[a-z0-9-]+)\)$/.exec(snippet)
+      if (!m) {
+        errors.push(`code syntax: ${coll}/${name} shows Dev Mode "${snippet}", not var(--graphite-*)`)
+      } else if (!known.has(m[1])) {
+        errors.push(`code syntax: ${coll}/${name} shows Dev Mode ${m[1]}, which the code does not declare`)
+      }
+    }
+  }
+  return n
+}
+
 // --------------------------------------------------------------------- main
 checkSpacing()
 checkRadius()
@@ -623,6 +667,7 @@ checkCarbonBreakpoints(kitBreakpoints)
 checkCarbonTypeStyles()
 checkRadiusCategory()
 checkDirectCarbon()
+const codeSyntaxCount = checkCodeSyntax()
 
 const counted = {
   spacing: Object.keys(collection('Spacing')).length,
@@ -634,7 +679,8 @@ const total = Object.values(counted).reduce((a, b) => a + b, 0)
 
 console.log(
   `token-drift: ${total} kit variables checked against ${STYLESHEET} ` +
-    `(${counted.spacing} spacing, ${counted.radius} radius, ${counted.breakpoint} breakpoint, ${counted.typography} typography)`,
+    `(${counted.spacing} spacing, ${counted.radius} radius, ${counted.breakpoint} breakpoint, ${counted.typography} typography); ` +
+    `${codeSyntaxCount} Dev Mode code syntax names checked against the code`,
 )
 
 if (warnings.length) {

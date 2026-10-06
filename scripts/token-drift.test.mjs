@@ -173,6 +173,33 @@ const cases = [
     expect:
       /could not parse Carbon's breakpoint map out of[\s\S]*media queries are unverified/,
   },
+
+  // Dev Mode's code syntax. Staged through TOKEN_DRIFT_CODE_SYNTAX, since the
+  // snapshot file is what drifts. The first case is the exact state the kit
+  // was in before 2026-10-06.
+  {
+    name: 'Dev Mode shows a retired prefix',
+    stage: (dir) => {
+      const f = path.join(dir, 'code-syntax-stale.json')
+      fs.writeFileSync(f, JSON.stringify({ collections: { 'Graphite Semantic': { danger: 'var(' + '--c' + 'ts-error)' } } }))
+      return { TOKEN_DRIFT_CODE_SYNTAX: f }
+    },
+    expect: /code syntax: Graphite Semantic\/danger shows Dev Mode "var\(--c.s-error\)", not var\(--graphite-\*\)/,
+  },
+  {
+    name: 'Dev Mode names a variable the code does not declare',
+    stage: (dir) => {
+      const f = path.join(dir, 'code-syntax-unknown.json')
+      fs.writeFileSync(f, JSON.stringify({ collections: { 'Graphite Semantic': { 'state/warning-hover': 'var(--graphite-warning-hover)' } } }))
+      return { TOKEN_DRIFT_CODE_SYNTAX: f }
+    },
+    expect: /code syntax: Graphite Semantic\/state\/warning-hover shows Dev Mode --graphite-warning-hover, which the code does not declare/,
+  },
+  {
+    name: 'the code syntax snapshot is missing',
+    stage: () => ({ TOKEN_DRIFT_CODE_SYNTAX: 'nope/figma-code-syntax.json' }),
+    expect: /code syntax: nope\/figma-code-syntax\.json not found/,
+  },
 ]
 
 // If the unmutated stylesheet does not pass, every negative below is

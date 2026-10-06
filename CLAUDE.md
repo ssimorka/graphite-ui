@@ -191,6 +191,16 @@ before trusting a browser result.
   (`scripts/component-extract.js` through the MCP, then `pnpm
   component-snapshot`). So the check catches a *doc* drifting from the
   snapshot, not the *snapshot* drifting from Figma.
+  **Dev Mode code syntax is snapshotted too**, separately: `scripts/figma-code-syntax.js`
+  (one `use_figma` call, read-only) returns every in-scope variable's WEB code
+  syntax; save it as `docs/tokens/figma-code-syntax.json` through
+  `JSON.stringify(x, null, 2)`. token-drift fails unless every entry is
+  `var(--graphite-…)` naming a variable the engine generates or `globals.scss`
+  declares, and fails if the file is missing. Rewritten in the kit 2026-10-06:
+  Semantic carried the retired export prefix (and `error` for danger), Spacing
+  and Radius carried Carbon-style names; the 20 kit-only state variables
+  (warning/success/info states, primary-container hover/active) have no CSS
+  counterpart and carry no code syntax on purpose. Restamp after a kit rename.
   Two gotchas if you touch it: a set counts as documented if the doc cites its
   node id **or** names it (dropdown.md documents all 8 sets by id in a matrix
   and names none of them), and `page.loadAsync()` is what lets one `use_figma`
