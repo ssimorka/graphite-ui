@@ -20,4 +20,4 @@ export const THEME_PAINT_KEY = 'graphite-theme-paint'
 // (private windows, blocked site data), and the page is simply default then.
 // A paint saved before the light/dark rename has no `theme`, only the class,
 // so the name is read off the class in that case.
-export const THEME_RESTORE_SCRIPT = `try{var p=JSON.parse(localStorage.getItem('${THEME_PAINT_KEY}')||'null');if(p&&p.vars){var r=document.documentElement;if(p.cls){r.classList.remove('cds--white','cds--g100');r.classList.add(p.cls)}r.setAttribute('data-theme',p.theme||(p.cls==='cds--white'?'light':'dark'));for(var k in p.vars)r.style.setProperty(k,p.vars[k])}}catch(e){}`
+export const THEME_RESTORE_SCRIPT = `try{var p=JSON.parse(localStorage.getItem('${THEME_PAINT_KEY}')||'null');if(p&&p.vars){var r=document.documentElement;if(p.cls){r.classList.remove('cds--white','cds--g100');r.classList.add(p.cls)}var t=p.theme||(p.cls==='cds--white'?'light':'dark');r.setAttribute('data-theme',t);r.style.colorScheme=t;for(var k in p.vars)r.style.setProperty(k,p.vars[k])}}catch(e){}`

@@ -218,6 +218,8 @@ export function ThemeProvider({
     root.classList.add('is-retheming')
 
     root.dataset.theme = theme
+    // So the browser's own scrollbars and form controls follow the theme.
+    root.style.colorScheme = theme
 
     const activeTheme = theme === 'light' ? light : dark
     const activeStates = theme === 'light' ? lightStates : darkStates
