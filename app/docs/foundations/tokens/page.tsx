@@ -156,7 +156,6 @@ export default function TokensPage() {
             </p>
             <div className={styles.badges}>
               <RoleCount />
-              <StatusBadge tone="neutral">{`${f.desktop.length} foundation tokens`}</StatusBadge>
               <StatusBadge tone="success">Light and dark</StatusBadge>
             </div>
           </header>

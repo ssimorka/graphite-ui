@@ -165,7 +165,6 @@ export default function QuickStartPage() {
   const gen = generatedVars()
   const generated = new Set([...gen.roles, ...gen.states, '--graphite-focus', '--graphite-scrim'])
   const statics = staticVars(generated)
-  const staticCount = [...statics.values()].reduce((n, v) => n + v.length, 0)
   // The head of the color part of the theme file for the seed: the selector
   // and the first roles, enough to show the naming and the shape.
   const cssHead = gen.css.split('\n').slice(0, 4).join('\n') + '\n  /* … */'
@@ -175,15 +174,6 @@ export default function QuickStartPage() {
       <DocsShell
         nav={DOCS_NAV}
         toc={TOC}
-        tocFooter={
-          <div className={styles.footnote}>
-            <p className={styles.footnoteHead}>{`${generated.size} generated · ${staticCount} static`}</p>
-            <p className={styles.footnoteBody}>
-              The --graphite-* variables in a theme file: colors for your
-              source, and foundations that never change.
-            </p>
-          </div>
-        }
       >
         <article className={styles.page}>
           <header className={styles.header}>

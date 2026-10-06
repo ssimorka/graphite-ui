@@ -11,16 +11,19 @@ import { readKitStats } from '@/lib/kit-stats'
 
 export default function Page() {
   const contracts = readContracts()
+  const stats = readKitStats()
   // Sorted so the carousel's component panel reads alphabetically rather than
-  // in whatever order the contracts directory happens to list.
+  // in whatever order the contracts directory happens to list. Internal
+  // contracts (Overlay) are not components, so they get no chip.
   const contractList = Object.values(contracts)
+    .filter((c) => !c.internal)
     .map(({ component, version }) => ({ component, version }))
     .sort((a, b) => a.component.localeCompare(b.component))
 
   return (
     <main id="main-content" className="page-main">
       {/* Section order is the kit's, 01 through 07. */}
-      <Hero governed={readKitStats().governed} />
+      <Hero governed={stats.governed} />
 
       <ComponentWall contracts={contracts} />
 
@@ -30,13 +33,13 @@ export default function Page() {
           the span and the spotlight are gone, and 02 and 04 carry a mesh
           gradient each instead. */}
       <PageBands>
-        <Capabilities contracts={contractList} stats={readKitStats()} />
+        <Capabilities contracts={contractList} stats={stats} />
       </PageBands>
 
       <ThemeCta />
       <TwoDoors />
 
-      <Faq governed={contractList.length} />
+      <Faq governed={stats.governed} />
       <SiteFooter />
     </main>
   )

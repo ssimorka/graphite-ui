@@ -6,6 +6,8 @@ export type ContractMeta = {
   version: string
   wave: string
   slug: string
+  /** A shared part other components build on (Overlay), not a component itself. */
+  internal: boolean
 }
 
 /**
@@ -36,6 +38,7 @@ export function readContracts(): Record<string, ContractMeta> {
       version: field('version'),
       wave: field('wave'),
       slug: file.replace(/\.md$/, ''),
+      internal: field('internal') === 'true',
     }
   }
   return out

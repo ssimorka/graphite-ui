@@ -91,6 +91,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/contribute/governance', label: 'Governance' },
       { href: '/docs/contribute/drift', label: 'Snapshots and drift' },
       { href: '/docs/contribute/carbon', label: 'Carbon migration' },
+      { href: '/docs/contribute/status', label: 'Status' },
     ],
   },
 ]

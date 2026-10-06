@@ -289,22 +289,6 @@ export function ComponentsIndex({
           <span className={`${styles.figure} ${styles.figureGoverned}`}>{stats.governed}</span>
           <span className={styles.caption}>governed components</span>
         </li>
-        <li className={styles.count}>
-          <span className={styles.figure}>{stats.pages}</span>
-          <span className={styles.caption}>component pages in the kit</span>
-        </li>
-        <li className={styles.count}>
-          <span className={styles.figure}>{stats.sets}</span>
-          <span className={styles.caption}>component sets</span>
-        </li>
-        {index.publicUngoverned !== null ? (
-          <li className={styles.count}>
-            <span className={`${styles.figure} ${styles.figurePublic}`}>
-              {index.publicUngoverned}
-            </span>
-            <span className={styles.caption}>public sets with no contract</span>
-          </li>
-        ) : null}
       </ul>
 
       <div className={styles.filterBar}>

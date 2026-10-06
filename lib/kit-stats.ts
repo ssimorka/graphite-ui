@@ -2,8 +2,14 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export type KitStats = {
-  /** Components carrying a versioned contract. */
+  /**
+   * Governed components: the site's one headline count. Contracts whose
+   * frontmatter says `internal: true` (Overlay, a shared hook) are not
+   * components, so they are left out.
+   */
   governed: number
+  /** Every contract file, internal ones included. */
+  contracts: number
   /** Component sets in the kit snapshot, private internals included. */
   sets: number
   /**
@@ -36,9 +42,13 @@ const CI_CHECKS = ['drift-check', 'token-drift', 'component-doc-drift']
  */
 export function readKitStats(): KitStats {
   const contractDir = path.join(process.cwd(), 'docs', 'contracts')
-  const governed = fs
+  const contractFiles = fs
     .readdirSync(contractDir)
-    .filter((f) => f.endsWith('.md') && f !== 'README.md').length
+    .filter((f) => f.endsWith('.md') && f !== 'README.md')
+  const frontmatter = (f: string) =>
+    fs.readFileSync(path.join(contractDir, f), 'utf8').match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ''
+  const internal = contractFiles.filter((f) => /^internal:\s*true\s*$/m.test(frontmatter(f))).length
+  const governed = contractFiles.length - internal
 
   const snapshot = JSON.parse(
     fs.readFileSync(
@@ -59,6 +69,7 @@ export function readKitStats(): KitStats {
 
   return {
     governed,
+    contracts: contractFiles.length,
     sets: allSets.length,
     publicSets,
     pages: snapshot.pages.length,

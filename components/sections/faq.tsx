@@ -10,7 +10,7 @@ import { Reveal } from '@/components/reveal'
 const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: `Not as an install yet. Today you can clone the repo, browse ${governed} React components, and export a theme as CSS or JSON. There is no npm package. Each component has a versioned spec that the code is checked against on every build.`,
+    a: `Not as an install yet. Today you can take a theme from Create, use the Figma kit, and copy any of the ${governed} governed components into your project by hand. An install command is coming. Each component has a versioned contract, checked in CI.`,
   },
   {
     q: 'Is it free, and what is it built with?',
@@ -18,7 +18,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'Does it require Carbon?',
-    a: 'No, but it is built on it today. The components style themselves from the --graphite-* tokens, and the engine also emits a Carbon compatibility layer so an existing Carbon build repaints without touching a component. Moving off Carbon is a tracked migration, not a rewrite.',
+    a: 'No. Graphite’s components, theme file and theme provider do not use Carbon. This site still uses a few Carbon pieces, and is moving off them.',
   },
   {
     q: 'Can I use my own brand color?',
@@ -26,7 +26,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'How do the Figma kit and the code stay in step?',
-    a: 'The kit is canonical: where it and a contract disagree, the kit wins and the contract is corrected. Three checks in CI enforce it, reading committed snapshots of the kit rather than the network, so they run offline. Re-extracting a snapshot is still a manual step.',
+    a: 'Checks in CI hold the governed components and tokens to their contracts and to a committed copy of the kit. Where the kit and a contract disagree, the kit wins and the contract is corrected. Updating that copy from Figma is a manual step.',
   },
   {
     q: 'How do I contribute a component?',
