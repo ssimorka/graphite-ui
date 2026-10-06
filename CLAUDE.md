@@ -352,7 +352,7 @@ a trace, which is what "no bypass" is meant to cost.
   mid-transition when the underlying CSS var changes value.
 - `components/token-panels.tsx` holds the token display pieces (RampRow,
   weight labels, copy-to-clipboard + toast). Its semantic table and states
-  matrix were removed in #333 as uncalled; the docs pages draw their own.
+  matrix had no callers and were removed in #333.
 - **One variable name, enforced.** The provider and Create's CSS export both
   build `--graphite-*` from `buildGraphiteVars` in `lib/color.js`, so the file
   an adopter downloads names exactly what components read. The export used to
