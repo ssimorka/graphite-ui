@@ -3,7 +3,7 @@ import { DocsShell } from '@/components/docs-shell'
 import { DOCS_NAV, COLOR_RAMPS_TOC, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
-import { Callout, SectionHeading, StatusBadge } from '@/components/doc-blocks'
+import { SectionHeading, StatusBadge } from '@/components/doc-blocks'
 import { RefTable } from '@/components/component-page'
 import { readDivergence, SOURCE_RAMPS, WEIGHTS } from '@/lib/ramp-divergence'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
@@ -14,7 +14,7 @@ import styles from './color-page.module.scss'
 export const metadata: Metadata = {
   title: 'Color ramps · Graphite UI',
   description:
-    'Four ramps, ten stops each, resolved in OKLab from one source color and sampled at fixed tone stops, with how they are sampled and where they differ from the kit.',
+    'Four ramps, ten stops each, resolved in OKLab from one source color and sampled at fixed tone stops, and how they are sampled.',
 }
 
 
@@ -36,16 +36,6 @@ export default function ColorRampsPage() {
   const d = readDivergence()
   const stops = SOURCE_RAMPS.length * WEIGHTS.length
   const seed = COVER_SOURCE_HEX.toUpperCase()
-  const differing = d.near + d.far.length
-  const where = d.rampsAffected.join(' and ')
-  // Weight 500 is the source-tone stop on every ramp, so a difference there is
-  // the one worth naming as such.
-  const farSentences = d.far
-    .map(
-      (f) =>
-        `The largest is ${f.ramp}/${f.weight}${f.weight === '500' ? ', the source-tone stop' : ''}: the engine produces ${f.engine.toUpperCase()} where the kit has ${f.kit.toUpperCase()}, a difference of ${f.delta} in ${f.channel}.`,
-    )
-    .join(' ')
 
   return (
     <main id="main-content" className="page-main">
@@ -103,28 +93,6 @@ export default function ColorRampsPage() {
                 WHY[s.ramp],
               ])}
             />
-          </section>
-
-          <section id="divergence" className={styles.block}>
-            <SectionHeading
-              title="A known divergence, recorded rather than fixed"
-              lede={`The kit's swatches are bound to its variables. The engine on the site computes ${lower(differing)} ${where} stops slightly differently.`}
-            />
-            <Callout
-              tone="warning"
-              title={`${d.exact} of ${d.total} stops match the kit exactly.`}
-            >
-              {[
-                `All ${lower(differing)} differences sit on ${where}. ${spell(d.near)} are within 1/255 and invisible. ${farSentences}`,
-                'Do not correct this towards Figma. The engine’s hue sits 0.17° from the intended source − 120°, where the kit’s baked value is 1.19° off, at a tone where red is already at the sRGB gamut edge. The engine is the more correct one, and the delta is recorded so nobody “fixes” it back.',
-              ]}
-            </Callout>
-            <p className={styles.note}>
-              Four ramps are shown here. The engine also derives danger, warning,
-              success and info, whose hue is pinned per status so red still
-              reads as danger whatever the source is, while chroma tracks the
-              source and is clamped between 0.10 and 0.20.
-            </p>
           </section>
         </article>
       </DocsShell>

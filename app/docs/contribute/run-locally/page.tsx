@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { DocsShell } from '@/components/docs-shell'
-import { DOCS_NAV, INSTALLATION_TOC, docsCrumbs } from '@/components/docs-nav'
+import { DOCS_NAV, RUN_LOCALLY_TOC, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -12,14 +12,52 @@ import {
   StatusBadge,
   Step,
 } from '@/components/doc-blocks'
-import { readKitStats } from '@/lib/kit-stats'
-import { spell } from '@/lib/spell'
-import styles from './installation.module.scss'
+import fs from 'node:fs'
+import path from 'node:path'
+import { RefTable, Surface } from '@/components/component-page'
+import { COVER_SOURCE_HEX } from '@/lib/cover-source'
+import { SourcePicker } from './examples/source-picker'
+import { ThemeSwitch } from './examples/theme-switch'
+import styles from './run-locally.module.scss'
 
 export const metadata: Metadata = {
-  title: 'Installation · Graphite UI',
+  title: 'Run Graphite locally · Graphite UI',
   description:
-    'Run Graphite UI locally: Node 24, pnpm 10, and a dev server that must run under webpack. Plus the governance checks a change has to pass before it lands.',
+    'Run the Graphite UI repository: Node 24, pnpm 10, a dev server that must run under webpack, the source color and theme in the repo, and the checks a change has to pass.',
+}
+
+const read = (...p: string[]) => fs.readFileSync(path.join(process.cwd(), ...p), 'utf8')
+
+/** The snippets in Working in the repo are the files in ./examples, read at build time. */
+const example = (file: string) =>
+  read('app', 'docs', 'contribute', 'run-locally', 'examples', file).trimEnd()
+
+/**
+ * The useTheme() value, read from its type in theme-provider.tsx so the table
+ * lists what the context actually carries.
+ */
+function themeApi() {
+  const src = read('components', 'theme-provider.tsx')
+  const alias = src.match(/type ThemeName = ([^\n]+)/)?.[1]?.trim() ?? ''
+  const body = src.match(/type ThemeContextValue = \{([\s\S]*?)\n\}/)?.[1] ?? ''
+  return [...body.matchAll(/^ {2}(\w+): ([^\n]+)$/gm)].map((m) => ({
+    name: m[1],
+    type: m[2].replace(/ThemeName/g, alias),
+  }))
+}
+
+const API_NOTES: Record<string, string> = {
+  theme: 'The active theme. The same two names the exported theme file uses for data-theme.',
+  toggleTheme: 'Flips between the two. This is what the header’s theme button calls.',
+  setTheme: 'Sets one directly.',
+  sourceHex: 'The current source, lower-case with a leading #.',
+  setSourceHex:
+    'Changes the source. Anything that is not a 3- or 6-digit hex is ignored.',
+  lightBundle: 'Tokens, contrast results and states for the light theme.',
+  darkBundle: 'The same for dark. Both are computed whichever theme is showing.',
+  level: 'The contrast target the engine resolves against.',
+  setLevel: 'Changes it, and every role re-resolves.',
+  ramps: 'The ramps for the current source, keyed by name.',
 }
 
 // Kept in step with the README's Getting started and Scripts tables, which are
@@ -50,12 +88,12 @@ const CHECKS = [
   },
 ]
 
-export default function InstallationPage() {
+export default function RunLocallyPage() {
   return (
     <main id="main-content" className="page-main">
       <DocsShell
         nav={DOCS_NAV}
-        toc={INSTALLATION_TOC}
+        toc={RUN_LOCALLY_TOC}
         tocFooter={
           <div className={styles.footnote}>
             <p className={styles.footnoteHead}>pnpm 10 · Node 24</p>
@@ -68,14 +106,11 @@ export default function InstallationPage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb items={docsCrumbs('/docs/installation')} />
-            <h1 className={styles.title}>Installation</h1>
+            <Breadcrumb items={docsCrumbs('/docs/contribute/run-locally')} />
+            <h1 className={styles.title}>Run Graphite locally</h1>
             <p className={styles.lede}>
-              Graphite ships as a published Figma library and a governed React
-              implementation. There is no registry command yet, so getting
-              started means running the project, not adding a dependency. This
-              page says so plainly rather than implying a CLI that does not
-              exist.
+              For working on Graphite itself. To use Graphite in your own
+              project, start at <a href="/docs/get-started">Get started</a>.
             </p>
             <div className={styles.badges}>
               <StatusBadge tone="success">Node 24+</StatusBadge>
@@ -163,12 +198,50 @@ export default function InstallationPage() {
               <>
               <code>--webpack</code> is baked into both the <code>dev</code> and{' '}
               <code>build</code> scripts, so <code>pnpm dev</code> is safe. If
-              you invoke Next directly, pass the flag yourself. The port is
-              hardcoded, so parallel worktrees collide on it: the second server
-              attaches to the first checkout, and anything you verify in the
-              browser is then testing the wrong code.
+              you invoke Next directly, pass the flag yourself.
               </>
             </Callout>
+          </section>
+
+          <section id="in-the-repo" className={styles.block}>
+            <SectionHeading
+              title="Working in the repo"
+              lede="The site holds one source color and one theme, and every page reads them."
+            />
+            <Step n={4} title="Set the source">
+              <p>
+                The swatch in the header sets it, and so does{' '}
+                <a href="/create">Create</a>. In code, the source lives in the
+                theme provider and <code>setSourceHex</code> changes it. The
+                browser saves it, so every page reads the same color. The
+                default is <code>{COVER_SOURCE_HEX.toUpperCase()}</code>,
+                sampled from the kit&rsquo;s cover image.
+              </p>
+              <Surface label="Live: these set the site’s source color">
+                <SourcePicker />
+              </Surface>
+              <DocSnippet code={example('source-picker.tsx')} />
+              <DocSnippet code={example('source-picker.module.scss')} />
+            </Step>
+            <Step n={5} title="Read the theme from useTheme">
+              <p>
+                <code>useTheme</code> is the hook the header&rsquo;s theme button
+                uses. It needs a client component.
+              </p>
+              <Surface label="Live: switches the site theme">
+                <ThemeSwitch />
+              </Surface>
+              <DocSnippet code={example('theme-switch.tsx')} />
+            </Step>
+            <RefTable
+              caption="What useTheme returns"
+              columns={[
+                { label: 'Field', tone: 'name' },
+                { label: 'Type', tone: 'type' },
+                { label: 'What it is', tone: 'text' },
+              ]}
+              rows={themeApi().map((f) => [f.name, f.type, API_NOTES[f.name] ?? ''])}
+            />
           </section>
 
           <section id="checks" className={styles.block}>
@@ -213,20 +286,17 @@ export default function InstallationPage() {
           <section id="next-steps" className={styles.block}>
             <SectionHeading
               title="Next steps"
-              lede="Three directions, depending on which half of the system you came for."
+              lede="The rest of Contribute."
             />
             <NextCards>
-              <NextCard href="/gallery" title="Components">
-                {`${spell(readKitStats().governed)} governed components, each with its contract version on the page.`}
-              </NextCard>
-              <NextCard href="/docs/theming#how-it-works" title="Theming">
-                How one source color becomes eight ramps and thirty-two roles.
-              </NextCard>
-              <NextCard
-                href="https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/README.md"
-                title="Governance"
-              >
+              <NextCard href="/docs/contribute/governance" title="Governance">
                 The eight rules, and why the kit outranks the contracts.
+              </NextCard>
+              <NextCard href="/docs/contribute/drift" title="Snapshots and drift">
+                How the checks compare code to the kit, and what they cannot see.
+              </NextCard>
+              <NextCard href="/docs/contribute/carbon" title="Carbon migration">
+                What still comes from Carbon, and the plan to remove it.
               </NextCard>
             </NextCards>
           </section>

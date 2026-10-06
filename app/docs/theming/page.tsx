@@ -16,7 +16,6 @@ import { buildTheme, makeRamps, STATE_FAMILIES, STATUS_NAMES } from '@/lib/color
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { spell } from '@/lib/spell'
 import {
-  CarbonVarCount,
   ContrastTable,
   CurrentLevel,
   PatternCount,
@@ -141,8 +140,7 @@ const PIPELINE: { step: string; detail: ReactNode }[] = [
     step: 'Wired into components',
     detail: (
       <>
-        Stamped onto the page as --graphite-* variables, plus <CarbonVarCount /> --cds-*
-        bindings for the Carbon parts that remain, so a new source repaints everything.
+        Written as --graphite-* variables, so a new source repaints everything.
       </>
     ),
   },
@@ -591,9 +589,7 @@ export default function ThemingPage() {
               The kit carries the same system as variables: semantic roles with a
               Light and a Dark mode, and the primitives as their own collection.
               Pick roles in a design, never primitive stops, and regenerate rather
-              than hand-edit when the source changes. <code>token-drift</code>{' '}
-              checks the site&rsquo;s foundations against a committed snapshot of
-              those variables.
+              than hand-edit when the source changes.
             </p>
           </section>
 

@@ -50,50 +50,6 @@ function engineShape() {
   }
 }
 
-/**
- * The numbered governance rules in docs/contracts/README.md. Read, because the
- * list has grown twice in a month (6 in #128, 8 in #133) and a typed count is
- * the first thing on a page to go stale.
- */
-function countRules() {
-  const src = fs.readFileSync(
-    path.join(process.cwd(), 'docs', 'contracts', 'README.md'),
-    'utf8',
-  )
-  const block = src.split('**Rules:**')[1]?.split(/\n#{2,3} /)[0] ?? ''
-  return block.split('\n').filter((l) => /^\d+\.\s/.test(l)).length
-}
-
-/**
- * How much of the site still imports @carbon/react, as the status section's
- * measure of the migration. Icons are a separate package and not counted: the
- * migration plan is about Carbon's components and theme layer.
- */
-function countCarbonFiles() {
-  const hits: string[] = []
-  const walk = (dir: string) => {
-    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-      const p = path.join(dir, entry.name)
-      if (entry.isDirectory()) walk(p)
-      else if (/\.tsx?$/.test(entry.name)) {
-        if (/from '@carbon\/react'/.test(fs.readFileSync(p, 'utf8'))) hits.push(p)
-      }
-    }
-  }
-  for (const d of ['app', 'components']) walk(path.join(process.cwd(), d))
-  return hits.length
-}
-
-/** The framework versions as package.json pins them. */
-function readStack() {
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'),
-  ) as { dependencies: Record<string, string> }
-  const major = (dep: string) =>
-    (pkg.dependencies[dep] ?? '').replace(/^[^\d]*/, '').split('.')[0]
-  return { next: major('next'), react: major('react') }
-}
-
 function readKitFile() {
   const snap = JSON.parse(
     fs.readFileSync(
@@ -107,9 +63,6 @@ function readKitFile() {
 export default function IntroductionPage() {
   const kit = readKitStats()
   const e = engineShape()
-  const rules = countRules()
-  const carbonFiles = countCarbonFiles()
-  const stack = readStack()
   const kitUrl = readKitFile()
 
   return (
@@ -202,14 +155,6 @@ export default function IntroductionPage() {
             <table className={`${styles.table} ${styles.parts}`}>
               <tbody>
                 <tr>
-                  <th scope="row">Site</th>
-                  <td>
-                    Next.js {stack.next} on the App Router, React {stack.react},
-                    TypeScript and SCSS modules. The dev server runs under
-                    webpack, because Turbopack breaks on the project&rsquo;s Sass.
-                  </td>
-                </tr>
-                <tr>
                   <th scope="row">Engine</th>
                   <td>
                     <code>lib/color.js</code>, plain JavaScript with no
@@ -223,9 +168,7 @@ export default function IntroductionPage() {
                   <td>
                     <a href={kitUrl}>The Graphite UI Kit</a>, and it is canonical:
                     where the kit and a contract disagree, the kit wins and the
-                    contract is corrected. The committed snapshot covers{' '}
-                    {kit.pages} pages and {kit.sets} component sets, {kit.publicSets}{' '}
-                    of them public.
+                    contract is corrected.
                   </td>
                 </tr>
                 <tr>
@@ -244,28 +187,18 @@ export default function IntroductionPage() {
           <section id="governance" className={styles.block}>
             <SectionHeading
               title="How it is governed"
-              lede="Written rules, checked by machines, with the kit as the reference."
+              lede="Written contracts, checked in CI."
             />
             <div className={styles.prose}>
               <p>
-                There are {lower(rules)} governance rules. The short version: a
-                component has exactly one contract, the contract changes before
-                the code does, contracts are versioned with semver, and every
-                component set in the kit is either governed by a contract or
-                labelled as ungoverned where it lives.
-              </p>
-              <p>
-                {spell(kit.checks)} checks enforce this in CI. One holds each
-                component to the variables its contract declares, one holds the
-                foundations to the kit&rsquo;s token snapshot, and one holds the{' '}
-                {kit.docs} component docs to the kit&rsquo;s component snapshot.
-                All of them read committed snapshots, so they run offline.{' '}
-                <code>main</code> is protected: every change lands through a pull
-                request with the <code>governance</code> job green.
+                Every governed component has a written contract, and automated
+                checks hold the components and tokens to their contracts and to
+                the kit on every change. You do not need any of it to use
+                Graphite.
               </p>
             </div>
             <p className={styles.more}>
-              <a href="/docs/governance">Read the rules and how the checks work</a>
+              <a href="/docs/contribute/governance">How governance works</a>
             </p>
           </section>
 
@@ -275,8 +208,8 @@ export default function IntroductionPage() {
               lede="Where to go next, by what you came to do."
             />
             <NextCards>
-              <NextCard href="/docs/installation" title="Installation">
-                Run the project locally, and the checks a change has to pass.
+              <NextCard href="/docs/get-started" title="Get started">
+                What you can use today, and how.
               </NextCard>
               <NextCard href="/docs/quick-start" title="Quick start">
                 Pick a color, use a component, style with the variables, take
@@ -289,8 +222,9 @@ export default function IntroductionPage() {
                 What the contrast checks guarantee, and the known gaps they do
                 not cover.
               </NextCard>
-              <NextCard href="/docs/governance" title="Governance">
-                {`The ${lower(rules)} rules, the ${lower(kit.checks)} checks, and why the kit outranks the contracts.`}
+              <NextCard href="/docs/contribute/run-locally" title="Contribute">
+                Running Graphite locally, the rules and checks, and how it is
+                kept in step with the kit.
               </NextCard>
               <NextCard href="/docs/foundations/color" title="Foundations">
                 Color, typography, spacing, radius, layout and the full token
@@ -300,8 +234,8 @@ export default function IntroductionPage() {
                 {`All ${lower(kit.governed)} governed components, each with its contract version beside it.`}
               </NextCard>
               <NextCard href="/create" title="Create">
-                Build a theme against a live preview, then take it away as CSS or
-                JSON.
+                Build a theme against a live preview, then take it away as one
+                CSS file.
               </NextCard>
               <NextCard href="/docs/foundations/tokens" title="Tokens">
                 Every variable the system defines, generated and static.
@@ -319,22 +253,10 @@ export default function IntroductionPage() {
                 <tr>
                   <th scope="row">Distribution</th>
                   <td>
-                    There is no npm package and no registry command. Using
-                    Graphite means working in this repository, or taking the
-                    generated theme out of <a href="/create">Create</a> as CSS
-                    or JSON.
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Carbon</th>
-                  <td>
-                    The site began on IBM&rsquo;s Carbon and is moving off it.
-                    The docs shell, the component pages and Create are built,
-                    but {carbonFiles} files still import{' '}
-                    <code>@carbon/react</code>: the header&rsquo;s source picker,
-                    the home page sections, and the theme provider itself. The
-                    engine still emits <code>--cds-*</code> variables alongside{' '}
-                    <code>--graphite-*</code> so those parts follow the theme.
+                    No package to install yet. The theme and the Figma kit are
+                    usable today; components are copied by hand.{' '}
+                    <a href="/docs/get-started">Get started</a> has the
+                    details.
                   </td>
                 </tr>
                 <tr>
@@ -345,14 +267,6 @@ export default function IntroductionPage() {
                 </tr>
               </tbody>
             </table>
-            <Callout tone="warning" title="De-Carboning is the next step, not a finished one.">
-              <>
-              The migration plan puts replacing Carbon&rsquo;s header and side
-              navigation first. Until that lands, the <code>--cds-*</code>{' '}
-              binding table in the theme provider is hand-listed and can drift,
-              which is why components read <code>--graphite-*</code> only.
-              </>
-            </Callout>
           </section>
         </article>
       </DocsShell>

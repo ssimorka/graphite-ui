@@ -9,17 +9,17 @@ import type { Crumb } from '@/components/ui/breadcrumb'
 
 export const DOCS_NAV: DocsNavGroup[] = [
   {
-    label: 'Getting started',
+    // Everything an adopter needs, and nothing about how Graphite is
+    // maintained. That lives under Contribute, at the end of the sidebar.
+    label: 'Use',
     items: [
       { href: '/docs/get-started', label: 'Get started' },
       { href: '/docs', label: 'Introduction' },
-      { href: '/docs/installation', label: 'Installation' },
       { href: '/docs/quick-start', label: 'Quick start' },
       // The color essay: how a source becomes ramps and roles. The kit's
       // Installation next-steps card calls it Theming.
       { href: '/docs/theming', label: 'Theming' },
       { href: '/docs/accessibility', label: 'Accessibility' },
-      { href: '/docs/governance', label: 'Governance' },
       { href: '/docs/glossary', label: 'Glossary' },
     ],
   },
@@ -82,6 +82,17 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/typography', label: 'Typography' },
     ],
   },
+  {
+    // How Graphite is built and kept honest: running it, the rules, the
+    // snapshots and the Carbon migration. Not needed to use it.
+    label: 'Contribute',
+    items: [
+      { href: '/docs/contribute/run-locally', label: 'Run Graphite locally' },
+      { href: '/docs/contribute/governance', label: 'Governance' },
+      { href: '/docs/contribute/drift', label: 'Snapshots and drift' },
+      { href: '/docs/contribute/carbon', label: 'Carbon migration' },
+    ],
+  },
 ]
 
 /**
@@ -103,14 +114,15 @@ export function docsCrumbs(href: string): [Crumb, ...Crumb[]] {
   ]
 }
 
-// The Installation and Color ramps pages' contents. Here rather than in the
+// The Run Graphite locally and Color ramps pages' contents. Here rather than in the
 // page files because a page may only export what Next allows, and the search
 // index reads every page's sections from this one place.
-export const INSTALLATION_TOC: TocItem[] = [
+export const RUN_LOCALLY_TOC: TocItem[] = [
   { href: '#requirements', label: 'Requirements' },
   { href: '#create', label: 'Create the project' },
   { href: '#run-it', label: 'Run it' },
   { href: '#webpack', label: 'Why webpack' },
+  { href: '#in-the-repo', label: 'Working in the repo' },
   { href: '#checks', label: 'Checks' },
   { href: '#next-steps', label: 'Next steps' },
 ]
@@ -121,5 +133,4 @@ export const COLOR_RAMPS_TOC: TocItem[] = [
   { href: '#neutral', label: 'Neutral' },
   { href: '#neutral-variant', label: 'Neutral variant' },
   { href: '#sampling', label: 'How stops are sampled' },
-  { href: '#divergence', label: 'Known divergence' },
 ]

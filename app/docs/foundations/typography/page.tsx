@@ -69,7 +69,6 @@ export default function TypographyPage() {
   const componentStepsRead = componentSteps.filter((s) =>
     t.components.some((c) => c.steps.includes(s)),
   )
-  const countMatches = t.contract.variableCount === t.variableCount
 
   return (
     <main id="main-content" className="page-main">
@@ -82,8 +81,7 @@ export default function TypographyPage() {
               {t.steps.length} steps · {t.variableCount} variables
             </p>
             <p className={styles.footnoteBody}>
-              Read from app/globals.scss when the page is built, and checked
-              against the kit snapshot by token-drift.
+              Read from the stylesheet when the page is built.
             </p>
           </div>
         }
@@ -305,16 +303,7 @@ export default function TypographyPage() {
               ]}
             </Callout>
             <p className={styles.note}>
-              The site&rsquo;s own chrome applies the scale through a{' '}
-              <code>text()</code> mixin in <code>app/globals.scss</code>, used{' '}
-              {t.mixinUses} times across {lower(t.mixinSteps.length)} steps.{' '}
-              {t.carbonStyles} Carbon type styles are still applied directly,
-              either because they are fluid (Carbon interpolates continuously
-              across the viewport, which two modes cannot reproduce) or because
-              they sit at a size the kit has no step for.{' '}
-              <code>token-drift</code> reports that count on every run so the
-              exception stays visible. Letter-spacing has no token: the kit does
-              not model it.
+              Letter-spacing has no token: the kit does not model it.
             </p>
           </section>
 
@@ -324,10 +313,7 @@ export default function TypographyPage() {
               lede={
                 <>
                   From the typography foundation contract, version{' '}
-                  {t.contract.version}. Its variable count
-                  {countMatches
-                    ? `, ${t.contract.variableCount}, matches the stylesheet, and token-drift fails the build if the two part.`
-                    : ` says ${t.contract.variableCount} but the stylesheet declares ${t.variableCount}; token-drift will fail until they agree.`}
+                  {t.contract.version}.
                 </>
               }
             />

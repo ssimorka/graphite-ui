@@ -63,7 +63,7 @@ function useScrollSpy(items: TocItem[]) {
     // At the foot of the page the last section can be physically unable to
     // reach the band — there is no scroll left to give it — so first-wins
     // would strand the highlight one item short of the end. Measured: on
-    // /docs/installation the page bottoms out with #checks still 220px below
+    // /docs/contribute/run-locally the page bottoms out with #checks still 220px below
     // the band. Within a pixel of the bottom, last-wins instead.
     const atBottom = () =>
       Math.ceil(window.scrollY + window.innerHeight) >=

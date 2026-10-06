@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 import { COMPONENT_DOCS } from '@/components/component-doc/registry'
 import { componentToc } from '@/components/component-doc/component-doc-page'
 import type { ComponentDocConfig } from '@/components/component-doc/types'
-import { COLOR_RAMPS_TOC, INSTALLATION_TOC } from '@/components/docs-nav'
+import { COLOR_RAMPS_TOC, RUN_LOCALLY_TOC } from '@/components/docs-nav'
 import { readContractDoc } from '@/lib/contract-doc'
 import { metadata as themingMeta } from '@/app/docs/theming/page'
 import { TOC as themingToc } from '@/app/docs/theming/toc'
-import { metadata as installMeta } from '@/app/docs/installation/page'
+import { metadata as installMeta } from '@/app/docs/contribute/run-locally/page'
 import { metadata as rampsMeta } from '@/app/docs/foundations/color/page'
 import { metadata as createMeta } from '@/app/create/page'
 import { metadata as galleryMeta } from '@/app/gallery/page'
@@ -17,10 +17,14 @@ import { metadata as quickStartMeta } from '@/app/docs/quick-start/page'
 import { TOC as quickStartToc } from '@/app/docs/quick-start/toc'
 import { metadata as a11yMeta } from '@/app/docs/accessibility/page'
 import { TOC as a11yToc } from '@/app/docs/accessibility/toc'
-import { metadata as governanceMeta } from '@/app/docs/governance/page'
-import { TOC as governanceToc } from '@/app/docs/governance/toc'
+import { metadata as governanceMeta } from '@/app/docs/contribute/governance/page'
+import { TOC as governanceToc } from '@/app/docs/contribute/governance/toc'
 import { metadata as glossaryMeta } from '@/app/docs/glossary/page'
 import { metadata as getStartedMeta } from '@/app/docs/get-started/page'
+import { metadata as driftMeta } from '@/app/docs/contribute/drift/page'
+import { TOC as driftToc } from '@/app/docs/contribute/drift/toc'
+import { metadata as carbonMeta } from '@/app/docs/contribute/carbon/page'
+import { TOC as carbonToc } from '@/app/docs/contribute/carbon/toc'
 import { TOC as getStartedToc } from '@/app/docs/get-started/toc'
 import { TOC as glossaryToc } from '@/app/docs/glossary/toc'
 import { metadata as typeMeta } from '@/app/docs/foundations/typography/page'
@@ -144,13 +148,15 @@ function componentPage(c: ComponentDocConfig): SearchEntry[] {
 export function buildSearchIndex(): SearchEntry[] {
   return [
     ...docsPage('/docs', introMeta, introToc, 'Docs', 'Introduction'),
-    ...docsPage('/docs/installation', installMeta, INSTALLATION_TOC),
+    ...docsPage('/docs/contribute/run-locally', installMeta, RUN_LOCALLY_TOC),
     ...docsPage('/docs/quick-start', quickStartMeta, quickStartToc),
     ...docsPage('/docs/theming', themingMeta, themingToc),
     ...docsPage('/docs/accessibility', a11yMeta, a11yToc),
-    ...docsPage('/docs/governance', governanceMeta, governanceToc),
+    ...docsPage('/docs/contribute/governance', governanceMeta, governanceToc),
     ...docsPage('/docs/glossary', glossaryMeta, glossaryToc),
     ...docsPage('/docs/get-started', getStartedMeta, getStartedToc),
+    ...docsPage('/docs/contribute/drift', driftMeta, driftToc),
+    ...docsPage('/docs/contribute/carbon', carbonMeta, carbonToc),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),
     ...docsPage('/docs/foundations/typography', typeMeta, typeToc),
     ...docsPage('/docs/foundations/spacing', spacingMeta, spacingToc),

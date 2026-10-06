@@ -148,7 +148,7 @@ export default function GovernancePage() {
       >
         <article className={styles.page}>
           <header className={styles.header}>
-            <Breadcrumb items={docsCrumbs('/docs/governance')} />
+            <Breadcrumb items={docsCrumbs('/docs/contribute/governance')} />
             <h1 className={styles.title}>Governance</h1>
             <p className={styles.lede}>
               Graphite exists three times: as a Figma kit, as a written contract
@@ -591,7 +591,7 @@ export default function GovernancePage() {
               <NextCard href="/gallery" title="Components">
                 {`${spell(stats.governed)} governed components, each page generated from its contract.`}
               </NextCard>
-              <NextCard href="/docs/installation#checks" title="Installation">
+              <NextCard href="/docs/contribute/run-locally#checks" title="Run Graphite locally">
                 Running the checks locally before you open a pull request.
               </NextCard>
             </NextCards>
