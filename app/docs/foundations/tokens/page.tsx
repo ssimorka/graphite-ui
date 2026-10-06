@@ -310,9 +310,9 @@ export default function TokensPage() {
               }
             />
             <ExportExcerpt />
-            <Callout title="Get the code adds your builder choices.">
+            <Callout title="Get the code is a whole theme, not only colors.">
               {[
-                'After the colors comes a second block: the radius and the three font families chosen in Create, written as --graphite-* overrides with full fallback stacks.',
+                'Above these color blocks it writes the foundations (space, density, radius, breakpoints, motion and type, read from the same stylesheet the site uses), with any radius, density or typeface chosen in Create written in place. The file needs no Graphite runtime, so it is the theme a project keeps.',
               ]}
             </Callout>
           </section>

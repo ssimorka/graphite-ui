@@ -70,7 +70,7 @@ Designers do not usually touch this layer, but it explains an important constrai
 
 The system exports in two formats:
 
-- **CSS**: custom properties prefixed `--graphite-`, in kebab-case (`--graphite-on-surface-variant`), scoped to `:root, [data-theme="light"]` and `[data-theme="dark"]`. These are the same names the theme provider stamps and the components read, built by the same function, so the file needs no renaming.
+- **CSS**: one theme file to keep in a project, with no Graphite runtime. Foundations (space, density, radius, breakpoints, motion, type) come first, read from `app/globals.scss`, with Create's radius, density and typeface choices written in place. Then the colors, as custom properties prefixed `--graphite-`, in kebab-case (`--graphite-on-surface-variant`): light under `:root, [data-theme="light"]`, dark under `[data-theme="dark"]`, and dark again under `@media (prefers-color-scheme: dark)` for a page that sets no `data-theme`. These are the same names the theme provider stamps and the components read, built by the same function (`buildGraphiteVars`), so the file needs no renaming. Built by `buildThemeFile` in `lib/theme-file.ts`.
 - **JSON**: `source`, `primitives` (all four ramps with every stop), and `semantic` (both themes, with tokens, contrast results, and states). Every entry carries the ramp and tone it came from.
 
 The provenance in the JSON is worth knowing about. Every token is auditable back to a ramp and a tone, so "why is this color this color" always has an answer.
