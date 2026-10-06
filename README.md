@@ -70,6 +70,7 @@ scripts. Leave it there.
 | `pnpm component-doc-drift` | Kit component sets against `docs/components/` |
 | `pnpm component-doc-drift:test` | Self-test for the component doc checker |
 | `pnpm naming-check` | Fails on any variable prefix but `--graphite-` |
+| `pnpm registry-check` | Builds every registry item and resolves its dependencies |
 | `pnpm figma-snapshot` | Regenerate `docs/tokens/figma-snapshot.json` |
 | `pnpm component-snapshot` | Regenerate `docs/tokens/figma-components.json` |
 
@@ -120,7 +121,7 @@ renders. If you are writing code, start with the contract.
 
 [.github/workflows/checks.yml](.github/workflows/checks.yml) runs on every pull
 request and every push to `main`: typecheck, drift check, token drift, the
-component doc check, both self-tests, and the naming check. Each step runs even if an earlier one failed, because a
+component doc check, both self-tests, the naming check, and the registry check. Each step runs even if an earlier one failed, because a
 contract change typically trips more than one. It deliberately does not run
 `next build`, since the Vercel deployment already does that on every PR.
 
