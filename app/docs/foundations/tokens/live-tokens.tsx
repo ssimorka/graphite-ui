@@ -256,7 +256,9 @@ export function ExportExcerpt() {
     }
     const css = buildCss(bundle)
     const lines = css.split('\n')
-    const selectors = lines.filter((l) => l.endsWith('{')).map((l) => l.slice(0, -1).trim())
+    const selectors = lines
+      .filter((l) => l.endsWith('{') && !l.startsWith('@media'))
+      .map((l) => l.slice(0, -1).trim())
     const firstBlock = lines.slice(0, lines.indexOf('}') + 1)
     const isDecl = (l: string) => l.trim().startsWith('--graphite-')
     // The primary family in full: the role, then its states.
@@ -282,17 +284,20 @@ export function ExportExcerpt() {
     <>
       <DocSnippet code={out.excerpt} />
       <p className={styles.note}>
-        The CSS has {out.selectors.length} blocks (
+        The colors come in {out.selectors.length} blocks (
         {out.selectors.map((s, i) => (
           <span key={s}>
-            {i ? ' and ' : ''}
+            {i ? (i === out.selectors.length - 1 ? ' and ' : ', ') : ''}
             <code>{s}</code>
           </span>
         ))}
         ), {out.perBlock} declarations each: every role, state, ladder step and
         the scrim, under the same <code>--graphite-*</code> names the
-        components read. The JSON carries the same values, with the ramp and
-        tone each one came from, under{' '}
+        components read. The middle block sits inside{' '}
+        <code>@media (prefers-color-scheme: dark)</code>, so a page that sets
+        no <code>data-theme</code> follows the visitor&rsquo;s OS. The JSON
+        carries the same values, with the ramp and tone each one came from,
+        under{' '}
         {out.jsonKeys.map((k, i) => (
           <span key={k}>
             {i ? (i === out.jsonKeys.length - 1 ? ' and ' : ', ') : ''}

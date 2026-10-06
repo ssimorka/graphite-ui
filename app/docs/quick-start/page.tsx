@@ -122,6 +122,18 @@ function themeApi() {
   }))
 }
 
+// How a project uses the downloaded theme file, in a Next.js root layout.
+const THEME_FILE_USAGE = `// app/layout.tsx
+import './graphite-theme.css'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" data-theme="light">
+      <body>{children}</body>
+    </html>
+  )
+}`
+
 const API_NOTES: Record<string, string> = {
   theme: 'The active theme. The same two names the exported theme file uses for data-theme.',
   toggleTheme: 'Flips between the two. This is what the header’s theme button calls.',
@@ -337,17 +349,30 @@ export default function QuickStartPage() {
             <Step n={6} title="Open Get the code in Create">
               <p className={styles.stepText}>
                 In <a href="/create">Create</a>, Get the code opens the theme as
-                CSS or JSON, with a Download button. The CSS carries both themes,
-                light under <code>:root</code> and{' '}
+                CSS or JSON, with a Download button. The CSS is the whole theme
+                in one file: the foundations (space, radius, motion, type), then
+                the colors, light under <code>:root</code> and{' '}
                 <code>[data-theme=&quot;light&quot;]</code>, dark under{' '}
-                <code>[data-theme=&quot;dark&quot;]</code>, under the same{' '}
-                <code>--graphite-*</code> names the components read. A second
-                block adds the radius and three typefaces chosen in Create. The
+                <code>[data-theme=&quot;dark&quot;]</code>, all under the same{' '}
+                <code>--graphite-*</code> names the components read. Any radius,
+                density or typeface chosen in Create is written into it. The
                 JSON holds the source, the four source ramps and both
                 themes&rsquo; tokens, with the ramp and tone each came from,
                 contrast results and states.
               </p>
               <DocSnippet code={cssHead} />
+            </Step>
+            <Step n={7} title="Keep the file in your project">
+              <p className={styles.stepText}>
+                The downloaded <code>graphite-theme.css</code> needs no Graphite
+                runtime: it is plain CSS with your source color fixed in it.
+                Import it once, globally, and set <code>data-theme</code> on{' '}
+                <code>&lt;html&gt;</code> to pick a theme. Leave it unset and the
+                page follows the visitor&rsquo;s OS setting. To change the
+                source later, make a new file in Create rather than editing the
+                values: they are all derived from the one color.
+              </p>
+              <DocSnippet code={THEME_FILE_USAGE} />
             </Step>
           </section>
 

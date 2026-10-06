@@ -1,9 +1,11 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { buildCss, buildJson } from '@/lib/color.js'
+import { createContext, useContext, useMemo, useState } from 'react'
+import { buildJson } from '@/lib/color.js'
 import type { ExportBundle } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
+import { buildThemeFile } from '@/lib/theme-file'
+import type { ThemeFileFoundations } from '@/lib/theme-file'
 import { Modal } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
 import { DocSnippet } from '@/components/doc-snippet'
@@ -17,13 +19,20 @@ import {
 import styles from './get-code.module.scss'
 
 /**
+ * The foundation tokens, read from app/globals.scss by the Create page on the
+ * server. Provided rather than imported because reading the repo is server
+ * work and this dialog is a client component.
+ */
+export const FoundationsContext = createContext<ThemeFileFoundations | null>(null)
+
+/**
  * "Get the code": the theme as it stands, in two forms, and a download.
  *
- * The colour output is the engine's own exporter (`buildCss` and `buildJson`),
- * so what you take is exactly what the site resolves, under the same
- * `--graphite-*` names the provider stamps and the components read; the
- * builder's own choices (radius and the three typefaces) follow as a second
- * block, so the CSS is a complete answer to what the preview shows.
+ * The CSS is the theme file (lib/theme-file.ts): foundations and both themes'
+ * colors, under the same `--graphite-*` names the provider stamps and the
+ * components read, with the builder's choices (radius, density and the three
+ * typefaces) written into the foundations. It needs no Graphite runtime, so an
+ * adopter keeps it as their theme. The JSON is the engine's audit format.
  */
 export function GetCodeDialog({
   open,
@@ -32,12 +41,13 @@ export function GetCodeDialog({
   open: boolean
   onClose: () => void
 }) {
-  const { sourceHex, ramps, lightBundle, darkBundle } = useTheme()
+  const { sourceHex, ramps, lightBundle, darkBundle, level } = useTheme()
+  const foundations = useContext(FoundationsContext)
   const b = useBuilder()
   const [tab, setTab] = useState<'css' | 'json'>('css')
 
   const out = useMemo(() => {
-    if (!ramps || !lightBundle || !darkBundle) return null
+    if (!ramps || !lightBundle || !darkBundle || !foundations) return null
     const bundle: ExportBundle = {
       hex: sourceHex,
       ramps,
@@ -46,27 +56,25 @@ export function GetCodeDialog({
       dark: darkBundle,
       darkStates: darkBundle.states,
     }
-    const stack = (opts: { key: string; stack: string }[], key: string) =>
-      (opts.find((o) => o.key === key) ?? opts[0]).stack
-    const radius = RADII.find((r) => r.key === b.radius)!
-    const choices = [
-      '',
-      '/* Builder choices. Graphite components take their corners from',
-      '   --graphite-radius-none, the square-corner token, so rounding them is',
-      '   one override. */',
-      ':root {',
-      `  --graphite-radius-none: ${radius.key === 'none' ? '0' : radius.key === 'full' ? '999px' : `${radius.key}px`};`,
-      `  --graphite-font-1: ${stack(HEADING_FONTS, b.headingFont)};`,
-      `  --graphite-font-2: ${stack(BODY_FONTS, b.bodyFont)};`,
-      `  --graphite-font-mono: ${stack(CODE_FONTS, b.codeFont)};`,
-      '}',
-      '',
-    ].join('\n')
+    // Only what differs from the stylesheet's own value is overridden. The
+    // radius and density choices are written as references to the scale, and
+    // a default choice would otherwise reference itself.
+    const overrides: Record<string, string> = {}
+    if (b.radius !== 'none')
+      overrides['--graphite-radius-none'] = RADII.find((r) => r.key === b.radius)!.value
+    if (b.density !== 'default')
+      overrides['--graphite-density-default'] = `var(--graphite-density-${b.density})`
+    const font = (opts: { key: string; stack: string }[], key: string, name: string) => {
+      if (key !== opts[0].key) overrides[name] = (opts.find((o) => o.key === key) ?? opts[0]).stack
+    }
+    font(HEADING_FONTS, b.headingFont, '--graphite-font-1')
+    font(BODY_FONTS, b.bodyFont, '--graphite-font-2')
+    font(CODE_FONTS, b.codeFont, '--graphite-font-mono')
     return {
-      css: `${buildCss(bundle)}${choices}`,
+      css: buildThemeFile({ bundle, level, foundations, overrides }),
       json: JSON.stringify(buildJson(bundle), null, 2),
     }
-  }, [sourceHex, ramps, lightBundle, darkBundle, b.radius, b.headingFont, b.bodyFont, b.codeFont])
+  }, [sourceHex, ramps, lightBundle, darkBundle, level, foundations, b.radius, b.density, b.headingFont, b.bodyFont, b.codeFont])
 
   const download = () => {
     if (!out) return
@@ -93,7 +101,9 @@ export function GetCodeDialog({
           <div className={styles.body}>
             <p className={styles.lede}>
               The theme as the preview shows it, for {sourceHex.toUpperCase()}.
-              CSS variables for both themes, or the same tokens as JSON.
+              The CSS is one file to keep in your project: foundations and both
+              themes, with no Graphite runtime needed. The JSON has the colors
+              with where each one came from.
             </p>
             <div className={styles.formats} role="group" aria-label="Format">
               {(['css', 'json'] as const).map((f) => (
