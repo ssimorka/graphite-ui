@@ -27,9 +27,9 @@ node `11678:251`).
 | Target | Reference | Route | Status |
 |---|---|---|---|
 | Home | `ui.shadcn.com` | `/` | Exists, Carbon-styled. Restyle. |
-| Docs | `/docs/installation` | `/docs/installation` | New. Needs the docs shell. |
-| Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | Done: one page per governed component, 35 in all, plus the Overlay pattern. |
-| UI Generator | `/create` | `/create` | New. Engine + token panels already exist. |
+| Docs | `/docs/installation` | `/docs/installation` | Done: the docs shell, Installation, Quick start, Theming, Accessibility, Governance, Glossary and the foundation pages. |
+| Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | Done: one page per governed component, 36 in all, plus the Overlay pattern. |
+| UI Generator | `/create` | `/create` | Done: the builder, with Get the code exporting the theme file, the Tailwind bridge and JSON. |
 
 ## What `/create` actually is
 
@@ -41,8 +41,8 @@ a Get Code button.
 
 Graphite's version should be stronger than the original. shadcn picks from a
 fixed set of base colors; Graphite derives a whole theme from any source
-color. The parts exist already: `theme-provider.tsx` (sourceHex, theme, level,
-autoFix), `color-picker.tsx`, and `token-panels.tsx` (ramp rows, semantic table,
+color. The parts exist already: `theme-provider.tsx` (sourceHex, theme, level),
+`color-picker.tsx`, and `token-panels.tsx` (ramp rows, semantic table,
 states matrix, copy-to-clipboard, toast). The Radius control maps directly onto
 the kit's radius tokens (None / 2 / 4 / 6 / 8 / 16 / 20 / full). Icon Library
 has its counterpart too, though not a library picker: the Icons control
@@ -52,7 +52,8 @@ kit already ships them.
 ## Shared foundation — build once, all four use it
 
 1. **App shell.** Top nav (Home / Docs / Components / Create), search, theme
-   toggle. Replaces Carbon's `Header` + `SideNav` in `components/site-header.tsx`.
+   toggle. Done: `components/site-header.tsx` renders the governed Navigation
+   Menu and Tree view in place of Carbon's `Header` + `SideNav`.
 2. **Docs shell.** Left sidebar plus right table of contents. Serves the docs
    page and every component page, so it is the single biggest piece.
 3. **Source extraction.** Preview/code tabs need each example's real source
@@ -76,35 +77,36 @@ kit already ships them.
 
 - The existing `/docs` (color essay, pattern guide, glossary) becomes a docs
   section rather than the whole route. It maps onto shadcn's Theming page.
-- `/gallery` is superseded by `/docs/components`.
+- `/gallery` is to be superseded by a `/docs/components` index. Not done:
+  `app/docs/components/` holds only the `[slug]` pages, and `/gallery` is
+  still the index.
 - **New components cost more than they look.** Governance is contract ->
   implementation -> drift-check -> Figma wave, so each new component is three
-  pieces of work, not one. None of Accordion, Sidebar, Command, Scroll area,
-  Skeleton, Collapsible or Sheet has a contract today. Keep the bill to one:
+  pieces of work, not one. When this was written, none of Accordion, Sidebar,
+  Command, Scroll area, Skeleton, Collapsible or Sheet had a contract. Keep the bill to one:
   Sidebar lives outside `components/ui/` as site chrome rather than a system
   component; mobile nav is a site-chrome tray instead of Sheet; overflow stays native
   instead of Scroll area; Accordion covers Collapsible; there is no async
-  content to Skeleton. That leaves **Accordion** as the only new contract, and
-  it is needed anyway because `faq.tsx` is on Carbon's today. Command palette
-  is deferred with search.
+  content to Skeleton. That left **Accordion** as the only new contract, needed
+  anyway because `faq.tsx` used Carbon's. Done: `accordion.md` is governed and
+  `faq.tsx` renders it. Command palette is deferred with search.
 - **Font is settled by rule 7.** The kit's 65 typography variables specify IBM
   Plex, so IBM Plex it is. This previously read as an open question between the
   kit and shadcn's Inter/Geist; with the kit canonical there is no question to
   answer.
-- Removing Carbon collapses `--cds-*` (59 vars, 78 `var(--cds-*)` references
-  in `globals.scss` and 81 across `app/` and `components/`, counted
-  2026-10-02) into the single `--graphite-*` namespace, deleting the
+- Removing Carbon collapses `--cds-*` (59 vars, 76 `var(--cds-*)` references
+  in `globals.scss` and 79 across `app/` and `components/`, counted
+  2026-10-06) into the single `--graphite-*` namespace, deleting the
   hand-listed binding table CLAUDE.md flags as driftable. Simplification, not
   just a reskin.
-- **De-Carbon must not be done before fixing `token-drift`.**
-  `scripts/token-drift.mjs` reads
-  `node_modules/.pnpm/@carbon+grid@11.56.0/.../_config.scss` at a hardcoded
-  path. A miss now fails the check rather than warning (half of this item is
-  done), so dropping `@carbon/react` would turn CI red rather than silently
-  skip the breakpoint check. The other half is still open: inline the grid
-  values into the snapshot, so the check no longer depends on Carbon's
-  install layout (it already fails on an npm install, which has no `.pnpm`
-  directory), before removing Carbon.
+- **`token-drift` is ready for de-Carboning (done 2026-10-05, #317).** It finds
+  `@carbon/grid`'s `_config.scss` by module resolution through `@carbon/react`
+  -> `@carbon/styles` rather than a hardcoded `.pnpm` path, so it works on any
+  install layout, and a miss fails rather than warns. Removing `@carbon/react`
+  therefore turns CI red while any `breakpoint.breakpoint()` call remains, and
+  the check stands down on its own once the last one is gone. The theme
+  provider no longer imports Carbon either (#317); the site's Carbon layer is
+  `components/carbon-compat.tsx`.
 - The keep/drop call on the kit's 132 Carbon component sets (73 public; see
   `docs/contracts/kit/figma-only.md`) is already
   tracked on the Figma side, and #240 settled it: the G1, G2 and carried sets
@@ -115,6 +117,6 @@ kit already ships them.
   workstream that writes to the kit. The two run in parallel, and while the
   Figma chain is blocked on a manual library publish, the site work here is
   the unblocked half.
-- `/docs/components` supersedes `/gallery`, which is currently the surface that
-  shows each contract's version next to its implementation. Carry that display
-  across; it is a governance affordance, not decoration.
+- When a `/docs/components` index replaces `/gallery`, which is currently the
+  surface that shows each contract's version next to its implementation, carry
+  that display across; it is a governance affordance, not decoration.

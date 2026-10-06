@@ -59,8 +59,9 @@ before trusting a browser result.
   green" chrome that read as a foreign color. Status hue is pinned per
   status (so red still reads as danger whatever the source is) while
   chroma tracks the source, clamped 0.10–0.20. Chrome that should
-  track the source but carries no status meaning still belongs on
-  `--cds-interactive` / `--cds-button-primary`.
+  track the source but carries no status meaning belongs on
+  `--graphite-primary` (or the button's own state roles), never on a status
+  role; governed code reads only `--graphite-*`.
 - **The secondary ramp is verified against the kit, including its one
   mismatch.** `secondary` is source-derived (hue − 120°, chroma × 0.585)
   and reproduces `Graphite Primitives/secondary/*` from
@@ -82,8 +83,9 @@ before trusting a browser result.
   is unchanged and only the chroma moves. The consequence is that
   neutralVariant no longer appears in the composition palette at all — it is
   still the fourth ramp in the ramp stack and still drives `outline`, so
-  that absence is intended, not an omission to repair. The ratio bar in
-  `pattern-guide.tsx` reads the `secondary` / `onSecondary` roles to match.
+  that absence is intended, not an omission to repair. The ratio bar
+  (`RatioBar` in `app/docs/theming/live.tsx`) reads the `secondary` /
+  `onSecondary` roles to match.
 - **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
   Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
   disagree, the kit wins and the *contract* is corrected. Contracts are still
@@ -139,9 +141,10 @@ before trusting a browser result.
   shells, which leaves the kit *silent* on `navigation-menu.md` rather than
   disagreeing with it, and rule 7's tie-break (#141) then says the code keeps
   its own. It is kept rather than removed because it passes rule 6's demand
-  test where Separator, Avatar and Card failed it: `site-header.tsx` still
-  renders Carbon's `Header` / `HeaderNavigation` / `SideNav`, and step 1 of
-  `docs/SHADCN-MIGRATION.md` is de-Carboning exactly that. Contract went to
+  test where Separator, Avatar and Card failed it: `site-header.tsx` renders
+  it (the header's flat links), having replaced Carbon's `Header` /
+  `HeaderNavigation` / `SideNav` with it and Tree view, which was step 1 of
+  `docs/SHADCN-MIGRATION.md`. Contract went to
   2.0.0 for the added "not an application shell" prohibition; the only code
   change is the version docblock, which `drift-check` verifies against the
   contract. Don't re-open this as deferred work.
@@ -180,7 +183,8 @@ before trusting a browser result.
   is not self-contained; and `_Structured list header row item` exists **twice**
   as two distinct sets, which defeats the name-based lookup the gallery badge
   and #134/#136 failures depend on.
-- **There are three governance checks now, not two.**
+- **There are four governance checks now.** `naming-check.mjs` (below, in
+  Architecture notes) joined the three described here on 2026-10-05.
   `component-doc-drift.mjs` joins `drift-check.mjs` (components vs contracts)
   and `token-drift.mjs` (foundations vs token snapshot). It checks
   `docs/components/*.md` against `docs/tokens/figma-components.json` — 45 pages,
@@ -280,7 +284,9 @@ a trace, which is what "no bypass" is meant to cost.
   `--graphite-*` (32 token roles, 6 states each for the `primary`,
   `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`,
   `--graphite-scrim`, and the six ladder variables from `LADDERS`:
-  `elevation-00`–`03`, `outline-subtle`, `outline-strong`) and 59 `--cds-*`.
+  `elevation-00`–`03`, `outline-subtle`, `outline-strong`) and, on this site
+  only, 59 `--cds-*` supplied through the provider's `extend` option by
+  `components/carbon-compat.tsx`.
   The ladders are not roles (the kit files them beside its 32), so "thirty-two
   roles" in the site copy stays true; drift-check binds `outline-*` to the
   `outline` role and `elevation-*` to a declarable `elevation`. Counts verified

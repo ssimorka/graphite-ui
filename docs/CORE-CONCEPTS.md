@@ -7,7 +7,7 @@ The ideas and architecture behind this project, for anyone extending it beyond t
 - **Next.js 16 (App Router)**: file-based routing under `app/`, React Server Components by default, client interactivity opted into per file with `'use client'`.
 - **React 19**, **TypeScript** throughout, **Sass (SCSS)** with CSS Modules for component and page styles.
 - **The color engine** (`lib/color.js`, typed by `lib/color.d.ts`): one source hex becomes perceptual ramps in OKLab, semantic roles for light and dark, interaction states, and measured contrast pairings.
-- **Governed components** (`components/ui/`): 35 components and the shared Overlay hook, each implementing a versioned contract in `docs/contracts/`.
+- **Governed components** (`components/ui/`): 36 components and the shared Overlay hook, each implementing a versioned contract in `docs/contracts/`.
 - **Carbon Design System** (`@carbon/react`, `@carbon/icons-react`): still present, but no longer the component layer. It supplies the Sass reset and IBM Plex font faces, the grid on the home page, a few pieces of site chrome, and the chrome's icons. The governed components and the Create preview draw the kit's own icons instead: Regular, Bold and Solid, exported from the Figma kit into `lib/kit-icons.ts` (a few the kit draws on the Regular page only, such as the calendar, the eye and the small plus and minus, are borrowed by the other two) and rendered by `components/kit-icon.tsx`. Removing it is a tracked migration; see [SHADCN-MIGRATION.md](SHADCN-MIGRATION.md). The Introduction page (`/docs`) counts the files that still import `@carbon/react`.
 
 There is no database, API layer or auth. Every route is prerendered at build time.
@@ -16,7 +16,7 @@ There is no database, API layer or auth. Every route is prerendered at build tim
 
 ```
 app/
-  layout.tsx             root HTML shell, metadata, ThemeProvider, SiteHeader
+  layout.tsx             root HTML shell, metadata, SiteTheme (the provider as configured), SiteHeader
   page.tsx               the home page
   docs/                  Getting started and Foundations pages
     components/[slug]/   every component page, from one template
@@ -57,9 +57,9 @@ pulls in Carbon's entire style layer in one shot — reset, IBM Plex font-face d
 
 Two layers make a theme, and only one of them is Carbon's.
 
-1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`light` or `dark`, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
+1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`light` or `dark`; the provider defaults to light, the site starts dark) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders). On this site it also writes 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read, supplied by the Carbon layer below. Governed components read only `--graphite-*`. For one frame during a rewrite the provider sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 
-2. **Carbon's theme zones.** The provider sets `data-theme="light"` or `"dark"` on `<html>`, the same names the exported theme file uses, and imports nothing from Carbon. The site's Carbon layer lives in `components/carbon-compat.tsx` and plugs in through the provider's `extend` option (wired up in `components/site-theme.tsx`): it supplies the `--cds-*` table and the `cds--white` / `cds--g100` zone class that `globals.scss`'s Carbon zones key on, and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
+2. **Carbon's theme zones.** The provider sets `data-theme="light"` or `"dark"` on `<html>`, the same names the exported theme file uses, and imports nothing from Carbon. The site's Carbon layer lives in `components/carbon-compat.tsx` and plugs in through the provider's `extend` option (wired up in `components/site-theme.tsx`): it supplies the `--cds-*` table and the `cds--white` / `cds--g100` zone class that `globals.scss`'s Carbon zones key on, and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left.
 
 `app/layout.tsx` sets `className="cds--g100"` and `data-theme="dark"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density, the overlay shadow) do not vary by theme and are declared once in `globals.scss`.
 

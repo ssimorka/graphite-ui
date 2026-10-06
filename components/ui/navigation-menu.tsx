@@ -20,7 +20,7 @@ export type NavItem = {
 }
 
 /**
- * Contract: docs/contracts/navigation-menu.md (2.0.0)
+ * Contract: docs/contracts/navigation-menu.md (2.0.1)
  *
  * A list of links, and only that. The kit's counterpart is Carbon's six UI
  * shell sets, which rule 6 places out of scope as application shells, so the
