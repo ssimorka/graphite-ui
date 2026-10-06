@@ -176,8 +176,8 @@ function renderCard(c: CardEntry) {
 }
 
 /**
- * The preview: two tabs over the same theme. Components is the examples; Patterns
- * is the generative composition built from the same source. Both read the
+ * The preview: two tabs over the same theme. Components is the examples;
+ * Generative Art is the composition built from the same source. Both read the
  * site's own provider, so the source, theme and contrast target repaint them
  * without any prop.
  */
@@ -187,7 +187,7 @@ export function Preview() {
       <Tabs
         tabs={[
           { id: 'components', label: 'Components', panel: <Samples /> },
-          { id: 'patterns', label: 'Patterns', panel: <Patterns /> },
+          { id: 'generative-art', label: 'Generative Art', panel: <GenerativeArtPanel /> },
         ]}
       />
     </section>
@@ -195,7 +195,7 @@ export function Preview() {
 }
 
 /**
- * The pattern generator: the 60/30/10 composition (see buildPalette in
+ * The generative art panel: the 60/30/10 composition (see buildPalette in
  * generative-art.tsx), redrawn from the source on every change. Selecting a
  * panel reshuffles just that panel; Regenerate deals a new layout.
  *
@@ -203,18 +203,20 @@ export function Preview() {
  * still is the Pattern composition set: one deal of the kit's Pattern Tiles
  * per preview width.
  */
-function Patterns() {
+function GenerativeArtPanel() {
   const [art, setArt] = useState<GenerativeArtHandle | null>(null)
   return (
     <div className={styles.tabPanel}>
-      <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Pattern">
+      <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Generative art">
         <Button size="sm" onClick={() => art?.regenerate()} disabled={!art}>
           Regenerate
         </Button>
         <Button size="sm" variant="ghost" onClick={() => art?.exportPng()} disabled={!art}>
           Export PNG
         </Button>
-        <p className={styles.hint}>Select a panel to reshuffle it.</p>
+        <p className={styles.hint}>
+          Select a panel to reshuffle it. <a href="/create/generative-art">How it works</a>
+        </p>
       </div>
       <div className={styles.art}>
         <GenerativeArt interactive cover={false} onReady={setArt} />

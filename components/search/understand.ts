@@ -60,6 +60,8 @@ const PHRASES: [string, string][] = [
   ['font', 'typography'],
   ['breakpoints', 'layout'],
   ['grid', 'layout'],
+  ['patterns', 'generative art'],
+  ['pattern', 'generative art'],
   ['dialog', 'modal'],
   ['dropdown', 'select'],
   ['switch', 'toggle'],

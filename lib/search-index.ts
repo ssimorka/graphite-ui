@@ -10,6 +10,7 @@ import { TOC as themingToc } from '@/app/docs/theming/toc'
 import { metadata as installMeta } from '@/app/docs/contribute/run-locally/page'
 import { metadata as rampsMeta } from '@/app/docs/foundations/color/page'
 import { metadata as createMeta } from '@/app/create/page'
+import { metadata as generativeArtMeta } from '@/app/create/generative-art/page'
 import { metadata as galleryMeta } from '@/app/gallery/page'
 import { metadata as introMeta } from '@/app/docs/page'
 import { TOC as introToc } from '@/app/docs/toc'
@@ -167,6 +168,7 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs/foundations/tokens', tokensMeta, tokensToc),
     ...docsPage('/gallery', galleryMeta, [], 'Docs'),
     ...docsPage('/create', createMeta, [], 'Tool', 'Create a theme'),
+    ...docsPage('/create/generative-art', generativeArtMeta, [], 'Tool', 'Generative Art'),
     ...Object.values(COMPONENT_DOCS).flatMap((doc) => componentPage(doc())),
   ]
 }
