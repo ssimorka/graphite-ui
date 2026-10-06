@@ -189,7 +189,7 @@ compatibility layer instead — Progress bar's fill is `Border/border-interactiv
 
 Do not follow those into component code. Contracts forbid it, and the whole
 point of `--graphite-*` is that it is the canonical surface. Translate instead,
-through the `CARBON_VAR_BINDINGS` table in `components/theme-provider.tsx`,
+through the `CARBON_VAR_BINDINGS` table in `components/carbon-compat.tsx`,
 which is what feeds those Carbon variables in the first place:
 
 | Kit binds | Fed by |

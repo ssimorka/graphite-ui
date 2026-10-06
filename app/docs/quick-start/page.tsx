@@ -53,9 +53,9 @@ const example = (file: string) =>
 const kebab = (s: string) =>
   s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-// The per-family state suffixes theme-provider.tsx writes (graphiteVarsFor).
-// Stated here because that module is 'use client' and its values do not reach
-// a server component; the families themselves come from the engine.
+// The per-family state suffixes buildGraphiteVars writes (lib/color.js).
+// Stated here rather than read from a stamped page; the families themselves
+// come from the engine.
 const STATE_SUFFIXES = [
   'hover',
   'pressed',
@@ -370,7 +370,10 @@ export default function QuickStartPage() {
                 <code>&lt;html&gt;</code> to pick a theme. Leave it unset and the
                 page follows the visitor&rsquo;s OS setting. To change the
                 source later, make a new file in Create rather than editing the
-                values: they are all derived from the one color.
+                values: they are all derived from the one color. If you also
+                use <code>ThemeProvider</code> for a theme switch, pass{' '}
+                <code>stampVars={'{false}'}</code> so it only sets{' '}
+                <code>data-theme</code> and leaves the file&rsquo;s colors alone.
               </p>
               <DocSnippet code={THEME_FILE_USAGE} />
             </Step>

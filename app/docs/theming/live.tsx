@@ -2,7 +2,8 @@
 
 import { RefTable } from '@/components/component-page'
 import { PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
-import { CARBON_VAR_COUNT, useTheme } from '@/components/theme-provider'
+import { useTheme } from '@/components/theme-provider'
+import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 import { weightLabelFor } from '@/components/token-panels'
 import { Tag } from '@/components/ui/tag'
 import { STATE_DELTAS, STATE_FAMILIES } from '@/lib/color.js'

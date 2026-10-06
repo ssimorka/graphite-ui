@@ -30,6 +30,8 @@ components/
   search/                the search dialog and its ranking
   sections/              home page sections and the site footer
   theme-provider.tsx     source color, theme and contrast level; stamps the variables
+  carbon-compat.tsx      the site's Carbon layer: --cds-* table, zone class, GlobalTheme
+  site-theme.tsx         the provider as the site configures it
 lib/                     the color engine, contract and kit readers, the kit's icon paths
 ```
 
@@ -57,7 +59,7 @@ Two layers make a theme, and only one of them is Carbon's.
 
 1. **The engine's variables** (the canonical surface). `components/theme-provider.tsx` holds the source color, the theme (`light` or `dark`, the default) and the contrast level. On every change it runs the engine and writes the result onto `<html>` as inline custom properties: 58 `--graphite-*` (32 roles, the primary, secondary and danger state families, the focus ring, the scrim, and the kit's elevation and outline ladders) and 59 `--cds-*`, a hand-listed table that maps the engine's roles onto the Carbon names the remaining Carbon pieces read. Governed components read only `--graphite-*`.
 
-2. **Carbon's theme zones.** The provider sets `data-theme="light"` or `"dark"` on `<html>`, the same names the exported theme file uses. `globals.scss` still emits Carbon's `white` and `g100` zones, and the provider still maps the theme onto the `cds--white` / `cds--g100` class on `<html>` and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
+2. **Carbon's theme zones.** The provider sets `data-theme="light"` or `"dark"` on `<html>`, the same names the exported theme file uses, and imports nothing from Carbon. The site's Carbon layer lives in `components/carbon-compat.tsx` and plugs in through the provider's `extend` option (wired up in `components/site-theme.tsx`): it supplies the `--cds-*` table and the `cds--white` / `cds--g100` zone class that `globals.scss`'s Carbon zones key on, and wraps children in Carbon's `<GlobalTheme>`, for the Carbon components that are left. For one frame during a rewrite it also sets `is-retheming`, because Carbon's 70ms background transition would otherwise strand buttons mid-change.
 
 `app/layout.tsx` sets `className="cds--g100"` and `data-theme="dark"` on `<html>` for the first paint, and `suppressHydrationWarning` because client state owns the class after hydration. The static foundations (spacing, radius, breakpoints, type, motion, density, the overlay shadow) do not vary by theme and are declared once in `globals.scss`.
 

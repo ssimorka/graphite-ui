@@ -27,6 +27,7 @@
 // issue that fixes it, not a reason to hold this check back.
 
 import fs from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 
 const ROOT = process.cwd()
@@ -410,6 +411,19 @@ function checkRadiusCategory() {
 // last breakpoint.breakpoint() call is gone there is nothing left to verify
 // and this stands down on its own, which is the honest end state rather than
 // a hardcoded node_modules path kept alive for its own sake.
+/** @carbon/grid's _config.scss as installed, or null if the chain does not resolve. */
+function carbonGridConfig() {
+  try {
+    const fromRoot = createRequire(path.join(ROOT, 'package.json'))
+    const fromReact = createRequire(fromRoot.resolve('@carbon/react/package.json'))
+    const fromStyles = createRequire(fromReact.resolve('@carbon/styles/package.json'))
+    const grid = path.dirname(fromStyles.resolve('@carbon/grid/package.json'))
+    return path.join(grid, 'scss', '_config.scss')
+  } catch {
+    return null
+  }
+}
+
 function checkCarbonBreakpoints(kitBreakpoints) {
   const uses = countMixinUses()
   if (uses === 0) return
@@ -417,13 +431,24 @@ function checkCarbonBreakpoints(kitBreakpoints) {
   // Overridable for the same reason STYLESHEET is: the self-test has to watch
   // this fail, and the only way to stage an unreadable config is to point it
   // at a path that is not there.
-  const config =
-    process.env.TOKEN_DRIFT_CARBON_GRID ||
-    'node_modules/.pnpm/@carbon+grid@11.56.0/node_modules/@carbon/grid/scss/_config.scss'
+  //
+  // Otherwise found the way Sass finds it: @carbon/react depends on
+  // @carbon/styles, which depends on @carbon/grid. Resolving down that chain
+  // follows whatever version is installed. This used to be a hardcoded
+  // node_modules/.pnpm path with the version in it, so any Carbon bump turned
+  // CI red for a reason that had nothing to do with the change.
+  const config = process.env.TOKEN_DRIFT_CARBON_GRID || carbonGridConfig()
+  if (!config) {
+    errors.push(
+      `cannot verify Carbon's breakpoint map — @carbon/grid did not resolve through ` +
+        `@carbon/react -> @carbon/styles. ${uses} breakpoint.breakpoint() media queries are unverified.`,
+    )
+    return
+  }
   const abs = path.isAbsolute(config) ? config : path.join(ROOT, config)
   if (!fs.existsSync(abs)) {
     errors.push(
-      `cannot verify Carbon's breakpoint map — ${config} not found (version bump?). ` +
+      `cannot verify Carbon's breakpoint map — ${config} not found. ` +
         `${uses} breakpoint.breakpoint() media queries are unverified.`,
     )
     return

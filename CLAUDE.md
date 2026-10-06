@@ -287,6 +287,15 @@ a trace, which is what "no bypass" is meant to cost.
   sampled from the kit cover image's dominant hue bucket — not
   arbitrary, and should stay in sync with `public/graphite/cover.jpg` if
   that image ever changes.
+- **The provider imports nothing from Carbon.** The 59 `--cds-*`, the
+  `cds--*` zone class and `GlobalTheme` live in `components/carbon-compat.tsx`
+  and plug in through the provider's `extend` option, configured in
+  `components/site-theme.tsx` (which also turns on `persist` and starts dark).
+  An adopter's provider defaults to light, no persistence, and stamps only
+  `--graphite-*`; `stampVars={false}` makes it a pure `data-theme` switcher for
+  projects that import Create's theme file. token-drift finds `@carbon/grid`
+  by module resolution through `@carbon/react` -> `@carbon/styles` and fails
+  if it cannot.
 - Token-rewrite flicker: `theme-provider.tsx` applies an `is-retheming`
   class for one frame while `--cds-*` vars are rewritten, because Carbon
   ships `transition: background 70ms` on buttons that otherwise strand

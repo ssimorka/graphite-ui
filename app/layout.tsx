@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
-import { ThemeProvider } from '@/components/theme-provider'
+import { SiteTheme } from '@/components/site-theme'
 import { SiteHeader } from '@/components/site-header'
 import { THEME_RESTORE_SCRIPT } from '@/lib/theme-storage'
 import './globals.scss'
@@ -40,10 +40,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_RESTORE_SCRIPT }} />
       </head>
       <body>
-        <ThemeProvider>
+        <SiteTheme>
           <SiteHeader />
           {children}
-        </ThemeProvider>
+        </SiteTheme>
       </body>
     </html>
   )
