@@ -94,8 +94,7 @@ export function Hero({ governed }: { governed: number }) {
             </h1>
             <p className="hero__subtitle">
               Pick a color. Graphite builds the scales, roles and both themes,
-              checking contrast as it goes. CI holds the governed components to
-              the Figma kit.
+              checking contrast as it goes.
             </p>
             <div className="hero__ctas">
               <Button variant="primary" size="lg" asChild>
