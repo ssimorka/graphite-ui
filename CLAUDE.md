@@ -351,7 +351,8 @@ a trace, which is what "no bypass" is meant to cost.
   ships `transition: background 70ms` on buttons that otherwise strand
   mid-transition when the underlying CSS var changes value.
 - `components/token-panels.tsx` holds the token display pieces (RampRow,
-  SemanticTable, StatesMatrix, copy-to-clipboard + toast).
+  weight labels, copy-to-clipboard + toast). Its semantic table and states
+  matrix had no callers and were removed in #333.
 - **One variable name, enforced.** The provider and Create's CSS export both
   build `--graphite-*` from `buildGraphiteVars` in `lib/color.js`, so the file
   an adopter downloads names exactly what components read. The export used to
