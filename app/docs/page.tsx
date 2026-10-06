@@ -73,7 +73,7 @@ export default function IntroductionPage() {
         tocFooter={
           <div className={styles.footnote}>
             <p className={styles.footnoteHead}>
-              {`${kit.governed} contracts · ${kit.checks} checks`}
+              {`${kit.governed} governed components`}
             </p>
             <p className={styles.footnoteBody}>
               Every number on this page is read from the repo or computed by the
@@ -262,7 +262,9 @@ export default function IntroductionPage() {
                 <tr>
                   <th scope="row">Components</th>
                   <td>
-                    {`${spell(kit.governed)} governed. The kit ships ${kit.publicSets} public component sets, and anything without a contract is labelled ungoverned in the kit rather than hidden.`}
+                    {`${spell(kit.governed)} governed. The kit ships more sets than that, and those without a contract are labelled in the kit rather than hidden.`}{' '}
+                    <a href="/docs/contribute/status">Status</a> has every
+                    count.
                   </td>
                 </tr>
               </tbody>

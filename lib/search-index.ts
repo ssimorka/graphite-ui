@@ -25,6 +25,7 @@ import { metadata as driftMeta } from '@/app/docs/contribute/drift/page'
 import { TOC as driftToc } from '@/app/docs/contribute/drift/toc'
 import { metadata as carbonMeta } from '@/app/docs/contribute/carbon/page'
 import { TOC as carbonToc } from '@/app/docs/contribute/carbon/toc'
+import { metadata as statusMeta } from '@/app/docs/contribute/status/page'
 import { TOC as getStartedToc } from '@/app/docs/get-started/toc'
 import { TOC as glossaryToc } from '@/app/docs/glossary/toc'
 import { metadata as typeMeta } from '@/app/docs/foundations/typography/page'
@@ -157,6 +158,7 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs/get-started', getStartedMeta, getStartedToc),
     ...docsPage('/docs/contribute/drift', driftMeta, driftToc),
     ...docsPage('/docs/contribute/carbon', carbonMeta, carbonToc),
+    ...docsPage('/docs/contribute/status', statusMeta, []),
     ...docsPage('/docs/foundations/color', rampsMeta, COLOR_RAMPS_TOC),
     ...docsPage('/docs/foundations/typography', typeMeta, typeToc),
     ...docsPage('/docs/foundations/spacing', spacingMeta, spacingToc),

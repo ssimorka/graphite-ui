@@ -78,19 +78,19 @@ const CAPABILITIES: {
     key: 'components',
     title: 'Governed components', // the count is prefixed at render, see titleOf
     body: 'Each one may not change without its contract changing first.',
-    caption: 'One chip per contract file in docs/contracts.',
+    caption: 'One chip per governed component.',
   },
   {
     key: 'checks',
-    title: '3 checks in CI',
-    body: 'Contracts against code, foundations against the token snapshot, docs against the kit.',
-    caption: 'All three read a committed snapshot, so they run offline.',
+    title: 'Checked in CI',
+    body: 'Components against their contracts, tokens and docs against the kit.',
+    caption: 'Each reads a committed copy of the kit, so it runs offline.',
   },
   {
     key: 'sets',
-    title: '206 component sets tracked',
-    body: 'Including the 35 public sets with no contract, which are labelled rather than hidden.',
-    caption: 'Counts from the last component-doc-drift run, not an estimate.',
+    title: 'Every kit set tracked',
+    body: 'Sets with no contract are labelled in the kit, not hidden.',
+    caption: 'What each kit set says about itself.',
   },
 ]
 
@@ -225,20 +225,33 @@ function PanelChecks() {
   )
 }
 
-// Kit 13395:751. The three numbers are the ones component-doc-drift prints on
-// every run, which is what the caption claims they are.
-function PanelSets({ stats }: { stats: KitStats }) {
-  const rows = [
-    { value: stats.pages, label: 'kit pages walked by the docs drift check' },
-    { value: stats.publicSets, label: 'public sets checked against their docs' },
-    { value: stats.docs, label: 'component docs read to check them against' },
-  ]
+// Kit 13395:751. The labels every kit set carries in its description, rather
+// than counts: the counts live on the Status page, so the home page quotes
+// only one number (governed components).
+const SET_LABELS = [
+  {
+    name: 'Graphite: governed',
+    body: 'A contract declares it, and the kit names that contract and version.',
+  },
+  {
+    name: 'Graphite: ungoverned',
+    body: 'No contract. Labelled where it lives, so nobody mistakes it for one.',
+  },
+  {
+    name: '_Internal',
+    body: 'A part other sets are built from. Marked do not edit.',
+  },
+]
+
+function PanelSets() {
   return (
-    <ul className="cap-sets">
-      {rows.map((row) => (
-        <li key={row.label} className="cap-sets__row">
-          <span className="cap-sets__value">{row.value}</span>
-          <span className="cap-sets__label">{row.label}</span>
+    <ul className="cap-checks">
+      {SET_LABELS.map((label) => (
+        <li key={label.name} className="cap-checks__row">
+          <p className="cap-checks__head">
+            <code className="cap-checks__name">{label.name}</code>
+          </p>
+          <p className="cap-checks__body">{label.body}</p>
         </li>
       ))}
     </ul>
@@ -464,7 +477,7 @@ function StagePanel({
     case 'checks':
       return <PanelChecks />
     case 'sets':
-      return <PanelSets stats={stats} />
+      return <PanelSets />
   }
 }
 
@@ -620,8 +633,8 @@ export function Capabilities({
               </h2>
               <p className="section__subtitle">
                 The engine does the work Figma cannot: it derives, it measures,
-                and it does both themes at once. Three checks in CI then keep
-                the result honest.
+                and it does both themes at once. Checks in CI then hold the
+                components and tokens to it.
               </p>
             </Reveal>
           </Column>

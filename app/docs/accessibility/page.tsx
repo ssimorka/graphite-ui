@@ -469,7 +469,7 @@ export default function AccessibilityPage() {
                 Every role and state measured above, as a variable.
               </NextCard>
               <NextCard href="/gallery" title="Components">
-                {`${spell(docs.length)} governed components, each with its own Accessibility section.`}
+                Every governed component, each with its own Accessibility section.
               </NextCard>
             </NextCards>
           </section>

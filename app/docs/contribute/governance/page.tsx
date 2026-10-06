@@ -158,9 +158,7 @@ export default function GovernancePage() {
               reality against it, not on review gates.
             </p>
             <div className={styles.badges}>
-              <StatusBadge tone="primary">{`${stats.governed} contracts`}</StatusBadge>
-              <StatusBadge tone="neutral">{`${RULES.length} rules`}</StatusBadge>
-              <StatusBadge tone="success">{`${stats.checks} drift checks`}</StatusBadge>
+              <StatusBadge tone="primary">{`${stats.governed} governed components`}</StatusBadge>
             </div>
           </header>
 
@@ -373,7 +371,7 @@ export default function GovernancePage() {
               </div>
               <div className={styles.stat}>
                 <dt>Contracts</dt>
-                <dd>{stats.governed}</dd>
+                <dd>{stats.contracts}</dd>
               </div>
             </dl>
             <p className={styles.note}>
