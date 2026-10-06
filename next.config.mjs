@@ -8,6 +8,8 @@ const nextConfig = {
       // Moved under Contribute when the docs split Use from Contribute.
       { source: '/docs/installation', destination: '/docs/contribute/run-locally', permanent: true },
       { source: '/docs/governance', destination: '/docs/contribute/governance', permanent: true },
+      // Get started was folded into the top of the Introduction.
+      { source: '/docs/get-started', destination: '/docs#use-today', permanent: true },
     ]
   },
   // The registry routes (app/r) read components, lib and the stylesheet's

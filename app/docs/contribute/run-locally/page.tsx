@@ -110,7 +110,8 @@ export default function RunLocallyPage() {
             <h1 className={styles.title}>Run Graphite locally</h1>
             <p className={styles.lede}>
               For working on Graphite itself. To use Graphite in your own
-              project, start at <a href="/docs/get-started">Get started</a>.
+              project, start at{' '}
+              <a href="/docs#use-today">What you can use today</a>.
             </p>
             <div className={styles.badges}>
               <StatusBadge tone="success">Node 24+</StatusBadge>

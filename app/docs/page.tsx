@@ -12,7 +12,9 @@ import {
   SectionHeading,
   StatusBadge,
 } from '@/components/doc-blocks'
+import { DocSnippet } from '@/components/doc-snippet'
 import { readKitStats } from '@/lib/kit-stats'
+import { shadcnAdd } from '@/lib/registry-url'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { spell } from '@/lib/spell'
 import {
@@ -32,6 +34,8 @@ export const metadata: Metadata = {
 }
 
 const lower = (n: number) => spell(n).toLowerCase()
+
+const KIT_URL = 'https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo'
 
 /**
  * What the engine produces from one colour, counted rather than stated. The
@@ -104,6 +108,49 @@ export default function IntroductionPage() {
               <StatusBadge tone="neutral">No npm package</StatusBadge>
             </div>
           </header>
+
+          <section id="use-today" className={styles.block}>
+            <SectionHeading
+              title="What you can use today"
+              lede="Three parts. Use any of them on its own."
+            />
+            <div className={styles.paths}>
+              <div className={styles.path}>
+                <h3 className={styles.pathHead}>
+                  Theme <StatusBadge tone="success">Usable today</StatusBadge>
+                </h3>
+                <p>
+                  Your color as one CSS file, light and dark. Import it once and
+                  you are themed; it needs no Graphite code. One command adds
+                  it, the Tailwind file and a <code>components.json</code> (your
+                  hex in place of 0f766e). Or pick the color in{' '}
+                  <a href="/create">Create</a> and download the file.
+                </p>
+                <DocSnippet code={shadcnAdd('init', 'theme/0f766e', 'tailwind')} />
+              </div>
+              <div className={styles.path}>
+                <h3 className={styles.pathHead}>
+                  Figma kit <StatusBadge tone="success">Usable today</StatusBadge>
+                </h3>
+                <p>
+                  Every component, drawn in light and dark, as a published
+                  library. <a href={KIT_URL}>Open the kit</a> and add it to your
+                  team libraries. It is drawn in the default color: there is no
+                  way yet to bring a theme from Create into it.
+                </p>
+              </div>
+              <div className={styles.path}>
+                <h3 className={styles.pathHead}>
+                  Components <StatusBadge tone="success">Usable today</StatusBadge>
+                </h3>
+                <p>
+                  {`All ${lower(kit.governed)} governed components install with the shadcn CLI, with the files each one uses. Set up the project first, as above.`}{' '}
+                  <a href="/docs/quick-start">Quick start</a> walks through it.
+                </p>
+                <DocSnippet code={shadcnAdd('button')} />
+              </div>
+            </div>
+          </section>
 
           <section id="what-it-is" className={styles.block}>
             <SectionHeading
@@ -208,9 +255,6 @@ export default function IntroductionPage() {
               lede="Where to go next, by what you came to do."
             />
             <NextCards>
-              <NextCard href="/docs/get-started" title="Get started">
-                What you can use today, and how.
-              </NextCard>
               <NextCard href="/docs/quick-start" title="Quick start">
                 Pick a color, use a component, style with the variables, take
                 the tokens out.
@@ -241,35 +285,6 @@ export default function IntroductionPage() {
                 Every variable the system defines, generated and static.
               </NextCard>
             </NextCards>
-          </section>
-
-          <section id="status" className={styles.block}>
-            <SectionHeading
-              title="Status"
-              lede="What works today, and what does not exist yet."
-            />
-            <table className={`${styles.table} ${styles.parts}`}>
-              <tbody>
-                <tr>
-                  <th scope="row">Distribution</th>
-                  <td>
-                    No npm package: the theme and every component install with
-                    the shadcn CLI from Graphite&rsquo;s registry, and the Figma
-                    kit is a published library.{' '}
-                    <a href="/docs/get-started">Get started</a> has the
-                    details.
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Components</th>
-                  <td>
-                    {`${spell(kit.governed)} governed. The kit ships more sets than that, and those without a contract are labelled in the kit rather than hidden.`}{' '}
-                    <a href="/docs/contribute/status">Status</a> has every
-                    count.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
           </section>
         </article>
       </DocsShell>

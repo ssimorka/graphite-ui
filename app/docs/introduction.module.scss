@@ -231,3 +231,32 @@
   line-height: var(--graphite-text-caption-1-line-height);
   color: var(--graphite-on-surface-variant);
 }
+
+// "What you can use today": the three parts, each a heading, a status badge,
+// a sentence or two and its command. Folded in from the old Get started page.
+.paths {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-07);
+  max-width: 44rem;
+}
+
+.path {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+
+  p {
+    margin: 0;
+  }
+}
+
+.pathHead {
+  display: flex;
+  align-items: center;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: var(--graphite-text-weight-semibold);
+}
