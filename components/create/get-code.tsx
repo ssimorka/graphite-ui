@@ -12,9 +12,8 @@ import { Modal } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
 import { DocSnippet } from '@/components/doc-snippet'
 import {
-  BODY_FONTS,
   CODE_FONTS,
-  HEADING_FONTS,
+  TEXT_FONTS,
   RADII,
   useBuilder,
 } from './builder'
@@ -79,8 +78,8 @@ export function GetCodeDialog({
     const font = (opts: { key: string; stack: string }[], key: string, name: string) => {
       if (key !== opts[0].key) overrides[name] = (opts.find((o) => o.key === key) ?? opts[0]).stack
     }
-    font(HEADING_FONTS, b.headingFont, '--graphite-font-1')
-    font(BODY_FONTS, b.bodyFont, '--graphite-font-2')
+    font(TEXT_FONTS, b.headingFont, '--graphite-font-1')
+    font(TEXT_FONTS, b.bodyFont, '--graphite-font-2')
     font(CODE_FONTS, b.codeFont, '--graphite-font-mono')
     return {
       css: buildThemeFile({ bundle, level, foundations, overrides }),

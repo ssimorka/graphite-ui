@@ -41,7 +41,7 @@ function codeFor(size: Size, dismissible: boolean, label: boolean, actions: Acti
 
 // An array rather than a fragment, which ButtonGroup and the footer layout
 // also unwrap, but an array is what the printed code shows.
-export const footer = (close: () => void, actions: Actions = 2) => {
+const footer = (close: () => void, actions: Actions = 2) => {
   const publish = (
     <Button key="publish" variant="primary" onClick={close}>
       Publish

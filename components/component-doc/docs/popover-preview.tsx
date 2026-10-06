@@ -49,7 +49,7 @@ export function ThemeOptions({ value, onChange }: { value: Themes; onChange: (ne
 }
 
 /** The Tab tip's trigger: the kit's 48px ghost icon-only button. */
-export const tabTipTrigger = (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => (
+const tabTipTrigger = (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => (
   <Button {...props} variant="ghost" size="icon-lg" aria-label={TRIGGER}>
     <KitIcon name="settings" />
   </Button>

@@ -5,16 +5,16 @@ import { ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
 import type { IconSet } from '@/lib/kit-icons'
-import { BODY_FONTS, CODE_FONTS, HEADING_FONTS, useBuilder } from './builder'
+import { CODE_FONTS, TEXT_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
 import type { Control, ControlId } from './controls-model'
 import { GetCodeDialog } from './get-code'
 import { Toast, useCopy } from '@/components/token-panels'
 import styles from './controls.module.scss'
 
-const FONT_SETS: Partial<Record<ControlId, typeof HEADING_FONTS>> = {
-  headings: HEADING_FONTS,
-  body: BODY_FONTS,
+const FONT_SETS: Partial<Record<ControlId, typeof TEXT_FONTS>> = {
+  headings: TEXT_FONTS,
+  body: TEXT_FONTS,
   code: CODE_FONTS,
 }
 

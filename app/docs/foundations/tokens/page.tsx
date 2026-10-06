@@ -11,7 +11,7 @@ import {
   SectionHeading,
   StatusBadge,
 } from '@/components/doc-blocks'
-import { NotesList, RefTable } from '@/components/component-page'
+import { NotesList } from '@/components/component-page'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import {
   groupFoundations,

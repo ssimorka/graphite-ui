@@ -33,7 +33,7 @@ export default function Page() {
           the span and the spotlight are gone, and 02 and 04 carry a mesh
           gradient each instead. */}
       <PageBands>
-        <Capabilities contracts={contractList} stats={stats} />
+        <Capabilities contracts={contractList} />
       </PageBands>
 
       <ThemeCta />

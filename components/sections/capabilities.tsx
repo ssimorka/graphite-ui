@@ -2,24 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Grid, Column } from '@carbon/react'
-import {
-  ColorPalette,
-  Types,
-  Accessibility,
-  Api,
-  Grid as GridIcon,
-  Moon,
-  Time,
-  Renew,
-  Bot,
-} from '@carbon/icons-react'
 import { Reveal } from '@/components/reveal'
-import { PatternSpecimen } from '@/components/generative-art'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
-import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
-import { makeRamps, buildTheme, graphiteVarName } from '@/lib/color.js'
+import { makeRamps, buildTheme } from '@/lib/color.js'
 import { WEIGHT_LABELS } from '@/components/token-panels'
-import type { KitStats } from '@/lib/kit-stats'
 import type { Ramps, Theme } from '@/lib/color.js'
 
 // The desktop carousel has no timer. The section is a tall scroll track with
@@ -109,8 +95,6 @@ const CONTRAST_ROLES = [
   'onSecondary',
   'outline',
 ]
-
-const VAR_ROLES = ['background', 'surface', 'onSurface', 'primary', 'onPrimary', 'outline']
 
 // The engine's key is camelCase; the label is prose. Only one of the four
 // needs the split, but a map keeps the rendering free of a special case.
@@ -344,88 +328,6 @@ function PanelRoles({ theme }: { theme: Theme }) {
   )
 }
 
-function PanelVars({ theme }: { theme: Theme }) {
-  return (
-    <div className="cap-vars">
-      <pre className="cap-vars__code">
-        {VAR_ROLES.map((role) => {
-          const token = theme.tokens[role]
-          if (!token) return null
-          return (
-            <span key={role} className="cap-vars__line">
-              <span
-                className="cap-vars__dot"
-                style={{ background: token.hex }}
-                aria-hidden="true"
-              />
-              {graphiteVarName(role)}: {token.hex};
-            </span>
-          )
-        })}
-      </pre>
-      <p className="cap-vars__more">
-        Plus {CARBON_VAR_COUNT} <code>--cds-*</code> bindings, so a Carbon build
-        repaints without touching a component.
-      </p>
-    </div>
-  )
-}
-
-function PanelPatterns() {
-  return (
-    <div className="cap-patterns">
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <div key={i} className="cap-patterns__tile">
-          <PatternSpecimen index={i} size={200} />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function PanelThemes({ light, dark }: { light: Theme; dark: Theme }) {
-  return (
-    <div className="cap-themes">
-      {[
-        { label: 'Light', data: light },
-        { label: 'Dark', data: dark },
-      ].map(({ label, data }) => (
-        <div
-          key={label}
-          className="cap-themes__card"
-          style={{
-            background: data.tokens.background.hex,
-            borderColor: data.tokens.outline.hex,
-            color: data.tokens.onBackground.hex,
-          }}
-        >
-          <p className="cap-themes__label">{label}</p>
-          <div
-            className="cap-themes__surface"
-            style={{
-              background: data.tokens.surface.hex,
-              borderColor: data.tokens.outline.hex,
-              color: data.tokens.onSurface.hex,
-            }}
-          >
-            <span className="cap-themes__line" />
-            <span className="cap-themes__line cap-themes__line--short" />
-            <span
-              className="cap-themes__button"
-              style={{
-                background: data.tokens.primary.hex,
-                color: data.tokens.onPrimary.hex,
-              }}
-            >
-              Primary
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 /**
  * The caption under a panel, inside its frame.
  *
@@ -456,14 +358,12 @@ function StagePanel({
   ramps,
   theme,
   contracts,
-  stats,
 }: {
   item: (typeof CAPABILITIES)[number]
   hex: string
   ramps: Ramps
   theme: Theme
   contracts: { component: string; version: string }[]
-  stats: KitStats
 }) {
   switch (item.key) {
     case 'source':
@@ -504,10 +404,8 @@ function useCarouselLayout() {
 
 export function Capabilities({
   contracts,
-  stats,
 }: {
   contracts: { component: string; version: string }[]
-  stats: KitStats
 }) {
   const [active, setActive] = useState(0)
   const [reduced, setReduced] = useState(false)
@@ -716,7 +614,6 @@ export function Capabilities({
                       ramps={ramps}
                       theme={current}
                       contracts={contracts}
-                      stats={stats}
                     />
                     <StageCaption item={item} />
                   </div>
@@ -748,7 +645,6 @@ export function Capabilities({
                             ramps={ramps}
                             theme={current}
                             contracts={contracts}
-                            stats={stats}
                           />
                           <StageCaption item={capability} />
                         </div>

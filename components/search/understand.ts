@@ -119,7 +119,7 @@ function findName(words: string[], name: string): [number, number] | null {
 }
 
 /** Read a query into the page, section and words it is asking about. */
-export function interpret(index: SearchEntry[], query: string): Intent {
+function interpret(index: SearchEntry[], query: string): Intent {
   let raw = ` ${norm(query).replace(/\s+/g, ' ').trim()} `
   const rewrites: [string, string][] = []
   for (const [from, to] of PHRASES) {

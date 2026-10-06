@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Select } from '@/components/ui/select'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 
