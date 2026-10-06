@@ -4,6 +4,8 @@ import { DOCS_NAV, docsCrumbs } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { SectionHeading, StatusBadge } from '@/components/doc-blocks'
+import { DocSnippet } from '@/components/doc-snippet'
+import { shadcnAdd } from '@/lib/registry-url'
 import { TOC } from './toc'
 import styles from '../theming/theming.module.scss'
 
@@ -19,8 +21,7 @@ const REPO_URL = 'https://github.com/ssimorka/graphite-ui'
 /**
  * The adopter's front door. It answers "can I use this, and how" before
  * anything else, so each path states what works today and nothing more. When
- * a path changes (the registry ships, the kit takes a theme), this page
- * changes with it.
+ * a path changes (the kit takes a theme, say), this page changes with it.
  */
 export default function GetStartedPage() {
   return (
@@ -41,15 +42,20 @@ export default function GetStartedPage() {
               <StatusBadge tone="success">Usable today</StatusBadge>
             </div>
             <p className={styles.note}>
-              Pick a color in <a className={styles.link} href="/create">Create</a>,
-              then Get the code. You download one CSS file with your color fixed
-              in it. Import it once and you are themed. It needs no Graphite
-              code. On Tailwind, also download the Tailwind file to use the
-              roles as classes.
+              One CSS file with your color fixed in it. Import it once and you
+              are themed; it needs no Graphite code. Install it, with the
+              Tailwind file and a <code>components.json</code>, in one command
+              (your hex in place of 0f766e):
+            </p>
+            <DocSnippet code={shadcnAdd('init', 'theme/0f766e', 'tailwind')} />
+            <p className={styles.note}>
+              Or pick the color in{' '}
+              <a className={styles.link} href="/create">Create</a> and download
+              the file from Get the code.
             </p>
             <p className={styles.note}>
               <a className={styles.link} href="/docs/quick-start">Quick start</a>{' '}
-              shows both files in a project.
+              shows the theme in a project.
             </p>
           </section>
 
@@ -74,17 +80,18 @@ export default function GetStartedPage() {
           <section id="components" className={styles.block}>
             <SectionHeading title="Components" lede="React components built on the theme." />
             <div className={styles.badges}>
-              <StatusBadge tone="neutral">Source readable today</StatusBadge>
-              <StatusBadge tone="primary">Install coming</StatusBadge>
+              <StatusBadge tone="success">Usable today</StatusBadge>
             </div>
             <p className={styles.note}>
-              Every component&rsquo;s source is in the{' '}
+              Install any component with the shadcn CLI. It brings the files
+              the component uses, and its source stays readable in your
+              project and in the{' '}
               <a className={styles.link} href={REPO_URL}>
                 repository
               </a>
-              . You can copy one into your project by hand today. There is no
-              install command yet.
+              . Set up the project first, as above.
             </p>
+            <DocSnippet code={shadcnAdd('button')} />
             <p className={styles.note}>
               Browse them in{' '}
               <a className={styles.link} href="/gallery">

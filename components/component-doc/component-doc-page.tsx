@@ -14,6 +14,7 @@ import {
 } from '@/components/component-page'
 import { readContractDoc } from '@/lib/contract-doc'
 import { readKitPage } from '@/lib/kit-page'
+import { shadcnAdd } from '@/lib/registry-url'
 import type { ComponentDocConfig } from './types'
 import styles from './component-doc.module.scss'
 
@@ -126,8 +127,9 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
           <section id="installation" className={styles.block}>
             <SectionHeading
               title="Installation"
-              lede="No install command yet. Copy the component from the repository into the same path, then import it. Quick start lists what Button needs."
+              lede="Install it with the shadcn CLI, along with everything it uses. New project? Set it up first, as Quick start shows."
             />
+            <DocSnippet code={shadcnAdd(c.slug)} />
             <DocSnippet code={c.install} />
           </section>
 

@@ -10,7 +10,7 @@ import { Reveal } from '@/components/reveal'
 const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: `Not as an install yet. Today you can take a theme from Create, use the Figma kit, and copy any of the ${governed} governed components into your project by hand. An install command is coming. Each component has a versioned contract, checked in CI.`,
+    a: `You can use it today. The theme and all ${governed} governed components install with the shadcn CLI, and the Figma kit is a published library. Each component has a versioned contract, checked in CI. There is no npm package.`,
   },
   {
     q: 'Is it free, and what is it built with?',
