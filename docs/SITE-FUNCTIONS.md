@@ -6,7 +6,8 @@ when routes change. If you add or remove a page, change this too.
 
 ## Shell
 
-[`app/layout.tsx`](../app/layout.tsx) wraps every page in `ThemeProvider` and
+[`app/layout.tsx`](../app/layout.tsx) wraps every page in `SiteTheme` (the
+provider as the site configures it, [`components/site-theme.tsx`](../components/site-theme.tsx)) and
 renders the fixed `SiteHeader` above `children`. It also sets the default
 `<title>` and metadata.
 
@@ -76,13 +77,14 @@ Foundations, Resources), a stats line, and the Built by credit.
 | `/gallery` | Components index: every kit component A to Z | `components/sections/components-index.tsx` |
 | `/docs` | Introduction | `app/docs/page.tsx` |
 | `/docs/installation` | Running the project and the governance checks | `app/docs/installation/` |
-| `/docs/quick-start` | Source color, a governed component, the variables, theme switching, and taking the tokens out | `app/docs/quick-start/` |
-| `/docs/theming` | How color works, the roles, states and pattern reference | `components/sections/color-docs.tsx`, `pattern-guide.tsx` |
+| `/docs/quick-start` | Source color, a governed component, the variables, theme switching, taking the tokens out, keeping the theme file in your own project, and the Tailwind bridge | `app/docs/quick-start/` |
+| `/docs/theming` | How color works, the roles, states and pattern reference | `app/docs/theming/` (`page.tsx`, `live.tsx`) |
 | `/docs/accessibility` | Contrast at AA and AAA and how it is measured, plus focus, motion and keyboard per component | `app/docs/accessibility/` |
 | `/docs/governance` | The eight governance rules, the three drift checks, and the required CI job | `app/docs/governance/` |
+| `/docs/glossary` | Plain definitions of the terms the docs use | `app/docs/glossary/` |
 | `/docs/foundations/color` | Color ramps, sampling, and the known divergence from the kit | `app/docs/foundations/color/`, `lib/ramp-divergence.ts` |
 | `/docs/foundations/typography`, `spacing`, `radius`, `layout`, `tokens` | The other foundations, read from their contracts and the token snapshot | `app/docs/foundations/*` |
-| `/docs/components/[slug]` | One page per governed component, 36 in all (35 components and Overlay); the docs nav lists them under Overview | `components/component-doc/` |
+| `/docs/components/[slug]` | One page per governed component, 37 in all (36 components and Overlay); the docs nav lists them under Overview | `components/component-doc/` |
 | `/search-index.json` | The static search index, built at build time | `lib/search-index.ts` |
 
 ## Home, `/`
@@ -111,7 +113,7 @@ Seven sections in the kit's order, one file each in `components/sections/`:
    developers goes to `/gallery`. Each door follows the card pattern with its
    action in the bottom-left corner (Open the Figma Kit ↗, Browse the components →), and
    the whole door is the link.
-6. **FAQ** (`faq.tsx`): five questions in the governed `Accordion`.
+6. **FAQ** (`faq.tsx`): six questions in the governed `Accordion`.
 7. **Footer**.
 
 Motion for all of it is catalogued in [ANIMATIONS.md](ANIMATIONS.md).
@@ -149,8 +151,12 @@ sheets rise from the bottom, the panel drops in.
   Regenerate deals a new layout and Export PNG saves it at 1600 × 900. Its
   twenty tile types are the kit's Pattern Tiles (Graphite UI Kit 11692:22);
   the kit names one of them Download circle where the code says Circle.
-- **Get the code**: CSS or JSON, from `buildCss` / `buildJson` in `lib/color.js`,
-  copied or downloaded.
+- **Get the code**: three tabs, copied or downloaded. CSS is the whole theme
+  as one file (`buildThemeFile` in `lib/theme-file.ts`: foundations, both
+  themes and the builder's choices, under `--graphite-*`); Tailwind is the
+  bridge that names those variables as Tailwind v4 tokens (`buildTailwindBridge`
+  in `lib/tailwind-bridge.ts`); JSON is the engine's audit format (`buildJson`
+  in `lib/color.js`).
 
 ## Search
 

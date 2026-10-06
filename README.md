@@ -11,8 +11,10 @@ fixed tone stops into perceptual ramps. Each theme pass emits 58
 `--graphite-*` color variables (32 roles, six states each for the primary,
 secondary and danger families, the focus ring, the scrim, and the kit's
 elevation and outline ladders), which are the
-canonical surface, plus 59 `--cds-*` variables as a Carbon compatibility
-layer. A further 102 variables (spacing, density, radius, breakpoints,
+canonical surface. The same set is what Create's theme file and Tailwind
+bridge name, so the site and an adopter's download cannot differ. On this site
+the provider also stamps 59 `--cds-*` variables as a Carbon compatibility
+layer, plugged in from `components/carbon-compat.tsx`. A further 102 variables (spacing, density, radius, breakpoints,
 typography, motion) are declared statically in `app/globals.scss`, because
 they do not vary by theme.
 
@@ -27,13 +29,16 @@ contract update.
 component's code references exactly the token variables its contract declares,
 nothing else, and that its docblock names the contract's version.
 `token-drift.mjs` verifies the four foundations (spacing, radius, breakpoint,
-typography) against the Figma snapshot. `component-doc-drift.mjs` verifies that
-every public set in the kit snapshot is covered by a component doc. All three
+typography) against the Figma snapshot, Carbon's breakpoint map against the
+kit, and that every Dev Mode code snippet in the kit names a `--graphite-*`
+variable the code declares. `component-doc-drift.mjs` verifies that every
+public set in the kit snapshot is covered by a component doc. `naming-check.mjs`
+keeps `--graphite-*` the only variable prefix anywhere in the repo. All four
 run in CI, and `main` requires them.
 
 ## Status
 
-36 contracts: 35 components and the shared Overlay hook they dismiss through.
+37 contracts: 36 components and the shared Overlay hook they dismiss through.
 Every contract in `docs/contracts/` has a matching implementation in
 `components/ui/` and a documentation page at `/docs/components/<name>`,
 generated from the contract.
@@ -64,6 +69,7 @@ scripts. Leave it there.
 | `pnpm token-drift:test` | Self-test for the token drift checker |
 | `pnpm component-doc-drift` | Kit component sets against `docs/components/` |
 | `pnpm component-doc-drift:test` | Self-test for the component doc checker |
+| `pnpm naming-check` | Fails on any variable prefix but `--graphite-` |
 | `pnpm figma-snapshot` | Regenerate `docs/tokens/figma-snapshot.json` |
 | `pnpm component-snapshot` | Regenerate `docs/tokens/figma-components.json` |
 
@@ -78,7 +84,7 @@ app/
   search-index.json/     # Static search index, built at build time
   globals.scss           # The 102 static, theme-invariant variables
 components/
-  ui/                    # The 35 contracted components and the Overlay hook
+  ui/                    # The 36 contracted components and the Overlay hook
   component-doc/         # Component page template and per-component configs
   search/                # Documentation search dialog and ranking
   sections/              # Landing page sections
@@ -91,7 +97,7 @@ lib/
 docs/
   contracts/             # Component contracts, plus foundations/ and kit/
   components/            # Descriptive snapshots of the Figma kit
-  tokens/                # figma-snapshot.json, figma-components.json
+  tokens/                # figma-snapshot.json, figma-components.json, figma-code-syntax.json
 scripts/                 # Drift checks and Figma extraction
 ```
 
@@ -114,7 +120,7 @@ renders. If you are writing code, start with the contract.
 
 [.github/workflows/checks.yml](.github/workflows/checks.yml) runs on every pull
 request and every push to `main`: typecheck, drift check, token drift, the
-component doc check, and both self-tests. Each step runs even if an earlier one failed, because a
+component doc check, both self-tests, and the naming check. Each step runs even if an earlier one failed, because a
 contract change typically trips more than one. It deliberately does not run
 `next build`, since the Vercel deployment already does that on every PR.
 

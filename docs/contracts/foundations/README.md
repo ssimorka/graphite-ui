@@ -17,7 +17,7 @@ instead, which diffs the declared values against
 `docs/tokens/figma-snapshot.json`. Both run per foundation:
 
 ```bash
-npm run token-drift
+pnpm token-drift
 ```
 
 Governance rules 1–5 in the parent README apply unchanged, with one

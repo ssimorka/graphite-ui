@@ -1,6 +1,6 @@
 ---
 foundation: Breakpoint
-version: 1.2.0
+version: 1.2.1
 source: Graphite UI Kit › Breakpoint (4 modes) + Breakpoint LG–XL (2 modes)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -69,7 +69,8 @@ That scan cannot see `@include breakpoint.breakpoint(lg)`, because the mixin
 compiles to a media query at build time and there is no literal number in the
 source to read. So the check reads Carbon's `$grid-breakpoints` map directly
 and compares it to the kit instead — if the two ever diverge, every one of
-those 15 media queries is following Carbon, and this fails. They agree as of
+those media queries (21, all in `app/globals.scss`, as of 2026-10-06) is
+following Carbon, and this fails. They agree as of
 `@carbon/grid` 11.56.0: 320 / 672 / 1056 / 1312 / 1584.
 
 Note Carbon calls the 1312px stop **`xlg`** where the kit and these tokens call

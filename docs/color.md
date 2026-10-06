@@ -21,7 +21,7 @@ Named colors            32 jobs per theme (meaning, readability-checked)
       ↓
 States                  hover / pressed / selected / disabled / focus
       ↓
-Wired into components   58 --graphite-* variables the components read (plus 59 --cds-* for Carbon)
+Wired into components   58 --graphite-* variables the components read (on this site, plus 59 --cds-* for Carbon)
 ```
 
 ### 1. The source color
@@ -62,13 +62,13 @@ The `on` prefix is the system's core convention: **`onX` is the content color gu
 
 ### 4. Component bindings
 
-Semantic tokens are stamped onto 58 `--graphite-*` custom properties, which the governed components read, and 59 `--cds-*` properties, a compatibility layer for the remaining Carbon pieces (`--cds-text-primary`, `--cds-button-primary`, and so on). This is the layer that makes a token change repaint real components.
+Semantic tokens are stamped onto 58 `--graphite-*` custom properties, which the governed components read. On this site the provider also stamps 59 `--cds-*` properties (from `components/carbon-compat.tsx`), a compatibility layer for the remaining Carbon pieces (`--cds-text-primary`, `--cds-button-primary`, and so on). This is the layer that makes a token change repaint real components.
 
 Designers do not usually touch this layer, but it explains an important constraint: several component variables share one semantic token. `--cds-text-primary` and `--cds-icon-primary` both resolve to `onBackground`, so **text and icons are the same color by construction.** If you need an icon that differs from body text, that is a system change, not a design choice you can make in a file.
 
 ### Export
 
-The system exports in two formats:
+The system exports in three formats:
 
 - **CSS**: one theme file to keep in a project, with no Graphite runtime. Foundations (space, density, radius, breakpoints, motion, type) come first, read from `app/globals.scss`, with Create's radius, density and typeface choices written in place. Then the colors, as custom properties prefixed `--graphite-`, in kebab-case (`--graphite-on-surface-variant`): light under `:root, [data-theme="light"]`, dark under `[data-theme="dark"]`, and dark again under `@media (prefers-color-scheme: dark)` for a page that sets no `data-theme`. These are the same names the theme provider stamps and the components read, built by the same function (`buildGraphiteVars`), so the file needs no renaming. Built by `buildThemeFile` in `lib/theme-file.ts`.
 - **Tailwind**: a bridge for Tailwind v4 (`buildTailwindBridge` in `lib/tailwind-bridge.ts`) that names the same variables as theme tokens under `@theme inline`: every generated color (`bg-surface`, `text-on-primary`, `bg-primary-hover`), spacing as `p-space-05`, radius, families, weights, the type steps (`text-body-3` sets size and line height), `ease-graphite`, `shadow-overlay`, and the kit's breakpoints as literals. It holds no values, so it is used beside the CSS file, never instead of it.
@@ -189,7 +189,7 @@ These are real gaps, not omissions from this page. Documenting them honestly is 
 | Need | Current state | What to do today |
 |---|---|---|
 | **Links** | No distinct link role. Links bind to `primary`, with hover bound to the primary hover state. | Rely on underline plus `primary` for link affordance. Do not introduce a separate link color. |
-| **Elevation scale** | ~~No shadow or elevation scale.~~ Resolved (#241, #242): the elevation ladder `elevation-00`–`03`, one overlay shadow (`--graphite-shadow-overlay`), and a generated scrim (`--graphite-scrim`, on the site only: the exporter does not emit it). | Menus and popovers fill `elevation-01` with the shadow and no edge; Tooltip is inverse (`onBackground`); the Modal panel is `background` over the scrim. Hover and pressed fills climb the ladder. |
+| **Elevation scale** | ~~No shadow or elevation scale.~~ Resolved (#241, #242): the elevation ladder `elevation-00`–`03`, one overlay shadow (`--graphite-shadow-overlay`), and a generated scrim (`--graphite-scrim`, per theme, in both the site and the exported theme file). | Menus and popovers fill `elevation-01` with the shadow and no edge; Tooltip is inverse (`onBackground`); the Modal panel is `background` over the scrim. Hover and pressed fills climb the ladder. |
 
 ---
 
@@ -403,11 +403,11 @@ Status, each with the same four-role shape:
 
 `base` · `hover` · `pressed` · `selected` · `disabled` (+ disabled content) · `focus`. The page-level focus ring is primary's.
 
-**Primitives**, 8 ramps × 10 stops, exported for reference and tooling. Available to inspect and copy; not for direct use in designs.
+**Primitives**, 8 ramps × 10 stops; the JSON export carries the four source ramps (accent, secondary, neutral, neutralVariant) for reference and tooling. Available to inspect and copy; not for direct use in designs.
 
 ### Using tokens in Figma
 
-The engine's output is CSS and JSON. There is no published Figma library shipping with it today, so the Figma side is a workflow you set up rather than a fact of the system. The recommended approach:
+The engine's output is CSS, a Tailwind bridge and JSON. The Graphite UI Kit is the published Figma library: its variables already mirror the role names, with Light and Dark modes, and Dev Mode shows each one's `--graphite-*` name (checked in CI against `docs/tokens/figma-code-syntax.json`). The kit is seeded from one source color, though, so a file themed to a different source is a workflow you set up. The recommended approach:
 
 - Create Figma variables that **mirror the semantic role names exactly** (`primary`, `onSurfaceVariant`, `outline`), so a design file and a code file name the same thing the same way.
 - Use a **variable mode per theme** (Light / Dark) so a single design switches themes the way the product does.

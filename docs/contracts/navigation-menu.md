@@ -1,6 +1,6 @@
 ---
 component: Navigation Menu
-version: 2.0.0
+version: 2.0.1
 wave: 4
 slots:
   - name: Top-level items
@@ -65,12 +65,14 @@ question is fair. It is kept because it passes rule 6's demand test, which
 those three failed: *"the repo uses one, a contract references one, or
 committed work needs one. Wanting it in the abstract is not demand."*
 
-`components/site-header.tsx` renders Carbon's `Header`, `HeaderNavigation`,
-`HeaderMenuItem` and `SideNav` today — the site's real navigation is the same
-UI shell the kit declines to govern. Step 1 of the build order in
-`docs/SHADCN-MIGRATION.md` is *"App shell, and de-Carbon the chrome it
-replaces."* That is committed work, it names this replacement, and a nav list
-is what the top nav is built from.
+`components/site-header.tsx` renders it: the header's flat links are this
+component, and the docs links in the mobile tray are Tree view. That is "the
+repo uses one", the first clause of the test. It got there through step 1 of
+the build order in `docs/SHADCN-MIGRATION.md`, *"App shell, and de-Carbon the
+chrome it replaces"*, which swapped out Carbon's `Header`, `HeaderNavigation`,
+`HeaderMenuItem` and `SideNav`. When 2.0.0 was written that replacement was
+committed work rather than done, which is why the evidence originally cited
+the Carbon shell.
 
 Note the boundary the migration plan draws in the same breath: *"Sidebar lives
 outside `components/ui/` as site chrome rather than a system component."* The
@@ -88,3 +90,7 @@ code edit is its version docblock. But rule 3 says a prohibition
 change is breaking, and "not an application shell" is a new prohibition, so a
 major is what the rule asks for whether or not anything downstream notices.
 Recording the disposition alone would have been a patch.
+
+**2.0.1** is that kind of patch: the demand-test evidence above was corrected
+once `site-header.tsx` stopped rendering Carbon's shell and started rendering
+this component. No slot, prop, token or prohibition changed.
