@@ -40,8 +40,8 @@ jobs:
 
       # token-drift reads @carbon/grid's own _config.scss to check the kit's
       # breakpoints against Carbon's, so the install is not optional for it.
-      # --frozen-lockfile keeps the resolved version matching the path that
-      # script looks for.
+      # It finds the file by module resolution and fails if it cannot, so a
+      # missing or moved install shows up red rather than skipped.
       - run: pnpm install --frozen-lockfile
 
       # Each check runs even if an earlier one failed. A contract change

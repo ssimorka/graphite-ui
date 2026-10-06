@@ -11,7 +11,6 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import { GlobalTheme } from '@carbon/react'
 import {
   makeRamps,
   buildTheme,
@@ -20,13 +19,18 @@ import {
   normalizeHex,
 } from '@/lib/color.js'
 
-// The same two names the exported theme file uses for [data-theme], so a
-// project that takes the file and the provider has one vocabulary. Carbon's
-// own names for these (white, g100) survive only as the zone class below,
-// which the site's remaining Carbon components need.
-export type ThemeName = 'light' | 'dark'
+// The provider for Graphite's generated theme: the source color, light or
+// dark, and the contrast target, with every generated --graphite-* variable
+// written onto <html> as they change.
+//
+// It imports nothing from Carbon, so a project can lift it out with only
+// lib/color.js (the engine), lib/cover-source.ts and lib/theme-storage.ts
+// beside it. This site's Carbon layer plugs in through `extend`; see
+// components/carbon-compat.tsx.
 
-const CARBON_ZONE: Record<ThemeName, string> = { light: 'cds--white', dark: 'cds--g100' }
+// The same two names the exported theme file uses for [data-theme], so a
+// project that takes the file and the provider has one vocabulary.
+export type ThemeName = 'light' | 'dark'
 
 // Choices saved before the rename hold Carbon's names. Read them as the new
 // ones so a returning visitor keeps their theme.
@@ -70,121 +74,48 @@ export function useTheme() {
   return useContext(ThemeContext)
 }
 
-type BuiltTheme = ReturnType<typeof buildTheme>
-type BuiltStates = ReturnType<typeof buildStates>
-type Tokens = BuiltTheme['tokens']
-
-// Every Carbon variable the generated theme drives, as [variable, resolver].
-//
-// A list rather than an object literal so the count is derivable: the site copy
-// quotes this number in several places, and stating it by hand is how it came
-// to read 33 while the map had grown to 42.
-const CARBON_VAR_BINDINGS: readonly [
-  string,
-  (t: Tokens, s: BuiltStates) => string,
-][] = [
-  ['--cds-background', (t) => t.background.hex],
-  ['--cds-layer', (t) => t.surface.hex],
-  ['--cds-layer-01', (t) => t.surface.hex],
-  ['--cds-layer-02', (t) => t.surfaceVariant.hex],
-  ['--cds-layer-03', (t) => t.surfaceElevated.hex],
-  ['--cds-layer-accent', (t) => t.surfaceVariant.hex],
-  ['--cds-layer-accent-01', (t) => t.surfaceVariant.hex],
-  ['--cds-field', (t) => t.surfaceVariant.hex],
-  ['--cds-field-01', (t) => t.surfaceVariant.hex],
-  ['--cds-field-02', (t) => t.surfaceVariant.hex],
-  ['--cds-border-subtle', (t) => t.outline.hex],
-  ['--cds-border-subtle-00', (t) => t.outline.hex],
-  ['--cds-border-subtle-01', (t) => t.outline.hex],
-  ['--cds-border-subtle-02', (t) => t.outline.hex],
-  ['--cds-border-strong', (t) => t.outline.hex],
-  ['--cds-border-strong-01', (t) => t.outline.hex],
-  ['--cds-border-interactive', (t) => t.primary.hex],
-  ['--cds-text-primary', (t) => t.onBackground.hex],
-  ['--cds-text-secondary', (t) => t.onSurfaceVariant.hex],
-  ['--cds-icon-primary', (t) => t.onBackground.hex],
-  ['--cds-icon-secondary', (t) => t.onSurfaceVariant.hex],
-  ['--cds-icon-interactive', (t) => t.primary.hex],
-  ['--cds-interactive', (t) => t.primary.hex],
-  ['--cds-link-primary', (t) => t.primary.hex],
-  ['--cds-link-primary-hover', (_t, s) => s.primary.hover.hex],
-  ['--cds-focus', (_t, s) => s.focus.hex],
-  ['--cds-focus-inset', (_t, s) => s.focus.hex],
-  ['--cds-button-primary', (_t, s) => s.primary.base.hex],
-  ['--cds-button-primary-hover', (_t, s) => s.primary.hover.hex],
-  ['--cds-button-primary-active', (_t, s) => s.primary.pressed.hex],
-  // Carbon's secondary button is a fixed gray until these are bound, which
-  // reads as a foreign color next to generated chrome — the same trap
-  // --cds-support-* used to be. Bound to the secondary family so a Carbon
-  // secondary button matches Graphite's own secondary variant.
-  // Carbon labels it with --cds-text-on-color, which is onPrimary; measured
-  // against all three secondary tones it clears AAA in both themes, so the
-  // label needs no separate binding.
-  ['--cds-button-secondary', (_t, s) => s.secondary.base.hex],
-  ['--cds-button-secondary-hover', (_t, s) => s.secondary.hover.hex],
-  ['--cds-button-secondary-active', (_t, s) => s.secondary.pressed.hex],
-  ['--cds-text-on-color', (t) => t.onPrimary.hex],
-  ['--cds-icon-on-color', (t) => t.onPrimary.hex],
-  ['--cds-background-selected', (t) => t.primaryContainer.hex],
-  ['--cds-background-hover', (t) => t.surfaceVariant.hex],
-  ['--cds-layer-selected', (t) => t.primaryContainer.hex],
-  ['--cds-layer-selected-01', (t) => t.primaryContainer.hex],
-  ['--cds-layer-hover', (t) => t.surfaceVariant.hex],
-  ['--cds-layer-hover-01', (t) => t.surfaceVariant.hex],
-  // Tags default to Carbon's fixed blue palette, which reads as a foreign
-  // color once the rest of the page is generated. Bind them to the accent.
-  ['--cds-tag-background-blue', (t) => t.primaryContainer.hex],
-  ['--cds-tag-color-blue', (t) => t.onPrimaryContainer.hex],
-  ['--cds-tag-hover-blue', (_t, s) => s.primary.hover.hex],
-  ['--cds-tag-background-gray', (t) => t.surfaceVariant.hex],
-  ['--cds-tag-color-gray', (t) => t.onSurfaceVariant.hex],
-  // Carbon's support colors are fixed values that read as foreign next to a
-  // generated theme — the reason earlier passes kept leaving a stray "success
-  // green" in the chrome. They now resolve to the generated status ramps.
-  ['--cds-support-error', (t) => t.danger.hex],
-  ['--cds-support-warning', (t) => t.warning.hex],
-  ['--cds-support-success', (t) => t.success.hex],
-  ['--cds-support-info', (t) => t.info.hex],
-  ['--cds-text-error', (t) => t.danger.hex],
-  ['--cds-tag-background-red', (t) => t.dangerContainer.hex],
-  ['--cds-tag-color-red', (t) => t.onDangerContainer.hex],
-  ['--cds-tag-background-green', (t) => t.successContainer.hex],
-  ['--cds-tag-color-green', (t) => t.onSuccessContainer.hex],
-  // Container fills for all four statuses. Carbon's notification backgrounds
-  // are the only slot it offers that covers every status — there is no yellow
-  // or orange tag — so warning and info reach their container here rather than
-  // through the tag palette. Note Carbon has no matching per-status *text*
-  // token (only text-error), so onWarningContainer and onInfoContainer are
-  // generated but stay unbound. See docs/contracts/README.md.
-  ['--cds-notification-background-error', (t) => t.dangerContainer.hex],
-  ['--cds-notification-background-warning', (t) => t.warningContainer.hex],
-  ['--cds-notification-background-success', (t) => t.successContainer.hex],
-  ['--cds-notification-background-info', (t) => t.infoContainer.hex],
-]
-
-/** How many Carbon variables a generated theme maps. Quote this, never a literal. */
-export const CARBON_VAR_COUNT = CARBON_VAR_BINDINGS.length
-
-// ---------- Graphite namespace ----------
-//
-// Carbon's variables are a compatibility layer: they exist so Carbon's own
-// components pick up generated values, and their names and shape are Carbon's.
-// They cannot express the full generated set — there is no Carbon slot for
-// text on a status container, for instance.
-//
 // --graphite-* carries everything, and is what Graphite's own components read.
 // The set comes from buildGraphiteVars in lib/color.js, the same function the
-// CSS exporter writes from, so what the site stamps and what Create hands out
-// cannot name things differently.
+// CSS exporter writes from, so what the provider stamps and what Create hands
+// out cannot name things differently.
 
-function carbonVarsFor(theme: BuiltTheme, states: BuiltStates) {
-  return Object.fromEntries(
-    CARBON_VAR_BINDINGS.map(([name, resolve]) => [
-      name,
-      resolve(theme.tokens, states),
-    ]),
-  )
+/** One generation pass, as an `extend` hook sees it. */
+export type ThemePass = {
+  theme: ThemeName
+  tokens: ReturnType<typeof buildTheme>['tokens']
+  states: ReturnType<typeof buildStates>
 }
+
+/**
+ * Extra variables and a root class derived from each pass, stamped with the
+ * Graphite set. The site uses it for Carbon's --cds-* layer; a project could
+ * use it to feed another library the same way.
+ */
+export type ThemeExtension = (pass: ThemePass) => {
+  vars?: Record<string, string>
+  className?: string
+}
+
+export type ThemeProviderProps = {
+  children: ReactNode
+  /** The source color the theme is generated from. A project passes its
+   *  brand color here; the site seeds the kit's cover color. */
+  defaultSourceHex?: string
+  defaultTheme?: ThemeName
+  defaultLevel?: ContrastLevel
+  /**
+   * Write the generated --graphite-* variables onto <html>. On by default.
+   * Turn it off when the project imports the theme file from Create, which
+   * already carries them: the provider then only switches data-theme, and the
+   * file's values are never overridden by inline styles.
+   */
+  stampVars?: boolean
+  /** Remember the choice across page loads, in localStorage. Off by default:
+   *  a project usually wants its source fixed in code, not in the browser. */
+  persist?: boolean
+  extend?: ThemeExtension
+}
+
 
 const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
 
@@ -193,10 +124,18 @@ const HEX_RE = /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/
 // reference, not a string. Re-exported so existing importers keep their path.
 export { COVER_SOURCE_HEX }
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<ThemeName>('dark')
-  const [sourceHex, setSourceHexRaw] = useState(COVER_SOURCE_HEX)
-  const [level, setLevel] = useState<ContrastLevel>('AA')
+export function ThemeProvider({
+  children,
+  defaultSourceHex = COVER_SOURCE_HEX,
+  defaultTheme = 'light',
+  defaultLevel = 'AA',
+  stampVars = true,
+  persist = false,
+  extend,
+}: ThemeProviderProps) {
+  const [theme, setTheme] = useState<ThemeName>(defaultTheme)
+  const [sourceHex, setSourceHexRaw] = useState(() => normalizeHex(defaultSourceHex))
+  const [level, setLevel] = useState<ContrastLevel>(defaultLevel)
   // Whether the stored choice has been read. The server renders the defaults,
   // so the first client render must too; the stored choice is applied in a
   // layout effect straight after, before paint. Nothing is stamped or saved
@@ -204,6 +143,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [restored, setRestored] = useState(false)
 
   useLayoutEffect(() => {
+    if (!persist) {
+      setRestored(true)
+      return
+    }
     try {
       const saved = JSON.parse(localStorage.getItem(THEME_CHOICE_KEY) ?? 'null')
       if (saved && typeof saved === 'object') {
@@ -215,14 +158,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
     } catch {}
     setRestored(true)
-  }, [])
+  }, [persist])
 
   useEffect(() => {
-    if (!restored) return
+    if (!restored || !persist) return
     try {
       localStorage.setItem(THEME_CHOICE_KEY, JSON.stringify({ sourceHex, theme, level }))
     } catch {}
-  }, [restored, sourceHex, theme, level])
+  }, [restored, persist, sourceHex, theme, level])
 
   const setSourceHex = (hex: string) => {
     if (HEX_RE.test(hex.trim())) setSourceHexRaw(normalizeHex(hex))
@@ -255,7 +198,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     light && lightStates ? { ...light, states: lightStates } : null
   const darkBundle = dark && darkStates ? { ...dark, states: darkStates } : null
 
-  // Stamp --cds-* variables onto document root.
+  // Stamp the variables onto document root.
   //
   // Transitions are suppressed for the duration of the write. A CSS transition
   // on `background-color` whose value comes from a custom property does not
@@ -270,27 +213,28 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     root.classList.add('is-retheming')
 
     root.dataset.theme = theme
-    root.classList.remove(...Object.values(CARBON_ZONE))
-    root.classList.add(CARBON_ZONE[theme])
 
     const activeTheme = theme === 'light' ? light : dark
     const activeStates = theme === 'light' ? lightStates : darkStates
 
+    let cls: string | undefined
     if (sourceHex && activeTheme && activeStates && ramps) {
+      const extra = extend?.({ theme, tokens: activeTheme.tokens, states: activeStates }) ?? {}
       const vars = {
-        ...carbonVarsFor(activeTheme, activeStates),
-        ...buildGraphiteVars(activeTheme, activeStates, ramps, theme),
+        ...extra.vars,
+        ...(stampVars ? buildGraphiteVars(activeTheme, activeStates, ramps, theme) : {}),
       }
       for (const [prop, value] of Object.entries(vars)) {
         root.style.setProperty(prop, value)
       }
+      cls = extra.className
+      if (cls) root.classList.add(cls)
       // For the next page load's inline script (lib/theme-storage.ts).
-      try {
-        localStorage.setItem(
-          THEME_PAINT_KEY,
-          JSON.stringify({ theme, cls: CARBON_ZONE[theme], vars }),
-        )
-      } catch {}
+      if (persist) {
+        try {
+          localStorage.setItem(THEME_PAINT_KEY, JSON.stringify({ theme, cls, vars }))
+        } catch {}
+      }
     }
 
     // Force a synchronous style flush so the new values are committed while
@@ -299,7 +243,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // tab, where frames are throttled and the callback may never run.
     void root.offsetHeight
     root.classList.remove('is-retheming')
-  }, [restored, theme, light, dark, lightStates, darkStates, sourceHex, ramps])
+    // The extension's class belongs to this pass; the next pass may pick
+    // another (Carbon's zone class flips with the theme).
+    return () => {
+      if (cls) root.classList.remove(cls)
+    }
+  }, [restored, theme, light, dark, lightStates, darkStates, sourceHex, ramps, stampVars, persist, extend])
 
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
 
@@ -318,7 +267,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         ramps,
       }}
     >
-      <GlobalTheme theme={theme === 'light' ? 'white' : 'g100'}>{children}</GlobalTheme>
+      {children}
     </ThemeContext.Provider>
   )
 }

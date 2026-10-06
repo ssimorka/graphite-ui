@@ -13,9 +13,11 @@ renders the fixed `SiteHeader` above `children`. It also sets the default
 **`ThemeProvider`** ([`components/theme-provider.tsx`](../components/theme-provider.tsx))
 holds the source color, the theme (`light` / `dark`) and the contrast level. On
 every change it runs the engine in [`lib/color.js`](../lib/color.js) and stamps
-the result onto `<html>` as `--graphite-*` variables (the primary namespace) and
-a `--cds-*` compatibility layer for the Carbon pieces that remain. CLAUDE.md
-keeps the current counts.
+the result onto `<html>` as `--graphite-*` variables (the primary namespace). It
+imports nothing from Carbon: the `--cds-*` compatibility layer for the Carbon
+pieces that remain comes from [`components/carbon-compat.tsx`](../components/carbon-compat.tsx),
+plugged in by [`components/site-theme.tsx`](../components/site-theme.tsx).
+CLAUDE.md keeps the current counts.
 
 **`SiteHeader`** ([`components/site-header.tsx`](../components/site-header.tsx)),
 64px tall and fixed:

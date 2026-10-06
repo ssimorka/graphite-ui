@@ -83,6 +83,8 @@ components/
   search/                # Documentation search dialog and ranking
   sections/              # Landing page sections
   theme-provider.tsx     # Source of truth for source color, theme, contrast level
+  carbon-compat.tsx      # The site's Carbon layer, plugged into the provider
+  site-theme.tsx         # The provider as the site configures it
   token-panels.tsx       # Ramp rows, semantic table, states matrix
 lib/
   color.js               # The color engine

@@ -10,7 +10,8 @@ import {
   STATE_FAMILIES,
 } from '@/lib/color.js'
 import type { ExportBundle, StateEntry, Token } from '@/lib/color.js'
-import { CARBON_VAR_COUNT, useTheme } from '@/components/theme-provider'
+import { useTheme } from '@/components/theme-provider'
+import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { DocSnippet } from '@/components/doc-snippet'
 import { StatusBadge } from '@/components/doc-blocks'

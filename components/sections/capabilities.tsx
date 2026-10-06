@@ -15,11 +15,8 @@ import {
 } from '@carbon/icons-react'
 import { Reveal } from '@/components/reveal'
 import { PatternSpecimen } from '@/components/generative-art'
-import {
-  useTheme,
-  COVER_SOURCE_HEX,
-  CARBON_VAR_COUNT,
-} from '@/components/theme-provider'
+import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
+import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 import { makeRamps, buildTheme, graphiteVarName } from '@/lib/color.js'
 import { WEIGHT_LABELS } from '@/components/token-panels'
 import type { KitStats } from '@/lib/kit-stats'
