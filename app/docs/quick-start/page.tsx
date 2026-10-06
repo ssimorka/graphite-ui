@@ -123,7 +123,14 @@ function themeApi() {
 }
 
 // How a project uses the downloaded theme file, in a Next.js root layout.
-const THEME_FILE_USAGE = `// app/layout.tsx
+const THEME_FILE_USAGE = `// npm i @fontsource/ibm-plex-sans @fontsource/ibm-plex-mono
+
+// app/layout.tsx
+import '@fontsource/ibm-plex-sans/400.css'
+import '@fontsource/ibm-plex-sans/500.css'
+import '@fontsource/ibm-plex-sans/600.css'
+import '@fontsource/ibm-plex-sans/700.css'
+import '@fontsource/ibm-plex-mono/400.css'
 import './graphite-theme.css'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -381,10 +388,26 @@ export default function QuickStartPage() {
                 <code>&lt;html&gt;</code> to pick a theme. Leave it unset and the
                 page follows the visitor&rsquo;s OS setting. To change the
                 source later, make a new file in Create rather than editing the
-                values: they are all derived from the one color. If you also
-                use <code>ThemeProvider</code> for a theme switch, pass{' '}
-                <code>stampVars={'{false}'}</code> so it only sets{' '}
+                values: they are all derived from the one color.
+              </p>
+              <p className={styles.stepText}>
+                The file is required even if you also use{' '}
+                <code>ThemeProvider</code>: the provider writes colors only, and
+                the components&rsquo; spacing and type come from the file. Pass
+                the provider <code>stampVars={'{false}'}</code> so it only sets{' '}
                 <code>data-theme</code> and leaves the file&rsquo;s colors alone.
+              </p>
+              <p className={styles.stepText}>
+                The theme names IBM Plex Sans and Mono first and falls back to
+                system fonts, but does not load them. Load them under those
+                exact names, as below with Fontsource; <code>next/font</code>{' '}
+                registers fonts under a generated name, so the theme would not
+                find them. In a new{' '}
+                <code>create-next-app</code> project, also clear the
+                starter&rsquo;s own <code>:root</code>, <code>@theme</code> and{' '}
+                <code>body</code> rules from <code>globals.css</code>: they set
+                a background, text color and <code>--font-sans</code> that
+                override the theme.
               </p>
               <DocSnippet code={THEME_FILE_USAGE} />
             </Step>

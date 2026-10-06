@@ -304,6 +304,16 @@ a trace, which is what "no bypass" is meant to cost.
   and replace Tailwind's sm–xl. Compiled against Tailwind 4.3.3 on 2026-10-06:
   every mapped utility resolves to its `--graphite-*` variable. Offered as the
   Tailwind tab of Get the code.
+- **Outside-project test, 2026-10-06** (fresh `create-next-app` 16.3.8 with
+  Tailwind 4.3.3, Turbopack): Button, Text input and Modal render correctly in
+  both themes beside Tailwind's preflight with zero edits to the copied files.
+  Turbopack compiles the SCSS modules fine; `--webpack` is only needed here for
+  Carbon's Sass. Three traps an adopter hits: the theme file is required even
+  with the provider (the provider stamps colors only), Plex must be loaded under
+  its real name (Fontsource works; `next/font` hashes the family name, so the
+  theme never matches it), and the starter's `globals.css` rules override the
+  theme. Next's default ESLint flags setState-in-effect, hence the scoped
+  disable in the provider's restore effect.
 - Token-rewrite flicker: `theme-provider.tsx` applies an `is-retheming`
   class for one frame while `--cds-*` vars are rewritten, because Carbon
   ships `transition: background 70ms` on buttons that otherwise strand
