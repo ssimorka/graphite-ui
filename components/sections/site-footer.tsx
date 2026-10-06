@@ -64,8 +64,8 @@ export function SiteFooter() {
             <div className={styles.brandBlock}>
               <Brand />
               <p className={styles.tagline}>
-                A design system built from one color, with checks that keep
-                design and code matched.
+                A design system built from one color. Checks in CI hold its
+                components and tokens to the Figma kit.
               </p>
             </div>
 

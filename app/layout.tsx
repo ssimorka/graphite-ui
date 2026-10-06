@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   // Required so the Open Graph image below resolves to an absolute production
   // URL; without it Next falls back to localhost and link previews break.
   metadataBase: new URL('https://www.graphite-ui.com'),
-  title: 'Graphite UI: One color. A whole design system.',
+  title: 'Graphite UI: One color. A whole theme.',
   description:
-    'Graphite UI is a structured design system built from one input: a source color. It generates the color foundations first (perceptual ramps, semantic tokens, contrast-checked pairings, and a pattern library), with layout, components, and typography built to follow the same system as it grows.',
+    'Graphite UI builds a whole theme from one color: color scales, named roles, and light and dark themes, with contrast checked. Radius, density and type are choices in Create. Checks in CI hold the governed components and tokens to the Figma kit.',
   // Carried over from the previous graphite-ui.com build so the live domain
   // keeps its existing favicon and touch icon after the framework swap.
   icons: {
@@ -23,7 +23,9 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'Graphite UI: One color. A whole design system.',
+    title: 'Graphite UI: One color. A whole theme.',
+    description:
+      'A whole theme from one color, with contrast checked. Governed components and tokens are held to the Figma kit in CI.',
     images: ['/graphite/cover.jpg'],
   },
 }
