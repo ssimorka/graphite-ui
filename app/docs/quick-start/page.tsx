@@ -351,8 +351,8 @@ export default function QuickStartPage() {
               <NextCard href="/gallery" title="Components">
                 Every component, with its contract version.
               </NextCard>
-              <NextCard href="/docs/get-started" title="Get started">
-                What each part of Graphite gives you today.
+              <NextCard href="/docs#use-today" title="What you can use today">
+                The theme, the Figma kit and the components, and their status.
               </NextCard>
             </NextCards>
           </section>

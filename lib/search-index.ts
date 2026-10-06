@@ -21,13 +21,11 @@ import { TOC as a11yToc } from '@/app/docs/accessibility/toc'
 import { metadata as governanceMeta } from '@/app/docs/contribute/governance/page'
 import { TOC as governanceToc } from '@/app/docs/contribute/governance/toc'
 import { metadata as glossaryMeta } from '@/app/docs/glossary/page'
-import { metadata as getStartedMeta } from '@/app/docs/get-started/page'
 import { metadata as driftMeta } from '@/app/docs/contribute/drift/page'
 import { TOC as driftToc } from '@/app/docs/contribute/drift/toc'
 import { metadata as carbonMeta } from '@/app/docs/contribute/carbon/page'
 import { TOC as carbonToc } from '@/app/docs/contribute/carbon/toc'
 import { metadata as statusMeta } from '@/app/docs/contribute/status/page'
-import { TOC as getStartedToc } from '@/app/docs/get-started/toc'
 import { TOC as glossaryToc } from '@/app/docs/glossary/toc'
 import { metadata as typeMeta } from '@/app/docs/foundations/typography/page'
 import { TOC as typeToc } from '@/app/docs/foundations/typography/toc'
@@ -156,7 +154,6 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs/accessibility', a11yMeta, a11yToc),
     ...docsPage('/docs/contribute/governance', governanceMeta, governanceToc),
     ...docsPage('/docs/glossary', glossaryMeta, glossaryToc),
-    ...docsPage('/docs/get-started', getStartedMeta, getStartedToc),
     ...docsPage('/docs/contribute/drift', driftMeta, driftToc),
     ...docsPage('/docs/contribute/carbon', carbonMeta, carbonToc),
     ...docsPage('/docs/contribute/status', statusMeta, []),

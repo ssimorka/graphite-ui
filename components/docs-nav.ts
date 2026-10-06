@@ -13,7 +13,6 @@ export const DOCS_NAV: DocsNavGroup[] = [
     // maintained. That lives under Contribute, at the end of the sidebar.
     label: 'Use',
     items: [
-      { href: '/docs/get-started', label: 'Get started' },
       { href: '/docs', label: 'Introduction' },
       { href: '/docs/quick-start', label: 'Quick start' },
       // The color essay: how a source becomes ramps and roles. The kit's
