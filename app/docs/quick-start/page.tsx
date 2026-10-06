@@ -243,9 +243,9 @@ export default function QuickStartPage() {
                 <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
                 <code>p-space-05</code> or <code>text-body-3</code>. Spacing
                 keeps a <code>space-</code> prefix because the kit&rsquo;s 05 is
-                16px, where Tailwind&rsquo;s <code>p-5</code> is 20px. The file
-                also sets the kit&rsquo;s breakpoints; delete that block to keep
-                Tailwind&rsquo;s.
+                16px, where Tailwind&rsquo;s <code>p-5</code> is 20px. The kit&rsquo;s
+                breakpoints are in the file too, commented out; uncomment them
+                to replace Tailwind&rsquo;s.
               </p>
               <DocSnippet code={TAILWIND_USAGE} />
             </Step>

@@ -17,8 +17,10 @@ import type { ThemeFileFoundations } from '@/lib/theme-file'
  * Generated rather than hand-written, from the same name list the provider and
  * the theme file use, so a role the engine gains arrives here without an edit.
  *
- * Breakpoints are the exception, and are literal: Tailwind writes them into
- * media queries, where a custom property does not resolve.
+ * Breakpoints are the exception: literal, because Tailwind writes them into
+ * media queries, where a custom property does not resolve. They ship
+ * commented out, since replacing Tailwind's sm to xl would silently move every
+ * responsive class in a project that already uses them.
  */
 
 type Line = string
@@ -127,12 +129,14 @@ export function buildTailwindBridge({
     ...lines.slice(1),
     '}',
     '',
-    "/* The kit's breakpoints. They replace Tailwind's sm, md, lg and xl (and add",
-    "   max); delete this block to keep Tailwind's. Literal because Tailwind",
-    '   writes them into media queries. */',
+    "/* The kit's breakpoints, off by default. Uncomment the block to replace",
+    "   Tailwind's sm, md, lg and xl with the kit's (and add max). Literal because",
+    '   Tailwind writes them into media queries.',
+    '',
     '@theme {',
     ...breakpoints,
     '}',
+    '*/',
     '',
   ].join('\n')
 }

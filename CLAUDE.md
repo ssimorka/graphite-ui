@@ -316,8 +316,10 @@ a trace, which is what "no bypass" is meant to cost.
   names every `buildGraphiteVars` key and the foundations from `globals.scss` as
   Tailwind v4 tokens under `@theme inline` (inline, so a nested `data-theme`
   reaches utilities). Spacing is `p-space-05`, not `p-05`, because Tailwind's
-  `p-5` is a different size. Breakpoints are literals in a plain `@theme` block
-  and replace Tailwind's sm–xl. Compiled against Tailwind 4.3.3 on 2026-10-06:
+  `p-5` is a different size. Breakpoints are literals in a plain `@theme` block,
+  shipped commented out (opt-in), because replacing Tailwind's sm–xl would
+  silently move every responsive class in an existing project. The theme file
+  and the provider both set `color-scheme`, so native controls follow the theme. Compiled against Tailwind 4.3.3 on 2026-10-06:
   every mapped utility resolves to its `--graphite-*` variable. Offered as the
   Tailwind tab of Get the code.
 - **Outside-project test, 2026-10-06** (fresh `create-next-app` 16.3.8 with
