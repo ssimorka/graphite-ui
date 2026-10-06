@@ -110,7 +110,7 @@ export function TwoDoors() {
                   <h3 className={styles.doorTitle}>For developers</h3>
                   <p className={styles.doorCopy}>
                     Every component has a versioned written spec, called a
-                    contract. The code is checked against it on every build.
+                    contract. The code is checked against it in CI.
                   </p>
                 </div>
                 <a className={styles.cta} href="/gallery">
