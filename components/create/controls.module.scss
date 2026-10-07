@@ -351,6 +351,19 @@
   padding: 1.125rem var(--graphite-space-06) 1.25rem;
 }
 
+// One line each for what Shuffle and Lock do, under the buttons they explain.
+.hints {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
 .actionRow {
   display: flex;
   gap: 0.625rem;
