@@ -25,7 +25,8 @@ before trusting a browser result.
 
 - **Auto-fix never has anything to fix, and its toggle is gone.** Swept 96
   hues × light/dark × AA/AAA through `buildTheme` with auto-fix off: 6,144
-  pairs, zero failures, so zero repairs. First found 2026-08-22; the
+  pairs, zero failures, so zero repairs. First found 2026-08-22 (6,912 pairs
+  since 2026-10-07, when Button's two label pairs joined: see below); the
   Accessibility page (`/docs/accessibility`) now reruns that sweep at build
   time and prints the result. The "Auto-fix on-colors" toggle was removed as
   a control the visitor did not really have (see the comment in
@@ -239,6 +240,15 @@ before trusting a browser result.
   tied to the visitor's contrast target: AA light 0.3 / dark 0.4 (worst 5.29 /
   5.11:1), AAA light 0.1 / dark 0.2 (worst 7.16 / 7.32:1). Don't raise them
   without rerunning the sweep.
+- **Button's label pairs are measured, never repaired.** The kit's Button
+  keeps `onPrimary` as its label on the secondary and danger fills too, so
+  `pairsFor` carries `onPrimaryOnSecondary` and `onPrimaryOnDanger`: keyed by
+  name, with the foreground in `on` (every contrast entry now has `on`, and
+  consumers read the foreground from it, not from the key). `repair: false`,
+  because retuning `onPrimary` for one fill would move it on primary. Swept
+  2026-10-07 across 288 sources, both themes, AA and AAA, fill plus hover and
+  pressed: zero failures, worst 8.20:1 (secondary) and 9.04:1 (danger).
+  `pnpm color:test` reruns that sweep in CI.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

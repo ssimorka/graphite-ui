@@ -153,7 +153,7 @@ export function ContrastTable() {
         ]}
         rows={Object.entries(light).map(([role, c]) => [
           <span key="p">
-            <code>{role}</code> on <code>{c.against}</code>
+            <code>{c.on}</code> on <code>{c.against}</code>
           </span>,
           `${c.target}:1${c.kind === 'UI' ? ' (UI)' : ''}`,
           verdict(c),
