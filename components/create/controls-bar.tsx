@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
+import { Slider } from '@/components/ui/slider'
 import type { IconSet } from '@/lib/kit-icons'
 import { CODE_FONTS, TEXT_FONTS, useBuilder } from './builder'
 import { DERIVED_ROLES, forView, openSourcePicker, useControls } from './controls-model'
@@ -75,6 +76,18 @@ function OptionSheet({
 
         {control.disabled ? (
           <p className={styles.sheetCaption}>{control.note}</p>
+        ) : control.slider ? (
+          <div className={styles.sheetSlider}>
+            <Slider
+              label={control.value}
+              min={control.slider.min}
+              max={control.slider.max}
+              step={control.slider.step}
+              value={control.slider.value}
+              onChange={control.slider.onChange}
+              showInputs={false}
+            />
+          </div>
         ) : control.id === 'derived' ? (
           <>
             {DERIVED_ROLES.map((r) => (

@@ -6,7 +6,7 @@ import type { RampName } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { SOURCE_TRIGGER_ID } from '@/components/color-picker'
 import { useTheme } from '@/components/theme-provider'
-import { ART_OPTIONS, isHueless } from '@/components/generative-art'
+import { ART_OPTIONS, intensityLabel, isHueless } from '@/components/generative-art'
 import type { ArtSettings } from '@/components/generative-art'
 import {
   CODE_FONTS,
@@ -54,6 +54,8 @@ export type Control = {
   note?: string
   /** Shown but not settable, with `note` saying why. */
   disabled?: boolean
+  /** A continuous control, drawn as a slider instead of options. */
+  slider?: { min: number; max: number; step: number; value: number; onChange: (v: number) => void }
 }
 
 /** The controls a tab shows, in order. */
@@ -230,7 +232,7 @@ function artControls(
   setArt: (patch: Partial<ArtSettings>) => void,
   hueless: boolean,
 ): Control[] {
-  const chip = <K extends keyof ArtSettings>(id: Exclude<ControlId, 'source'> & K, heading: string): Control => ({
+  const chip = (id: 'mix' | 'grid', heading: string): Control => ({
     id,
     label: heading,
     heading,
@@ -240,21 +242,31 @@ function artControls(
     select: (k) => setArt({ [id]: k } as Partial<ArtSettings>),
     view: 'art',
   })
-  const intensity = chip('intensity', 'Intensity')
-  return [
-    hueless
+  const intensity: Control = {
+    id: 'intensity',
+    label: 'Intensity',
+    heading: 'Intensity',
+    value: hueless ? 'Off' : `${intensityLabel(art.intensity)} · ${art.intensity}`,
+    options: [],
+    selected: String(art.intensity),
+    select: () => {},
+    view: 'art',
+    ...(hueless
       ? {
-          ...intensity,
-          value: 'Off',
-          selected: 'off',
-          select: () => {},
           disabled: true,
           note: 'Your pick is grey, black or white, so there is no hue to draw with. Pick a color to turn intensity up.',
         }
-      : intensity,
-    chip('mix', 'Mix'),
-    chip('grid', 'Grid'),
-  ]
+      : {
+          slider: {
+            min: 0,
+            max: 100,
+            step: 1,
+            value: art.intensity,
+            onChange: (v: number) => setArt({ intensity: v }),
+          },
+        }),
+  }
+  return [intensity, chip('mix', 'Mix'), chip('grid', 'Grid')]
 }
 
 /** The eight roles the Derived roles section shows, as the kit lists them. */

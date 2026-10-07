@@ -305,52 +305,66 @@ type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: strin
 // source: a grey or black pick has none, so the art draws in mono whatever
 // the intensity says.
 //
-// - intensity: how strong the color is, as an absolute chroma, so it can go
-//   past the pick's own. It also sets where the color sits: the lower steps
-//   pair one deep shade with two light tints, which reads pale; Strong and Max
-//   use the first generator's deep 30/41/52. Strong is its 0.16, the strength
-//   of its #6B4FBE and #1DE9B6. The companion is always the hue 120 degrees
-//   round, the first generator's teal against its purple.
+// - intensity (0-100): how strong the color is, as an absolute chroma up to
+//   0.24, so it can go past the pick's own. It also moves where the color
+//   sits: low values pair one deep shade with two light tints, which reads
+//   pale; from about 65 it is the first generator's deep 30/41/52 (vivid).
+//   67 is its 0.16, the strength of its #6B4FBE and #1DE9B6. 0 is mono. The
+//   companion is always the hue 120 degrees round, its teal against purple.
 // - mix: how much of the pool is grey. Balanced is the 60/30/10 rhythm.
-// - grid: the unit grid the tiles are dealt onto.
+// - grid: the size a tile aims for. The column and row counts come from the
+//   canvas's own size, so the grid reflows with its container, portrait on a
+//   phone included.
 //
 // One pool for both themes: the art is a picture, not chrome.
-export type ArtIntensity = 'off' | 'soft' | 'medium' | 'strong' | 'max'
 export type ArtMix = 'gray' | 'balanced' | 'color'
 export type ArtGrid = 'large' | 'medium' | 'small'
 export type ArtSettings = {
-  intensity: ArtIntensity
+  intensity: number
   mix: ArtMix
   grid: ArtGrid
 }
 
 const DEEP = [30, 41, 52]
 const PALE = [30, 80, 90]
+const MAX_CHROMA = 0.24
 
 export const ART_OPTIONS = {
-  intensity: [
-    { key: 'off', label: 'Off', chroma: 0, tones: DEEP },
-    { key: 'soft', label: 'Soft', chroma: 0.07, tones: PALE },
-    { key: 'medium', label: 'Medium', chroma: 0.11, tones: PALE },
-    { key: 'strong', label: 'Strong', chroma: 0.16, tones: DEEP },
-    { key: 'max', label: 'Max', chroma: 0.24, tones: DEEP },
-  ],
   mix: [
     { key: 'gray', label: 'More gray', grays: 7 },
     { key: 'balanced', label: 'Balanced', grays: 6 },
     { key: 'color', label: 'More color', grays: 4 },
   ],
   grid: [
-    { key: 'large', label: 'Large', cols: 8, rows: 6 },
-    { key: 'medium', label: 'Medium', cols: 12, rows: 10 },
-    { key: 'small', label: 'Small', cols: 16, rows: 12 },
+    { key: 'large', label: 'Large', unit: 112 },
+    { key: 'medium', label: 'Medium', unit: 76 },
+    { key: 'small', label: 'Small', unit: 54 },
   ],
 } as const
 
 export const ART_DEFAULTS: ArtSettings = {
-  intensity: 'strong',
+  intensity: 67,
   mix: 'balanced',
   grid: 'medium',
+}
+
+/** The intensity slider's reading: 0 is mono, 67 the first generator's vivid. */
+export function intensityLabel(v: number) {
+  if (v === 0) return 'Off'
+  if (v < 30) return 'Pale'
+  if (v < 60) return 'Soft'
+  if (v < 80) return 'Vivid'
+  return 'Loud'
+}
+
+/** Columns and rows for a canvas size, aiming each tile at the grid's unit. */
+export function gridFor(width: number, height: number, grid: ArtGrid) {
+  const unit = ART_OPTIONS.grid.find((g) => g.key === grid)!.unit
+  if (!width || !height) return { cols: 12, rows: 10 }
+  return {
+    cols: Math.max(4, Math.round(width / unit)),
+    rows: Math.max(4, Math.round(height / unit)),
+  }
 }
 
 /** Below this chroma a pick has no hue worth reading, so the art is mono. */
@@ -380,13 +394,16 @@ function grayAt(tone: number) {
 /** The art's groups for a source and settings, for anything that shows the rhythm. */
 export function artPalette(sourceHex: string, settings: Partial<ArtSettings> = {}) {
   const s = { ...ART_DEFAULTS, ...settings }
-  const intensity = opt('intensity', s.intensity)
-  const chroma = isHueless(sourceHex) ? 0 : intensity.chroma
+  const v = Math.min(100, Math.max(0, s.intensity))
+  const chroma = isHueless(sourceHex) ? 0 : (v / 100) * MAX_CHROMA
+  // How deep the color sits: pale tints up to 25, all deep from 65.
+  const depth = Math.min(1, Math.max(0, (v - 25) / 40))
+  const tones = PALE.map((t, i) => t + (DEEP[i] - t) * depth)
   const grayCount = opt('mix', s.mix).grays
 
   const grays = GRAY_TONES.slice(0, grayCount).map(grayAt)
   const accents = Array.from({ length: 10 - grayCount - 1 }, (_, i) => {
-    const t = intensity.tones[i % intensity.tones.length]
+    const t = tones[i % tones.length]
     return chroma ? toneAt(sourceHex, t, { chromaScale: 0, minChroma: chroma }) : grayAt(t)
   })
   const pop = chroma
@@ -432,9 +449,10 @@ function buildLayout(pal: Palette, assetsReady: boolean, COLS = 12, ROWS = 10): 
 
   // Zones: the grid is split into horizontal bands and one asset is seeded per
   // band, so no single region of the composition dominates.
-  const assetKinds: Kind[] = assetsReady
-    ? ['eye', 'eye', 'eye', 'mouth', 'mouth', 'mouth']
-    : []
+  // Six on the original 12x10; fewer on a smaller grid, never more rows than
+  // there are zones for.
+  const assetCount = assetsReady ? Math.max(1, Math.min(6, ROWS, Math.round((COLS * ROWS) / 20))) : 0
+  const assetKinds: Kind[] = Array.from({ length: assetCount }, (_, i) => (i % 2 ? 'mouth' : 'eye'))
   for (let i = assetKinds.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1))
     ;[assetKinds[i], assetKinds[j]] = [assetKinds[j], assetKinds[i]]
@@ -654,7 +672,22 @@ export function GenerativeArt({
     () => buildPalette(activeHex, { intensity, mix }),
     [activeHex, intensity, mix],
   )
-  const { cols, rows } = opt('grid', grid)
+  // The canvas's own size, so the grid reflows with its container.
+  const [box, setBox] = useState({ w: 0, h: 0 })
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const measure = () => setBox({ w: canvas.offsetWidth, h: canvas.offsetHeight })
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(canvas)
+    return () => ro.disconnect()
+  }, [])
+  const { cols, rows } = gridFor(box.w, box.h, grid)
+  // The grid the current layout was dealt on, read by paint and the click.
+  const gridRef = useRef({ cols, rows })
+  // Bumped after every rebuild, so the canvas repaints with the new layout.
+  const [dealt, setDealt] = useState(0)
   // Near-black seams in both themes, as the original drew them: white seams
   // in light mode broke the tiles apart instead of framing them.
   const seamColor = '#0a0a0a'
@@ -662,8 +695,11 @@ export function GenerativeArt({
   const assetsRef = useRef<{ eye: HTMLImageElement; mouth: HTMLImageElement } | null>(null)
   const [assetsReady, setAssetsReady] = useState(false)
 
-  // Bumping this rebuilds the whole composition (Regenerate).
+  // Bumping this rebuilds the whole composition (Regenerate). Each deal keeps
+  // its seed, so moving a control afterwards recolors or reflows that deal
+  // rather than dealing a new one.
   const [nonce, setNonce] = useState(0)
+  const dealSeed = useRef(0)
   // Switching Explore tabs remounts this component, so "dismissed" is tracked
   // per session rather than per mount — the cover greets you once, not
   // every time you come back to the composition view.
@@ -696,12 +732,12 @@ export function GenerativeArt({
   // Rebuild the layout whenever the palette or nonce changes.
   useEffect(() => {
     const prevRand = rand
-    rand = nonce === 0
-      ? mulberry32(hexSeed(activeHex))
-      : mulberry32(Math.floor(Math.random() * 0xffffffff))
+    rand = mulberry32(nonce === 0 ? hexSeed(activeHex) : dealSeed.current)
     try {
       layoutRef.current = buildLayout(palette, !!assetsRef.current, cols, rows)
+      gridRef.current = { cols, rows }
       tileCache.current = new WeakMap()
+      setDealt((d) => d + 1)
     } finally {
       rand = prevRand
     }
@@ -712,7 +748,7 @@ export function GenerativeArt({
     const layout = layoutRef.current
     if (!layout) return
     const assets = assetsRef.current
-    const uW = W / cols, uH = H / rows
+    const uW = W / gridRef.current.cols, uH = H / gridRef.current.rows
 
     ctx.fillStyle = palette.colors[0]
     ctx.fillRect(0, 0, W, H)
@@ -776,13 +812,16 @@ export function GenerativeArt({
     const ro = new ResizeObserver(() => draw())
     ro.observe(canvas)
     return () => ro.disconnect()
-  }, [draw, nonce, assetsReady])
+  }, [draw, dealt])
 
-  // Export at the same 1600×900 the original pattern tool uses.
+  // Export 1600 wide, at the canvas's own proportions (portrait on a phone).
   const exportPng = useCallback(() => {
+    const canvas = canvasRef.current
+    const W = 1600
+    const H = canvas && canvas.offsetWidth ? Math.round((W * canvas.offsetHeight) / canvas.offsetWidth) : 900
     const out = document.createElement('canvas')
-    out.width = 1600
-    out.height = 900
+    out.width = W
+    out.height = H
     const ctx = out.getContext('2d')
     if (!ctx) return
     // Export renders at a different size, so use a scratch cache to avoid
@@ -792,7 +831,7 @@ export function GenerativeArt({
     const prevRand = rand
     rand = mulberry32(hexSeed(activeHex))
     try {
-      paint(ctx, 1600, 900)
+      paint(ctx, W, H)
     } finally {
       rand = prevRand
       tileCache.current = onScreen
@@ -803,7 +842,10 @@ export function GenerativeArt({
     a.click()
   }, [paint, activeHex])
 
-  const regenerate = useCallback(() => setNonce((n) => n + 1), [])
+  const regenerate = useCallback(() => {
+    dealSeed.current = Math.floor(Math.random() * 0xffffffff)
+    setNonce((n) => n + 1)
+  }, [])
 
   useEffect(() => {
     onReady?.({ regenerate, exportPng })
@@ -816,8 +858,8 @@ export function GenerativeArt({
     const layout = layoutRef.current
     if (!canvas || !layout) return
     const rect = canvas.getBoundingClientRect()
-    const col = Math.floor(((e.clientX - rect.left) / rect.width) * cols)
-    const row = Math.floor(((e.clientY - rect.top) / rect.height) * rows)
+    const col = Math.floor(((e.clientX - rect.left) / rect.width) * gridRef.current.cols)
+    const row = Math.floor(((e.clientY - rect.top) / rect.height) * gridRef.current.rows)
     const hit = layout.find(
       (c) => col >= c.col && col < c.col + c.colSpan && row >= c.row && row < c.row + c.rowSpan,
     )

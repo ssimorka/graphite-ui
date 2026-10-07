@@ -82,13 +82,18 @@ before trusting a browser result.
   which made it pale (the accent's 80/90 are container tints; `secondary` is
   0.585x the source's chroma). Now Create's Generative Art tab swaps the UI
   controls for three art controls held in the builder (`art`, `setArt`):
-  Intensity, Mix and Grid. Intensity is an absolute chroma (Strong 0.16, Max
-  0.24, so it can go past the pick's own) and also sets where the color sits:
-  Soft and Medium pair a deep shade with two light tints (pale), Strong and
-  Max use the first generator's deep 30/41/52 (vivid), Off is mono. The
-  companion is always the hue 120 degrees round. On that tab Shuffle becomes
-  Regenerate (a new deal, no setting changes); Reset resets everything,
-  source included, on either tab; Export PNG replaces Get the code.
+  Intensity (a 0-100 slider), Mix and Grid. Intensity is an absolute chroma
+  up to 0.24 (67 is the first generator's 0.16), so it can go past the pick's
+  own, and it moves where the color sits: one deep shade and two light tints
+  at the low end (pale), the first generator's deep 30/41/52 from about 65
+  (vivid), mono at 0. The companion is always the hue 120 degrees round. Grid
+  is a target tile size: `gridFor` derives columns and rows from the canvas's
+  measured size, so the grid reflows with its container and goes portrait
+  (3:4) on a phone; the layout keeps the grid it was dealt on, and each
+  deal keeps its seed, so moving a control recolors or reflows that deal
+  instead of dealing a new one. On that tab Shuffle becomes Regenerate;
+  Reset resets everything, source included, on either tab; Export PNG
+  replaces Get the code and exports at the canvas's proportions.
   `artPalette(source, settings)` in `components/generative-art.tsx` builds the
   pool from true greys (`grayAt`). A pick under 0.02 chroma (`isHueless`)
   has no hue, so the art is mono and Intensity is disabled with a note:

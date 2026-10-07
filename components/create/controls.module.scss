@@ -712,3 +712,8 @@
   line-height: var(--graphite-text-code-1-line-height);
   color: var(--graphite-on-surface-variant);
 }
+
+// The intensity slider inside the bar's bottom sheet: the sheet's side gutter.
+.sheetSlider {
+  padding: var(--graphite-space-03) var(--graphite-space-06) var(--graphite-space-05);
+}

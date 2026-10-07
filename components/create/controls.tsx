@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
 import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'
 import type { LockKey } from './builder'
@@ -23,9 +24,9 @@ const CAPTIONS: Record<string, string> = {
     'font-1 and font-2 are two roles that happen to hold the same family today. The kit says they may diverge, so the builder lets them.',
   derived:
     'Secondary is the source hue minus 120°, chroma × 0.585. Background, foreground and borders come off the neutral ramp. These are outputs, not inputs.',
-  intensity: 'How strong your color is, from none to louder than your pick. Off is black, white and gray; Soft and Medium are pale; Strong is vivid. The hue is always yours.',
+  intensity: 'How strong your color is, from none to louder than your pick. Low is pale, the middle is vivid. The hue is always yours.',
   mix: 'How much of the grid is gray. Balanced is 60% gray, 30% your color, 10% companion.',
-  grid: 'The size of the grid the tiles are dealt onto.',
+  grid: 'How big the tiles are. The grid fills whatever space it has, portrait on a phone.',
 }
 
 function Chip({
@@ -255,7 +256,21 @@ export function ControlsPanel() {
             return (
               <Section key={id} label={c.heading} open={open[id] ?? true} onToggle={() => setOpen((o) => ({ ...o, [id]: !(o[id] ?? true) }))}>
                 <p className={styles.caption}>{CAPTIONS[id]}</p>
-                {c.disabled ? <p className={styles.note}>{c.note}</p> : <ChipRow control={c} grow />}
+                {c.disabled ? (
+                  <p className={styles.note}>{c.note}</p>
+                ) : c.slider ? (
+                  <Slider
+                    label={c.value}
+                    min={c.slider.min}
+                    max={c.slider.max}
+                    step={c.slider.step}
+                    value={c.slider.value}
+                    onChange={c.slider.onChange}
+                    showInputs={false}
+                  />
+                ) : (
+                  <ChipRow control={c} grow />
+                )}
               </Section>
             )
           })}
