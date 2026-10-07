@@ -109,16 +109,18 @@ function staticVars(generated: Set<string>) {
   return groups
 }
 
-// How a project uses the downloaded theme file, in a Next.js root layout.
-const THEME_FILE_USAGE = `// npm i @fontsource/ibm-plex-sans @fontsource/ibm-plex-mono
+// The fonts the theme names, loaded under their own names.
+const FONT_INSTALL = 'npm i @fontsource/ibm-plex-sans @fontsource/ibm-plex-mono'
 
-// app/layout.tsx
+// The root layout of a project without the Tailwind bridge: fonts, then the
+// theme, once.
+const LAYOUT = `// app/layout.tsx
 import '@fontsource/ibm-plex-sans/400.css'
 import '@fontsource/ibm-plex-sans/500.css'
 import '@fontsource/ibm-plex-sans/600.css'
 import '@fontsource/ibm-plex-sans/700.css'
 import '@fontsource/ibm-plex-mono/400.css'
-import './graphite-theme.css'
+import './graphite-theme.css' // with Tailwind, in globals.css instead
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -150,7 +152,7 @@ export function ThemeToggle() {
   return <button onClick={toggle}>Switch theme</button>
 }`
 
-// The example source color in the commands. Any six-digit hex works.
+// The example source color in the commands: six hex digits, no #.
 const EXAMPLE_HEX = '0f766e'
 
 export default function QuickStartPage() {
@@ -180,87 +182,130 @@ export default function QuickStartPage() {
               Graphite in your own project, from a color to a themed screen.
             </p>
             <div className={styles.badges}>
-              <StatusBadge tone="success">Any React project</StatusBadge>
+              <StatusBadge tone="success">Next.js App Router</StatusBadge>
               <StatusBadge tone="neutral">Installs with the shadcn CLI</StatusBadge>
             </div>
           </header>
 
+          <section id="before" className={styles.block}>
+            <SectionHeading title="Before you start" />
+            <ul className={styles.list}>
+              <li>Node 20 or newer.</li>
+              <li>
+                An existing Next.js project on the App Router, in TypeScript.{' '}
+                <code>npx create-next-app@latest</code> gives you one.
+              </li>
+              <li>
+                The <code>@/</code> import alias, which{' '}
+                <code>create-next-app</code> sets up by default.
+              </li>
+              <li>Tailwind v4, only if you want the Tailwind classes in step 4.</li>
+            </ul>
+            <p className={styles.stepText}>
+              Another React setup, such as Vite, works too. Put the imports from
+              steps 2 to 4 in your entry file (for example{' '}
+              <code>src/main.tsx</code>) instead of <code>app/layout.tsx</code>,
+              and set up the <code>@/</code> alias in <code>tsconfig.json</code>{' '}
+              and your bundler.
+            </p>
+          </section>
+
           <section id="get-the-theme" className={styles.block}>
-            <SectionHeading
-              title="Get the theme"
-              lede="One color in, a whole theme out."
-            />
-            <Step n={1} title="Set up the project">
+            <Step n={1} title="Add the theme">
               <p className={styles.stepText}>
-                One command adds a <code>components.json</code>, the theme for
-                your color and the Tailwind file. Put your own hex in place of{' '}
-                <code>{EXAMPLE_HEX}</code>.
+                Run this in your project root. Put your color in place of{' '}
+                <code>{EXAMPLE_HEX}</code>: six hex digits, no <code>#</code>.
               </p>
               <DocSnippet code={shadcnAdd('init', `theme/${EXAMPLE_HEX}`, 'tailwind')} />
               <p className={styles.stepText}>
+                It writes three files: <code>components.json</code> in the
+                project root, and <code>app/graphite-theme.css</code> and{' '}
+                <code>app/graphite-tailwind.css</code>. The theme meets the AA
+                contrast target. For AAA, add <code>?level=AAA</code> to the
+                theme URL and put that URL in quotes.
+              </p>
+              <p className={styles.stepText}>
                 The theme is one plain CSS file: foundations (space, radius,
                 motion, type), then colors for light and dark, all as{' '}
-                <code>--graphite-*</code> variables. To pick the color by eye,
-                or to change radius, density or type too, use{' '}
-                <a href="/create">Create</a> and download the file from Get the
-                code instead.
+                <code>--graphite-*</code> variables.
               </p>
               <DocSnippet code={cssHead} />
+              <p className={styles.stepText}>
+                To pick the color by eye, or to change radius, density or type
+                too, use <a href="/create">Create</a> instead. Get the code
+                downloads <code>graphite-theme.css</code> (and{' '}
+                <code>graphite-tailwind.css</code> from its Tailwind tab), at the
+                contrast target you chose there. Save them in <code>app/</code>,
+                then run the init item alone so components can install:
+              </p>
+              <DocSnippet code={shadcnAdd('init')} />
+            </Step>
+          </section>
+
+          <section id="fonts" className={styles.block}>
+            <Step n={2} title="Load the fonts">
+              <p className={styles.stepText}>
+                The theme names IBM Plex but does not load it. Install it from
+                Fontsource, which keeps the real font names.{' '}
+                <code>next/font</code> renames fonts, so the theme would not find
+                them.
+              </p>
+              <DocSnippet code={FONT_INSTALL} />
+              <p className={styles.stepText}>
+                Import the weights in <code>app/layout.tsx</code>, as step 3
+                shows.
+              </p>
             </Step>
           </section>
 
           <section id="add-it" className={styles.block}>
-            <SectionHeading
-              title="Add it to your project"
-              lede="Plain CSS, with your color fixed in it."
-            />
-            <Step n={2} title="Import the theme and load the fonts">
+            <Step n={3} title="Import the theme">
               <p className={styles.stepText}>
-                Import <code>graphite-theme.css</code> once, globally. Set{' '}
-                <code>data-theme</code> on <code>&lt;html&gt;</code> to pick a
-                theme, or leave it unset to follow the visitor&rsquo;s OS. To
-                change color later, make a new file in Create: every value comes
-                from the one color.
+                Import <code>graphite-theme.css</code> once. Without Tailwind,
+                import it in <code>app/layout.tsx</code>, after the fonts. With
+                Tailwind, import it in <code>globals.css</code> instead (step 4),
+                not in both.
               </p>
               <p className={styles.stepText}>
-                The theme names IBM Plex but does not load it. Load it under its
-                own name, as below with Fontsource; <code>next/font</code>{' '}
-                renames fonts, so the theme would not find them. In a new{' '}
-                <code>create-next-app</code> project, clear the starter&rsquo;s{' '}
-                <code>:root</code>, <code>@theme</code> and <code>body</code>{' '}
-                rules from <code>globals.css</code>: they override the theme.
+                Set <code>data-theme=&quot;light&quot;</code> on{' '}
+                <code>&lt;html&gt;</code> as the default, so the server and the
+                browser agree. Remove it to follow the visitor&rsquo;s OS.
               </p>
-              <DocSnippet code={THEME_FILE_USAGE} />
+              <p className={styles.stepText}>
+                In a new <code>create-next-app</code> project, delete the
+                starter&rsquo;s <code>:root</code>, <code>@theme</code> and{' '}
+                <code>body</code> rules from <code>globals.css</code>: they
+                override the theme.
+              </p>
+              <DocSnippet code={LAYOUT} />
             </Step>
           </section>
 
           <section id="tailwind" className={styles.block}>
-            <SectionHeading
-              title="Use Tailwind"
-              lede="Optional. The roles as Tailwind classes."
-            />
-            <Step n={3} title="Import the Tailwind file">
+            <Step n={4} title="Use Tailwind (optional)">
               <p className={styles.stepText}>
-                On Tailwind v4, import <code>graphite-tailwind.css</code> after
-                the theme file. It holds no values, so dark
-                theme and a new color reach every class. Write{' '}
-                <code>bg-surface</code>, <code>text-on-primary</code>,{' '}
-                <code>p-space-05</code> or <code>text-body-3</code>. Spacing
-                keeps a <code>space-</code> prefix because the kit&rsquo;s 05 is
-                16px, where Tailwind&rsquo;s <code>p-5</code> is 20px. The kit&rsquo;s
-                breakpoints are in the file too, commented out; uncomment them
-                to replace Tailwind&rsquo;s.
+                On Tailwind v4, import the theme and then{' '}
+                <code>graphite-tailwind.css</code> in <code>globals.css</code>.
+                The Tailwind file holds no values, so dark theme and a new color
+                reach every class. Write <code>bg-surface</code>,{' '}
+                <code>text-on-primary</code>, <code>p-space-05</code> or{' '}
+                <code>text-body-3</code>. Spacing keeps a <code>space-</code>{' '}
+                prefix because the kit&rsquo;s 05 is 16px, where Tailwind&rsquo;s{' '}
+                <code>p-5</code> is 20px. The kit&rsquo;s breakpoints are in the
+                file too, commented out; uncomment them to replace
+                Tailwind&rsquo;s.
               </p>
               <DocSnippet code={TAILWIND_USAGE} />
             </Step>
           </section>
 
           <section id="style" className={styles.block}>
-            <SectionHeading
-              title="Style with the roles"
-              lede="Your own components read the same --graphite-* variables."
-            />
-            <Step n={4} title="Write a module against the roles">
+            <Step n={5} title="Style with the roles">
+              <p className={styles.stepText}>
+                CSS modules in <code>.module.scss</code> need{' '}
+                <code>sass</code>: run <code>npm i -D sass</code> first. Step 7
+                adds it too, but your own module comes before that.
+              </p>
               <p className={styles.stepText}>
                 Use a role, never a hex. Here the container role and its{' '}
                 <code>on-</code> partner are a checked pairing, so the text
@@ -310,11 +355,7 @@ export default function QuickStartPage() {
           </section>
 
           <section id="switch-theme" className={styles.block}>
-            <SectionHeading
-              title="Switch theme"
-              lede="One attribute. The theme file holds both."
-            />
-            <Step n={5} title="Set data-theme">
+            <Step n={6} title="Switch theme">
               <p className={styles.stepText}>
                 Set <code>data-theme</code> to <code>light</code> or{' '}
                 <code>dark</code> on <code>&lt;html&gt;</code>, or on any element
@@ -325,11 +366,7 @@ export default function QuickStartPage() {
           </section>
 
           <section id="add-a-component" className={styles.block}>
-            <SectionHeading
-              title="Add a component"
-              lede="Each one installs with everything it uses."
-            />
-            <Step n={6} title="Install Button and ButtonGroup">
+            <Step n={7} title="Add a component">
               <p className={styles.stepText}>
                 {`Button follows its contract at ${button?.version ?? 'an unversioned state'}, and ButtonGroup at ${group?.version ?? 'an unversioned state'}.`}{' '}
                 The CLI adds their files to <code>components/ui</code>, the
