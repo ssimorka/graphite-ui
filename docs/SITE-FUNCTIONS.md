@@ -125,17 +125,26 @@ that, a compact bar stuck to the bottom of the viewport opens each control in a
 bottom sheet. Panel, bar and sheets wear the drop panel's layer; the bar and
 sheets rise from the bottom, the panel drops in.
 
-- **Controls**: source color (hex, Pick, and eight ramp swatches that copy
-  their hex rather than set the source), theme, contrast target, radius,
-  density, icons, typeface (headings, body, code), the derived roles
-  (read-only), and
-  Shuffle, Reset and Get the code. Source, theme, contrast and radius can be
-  locked against Shuffle. The bar's footer is Reset, Shuffle and the filled
-  Get the code; below 672px Reset and Shuffle are icons that share the width.
-  On the bar, each control opens a bottom sheet. The Source color sheet lists
-  the ramp stops to copy and ends in a filled Pick color action, which opens
-  the header's color picker.
-- **Preview**: two tabs, Components and Patterns, in the governed `Tabs`.
+- **Controls**: they follow the preview tab.
+  - On **Components**: source color (hex, Pick, and eight ramp swatches that
+    copy their hex rather than set the source), theme, contrast target,
+    radius, density, icons, typeface (headings, body, code), the derived roles
+    (read-only), and Shuffle, Reset and Get the code. Source, theme, contrast
+    and radius can be locked against Shuffle.
+  - On **Generative Art**: source color, Intensity (a 0 to 100 slider), Mix
+    and Grid, then Regenerate in Shuffle's place, Reset and Export PNG in Get
+    the code's. Intensity and Mix are disabled, with a note, when the art has
+    no color: Intensity on a gray, black or white pick, Mix at intensity 0 too.
+  - Reset puts everything back on either tab, the source included.
+  - The bar's footer is Reset, Shuffle (Regenerate on the art tab) and the
+    filled main action; below 672px Reset and Shuffle are icons that share the
+    width. On the bar, each control opens a bottom sheet; a disabled control
+    wears the kit's disabled field colors and its sheet says why. The Source
+    color sheet lists the ramp stops to copy and ends in a filled Pick color
+    action, which opens the header's color picker.
+- **Preview**: two tabs, Components and Generative Art, in the governed
+  `Tabs`. Both panels stay mounted; the art panel tells the controls which tab
+  is showing from its tab panel's `hidden` attribute.
 - **Components**: a Desktop / Tablet / Mobile toolbar (from 1056px only) over a
   rack of example cards with no frame of their own, on the page grid, which is
   fixed to the viewport. Cards carry a drop shadow and are dealt into one to
@@ -145,12 +154,18 @@ sheets rise from the bottom, the panel drops in.
   follows it (`KitIcon` in [`components/kit-icon.tsx`](../components/kit-icon.tsx),
   paths in [`lib/kit-icons.ts`](../lib/kit-icons.ts), exported from the kit).
   The site's own chrome keeps its Carbon icons.
-- **Patterns**: the generative composition (`GenerativeArt` in
-  [`components/generative-art.tsx`](../components/generative-art.tsx)) at 16:9,
-  repainted from the source and theme. Selecting a panel reshuffles it;
-  Regenerate deals a new layout and Export PNG saves it at 1600 × 900. Its
-  twenty tile types are the kit's Pattern Tiles (Graphite UI Kit 11692:22);
-  the kit names one of them Download circle where the code says Circle.
+- **Generative Art**: the generative composition (`GenerativeArt` in
+  [`components/generative-art.tsx`](../components/generative-art.tsx)) at
+  16:9, and 3:4 below 672px. Its hue only ever comes from the source; the
+  palette is the art's own (`artPalette`), not the UI roles', and is the same
+  in both themes. Intensity sets the color's strength (past the pick's own)
+  and how deep it sits, Mix the share of gray, Grid the tile size: columns and
+  rows come from the canvas's measured size, so the grid reflows with its
+  container. Moving a control recolors or reflows the current deal;
+  Regenerate deals a new one; selecting a panel reshuffles just that panel.
+  Export PNG saves it 1600 wide at the canvas's proportions. Its twenty tile
+  types are the kit's Pattern Tiles (Graphite UI Kit 11692:22); the kit names
+  one of them Download circle where the code says Circle.
 - **Get the code**: three tabs, copied or downloaded. CSS is the whole theme
   as one file (`buildThemeFile` in `lib/theme-file.ts`: foundations, both
   themes and the builder's choices, under `--graphite-*`); Tailwind is the
