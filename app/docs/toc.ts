@@ -7,5 +7,6 @@ export const TOC: TocItem[] = [
   { href: '#what-it-is', label: 'What Graphite is' },
   { href: '#built-from', label: 'What it is built from' },
   { href: '#governance', label: 'How it is governed' },
+  { href: '#help', label: 'Updates and help' },
   { href: '#whats-here', label: 'What is here' },
 ]

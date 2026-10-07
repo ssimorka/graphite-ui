@@ -280,7 +280,8 @@ export function ComponentsIndex({
           {spell(stats.governed)} components carry a versioned contract and are
           checked against the kit on every build. The kit ships more than that,
           and the ones it ships without a contract are listed here too, labelled
-          rather than hidden.
+          rather than hidden. Ungoverned items exist only in the Figma kit:
+          there is no code to install.
         </p>
       </header>
 

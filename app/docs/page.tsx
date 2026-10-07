@@ -239,7 +239,7 @@ export default function IntroductionPage() {
             <div className={styles.prose}>
               <p>
                 Every governed component has a written contract, and automated
-                checks hold the components and tokens to their contracts and to
+                checks compare each component to its contract and each token to
                 the kit on every change. You do not need any of it to use
                 Graphite.
               </p>
@@ -247,6 +247,40 @@ export default function IntroductionPage() {
             <p className={styles.more}>
               <a href="/docs/contribute/governance">How governance works</a>
             </p>
+          </section>
+
+          <section id="help" className={styles.block}>
+            <SectionHeading title="Updates and help" />
+            <div className={styles.prose}>
+              <p>
+                <strong>Take an update.</strong>{' '}Each component page shows its
+                contract version. When it changes, run the component&rsquo;s
+                install command again. The CLI asks before it overwrites a file,
+                so if you edited the component, compare before you accept.{' '}
+                <a href="https://github.com/ssimorka/graphite-ui/releases">
+                  Releases
+                </a>{' '}
+                list what changed.
+              </p>
+              <p>
+                <strong>Ask a question</strong> in{' '}
+                <a href="https://github.com/ssimorka/graphite-ui/discussions">
+                  GitHub Discussions
+                </a>
+                .
+              </p>
+              <p>
+                <strong>Report a problem</strong> in{' '}
+                <a href="https://github.com/ssimorka/graphite-ui/issues/new/choose">
+                  GitHub Issues
+                </a>
+                . For a security issue, use private reporting instead (see{' '}
+                <a href="https://github.com/ssimorka/graphite-ui/security/policy">
+                  the security policy
+                </a>
+                ).
+              </p>
+            </div>
           </section>
 
           <section id="whats-here" className={styles.block}>
