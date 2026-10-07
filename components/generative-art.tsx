@@ -301,62 +301,39 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// The art's palette, from settings. The hue only ever comes from the source:
-// a grey or black pick has none, so the art draws in mono whatever the
-// intensity says. Everything else is the visitor's to set:
+// The art's palette, from three settings. The hue only ever comes from the
+// source: a grey or black pick has none, so the art draws in mono whatever
+// the intensity says.
 //
-// - intensity: the chroma the color takes, from none (mono) to more than most
-//   picks carry. It is absolute, not a share of the source's, so a muted pick
-//   can be pushed loud and a loud one calmed. Strong is the first generator's
-//   0.16, the strength of its #6B4FBE and #1DE9B6.
-// - range (Contrast in the panel): how far the tones spread. High is the first
-//   generator's near-black to near-white; low pulls everything together.
-// - tone: where the color sits. Deep is the first generator's 30/41/52; mixed
-//   is one deep shade and two light tints, which with a medium intensity is
-//   pastel; light is all tints.
-// - companion: the second hue, 120 degrees round (the first generator's teal
-//   against its purple), opposite, or none.
+// - intensity: how strong the color is, as an absolute chroma, so it can go
+//   past the pick's own. It also sets where the color sits: the lower steps
+//   pair one deep shade with two light tints, which reads pale; Strong and Max
+//   use the first generator's deep 30/41/52. Strong is its 0.16, the strength
+//   of its #6B4FBE and #1DE9B6. The companion is always the hue 120 degrees
+//   round, the first generator's teal against its purple.
 // - mix: how much of the pool is grey. Balanced is the 60/30/10 rhythm.
 // - grid: the unit grid the tiles are dealt onto.
 //
 // One pool for both themes: the art is a picture, not chrome.
 export type ArtIntensity = 'off' | 'soft' | 'medium' | 'strong' | 'max'
-export type ArtRange = 'narrow' | 'medium' | 'wide'
-export type ArtTone = 'deep' | 'mixed' | 'light'
-export type ArtCompanion = 'triad' | 'opposite' | 'none'
 export type ArtMix = 'gray' | 'balanced' | 'color'
 export type ArtGrid = 'large' | 'medium' | 'small'
 export type ArtSettings = {
   intensity: ArtIntensity
-  range: ArtRange
-  tone: ArtTone
-  companion: ArtCompanion
   mix: ArtMix
   grid: ArtGrid
 }
 
+const DEEP = [30, 41, 52]
+const PALE = [30, 80, 90]
+
 export const ART_OPTIONS = {
   intensity: [
-    { key: 'off', label: 'Off', chroma: 0 },
-    { key: 'soft', label: 'Soft', chroma: 0.06 },
-    { key: 'medium', label: 'Medium', chroma: 0.11 },
-    { key: 'strong', label: 'Strong', chroma: 0.16 },
-    { key: 'max', label: 'Max', chroma: 0.24 },
-  ],
-  range: [
-    { key: 'narrow', label: 'Low', spread: 0.4, center: 70 },
-    { key: 'medium', label: 'Medium', spread: 0.7, center: 60 },
-    { key: 'wide', label: 'High', spread: 1, center: 55 },
-  ],
-  tone: [
-    { key: 'deep', label: 'Deep', tones: [30, 41, 52] },
-    { key: 'mixed', label: 'Mixed', tones: [30, 80, 90] },
-    { key: 'light', label: 'Light', tones: [70, 82, 92] },
-  ],
-  companion: [
-    { key: 'triad', label: '120°', turn: -120 },
-    { key: 'opposite', label: 'Opposite', turn: 180 },
-    { key: 'none', label: 'None', turn: 0 },
+    { key: 'off', label: 'Off', chroma: 0, tones: DEEP },
+    { key: 'soft', label: 'Soft', chroma: 0.07, tones: PALE },
+    { key: 'medium', label: 'Medium', chroma: 0.11, tones: PALE },
+    { key: 'strong', label: 'Strong', chroma: 0.16, tones: DEEP },
+    { key: 'max', label: 'Max', chroma: 0.24, tones: DEEP },
   ],
   mix: [
     { key: 'gray', label: 'More gray', grays: 7 },
@@ -372,19 +349,9 @@ export const ART_OPTIONS = {
 
 export const ART_DEFAULTS: ArtSettings = {
   intensity: 'strong',
-  range: 'wide',
-  tone: 'deep',
-  companion: 'triad',
   mix: 'balanced',
   grid: 'medium',
 }
-
-/** One-click looks: each sets intensity, contrast and color tone, and leaves the rest. */
-export const ART_PRESETS = [
-  { key: 'vivid', label: 'Vivid', set: { intensity: 'strong', range: 'wide', tone: 'deep' } },
-  { key: 'pale', label: 'Pale', set: { intensity: 'medium', range: 'wide', tone: 'mixed' } },
-  { key: 'mono', label: 'Mono', set: { intensity: 'off', range: 'wide', tone: 'deep' } },
-] as const satisfies readonly { key: string; label: string; set: Partial<ArtSettings> }[]
 
 /** Below this chroma a pick has no hue worth reading, so the art is mono. */
 const HUELESS = 0.02
@@ -394,9 +361,10 @@ export function isHueless(sourceHex: string) {
   return hexToOklch(sourceHex).c < HUELESS
 }
 
-// The first generator's tones, before the range pulls them together.
+// The first generator's grey and pop tones.
 const GRAY_TONES = [18, 29, 45, 73, 95, 29, 60]
 const POP_TONE = 83
+const COMPANION_TURN = -120
 
 const opt = <K extends keyof typeof ART_OPTIONS>(k: K, key: string) =>
   (ART_OPTIONS[k] as readonly { key: string }[]).find((o) => o.key === key) as (typeof ART_OPTIONS)[K][number]
@@ -412,42 +380,27 @@ function grayAt(tone: number) {
 /** The art's groups for a source and settings, for anything that shows the rhythm. */
 export function artPalette(sourceHex: string, settings: Partial<ArtSettings> = {}) {
   const s = { ...ART_DEFAULTS, ...settings }
-  const range = opt('range', s.range)
-  const tone = (t: number) => range.center + (t - range.center) * range.spread
-  const chroma = isHueless(sourceHex) ? 0 : opt('intensity', s.intensity).chroma
+  const intensity = opt('intensity', s.intensity)
+  const chroma = isHueless(sourceHex) ? 0 : intensity.chroma
   const grayCount = opt('mix', s.mix).grays
-  const turn = opt('companion', s.companion).turn
-  const hasPop = s.companion !== 'none'
 
-  const grays = GRAY_TONES.slice(0, grayCount).map((t) => grayAt(tone(t)))
-  const colorSlots = 10 - grayCount - (hasPop ? 1 : 0)
-  const accentTones = opt('tone', s.tone).tones
-  const accents = Array.from({ length: colorSlots }, (_, i) => {
-    const t = tone(accentTones[i % accentTones.length])
+  const grays = GRAY_TONES.slice(0, grayCount).map(grayAt)
+  const accents = Array.from({ length: 10 - grayCount - 1 }, (_, i) => {
+    const t = intensity.tones[i % intensity.tones.length]
     return chroma ? toneAt(sourceHex, t, { chromaScale: 0, minChroma: chroma }) : grayAt(t)
   })
-  const near = tone(POP_TONE)
-  const pop = !hasPop
-    ? null
-    : chroma
-      ? vividTone(sourceHex, {
-          hueTurn: turn,
-          chromaScale: 0,
-          minChroma: chroma,
-          near,
-          min: Math.max(20, Math.round(near - 28)),
-          max: Math.min(95, Math.round(near + 5)),
-        })
-      : grayAt(near)
+  const pop = chroma
+    ? vividTone(sourceHex, { hueTurn: COMPANION_TURN, chromaScale: 0, minChroma: chroma, near: POP_TONE })
+    : grayAt(POP_TONE)
   return { grays, accents, pop }
 }
 
 function buildPalette(sourceHex: string, settings: Partial<ArtSettings> = {}): Palette {
   const { grays, accents, pop } = artPalette(sourceHex, settings)
-  const colors = [...grays, ...accents, ...(pop ? [pop] : [])]
+  const colors = [...grays, ...accents, pop]
   const lights = colors.filter((c) => luminance(c) > 0.45)
   const darks = colors.filter((c) => luminance(c) <= 0.45)
-  return { colors, darks, lights, pop: pop ?? accents[0] ?? grays[0] }
+  return { colors, darks, lights, pop }
 }
 
 function contrastPair(bg: string, pal: Palette): string {
@@ -683,7 +636,7 @@ export function GenerativeArt({
   onReady,
 }: {
   className?: string
-  /** Intensity, range, companion, mix and grid. See artPalette. */
+  /** Intensity, mix and grid. See artPalette. */
   settings?: ArtSettings
   /** Enables click-to-shuffle on individual panels. */
   interactive?: boolean
@@ -696,10 +649,10 @@ export function GenerativeArt({
   const { sourceHex } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
 
-  const { intensity, range, tone, companion, mix, grid } = settings
+  const { intensity, mix, grid } = settings
   const palette = useMemo(
-    () => buildPalette(activeHex, { intensity, range, tone, companion, mix }),
-    [activeHex, intensity, range, tone, companion, mix],
+    () => buildPalette(activeHex, { intensity, mix }),
+    [activeHex, intensity, mix],
   )
   const { cols, rows } = opt('grid', grid)
   // Near-black seams in both themes, as the original drew them: white seams

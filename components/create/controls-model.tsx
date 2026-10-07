@@ -6,7 +6,7 @@ import type { RampName } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { SOURCE_TRIGGER_ID } from '@/components/color-picker'
 import { useTheme } from '@/components/theme-provider'
-import { ART_OPTIONS, ART_PRESETS, isHueless } from '@/components/generative-art'
+import { ART_OPTIONS, isHueless } from '@/components/generative-art'
 import type { ArtSettings } from '@/components/generative-art'
 import {
   CODE_FONTS,
@@ -29,11 +29,7 @@ export type ControlId =
   | 'body'
   | 'code'
   | 'derived'
-  | 'look'
   | 'intensity'
-  | 'range'
-  | 'tone'
-  | 'companion'
   | 'mix'
   | 'grid'
 
@@ -234,14 +230,7 @@ function artControls(
   setArt: (patch: Partial<ArtSettings>) => void,
   hueless: boolean,
 ): Control[] {
-  const look = ART_PRESETS.find((p) =>
-    Object.entries(p.set).every(([k, v]) => art[k as keyof ArtSettings] === v),
-  )
-  const chip = <K extends keyof ArtSettings>(
-    id: Exclude<ControlId, 'source'> & K,
-    heading: string,
-    lock?: LockKey,
-  ): Control => ({
+  const chip = <K extends keyof ArtSettings>(id: Exclude<ControlId, 'source'> & K, heading: string): Control => ({
     id,
     label: heading,
     heading,
@@ -249,24 +238,10 @@ function artControls(
     options: ART_OPTIONS[id].map((o) => ({ key: o.key, label: o.label })),
     selected: art[id],
     select: (k) => setArt({ [id]: k } as Partial<ArtSettings>),
-    lock,
     view: 'art',
   })
-  const intensity = chip('intensity', 'Intensity', 'intensity')
+  const intensity = chip('intensity', 'Intensity')
   return [
-    {
-      id: 'look',
-      label: 'Look',
-      heading: 'Look',
-      value: look?.label ?? 'Custom',
-      options: ART_PRESETS.map((p) => ({ key: p.key, label: p.label })),
-      selected: look?.key ?? '',
-      select: (k) => {
-        const p = ART_PRESETS.find((x) => x.key === k)
-        if (p) setArt(p.set)
-      },
-      view: 'art',
-    },
     hueless
       ? {
           ...intensity,
@@ -277,9 +252,6 @@ function artControls(
           note: 'Your pick is grey, black or white, so there is no hue to draw with. Pick a color to turn intensity up.',
         }
       : intensity,
-    chip('range', 'Contrast', 'range'),
-    chip('tone', 'Color tone'),
-    chip('companion', 'Companion', 'companion'),
     chip('mix', 'Mix'),
     chip('grid', 'Grid'),
   ]

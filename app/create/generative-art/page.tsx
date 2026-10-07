@@ -57,9 +57,9 @@ export default function GenerativeArtPage() {
           <p className={styles.note}>
             Sixty percent grays, thirty percent your color, ten percent a
             companion at the hue 120° round from it. In Create you set the
-            intensity, contrast, color tone, companion, mix and grid. The hue is
-            always yours: a gray or black pick draws in mono. Adjacent panels
-            check their neighbors so no color clusters.
+            intensity, the mix and the grid. The hue is always yours: a gray or
+            black pick draws in mono. Adjacent panels check their neighbors so
+            no color clusters.
           </p>
           <RatioBar />
         </section>

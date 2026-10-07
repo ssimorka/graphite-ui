@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
+import { ChevronDown, ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
@@ -23,11 +23,7 @@ const CAPTIONS: Record<string, string> = {
     'font-1 and font-2 are two roles that happen to hold the same family today. The kit says they may diverge, so the builder lets them.',
   derived:
     'Secondary is the source hue minus 120°, chroma × 0.585. Background, foreground and borders come off the neutral ramp. These are outputs, not inputs.',
-  look: 'Three starting points. Each sets intensity, contrast and color tone.',
-  intensity: 'How strong your color is in the art, from none to louder than your pick. The hue is always yours.',
-  range: 'How far the lights and darks spread. High runs near-black to near-white; low pulls them together.',
-  tone: 'Where your color sits: deep shades, one shade with two light tints, or tints only.',
-  companion: 'A second hue to set against yours: 120° round the wheel, opposite, or none.',
+  intensity: 'How strong your color is, from none to louder than your pick. Off is black, white and gray; Soft and Medium are pale; Strong is vivid. The hue is always yours.',
   mix: 'How much of the grid is gray. Balanced is 60% gray, 30% your color, 10% companion.',
   grid: 'The size of the grid the tiles are dealt onto.',
 }
@@ -254,10 +250,10 @@ export function ControlsPanel() {
 
       {art ? (
         <>
-          {(['look', 'intensity', 'range', 'tone', 'companion', 'mix', 'grid'] as const).map((id) => {
+          {(['intensity', 'mix', 'grid'] as const).map((id) => {
             const c = by(id)
             return (
-              <Section key={id} label={c.heading} open={open[id] ?? true} onToggle={() => setOpen((o) => ({ ...o, [id]: !(o[id] ?? true) }))} lock={lockOf(c)}>
+              <Section key={id} label={c.heading} open={open[id] ?? true} onToggle={() => setOpen((o) => ({ ...o, [id]: !(o[id] ?? true) }))}>
                 <p className={styles.caption}>{CAPTIONS[id]}</p>
                 {c.disabled ? <p className={styles.note}>{c.note}</p> : <ChipRow control={c} grow />}
               </Section>
@@ -342,8 +338,8 @@ export function ControlsPanel() {
       <div className={styles.actions}>
         <div className={styles.actionRow}>
           <Button variant="ghost" className={styles.outlined} onClick={b.shuffle}>
-            Shuffle
-            <Shuffle />
+            {art ? 'Regenerate' : 'Shuffle'}
+            {art ? <Renew /> : <Shuffle />}
           </Button>
           <Button variant="ghost" className={styles.outlined} onClick={b.reset}>
             Reset
@@ -351,12 +347,17 @@ export function ControlsPanel() {
           </Button>
         </div>
         <ul className={styles.hints}>
-          <li>
-            {art
-              ? 'Shuffle picks a new color, intensity, contrast and companion.'
-              : 'Shuffle picks a new color, theme, contrast target and radius.'}
-          </li>
-          <li>Lock a setting to keep it when you shuffle.</li>
+          {art ? (
+            <>
+              <li>Regenerate deals a new composition.</li>
+              <li>Reset puts the color and every setting back.</li>
+            </>
+          ) : (
+            <>
+              <li>Shuffle picks a new color, theme, contrast target and radius.</li>
+              <li>Lock a setting to keep it when you shuffle.</li>
+            </>
+          )}
         </ul>
         {art ? (
           <Button variant="primary" onClick={() => b.artHandle?.exportPng()} disabled={!b.artHandle}>

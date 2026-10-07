@@ -226,9 +226,6 @@ function GenerativeArtPanel() {
   return (
     <div ref={rootRef} className={styles.tabPanel}>
       <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Generative art">
-        <Button size="sm" onClick={() => b.artHandle?.regenerate()} disabled={!b.artHandle}>
-          Regenerate
-        </Button>
         <p className={styles.hint}>
           Select a panel to reshuffle it. <a href="/create/generative-art">How it works</a>
         </p>

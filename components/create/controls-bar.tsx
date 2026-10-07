@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
+import { ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
 import type { IconSet } from '@/lib/kit-icons'
@@ -191,11 +191,11 @@ export function ControlsBar() {
         <button
           type="button"
           className={`${styles.barQuiet} ${styles.barShuffle}`}
-          title="Shuffle"
+          title={b.view === 'art' ? 'Regenerate' : 'Shuffle'}
           onClick={b.shuffle}
         >
-          <Shuffle size={16} aria-hidden="true" />
-          <span className={styles.barLabel}>Shuffle</span>
+          {b.view === 'art' ? <Renew size={16} aria-hidden="true" /> : <Shuffle size={16} aria-hidden="true" />}
+          <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Shuffle'}</span>
         </button>
         {b.view === 'art' ? (
           <button
