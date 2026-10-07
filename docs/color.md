@@ -37,7 +37,7 @@ Lightness sweeps from dark to light while chroma is scaled, producing four paral
 | Ramp | Intensity | What it is for |
 |---|---|---|
 | **Accent** | Same as your color | Brand color, interactive elements, focus |
-| **Secondary** | Just over half your color | Counterpoint accent: the vivid tenth of the 60/30/10 rhythm |
+| **Secondary** | Just over half your color | Counterpoint accent, 120° round from your color |
 | **Neutral variant** | Barely tinted | Secondary surfaces, borders, supporting text |
 | **Neutral** | Almost gray | Page backgrounds, primary surfaces, primary text |
 
