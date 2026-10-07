@@ -5,7 +5,7 @@ import styles from './environment-variables.module.scss'
 const VARIABLES = [
   ['DATABASE_URL', '••••••••'],
   ['NEXT_PUBLIC_API', 'https://api.example.com'],
-  ['STRIPE_SECRET', '••••••••'],
+  ['PAYMENTS_SECRET', '••••••••'],
 ]
 
 export function EnvironmentVariablesCard() {

@@ -323,6 +323,10 @@ export function ControlsPanel() {
             <Reset />
           </Button>
         </div>
+        <ul className={styles.hints}>
+          <li>Shuffle picks a new color, theme, contrast target and radius.</li>
+          <li>Lock a setting to keep it when you shuffle.</li>
+        </ul>
         <Button variant="primary" onClick={() => setCodeOpen(true)}>
           Get the code
           <Download />
