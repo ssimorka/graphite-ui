@@ -868,8 +868,7 @@ body {
 }
 
 // The kit breaks the headline after "One color." from Medium up. At Small
-// there is not room for "A whole design system." on one line either way, so
-// the forced break only splits it worse; let it wrap on its own there.
+// the second line wraps on its own, so the forced break only splits it worse.
 .hero__title-break {
   display: none;
 
