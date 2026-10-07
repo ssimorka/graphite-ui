@@ -32,7 +32,7 @@ const CHUNKS = [
   { only: ['Graphite Theme'], offset: 153, limit: 15 },
   { only: ['Graphite Theme'], offset: 168, limit: 15 },
   { only: ['Graphite Semantic'], offset: 0, limit: 44 },
-  { only: ['Graphite Semantic'], offset: 44, limit: 43 },
+  { only: ['Graphite Semantic'], offset: 44, limit: 44 },
   { only: ['Graphite Primitives'], offset: 0, limit: 80 },
   { only: ['Graphite Typography'], offset: 0, limit: 65 },
   {
@@ -140,7 +140,7 @@ const resolve = (value, type, modeName, seen) => {
     seen,
   )
   const out = { a, x }
-  if (targetColl.modes.length > 1) out.m = mode.name
+  if (targetColl.modes.length > 1) out.m = safe(mode.name)
   return out
 }
 
@@ -157,9 +157,13 @@ const payload = collections
       .map((id) => varById.get(id))
       .filter(Boolean)
       .map((v) => {
+        // Keyed by the escaped mode name, the same string the collection's
+        // `m` list carries, because that is what figma-snapshot.mjs looks
+        // values up by. Keying by the raw name silently dropped every value
+        // under a non-ASCII mode (Breakpoint's `LG–XL (1056–1312px)`).
         const values = {}
         for (const m of c.modes) {
-          values[m.name] = resolve(
+          values[safe(m.name)] = resolve(
             v.valuesByMode[m.modeId],
             v.resolvedType,
             m.name,
@@ -170,6 +174,10 @@ const payload = collections
       }),
   }))
 
-const missing = [...wanted].filter((n) => !payload.some((c) => c.n === n))
+// `c.n` is escaped, so compare escaped against escaped: a raw `Breakpoint
+// LG–XL` never matches and would be reported missing on every run.
+const missing = [...wanted]
+  .map(safe)
+  .filter((n) => !payload.some((c) => c.n === n))
 
 return { c: payload, missing }
