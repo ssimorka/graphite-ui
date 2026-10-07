@@ -6,7 +6,7 @@ import { readFoundations } from '@/app/docs/foundations/tokens/read-tokens'
 export const metadata: Metadata = {
   title: 'Create · Graphite UI',
   description:
-    'Pick one color and Graphite resolves the ramps, the semantic roles and both themes, checking every pairing as it goes. Tune radius, density and type, and take the code.',
+    'Pick one color and Graphite resolves the ramps, the semantic roles and both themes, checking every pairing as it goes. Tune radius, density and type and take the code, or turn the color into generative art and export it.',
 }
 
 export default function Create() {
