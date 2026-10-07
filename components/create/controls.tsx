@@ -23,6 +23,13 @@ const CAPTIONS: Record<string, string> = {
     'font-1 and font-2 are two roles that happen to hold the same family today. The kit says they may diverge, so the builder lets them.',
   derived:
     'Secondary is the source hue minus 120°, chroma × 0.585. Background, foreground and borders come off the neutral ramp. These are outputs, not inputs.',
+  look: 'Three starting points. Each sets intensity, contrast and color tone.',
+  intensity: 'How strong your color is in the art, from none to louder than your pick. The hue is always yours.',
+  range: 'How far the lights and darks spread. High runs near-black to near-white; low pulls them together.',
+  tone: 'Where your color sits: deep shades, one shade with two light tints, or tints only.',
+  companion: 'A second hue to set against yours: 120° round the wheel, opposite, or none.',
+  mix: 'How much of the grid is gray. Balanced is 60% gray, 30% your color, 10% companion.',
+  grid: 'The size of the grid the tiles are dealt onto.',
 }
 
 function Chip({
@@ -199,6 +206,7 @@ export function ControlsPanel() {
       : undefined
 
   const source = by('source')
+  const art = b.view === 'art'
   const theme = by('theme')
   const contrast = by('contrast')
   const radius = by('radius')
@@ -244,6 +252,20 @@ export function ControlsPanel() {
         <Toast message={toast} />
       </Section>
 
+      {art ? (
+        <>
+          {(['look', 'intensity', 'range', 'tone', 'companion', 'mix', 'grid'] as const).map((id) => {
+            const c = by(id)
+            return (
+              <Section key={id} label={c.heading} open={open[id] ?? true} onToggle={() => setOpen((o) => ({ ...o, [id]: !(o[id] ?? true) }))} lock={lockOf(c)}>
+                <p className={styles.caption}>{CAPTIONS[id]}</p>
+                {c.disabled ? <p className={styles.note}>{c.note}</p> : <ChipRow control={c} grow />}
+              </Section>
+            )
+          })}
+        </>
+      ) : (
+        <>
       <Section label="Theme" open={!!open.theme} onToggle={() => flip('theme')} lock={lockOf(theme)}>
         <ChipRow control={theme} />
       </Section>
@@ -314,6 +336,9 @@ export function ControlsPanel() {
         </p>
       </Section>
 
+        </>
+      )}
+
       <div className={styles.actions}>
         <div className={styles.actionRow}>
           <Button variant="ghost" className={styles.outlined} onClick={b.shuffle}>
@@ -326,13 +351,24 @@ export function ControlsPanel() {
           </Button>
         </div>
         <ul className={styles.hints}>
-          <li>Shuffle picks a new color, theme, contrast target and radius.</li>
+          <li>
+            {art
+              ? 'Shuffle picks a new color, intensity, contrast and companion.'
+              : 'Shuffle picks a new color, theme, contrast target and radius.'}
+          </li>
           <li>Lock a setting to keep it when you shuffle.</li>
         </ul>
-        <Button variant="primary" onClick={() => setCodeOpen(true)}>
-          Get the code
-          <Download />
-        </Button>
+        {art ? (
+          <Button variant="primary" onClick={() => b.artHandle?.exportPng()} disabled={!b.artHandle}>
+            Export PNG
+            <Download />
+          </Button>
+        ) : (
+          <Button variant="primary" onClick={() => setCodeOpen(true)}>
+            Get the code
+            <Download />
+          </Button>
+        )}
       </div>
       <GetCodeDialog open={codeOpen} onClose={() => setCodeOpen(false)} />
     </div>

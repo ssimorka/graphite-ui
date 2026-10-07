@@ -124,6 +124,15 @@
   gap: var(--graphite-space-04);
 }
 
+// Why a control is off (Intensity on a hueless pick): the caption's size, in
+// the warning role, as the Proposed note below uses it.
+.note {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-warning);
+}
+
 .caption {
   margin: 0;
   font-size: var(--graphite-text-caption-1-size);

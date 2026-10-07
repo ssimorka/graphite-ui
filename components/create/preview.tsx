@@ -1,6 +1,6 @@
 'use client'
 
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { CARDS } from './cards'
 import type { CardEntry } from './cards'
@@ -9,8 +9,7 @@ import type { DeviceKey } from './builder'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@/components/ui/tabs'
 import { IconSetProvider } from '@/components/kit-icon'
-import { ART_MODES, GenerativeArt } from '@/components/generative-art'
-import type { ArtMode, GenerativeArtHandle } from '@/components/generative-art'
+import { GenerativeArt } from '@/components/generative-art'
 import styles from './preview.module.scss'
 
 // The kit's single-column order for Small (Graphite UI Site 11856:2265). It is
@@ -195,46 +194,47 @@ export function Preview() {
 }
 
 /**
- * The generative art panel: the 60/30/10 composition (see artPalette in
- * generative-art.tsx), redrawn from the source on every change, in vivid,
- * pale or mono. Selecting a panel reshuffles just that panel; Regenerate deals
- * a new layout.
+ * The generative art panel: the composition (see artPalette in
+ * generative-art.tsx), redrawn from the source and the art settings the
+ * controls panel holds on this tab. Selecting a panel reshuffles just that
+ * panel; Regenerate deals a new layout; Export PNG is the panel's main action.
  *
  * Mocked in Graphite UI Site as the "Create — Patterns tab" artboards, whose
  * still is the Pattern composition set: one deal of the kit's Pattern Tiles
  * per preview width.
  */
 function GenerativeArtPanel() {
-  const [art, setArt] = useState<GenerativeArtHandle | null>(null)
-  const [mode, setMode] = useState<ArtMode>('vivid')
+  const b = useBuilder()
+  const { setView, setArtHandle } = b
+  const rootRef = useRef<HTMLDivElement>(null)
+  // Tabs keeps every panel mounted and hides the inactive ones, so this panel
+  // watches its own tab panel's hidden attribute to tell the builder which
+  // controls the panel and bar should offer.
+  useEffect(() => {
+    const tabPanel = rootRef.current?.closest('[role="tabpanel"]')
+    if (!tabPanel) return
+    const sync = () => setView(tabPanel.hasAttribute('hidden') ? 'components' : 'art')
+    sync()
+    const mo = new MutationObserver(sync)
+    mo.observe(tabPanel, { attributes: true, attributeFilter: ['hidden'] })
+    return () => {
+      mo.disconnect()
+      setView('components')
+      setArtHandle(null)
+    }
+  }, [setView, setArtHandle])
   return (
-    <div className={styles.tabPanel}>
+    <div ref={rootRef} className={styles.tabPanel}>
       <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Generative art">
-        <div className={styles.artModes} role="group" aria-label="Palette">
-          {ART_MODES.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              className={styles.chip}
-              aria-pressed={mode === m.id}
-              onClick={() => setMode(m.id)}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
-        <Button size="sm" onClick={() => art?.regenerate()} disabled={!art}>
+        <Button size="sm" onClick={() => b.artHandle?.regenerate()} disabled={!b.artHandle}>
           Regenerate
-        </Button>
-        <Button size="sm" variant="ghost" onClick={() => art?.exportPng()} disabled={!art}>
-          Export PNG
         </Button>
         <p className={styles.hint}>
           Select a panel to reshuffle it. <a href="/create/generative-art">How it works</a>
         </p>
       </div>
       <div className={styles.art}>
-        <GenerativeArt interactive cover={false} mode={mode} onReady={setArt} />
+        <GenerativeArt interactive cover={false} settings={b.art} onReady={setArtHandle} />
       </div>
     </div>
   )

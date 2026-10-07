@@ -186,7 +186,7 @@ export function RatioBar() {
       <span className={styles.ratioAccent} style={{ background: accents[1], color: grays[4] }}>
         30% Accent
       </span>
-      <span className={styles.ratioPop} style={{ background: pop, color: grays[0] }}>
+      <span className={styles.ratioPop} style={{ background: pop ?? accents[0], color: grays[0] }}>
         10%
       </span>
     </div>

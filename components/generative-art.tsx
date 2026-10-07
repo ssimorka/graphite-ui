@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
-import { makeRamps, toneAt, vividTone } from '@/lib/color.js'
+import { hexToOklch, toneAt, vividTone } from '@/lib/color.js'
 
 // Seeded PRNG so the same hex always yields the same composition.
 function mulberry32(seed: number) {
@@ -301,39 +301,105 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// The art keeps its own palette, in one of three modes. It used to borrow the
-// UI roles' ramp stops, which is why it went pale: the accent's 80 and 90 are
-// container tints, and secondary carries 0.585x the source's chroma. Now:
+// The art's palette, from settings. The hue only ever comes from the source:
+// a grey or black pick has none, so the art draws in mono whatever the
+// intensity says. Everything else is the visitor's to set:
 //
-// - vivid (default): the first generator's palette, rebuilt from the source.
-//   Six grays at its lightnesses (18, 29, 45, 73, 95, 29); the source hue at
-//   tones 30, 41 and 52 at full chroma, floored at 0.15 so a pale source still
-//   paints bold; one pop at the secondary hue (120 degrees round), chroma
-//   floored at 0.16, at the tone where that hue is most vivid, nearest 83.
-//   At the default source: #4e3296 #6c53ba #18e8b9, against the original's
-//   #4A3296 #6B4FBE #1DE9B6.
-// - pale: soft. Dark neutral grays, the accent's 30 with its 80 and 90 tints,
-//   and secondary's 80 for the pop: the ramps' own stops.
-// - mono: black, white and true grays only, whatever the source.
+// - intensity: the chroma the color takes, from none (mono) to more than most
+//   picks carry. It is absolute, not a share of the source's, so a muted pick
+//   can be pushed loud and a loud one calmed. Strong is the first generator's
+//   0.16, the strength of its #6B4FBE and #1DE9B6.
+// - range (Contrast in the panel): how far the tones spread. High is the first
+//   generator's near-black to near-white; low pulls everything together.
+// - tone: where the color sits. Deep is the first generator's 30/41/52; mixed
+//   is one deep shade and two light tints, which with a medium intensity is
+//   pastel; light is all tints.
+// - companion: the second hue, 120 degrees round (the first generator's teal
+//   against its purple), opposite, or none.
+// - mix: how much of the pool is grey. Balanced is the 60/30/10 rhythm.
+// - grid: the unit grid the tiles are dealt onto.
 //
-// One pool for both themes in every mode: the art is a picture, not chrome.
-export type ArtMode = 'vivid' | 'pale' | 'mono'
-export const ART_MODES: { id: ArtMode; label: string }[] = [
-  { id: 'vivid', label: 'Vivid' },
-  { id: 'pale', label: 'Pale' },
-  { id: 'mono', label: 'Mono' },
-]
+// One pool for both themes: the art is a picture, not chrome.
+export type ArtIntensity = 'off' | 'soft' | 'medium' | 'strong' | 'max'
+export type ArtRange = 'narrow' | 'medium' | 'wide'
+export type ArtTone = 'deep' | 'mixed' | 'light'
+export type ArtCompanion = 'triad' | 'opposite' | 'none'
+export type ArtMix = 'gray' | 'balanced' | 'color'
+export type ArtGrid = 'large' | 'medium' | 'small'
+export type ArtSettings = {
+  intensity: ArtIntensity
+  range: ArtRange
+  tone: ArtTone
+  companion: ArtCompanion
+  mix: ArtMix
+  grid: ArtGrid
+}
 
-const VIVID_GRAYS = [18, 29, 45, 73, 95, 29]
-const VIVID_ACCENTS = [30, 41, 52]
-const VIVID_ACCENT_MIN_CHROMA = 0.15
-const VIVID_POP = { near: 83, hueTurn: -120, minChroma: 0.16 }
-const PALE_GRAYS = [10, 20, 30, 60, 90, 20]
-const PALE_ACCENTS = [30, 80, 90]
-const PALE_POP = 80
-const MONO_GRAYS = [8, 18, 29, 45, 73, 95]
-const MONO_LIGHTS = [60, 86, 99]
-const MONO_POP = 82
+export const ART_OPTIONS = {
+  intensity: [
+    { key: 'off', label: 'Off', chroma: 0 },
+    { key: 'soft', label: 'Soft', chroma: 0.06 },
+    { key: 'medium', label: 'Medium', chroma: 0.11 },
+    { key: 'strong', label: 'Strong', chroma: 0.16 },
+    { key: 'max', label: 'Max', chroma: 0.24 },
+  ],
+  range: [
+    { key: 'narrow', label: 'Low', spread: 0.4, center: 70 },
+    { key: 'medium', label: 'Medium', spread: 0.7, center: 60 },
+    { key: 'wide', label: 'High', spread: 1, center: 55 },
+  ],
+  tone: [
+    { key: 'deep', label: 'Deep', tones: [30, 41, 52] },
+    { key: 'mixed', label: 'Mixed', tones: [30, 80, 90] },
+    { key: 'light', label: 'Light', tones: [70, 82, 92] },
+  ],
+  companion: [
+    { key: 'triad', label: '120°', turn: -120 },
+    { key: 'opposite', label: 'Opposite', turn: 180 },
+    { key: 'none', label: 'None', turn: 0 },
+  ],
+  mix: [
+    { key: 'gray', label: 'More gray', grays: 7 },
+    { key: 'balanced', label: 'Balanced', grays: 6 },
+    { key: 'color', label: 'More color', grays: 4 },
+  ],
+  grid: [
+    { key: 'large', label: 'Large', cols: 8, rows: 6 },
+    { key: 'medium', label: 'Medium', cols: 12, rows: 10 },
+    { key: 'small', label: 'Small', cols: 16, rows: 12 },
+  ],
+} as const
+
+export const ART_DEFAULTS: ArtSettings = {
+  intensity: 'strong',
+  range: 'wide',
+  tone: 'deep',
+  companion: 'triad',
+  mix: 'balanced',
+  grid: 'medium',
+}
+
+/** One-click looks: each sets intensity, contrast and color tone, and leaves the rest. */
+export const ART_PRESETS = [
+  { key: 'vivid', label: 'Vivid', set: { intensity: 'strong', range: 'wide', tone: 'deep' } },
+  { key: 'pale', label: 'Pale', set: { intensity: 'medium', range: 'wide', tone: 'mixed' } },
+  { key: 'mono', label: 'Mono', set: { intensity: 'off', range: 'wide', tone: 'deep' } },
+] as const satisfies readonly { key: string; label: string; set: Partial<ArtSettings> }[]
+
+/** Below this chroma a pick has no hue worth reading, so the art is mono. */
+const HUELESS = 0.02
+
+/** True when the pick is grey, black or white: there is no hue to draw with. */
+export function isHueless(sourceHex: string) {
+  return hexToOklch(sourceHex).c < HUELESS
+}
+
+// The first generator's tones, before the range pulls them together.
+const GRAY_TONES = [18, 29, 45, 73, 95, 29, 60]
+const POP_TONE = 83
+
+const opt = <K extends keyof typeof ART_OPTIONS>(k: K, key: string) =>
+  (ART_OPTIONS[k] as readonly { key: string }[]).find((o) => o.key === key) as (typeof ART_OPTIONS)[K][number]
 
 // A true gray at an OKLab lightness (0-100): no tint from the source.
 function grayAt(tone: number) {
@@ -343,32 +409,45 @@ function grayAt(tone: number) {
   return `#${c}${c}${c}`
 }
 
-/** The art's three groups for a source and mode, for anything that shows the rhythm. */
-export function artPalette(sourceHex: string, mode: ArtMode = 'vivid') {
-  if (mode === 'mono') {
-    return { grays: MONO_GRAYS.map(grayAt), accents: MONO_LIGHTS.map(grayAt), pop: grayAt(MONO_POP) }
-  }
-  const ramps = makeRamps(sourceHex)
-  if (mode === 'pale') {
-    return {
-      grays: PALE_GRAYS.map((t) => ramps.neutral.tone(t)),
-      accents: PALE_ACCENTS.map((t) => ramps.accent.tone(t)),
-      pop: ramps.secondary.tone(PALE_POP),
-    }
-  }
-  return {
-    grays: VIVID_GRAYS.map((t) => ramps.neutral.tone(t)),
-    accents: VIVID_ACCENTS.map((t) => toneAt(sourceHex, t, { minChroma: VIVID_ACCENT_MIN_CHROMA })),
-    pop: vividTone(sourceHex, VIVID_POP),
-  }
+/** The art's groups for a source and settings, for anything that shows the rhythm. */
+export function artPalette(sourceHex: string, settings: Partial<ArtSettings> = {}) {
+  const s = { ...ART_DEFAULTS, ...settings }
+  const range = opt('range', s.range)
+  const tone = (t: number) => range.center + (t - range.center) * range.spread
+  const chroma = isHueless(sourceHex) ? 0 : opt('intensity', s.intensity).chroma
+  const grayCount = opt('mix', s.mix).grays
+  const turn = opt('companion', s.companion).turn
+  const hasPop = s.companion !== 'none'
+
+  const grays = GRAY_TONES.slice(0, grayCount).map((t) => grayAt(tone(t)))
+  const colorSlots = 10 - grayCount - (hasPop ? 1 : 0)
+  const accentTones = opt('tone', s.tone).tones
+  const accents = Array.from({ length: colorSlots }, (_, i) => {
+    const t = tone(accentTones[i % accentTones.length])
+    return chroma ? toneAt(sourceHex, t, { chromaScale: 0, minChroma: chroma }) : grayAt(t)
+  })
+  const near = tone(POP_TONE)
+  const pop = !hasPop
+    ? null
+    : chroma
+      ? vividTone(sourceHex, {
+          hueTurn: turn,
+          chromaScale: 0,
+          minChroma: chroma,
+          near,
+          min: Math.max(20, Math.round(near - 28)),
+          max: Math.min(95, Math.round(near + 5)),
+        })
+      : grayAt(near)
+  return { grays, accents, pop }
 }
 
-function buildPalette(sourceHex: string, mode: ArtMode = 'vivid'): Palette {
-  const { grays, accents, pop } = artPalette(sourceHex, mode)
-  const colors = [...grays, ...accents, pop]
+function buildPalette(sourceHex: string, settings: Partial<ArtSettings> = {}): Palette {
+  const { grays, accents, pop } = artPalette(sourceHex, settings)
+  const colors = [...grays, ...accents, ...(pop ? [pop] : [])]
   const lights = colors.filter((c) => luminance(c) > 0.45)
   const darks = colors.filter((c) => luminance(c) <= 0.45)
-  return { colors, darks, lights, pop }
+  return { colors, darks, lights, pop: pop ?? accents[0] ?? grays[0] }
 }
 
 function contrastPair(bg: string, pal: Palette): string {
@@ -393,8 +472,7 @@ const SPAN_OPTIONS: [number, number][] = [
 // Asset panels always land on large spans so they read as focal points.
 const BIG_SPANS: [number, number][] = [[2, 2], [3, 2], [2, 3], [3, 1], [2, 1], [1, 2]]
 
-function buildLayout(pal: Palette, assetsReady: boolean): Cell[] {
-  const COLS = 12, ROWS = 10
+function buildLayout(pal: Palette, assetsReady: boolean, COLS = 12, ROWS = 10): Cell[] {
   const occupied = Array.from({ length: ROWS }, () => new Array(COLS).fill(false))
   const cellGrid: (Cell | null)[][] = Array.from({ length: ROWS }, () => new Array(COLS).fill(null))
   const cells: Cell[] = []
@@ -601,12 +679,12 @@ export function GenerativeArt({
   className,
   interactive = false,
   cover = interactive,
-  mode = 'vivid',
+  settings = ART_DEFAULTS,
   onReady,
 }: {
   className?: string
-  /** Vivid, pale or mono. */
-  mode?: ArtMode
+  /** Intensity, range, companion, mix and grid. See artPalette. */
+  settings?: ArtSettings
   /** Enables click-to-shuffle on individual panels. */
   interactive?: boolean
   /** Greets the first view with the kit cover. Off where the grid is the point. */
@@ -618,7 +696,12 @@ export function GenerativeArt({
   const { sourceHex } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
 
-  const palette = useMemo(() => buildPalette(activeHex, mode), [activeHex, mode])
+  const { intensity, range, tone, companion, mix, grid } = settings
+  const palette = useMemo(
+    () => buildPalette(activeHex, { intensity, range, tone, companion, mix }),
+    [activeHex, intensity, range, tone, companion, mix],
+  )
+  const { cols, rows } = opt('grid', grid)
   // Near-black seams in both themes, as the original drew them: white seams
   // in light mode broke the tiles apart instead of framing them.
   const seamColor = '#0a0a0a'
@@ -664,19 +747,19 @@ export function GenerativeArt({
       ? mulberry32(hexSeed(activeHex))
       : mulberry32(Math.floor(Math.random() * 0xffffffff))
     try {
-      layoutRef.current = buildLayout(palette, !!assetsRef.current)
+      layoutRef.current = buildLayout(palette, !!assetsRef.current, cols, rows)
       tileCache.current = new WeakMap()
     } finally {
       rand = prevRand
     }
-  }, [activeHex, palette, assetsReady, nonce])
+  }, [activeHex, palette, assetsReady, nonce, cols, rows])
 
   // Paint `layout` into any 2D context at the given size.
   const paint = useCallback((ctx: CanvasRenderingContext2D, W: number, H: number) => {
     const layout = layoutRef.current
     if (!layout) return
     const assets = assetsRef.current
-    const uW = W / 12, uH = H / 10
+    const uW = W / cols, uH = H / rows
 
     ctx.fillStyle = palette.colors[0]
     ctx.fillRect(0, 0, W, H)
@@ -780,8 +863,8 @@ export function GenerativeArt({
     const layout = layoutRef.current
     if (!canvas || !layout) return
     const rect = canvas.getBoundingClientRect()
-    const col = Math.floor(((e.clientX - rect.left) / rect.width) * 12)
-    const row = Math.floor(((e.clientY - rect.top) / rect.height) * 10)
+    const col = Math.floor(((e.clientX - rect.left) / rect.width) * cols)
+    const row = Math.floor(((e.clientY - rect.top) / rect.height) * rows)
     const hit = layout.find(
       (c) => col >= c.col && col < c.col + c.colSpan && row >= c.row && row < c.row + c.rowSpan,
     )

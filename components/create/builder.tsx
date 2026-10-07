@@ -11,6 +11,8 @@ import type { CSSProperties, ReactNode } from 'react'
 import { hsvToHex } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { useTheme } from '@/components/theme-provider'
+import { ART_DEFAULTS, ART_OPTIONS } from '@/components/generative-art'
+import type { ArtSettings, GenerativeArtHandle } from '@/components/generative-art'
 import type { IconSet } from '@/lib/kit-icons'
 
 // ------------------------------------------------------------------ options
@@ -73,7 +75,10 @@ export const CODE_FONTS: FontOption[] = [
 ]
 
 /** The controls that carry a Lock in the kit; the others are never shuffled. */
-export type LockKey = 'source' | 'theme' | 'contrast' | 'radius'
+export type LockKey = 'source' | 'theme' | 'contrast' | 'radius' | 'intensity' | 'range' | 'companion'
+
+/** Which preview tab is showing: the controls panel and bar follow it. */
+export type BuilderView = 'components' | 'art'
 
 // ------------------------------------------------------------------- state
 type Builder = {
@@ -93,6 +98,14 @@ type Builder = {
   setDevice: (d: DeviceKey) => void
   locks: Record<LockKey, boolean>
   toggleLock: (k: LockKey) => void
+  view: BuilderView
+  setView: (v: BuilderView) => void
+  /** The generative art's settings, owned here so the panel and bar set them. */
+  art: ArtSettings
+  setArt: (patch: Partial<ArtSettings>) => void
+  /** Regenerate and Export PNG, once the art has mounted. */
+  artHandle: GenerativeArtHandle | null
+  setArtHandle: (h: GenerativeArtHandle | null) => void
   shuffle: () => void
   reset: () => void
   /**
@@ -149,7 +162,14 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     theme: false,
     contrast: false,
     radius: false,
+    intensity: false,
+    range: false,
+    companion: false,
   })
+  const [view, setView] = useState<BuilderView>('components')
+  const [art, setArtState] = useState<ArtSettings>(ART_DEFAULTS)
+  const setArt = useCallback((patch: Partial<ArtSettings>) => setArtState((a) => ({ ...a, ...patch })), [])
+  const [artHandle, setArtHandle] = useState<GenerativeArtHandle | null>(null)
 
   const toggleLock = useCallback(
     (k: LockKey) => setLocks((l) => ({ ...l, [k]: !l[k] })),
@@ -159,7 +179,21 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   // Shuffle randomises what is unlocked, and only the four controls the kit
   // gives a Lock. Density, type and icons have none, so they are not part of
   // the dice.
+  //
+  // On the Generative Art tab the dice are the source and the art's three
+  // locked controls instead; the UI-only settings are not on that tab.
   const shuffle = useCallback(() => {
+    const randomSource = () =>
+      setSourceHex(hsvToHex({ h: Math.random() * 360, s: 0.55 + Math.random() * 0.35, v: 0.6 + Math.random() * 0.3 }))
+    if (view === 'art') {
+      if (!locks.source) randomSource()
+      setArt({
+        ...(locks.intensity ? {} : { intensity: pick(ART_OPTIONS.intensity.filter((o) => o.key !== 'off')).key }),
+        ...(locks.range ? {} : { range: pick(ART_OPTIONS.range).key }),
+        ...(locks.companion ? {} : { companion: pick(ART_OPTIONS.companion).key }),
+      })
+      return
+    }
     if (!locks.source) {
       // A saturated, mid-value colour: a random hex is mostly muddy, and the
       // builder is there to show what a good source does.
@@ -168,9 +202,14 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     if (!locks.theme) setTheme(pick(['light', 'dark'] as const))
     if (!locks.contrast) setLevel(pick(['AA', 'AAA'] as const))
     if (!locks.radius) setRadius(pick(RADII).key)
-  }, [locks, setSourceHex, setTheme, setLevel])
+  }, [locks, view, setArt, setSourceHex, setTheme, setLevel])
 
+  // Reset on the art tab puts the art back and leaves the shared source alone.
   const reset = useCallback(() => {
+    if (view === 'art') {
+      setArt(ART_DEFAULTS)
+      return
+    }
     setSourceHex(COVER_SOURCE_HEX)
     setTheme('dark')
     setLevel('AA')
@@ -180,7 +219,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     setBodyFont(DEFAULTS.bodyFont)
     setCodeFont(DEFAULTS.codeFont)
     setIconSet(DEFAULTS.iconSet)
-  }, [setSourceHex, setTheme, setLevel])
+  }, [view, setArt, setSourceHex, setTheme, setLevel])
 
   const previewStyle = useMemo<CSSProperties>(
     () =>
@@ -218,6 +257,12 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     setDevice,
     locks,
     toggleLock,
+    view,
+    setView,
+    art,
+    setArt,
+    artHandle,
+    setArtHandle,
     shuffle,
     reset,
     previewStyle,

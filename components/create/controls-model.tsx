@@ -6,6 +6,8 @@ import type { RampName } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { SOURCE_TRIGGER_ID } from '@/components/color-picker'
 import { useTheme } from '@/components/theme-provider'
+import { ART_OPTIONS, ART_PRESETS, isHueless } from '@/components/generative-art'
+import type { ArtSettings } from '@/components/generative-art'
 import {
   CODE_FONTS,
   DENSITIES,
@@ -14,7 +16,7 @@ import {
   RADII,
   useBuilder,
 } from './builder'
-import type { LockKey } from './builder'
+import type { BuilderView, LockKey } from './builder'
 
 export type ControlId =
   | 'source'
@@ -27,6 +29,13 @@ export type ControlId =
   | 'body'
   | 'code'
   | 'derived'
+  | 'look'
+  | 'intensity'
+  | 'range'
+  | 'tone'
+  | 'companion'
+  | 'mix'
+  | 'grid'
 
 export type Option = { key: string; label: string; swatch?: string }
 
@@ -43,7 +52,17 @@ export type Control = {
   select: (key: string) => void
   /** The Lock the kit draws on this control, if it draws one. */
   lock?: LockKey
+  /** Which tab shows it. The source is shared; the rest belong to one tab. */
+  view: BuilderView | 'both'
+  /** A line under the control, when it is constrained. */
+  note?: string
+  /** Shown but not settable, with `note` saying why. */
+  disabled?: boolean
 }
+
+/** The controls a tab shows, in order. */
+export const forView = (controls: Control[], view: BuilderView) =>
+  controls.filter((c) => c.view === 'both' || c.view === view)
 
 // The kit's eight presets: the 500 stop of each ramp, sampled at the current
 // source so they follow whatever is picked. Sampled from the engine rather than
@@ -101,6 +120,7 @@ export function useControls(): Control[] {
       selected: hex,
       select: (k) => setSourceHex(k),
       lock: 'source',
+      view: 'both',
     },
     {
       id: 'theme',
@@ -114,6 +134,7 @@ export function useControls(): Control[] {
       selected: theme,
       select: (k) => setTheme(k as 'light' | 'dark'),
       lock: 'theme',
+      view: 'components',
     },
     {
       id: 'contrast',
@@ -127,6 +148,7 @@ export function useControls(): Control[] {
       selected: level,
       select: (k) => setLevel(k as 'AA' | 'AAA'),
       lock: 'contrast',
+      view: 'components',
     },
     {
       id: 'radius',
@@ -137,6 +159,7 @@ export function useControls(): Control[] {
       selected: b.radius,
       select: (k) => b.setRadius(k as typeof b.radius),
       lock: 'radius',
+      view: 'components',
     },
     {
       id: 'density',
@@ -146,6 +169,7 @@ export function useControls(): Control[] {
       options: DENSITIES.map((d) => ({ key: d.key, label: d.label })),
       selected: b.density,
       select: (k) => b.setDensity(k as typeof b.density),
+      view: 'components',
     },
     {
       id: 'icons',
@@ -155,6 +179,7 @@ export function useControls(): Control[] {
       options: ICON_FAMILIES.map((f) => ({ key: f.key, label: f.label })),
       selected: b.iconSet,
       select: (k) => b.setIconSet(k as typeof b.iconSet),
+      view: 'components',
     },
     {
       id: 'headings',
@@ -164,6 +189,7 @@ export function useControls(): Control[] {
       options: fontOptions(TEXT_FONTS),
       selected: b.headingFont,
       select: b.setHeadingFont,
+      view: 'components',
     },
     {
       id: 'body',
@@ -173,6 +199,7 @@ export function useControls(): Control[] {
       options: fontOptions(TEXT_FONTS),
       selected: b.bodyFont,
       select: b.setBodyFont,
+      view: 'components',
     },
     {
       id: 'code',
@@ -182,6 +209,7 @@ export function useControls(): Control[] {
       options: fontOptions(CODE_FONTS),
       selected: b.codeFont,
       select: b.setCodeFont,
+      view: 'components',
     },
     {
       id: 'derived',
@@ -191,7 +219,69 @@ export function useControls(): Control[] {
       options: [],
       selected: '',
       select: () => {},
+      view: 'components',
     },
+    ...artControls(b.art, b.setArt, isHueless(hex)),
+  ]
+}
+
+const label = (opts: readonly { key: string; label: string }[], key: string) =>
+  opts.find((o) => o.key === key)?.label ?? ''
+
+/** The Generative Art tab's controls. Its colors still come from the source. */
+function artControls(
+  art: ArtSettings,
+  setArt: (patch: Partial<ArtSettings>) => void,
+  hueless: boolean,
+): Control[] {
+  const look = ART_PRESETS.find((p) =>
+    Object.entries(p.set).every(([k, v]) => art[k as keyof ArtSettings] === v),
+  )
+  const chip = <K extends keyof ArtSettings>(
+    id: Exclude<ControlId, 'source'> & K,
+    heading: string,
+    lock?: LockKey,
+  ): Control => ({
+    id,
+    label: heading,
+    heading,
+    value: label(ART_OPTIONS[id], art[id]),
+    options: ART_OPTIONS[id].map((o) => ({ key: o.key, label: o.label })),
+    selected: art[id],
+    select: (k) => setArt({ [id]: k } as Partial<ArtSettings>),
+    lock,
+    view: 'art',
+  })
+  const intensity = chip('intensity', 'Intensity', 'intensity')
+  return [
+    {
+      id: 'look',
+      label: 'Look',
+      heading: 'Look',
+      value: look?.label ?? 'Custom',
+      options: ART_PRESETS.map((p) => ({ key: p.key, label: p.label })),
+      selected: look?.key ?? '',
+      select: (k) => {
+        const p = ART_PRESETS.find((x) => x.key === k)
+        if (p) setArt(p.set)
+      },
+      view: 'art',
+    },
+    hueless
+      ? {
+          ...intensity,
+          value: 'Off',
+          selected: 'off',
+          select: () => {},
+          disabled: true,
+          note: 'Your pick is grey, black or white, so there is no hue to draw with. Pick a color to turn intensity up.',
+        }
+      : intensity,
+    chip('range', 'Contrast', 'range'),
+    chip('tone', 'Color tone'),
+    chip('companion', 'Companion', 'companion'),
+    chip('mix', 'Mix'),
+    chip('grid', 'Grid'),
   ]
 }
 

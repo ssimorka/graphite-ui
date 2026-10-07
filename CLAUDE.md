@@ -77,28 +77,27 @@ before trusting a browser result.
   why `makeRamps` pins the source tone for secondary — and why it then
   clears the `source` flag, which means "this stop is the source hex" and
   is false for a hue 120° away.
-- **The generative art keeps its own palette, in three modes.** It borrowed
-  the UI roles' ramp stops from #90 until 2026-10-07, and that made it pale:
-  the accent's 80/90 are container tints, and `secondary` carries 0.585x the
-  source's chroma, so the pop was about half as intense as the first
-  generator's #1DE9B6. `artPalette(source, mode)` in
-  `components/generative-art.tsx`, switched in Create's Generative Art
-  toolbar:
-  - **Vivid** (default) rebuilds the first generator's fixed palette from the
-    source: grays at its lightnesses (18/29/45/73/95/29), the source hue at
-    tones 30/41/52 at full chroma floored 0.15, and a pop at the secondary
-    hue, chroma floored 0.16, at the tone in 55-88 where that hue is most
-    vivid, nearest 83. Default source: #4e3296/#6c53ba/#18e8b9 against the
-    original's #4A3296/#6B4FBE/#1DE9B6. Uses `toneAt` and `vividTone` in
-    `lib/color.js`, for decoration only; UI roles stay on the ramps.
-  - **Pale** is the ramps' own soft stops: neutral 10/20/30/60/90/20, accent
-    30/80/90, secondary 80.
-  - **Mono** is true grays only (`grayAt`), whatever the source.
-  Tried and rejected: building Vivid only from ramp stops (accent 30/40/50 and
-  the most vivid status stop as the pop). No ramp holds the original teal, so
-  the pop came out mint green and grey sources went flat. One pool for both
-  themes and near-black seams in every mode. The Generative Art page's ratio
-  bar paints Vivid.
+- **The generative art has its own controls, and its hue only comes from the
+  pick.** It borrowed the UI roles' ramp stops from #90 until 2026-10-07,
+  which made it pale (the accent's 80/90 are container tints; `secondary` is
+  0.585x the source's chroma). Now Create's Generative Art tab swaps the UI
+  controls for art controls held in the builder (`art`, `setArt`): Look
+  (Vivid / Pale / Mono presets), Intensity, Contrast (`range`), Color tone,
+  Companion, Mix and Grid, with Lock on intensity, contrast and companion,
+  and Export PNG as the main action. `artPalette(source, settings)` in
+  `components/generative-art.tsx` builds the pool: true greys (`grayAt`) at
+  the first generator's lightnesses, accents at the pick's hue with an
+  absolute chroma (Strong is 0.16, Max 0.24, so intensity can go past the
+  pick's own), and a companion hue via `vividTone`. A pick under 0.02 chroma
+  (`isHueless`: grey, black, white) has no hue, so the art is mono and
+  Intensity is disabled with a note: nothing invents a hue. Vivid at the
+  default source is close to the original (#4e3296/#6c53ba/#18e8b9 against
+  #4A3296/#6B4FBE/#1DE9B6). `Tabs` keeps every panel mounted, so the art
+  panel reports the view from its tab panel's `hidden` attribute (a
+  MutationObserver), not from mounting. `toneAt`/`vividTone` in
+  `lib/color.js` are for decoration only; UI roles stay on the ramps.
+  Tried and rejected: Vivid from ramp stops alone (no ramp holds the original
+  teal) and a pale built by compressing tones (it read mid-grey, not pastel).
 - **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
   Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
   disagree, the kit wins and the *contract* is corrected. Contracts are still
