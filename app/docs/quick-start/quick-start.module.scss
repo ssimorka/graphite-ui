@@ -111,3 +111,23 @@
   line-height: var(--graphite-text-caption-1-line-height);
   color: var(--graphite-on-surface-variant);
 }
+
+// The prerequisites: body copy in a plain bulleted list, with the same inline
+// code as step prose.
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0 0 var(--graphite-space-05);
+  padding-left: var(--graphite-space-06);
+  list-style: disc;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+  }
+}
