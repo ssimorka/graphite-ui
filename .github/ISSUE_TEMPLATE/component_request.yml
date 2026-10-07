@@ -1,0 +1,49 @@
+name: Component request
+description: Propose a component Graphite does not have yet
+title: "[component]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Graphite decides whether a component should exist with three questions, in order. Answering them here is most of the decision. See "When the kit has nothing" in [docs/contracts/README.md](https://github.com/ssimorka/graphite-ui/blob/main/docs/contracts/README.md).
+
+  - type: input
+    id: name
+    attributes:
+      label: Component name
+      placeholder: ex. Combobox
+    validations:
+      required: true
+
+  - type: textarea
+    id: kit
+    attributes:
+      label: 1. Does the Figma kit have a counterpart?
+      description: Name the kit page or set if it does. If it does, the component is built from the kit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: absorb
+    attributes:
+      label: 2. Does the kit meet the same need inside something it already governs?
+      description: For example, a label that already lives inside the field components. If so, it is absorbed there rather than added.
+    validations:
+      required: true
+
+  - type: textarea
+    id: demand
+    attributes:
+      label: 3. Where would it be used?
+      description: If the kit says nothing, a component needs a real use to be built. Where on the site, or in your project, would it go?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the Components index and existing issues
+          required: true

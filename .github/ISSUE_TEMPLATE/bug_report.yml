@@ -1,0 +1,68 @@
+name: Bug report
+description: Report something that does not work as documented
+title: "[bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please search open and closed issues first, as it may already be reported.
+
+        Not sure it is a bug? Ask in [Discussions](https://github.com/ssimorka/graphite-ui/discussions/new?category=q-a) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: What happened, and what you expected to happen.
+    validations:
+      required: true
+
+  - type: input
+    id: components
+    attributes:
+      label: Affected components
+      description: Which Graphite components, or which part of the site or registry?
+      placeholder: ex. Button, Dropdown, the theme file, /r/tailwind.json
+    validations:
+      required: true
+
+  - type: input
+    id: theme
+    attributes:
+      label: Source color and contrast level
+      description: Theme bugs are often specific to one hex. Which source color, which theme (light or dark) and which level (AA or AAA)?
+      placeholder: ex. #0f766e, dark, AA
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      description: Step by step. A link to a repository or sandbox with a minimal reproduction helps most.
+      placeholder: |
+        1. Install with '...'
+        2. Render '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Browser console, server or CLI output. Paste text rather than a screenshot.
+      render: bash
+
+  - type: textarea
+    id: system
+    attributes:
+      label: System info
+      description: Browser, OS, Next.js, React, Tailwind and shadcn CLI versions, as relevant.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and pull requests
+          required: true

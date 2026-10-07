@@ -1,0 +1,41 @@
+name: Feature request
+description: Suggest an improvement to an existing component, the theme or the site
+title: "[feat]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. For a component Graphite does not have yet, use the component request form instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      description: What you would like, and the problem it solves for you.
+    validations:
+      required: true
+
+  - type: input
+    id: components
+    attributes:
+      label: Affected components
+      description: Does this touch an existing component? Changing one means changing its contract too.
+      placeholder: ex. Button, Tabs
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, links, or what the Figma kit draws for this.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      description: By submitting, you agree to follow the [contributing guide](https://github.com/ssimorka/graphite-ui/blob/main/CONTRIBUTING.md).
+      options:
+        - label: I searched the documentation
+          required: true
+        - label: I searched existing issues and pull requests
+          required: true
