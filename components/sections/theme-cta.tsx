@@ -37,7 +37,7 @@ export function ThemeCta() {
               </p>
             </div>
             <div className={styles.ctas}>
-              <Button variant="primary" size="lg" asChild>
+              <Button variant="ghost" size="lg" asChild>
                 <a href="/create">
                   Open the theme builder
                   <ArrowRight />

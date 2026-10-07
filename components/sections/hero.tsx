@@ -84,7 +84,7 @@ export function Hero({ governed }: { governed: number }) {
         <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>
           <div className="hero__center">
             <Tag type="purple" size="md" className="hero__eyebrow">
-              <Gem size={16} className="hero__eyebrow-icon" /> {governed} governed{' '}
+              <Gem size={16} className="hero__eyebrow-icon" /> {governed} React
               components
             </Tag>
             <h1 className="hero__title" id="hero-title">

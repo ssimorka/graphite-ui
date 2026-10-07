@@ -18,21 +18,17 @@ const DOOR_TOKENS: { role: string; use: string }[] = [
   { role: 'surfaceVariant', use: 'Trigger hover. A tone step, never a new color.' },
 ]
 
-// The kit's own three blocks for this panel
-// (I13170:4478;13170:4451 through 4453), verbatim. Two are Figma's "copy as
-// CSS" output and the third is a usage sample, which is a fair picture of
-// what crossing from design into code actually looks like.
-//
-// The usage sample is the shipped API: components/ui/accordion, contract
-// 1.0.0, the one new component docs/SHADCN-MIGRATION.md budgeted for.
+// What a developer writes: the Accordion's install, its styles as Graphite
+// variables, and its use. The kit's panel showed raw Figma "copy as CSS"
+// output here (fixed widths, Figma variable names), which is not code anyone
+// would ship.
 const CODE_BLOCKS = [
-  `display: flex;
-width: 401px;
-flex-direction: column;
-align-items: flex-start;`,
-  `border-top: 1px solid var(--Border-border-subtle-00, #DEDCEA);
-background: var(--Transparent, rgba(0, 0, 0, 0.00));
-background-blend-mode: multiply;`,
+  `npx shadcn@latest add https://www.graphite-ui.com/r/accordion.json`,
+  `.item {
+  border-top: 1px solid var(--graphite-outline);
+  background: var(--graphite-surface);
+  color: var(--graphite-on-surface);
+}`,
   `import { Accordion, AccordionItem } from '@/components/ui/accordion'
 
 <Accordion type="single" collapsible>
@@ -71,8 +67,9 @@ export function TwoDoors() {
                 <div className={styles.doorBody}>
                   <h3 className={styles.doorTitle}>For designers</h3>
                   <p className={styles.doorCopy}>
-                    The Figma kit is the source of truth. When the kit and a
-                    component&apos;s spec disagree, the kit wins.
+                    Design in the Figma kit, a published library with the same
+                    tokens as the code. Shown: the Accordion&apos;s color tokens,
+                    live.
                   </p>
                 </div>
                 {/* The door's action, as the filled block the other cards end
@@ -109,8 +106,8 @@ export function TwoDoors() {
                 <div className={styles.doorBody}>
                   <h3 className={styles.doorTitle}>For developers</h3>
                   <p className={styles.doorCopy}>
-                    Every component has a versioned written spec, called a
-                    contract. The code is checked against it in CI.
+                    Install each component as source you own, with one command.
+                    Shown: the Accordion, installed, styled and used.
                   </p>
                 </div>
                 <a className={styles.cta} href="/gallery">
