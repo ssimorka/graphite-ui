@@ -266,7 +266,22 @@ function artControls(
           },
         }),
   }
-  return [intensity, chip('mix', 'Mix'), chip('grid', 'Grid')]
+  // With no color in the art (intensity 0, or a pick with no hue) every tile
+  // is gray, so there is nothing for the mix to balance.
+  const mix = chip('mix', 'Mix')
+  const colorless = hueless || art.intensity === 0
+  return [
+    intensity,
+    colorless
+      ? {
+          ...mix,
+          select: () => {},
+          disabled: true,
+          note: 'With no color in the art, every tile is gray, so there is nothing to mix. Turn intensity up to use it.',
+        }
+      : mix,
+    chip('grid', 'Grid'),
+  ]
 }
 
 /** The eight roles the Derived roles section shows, as the kit lists them. */
