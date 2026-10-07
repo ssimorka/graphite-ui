@@ -55,9 +55,10 @@ export default function GenerativeArtPage() {
         <section id="rhythm" className={styles.block}>
           <SectionHeading title="Color rhythm: 60 / 30 / 10" />
           <p className={styles.note}>
-            Sixty percent neutrals, thirty percent accent, ten percent secondary,
-            the ramp the engine derives 120° off your source. Adjacent panels
-            check their neighbors so no color clusters.
+            Sixty percent grays, thirty percent your color at full strength, ten
+            percent a vivid pop at the hue 120° round from it. The art keeps its
+            own palette, bolder than the interface&rsquo;s. Adjacent panels check
+            their neighbors so no color clusters.
           </p>
           <RatioBar />
         </section>

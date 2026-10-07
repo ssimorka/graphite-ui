@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
-import { makeRamps } from '@/lib/color.js'
+import { makeRamps, toneAt, vividTone } from '@/lib/color.js'
 
 // Seeded PRNG so the same hex always yields the same composition.
 function mulberry32(seed: number) {
@@ -297,36 +297,44 @@ const STANDARD: P[] = [
   pCheckerboard,
 ]
 
-// --- Palette: the 60/30/10 pool, derived from the live token ramps ---
+// --- Palette: the 60/30/10 pool, from the source color ---
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// Palette construction follows the engine's rules: colors are only
-// ever sampled at the canonical TONE_STOPS, never at invented tones, and only
-// from the generated ramps — no off-system hues. The 60/30/10 weighting is
-// expressed as six neutral stops, three accent stops, and one secondary stop,
-// so the composition and the token table are provably the same system.
-function buildPalette(sourceHex: string, isDark: boolean): Palette {
+// The art does not follow the UI's rules. The UI samples the ramps at fixed
+// stops so every pairing is contrast-checked; that left the art pale (the
+// accent's 80 and 90 stops are container tints) and its pop at secondary's
+// muted chroma, about half the original's. So the pool is built the way the
+// first generator's fixed palette was, but from the source:
+//
+// - 60%: six grays, at the original's lightnesses (18, 29, 45, 73, 95, 29).
+// - 30%: the source hue at tones 30, 41 and 52, at full chroma, floored at
+//   0.15 so a pale source still paints bold purples, blues or whatever it is.
+// - 10%: one pop, the secondary hue (120 degrees round) at chroma at least
+//   0.16, at the tone between 55 and 88 where that hue is most vivid, nearest
+//   83. Teal is vivid at 83; blue only lower down, so a fixed tone left some
+//   sources with a pastel pop. At the default source it is #18e8b9, against
+//   the original's #1DE9B6.
+//
+// One pool for both themes, as the original had: the art is a picture, not
+// chrome, and it should not go pastel in dark mode.
+const GRAY_TONES = [18, 29, 45, 73, 95, 29]
+const ACCENT_TONES = [30, 41, 52]
+const ACCENT_MIN_CHROMA = 0.15
+const POP = { tone: 83, hueTurn: -120, minChroma: 0.16 }
+
+/** The art's three groups for a source, for anything that shows the rhythm. */
+export function artPalette(sourceHex: string) {
   const ramps = makeRamps(sourceHex)
-  const n = ramps.neutral.tone
-  const a = ramps.accent.tone
-  const s2 = ramps.secondary.tone
+  return {
+    grays: GRAY_TONES.map((t) => ramps.neutral.tone(t)),
+    accents: ACCENT_TONES.map((t) => toneAt(sourceHex, t, { minChroma: ACCENT_MIN_CHROMA })),
+    pop: vividTone(sourceHex, { hueTurn: POP.hueTurn, minChroma: POP.minChroma, near: POP.tone }),
+  }
+}
 
-  // 60% neutral — the ramp's dark-to-light stops, ordered as in the ramp rows.
-  const grays = isDark
-    ? [n(10), n(20), n(30), n(60), n(90), n(20)]
-    : [n(10), n(20), n(50), n(80), n(98), n(20)]
-
-  // 30% accent — the same stops the semantic tokens draw primary from.
-  const accents = isDark ? [a(30), a(80), a(90)] : [a(40), a(30), a(90)]
-
-  // 10% — the secondary ramp, which the engine derives at 120° off the source.
-  // It is the vivid counterpoint the rhythm asks for and still on-system: a
-  // generated ramp sampled at a canonical stop, not an invented hue. Holds the
-  // two tones neutralVariant used here, so the light/dark split of the pool is
-  // unchanged and only the chroma moves.
-  const pop = isDark ? s2(80) : s2(50)
-
+function buildPalette(sourceHex: string): Palette {
+  const { grays, accents, pop } = artPalette(sourceHex)
   const colors = [...grays, ...accents, pop]
   const lights = colors.filter((c) => luminance(c) > 0.45)
   const darks = colors.filter((c) => luminance(c) <= 0.45)
@@ -469,10 +477,9 @@ export const PATTERN_NAMES = SPECIMENS.map((s) => s.name)
 // One named tile at a fixed index — the pattern reference specimen.
 export function PatternSpecimen({ index, size = 140 }: { index: number; size?: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { sourceHex, theme } = useTheme()
-  const isDark = theme === 'dark'
+  const { sourceHex } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
-  const palette = useMemo(() => buildPalette(activeHex, isDark), [activeHex, isDark])
+  const palette = useMemo(() => buildPalette(activeHex), [activeHex])
   const spec = SPECIMENS[index]
 
   useEffect(() => {
@@ -575,12 +582,13 @@ export function GenerativeArt({
   onReady?: (handle: GenerativeArtHandle) => void
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const { sourceHex, theme } = useTheme()
-  const isDark = theme === 'dark'
+  const { sourceHex } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
 
-  const palette = useMemo(() => buildPalette(activeHex, isDark), [activeHex, isDark])
-  const seamColor = isDark ? '#0a0a0a' : '#ffffff'
+  const palette = useMemo(() => buildPalette(activeHex), [activeHex])
+  // Near-black seams in both themes, as the original drew them: white seams
+  // in light mode broke the tiles apart instead of framing them.
+  const seamColor = '#0a0a0a'
 
   const assetsRef = useRef<{ eye: HTMLImageElement; mouth: HTMLImageElement } | null>(null)
   const [assetsReady, setAssetsReady] = useState(false)
@@ -616,11 +624,11 @@ export function GenerativeArt({
     return () => { cancelled = true }
   }, [])
 
-  // Rebuild the layout whenever the palette, theme, or nonce changes.
+  // Rebuild the layout whenever the palette or nonce changes.
   useEffect(() => {
     const prevRand = rand
     rand = nonce === 0
-      ? mulberry32(hexSeed(activeHex + (isDark ? 'd' : 'l')))
+      ? mulberry32(hexSeed(activeHex))
       : mulberry32(Math.floor(Math.random() * 0xffffffff))
     try {
       layoutRef.current = buildLayout(palette, !!assetsRef.current)
@@ -628,7 +636,7 @@ export function GenerativeArt({
     } finally {
       rand = prevRand
     }
-  }, [activeHex, isDark, palette, assetsReady, nonce])
+  }, [activeHex, palette, assetsReady, nonce])
 
   // Paint `layout` into any 2D context at the given size.
   const paint = useCallback((ctx: CanvasRenderingContext2D, W: number, H: number) => {

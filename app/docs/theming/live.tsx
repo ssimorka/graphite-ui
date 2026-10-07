@@ -1,8 +1,8 @@
 'use client'
 
 import { RefTable } from '@/components/component-page'
-import { PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
-import { useTheme } from '@/components/theme-provider'
+import { artPalette, PatternSpecimen, PATTERN_NAMES } from '@/components/generative-art'
+import { COVER_SOURCE_HEX, useTheme } from '@/components/theme-provider'
 import { weightLabelFor } from '@/components/token-panels'
 import { Tag } from '@/components/ui/tag'
 import { STATE_DELTAS, STATE_FAMILIES } from '@/lib/color.js'
@@ -172,26 +172,21 @@ export function CurrentLevel() {
 
 /** The 60/30/10 rhythm, with the tenth painted from the live secondary role. */
 export function RatioBar() {
-  const { theme, lightBundle, darkBundle } = useTheme()
-  const tokens = (theme === 'dark' ? darkBundle : lightBundle)?.tokens as
-    | Record<string, Entry>
-    | undefined
+  const { sourceHex } = useTheme()
+  const { grays, accents, pop } = artPalette(sourceHex || COVER_SOURCE_HEX)
   return (
     <div
       className={styles.ratio}
       role="img"
-      aria-label="Sixty percent neutral, thirty percent accent, ten percent secondary"
+      aria-label="Sixty percent gray, thirty percent accent, ten percent pop"
     >
-      <span className={styles.ratioNeutral}>60% Neutral</span>
-      <span className={styles.ratioAccent}>30% Accent</span>
-      <span
-        className={styles.ratioPop}
-        style={
-          tokens
-            ? { background: tokens.secondary.hex, color: tokens.onSecondary.hex }
-            : undefined
-        }
-      >
+      <span className={styles.ratioNeutral} style={{ background: grays[1], color: grays[4] }}>
+        60% Gray
+      </span>
+      <span className={styles.ratioAccent} style={{ background: accents[1], color: grays[4] }}>
+        30% Accent
+      </span>
+      <span className={styles.ratioPop} style={{ background: pop, color: grays[0] }}>
         10%
       </span>
     </div>
