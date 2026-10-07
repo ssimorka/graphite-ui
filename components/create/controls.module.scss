@@ -445,6 +445,19 @@
   }
 }
 
+// A control that does nothing right now (Mix with no color, Intensity on a
+// grey pick) takes the kit's disabled field colours, as Select does. It still
+// opens its sheet, which says why.
+.picker[data-disabled] {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+
+  .pickerLabel,
+  .indicator {
+    color: var(--graphite-primary-disabled-content);
+  }
+}
+
 .pickerText {
   display: flex;
   flex-direction: column;

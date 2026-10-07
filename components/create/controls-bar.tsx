@@ -175,6 +175,8 @@ export function ControlsBar() {
             key={c.id}
             type="button"
             className={styles.picker}
+            // Still opens: the sheet says why the control is off.
+            data-disabled={c.disabled ? '' : undefined}
             aria-haspopup="dialog"
             onClick={() => setSheet(c.id)}
           >
