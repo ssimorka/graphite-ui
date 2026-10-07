@@ -114,7 +114,8 @@ export default function AccessibilityPage() {
     .map((d) => [
       link(d),
       reduced.has(d.slug) ? 'Yes' : 'No',
-      row(d, 'Motion')?.[1] ?? 'The page records no motion note.',
+      // A dash is the table's null state, not copy.
+      row(d, 'Motion')?.[1] ?? '—',
     ])
 
   return (
@@ -255,7 +256,7 @@ export default function AccessibilityPage() {
           <section id="focus" className={styles.block}>
             <SectionHeading
               title="Focus"
-              lede="One ring color for the whole system, generated like every other role."
+              lede={`A shared ring color, generated like every other role. ${spell(ringedDocs.length)} components draw it; the rest show focus their own way.`}
             />
             <div className={styles.focusRow}>
               {focus.map((f) => (

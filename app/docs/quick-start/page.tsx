@@ -19,8 +19,10 @@ import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { spell } from '@/lib/spell'
 import {
   buildCss,
+  buildGraphiteVars,
   buildStates,
   buildTheme,
+  LADDERS,
   makeRamps,
   STATE_FAMILIES,
 } from '@/lib/color.js'
@@ -74,6 +76,8 @@ function generatedVars() {
   const states = STATE_FAMILIES.flatMap((f) =>
     STATE_SUFFIXES.map((s) => `--graphite-${f}-${s}`),
   )
+  const ladders = Object.keys(LADDERS.light).map((n) => `--graphite-${n}`)
+  const all = Object.keys(buildGraphiteVars(light, lightStates, ramps, 'light'))
   const css = buildCss({
     hex: COVER_SOURCE_HEX,
     ramps,
@@ -82,7 +86,7 @@ function generatedVars() {
     dark,
     darkStates,
   })
-  return { roles, states, css }
+  return { roles, states, ladders, all, css }
 }
 
 /**
@@ -156,7 +160,7 @@ export default function QuickStartPage() {
   const button = bySlug('button')
   const group = bySlug('button-group')
   const gen = generatedVars()
-  const generated = new Set([...gen.roles, ...gen.states, '--graphite-focus', '--graphite-scrim'])
+  const generated = new Set(gen.all)
   const statics = staticVars(generated)
   // The head of the color part of the theme file for the seed: the selector
   // and the first roles, enough to show the naming and the shape.
@@ -286,6 +290,11 @@ export default function QuickStartPage() {
                   String(gen.states.length),
                   gen.states.slice(0, 3).join(', '),
                 ],
+                [
+                  'Ladders (generated)',
+                  String(gen.ladders.length),
+                  gen.ladders.slice(0, 3).join(', '),
+                ],
                 ['Focus and scrim (generated)', '2', '--graphite-focus, --graphite-scrim'],
                 ...[...statics.entries()].map(([family, names]) => [
                   `${family} (static)`,
@@ -295,7 +304,7 @@ export default function QuickStartPage() {
               ]}
             />
             <p className={styles.note}>
-              {`Generated variables come from your color: ${lower(gen.roles.length)} roles, and ${lower(STATE_SUFFIXES.length)} states for each of the ${STATE_FAMILIES.join(', ')} families. Static ones are the same for every theme.`}{' '}
+              {`Generated variables come from your color, ${gen.all.length} per theme: ${lower(gen.roles.length)} roles, ${lower(STATE_SUFFIXES.length)} states for each of the ${STATE_FAMILIES.join(', ')} families, ${lower(gen.ladders.length)} ladder steps for layers and borders, focus and scrim. Static ones are the same for every theme.`}{' '}
               <a href="/docs/foundations/tokens">Tokens</a> lists them all.
             </p>
           </section>

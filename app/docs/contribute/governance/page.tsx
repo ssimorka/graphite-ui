@@ -239,8 +239,7 @@ export default function GovernancePage() {
               ])}
             />
             <p className={styles.note}>
-              {spell(contracts.length)} contracts, read from their frontmatter
-              when this page was built. Inherited rows are counted in full, so
+              {`${spell(contracts.length)} contracts: the ${lower(stats.governed)} governed components and the Overlay hook they share, read from their frontmatter when this page was built.`} Inherited rows are counted in full, so
               Text area&rsquo;s figures include what it takes from Text input.
               The foundations (spacing, radius, breakpoint, type) have contracts
               too, in <code>docs/contracts/foundations/</code>, and answer to
@@ -417,14 +416,9 @@ export default function GovernancePage() {
                   'Out of scope permanently. No Graphite counterpart.',
                 ],
                 [
-                  'Already spoken for',
-                  'Number and Password input, Dropdown, Menu buttons',
-                  'A value on a governed component (type on Text input, Select, Button with Menu), recorded on that contract.',
-                ],
-                [
-                  'Awaiting demand',
-                  'Link, Search, Slider, Pagination, Date picker, File uploader',
-                  'Ungoverned until the repo uses one, a contract references one, or committed work needs one.',
+                  'Built and governed',
+                  'Link, Search, Slider, Pagination, Date picker, Time picker, File uploader, Number and Password input, Dropdown, Menu buttons',
+                  'Once awaiting demand or folded into another contract. Built with their own contracts on 2026-10-04, so they are governed now.',
                 ],
               ]}
             />
@@ -456,7 +450,7 @@ export default function GovernancePage() {
             </ol>
             <Callout title="A dependency survives the question; an illustration does not.">
               {[
-                'If a reference still reads correctly after substituting something else, it was an illustration. Contained list named Avatar in an optional slot, a Tag replaced it, and the contract lost only a word. Typography is the type of Contained list’s required title slot and the remedy in one of Progress bar’s prohibitions: remove it and a prohibition points at nothing.',
+                'If a reference still reads correctly after substituting something else, it was an illustration. Contained list named Avatar in an optional slot, a Tag replaced it, and the contract lost only a word. Typography is the type of Contained list’s required title slot: remove it and the slot names nothing.',
                 '“The repo imports it” is not the test. Only the gallery imports Typography, and that is not what keeps it.',
               ]}
             </Callout>

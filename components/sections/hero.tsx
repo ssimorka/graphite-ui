@@ -140,8 +140,9 @@ export function Hero({ governed }: { governed: number }) {
                 looking at their ramps to building with them. */}
             <div className="hero__strip-footer">
               <p className="ramp-stack__hint">
-                Select any swatch to copy its hex. The outlined stop is where
-                your source color landed.
+                Four of the eight ramps; the status ramps are danger, warning,
+                success and info. Select a swatch to copy its hex. The outlined
+                stop is your source color.
               </p>
               <a className="hero__strip-cta" href="/create">
                 Create a theme
