@@ -715,5 +715,11 @@
 
 // The intensity slider inside the bar's bottom sheet: the sheet's side gutter.
 .sheetSlider {
+  align-self: stretch;
   padding: var(--graphite-space-03) var(--graphite-space-06) var(--graphite-space-05);
+
+  // The sheet centers its children; the slider has to span it to be usable.
+  > * {
+    width: 100%;
+  }
 }
