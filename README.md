@@ -1,134 +1,37 @@
 # Graphite UI
 
-A design system and the site that documents it. One hex source color resolves
-through a perceptual color engine into a complete themed palette, and every
-component answers to a written contract that CI checks the code against.
+One color. A whole theme.
 
-## How it works
+Pick a source color and Graphite builds the scales, the thirty-two roles and both themes, checking contrast as it goes. Thirty-six React components read those roles, each held by CI to a written contract and to the Figma kit.
 
-**Source-derived theming.** One hex input, resolved in OKLab and sampled at
-fixed tone stops into perceptual ramps. Each theme pass emits 58
-`--graphite-*` color variables (32 roles, six states each for the primary,
-secondary and danger families, the focus ring, the scrim, and the kit's
-elevation and outline ladders), which are the
-canonical surface. The same set is what Create's theme file and Tailwind
-bridge name, so the site and an adopter's download cannot differ. On this site
-the provider also stamps 59 `--cds-*` variables as a Carbon compatibility
-layer, plugged in from `components/carbon-compat.tsx`. A further 102 variables (spacing, density, radius, breakpoints,
-typography, motion) are declared statically in `app/globals.scss`, because
-they do not vary by theme.
+![Graphite UI](public/graphite/cover.jpg)
 
-**Contracted components.** Every component has exactly one contract file in
-`docs/contracts/`, versioned with semver, and the code is checked against it.
-The Figma kit is canonical: where the kit and a contract disagree, the kit
-wins and the contract is corrected (governance rule 7, reversed from
-"contracts win" on 2026-08-28). No component code changes without a matching
-contract update.
+## Use it
 
-**Drift checks that gate the build.** `drift-check.mjs` verifies that each
-component's code references exactly the token variables its contract declares,
-nothing else, and that its docblock names the contract's version.
-`token-drift.mjs` verifies the four foundations (spacing, radius, breakpoint,
-typography) against the Figma snapshot, Carbon's breakpoint map against the
-kit, and that every Dev Mode code snippet in the kit names a `--graphite-*`
-variable the code declares. `component-doc-drift.mjs` verifies that every
-public set in the kit snapshot is covered by a component doc. `naming-check.mjs`
-keeps `--graphite-*` the only variable prefix anywhere in the repo. All four
-run in CI, and `main` requires them.
-
-## Status
-
-37 contracts: 36 components and the shared Overlay hook they dismiss through.
-Every contract in `docs/contracts/` has a matching implementation in
-`components/ui/` and a documentation page at `/docs/components/<name>`,
-generated from the contract.
-
-## Getting started
-
-Requires Node 24 and pnpm 10, the versions CI pins.
+Set up a Next.js project with Tailwind, then add the init item, your theme and the Tailwind bridge:
 
 ```bash
-pnpm install
-pnpm dev
+npx shadcn@latest add https://www.graphite-ui.com/r/init.json https://www.graphite-ui.com/r/theme/0f766e.json https://www.graphite-ui.com/r/tailwind.json
 ```
 
-The dev server runs on port 3000 and must run under webpack. Turbopack breaks
-on this project's Sass, so `--webpack` is baked into both the `dev` and `build`
-scripts. Leave it there.
+Then add components:
 
-## Scripts
-
-| Script | What it does |
-|---|---|
-| `pnpm dev` | Dev server, port 3000, webpack |
-| `pnpm build` | Production build, webpack |
-| `pnpm start` | Serve the production build |
-| `pnpm typecheck` | `tsc --noEmit` |
-| `pnpm drift-check` | Components against their contracts |
-| `pnpm token-drift` | Foundations against the Figma snapshot |
-| `pnpm token-drift:test` | Self-test for the token drift checker |
-| `pnpm component-doc-drift` | Kit component sets against `docs/components/` |
-| `pnpm component-doc-drift:test` | Self-test for the component doc checker |
-| `pnpm naming-check` | Fails on any variable prefix but `--graphite-` |
-| `pnpm registry-check` | Builds every registry item and resolves its dependencies |
-| `pnpm figma-snapshot` | Regenerate `docs/tokens/figma-snapshot.json` |
-| `pnpm component-snapshot` | Regenerate `docs/tokens/figma-components.json` |
-
-## Layout
-
+```bash
+npx shadcn@latest add https://www.graphite-ui.com/r/button.json
 ```
-app/
-  docs/                  # Getting started, foundations, component pages
-    components/[slug]/   # One route renders every component page
-  gallery/               # The Components index
-  create/                # The theme builder
-  search-index.json/     # Static search index, built at build time
-  globals.scss           # The 102 static, theme-invariant variables
-components/
-  ui/                    # The 36 contracted components and the Overlay hook
-  component-doc/         # Component page template and per-component configs
-  search/                # Documentation search dialog and ranking
-  sections/              # Landing page sections
-  theme-provider.tsx     # Source of truth for source color, theme, contrast level
-  carbon-compat.tsx      # The site's Carbon layer, plugged into the provider
-  site-theme.tsx         # The provider as the site configures it
-  token-panels.tsx       # Ramp rows, semantic table, states matrix
-lib/
-  color.js               # The color engine
-docs/
-  contracts/             # Component contracts, plus foundations/ and kit/
-  components/            # Descriptive snapshots of the Figma kit
-  tokens/                # figma-snapshot.json, figma-components.json, figma-code-syntax.json
-scripts/                 # Drift checks and Figma extraction
-```
+
+Swap `0f766e` for your own hex, or build a theme in [Create](https://www.graphite-ui.com/create) and take the code. The [Quick start](https://www.graphite-ui.com/docs/quick-start) walks through it, and [What you can use today](https://www.graphite-ui.com/docs#use-today) covers the theme, the Figma kit and the components.
+
+There is no npm package. Components install as source files you own, the way shadcn/ui works.
 
 ## Documentation
 
-- [docs/contracts/README.md](docs/contracts/README.md): governance model, token
-  structure reference, and build order. Start here.
-- [docs/components/README.md](docs/components/README.md): why the Figma kit docs
-  are not the same thing as the contracts.
-- [docs/CORE-CONCEPTS.md](docs/CORE-CONCEPTS.md), [docs/color.md](docs/color.md),
-  [docs/guidelines.md](docs/guidelines.md),
-  [docs/SITE-FUNCTIONS.md](docs/SITE-FUNCTIONS.md).
+Visit [graphite-ui.com/docs](https://www.graphite-ui.com/docs).
 
-Note that `docs/contracts/` and `docs/components/` share several filenames and
-answer different questions. Contracts define a component's behavior, props and
-token dependencies. The component docs describe what the Figma kit currently
-renders. If you are writing code, start with the contract.
+## Contributing
 
-## CI
-
-[.github/workflows/checks.yml](.github/workflows/checks.yml) runs on every pull
-request and every push to `main`: typecheck, drift check, token drift, the
-component doc check, both self-tests, the naming check, and the registry check. Each step runs even if an earlier one failed, because a
-contract change typically trips more than one. It deliberately does not run
-`next build`, since the Vercel deployment already does that on every PR.
+Please read the [contributing guide](CONTRIBUTING.md). Questions go to [Discussions](https://github.com/ssimorka/graphite-ui/discussions).
 
 ## License
 
-MIT. See [LICENSE](LICENSE). Commercial use included.
-
-The licence covers the code and documentation. The Simorka Designs name and
-logo, the SD System mark, and the Graphite UI name and logo are not included.
-See [TRADEMARKS.md](TRADEMARKS.md).
+Licensed under the [MIT license](LICENSE). The Graphite UI, Simorka Designs and SD System names and logos are not covered; see [TRADEMARKS.md](TRADEMARKS.md).
