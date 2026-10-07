@@ -95,9 +95,6 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
             <p className={styles.lede}>{c.lede}</p>
             <div className={styles.statusRow}>
               <StatusBadge tone="success">{`Contract ${contract.version}`}</StatusBadge>
-              {contract.wave ? (
-                <StatusBadge tone="neutral">{`Wave ${contract.wave}`}</StatusBadge>
-              ) : null}
               {kit ? (
                 <StatusBadge tone="neutral">{`Kit · ${kit.sets} sets · ${kit.variants} variants`}</StatusBadge>
               ) : (
