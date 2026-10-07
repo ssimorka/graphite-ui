@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Grid, Column } from '@carbon/react'
 import { Reveal } from '@/components/reveal'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
@@ -30,7 +31,7 @@ type PanelKey =
 const CAPABILITIES: {
   key: PanelKey
   title: string
-  body: string
+  body: ReactNode
   caption: string
   /**
    * Caption for the collapsed layout, where one is drawn differently. Only the
@@ -63,19 +64,24 @@ const CAPABILITIES: {
   {
     key: 'components',
     title: 'Governed components', // the count is prefixed at render, see titleOf
-    body: 'Each one may not change without its contract changing first.',
+    body: (
+      <>
+        Governed means each has a contract, and its code may not change without
+        the contract changing first. <a href="/docs/glossary">Glossary</a>
+      </>
+    ),
     caption: 'One chip per governed component.',
   },
   {
     key: 'checks',
-    title: 'Checked in CI',
-    body: 'Components against their contracts, tokens and docs against the kit.',
-    caption: 'Each reads a committed copy of the kit, so it runs offline.',
+    title: 'Checked on every change',
+    body: 'Components against their contracts; tokens and docs against the Figma kit.',
+    caption: 'Each check reads a saved copy of the kit, so it needs no network.',
   },
   {
     key: 'sets',
-    title: 'Every kit set tracked',
-    body: 'Sets with no contract are labelled in the kit, not hidden.',
+    title: 'Every kit component labelled',
+    body: 'Kit components with no contract are marked in Figma, not hidden.',
     caption: 'What each kit set says about itself.',
   },
 ]
@@ -178,16 +184,16 @@ function PanelComponents({
 // than what it compares - the more useful half of the same fact.
 const CHECKS = [
   {
-    name: 'drift-check',
-    body: 'Fails when a component references a token role its contract does not declare.',
+    name: 'Components',
+    body: 'Fails when a component uses a color role its contract does not list.',
   },
   {
-    name: 'token-drift',
-    body: 'Fails when a foundation value stops matching the committed snapshot.',
+    name: 'Tokens',
+    body: 'Fails when a spacing, radius or type value stops matching the kit.',
   },
   {
-    name: 'component-doc-drift',
-    body: 'Fails when a public component set has no doc coverage.',
+    name: 'Docs',
+    body: 'Fails when a kit component has no documentation.',
   },
 ]
 
@@ -531,8 +537,8 @@ export function Capabilities({
               </h2>
               <p className="section__subtitle">
                 The engine does the work Figma cannot: it derives, it measures,
-                and it does both themes at once. Checks in CI then hold the
-                components and tokens to it.
+                and it does both themes at once. Automated checks then compare
+                each component to its contract and each token to the Figma kit.
               </p>
             </Reveal>
           </Column>

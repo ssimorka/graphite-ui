@@ -80,9 +80,11 @@ export function ComponentWall({
                 The components, live
               </h2>
               <p className={styles.body}>
-                Not a screenshot of a dashboard. These are the real component
-                sets from the kit, rendering from the same tokens the rest of
-                the page uses, so they repaint when the color above changes.
+                The real components, built from the Figma kit and painted by the
+                same tokens as this page, so they repaint when the color above
+                changes. Each badge is a contract version: a contract is the
+                component&apos;s written spec, and automated checks compare the
+                code against it. <a href="/docs/glossary">Glossary</a>
               </p>
             </div>
 

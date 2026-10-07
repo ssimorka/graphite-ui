@@ -11,11 +11,11 @@ import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: `You can use it today. The theme and all ${governed} governed components install with the shadcn CLI, and the Figma kit is a published library. Each component has a versioned contract, checked in CI. There is no npm package.`,
+    a: `Yes, for the theme and the ${governed} components: they install today with the shadcn CLI, and automated checks compare each one to its contract on every change. The Figma kit is a published library. Graphite is at v0.1.0, so expect changes. There is no npm package.`,
   },
   {
     q: 'Is it free, and what is it built with?',
-    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI, Simorka Designs and SD System names and logos are not covered by the licence.',
+    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI and Simorka Designs names and logos, including the SD System mark in the footer, are not covered by the licence.',
   },
   {
     q: 'Does it require Carbon?',
@@ -27,11 +27,11 @@ const faqs = (governed: number) => [
   },
   {
     q: 'How do the Figma kit and the code stay in step?',
-    a: 'Checks in CI hold the governed components and tokens to their contracts and to a committed copy of the kit. Where the kit and a contract disagree, the kit wins and the contract is corrected. Updating that copy from Figma is a manual step.',
+    a: 'Automated checks compare each component to its contract, and each token to a saved copy of the Figma kit. Where the kit and a contract disagree, the kit wins and the contract is updated. Refreshing that copy from Figma is a manual step.',
   },
   {
     q: 'How do I contribute a component?',
-    a: 'Start with the contract, not the code. It declares the roles and variables the component may touch, and drift-check then holds the implementation to it. Main is protected, so everything lands through a pull request with the governance job green.',
+    a: 'Start with the contract, not the code: it lists what the component may use, and the checks compare the code against it. Every change lands through a pull request with the checks passing. The contributing guide on GitHub has the details.',
   },
 ]
 
