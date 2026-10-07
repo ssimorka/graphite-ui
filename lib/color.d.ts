@@ -163,19 +163,8 @@ export declare function hsvToHex(hsv: Hsv): string
 
 export declare function relativeLuminance(hex: string): number
 export declare function contrastRatio(hexA: string, hexB: string): number
-/** Decoration only: a colour at any tone, hue turned from the source's in
- *  degrees, chroma scaled and floored. UI roles stay on the ramps. */
-export declare function toneAt(
-  hex: string,
-  tone: number,
-  options?: { hueTurn?: number; chromaScale?: number; minChroma?: number },
-): string
-/** Decoration only: toneAt at the tone in [min, max] where the hue holds the
- *  most chroma, preferring `near`. */
-export declare function vividTone(
-  hex: string,
-  options?: { hueTurn?: number; minChroma?: number; min?: number; max?: number; near?: number },
-): string
+/** Measures a hex as OKLCH: l 0-100, chroma, hue in degrees. */
+export declare function hexToOklch(hex: string): { l: number; c: number; h: number }
 
 export declare function sourceToneOf(hex: string): number
 export declare function makeRamps(hex: string): Ramps

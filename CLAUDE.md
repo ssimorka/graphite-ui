@@ -77,23 +77,23 @@ before trusting a browser result.
   why `makeRamps` pins the source tone for secondary — and why it then
   clears the `source` flag, which means "this stop is the source hex" and
   is false for a hue 120° away.
-- **The generative art keeps its own palette, not the UI's.** It sampled the
-  UI ramps at their fixed stops from #90 until 2026-10-07, and that made it
-  pale: the accent's 80/90 stops are container tints, and `secondary` carries
+- **The generative art samples the ramps' vivid stops, not the UI's.** It
+  borrowed the stops the roles use from #90 until 2026-10-07, and that made
+  it pale: the accent's 80/90 are container tints, and `secondary` carries
   0.585x the source's chroma, so the pop was about half as intense as the
   first generator's #1DE9B6. `artPalette` in `components/generative-art.tsx`
-  now rebuilds the first generator's fixed palette from the source: six grays
-  at its lightnesses (18/29/45/73/95/29), the source hue at tones 30/41/52 at
-  full chroma (floored 0.15), and one pop at the secondary hue (source -120
-  degrees), chroma floored 0.16, at the tone in 55-88 where that hue holds the
-  most chroma, nearest 83 (`vividTone`: a fixed 83 left blue pops pastel).
-  At the default source that is #4e3296/#6c53ba/#18e8b9 against the
-  original's #4A3296/#6B4FBE/#1DE9B6. It uses `toneAt` and `vividTone` in
-  `lib/color.js`, which are for decoration only: UI roles stay on the ramps
-  so their contrast stays checked. One pool for both themes and
-  near-black seams, as the original had. The Generative Art page's ratio bar
-  paints from `artPalette`, not from the roles. Don't route the art back
-  through the ramps' stops: that is what flattened it.
+  now takes, still only from `makeRamps`: six neutral-ramp grays at the first
+  generator's lightnesses (18/29/45/73/95/29); the accent ramp's 30, 40 and
+  50 stops at full chroma; and a pop chosen from the 70 and 80 stops of
+  secondary and the four status ramps, the most vivid one at least 90
+  degrees from the accent's hue, nearest secondary's hue among near-equals.
+  At the default source: #340b74/#4c2f93/#5e44aa and pop success-80 #5adb91
+  (no ramp holds #1DE9B6's exact teal; secondary is too muted to win).
+  `hexToOklch` in `lib/color.js` only measures. A grey source makes quiet art,
+  because its ramps are quiet. One pool for both themes and near-black seams,
+  as the original had. The Generative Art page's ratio bar paints from
+  `artPalette`. Don't route the art back through the roles' stops: that is
+  what flattened it.
 - **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
   Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
   disagree, the kit wins and the *contract* is corrected. Contracts are still

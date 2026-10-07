@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
-import { makeRamps, toneAt, vividTone } from '@/lib/color.js'
+import { hexToOklch, makeRamps } from '@/lib/color.js'
 
 // Seeded PRNG so the same hex always yields the same composition.
 function mulberry32(seed: number) {
@@ -301,35 +301,57 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// The art does not follow the UI's rules. The UI samples the ramps at fixed
-// stops so every pairing is contrast-checked; that left the art pale (the
-// accent's 80 and 90 stops are container tints) and its pop at secondary's
-// muted chroma, about half the original's. So the pool is built the way the
-// first generator's fixed palette was, but from the source:
+// The art samples the engine's ramps, but not at the UI's stops. The UI reads
+// the accent's 80 and 90 for container tints and draws secondary at 0.585x
+// the source's chroma, and borrowing those made the art pale: two of three
+// accent slots were tints and the pop was half as intense as the first
+// generator's #1DE9B6. So the pool takes the ramps' most vivid stops instead:
 //
-// - 60%: six grays, at the original's lightnesses (18, 29, 45, 73, 95, 29).
-// - 30%: the source hue at tones 30, 41 and 52, at full chroma, floored at
-//   0.15 so a pale source still paints bold purples, blues or whatever it is.
-// - 10%: one pop, the secondary hue (120 degrees round) at chroma at least
-//   0.16, at the tone between 55 and 88 where that hue is most vivid, nearest
-//   83. Teal is vivid at 83; blue only lower down, so a fixed tone left some
-//   sources with a pastel pop. At the default source it is #18e8b9, against
-//   the original's #1DE9B6.
+// - 60%: six neutral-ramp grays at the first generator's lightnesses.
+// - 30%: the accent ramp's 30, 40 and 50 stops, at the source's full chroma
+//   (the 50 stop is your exact color when it lands near there).
+// - 10%: the pop. Of the light stops (70 and 80) on secondary and the four
+//   status ramps, the most vivid one whose hue sits at least 90 degrees from
+//   the accent's, preferring the one nearest secondary's hue among near-equals.
+//   At the default source that is success 80, #5adb91: secondary itself is
+//   too muted to win.
 //
 // One pool for both themes, as the original had: the art is a picture, not
 // chrome, and it should not go pastel in dark mode.
 const GRAY_TONES = [18, 29, 45, 73, 95, 29]
-const ACCENT_TONES = [30, 41, 52]
-const ACCENT_MIN_CHROMA = 0.15
-const POP = { tone: 83, hueTurn: -120, minChroma: 0.16 }
+const ACCENT_STOPS = [2, 3, 4] // tones 30, 40, 50 in the ramp's ten stops
+const POP_STOPS = [6, 7] // tones 70 and 80
+const POP_RAMPS = ['secondary', 'danger', 'warning', 'success', 'info'] as const
+
+const hueGap = (a: number, b: number) => {
+  const d = Math.abs(a - b) % 360
+  return d > 180 ? 360 - d : d
+}
 
 /** The art's three groups for a source, for anything that shows the rhythm. */
 export function artPalette(sourceHex: string) {
   const ramps = makeRamps(sourceHex)
+  const accents = ACCENT_STOPS.map((i) => ramps.accent.stops[i].hex)
+  const accentHue = hexToOklch(sourceHex).h
+  const secondaryHue = hexToOklch(ramps.secondary.stops[7].hex).h
+
+  const candidates = POP_RAMPS.flatMap((name) =>
+    POP_STOPS.map((i) => {
+      const hex = ramps[name].stops[i].hex
+      return { hex, ...hexToOklch(hex) }
+    }),
+  ).filter((c) => hueGap(c.h, accentHue) >= 90)
+  const top = Math.max(...candidates.map((c) => c.c))
+  const pop = candidates.length
+    ? candidates
+        .filter((c) => c.c >= top - 0.02)
+        .sort((x, y) => hueGap(x.h, secondaryHue) - hueGap(y.h, secondaryHue))[0].hex
+    : ramps.secondary.stops[7].hex
+
   return {
     grays: GRAY_TONES.map((t) => ramps.neutral.tone(t)),
-    accents: ACCENT_TONES.map((t) => toneAt(sourceHex, t, { minChroma: ACCENT_MIN_CHROMA })),
-    pop: vividTone(sourceHex, { hueTurn: POP.hueTurn, minChroma: POP.minChroma, near: POP.tone }),
+    accents,
+    pop,
   }
 }
 
