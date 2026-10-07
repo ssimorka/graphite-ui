@@ -26,8 +26,9 @@ export function CreatePage({ foundations }: { foundations: ThemeFileFoundations 
               <p className={styles.lede}>
                 Pick one color. Graphite resolves eight ramps and thirty-two semantic
                 roles from it, in both themes, and checks every pairing as it goes.
-                Everything below the source is derived, which is the point: you are
-                choosing a system, not painting components.
+                See it on real components and take the code, or switch to
+                Generative Art to turn the same color into a composition you can
+                export.
               </p>
             </header>
             <div className={styles.split}>

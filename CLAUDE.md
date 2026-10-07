@@ -77,16 +77,33 @@ before trusting a browser result.
   why `makeRamps` pins the source tone for secondary — and why it then
   clears the `source` flag, which means "this stop is the source hex" and
   is false for a hue 120° away.
-- **The 10% of the 60/30/10 rhythm is `secondary`, deliberately.** It was
-  `neutralVariant` until #90. `buildPalette` in `components/generative-art.tsx`
-  now samples `secondary` at the same two tone stops neutralVariant held
-  (80 dark, 50 light), so the pool's light/dark split by `luminance > 0.45`
-  is unchanged and only the chroma moves. The consequence is that
-  neutralVariant no longer appears in the composition palette at all — it is
-  still the fourth ramp in the ramp stack and still drives `outline`, so
-  that absence is intended, not an omission to repair. The ratio bar
-  (`RatioBar` in `app/docs/theming/live.tsx`) reads the `secondary` /
-  `onSecondary` roles to match.
+- **The generative art has its own controls, and its hue only comes from the
+  pick.** It borrowed the UI roles' ramp stops from #90 until 2026-10-07,
+  which made it pale (the accent's 80/90 are container tints; `secondary` is
+  0.585x the source's chroma). Now Create's Generative Art tab swaps the UI
+  controls for three art controls held in the builder (`art`, `setArt`):
+  Intensity (a 0-100 slider), Mix and Grid. Intensity is an absolute chroma
+  up to 0.24 (67 is the first generator's 0.16), so it can go past the pick's
+  own, and it moves where the color sits: one deep shade and two light tints
+  at the low end (pale), the first generator's deep 30/41/52 from about 65
+  (vivid), mono at 0. The companion is always the hue 120 degrees round. Grid
+  is a target tile size: `gridFor` derives columns and rows from the canvas's
+  measured size, so the grid reflows with its container and goes portrait
+  (3:4) on a phone; the layout keeps the grid it was dealt on, and each
+  deal keeps its seed, so moving a control recolors or reflows that deal
+  instead of dealing a new one. On that tab Shuffle becomes Regenerate;
+  Reset resets everything, source included, on either tab; Export PNG
+  replaces Get the code and exports at the canvas's proportions.
+  `artPalette(source, settings)` in `components/generative-art.tsx` builds the
+  pool from true greys (`grayAt`). A pick under 0.02 chroma (`isHueless`)
+  has no hue, so the art is mono and Intensity is disabled with a note:
+  nothing invents a hue. Vivid at the default source is close to the
+  original (#4e3296/#6c53ba/#18e8b9 against #4A3296/#6B4FBE/#1DE9B6). `Tabs`
+  keeps every panel mounted, so the art panel reports the view from its tab
+  panel's `hidden` attribute. `toneAt`/`vividTone` in `lib/color.js` are for
+  decoration only. Tried and dropped: Vivid from ramp stops alone (no ramp
+  holds the original teal), a pale made by compressing tones (read mid-grey),
+  and separate Look/Contrast/Color tone/Companion controls (they overlapped).
 - **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
   Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
   disagree, the kit wins and the *contract* is corrected. Contracts are still

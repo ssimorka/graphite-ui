@@ -124,6 +124,15 @@
   gap: var(--graphite-space-04);
 }
 
+// Why a control is off (Intensity on a hueless pick): the caption's size, in
+// the warning role, as the Proposed note below uses it.
+.note {
+  margin: 0;
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  color: var(--graphite-warning);
+}
+
 .caption {
   margin: 0;
   font-size: var(--graphite-text-caption-1-size);
@@ -436,6 +445,19 @@
   }
 }
 
+// A control that does nothing right now (Mix with no color, Intensity on a
+// grey pick) takes the kit's disabled field colours, as Select does. It still
+// opens its sheet, which says why.
+.picker[data-disabled] {
+  background: var(--graphite-primary-disabled);
+  color: var(--graphite-primary-disabled-content);
+
+  .pickerLabel,
+  .indicator {
+    color: var(--graphite-primary-disabled-content);
+  }
+}
+
 .pickerText {
   display: flex;
   flex-direction: column;
@@ -702,4 +724,15 @@
   font-size: var(--graphite-text-code-1-size);
   line-height: var(--graphite-text-code-1-line-height);
   color: var(--graphite-on-surface-variant);
+}
+
+// The intensity slider inside the bar's bottom sheet: the sheet's side gutter.
+.sheetSlider {
+  align-self: stretch;
+  padding: var(--graphite-space-03) var(--graphite-space-06) var(--graphite-space-05);
+
+  // The sheet centers its children; the slider has to span it to be usable.
+  > * {
+    width: 100%;
+  }
 }

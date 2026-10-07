@@ -51,6 +51,12 @@
 // The composition at the 16:9 it exports at, lifted like the sample cards.
 .art {
   aspect-ratio: 16 / 9;
+
+  // Portrait on a phone: the grid reflows to whatever box it is given.
+  @media (max-width: 671.98px) {
+    aspect-ratio: 3 / 4;
+  }
+
   overflow: hidden;
   box-shadow:
     0 1px 2px color-mix(in srgb, #000 12%, transparent),

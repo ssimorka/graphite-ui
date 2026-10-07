@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp, Download, Reset, Shuffle } from '@carbon/icons-react'
+import { ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
+import { Slider } from '@/components/ui/slider'
 import type { IconSet } from '@/lib/kit-icons'
 import { CODE_FONTS, TEXT_FONTS, useBuilder } from './builder'
-import { DERIVED_ROLES, openSourcePicker, useControls } from './controls-model'
+import { DERIVED_ROLES, forView, openSourcePicker, useControls } from './controls-model'
 import type { Control, ControlId } from './controls-model'
 import { GetCodeDialog } from './get-code'
 import { Toast, useCopy } from '@/components/token-panels'
@@ -73,7 +74,21 @@ function OptionSheet({
         <span className={styles.grabber} aria-hidden="true" />
         <h2 className={styles.sheetTitle}>{control.heading}</h2>
 
-        {control.id === 'derived' ? (
+        {control.disabled ? (
+          <p className={styles.sheetCaption}>{control.note}</p>
+        ) : control.slider ? (
+          <div className={styles.sheetSlider}>
+            <Slider
+              label={control.value}
+              min={control.slider.min}
+              max={control.slider.max}
+              step={control.slider.step}
+              value={control.slider.value}
+              onChange={control.slider.onChange}
+              showInputs={false}
+            />
+          </div>
+        ) : control.id === 'derived' ? (
           <>
             {DERIVED_ROLES.map((r) => (
               <div key={r} className={styles.option}>
@@ -146,8 +161,8 @@ function OptionSheet({
  * shuffling here randomises everything not already locked on the desktop panel.
  */
 export function ControlsBar() {
-  const controls = useControls()
   const b = useBuilder()
+  const controls = forView(useControls(), b.view)
   const [sheet, setSheet] = useState<ControlId | null>(null)
   const [codeOpen, setCodeOpen] = useState(false)
   const active = controls.find((c) => c.id === sheet)
@@ -160,6 +175,8 @@ export function ControlsBar() {
             key={c.id}
             type="button"
             className={styles.picker}
+            // Still opens: the sheet says why the control is off.
+            data-disabled={c.disabled ? '' : undefined}
             aria-haspopup="dialog"
             onClick={() => setSheet(c.id)}
           >
@@ -189,16 +206,28 @@ export function ControlsBar() {
         <button
           type="button"
           className={`${styles.barQuiet} ${styles.barShuffle}`}
-          title="Shuffle"
+          title={b.view === 'art' ? 'Regenerate' : 'Shuffle'}
           onClick={b.shuffle}
         >
-          <Shuffle size={16} aria-hidden="true" />
-          <span className={styles.barLabel}>Shuffle</span>
+          {b.view === 'art' ? <Renew size={16} aria-hidden="true" /> : <Shuffle size={16} aria-hidden="true" />}
+          <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Shuffle'}</span>
         </button>
-        <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
-          Get the code
-          <Download size={16} aria-hidden="true" />
-        </button>
+        {b.view === 'art' ? (
+          <button
+            type="button"
+            className={styles.barCode}
+            onClick={() => b.artHandle?.exportPng()}
+            disabled={!b.artHandle}
+          >
+            Export PNG
+            <Download size={16} aria-hidden="true" />
+          </button>
+        ) : (
+          <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
+            Get the code
+            <Download size={16} aria-hidden="true" />
+          </button>
+        )}
       </div>
       {active ? <OptionSheet control={active} onClose={() => setSheet(null)} /> : null}
       <GetCodeDialog open={codeOpen} onClose={() => setCodeOpen(false)} />
