@@ -3,6 +3,7 @@
 import { Grid, Column } from '@carbon/react'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Reveal } from '@/components/reveal'
+import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 
 // The kit draws only the first answer open; the other questions are
 // collapsed, so their copy is written here against what the repo actually
@@ -18,7 +19,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'Does it require Carbon?',
-    a: 'No. Graphite’s components, theme file and theme provider do not use Carbon. This site still uses a few Carbon pieces, and is moving off them.',
+    a: `No. Graphite’s components, theme file and theme provider do not use Carbon. The Figma kit descends from IBM’s Carbon Design System, and this site’s own chrome still runs on Carbon, mapped to Graphite’s colors through ${CARBON_VAR_COUNT} --cds-* variables while it moves off.`,
   },
   {
     q: 'Can I use my own brand color?',

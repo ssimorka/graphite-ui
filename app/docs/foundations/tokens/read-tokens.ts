@@ -90,7 +90,9 @@ export type FoundationGroup = {
 }
 
 // Order and titles are the page's. Membership is by prefix, so a token added to
-// the stylesheet lands in its group without an edit here.
+// the stylesheet lands in its group without an edit here. --graphite-scrim is
+// declared in the stylesheet too, but only as a first-paint fallback for a
+// generated variable, so it belongs to no group and is not counted.
 const GROUPS: FoundationGroup[] = [
   { id: 'space', title: 'Space', test: /^--graphite-space-/ },
   { id: 'density', title: 'Density', test: /^--graphite-density-/ },
@@ -104,7 +106,7 @@ const GROUPS: FoundationGroup[] = [
     title: 'Type steps',
     test: /^--graphite-text-(?!weight-)[a-z0-9-]+-(size|line-height)$/,
   },
-  { id: 'scrim', title: 'Scrim', test: /^--graphite-scrim$/ },
+  { id: 'shadow', title: 'Shadow', test: /^--graphite-shadow-/ },
 ]
 
 export function groupFoundations(decls: Decl[]) {

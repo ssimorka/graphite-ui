@@ -52,8 +52,7 @@ const GROUP_NOTES: Record<string, string> = {
   font: 'Three roles. font-1 and font-2 hold the same face today and have no fallback stack.',
   weight: 'The kit stores style names; the number is mapped once, here.',
   text: 'Desktop values. The Mobile block restates only the steps that change.',
-  scrim:
-    'A pre-hydration fallback only. ThemeProvider overwrites it on every source change with an alpha over the darkest neutral, so the veil carries the source color.',
+  shadow: 'The kit’s menu shadow, under every overlay.',
 }
 
 const GROUP_LINKS: Record<string, string> = {
@@ -124,6 +123,7 @@ function FoundationTable({ id, title, decls }: { id: string; title: string; decl
 export default function TokensPage() {
   const f = readFoundations()
   const groups = groupFoundations(f.desktop).filter((g) => g.decls.length)
+  const staticCount = groups.reduce((n, g) => n + g.decls.length, 0)
   const inline = groups.filter((g) => g.id !== 'text')
   const text = groups.find((g) => g.id === 'text')
 
@@ -233,7 +233,7 @@ export default function TokensPage() {
           <section id="foundations" className={styles.block}>
             <SectionHeading
               title="Foundation tokens"
-              lede={`${f.desktop.length} variables in ${groups.length} groups, the same in both themes. Mobile restates ${f.mobile.length} type values below ${(f.mobileMaxWidth ?? 0) + 1}px.`}
+              lede={`${staticCount} variables in ${groups.length} groups, the same in both themes. Mobile restates ${f.mobile.length} type values below ${(f.mobileMaxWidth ?? 0) + 1}px.`}
             />
             <div className={styles.groups}>
               {inline.map((g) => (

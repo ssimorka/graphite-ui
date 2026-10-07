@@ -60,7 +60,6 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/navigation-menu', label: 'Navigation menu' },
       { href: '/docs/components/notification', label: 'Notification' },
       { href: '/docs/components/number-input', label: 'Number input' },
-      { href: '/docs/components/overlay', label: 'Overlay' },
       { href: '/docs/components/pagination', label: 'Pagination' },
       { href: '/docs/components/password-input', label: 'Password input' },
       { href: '/docs/components/popover', label: 'Popover' },
@@ -79,6 +78,9 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/components/tooltip', label: 'Tooltip' },
       { href: '/docs/components/tree-view', label: 'Tree view' },
       { href: '/docs/components/typography', label: 'Typography' },
+      // Governed by a contract but not a component: the dismissal hook the
+      // overlays share. Last, and labelled, so the list above is the 36.
+      { href: '/docs/components/overlay', label: 'Overlay (hook)' },
     ],
   },
   {

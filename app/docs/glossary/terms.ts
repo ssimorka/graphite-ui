@@ -19,6 +19,7 @@ export const COLOR_TERMS: [string, string][] = [
   ['Chroma', 'How intense the color is. High chroma is vivid; zero chroma is gray.'],
   ['Tone', 'How light or dark, from 0 (black) to 100 (white). Tone 40 is dark; tone 90 is pale.'],
   ['Ramp', 'One hue from dark to light: the same color at ten tones, like a paint strip.'],
+  ['Step', 'A named stop on a ramp, from 900 (darkest) to 050 (lightest). Each stands for a tone: 900 is tone 10, 800 is 20, on to 050 at 98. Your source color replaces the nearest step on accent.'],
   ['OKLab', 'The color model the math runs in. Equal steps in its numbers look like equal steps to the eye.'],
   ['Primitive', 'A raw color on a ramp, with no job attached. Useful to look at, never to build with.'],
   ['Role', 'A named color with a job, such as page background or button fill. You build with these.'],

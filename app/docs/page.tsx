@@ -197,7 +197,7 @@ export default function IntroductionPage() {
           <section id="built-from" className={styles.block}>
             <SectionHeading
               title="What it is built from"
-              lede="Four parts, and the order of authority between them matters."
+              lede="Three parts. Where they disagree, the kit outranks the contracts, and the contracts outrank the code."
             />
             <table className={`${styles.table} ${styles.parts}`}>
               <tbody>

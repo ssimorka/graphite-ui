@@ -30,9 +30,8 @@ function codeSyntaxCount() {
 }
 
 /**
- * The one place for every count but the headline. The site quotes a single
- * number elsewhere, governed components, so pages cannot disagree; everything
- * else is here, computed at build time, with what it counts beside it.
+ * Every count in one table, computed at build time with what it counts beside
+ * it. Other pages quote some of them, from the same functions, so they agree.
  */
 export default function StatusPage() {
   const kit = readKitStats()
@@ -69,7 +68,8 @@ export default function StatusPage() {
             <h1 className={styles.title}>Status</h1>
             <p className={styles.lede}>
               Every count Graphite quotes, read from the repo when the site is
-              built. Elsewhere the site quotes one: governed components.
+              built. Other pages quote some of these too, computed from the same
+              sources, so they match this table.
             </p>
           </header>
           <RefTable

@@ -299,9 +299,12 @@ export default function ThemingPage() {
             </table>
             </div>
             <p className={styles.note}>
-              Ten stops are shown per ramp, but the engine can produce any tone in
-              between, and often does. Your exact color is kept: it sits on the
-              accent ramp unchanged. The{' '}
+              Ten stops are shown per ramp, named 900 (darkest) to 050
+              (lightest). Each name stands for a tone on the 0 to 100 scale: 900
+              is tone 10, 800 is 20, and so on to 100 at 90 and 050 at 98. The
+              engine can produce any tone in between, and often does. Your exact
+              color is kept: on the accent ramp it replaces the nearest step, at
+              its own tone, and secondary moves the same step to match. The{' '}
               <a className={styles.link} href="/docs/foundations/color">
                 Color
               </a>{' '}

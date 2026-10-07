@@ -44,7 +44,7 @@ const CAPABILITIES: {
     key: 'source',
     title: 'A source color',
     body: 'Any hex. It is resolved in OKLab and sampled at fixed tone stops, so the steps read as evenly spaced at any hue.',
-    caption: 'The outlined stop is the source. Numbers are OKLab tones.',
+    caption: 'The outlined stop is the source. Labels are steps, 900 darkest to 050 lightest.',
   },
   {
     key: 'ramps',
@@ -123,7 +123,7 @@ const ALL_RAMPS = [
 ] as const
 
 // The kit's first panel: the one input, then the accent ramp it produced, with
-// the OKLab tone under each stop.
+// the step name under each stop and the OKLab tone in its tooltip.
 function PanelSource({ hex, ramps }: { hex: string; ramps: Ramps }) {
   return (
     <div className="cap-source">

@@ -52,6 +52,19 @@ const unquote = (v: string) => v.replace(/^(['"])(.*)\1$/, '$2')
 
 type Item = Record<string, string>
 
+// Most contracts list a prop's options as `values` (`[sm, md, lg]`, `boolean`)
+// rather than a `type`. Rendered as the TypeScript union the component takes.
+function typeFromValues(values: string | undefined): string {
+  if (!values) return ''
+  const list = values.match(/^\[(.*)\]$/)
+  if (!list) return values
+  return list[1]
+    .split(',')
+    .map((v) => v.trim().replace(/^["']|["']$/g, ''))
+    .map((v) => (v === 'etc.' ? '…' : `'${v}'`))
+    .join(' | ')
+}
+
 function readList(lines: string[], key: string): Item[] {
   const start = lines.findIndex((l) => new RegExp(`^${key}:\\s*$`).test(l))
   if (start === -1) return []
@@ -147,7 +160,7 @@ function readContract(slug: string, seen: Set<string>): ContractDoc {
     ),
     props: expand<ContractProp>(
       readList(lines, 'props'),
-      (p) => ({ name: p.name ?? '', type: p.type ?? '', default: p.default ?? '', notes: p.notes ?? '' }),
+      (p) => ({ name: p.name ?? '', type: p.type ?? typeFromValues(p.values), default: p.default ?? '', notes: p.notes ?? '' }),
       (d) => d.props,
       seen,
     ),
