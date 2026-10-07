@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
-import { hexToOklch, makeRamps } from '@/lib/color.js'
+import { makeRamps, toneAt, vividTone } from '@/lib/color.js'
 
 // Seeded PRNG so the same hex always yields the same composition.
 function mulberry32(seed: number) {
@@ -301,62 +301,70 @@ const STANDARD: P[] = [
 
 type Palette = { colors: string[]; darks: string[]; lights: string[]; pop: string }
 
-// The art samples the engine's ramps, but not at the UI's stops. The UI reads
-// the accent's 80 and 90 for container tints and draws secondary at 0.585x
-// the source's chroma, and borrowing those made the art pale: two of three
-// accent slots were tints and the pop was half as intense as the first
-// generator's #1DE9B6. So the pool takes the ramps' most vivid stops instead:
+// The art keeps its own palette, in one of three modes. It used to borrow the
+// UI roles' ramp stops, which is why it went pale: the accent's 80 and 90 are
+// container tints, and secondary carries 0.585x the source's chroma. Now:
 //
-// - 60%: six neutral-ramp grays at the first generator's lightnesses.
-// - 30%: the accent ramp's 30, 40 and 50 stops, at the source's full chroma
-//   (the 50 stop is your exact color when it lands near there).
-// - 10%: the pop. Of the light stops (70 and 80) on secondary and the four
-//   status ramps, the most vivid one whose hue sits at least 90 degrees from
-//   the accent's, preferring the one nearest secondary's hue among near-equals.
-//   At the default source that is success 80, #5adb91: secondary itself is
-//   too muted to win.
+// - vivid (default): the first generator's palette, rebuilt from the source.
+//   Six grays at its lightnesses (18, 29, 45, 73, 95, 29); the source hue at
+//   tones 30, 41 and 52 at full chroma, floored at 0.15 so a pale source still
+//   paints bold; one pop at the secondary hue (120 degrees round), chroma
+//   floored at 0.16, at the tone where that hue is most vivid, nearest 83.
+//   At the default source: #4e3296 #6c53ba #18e8b9, against the original's
+//   #4A3296 #6B4FBE #1DE9B6.
+// - pale: soft. Dark neutral grays, the accent's 30 with its 80 and 90 tints,
+//   and secondary's 80 for the pop: the ramps' own stops.
+// - mono: black, white and true grays only, whatever the source.
 //
-// One pool for both themes, as the original had: the art is a picture, not
-// chrome, and it should not go pastel in dark mode.
-const GRAY_TONES = [18, 29, 45, 73, 95, 29]
-const ACCENT_STOPS = [2, 3, 4] // tones 30, 40, 50 in the ramp's ten stops
-const POP_STOPS = [6, 7] // tones 70 and 80
-const POP_RAMPS = ['secondary', 'danger', 'warning', 'success', 'info'] as const
+// One pool for both themes in every mode: the art is a picture, not chrome.
+export type ArtMode = 'vivid' | 'pale' | 'mono'
+export const ART_MODES: { id: ArtMode; label: string }[] = [
+  { id: 'vivid', label: 'Vivid' },
+  { id: 'pale', label: 'Pale' },
+  { id: 'mono', label: 'Mono' },
+]
 
-const hueGap = (a: number, b: number) => {
-  const d = Math.abs(a - b) % 360
-  return d > 180 ? 360 - d : d
+const VIVID_GRAYS = [18, 29, 45, 73, 95, 29]
+const VIVID_ACCENTS = [30, 41, 52]
+const VIVID_ACCENT_MIN_CHROMA = 0.15
+const VIVID_POP = { near: 83, hueTurn: -120, minChroma: 0.16 }
+const PALE_GRAYS = [10, 20, 30, 60, 90, 20]
+const PALE_ACCENTS = [30, 80, 90]
+const PALE_POP = 80
+const MONO_GRAYS = [8, 18, 29, 45, 73, 95]
+const MONO_LIGHTS = [60, 86, 99]
+const MONO_POP = 82
+
+// A true gray at an OKLab lightness (0-100): no tint from the source.
+function grayAt(tone: number) {
+  const y = (tone / 100) ** 3
+  const v = y <= 0.0031308 ? 12.92 * y : 1.055 * y ** (1 / 2.4) - 0.055
+  const c = Math.round(Math.min(1, Math.max(0, v)) * 255).toString(16).padStart(2, '0')
+  return `#${c}${c}${c}`
 }
 
-/** The art's three groups for a source, for anything that shows the rhythm. */
-export function artPalette(sourceHex: string) {
+/** The art's three groups for a source and mode, for anything that shows the rhythm. */
+export function artPalette(sourceHex: string, mode: ArtMode = 'vivid') {
+  if (mode === 'mono') {
+    return { grays: MONO_GRAYS.map(grayAt), accents: MONO_LIGHTS.map(grayAt), pop: grayAt(MONO_POP) }
+  }
   const ramps = makeRamps(sourceHex)
-  const accents = ACCENT_STOPS.map((i) => ramps.accent.stops[i].hex)
-  const accentHue = hexToOklch(sourceHex).h
-  const secondaryHue = hexToOklch(ramps.secondary.stops[7].hex).h
-
-  const candidates = POP_RAMPS.flatMap((name) =>
-    POP_STOPS.map((i) => {
-      const hex = ramps[name].stops[i].hex
-      return { hex, ...hexToOklch(hex) }
-    }),
-  ).filter((c) => hueGap(c.h, accentHue) >= 90)
-  const top = Math.max(...candidates.map((c) => c.c))
-  const pop = candidates.length
-    ? candidates
-        .filter((c) => c.c >= top - 0.02)
-        .sort((x, y) => hueGap(x.h, secondaryHue) - hueGap(y.h, secondaryHue))[0].hex
-    : ramps.secondary.stops[7].hex
-
+  if (mode === 'pale') {
+    return {
+      grays: PALE_GRAYS.map((t) => ramps.neutral.tone(t)),
+      accents: PALE_ACCENTS.map((t) => ramps.accent.tone(t)),
+      pop: ramps.secondary.tone(PALE_POP),
+    }
+  }
   return {
-    grays: GRAY_TONES.map((t) => ramps.neutral.tone(t)),
-    accents,
-    pop,
+    grays: VIVID_GRAYS.map((t) => ramps.neutral.tone(t)),
+    accents: VIVID_ACCENTS.map((t) => toneAt(sourceHex, t, { minChroma: VIVID_ACCENT_MIN_CHROMA })),
+    pop: vividTone(sourceHex, VIVID_POP),
   }
 }
 
-function buildPalette(sourceHex: string): Palette {
-  const { grays, accents, pop } = artPalette(sourceHex)
+function buildPalette(sourceHex: string, mode: ArtMode = 'vivid'): Palette {
+  const { grays, accents, pop } = artPalette(sourceHex, mode)
   const colors = [...grays, ...accents, pop]
   const lights = colors.filter((c) => luminance(c) > 0.45)
   const darks = colors.filter((c) => luminance(c) <= 0.45)
@@ -593,9 +601,12 @@ export function GenerativeArt({
   className,
   interactive = false,
   cover = interactive,
+  mode = 'vivid',
   onReady,
 }: {
   className?: string
+  /** Vivid, pale or mono. */
+  mode?: ArtMode
   /** Enables click-to-shuffle on individual panels. */
   interactive?: boolean
   /** Greets the first view with the kit cover. Off where the grid is the point. */
@@ -607,7 +618,7 @@ export function GenerativeArt({
   const { sourceHex } = useTheme()
   const activeHex = sourceHex || COVER_SOURCE_HEX
 
-  const palette = useMemo(() => buildPalette(activeHex), [activeHex])
+  const palette = useMemo(() => buildPalette(activeHex, mode), [activeHex, mode])
   // Near-black seams in both themes, as the original drew them: white seams
   // in light mode broke the tiles apart instead of framing them.
   const seamColor = '#0a0a0a'

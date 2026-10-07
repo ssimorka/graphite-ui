@@ -228,7 +228,9 @@ export function ControlsPanel() {
         <div className={styles.presets} role="group" aria-label="Ramp swatches">
           {source.options.map((o) => (
             <button
-              key={o.key}
+              // By label: on a grey or black source several ramps resolve to
+              // the same hex, so the hex is not unique.
+              key={o.label}
               type="button"
               className={styles.preset}
               data-source={source.selected === o.key ? '' : undefined}

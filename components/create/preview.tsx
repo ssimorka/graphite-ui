@@ -9,8 +9,8 @@ import type { DeviceKey } from './builder'
 import { Button } from '@/components/ui/button'
 import { Tabs } from '@/components/ui/tabs'
 import { IconSetProvider } from '@/components/kit-icon'
-import { GenerativeArt } from '@/components/generative-art'
-import type { GenerativeArtHandle } from '@/components/generative-art'
+import { ART_MODES, GenerativeArt } from '@/components/generative-art'
+import type { ArtMode, GenerativeArtHandle } from '@/components/generative-art'
 import styles from './preview.module.scss'
 
 // The kit's single-column order for Small (Graphite UI Site 11856:2265). It is
@@ -195,9 +195,10 @@ export function Preview() {
 }
 
 /**
- * The generative art panel: the 60/30/10 composition (see buildPalette in
- * generative-art.tsx), redrawn from the source on every change. Selecting a
- * panel reshuffles just that panel; Regenerate deals a new layout.
+ * The generative art panel: the 60/30/10 composition (see artPalette in
+ * generative-art.tsx), redrawn from the source on every change, in vivid,
+ * pale or mono. Selecting a panel reshuffles just that panel; Regenerate deals
+ * a new layout.
  *
  * Mocked in Graphite UI Site as the "Create — Patterns tab" artboards, whose
  * still is the Pattern composition set: one deal of the kit's Pattern Tiles
@@ -205,9 +206,23 @@ export function Preview() {
  */
 function GenerativeArtPanel() {
   const [art, setArt] = useState<GenerativeArtHandle | null>(null)
+  const [mode, setMode] = useState<ArtMode>('vivid')
   return (
     <div className={styles.tabPanel}>
       <div className={`${styles.toolbar} ${styles.patternBar}`} role="group" aria-label="Generative art">
+        <div className={styles.artModes} role="group" aria-label="Palette">
+          {ART_MODES.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              className={styles.chip}
+              aria-pressed={mode === m.id}
+              onClick={() => setMode(m.id)}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
         <Button size="sm" onClick={() => art?.regenerate()} disabled={!art}>
           Regenerate
         </Button>
@@ -219,7 +234,7 @@ function GenerativeArtPanel() {
         </p>
       </div>
       <div className={styles.art}>
-        <GenerativeArt interactive cover={false} onReady={setArt} />
+        <GenerativeArt interactive cover={false} mode={mode} onReady={setArt} />
       </div>
     </div>
   )

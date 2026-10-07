@@ -77,23 +77,28 @@ before trusting a browser result.
   why `makeRamps` pins the source tone for secondary — and why it then
   clears the `source` flag, which means "this stop is the source hex" and
   is false for a hue 120° away.
-- **The generative art samples the ramps' vivid stops, not the UI's.** It
-  borrowed the stops the roles use from #90 until 2026-10-07, and that made
-  it pale: the accent's 80/90 are container tints, and `secondary` carries
-  0.585x the source's chroma, so the pop was about half as intense as the
-  first generator's #1DE9B6. `artPalette` in `components/generative-art.tsx`
-  now takes, still only from `makeRamps`: six neutral-ramp grays at the first
-  generator's lightnesses (18/29/45/73/95/29); the accent ramp's 30, 40 and
-  50 stops at full chroma; and a pop chosen from the 70 and 80 stops of
-  secondary and the four status ramps, the most vivid one at least 90
-  degrees from the accent's hue, nearest secondary's hue among near-equals.
-  At the default source: #340b74/#4c2f93/#5e44aa and pop success-80 #5adb91
-  (no ramp holds #1DE9B6's exact teal; secondary is too muted to win).
-  `hexToOklch` in `lib/color.js` only measures. A grey source makes quiet art,
-  because its ramps are quiet. One pool for both themes and near-black seams,
-  as the original had. The Generative Art page's ratio bar paints from
-  `artPalette`. Don't route the art back through the roles' stops: that is
-  what flattened it.
+- **The generative art keeps its own palette, in three modes.** It borrowed
+  the UI roles' ramp stops from #90 until 2026-10-07, and that made it pale:
+  the accent's 80/90 are container tints, and `secondary` carries 0.585x the
+  source's chroma, so the pop was about half as intense as the first
+  generator's #1DE9B6. `artPalette(source, mode)` in
+  `components/generative-art.tsx`, switched in Create's Generative Art
+  toolbar:
+  - **Vivid** (default) rebuilds the first generator's fixed palette from the
+    source: grays at its lightnesses (18/29/45/73/95/29), the source hue at
+    tones 30/41/52 at full chroma floored 0.15, and a pop at the secondary
+    hue, chroma floored 0.16, at the tone in 55-88 where that hue is most
+    vivid, nearest 83. Default source: #4e3296/#6c53ba/#18e8b9 against the
+    original's #4A3296/#6B4FBE/#1DE9B6. Uses `toneAt` and `vividTone` in
+    `lib/color.js`, for decoration only; UI roles stay on the ramps.
+  - **Pale** is the ramps' own soft stops: neutral 10/20/30/60/90/20, accent
+    30/80/90, secondary 80.
+  - **Mono** is true grays only (`grayAt`), whatever the source.
+  Tried and rejected: building Vivid only from ramp stops (accent 30/40/50 and
+  the most vivid status stop as the pop). No ramp holds the original teal, so
+  the pop came out mint green and grey sources went flat. One pool for both
+  themes and near-black seams in every mode. The Generative Art page's ratio
+  bar paints Vivid.
 - **The Figma kit is canonical, not the contracts.** Reversed 2026-08-28.
   Governance rule 7 in `docs/contracts/README.md`: where the kit and a contract
   disagree, the kit wins and the *contract* is corrected. Contracts are still

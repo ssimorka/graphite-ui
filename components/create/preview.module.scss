@@ -36,6 +36,11 @@
   }
 }
 
+// The art's palette switch: Vivid, Pale, Mono, in the device chips' style.
+.artModes {
+  display: flex;
+}
+
 // The pattern toolbar spans the stage so its hint can sit on the right edge.
 .patternBar {
   width: 100%;
