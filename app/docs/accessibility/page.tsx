@@ -248,7 +248,7 @@ export default function AccessibilityPage() {
                   tone that clears it, so a repaired color is still a step of the
                   role&rsquo;s own ramp rather than a new hue.
                 </>,
-                'No input tested has ever given it anything to do. The project notes record the same sweep by hand (6,144 pairs, zero failures, zero repairs), and the figures above recompute it. That is correct behavior, not a broken switch, so do not expect toggling it to change anything visible without testing the actual source first.',
+                'No input tested has ever given it anything to do. The project notes record the same sweep by hand (6,144 pairs, zero failures, zero repairs, before Button’s two label pairs joined), and the figures above recompute it. That is correct behavior, not a broken switch, so do not expect toggling it to change anything visible without testing the actual source first.',
               ]}
             </Callout>
           </section>

@@ -47,6 +47,9 @@ export interface Token {
 }
 
 export interface ContrastCheck {
+  /** The foreground role. The map key, except for a role measured on a base
+   *  other than its own (Button's onPrimary on secondary and danger). */
+  on: string
   against: string
   ratio: number
   target: number

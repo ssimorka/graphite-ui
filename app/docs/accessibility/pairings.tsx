@@ -30,7 +30,7 @@ export function Pairings() {
   const cell = (mode: 'light' | 'dark', role: string) => {
     const bundle = mode === 'light' ? lightBundle : darkBundle
     const c = bundle.contrast[role]
-    const fg = bundle.tokens[role].hex
+    const fg = bundle.tokens[c.on].hex
     const bg = bundle.tokens[c.against].hex
     return (
       <td className={styles.ratioCell}>
@@ -82,7 +82,7 @@ export function Pairings() {
               return (
                 <tr key={role}>
                   <th scope="row">
-                    <code>{kebab(role)}</code>
+                    <code>{kebab(c.on)}</code>
                   </th>
                   <td>
                     <code>{kebab(c.against)}</code>

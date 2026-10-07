@@ -62,7 +62,7 @@ export function runSweep(): Sweep {
           targets.set(`${c.kind}-${level}`, { kind: c.kind, level, target: c.target })
           const margin = c.ratio / c.target
           if (!tightest || margin < tightest.ratio / tightest.target) {
-            tightest = { role, against: c.against, mode, level, source, ratio: c.ratio, target: c.target }
+            tightest = { role: c.on, against: c.against, mode, level, source, ratio: c.ratio, target: c.target }
           }
         }
         const states = buildStates(raw.tokens, ramps, mode)

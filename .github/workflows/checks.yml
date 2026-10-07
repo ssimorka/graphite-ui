@@ -73,6 +73,11 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm component-doc-drift:test
 
+      # Button's label pairs: onPrimary on the secondary and danger fills.
+      - name: "Color engine test: Button's label pairs"
+        if: ${{ !cancelled() }}
+        run: pnpm color:test
+
       # One variable prefix, --graphite-. The engine's former export prefix and
       # project name are banned from every tracked file; see the header of
       # scripts/naming-check.mjs for why a folder list was not enough.
