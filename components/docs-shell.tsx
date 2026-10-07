@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import type { NavItem } from '@/components/ui/navigation-menu'
@@ -203,7 +203,11 @@ export function DocsShell({
               )
             })}
           </ul>
-          {tocFooter}
+          {/* Keyed because it arrives from a server page as a lazy reference
+              (Flight outlines it), and a lazy child is not marked as a static
+              child when this list is built: once it resolves, React checks it
+              for a key and warns. The Fragment is the keyed element here. */}
+          <Fragment key="toc-footer">{tocFooter}</Fragment>
         </nav>
       ) : null}
     </div>
