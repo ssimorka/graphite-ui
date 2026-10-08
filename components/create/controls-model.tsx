@@ -16,7 +16,7 @@ import {
   RADII,
   useBuilder,
 } from './builder'
-import type { BuilderView, LockKey } from './builder'
+import type { BuilderView } from './builder'
 
 export type ControlId =
   | 'source'
@@ -46,8 +46,6 @@ export type Control = {
   options: Option[]
   selected: string
   select: (key: string) => void
-  /** The Lock the kit draws on this control, if it draws one. */
-  lock?: LockKey
   /** Which tab shows it. The source is shared; the rest belong to one tab. */
   view: BuilderView | 'both'
   /** A line under the control, when it is constrained. */
@@ -117,7 +115,6 @@ export function useControls(): Control[] {
       options: presets,
       selected: hex,
       select: (k) => setSourceHex(k),
-      lock: 'source',
       view: 'both',
     },
     {
@@ -131,7 +128,6 @@ export function useControls(): Control[] {
       ],
       selected: theme,
       select: (k) => setTheme(k as 'light' | 'dark'),
-      lock: 'theme',
       view: 'components',
     },
     {
@@ -145,7 +141,6 @@ export function useControls(): Control[] {
       ],
       selected: level,
       select: (k) => setLevel(k as 'AA' | 'AAA'),
-      lock: 'contrast',
       view: 'components',
     },
     {
@@ -156,7 +151,6 @@ export function useControls(): Control[] {
       options: RADII.map((r) => ({ key: r.key, label: r.label })),
       selected: b.radius,
       select: (k) => b.setRadius(k as typeof b.radius),
-      lock: 'radius',
       view: 'components',
     },
     {

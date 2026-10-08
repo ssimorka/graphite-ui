@@ -92,32 +92,6 @@
   text-transform: uppercase;
 }
 
-.lock {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--graphite-on-surface-variant);
-  font: inherit;
-  font-size: var(--graphite-text-caption-1-size);
-  line-height: var(--graphite-text-caption-1-line-height);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--graphite-on-surface);
-  }
-
-  // Locked reads in the primary role and in the word, not the hue alone.
-  &[aria-pressed='true'] {
-    color: var(--graphite-primary);
-    font-weight: 600;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
-}
-
 .body {
   display: flex;
   flex-direction: column;
@@ -360,7 +334,7 @@
   padding: 1.125rem var(--graphite-space-06) 1.25rem;
 }
 
-// One line each for what Shuffle and Lock do, under the buttons they explain.
+// One line each for what Shuffle and Reset do, under the buttons they explain.
 .hints {
   display: flex;
   flex-direction: column;

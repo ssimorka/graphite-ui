@@ -74,9 +74,6 @@ export const CODE_FONTS: FontOption[] = [
   { key: 'courier', label: 'Courier New', stack: "'Courier New', Courier, monospace" },
 ]
 
-/** The controls that carry a Lock in the kit; the others are never shuffled. */
-export type LockKey = 'source' | 'theme' | 'contrast' | 'radius'
-
 /** Which preview tab is showing: the controls panel and bar follow it. */
 export type BuilderView = 'components' | 'art'
 
@@ -96,8 +93,6 @@ type Builder = {
   setIconSet: (s: IconSet) => void
   device: DeviceKey
   setDevice: (d: DeviceKey) => void
-  locks: Record<LockKey, boolean>
-  toggleLock: (k: LockKey) => void
   view: BuilderView
   setView: (v: BuilderView) => void
   /** The generative art's settings, owned here so the panel and bar set them. */
@@ -157,25 +152,16 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   const [codeFont, setCodeFont] = useState(DEFAULTS.codeFont)
   const [iconSet, setIconSet] = useState<IconSet>(DEFAULTS.iconSet)
   const [device, setDevice] = useState<DeviceKey>('desktop')
-  const [locks, setLocks] = useState<Record<LockKey, boolean>>({
-    source: false,
-    theme: false,
-    contrast: false,
-    radius: false,
-  })
   const [view, setView] = useState<BuilderView>('components')
   const [art, setArtState] = useState<ArtSettings>(ART_DEFAULTS)
   const setArt = useCallback((patch: Partial<ArtSettings>) => setArtState((a) => ({ ...a, ...patch })), [])
   const [artHandle, setArtHandle] = useState<GenerativeArtHandle | null>(null)
 
-  const toggleLock = useCallback(
-    (k: LockKey) => setLocks((l) => ({ ...l, [k]: !l[k] })),
-    [],
-  )
-
-  // Shuffle randomises what is unlocked, and only the four controls the kit
-  // gives a Lock. Density, type and icons have none, so they are not part of
-  // the dice.
+  // Shuffle randomises every setting the Components tab has: source, theme,
+  // contrast, radius, density, icons and the three typefaces. There are no
+  // locks. The kit draws one on four controls, but only the desktop panel had
+  // room for them, so phones and tablets shuffled by locks they could neither
+  // see nor change; one Shuffle that does the same everywhere replaced them.
   //
   // On the Generative Art tab the button is Regenerate instead: it deals a new
   // composition and changes no setting.
@@ -184,15 +170,18 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
       artHandle?.regenerate()
       return
     }
-    if (!locks.source) {
-      // A saturated, mid-value colour: a random hex is mostly muddy, and the
-      // builder is there to show what a good source does.
-      setSourceHex(hsvToHex({ h: Math.random() * 360, s: 0.55 + Math.random() * 0.35, v: 0.6 + Math.random() * 0.3 }))
-    }
-    if (!locks.theme) setTheme(pick(['light', 'dark'] as const))
-    if (!locks.contrast) setLevel(pick(['AA', 'AAA'] as const))
-    if (!locks.radius) setRadius(pick(RADII).key)
-  }, [locks, view, artHandle, setSourceHex, setTheme, setLevel])
+    // A saturated, mid-value colour: a random hex is mostly muddy, and the
+    // builder is there to show what a good source does.
+    setSourceHex(hsvToHex({ h: Math.random() * 360, s: 0.55 + Math.random() * 0.35, v: 0.6 + Math.random() * 0.3 }))
+    setTheme(pick(['light', 'dark'] as const))
+    setLevel(pick(['AA', 'AAA'] as const))
+    setRadius(pick(RADII).key)
+    setDensity(pick(DENSITIES).key)
+    setIconSet(pick(ICON_FAMILIES).key)
+    setHeadingFont(pick(TEXT_FONTS).key)
+    setBodyFont(pick(TEXT_FONTS).key)
+    setCodeFont(pick(CODE_FONTS).key)
+  }, [view, artHandle, setSourceHex, setTheme, setLevel])
 
   // Reset puts everything back, on either tab: the source, the UI settings
   // and the art's.
@@ -243,8 +232,6 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     setIconSet,
     device,
     setDevice,
-    locks,
-    toggleLock,
     view,
     setView,
     art,

@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'
-import type { LockKey } from './builder'
 import { DERIVED_ROLES, useControls } from './controls-model'
 import type { Control } from './controls-model'
 import { GetCodeDialog } from './get-code'
@@ -70,21 +69,19 @@ function ChipRow({ control, grow }: { control: Control; grow?: boolean }) {
 }
 
 /**
- * One collapsible section. The header is a real button that toggles the body,
- * and the Lock is its own button beside it: the kit draws them as one row, but
- * a button inside a button is not valid, so they are two siblings in one row.
+ * One collapsible section. The header is a real button that toggles the body.
+ * The kit also draws a Lock in this row on four sections; the site has none,
+ * because Shuffle changes everything (see `shuffle` in ./builder).
  */
 function Section({
   label,
   open,
   onToggle,
-  lock,
   children,
 }: {
   label: string
   open: boolean
   onToggle: () => void
-  lock?: { key: LockKey; on: boolean; toggle: () => void }
   children: React.ReactNode
 }) {
   return (
@@ -99,17 +96,6 @@ function Section({
           {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           <span className={styles.label}>{label}</span>
         </button>
-        {lock ? (
-          <button
-            type="button"
-            className={styles.lock}
-            aria-pressed={lock.on}
-            onClick={lock.toggle}
-          >
-            {lock.on ? 'Locked' : 'Lock'}
-            <span className={styles.srOnly}> {label}</span>
-          </button>
-        ) : null}
       </div>
       {open ? <div className={styles.body}>{children}</div> : null}
     </section>
@@ -197,10 +183,6 @@ export function ControlsPanel() {
 
   const by = (id: Control['id']) => controls.find((c) => c.id === id)!
   const flip = (id: string) => setOpen((o) => ({ ...o, [id]: !o[id] }))
-  const lockOf = (c: Control) =>
-    c.lock
-      ? { key: c.lock, on: b.locks[c.lock], toggle: () => b.toggleLock(c.lock!) }
-      : undefined
 
   const source = by('source')
   const art = b.view === 'art'
@@ -222,7 +204,6 @@ export function ControlsPanel() {
         label="Source color"
         open={!!open.source}
         onToggle={() => flip('source')}
-        lock={lockOf(source)}
       >
         <p className={styles.caption}>{CAPTIONS.source}</p>
         <HexField value={source.value} onChange={(hex) => source.select(hex)} />
@@ -277,16 +258,16 @@ export function ControlsPanel() {
         </>
       ) : (
         <>
-      <Section label="Theme" open={!!open.theme} onToggle={() => flip('theme')} lock={lockOf(theme)}>
+      <Section label="Theme" open={!!open.theme} onToggle={() => flip('theme')}>
         <ChipRow control={theme} />
       </Section>
 
-      <Section label="Contrast target" open={!!open.contrast} onToggle={() => flip('contrast')} lock={lockOf(contrast)}>
+      <Section label="Contrast target" open={!!open.contrast} onToggle={() => flip('contrast')}>
         <p className={styles.caption}>{CAPTIONS.contrast}</p>
         <ChipRow control={contrast} />
       </Section>
 
-      <Section label="Radius" open={!!open.radius} onToggle={() => flip('radius')} lock={lockOf(radius)}>
+      <Section label="Radius" open={!!open.radius} onToggle={() => flip('radius')}>
         <p className={styles.caption}>{CAPTIONS.radius}</p>
         <div className={styles.radii}>
           {radius.options.map((o) => (
@@ -369,8 +350,8 @@ export function ControlsPanel() {
             </>
           ) : (
             <>
-              <li>Shuffle picks a new color, theme, contrast target and radius.</li>
-              <li>Lock a setting to keep it when you shuffle.</li>
+              <li>Shuffle picks a new color, theme, contrast target, radius, density, icons and typefaces.</li>
+              <li>Reset puts the color and every setting back.</li>
             </>
           )}
         </ul>
