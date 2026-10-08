@@ -74,18 +74,24 @@ Foundations, Resources), a stats line, and the Built by credit.
 |---|---|---|
 | `/` | The landing page | `app/page.tsx`, `components/sections/` |
 | `/create` | The theme builder | `components/create/` |
+| `/create/generative-art` | The rules behind Create's generative art: the tile library, the 60 / 30 / 10 color rhythm and the spans | `app/create/generative-art/`, `app/docs/theming/live.tsx` |
 | `/gallery` | Components index: every kit component A to Z | `components/sections/components-index.tsx` |
 | `/docs` | Introduction | `app/docs/page.tsx` |
-| `/docs/installation` | Running the project and the governance checks | `app/docs/installation/` |
+| `/docs/contribute/run-locally` | Running the project and the governance checks; `/docs/installation` redirects here (`next.config.mjs`) | `app/docs/contribute/run-locally/` |
 | `/docs/quick-start` | Source color, a governed component, the variables, theme switching, taking the tokens out, keeping the theme file in your own project, and the Tailwind bridge | `app/docs/quick-start/` |
-| `/docs/theming` | How color works, the roles, states and pattern reference | `app/docs/theming/` (`page.tsx`, `live.tsx`) |
+| `/docs/theming` | How color works, the roles, hierarchy, themes, states, accessibility and usage | `app/docs/theming/` (`page.tsx`, `live.tsx`) |
 | `/docs/accessibility` | Contrast at AA and AAA and how it is measured, plus focus, motion and keyboard per component | `app/docs/accessibility/` |
-| `/docs/governance` | The eight governance rules, the three drift checks, and the required CI job | `app/docs/governance/` |
+| `/docs/contribute/governance` | The eight governance rules, the three drift checks, and the required CI job; `/docs/governance` redirects here | `app/docs/contribute/governance/` |
+| `/docs/contribute/carbon` | Which files still import Carbon, the `--cds-*` compatibility layer, and the migration plan | `app/docs/contribute/carbon/` |
+| `/docs/contribute/drift` | The token snapshot, Dev Mode names, where the engine differs from the kit, and what the checks cannot see | `app/docs/contribute/drift/` |
+| `/docs/contribute/status` | Every count the site quotes, each with what it counts, read from the repo at build time | `app/docs/contribute/status/` |
 | `/docs/glossary` | Plain definitions of the terms the docs use | `app/docs/glossary/` |
 | `/docs/foundations/color` | Color ramps, sampling, and the known divergence from the kit | `app/docs/foundations/color/`, `lib/ramp-divergence.ts` |
 | `/docs/foundations/typography`, `spacing`, `radius`, `layout`, `tokens` | The other foundations, read from their contracts and the token snapshot | `app/docs/foundations/*` |
 | `/docs/components/[slug]` | One page per governed component, 37 in all (36 components and Overlay); the docs nav lists them under Overview | `components/component-doc/` |
 | `/search-index.json` | The static search index, built at build time | `lib/search-index.ts` |
+| `/r/<name>.json` | One shadcn registry item, built from the repo on request | `app/r/[name]/`, `lib/registry.ts` |
+| `/r/theme/<hex>.json` | The theme file for one source color as a registry item (`?level=AAA` raises the target) | `app/r/theme/[hex]/`, `lib/registry.ts` |
 
 ## Home, `/`
 

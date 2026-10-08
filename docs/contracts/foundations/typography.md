@@ -73,18 +73,18 @@ exactly a kit step and now use the local `text()` mixin, which reads
 | `body-02` | `body-2` | 5 |
 | `code-01` | `code-3` (+ `--graphite-font-mono`) | 4 |
 
-13 stay on Carbon because the kit cannot express them, not because nobody got
-to them (13 as of 2026-09-30, down from 19; `token-drift` prints the current
-count and split on every run, and that output is the authority, not this line):
+5 stay on Carbon because the kit cannot express them, not because nobody got
+to them (5 as of 2026-10-07, down from 19, then 13 on 2026-09-30; `token-drift`
+prints the current count and split on every run, and that output is the
+authority, not this line):
 
-- **4 fluid styles.** Carbon's `fluid-*` tokens compile to
+- **3 fluid styles.** Carbon's `fluid-*` tokens compile to
   `calc(Nrem + Nvw)` with a different formula per breakpoint band — genuine
   continuous interpolation. The hero title ramps 32.6px → 60px across the
   viewport. Two discrete modes cannot reproduce that; forcing it would replace
   a ramp with a step.
-- **9 at sizes with no kit step.** For example `heading-compact-01` and
-  `body-compact-01` are 14/18, `heading-03` is 20/28, `heading-04` is 28/36.
-  The kit has no 18px line height, and its sizes jump 18 → 24 → 32.
+- **2 at sizes with no kit step.** `body-compact-01` is 14/18 and `heading-03`
+  is 20/28. The kit has no 18px line height, and its sizes jump 18 → 24 → 32.
 
 `token-drift` reports them on every run so the exception stays visible.
 
