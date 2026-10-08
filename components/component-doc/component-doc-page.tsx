@@ -2,6 +2,7 @@ import { DocsShell } from '@/components/docs-shell'
 import { DOCS_NAV } from '@/components/docs-nav'
 import { SiteFooter } from '@/components/sections/site-footer'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
+import { Link } from '@/components/ui/link'
 import { DocSnippet } from '@/components/doc-snippet'
 import { SectionHeading, StatusBadge } from '@/components/doc-blocks'
 import {
@@ -101,14 +102,15 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
                 <StatusBadge tone="neutral">No kit page</StatusBadge>
               )}
               {figmaUrl ? (
-                <a
-                  className={styles.figmaLink}
+                <Link
+                  size="md"
+                  icon="arrow-right"
                   href={figmaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Open in Figma <span aria-hidden="true">↗</span>
-                </a>
+                  Open in Figma
+                </Link>
               ) : null}
             </div>
           </header>

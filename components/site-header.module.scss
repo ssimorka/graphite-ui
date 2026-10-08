@@ -277,32 +277,13 @@
   outline-offset: 2px;
 }
 
-// A square action tile: 3rem, a comfortable touch target, centred in the
-// 4rem bar.
-.action {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  background: none;
-  border: none;
-  color: var(--graphite-on-surface);
-  cursor: pointer;
-}
-
-.action:hover {
-  background: var(--graphite-surface-variant);
-  color: var(--graphite-primary);
-}
-
-.action:focus-visible {
-  outline: 2px solid var(--graphite-focus);
-  outline-offset: -2px;
-}
+// Menu, search and repo are the kit's Button, Ghost icon-only Large (48px
+// square), centred in the 4rem bar. They keep flex's default shrink, as the
+// old tiles did: at 320px the rail needs the few pixels it gives back.
 
 // 1056px is the kit's `lg` stop, the same one Carbon's HeaderNavigation used.
+// Qualified by .inner so the hide outranks Button's own display, whichever
+// stylesheet loads first.
 @media (min-width: 1056px) {
   .nav {
     display: block;
@@ -312,8 +293,8 @@
     display: flex;
   }
 
-  .menuButton,
-  .searchButton {
+  .inner .menuButton,
+  .inner .searchButton {
     display: none;
   }
 }
@@ -492,11 +473,9 @@ $tray-bleed: 2rem;
   object-fit: cover;
 }
 
-// Repo link in the utility rail. Shares .action's hit area and focus ring;
-// only the anchor's underline needs clearing.
-.repo {
-  text-decoration: none;
-
+// Repo link in the utility rail: Button's hit area and focus ring on an
+// anchor.
+.inner .repo {
   // Search took a slot in the utility rail, and 320px cannot hold four. The
   // footer carries the same GitHub link, so the header's copy goes first.
   // token-drift-allow: content threshold, not a system breakpoint. The

@@ -334,7 +334,7 @@ export function ColorPickerPopover({
               }}
             >
               Surprise me
-              <KitIcon name="arrow-small-right" />
+              <KitIcon name="dice" />
             </Button>
           </div>
         </div>

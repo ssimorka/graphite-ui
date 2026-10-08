@@ -163,23 +163,9 @@
   color: var(--graphite-on-surface);
 }
 
+// The kit's Button, Ghost Small.
 .pick {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--graphite-primary);
-  font: inherit;
-  font-size: var(--graphite-text-body-2-size);
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
+  flex: none;
 }
 
 .presets {
@@ -256,40 +242,17 @@
 }
 
 // ------------------------------------------------------------------ typeface
+// One kit Select, Style=Inline, per row, ruled off underneath. The inline
+// Select hugs its content; here it spans the row, so the label sits left and
+// the trigger right. `> span` outranks the Select's own `.inline` width.
 .face {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--graphite-space-04);
-  padding: 0.5625rem var(--graphite-space-04);
+  padding: 0.1875rem 0 0.1875rem var(--graphite-space-04);
   border-bottom: 1px solid var(--graphite-outline);
-  font-size: var(--graphite-text-body-2-size);
-  line-height: var(--graphite-text-body-2-line-height);
 }
 
-.faceLabel {
-  color: var(--graphite-on-surface-variant);
-}
-
-.faceRole {
-  font-family: var(--graphite-font-mono), monospace;
-  font-size: var(--graphite-text-code-3-size);
-}
-
-.select {
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--graphite-on-surface);
-  font: inherit;
-  text-align: right;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
+.face > span {
+  width: 100%;
+  justify-content: space-between;
 }
 
 // ------------------------------------------------------------- derived roles

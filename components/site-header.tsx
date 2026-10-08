@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 import { LogoGithub } from '@carbon/icons-react'
 import { KitIcon } from '@/components/kit-icon'
+import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
@@ -165,9 +166,10 @@ export function SiteHeader() {
         {/* First in the DOM, not just visually: below lg the kit puts this at
             the far left, and reordering with CSS alone would leave the tab
             order disagreeing with what is on screen. */}
-        <button
-          type="button"
-          className={`${styles.action} ${styles.menuButton}`}
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          className={styles.menuButton}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
           onClick={() => {
@@ -181,9 +183,9 @@ export function SiteHeader() {
             key={menuOpen ? 'close' : 'menu'}
             className={menuToggled ? styles.menuIconSpin : styles.menuIcon}
           >
-            {menuOpen ? <KitIcon name="cross-small" size={20} /> : <KitIcon name="menu-burger" size={20} />}
+            {menuOpen ? <KitIcon name="cross-small" /> : <KitIcon name="menu-burger" />}
           </span>
-        </button>
+        </Button>
 
         <a className={styles.brand} href="/">
           <Brand />
@@ -224,26 +226,30 @@ export function SiteHeader() {
               {searchKey}
             </kbd>
           </button>
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon-lg"
             ref={searchIcon}
-            className={`${styles.action} ${styles.searchButton}`}
+            className={styles.searchButton}
             aria-label="Search documentation"
             aria-haspopup="dialog"
             onClick={() => setSearchOpen(true)}
           >
-            <KitIcon name="search" size={18} />
-          </button>
+            <KitIcon name="search" />
+          </Button>
 
-          <a
-            className={`${styles.action} ${styles.repo}`}
-            href="https://github.com/ssimorka/graphite-ui"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Graphite UI on GitHub"
-          >
-            <LogoGithub size={18} />
-          </a>
+          {/* The one icon here that is not the kit's: a brand mark is not a
+              system icon, so the mocks keep the GitHub mark local too. */}
+          <Button variant="ghost" size="icon-lg" asChild className={styles.repo}>
+            <a
+              href="https://github.com/ssimorka/graphite-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Graphite UI on GitHub"
+            >
+              <LogoGithub size={16} />
+            </a>
+          </Button>
 
           {/* The kit pairs a filled square theme toggle with the source chip
               as one unit, so they sit in a shared group with no gap. */}
