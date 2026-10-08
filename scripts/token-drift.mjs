@@ -36,7 +36,11 @@ const SNAPSHOT = 'docs/tokens/figma-snapshot.json'
 // Overridable so the test suite can point the check at a mutated copy instead
 // of editing the real stylesheet to prove the check fails when it should.
 const STYLESHEET = process.argv[2] || 'app/globals.scss'
-const SCAN_DIRS = ['components', 'app']
+// Overridable for the same reason: the media query check reads the component
+// tree, not the stylesheet argument, so its tests stage a directory instead.
+const SCAN_DIRS = process.env.TOKEN_DRIFT_SCAN_DIRS
+  ? process.env.TOKEN_DRIFT_SCAN_DIRS.split(path.delimiter)
+  : ['components', 'app']
 
 // The override may be absolute, so resolve once rather than joining ROOT onto
 // something that already starts at the drive root.
@@ -316,7 +320,7 @@ function compare(label, kit, declared, varName) {
 // ------------------------------------------------------- what values cannot say
 function scanFiles() {
   const out = []
-  const stack = SCAN_DIRS.map((d) => path.join(ROOT, d)).filter((d) =>
+  const stack = SCAN_DIRS.map((d) => path.resolve(ROOT, d)).filter((d) =>
     fs.existsSync(d),
   )
   while (stack.length) {
@@ -332,11 +336,19 @@ function scanFiles() {
 
 // 1. Breakpoints written into media queries, which no token can reach.
 function checkMediaQueries(kitBreakpoints) {
+  // Widths are compared in px to two decimals, so 671.98 is not lost to float
+  // noise once 672 - 0.02 is computed.
+  const key = (px) => Math.round(px * 100) / 100
   const known = new Set()
   for (const px of kitBreakpoints.values()) {
-    known.add(px) // min-width lands on the breakpoint
-    known.add(px - 1) // max-width bounds sit one below the next one up
+    known.add(key(px)) // min-width lands on the breakpoint
+    known.add(key(px - 1)) // max-width bounds sit one below the next one up
+    known.add(key(px - 0.02)) // or 0.02px below, the sub-pixel-safe form
   }
+
+  // rem and em in a media query are relative to the initial font size, not
+  // the page's, so 16px is the conversion whatever the root sets.
+  const toPx = (n, unit) => (unit === 'px' ? n : n * 16)
 
   // Not every media query is a breakpoint. A rule can be keyed to the width at
   // which its own content stops fitting — a content threshold — which by
@@ -365,15 +377,22 @@ function checkMediaQueries(kitBreakpoints) {
       return false
     }
 
+    // Every width condition on the line, not only the first: a range query
+    // carries two. Decimal px and rem/em are read too; matching whole px only
+    // let 671.98px and every rem query through unchecked.
     lines.forEach((line, i) => {
-      const m = /@media[^{]*?\((min|max)-width:\s*(\d+)px\)/.exec(line)
-      if (!m) return
-      const px = Number(m[2])
-      if (known.has(px) || allowed(i)) return
-      warnings.push(
-        `${rel}:${i + 1}: @media ${m[1]}-width ${px}px matches no kit breakpoint ` +
-          `— align it to the scale, or mark it \`${ALLOW} <reason>\` if it is a content threshold`,
-      )
+      if (!/@media\b/.test(line)) return
+      for (const m of line.matchAll(
+        /\((min|max)-width:\s*(\d*\.?\d+)(px|rem|em)\)/g,
+      )) {
+        const px = key(toPx(Number(m[2]), m[3]))
+        if (known.has(px) || allowed(i)) continue
+        const shown = m[3] === 'px' ? `${m[2]}px` : `${m[2]}${m[3]} (${px}px)`
+        warnings.push(
+          `${rel}:${i + 1}: @media ${m[1]}-width ${shown} matches no kit breakpoint ` +
+            `— align it to the scale, or mark it \`${ALLOW} <reason>\` if it is a content threshold`,
+        )
+      }
     })
   }
 }
