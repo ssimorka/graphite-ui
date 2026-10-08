@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
 import { Slider } from '@/components/ui/slider'
@@ -37,7 +36,7 @@ function Indicator({ control }: { control: Control }) {
     const stack = fonts.find((f) => f.key === control.selected)?.stack
     return <span style={{ fontFamily: stack }}>Aa</span>
   }
-  return <ChevronUp size={16} />
+  return <KitIcon name="angle-small-up" size={16} />
 }
 
 /**
@@ -200,8 +199,8 @@ export function ControlsBar() {
           title="Reset"
           onClick={b.reset}
         >
-          <Reset size={16} aria-hidden="true" />
           <span className={styles.barLabel}>Reset</span>
+          <KitIcon name="redo-alt" size={16} aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -209,8 +208,8 @@ export function ControlsBar() {
           title={b.view === 'art' ? 'Regenerate' : 'Shuffle'}
           onClick={b.shuffle}
         >
-          {b.view === 'art' ? <Renew size={16} aria-hidden="true" /> : <Shuffle size={16} aria-hidden="true" />}
           <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Shuffle'}</span>
+          {b.view === 'art' ? <KitIcon name="refresh" size={16} aria-hidden="true" /> : <KitIcon name="dice" size={16} aria-hidden="true" />}
         </button>
         {b.view === 'art' ? (
           <button
@@ -220,12 +219,12 @@ export function ControlsBar() {
             disabled={!b.artHandle}
           >
             Export PNG
-            <Download size={16} aria-hidden="true" />
+            <KitIcon name="download" size={16} aria-hidden="true" />
           </button>
         ) : (
           <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
             Get the code
-            <Download size={16} aria-hidden="true" />
+            <KitIcon name="download" size={16} aria-hidden="true" />
           </button>
         )}
       </div>

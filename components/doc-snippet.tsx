@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Checkmark, Copy } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import styles from './doc-snippet.module.scss'
 
 /**
@@ -38,7 +38,7 @@ export function DocSnippet({ code }: { code: string }) {
         onClick={copy}
         aria-label={copied ? 'Copied' : 'Copy to clipboard'}
       >
-        {copied ? <Checkmark size={16} /> : <Copy size={16} />}
+        {copied ? <KitIcon name="check" size={16} /> : <KitIcon name="copy-alt" size={16} />}
       </button>
     </div>
   )

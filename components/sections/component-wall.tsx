@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { Grid, Column } from '@carbon/react'
-import { Add } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import type { ContractMeta } from '@/lib/contracts'
 import { Reveal } from '@/components/reveal'
 import { MeshGradient } from '@/components/mesh-gradient'
@@ -92,7 +92,7 @@ export function ComponentWall({
               <Card name="Button">
                 <Button variant="primary">
                   Button
-                  <Add />
+                  <KitIcon name="plus-small" />
                 </Button>
               </Card>
 

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useId, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Close, Download } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { buildJson } from '@/lib/color.js'
 import type { ExportBundle } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
@@ -130,7 +130,7 @@ export function GetCodeDialog({
             Get the code
           </h2>
           <button type="button" className={styles.close} aria-label="Close" onClick={onClose}>
-            <Close size={20} aria-hidden="true" />
+            <KitIcon name="cross-small" size={20} aria-hidden="true" />
           </button>
         </div>
         {out ? (
@@ -185,7 +185,7 @@ export function GetCodeDialog({
         <div className={styles.footer}>
           <button type="button" className={styles.footerAction} onClick={download} disabled={!out}>
             Download {FORMATS[tab].label}
-            <Download size={16} aria-hidden="true" />
+            <KitIcon name="download" size={16} aria-hidden="true" />
           </button>
         </div>
       </div>
