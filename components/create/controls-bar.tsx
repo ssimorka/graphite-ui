@@ -157,8 +157,8 @@ function OptionSheet({
 
 /**
  * The compact controls below xl: a horizontally scrolling rail of pickers, and a
- * footer of Shuffle and Get the code. The kit omits the Lock at these sizes, so
- * shuffling here randomises everything not already locked on the desktop panel.
+ * footer of Reset, Shuffle and Get the code. Shuffle here is the desktop's:
+ * it randomises every setting.
  */
 export function ControlsBar() {
   const b = useBuilder()

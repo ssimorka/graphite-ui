@@ -135,8 +135,8 @@ sheets rise from the bottom, the panel drops in.
   - On **Components**: source color (hex, Pick, and eight ramp swatches that
     copy their hex rather than set the source), theme, contrast target,
     radius, density, icons, typeface (headings, body, code), the derived roles
-    (read-only), and Shuffle, Reset and Get the code. Source, theme, contrast
-    and radius can be locked against Shuffle.
+    (read-only), and Shuffle, Reset and Get the code. Shuffle randomises
+    every one of those settings, on every screen size; there are no locks.
   - On **Generative Art**: source color, Intensity (a 0 to 100 slider), Mix
     and Grid, then Regenerate in Shuffle's place, Reset and Export PNG in Get
     the code's. Intensity and Mix are disabled, with a note, when the art has
