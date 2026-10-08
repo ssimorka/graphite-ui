@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { ArrowRight, Close, Renew, Search, Time } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { useOverlay } from '@/components/ui/overlay'
 import { Button } from '@/components/ui/button'
 import { Tag } from '@/components/ui/tag'
@@ -311,7 +311,7 @@ export function SearchPalette({
         style={place}
       >
         <div className={styles.field}>
-          <Search size={16} className={styles.icon} aria-hidden="true" />
+          <KitIcon name="search" size={16} className={styles.icon} aria-hidden="true" />
           <div className={styles.inputWrap}>
             {ghost ? (
               <span className={styles.ghost} aria-hidden="true">
@@ -348,7 +348,7 @@ export function SearchPalette({
           </div>
           {query ? (
             <button type="button" className={styles.clear} aria-label="Clear search" onClick={() => ask('')}>
-              <Close size={16} aria-hidden="true" />
+              <KitIcon name="cross-small" size={16} aria-hidden="true" />
             </button>
           ) : null}
           <kbd className={styles.esc}>Esc</kbd>
@@ -376,7 +376,7 @@ export function SearchPalette({
                     onClick={() => setIgnore((v) => ({ ...v, page: true }))}
                   >
                     {intent!.page}
-                    <Close size={16} aria-hidden="true" />
+                    <KitIcon name="cross-small" size={16} aria-hidden="true" />
                   </button>
                 ) : null}
                 {intent!.section ? (
@@ -387,7 +387,7 @@ export function SearchPalette({
                     onClick={() => setIgnore((v) => ({ ...v, section: true }))}
                   >
                     {intent!.section}
-                    <Close size={16} aria-hidden="true" />
+                    <KitIcon name="cross-small" size={16} aria-hidden="true" />
                   </button>
                 ) : null}
                 {ignore.page || ignore.section ? (
@@ -452,7 +452,7 @@ export function SearchPalette({
             </p>
             <Button variant="secondary" size="sm" onClick={load}>
               Try again
-              <Renew size={16} aria-hidden="true" />
+              <KitIcon name="refresh" size={16} aria-hidden="true" />
             </Button>
             <ul className={styles.quickLinks}>
               {START.map(([href, title]) => (
@@ -529,10 +529,10 @@ export function SearchPalette({
                     onClick: () => choose(item),
                   } as const
                   if (item.type === 'query') {
-                    const Icon = item.icon === 'recent' ? Time : item.icon === 'next' ? ArrowRight : Search
+                    const icon = item.icon === 'recent' ? 'time-past' : item.icon === 'next' ? 'arrow-right' : 'search'
                     return (
                       <div key={`q-${item.text}`} {...props} className={styles.queryOption}>
-                        <Icon size={16} className={styles.icon} aria-hidden="true" />
+                        <KitIcon name={icon} className={styles.icon} />
                         <span>{item.text}</span>
                       </div>
                     )
@@ -588,7 +588,7 @@ export function SearchPalette({
             onClick={() => (items[active] ? choose(items[active]) : input.current?.focus())}
           >
             Search
-            <Search size={16} aria-hidden="true" />
+            <KitIcon name="search" size={16} aria-hidden="true" />
           </button>
         </div>
       </div>

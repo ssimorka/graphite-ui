@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
-import { Reset, Shuffle } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { Dropdown } from '@/components/ui/dropdown'
 import styles from './color-picker.module.scss'
 
@@ -319,8 +319,8 @@ export function ColorPickerPopover({
                 setLevel('AA')
               }}
             >
-              <Reset size={16} aria-hidden="true" />
               Reset
+              <KitIcon name="redo-alt" size={16} aria-hidden="true" />
             </button>
             <button
               type="button"
@@ -332,7 +332,7 @@ export function ColorPickerPopover({
               }}
             >
               Surprise me
-              <Shuffle size={16} aria-hidden="true" />
+              <KitIcon name="dice" size={16} aria-hidden="true" />
             </button>
           </div>
         </div>

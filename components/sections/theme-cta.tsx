@@ -1,7 +1,7 @@
 'use client'
 
 import { Grid, Column } from '@carbon/react'
-import { ArrowRight, Book } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { Reveal } from '@/components/reveal'
 import { MeshGradient } from '@/components/mesh-gradient'
 import { Button } from '@/components/ui/button'
@@ -40,13 +40,13 @@ export function ThemeCta() {
               <Button variant="ghost" size="lg" asChild>
                 <a href="/create">
                   Open the theme builder
-                  <ArrowRight />
+                  <KitIcon name="arrow-right" />
                 </a>
               </Button>
               <Button variant="ghost" size="lg" asChild>
                 <a href="/docs/theming">
                   Read how theming works
-                  <Book />
+                  <KitIcon name="fill" />
                 </a>
               </Button>
             </div>

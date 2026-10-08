@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { Grid, Column, Tag } from '@carbon/react'
-import { Gem, ArrowRight, Grid as GridIcon } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { Button } from '@/components/ui/button'
 import { RampRow, Toast, useCopy } from '@/components/token-panels'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
@@ -84,7 +84,7 @@ export function Hero({ governed }: { governed: number }) {
         <Column sm={4} md={8} lg={{ span: 10, offset: 3 }}>
           <div className="hero__center">
             <Tag type="purple" size="md" className="hero__eyebrow">
-              <Gem size={16} className="hero__eyebrow-icon" /> {governed} React
+              <KitIcon name="gem" size={16} className="hero__eyebrow-icon" /> {governed} React
               components
             </Tag>
             <h1 className="hero__title" id="hero-title">
@@ -100,13 +100,13 @@ export function Hero({ governed }: { governed: number }) {
               <Button variant="primary" size="lg" asChild>
                 <a href="/docs#use-today">
                   Get started
-                  <ArrowRight />
+                  <KitIcon name="arrow-right" />
                 </a>
               </Button>
               <Button variant="ghost" size="lg" asChild>
                 <a href="/gallery">
                   Browse components
-                  <GridIcon />
+                  <KitIcon name="layout-fluid" />
                 </a>
               </Button>
             </div>
@@ -146,7 +146,7 @@ export function Hero({ governed }: { governed: number }) {
               </p>
               <a className="hero__strip-cta" href="/create">
                 Create a theme
-                <ArrowRight size={16} aria-hidden="true" />
+                <KitIcon name="arrow-right" size={16} aria-hidden="true" />
               </a>
             </div>
           </div>

@@ -358,10 +358,18 @@
 }
 
 // The kit's Shuffle and Reset are outlined in primary. Button has no outlined
-// variant, so this extends the ghost one; className is merged after the recipe.
-.outlined {
-  border: 1px solid var(--graphite-primary);
-  color: var(--graphite-primary);
+// variant, so this extends the ghost one. Drawn as an inset shadow, as the
+// mock's inside stroke is, so the button keeps its size; the doubled class
+// outranks Button's own `border: 0` and shadow, which load after this file and
+// left the outline unpainted. Focus keeps Button's 2px ring inside the line.
+.outlined.outlined {
+  box-shadow: inset 0 0 0 1px var(--graphite-primary);
+
+  &:focus-visible {
+    box-shadow:
+      inset 0 0 0 1px var(--graphite-primary),
+      inset 0 0 0 3px var(--graphite-primary-focus);
+  }
 }
 
 // ---------------------------------------------------------------- compact bar

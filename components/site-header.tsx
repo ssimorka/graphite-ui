@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import { Asleep, Light, Menu, Close, LogoGithub, Search } from '@carbon/icons-react'
+import { LogoGithub } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
@@ -180,7 +181,7 @@ export function SiteHeader() {
             key={menuOpen ? 'close' : 'menu'}
             className={menuToggled ? styles.menuIconSpin : styles.menuIcon}
           >
-            {menuOpen ? <Close size={20} /> : <Menu size={20} />}
+            {menuOpen ? <KitIcon name="cross-small" size={20} /> : <KitIcon name="menu-burger" size={20} />}
           </span>
         </button>
 
@@ -217,7 +218,7 @@ export function SiteHeader() {
             aria-keyshortcuts="Control+K Meta+K /"
             onClick={() => setSearchOpen(true)}
           >
-            <Search size={16} className={styles.searchIcon} aria-hidden="true" />
+            <KitIcon name="search" size={16} className={styles.searchIcon} aria-hidden="true" />
             <span className={styles.searchPlaceholder}>Search docs</span>
             <kbd className={styles.searchKey} aria-hidden="true">
               {searchKey}
@@ -231,7 +232,7 @@ export function SiteHeader() {
             aria-haspopup="dialog"
             onClick={() => setSearchOpen(true)}
           >
-            <Search size={18} />
+            <KitIcon name="search" size={18} />
           </button>
 
           <a
@@ -255,7 +256,9 @@ export function SiteHeader() {
               }
               onClick={toggleTheme}
             >
-              {isDark ? <Light size={16} /> : <Asleep size={16} />}
+              {/* The glyph is the current theme, as the kit's header draws
+                  it (fi-rs-moon on dark); the label says what a press does. */}
+              {isDark ? <KitIcon name="moon" size={16} /> : <KitIcon name="sun" size={16} />}
             </button>
             <ColorPickerPopover
               value={sourceHex || COVER_SOURCE_HEX}

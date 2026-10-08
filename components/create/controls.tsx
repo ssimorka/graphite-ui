@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp, Download, Renew, Reset, Shuffle } from '@carbon/icons-react'
+import { KitIcon } from '@/components/kit-icon'
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
@@ -93,7 +93,7 @@ function Section({
           aria-expanded={open}
           onClick={onToggle}
         >
-          {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          {open ? <KitIcon name="angle-small-up" size={16} /> : <KitIcon name="angle-small-down" size={16} />}
           <span className={styles.label}>{label}</span>
         </button>
       </div>
@@ -335,11 +335,11 @@ export function ControlsPanel() {
         <div className={styles.actionRow}>
           <Button variant="ghost" className={styles.outlined} onClick={b.shuffle}>
             {art ? 'Regenerate' : 'Shuffle'}
-            {art ? <Renew /> : <Shuffle />}
+            {art ? <KitIcon name="refresh" /> : <KitIcon name="dice" />}
           </Button>
           <Button variant="ghost" className={styles.outlined} onClick={b.reset}>
             Reset
-            <Reset />
+            <KitIcon name="redo-alt" />
           </Button>
         </div>
         <ul className={styles.hints}>
@@ -358,12 +358,12 @@ export function ControlsPanel() {
         {art ? (
           <Button variant="primary" onClick={() => b.artHandle?.exportPng()} disabled={!b.artHandle}>
             Export PNG
-            <Download />
+            <KitIcon name="download" />
           </Button>
         ) : (
           <Button variant="primary" onClick={() => setCodeOpen(true)}>
             Get the code
-            <Download />
+            <KitIcon name="download" />
           </Button>
         )}
       </div>
