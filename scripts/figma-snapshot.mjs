@@ -119,7 +119,19 @@ const merge = (files) => {
         // Iterate the collection's declared mode order rather than the key
         // order of the payload, so modes read Light/Dark, SM/MD/LG/Max — the
         // order they carry meaning in — instead of alphabetically.
-        for (const mode of c.m) values[decode(mode)] = expandValue(v.v[mode])
+        for (const mode of c.m) {
+          const value = expandValue(v.v[mode])
+          // The count check below counts variables, not values, so a value
+          // lost on the wire (a mode key that does not match the `m` list, or
+          // an alias with no `x`) would otherwise land as `{}` and pass.
+          // `null` is legitimate: it is how an unresolved alias reads.
+          if (v.v[mode] === undefined || value.value === undefined) {
+            throw new Error(
+              `${file}: ${name}/${varName}: no value for mode ${decode(mode)}`,
+            )
+          }
+          values[decode(mode)] = value
+        }
         const next = { type: v.t, values }
 
         const prev = target.variables.get(varName)
