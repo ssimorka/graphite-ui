@@ -987,14 +987,20 @@ body {
     }
   }
 
-  .hero__strip-cta {
-    @include drop.action;
+  // The corner action: Button, rounded into the strip's bottom-right corner.
+  .hero__strip-cta.hero__strip-cta {
+    @include drop.corner;
+    flex: none;
+    // The label holds the left, as the kit's has it, however wide the block.
+    justify-content: flex-start;
+    min-width: 10rem;
+    margin-left: auto;
     text-decoration: none;
 
     // Full width, so it takes both bottom corners.
     @media (max-width: 671.98px) {
+      @include drop.corner(both);
       margin-left: 0;
-      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
     }
   }
 

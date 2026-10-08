@@ -188,9 +188,9 @@
       padding: var(--graphite-space-04) var(--graphite-space-05);
     }
 
-    .cta {
+    .cta.cta {
+      @include drop.corner(both);
       margin-left: 0;
-      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
     }
   }
 }
@@ -199,15 +199,26 @@
 // cards and the header panels. It is the card's link, so it stays in the flow
 // (flush in the corner by the strip's own geometry, not absolutely placed):
 // positioned, it would become the containing block for its own ::after and
-// the overlay would shrink to the button.
-.cta {
-  @include drop.action;
+// the overlay would shrink to the button. It is Button, rounded into the
+// card's bottom-right corner.
+.cta.cta {
+  @include drop.corner;
+  // Static, so its ::after resolves to the card and the whole card is the
+  // target. Button pins its icon against itself, so the icon rejoins the flow
+  // at the far end instead (.ctaIcon), and the press nudge is off: a transform
+  // would make the link the overlay's containing block mid-click.
+  position: static;
+  justify-content: space-between;
+  margin-left: auto;
   // Tighter than the panels' footer action: it shares a 260px strip with the
   // contract badge, and "Notification" has to fit beside it on one line.
   gap: var(--graphite-space-03);
-  min-width: 0;
   padding: 0 var(--graphite-space-04);
   text-decoration: none;
+
+  &:active:not(:disabled) {
+    transform: none;
+  }
 
   &::after {
     content: '';
@@ -218,6 +229,12 @@
   .card:hover & {
     background: var(--graphite-primary-hover);
   }
+}
+
+// Three classes deep, to outrank Button's `.primary:not(.square) > svg`.
+.cta.cta > .ctaIcon {
+  position: static;
+  transform: none;
 }
 
 .name {

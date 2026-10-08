@@ -200,8 +200,8 @@
       margin-left: 0;
     }
 
-    .cta {
-      border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
+    .cta.cta {
+      @include drop.corner(both);
     }
   }
 }
@@ -215,11 +215,23 @@
 // The component's name as the filled corner action, as on the home wall. It
 // is the card's link, so it stays in the flow: positioned, it would become the
 // containing block for its own ::after and the overlay would shrink to it.
-.cta {
-  @include drop.action;
+.cta.cta {
+  @include drop.corner;
+  // Static, so its ::after resolves to the card and the whole card is the
+  // target. Button pins its icon against itself, so the icon rejoins the flow
+  // at the far end instead (.ctaIcon), and the press nudge is off: a transform
+  // would make the link the overlay's containing block mid-click.
+  position: static;
+  justify-content: space-between;
   flex: 1;
+  min-width: 10rem;
+  padding-right: var(--graphite-space-05);
   gap: var(--graphite-space-04);
   text-decoration: none;
+
+  &:active:not(:disabled) {
+    transform: none;
+  }
 
   &::after {
     content: '';
@@ -246,19 +258,23 @@
   }
 }
 
+// Three classes deep, to outrank Button's `.primary:not(.square) > svg`.
+.cta.cta > .ctaIcon {
+  position: static;
+  transform: none;
+}
+
 // Ungoverned: the same block, disabled, because there is no page to open. Not
-// a link and no overlay, so the card does nothing when pressed.
-.ctaDisabled {
+// a link and no overlay, so the card does nothing when pressed. Button's
+// disabled look, which it only gives a real :disabled, so a span is given it
+// here.
+.cta.cta.ctaDisabled {
   background: var(--graphite-primary-disabled);
   color: var(--graphite-primary-disabled-content);
   cursor: default;
 
   &::after {
     content: none;
-  }
-
-  &:hover {
-    background: var(--graphite-primary-disabled);
   }
 }
 

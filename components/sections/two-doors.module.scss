@@ -79,20 +79,36 @@
 // The door's action: the filled block the other cards end in, flush in the
 // bottom-left corner. In the flow, not positioned, so its ::after resolves to
 // the door and the whole door is the target.
-.cta {
-  @include drop.action;
+.cta.cta {
+  @include drop.corner(left);
+  // Static, so its ::after resolves to the card and the whole card is the
+  // target. Button pins its icon against itself, so the icon rejoins the flow
+  // at the far end instead (.ctaIcon), and the press nudge is off: a transform
+  // would make the link the overlay's containing block mid-click.
+  position: static;
+  justify-content: space-between;
   align-self: flex-start;
+  min-width: 10rem;
+  padding-right: var(--graphite-space-05);
   gap: var(--graphite-space-05);
   margin: auto 0 0 calc(var(--graphite-space-06) * -1);
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
   text-decoration: none;
+
+  &:active:not(:disabled) {
+    transform: none;
+  }
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
   }
+}
+
+// Three classes deep, to outrank Button's `.primary:not(.square) > svg`.
+.cta.cta > .ctaIcon {
+  position: static;
+  transform: none;
 }
 
 .door:hover .artefact {

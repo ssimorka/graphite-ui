@@ -135,15 +135,15 @@ sheets rise from the bottom, the panel drops in.
   - On **Components**: source color (hex, Pick, and eight ramp swatches that
     copy their hex rather than set the source), theme, contrast target,
     radius, density, icons, typeface (headings, body, code), the derived roles
-    (read-only), and Shuffle, Reset and Get the code. Shuffle randomises
+    (read-only), and Surprise me, Reset and Get the code. Surprise me randomises
     every one of those settings, on every screen size; there are no locks.
   - On **Generative Art**: source color, Intensity (a 0 to 100 slider), Mix
-    and Grid, then Regenerate in Shuffle's place, Reset and Export PNG in Get
+    and Grid, then Regenerate in Surprise me's place, Reset and Export PNG in Get
     the code's. Intensity and Mix are disabled, with a note, when the art has
     no color: Intensity on a gray, black or white pick, Mix at intensity 0 too.
   - Reset puts everything back on either tab, the source included.
-  - The bar's footer is Reset, Shuffle (Regenerate on the art tab) and the
-    filled main action; below 672px Reset and Shuffle are icons that share the
+  - The bar's footer is Reset, Surprise me (Regenerate on the art tab) and the
+    filled main action; below 672px Reset and Surprise me are icons that share the
     width. On the bar, each control opens a bottom sheet; a disabled control
     wears the kit's disabled field colors and its sheet says why. The Source
     color sheet lists the ramp stops to copy and ends in a filled Pick color

@@ -550,9 +550,13 @@
   margin-left: auto;
 }
 
-.barCode {
-  @include drop.action;
-  margin-left: 0;
+// The corner action: Button, rounded into the bar's bottom-right corner.
+.barCode.barCode {
+  @include drop.corner;
+  flex: none;
+  // The label holds the left, as the kit's has it, however wide the block.
+  justify-content: flex-start;
+  min-width: 10rem;
 }
 
 // -------------------------------------------------------------------- sheets
@@ -663,18 +667,15 @@
   white-space: nowrap;
 }
 
-// The source sheet's action: the drop panel's filled block, full width at the
-// foot of the list, so it reads as the sheet's one choice and not a list row.
-.customHex {
-  @include drop.action;
+// The source sheet's action: Button, full width at the foot of the list, so it
+// reads as the sheet's one choice and not a list row. It sits inside the sheet
+// rather than in a corner, so it keeps the sheet's 8px corners all round.
+.customHex.customHex {
   justify-content: flex-start;
   gap: var(--graphite-space-04);
   width: calc(100% - 2.5rem);
   margin: var(--graphite-space-05) 1.25rem 0;
   border-radius: var(--graphite-radius-8);
-  font-size: var(--graphite-text-body-2-size);
-  line-height: var(--graphite-text-body-2-line-height);
-  text-align: left;
 
   .optionSwatch {
     border-color: var(--graphite-on-primary);

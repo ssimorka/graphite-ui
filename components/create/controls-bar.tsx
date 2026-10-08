@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
+import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
+import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import type { IconSet } from '@/lib/kit-icons'
 import { CODE_FONTS, TEXT_FONTS, useBuilder } from './builder'
@@ -132,8 +134,9 @@ function OptionSheet({
             {/* Picking a source is the sheet's one real choice, so it closes
                 the list as the filled action. The stops above only copy. */}
             {copies ? (
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="lg"
                 className={styles.customHex}
                 onClick={() => {
                   onClose()
@@ -143,8 +146,8 @@ function OptionSheet({
                 <span className={styles.optionSwatch} style={{ background: control.value }} aria-hidden="true" />
                 <span className={styles.optionLabel}>Pick color</span>
                 <span className={styles.customHexValue}>{control.value.toUpperCase()}</span>
-                <span aria-hidden="true">→</span>
-              </button>
+                <KitIcon name="arrow-small-right" />
+              </Button>
             ) : null}
             <Toast message={toast} />
           </>
@@ -156,7 +159,7 @@ function OptionSheet({
 
 /**
  * The compact controls below xl: a horizontally scrolling rail of pickers, and a
- * footer of Reset, Shuffle and Get the code. Shuffle here is the desktop's:
+ * footer of Reset, Surprise me and Get the code. Surprise me here is the desktop's:
  * it randomises every setting.
  */
 export function ControlsBar() {
@@ -164,6 +167,7 @@ export function ControlsBar() {
   const controls = forView(useControls(), b.view)
   const [sheet, setSheet] = useState<ControlId | null>(null)
   const [codeOpen, setCodeOpen] = useState(false)
+  const [roll, rollDice] = useDiceRoll()
   const active = controls.find((c) => c.id === sheet)
 
   return (
@@ -191,7 +195,7 @@ export function ControlsBar() {
       </div>
       <div className={styles.barFooter}>
         {/* Below md the footer is too narrow for three labels, so Reset and
-            Shuffle drop to icons there. The label stays in the DOM as their
+            Surprise me drop to icons there. The label stays in the DOM as their
             accessible name, and the title shows it on hover. */}
         <button
           type="button"
@@ -205,27 +209,31 @@ export function ControlsBar() {
         <button
           type="button"
           className={`${styles.barQuiet} ${styles.barShuffle}`}
-          title={b.view === 'art' ? 'Regenerate' : 'Shuffle'}
-          onClick={b.shuffle}
+          title={b.view === 'art' ? 'Regenerate' : 'Surprise me'}
+          onClick={() => {
+            if (b.view !== 'art') rollDice()
+            b.shuffle()
+          }}
         >
-          <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Shuffle'}</span>
-          {b.view === 'art' ? <KitIcon name="refresh" size={16} aria-hidden="true" /> : <KitIcon name="dice" size={16} aria-hidden="true" />}
+          <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Surprise me'}</span>
+          {b.view === 'art' ? <KitIcon name="refresh" size={16} aria-hidden="true" /> : <RollingDice roll={roll} />}
         </button>
         {b.view === 'art' ? (
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="lg"
             className={styles.barCode}
             onClick={() => b.artHandle?.exportPng()}
             disabled={!b.artHandle}
           >
             Export PNG
-            <KitIcon name="download" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-down" />
+          </Button>
         ) : (
-          <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
+          <Button variant="primary" size="lg" className={styles.barCode} onClick={() => setCodeOpen(true)}>
             Get the code
-            <KitIcon name="download" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-right" />
+          </Button>
         )}
       </div>
       {active ? <OptionSheet control={active} onClose={() => setSheet(null)} /> : null}

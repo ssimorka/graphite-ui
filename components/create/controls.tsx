@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { KitIcon } from '@/components/kit-icon'
+import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
@@ -179,6 +180,7 @@ export function ControlsPanel() {
   const b = useBuilder()
   const [open, setOpen] = useState<Record<string, boolean>>({ source: true })
   const [codeOpen, setCodeOpen] = useState(false)
+  const [roll, rollDice] = useDiceRoll()
   const { toast, copy } = useCopy()
 
   const by = (id: Control['id']) => controls.find((c) => c.id === id)!
@@ -333,9 +335,16 @@ export function ControlsPanel() {
 
       <div className={styles.actions}>
         <div className={styles.actionRow}>
-          <Button variant="ghost" className={styles.outlined} onClick={b.shuffle}>
-            {art ? 'Regenerate' : 'Shuffle'}
-            {art ? <KitIcon name="refresh" /> : <KitIcon name="dice" />}
+          <Button
+            variant="ghost"
+            className={styles.outlined}
+            onClick={() => {
+              if (!art) rollDice()
+              b.shuffle()
+            }}
+          >
+            {art ? 'Regenerate' : 'Surprise me'}
+            {art ? <KitIcon name="refresh" /> : <RollingDice roll={roll} />}
           </Button>
           <Button variant="ghost" className={styles.outlined} onClick={b.reset}>
             Reset
@@ -350,7 +359,7 @@ export function ControlsPanel() {
             </>
           ) : (
             <>
-              <li>Shuffle picks a new color, theme, contrast target, radius, density, icons and typefaces.</li>
+              <li>Surprise me picks a new color, theme, contrast target, radius, density, icons and typefaces.</li>
               <li>Reset puts the color and every setting back.</li>
             </>
           )}

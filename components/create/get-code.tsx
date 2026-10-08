@@ -11,6 +11,7 @@ import { buildTailwindBridge } from '@/lib/tailwind-bridge'
 import { REGISTRY_URL, shadcnAdd } from '@/lib/registry-url'
 import type { ThemeFileFoundations } from '@/lib/theme-file'
 import { useOverlay } from '@/components/ui/overlay'
+import { Button } from '@/components/ui/button'
 import { DocSnippet } from '@/components/doc-snippet'
 import {
   CODE_FONTS,
@@ -183,10 +184,10 @@ export function GetCodeDialog({
           </div>
         )}
         <div className={styles.footer}>
-          <button type="button" className={styles.footerAction} onClick={download} disabled={!out}>
+          <Button variant="primary" size="lg" className={styles.footerAction} onClick={download} disabled={!out}>
             Download {FORMATS[tab].label}
-            <KitIcon name="download" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-down" />
+          </Button>
         </div>
       </div>
     </>,
