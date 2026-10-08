@@ -1,6 +1,6 @@
 ---
 foundation: Breakpoint
-version: 1.2.1
+version: 1.3.0
 source: Graphite UI Kit › Breakpoint (4 modes) + Breakpoint LG–XL (2 modes)
 snapshot: docs/tokens/figma-snapshot.json
 declared_in: app/globals.scss
@@ -21,11 +21,11 @@ variables:
     value: 1584px
 composition_rules:
   - lg and xl are two tokens, not one lg-xl. The kit keeps them in a separate collection the main one aliases into per mode; collapsing them would flatten a distinction the kit makes.
-  - A max-width bound sits one below the next breakpoint up — 671px is md minus one. token-drift knows this convention and accepts both forms.
+  - A max-width bound sits one below the next breakpoint up — 671px is md minus one, or 671.98px, md minus 0.02, the sub-pixel-safe form. token-drift knows this convention and accepts all three forms, in px, rem or em (rem and em at 16px).
 prohibitions:
   - These cannot drive a media query. A custom property does not resolve in an @media condition; a rule written as `@media (max-width: var(--graphite-breakpoint-md))` silently never matches.
   - Do not add the Modal sizing variables from the same collection. They are modal geometry keyed by breakpoint, not breakpoints.
-  - Do not silence a media-query warning by moving the width to the nearest kit stop. If the number is set by content rather than by the scale, mark it `token-drift-allow: <reason>`; if it is not, fix the number.
+  - Do not silence a media-query failure by moving the width to the nearest kit stop. If the number is set by content rather than by the scale, mark it `token-drift-allow: <reason>`; if it is not, fix the number.
 ---
 
 ### Breakpoint
@@ -46,16 +46,19 @@ literally.
 
 `token-drift` closes that gap from two sides.
 
-It scans `@media` conditions and warns when one matches no kit breakpoint
-(accepting both a breakpoint and one-below-it, per the convention above).
+It scans every width condition in `@media` rules, in px, rem or em, and fails
+when one matches no kit breakpoint (accepting a breakpoint, one below it, or
+0.02px below it, per the convention above).
 
 **Not every media query is a breakpoint.** A rule can be keyed to the width at
 which its own content stops fitting — a content threshold — which by definition
-will not land on the kit's scale. The one such rule here is
-`max-width: 419px` on the canvas toolbar's button pair: below roughly that
-width two full-height buttons clip, so they go 50/50. Forcing it onto the scale
-would make it worse in both directions — `sm` (320px) leaves it broken on a
-375px phone, `md` (672px) splits the buttons on tablets where they fit.
+will not land on the kit's scale. There are three such rules here, each marked:
+the header's utility rail tightens its gaps below 400px and drops the GitHub
+link below 480px, where its controls stop fitting beside the brand
+(`site-header.module.scss`), and a Two doors card drops its decorative panel
+below 30rem, where the panel would land on the copy (`two-doors.module.scss`).
+Forcing any of them onto the scale would move the break to a width where the
+content does not need it.
 
 A rule like that opts out with `token-drift-allow: <reason>` in the comment
 immediately above it. The marker requires the reason, so the exemption is
