@@ -538,9 +538,16 @@
   }
 }
 
-// Search, Enter's twin, as the kit's footer action.
-.footerAction {
-  @include drop.action;
+// Search, Enter's twin, as the corner action: Button, rounded into the
+// panel's bottom-right corner. On a phone the panel runs edge to edge, so the
+// corner is square.
+.footerAction.footerAction {
+  @include drop.corner;
+  flex: none;
+  // The label holds the left, as the kit's has it, however wide the block.
+  justify-content: flex-start;
+  min-width: 10rem;
+  margin-left: auto;
 
   @media (max-width: 671.98px) {
     border-radius: 0;

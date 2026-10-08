@@ -56,10 +56,12 @@ export function ComponentWall({
             </span>
           </div>
           {meta ? (
-            <a className={styles.cta} href={`/docs/components/${meta.slug}`}>
-              {name}
-              <span aria-hidden="true">→</span>
-            </a>
+            <Button asChild variant="primary" size="lg" className={styles.cta}>
+              <a href={`/docs/components/${meta.slug}`}>
+                {name}
+                <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
+              </a>
+            </Button>
           ) : (
             <p className={styles.name}>{name}</p>
           )}

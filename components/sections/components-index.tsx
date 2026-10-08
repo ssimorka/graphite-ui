@@ -6,6 +6,7 @@ import type { ContractMeta } from '@/lib/contracts'
 import type { KitStats } from '@/lib/kit-stats'
 import type { IndexStats } from '@/lib/components-index'
 import { StatusBadge } from '@/components/doc-blocks'
+import { KitIcon } from '@/components/kit-icon'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
@@ -358,14 +359,16 @@ export function ComponentsIndex({
               )}
               <h2 className={styles.ctaHeading}>
                 {card.kind === 'governed' ? (
-                  <a className={styles.cta} href={`/docs/components/${card.meta.slug}`}>
-                    {card.name}
-                    <span aria-hidden="true">→</span>
-                  </a>
+                  <Button asChild variant="primary" size="lg" className={styles.cta}>
+                    <a href={`/docs/components/${card.meta.slug}`}>
+                      {card.name}
+                      <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
+                    </a>
+                  </Button>
                 ) : (
-                  <span className={`${styles.cta} ${styles.ctaDisabled}`}>
-                    {card.name}
-                  </span>
+                  <Button asChild variant="primary" size="lg" className={`${styles.cta} ${styles.ctaDisabled}`}>
+                    <span aria-disabled="true">{card.name}</span>
+                  </Button>
                 )}
               </h2>
             </div>
