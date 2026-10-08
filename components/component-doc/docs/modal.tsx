@@ -10,7 +10,7 @@ export function modalDoc(): ComponentDocConfig {
     lede: 'A dialog that stops the page until the reader answers it. Use it for a decision that has to be made before anything else can happen, not for news the reader could take in without stopping.',
     description:
       'A dialog that stops the page until the reader answers it. Anatomy, sizes, API, tokens and accessibility, generated from the contract.',
-    tocNote: 'The site’s mobile navigation and the Create page’s Get the code dialog are both this Modal.',
+    tocNote: 'The site’s mobile navigation is this Modal.',
     livePreview: <ModalPreview />,
     install: "import { Modal } from '@/components/ui/modal'",
     anatomyLede:
