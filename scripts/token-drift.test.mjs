@@ -213,11 +213,11 @@ if (baseline.code !== 0) {
   process.exit(1)
 }
 
-// The media query check warns rather than fails, and it reads the component
-// tree rather than the stylesheet argument. So these stage one SCSS file in a
-// temporary directory, point the scan at it through TOKEN_DRIFT_SCAN_DIRS, and
-// assert on the warning text. A sentinel at 123px rides along in every file, so
-// a case cannot pass just because its file was never scanned.
+// The media query check reads the component tree rather than the stylesheet
+// argument. So these stage one SCSS file in a temporary directory, point the
+// scan at it through TOKEN_DRIFT_SCAN_DIRS, and assert on the message, plus
+// the exit code where a query should fail. A case that should pass carries a
+// sentinel at 123px, so it cannot pass just because its file was never scanned.
 const SENTINEL = '@media (min-width: 123px) { .s { color: red; } }'
 const mediaCases = [
   {
@@ -277,12 +277,17 @@ for (const c of cases) {
 mediaCases.forEach((c, n) => {
   const dir = path.join(path.dirname(tmp), `media-${n}`)
   fs.mkdirSync(dir)
-  fs.writeFileSync(path.join(dir, 'case.scss'), `${c.query}\n${SENTINEL}\n`)
+  // A flagged query fails the run on its own, so only the cases that should
+  // pass carry the sentinel; for them it proves the file was read.
+  const body = c.flagged ? `${c.query}\n` : `${c.query}\n${SENTINEL}\n`
+  fs.writeFileSync(path.join(dir, 'case.scss'), body)
   const r = run(REAL, { TOKEN_DRIFT_SCAN_DIRS: dir })
-  if (!/@media min-width 123px matches no kit breakpoint/.test(r.out))
-    failures.push(`${c.name}: the staged file was not scanned`)
-  else if (c.flagged && !c.flagged.test(r.out))
+  if (c.flagged && !c.flagged.test(r.out))
     failures.push(`${c.name}: the query was not flagged`)
+  else if (c.flagged && r.code === 0)
+    failures.push(`${c.name}: the check PASSED when it should have failed`)
+  else if (c.clean && !/@media min-width 123px matches no kit breakpoint/.test(r.out))
+    failures.push(`${c.name}: the staged file was not scanned`)
   else if (c.clean && c.clean.test(r.out))
     failures.push(`${c.name}: the query was flagged when it sits on the scale`)
   else caught++

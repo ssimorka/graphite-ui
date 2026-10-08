@@ -357,6 +357,10 @@ function checkMediaQueries(kitBreakpoints) {
   // out with `token-drift-allow:` in the comment directly above it, which has
   // to carry the reason, so the exemption is argued in the source rather than
   // hidden in this script.
+  //
+  // Fatal since every query either sits on the scale or carries that marker.
+  // A warning let an off-scale width ship with CI green; now it has to be
+  // fixed or argued before it lands.
   const ALLOW = 'token-drift-allow:'
 
   for (const file of scanFiles()) {
@@ -388,7 +392,7 @@ function checkMediaQueries(kitBreakpoints) {
         const px = key(toPx(Number(m[2]), m[3]))
         if (known.has(px) || allowed(i)) continue
         const shown = m[3] === 'px' ? `${m[2]}px` : `${m[2]}${m[3]} (${px}px)`
-        warnings.push(
+        errors.push(
           `${rel}:${i + 1}: @media ${m[1]}-width ${shown} matches no kit breakpoint ` +
             `— align it to the scale, or mark it \`${ALLOW} <reason>\` if it is a content threshold`,
         )

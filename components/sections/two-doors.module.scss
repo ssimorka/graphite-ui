@@ -171,6 +171,9 @@
     border-color var(--graphite-motion-base) ease-out,
     transform var(--graphite-motion-base) ease-out;
 
+  // token-drift-allow: content threshold, not a system breakpoint. Below
+  // 30rem the door is too narrow for the panel to bleed past its edge without
+  // landing on the copy, so the panel, being decoration, is dropped (#158).
   @media (min-width: 30rem) {
     display: flex;
   }
