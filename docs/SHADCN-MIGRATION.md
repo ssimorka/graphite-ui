@@ -26,8 +26,8 @@ node `11678:251`).
 
 | Target | Reference | Route | Status |
 |---|---|---|---|
-| Home | `ui.shadcn.com` | `/` | Exists, Carbon-styled. Restyle. |
-| Docs | `/docs/installation` | `/docs/installation` | Done: the docs shell, Installation, Quick start, Theming, Accessibility, Governance, Glossary and the foundation pages. |
+| Home | `ui.shadcn.com` | `/` | Partial. All seven blocks are built to the kit's 01 to 07 frames: Hero, Component wall, Capabilities, Theme CTA, Two doors, FAQ and Footer. All seven still lay out on Carbon `Grid`/`Column`. |
+| Docs | `/docs/installation` | `/docs/installation` | Done: the docs shell, Quick start, Theming, Accessibility, Glossary, the foundation pages, and the Contribute pages (Run locally, Governance, Carbon, Drift, Status). Installation became Run locally; `/docs/installation` redirects to `/docs/contribute/run-locally`. |
 | Component pages | `/docs/components/base/accordion` | `/docs/components/[slug]` | Done: one page per governed component, 36 in all, plus the Overlay pattern. |
 | UI Generator | `/create` | `/create` | Done: the builder, with Get the code exporting the theme file, the Tailwind bridge and JSON. |
 
@@ -63,23 +63,28 @@ kit already ships them.
 
 ## Build order
 
-1. App shell, and de-Carbon the chrome it replaces.
-2. Docs shell, then `/docs/installation`.
+1. App shell, and de-Carbon the chrome it replaces. Partial: the header renders
+   the governed Navigation Menu and Tree view with no `@carbon/react`, but its
+   icons still come from `@carbon/icons-react`.
+2. Docs shell, then `/docs/installation`. Done; Installation is now
+   `/docs/contribute/run-locally`, and the old route redirects there.
 3. `/docs/components/[slug]`. The API reference section comes from
    `docs/contracts/*.md`, which are already versioned and governed — an
    advantage over shadcn, whose prop tables are hand-maintained. Note the
    contracts now follow the kit rather than lead it, so a page generated from
-   them describes the kit at one remove.
-4. Home restyle.
-5. `/create`.
+   them describes the kit at one remove. Done: 37 pages, one per contract.
+4. Home restyle. Partial: built to the kit, still on Carbon `Grid`/`Column`
+   (see the table above).
+5. `/create`. Done.
 
 ## Notes and open items
 
-- The existing `/docs` (color essay, pattern guide, glossary) becomes a docs
-  section rather than the whole route. It maps onto shadcn's Theming page.
-- `/gallery` is to be superseded by a `/docs/components` index. Not done:
-  `app/docs/components/` holds only the `[slug]` pages, and `/gallery` is
-  still the index.
+- The old `/docs` (color essay, pattern guide, glossary) is now split up:
+  `/docs` is the Introduction, the color essay is `/docs/theming`, the glossary
+  is `/docs/glossary`, and the pattern guide is `/create/generative-art`.
+- `/gallery` was to be superseded by a `/docs/components` index. That index
+  is not built: `app/docs/components/` holds only the `[slug]` pages, and
+  `/gallery` is still the index.
 - **New components cost more than they look.** Governance is contract ->
   implementation -> drift-check -> Figma wave, so each new component is three
   pieces of work, not one. When this was written, none of Accordion, Sidebar,
