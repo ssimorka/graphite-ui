@@ -1,4 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { KitIcon } from './kit-icon'
+import { Button } from './ui/button'
 import styles from './doc-blocks.module.scss'
 
 // Docs-site chrome, from the kit's "Site" pages (Graphite UI Site, node
@@ -141,9 +143,11 @@ export function NextCard({
         {title}
       </a>
       <p className={styles.nextBody}>{children}</p>
-      <span className={styles.nextCta} aria-hidden="true">
-        →
-      </span>
+      <Button asChild variant="primary" size="icon-lg" className={styles.nextCta}>
+        <span aria-hidden="true">
+          <KitIcon name="arrow-small-right" />
+        </span>
+      </Button>
     </li>
   )
 }

@@ -1,7 +1,9 @@
 'use client'
 
 import { Grid, Column } from '@carbon/react'
+import { KitIcon } from '@/components/kit-icon'
 import { Reveal } from '@/components/reveal'
+import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
 import styles from './two-doors.module.scss'
@@ -72,18 +74,19 @@ export function TwoDoors() {
                     live.
                   </p>
                 </div>
-                {/* The door's action, as the filled block the other cards end
+                {/* The door's action, the corner action the other cards end
                     in, here in the bottom-left corner. Its overlay makes the
-                    whole door the link. ↗ because it leaves the site. */}
-                <a
-                  className={styles.cta}
-                  href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open the Figma Kit
-                  <span aria-hidden="true">↗</span>
-                </a>
+                    whole door the link. */}
+                <Button asChild variant="primary" size="lg" className={styles.cta}>
+                  <a
+                    href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open the Figma Kit
+                    <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
+                  </a>
+                </Button>
                 {/* Decorative: the door's motif is a slice of the artefact
                     behind it, bleeding off the card's clipped edge. */}
                 <div className={styles.artefact} aria-hidden="true">
@@ -110,10 +113,12 @@ export function TwoDoors() {
                     Shown: the Accordion, installed, styled and used.
                   </p>
                 </div>
-                <a className={styles.cta} href="/gallery">
-                  Browse the components
-                  <span aria-hidden="true">→</span>
-                </a>
+                <Button asChild variant="primary" size="lg" className={styles.cta}>
+                  <a href="/gallery">
+                    Browse the components
+                    <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
+                  </a>
+                </Button>
                 <div className={styles.artefact} aria-hidden="true">
                   {CODE_BLOCKS.map((block, i) => (
                     <pre key={i} className={styles.code}>

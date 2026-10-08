@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
+import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import type { IconSet } from '@/lib/kit-icons'
 import { CODE_FONTS, TEXT_FONTS, useBuilder } from './builder'
@@ -132,8 +133,9 @@ function OptionSheet({
             {/* Picking a source is the sheet's one real choice, so it closes
                 the list as the filled action. The stops above only copy. */}
             {copies ? (
-              <button
-                type="button"
+              <Button
+                variant="primary"
+                size="lg"
                 className={styles.customHex}
                 onClick={() => {
                   onClose()
@@ -143,8 +145,8 @@ function OptionSheet({
                 <span className={styles.optionSwatch} style={{ background: control.value }} aria-hidden="true" />
                 <span className={styles.optionLabel}>Pick color</span>
                 <span className={styles.customHexValue}>{control.value.toUpperCase()}</span>
-                <span aria-hidden="true">→</span>
-              </button>
+                <KitIcon name="arrow-small-right" />
+              </Button>
             ) : null}
             <Toast message={toast} />
           </>
@@ -212,20 +214,21 @@ export function ControlsBar() {
           {b.view === 'art' ? <KitIcon name="refresh" size={16} aria-hidden="true" /> : <KitIcon name="dice" size={16} aria-hidden="true" />}
         </button>
         {b.view === 'art' ? (
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="lg"
             className={styles.barCode}
             onClick={() => b.artHandle?.exportPng()}
             disabled={!b.artHandle}
           >
             Export PNG
-            <KitIcon name="download" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-down" />
+          </Button>
         ) : (
-          <button type="button" className={styles.barCode} onClick={() => setCodeOpen(true)}>
+          <Button variant="primary" size="lg" className={styles.barCode} onClick={() => setCodeOpen(true)}>
             Get the code
-            <KitIcon name="download" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-right" />
+          </Button>
         )}
       </div>
       {active ? <OptionSheet control={active} onClose={() => setSheet(null)} /> : null}

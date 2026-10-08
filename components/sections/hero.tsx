@@ -144,10 +144,12 @@ export function Hero({ governed }: { governed: number }) {
                 success and info. Select a swatch to copy its hex. The outlined
                 stop is your source color.
               </p>
-              <a className="hero__strip-cta" href="/create">
-                Create a theme
-                <KitIcon name="arrow-right" size={16} aria-hidden="true" />
-              </a>
+              <Button asChild variant="primary" size="lg" className="hero__strip-cta">
+                <a href="/create">
+                  Create a theme
+                  <KitIcon name="arrow-small-right" />
+                </a>
+              </Button>
             </div>
           </div>
         </Column>

@@ -179,7 +179,6 @@
   // 18 around it. .condensed below swaps both down.
   --foot: 3rem;
   --pad: 1.125rem;
-  --cta-glyph: 1.125rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -256,18 +255,15 @@
 // home strip. Pinned to the corner rather than in the flow, so the 4px hover
 // drop moves the text and leaves the action where it is. Decorative: the
 // title's overlay is the link, so hover is read off the card.
-.nextCta {
-  @include drop.action;
+// It is Button's icon-only square, sized to the --foot strip: Large's 48 here,
+// the kit's Small 32 on a condensed card.
+.nextCta.nextCta {
+  @include drop.corner;
   position: absolute;
   right: 0;
   bottom: 0;
-  // An icon-only square: the title already names the destination.
-  justify-content: center;
   width: var(--foot);
   min-height: var(--foot);
-  min-width: 0;
-  padding: 0;
-  font-size: var(--cta-glyph);
   pointer-events: none;
 
   .nextCard:hover & {
@@ -281,7 +277,6 @@
 .condensed .nextCard {
   --foot: 2rem;
   --pad: var(--graphite-space-04);
-  --cta-glyph: 1rem;
 }
 
 .nextBody {

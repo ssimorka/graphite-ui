@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
 import { KitIcon } from '@/components/kit-icon'
+import { Button } from '@/components/ui/button'
 import { Dropdown } from '@/components/ui/dropdown'
 import styles from './color-picker.module.scss'
 
@@ -322,8 +323,9 @@ export function ColorPickerPopover({
               Reset
               <KitIcon name="redo-alt" size={16} aria-hidden="true" />
             </button>
-            <button
-              type="button"
+            <Button
+              variant="primary"
+              size="lg"
               className={styles.footerAction}
               onClick={() => {
                 const hex = nextSurpriseHex()
@@ -332,8 +334,8 @@ export function ColorPickerPopover({
               }}
             >
               Surprise me
-              <KitIcon name="dice" size={16} aria-hidden="true" />
-            </button>
+              <KitIcon name="arrow-small-right" />
+            </Button>
           </div>
         </div>
       )}

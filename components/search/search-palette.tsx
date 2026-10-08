@@ -582,14 +582,15 @@ export function SearchPalette({
           </p>
           {/* The kit's footer action. It does what Enter does: opens the
               highlighted result, or runs the highlighted suggestion. */}
-          <button
-            type="button"
+          <Button
+            variant="primary"
+            size="lg"
             className={styles.footerAction}
             onClick={() => (items[active] ? choose(items[active]) : input.current?.focus())}
           >
             Search
-            <KitIcon name="search" size={16} aria-hidden="true" />
-          </button>
+            <KitIcon name="arrow-small-right" />
+          </Button>
         </div>
       </div>
     </>
