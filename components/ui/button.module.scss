@@ -55,9 +55,11 @@
 .secondary:not(.square) > svg,
 .danger:not(.square) > svg {
   position: absolute;
-  top: 50%;
+  // Centred by offset rather than a transform (every Button icon is 1rem, see
+  // above), so an icon that animates its own transform, such as RollingDice,
+  // stays put while it does.
+  top: calc(50% - 0.5rem);
   right: var(--graphite-space-05);
-  transform: translateY(-50%);
 }
 
 .button:disabled {
@@ -207,7 +209,6 @@
 .secondary.xxl > svg,
 .danger.xxl > svg {
   top: var(--graphite-space-05);
-  transform: none;
 }
 
 // Expressive: Large's 50px with the kit's larger label, Button/1 16/24.

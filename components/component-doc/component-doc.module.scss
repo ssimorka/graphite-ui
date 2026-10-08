@@ -45,21 +45,6 @@
   padding-top: var(--graphite-space-02);
 }
 
-.figmaLink {
-  font-size: var(--graphite-text-body-2-size);
-  line-height: var(--graphite-text-body-2-line-height);
-  color: var(--graphite-primary);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--graphite-focus);
-    outline-offset: 2px;
-  }
-}
 
 // ------------------------------------------------------------------ preview
 .live {

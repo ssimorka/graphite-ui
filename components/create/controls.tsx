@@ -6,6 +6,8 @@ import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import type { SelectOption } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 import { normalizeHex } from '@/lib/color.js'
 import { useBuilder } from './builder'
@@ -168,9 +170,9 @@ function HexField({ value, onChange }: { value: string; onChange: (hex: string) 
           }
         }}
       />
-      <button type="button" className={styles.pick} onClick={() => onChange(nextSurpriseHex())}>
+      <Button variant="ghost" size="sm" className={styles.pick} onClick={() => onChange(nextSurpriseHex())}>
         Pick
-      </button>
+      </Button>
     </div>
   )
 }
@@ -292,23 +294,17 @@ export function ControlsPanel() {
       <Section label="Typeface" open={!!open.typeface} onToggle={() => flip('typeface')}>
         <p className={styles.caption}>{CAPTIONS.typeface}</p>
         {faces.map(({ c, name, role }) => (
-          <label key={c.id} className={styles.face}>
-            <span className={styles.faceLabel}>
-              {name} <span className={styles.faceRole}>{role}</span>
-            </span>
-            <select
-              className={styles.select}
+          // The kit's Select, Style=Inline: label left, value right.
+          <div key={c.id} className={styles.face}>
+            <Select
+              layout="inline"
+              size="sm"
+              label={`${name} (${role})`}
               value={c.selected}
-              onChange={(e) => c.select(e.target.value)}
-              aria-label={`${name} typeface`}
-            >
-              {c.options.map((o) => (
-                <option key={o.key} value={o.key}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </label>
+              onChange={(v) => c.select(v)}
+              options={c.options.map((o) => ({ value: o.key, label: o.label })) as [SelectOption, SelectOption, ...SelectOption[]]}
+            />
+          </div>
         ))}
       </Section>
 

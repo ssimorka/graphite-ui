@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
 import { KitIcon } from '@/components/kit-icon'
+import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { Button } from '@/components/ui/button'
 import { Dropdown } from '@/components/ui/dropdown'
 import styles from './color-picker.module.scss'
@@ -170,6 +171,7 @@ export function ColorPickerPopover({
   const [open, setOpen] = useState(false)
   // Was Avatar's internal state before Avatar was removed.
   const [input, setInput] = useState(value || '#0f62fe')
+  const [roll, rollDice] = useDiceRoll()
   const { level, setLevel, lightBundle, darkBundle } = useTheme()
   const popoverRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -331,10 +333,11 @@ export function ColorPickerPopover({
                 const hex = nextSurpriseHex()
                 setInput(hex)
                 onChange(hex)
+                rollDice()
               }}
             >
               Surprise me
-              <KitIcon name="arrow-small-right" />
+              <RollingDice roll={roll} />
             </Button>
           </div>
         </div>

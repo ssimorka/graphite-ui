@@ -385,8 +385,11 @@
   font-weight: 500;
 }
 
+// The kit's angle-small-right between page and section. The glyph carries
+// its own side bearing, so the margin is narrower than the old text glyph's.
 .sep {
-  margin: 0 var(--graphite-space-03);
+  margin: 0 var(--graphite-space-02);
+  vertical-align: -0.1875rem;
   color: var(--graphite-on-surface-variant);
 }
 

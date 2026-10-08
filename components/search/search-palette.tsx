@@ -549,9 +549,7 @@ export function SearchPalette({
                         {entry.page}
                         {entry.section ? (
                           <>
-                            <span className={styles.sep} aria-hidden="true">
-                              ›
-                            </span>
+                            <KitIcon name="angle-small-right" className={styles.sep} />
                             {entry.section}
                           </>
                         ) : null}
