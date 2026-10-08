@@ -1,6 +1,8 @@
 'use client'
 
-import { createContext, useContext, useMemo, useState } from 'react'
+import { createContext, useContext, useId, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Close, Download } from '@carbon/icons-react'
 import { buildJson } from '@/lib/color.js'
 import type { ExportBundle } from '@/lib/color.js'
 import { useTheme } from '@/components/theme-provider'
@@ -8,8 +10,7 @@ import { buildThemeFile } from '@/lib/theme-file'
 import { buildTailwindBridge } from '@/lib/tailwind-bridge'
 import { REGISTRY_URL, shadcnAdd } from '@/lib/registry-url'
 import type { ThemeFileFoundations } from '@/lib/theme-file'
-import { Modal } from '@/components/ui/modal'
-import { Button } from '@/components/ui/button'
+import { useOverlay } from '@/components/ui/overlay'
 import { DocSnippet } from '@/components/doc-snippet'
 import {
   CODE_FONTS,
@@ -36,6 +37,12 @@ export const FoundationsContext = createContext<ThemeFileFoundations | null>(nul
  * adopter keeps it as their theme. Tailwind is the bridge (lib/tailwind-bridge.ts)
  * that names those variables as Tailwind tokens, alongside the CSS. The JSON
  * is the engine's audit format.
+ *
+ * Dressed as the header's drop panels (../_drop-panel.scss) rather than as the
+ * kit's Modal: the AI layer's tinted surface and edge, the glow rising from
+ * the foot, sections cascading in, and the footer's filled action. It opens
+ * from the bottom of the controls, so there is no trigger above it to hang a
+ * caret from; it centres under the header, as search does without an anchor.
  */
 
 // What each tab downloads as.
@@ -99,16 +106,36 @@ export function GetCodeDialog({
     URL.revokeObjectURL(url)
   }
 
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title="Get the code"
-      size="lg"
-      body={
-        out ? (
+  const id = useId()
+  // Escape, the scrim and the close dismiss it; focus is trapped inside and
+  // returned to the trigger on close, as the Modal did.
+  const ref = useOverlay<HTMLDivElement>({ open, onDismiss: onClose, trapFocus: true })
+
+  if (!open || typeof document === 'undefined') return null
+
+  // Portalled, so the Create panel's sticky aside cannot scope its z-index.
+  return createPortal(
+    <>
+      <div className={styles.scrim} aria-hidden="true" />
+      <div
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={`${id}-title`}
+        tabIndex={-1}
+        className={styles.panel}
+      >
+        <div className={`${styles.header} ${styles.section}`}>
+          <h2 id={`${id}-title`} className={styles.title}>
+            Get the code
+          </h2>
+          <button type="button" className={styles.close} aria-label="Close" onClick={onClose}>
+            <Close size={20} aria-hidden="true" />
+          </button>
+        </div>
+        {out ? (
           <div className={styles.body}>
-            <p className={styles.lede}>
+            <p className={`${styles.lede} ${styles.section}`}>
               The theme as the preview shows it, for {sourceHex.toUpperCase()}.
               The CSS is one file to keep in your project: foundations and both
               themes, with no Graphite runtime needed. Tailwind is a second
@@ -116,48 +143,53 @@ export function GetCodeDialog({
               beside the CSS. The JSON has the colors with where each one came
               from.
             </p>
-            <p className={styles.lede}>
-              Or install the theme and the Tailwind file with the shadcn CLI.
-              The CLI version takes your color and contrast target; radius,
-              density and type chosen here are in the download only.
-            </p>
-            <DocSnippet
-              code={
-                level === 'AAA'
-                  ? // Quoted: some shells read a bare ? as a glob.
-                    `${shadcnAdd('init')} "${REGISTRY_URL}/theme/${sourceHex.slice(1)}.json?level=AAA" ${REGISTRY_URL}/tailwind.json`
-                  : shadcnAdd('init', `theme/${sourceHex.slice(1)}`, 'tailwind')
-              }
-            />
-            <div className={styles.formats} role="group" aria-label="Format">
-              {(Object.keys(FORMATS) as Format[]).map((f) => (
-                <button
-                  key={f}
-                  type="button"
-                  className={styles.chip}
-                  aria-pressed={tab === f}
-                  onClick={() => setTab(f)}
-                >
-                  {FORMATS[f].label}
-                </button>
-              ))}
+            <div className={styles.section}>
+              <p className={styles.lede}>
+                Or install the theme and the Tailwind file with the shadcn CLI.
+                The CLI version takes your color and contrast target; radius,
+                density and type chosen here are in the download only.
+              </p>
+              <DocSnippet
+                code={
+                  level === 'AAA'
+                    ? // Quoted: some shells read a bare ? as a glob.
+                      `${shadcnAdd('init')} "${REGISTRY_URL}/theme/${sourceHex.slice(1)}.json?level=AAA" ${REGISTRY_URL}/tailwind.json`
+                    : shadcnAdd('init', `theme/${sourceHex.slice(1)}`, 'tailwind')
+                }
+              />
             </div>
-            <div className={styles.snippet}>
-              <DocSnippet key={tab} code={out[tab]} />
+            <div className={styles.section}>
+              <div className={styles.formats} role="group" aria-label="Format">
+                {(Object.keys(FORMATS) as Format[]).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    className={styles.chip}
+                    aria-pressed={tab === f}
+                    onClick={() => setTab(f)}
+                  >
+                    {FORMATS[f].label}
+                  </button>
+                ))}
+              </div>
+              <div className={styles.snippet}>
+                <DocSnippet key={tab} code={out[tab]} />
+              </div>
             </div>
           </div>
         ) : (
-          <p className={styles.lede}>The theme is still resolving.</p>
-        )
-      }
-      footer={
-        <>
-          <Button onClick={onClose}>Close</Button>
-          <Button variant="primary" onClick={download} disabled={!out}>
-            Download
-          </Button>
-        </>
-      }
-    />
+          <div className={styles.body}>
+            <p className={styles.lede}>The theme is still resolving.</p>
+          </div>
+        )}
+        <div className={styles.footer}>
+          <button type="button" className={styles.footerAction} onClick={download} disabled={!out}>
+            Download {FORMATS[tab].label}
+            <Download size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    </>,
+    document.body,
   )
 }

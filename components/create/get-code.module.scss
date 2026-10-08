@@ -1,8 +1,153 @@
+@use '../drop-panel' as drop;
+
+// Get the code, in the header's drop-panel dress: the AI layer's surface and
+// edge, the glow rising from its foot, sections cascading in, and a footer
+// bar ending in the filled action. The shared shape and motion are in
+// ../_drop-panel.scss. Centred under the header like search without an anchor.
+
+@include drop.defs;
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  // Above the site header (8000), below search (9000) and the copy toast
+  // (9500), so a copy from inside the panel still shows its confirmation.
+  z-index: 8500;
+  background: var(--graphite-scrim);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fade var(--graphite-motion-base) var(--graphite-motion-ease) both;
+  }
+}
+
+.panel {
+  @include drop.surface;
+  position: fixed;
+  z-index: 8501;
+  top: 4.5rem;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(42rem, calc(100vw - 2 * var(--graphite-space-05)));
+  max-height: calc(100dvh - 6rem);
+  transform: translateX(-50%);
+
+  &:focus {
+    outline: none;
+  }
+
+  // The glow rises once it has faded in. No drop: there is no trigger above
+  // it to drop from, and the centring lives in transform.
+  @media (prefers-reduced-motion: no-preference) {
+    animation:
+      fade var(--graphite-motion-fast) var(--graphite-motion-ease),
+      glow 900ms var(--graphite-motion-ease) 220ms both;
+  }
+
+  // Below md it takes the whole screen, as search does.
+  @media (max-width: 671.98px) {
+    inset: 0;
+    width: auto;
+    max-height: none;
+    transform: none;
+    border: 0;
+    border-radius: 0;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+// Header, ledes, install and formats each rise in behind the panel.
+.section {
+  @include drop.cascade($count: 4);
+}
+
+.header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-03) var(--graphite-space-03) var(--graphite-space-03)
+    var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-surface-variant);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+  font-weight: var(--graphite-text-weight-regular);
+}
+
+.close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--graphite-radius-4);
+  color: var(--graphite-on-surface-variant);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-on-surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--graphite-focus);
+    outline-offset: -2px;
+  }
+}
+
 .body {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: var(--graphite-space-05);
   min-width: 0;
+  min-height: 0;
+  padding: var(--graphite-space-05);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--graphite-space-04);
+  }
+}
+
+// The footer bar, with the filled action in the corner. The header's close
+// is the one way out, so the bar carries no Close of its own.
+.footer {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  min-height: 3rem;
+  border-top: 1px solid var(--graphite-surface-variant);
+}
+
+.footerAction {
+  @include drop.action;
+
+  &:disabled {
+    background: var(--graphite-primary-disabled);
+    color: var(--graphite-primary-disabled-content);
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 671.98px) {
+    border-radius: 0;
+  }
 }
 
 .lede {
@@ -19,6 +164,12 @@
   pre {
     max-height: 22rem;
     overflow: auto;
+  }
+
+  // The pre scrolls itself here, so its vertical scrollbar runs down the
+  // right edge under the copy button. Clear it by a scrollbar's width.
+  button {
+    right: calc(var(--graphite-space-03) + 1rem);
   }
 }
 
