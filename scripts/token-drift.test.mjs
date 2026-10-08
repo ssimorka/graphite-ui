@@ -213,6 +213,35 @@ if (baseline.code !== 0) {
   process.exit(1)
 }
 
+// The media query check warns rather than fails, and it reads the component
+// tree rather than the stylesheet argument. So these stage one SCSS file in a
+// temporary directory, point the scan at it through TOKEN_DRIFT_SCAN_DIRS, and
+// assert on the warning text. A sentinel at 123px rides along in every file, so
+// a case cannot pass just because its file was never scanned.
+const SENTINEL = '@media (min-width: 123px) { .s { color: red; } }'
+const mediaCases = [
+  {
+    name: 'an off-breakpoint decimal px is flagged',
+    query: '@media (max-width: 599.98px) { .a { color: red; } }',
+    flagged: /@media max-width 599\.98px matches no kit breakpoint/,
+  },
+  {
+    name: 'an off-breakpoint rem is flagged',
+    query: '@media (min-width: 30rem) { .a { color: red; } }',
+    flagged: /@media min-width 30rem \(480px\) matches no kit breakpoint/,
+  },
+  {
+    name: '671.98px, 0.02px below md, passes',
+    query: '@media (max-width: 671.98px) { .a { color: red; } }',
+    clean: /671\.98px matches no kit breakpoint/,
+  },
+  {
+    name: '66rem, the kit lg at 1056px, passes',
+    query: '@media (min-width: 66rem) { .a { color: red; } }',
+    clean: /66rem \(1056px\) matches no kit breakpoint/,
+  },
+]
+
 let caught = 0
 const failures = []
 
@@ -245,11 +274,24 @@ for (const c of cases) {
   } else caught++
 }
 
+mediaCases.forEach((c, n) => {
+  const dir = path.join(path.dirname(tmp), `media-${n}`)
+  fs.mkdirSync(dir)
+  fs.writeFileSync(path.join(dir, 'case.scss'), `${c.query}\n${SENTINEL}\n`)
+  const r = run(REAL, { TOKEN_DRIFT_SCAN_DIRS: dir })
+  if (!/@media min-width 123px matches no kit breakpoint/.test(r.out))
+    failures.push(`${c.name}: the staged file was not scanned`)
+  else if (c.flagged && !c.flagged.test(r.out))
+    failures.push(`${c.name}: the query was not flagged`)
+  else if (c.clean && c.clean.test(r.out))
+    failures.push(`${c.name}: the query was flagged when it sits on the scale`)
+  else caught++
+})
+
 fs.rmSync(path.dirname(tmp), { recursive: true, force: true })
 
-console.log(
-  `token-drift.test: ${caught}/${cases.length} drift classes detected`,
-)
+const total = cases.length + mediaCases.length
+console.log(`token-drift.test: ${caught}/${total} drift classes detected`)
 if (failures.length) {
   console.log('\nnot caught:')
   for (const f of failures) console.log(`  x ${f}`)
