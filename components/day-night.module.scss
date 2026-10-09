@@ -1,0 +1,59 @@
+// The sky is the glyph's 16px box. The wheel's pivot sits $reach below its
+// centre, and each body hangs $reach from the pivot: the sun above it, the
+// moon below and upside down, so the moon is upright once the wheel has
+// turned half way. The button's overflow hides whichever body is down.
+$reach: 1.375rem;
+
+.sky {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.wheel {
+  position: absolute;
+  top: calc(50% + #{$reach});
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: rotate(var(--to));
+}
+
+.moving {
+  @media (prefers-reduced-motion: no-preference) {
+    // A slow start and a soft landing, as a body clears the horizon and
+    // settles at its height.
+    animation: turn 720ms cubic-bezier(0.65, 0, 0.35, 1);
+  }
+}
+
+@keyframes turn {
+  from {
+    transform: rotate(var(--from));
+  }
+  to {
+    transform: rotate(var(--to));
+  }
+}
+
+.body {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  display: block;
+  width: 16px;
+  height: 16px;
+
+  > svg {
+    display: block;
+  }
+}
+
+.sun {
+  transform: translateY(-$reach);
+}
+
+.moon {
+  transform: translateY($reach) rotate(180deg);
+}

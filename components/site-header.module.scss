@@ -258,6 +258,9 @@
   border: 1px solid var(--graphite-primary);
   cursor: pointer;
   transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+  // The button is the horizon: DayNight's wheel turns below it, and only the
+  // body that has risen shows.
+  overflow: hidden;
 }
 
 // Hover is a tone step on the resting fill's own ramp, never a new colour:
