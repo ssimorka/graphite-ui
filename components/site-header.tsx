@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
+import { DayNight } from '@/components/day-night'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { TreeView } from '@/components/ui/tree-view'
 import { useOverlay } from '@/components/ui/overlay'
@@ -263,8 +264,9 @@ export function SiteHeader() {
               onClick={toggleTheme}
             >
               {/* The glyph is the current theme, as the kit's header draws
-                  it (fi-rs-moon on dark); the label says what a press does. */}
-              {isDark ? <KitIcon name="moon" size={16} /> : <KitIcon name="sun" size={16} />}
+                  it (fi-rs-moon on dark); the label says what a press does.
+                  A change sets one body and raises the other. */}
+              <DayNight dark={isDark} />
             </button>
             <ColorPickerPopover
               value={sourceHex || COVER_SOURCE_HEX}
