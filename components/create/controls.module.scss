@@ -448,9 +448,10 @@
   border-top: 1px solid var(--graphite-surface-variant);
 }
 
-// Reset and Shuffle are the footer's quiet actions, Get the code its filled
-// corner block, as in the search panel's footer. Reset holds the left end;
-// Shuffle sits at the right, beside Get the code. Below md both are icons.
+// The footer's quiet actions beside its filled corner block, as in the search
+// panel's footer: Get the code and Reset, then Surprise me; on the art tab
+// Export PNG and Reset, then Regenerate. The first holds the left end and
+// Reset is pushed right, against the corner. Below md the quiet ones are icons.
 .barQuiet {
   display: flex;
   align-items: center;
@@ -472,14 +473,24 @@
     outline: 2px solid var(--graphite-focus);
     outline-offset: -4px;
   }
+
+  &:disabled {
+    color: var(--graphite-primary-disabled-content);
+    text-decoration: none;
+    cursor: not-allowed;
+  }
 }
 
 .barReset {
+  margin-left: auto;
+}
+
+.barFirst {
   border-bottom-left-radius: calc(var(--graphite-radius-8) - 1px);
 }
 
-// Below md, Reset and Shuffle drop to icons so all three actions fit in one
-// row at phone width, and split the room left of Get the code between them,
+// Below md, the two quiet actions drop to icons so all three actions fit in one
+// row at phone width, and split the room left of the corner block between them,
 // so the whole footer is target. Their labels become visually hidden text.
 @media (max-width: 671.98px) {
   .barQuiet {
@@ -495,10 +506,6 @@
     }
   }
 
-  .barShuffle {
-    margin-left: 0;
-  }
-
   .barLabel {
     position: absolute;
     width: 1px;
@@ -509,12 +516,8 @@
   }
 }
 
-.barShuffle {
-  margin-left: auto;
-}
-
 // The corner action: Button, rounded into the bar's bottom-right corner.
-.barCode.barCode {
+.barCorner.barCorner {
   @include drop.corner;
   flex: none;
   // The label holds the left, as the kit's has it, however wide the block.

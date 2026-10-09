@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { KitIcon } from '@/components/kit-icon'
 import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
+import { SparklingConfetti } from '@/components/sparkling-confetti'
 import { nextSurpriseHex } from '@/components/color-picker'
 import { Toast, useCopy } from '@/components/token-panels'
 import { Button } from '@/components/ui/button'
@@ -183,6 +184,7 @@ export function ControlsPanel() {
   const [open, setOpen] = useState<Record<string, boolean>>({ source: true })
   const [codeOpen, setCodeOpen] = useState(false)
   const [roll, rollDice] = useDiceRoll()
+  const [sparkles, sparkle] = useDiceRoll()
   const { toast, copy } = useCopy()
 
   const by = (id: Control['id']) => controls.find((c) => c.id === id)!
@@ -330,18 +332,26 @@ export function ControlsPanel() {
       )}
 
       <div className={styles.actions}>
+        {/* Dealing is the filled action on both tabs: Surprise me, or
+            Regenerate on the art tab. Taking the result (Get the code, Export
+            PNG) joins Reset in the row. */}
         <div className={styles.actionRow}>
-          <Button
-            variant="ghost"
-            className={styles.outlined}
-            onClick={() => {
-              if (!art) rollDice()
-              b.shuffle()
-            }}
-          >
-            {art ? 'Regenerate' : 'Surprise me'}
-            {art ? <KitIcon name="refresh" /> : <RollingDice roll={roll} />}
-          </Button>
+          {art ? (
+            <Button
+              variant="ghost"
+              className={styles.outlined}
+              onClick={() => b.artHandle?.exportPng()}
+              disabled={!b.artHandle}
+            >
+              Export PNG
+              <KitIcon name="download" />
+            </Button>
+          ) : (
+            <Button variant="ghost" className={styles.outlined} onClick={() => setCodeOpen(true)}>
+              Get the code
+              <KitIcon name="download" />
+            </Button>
+          )}
           <Button variant="ghost" className={styles.outlined} onClick={b.reset}>
             Reset
             <KitIcon name="redo-alt" />
@@ -350,25 +360,37 @@ export function ControlsPanel() {
         <ul className={styles.hints}>
           {art ? (
             <>
-              <li>Regenerate deals a new composition.</li>
               <li>Reset puts the color and every setting back.</li>
+              <li>Regenerate deals a new composition.</li>
             </>
           ) : (
             <>
-              <li>Surprise me picks a new color, theme, contrast target, radius, density, icons and typefaces.</li>
               <li>Reset puts the color and every setting back.</li>
+              <li>Surprise me picks a new color, theme, contrast target, radius, density, icons and typefaces.</li>
             </>
           )}
         </ul>
         {art ? (
-          <Button variant="primary" onClick={() => b.artHandle?.exportPng()} disabled={!b.artHandle}>
-            Export PNG
-            <KitIcon name="download" />
+          <Button
+            variant="primary"
+            onClick={() => {
+              sparkle()
+              b.shuffle()
+            }}
+          >
+            Regenerate
+            <SparklingConfetti play={sparkles} />
           </Button>
         ) : (
-          <Button variant="primary" onClick={() => setCodeOpen(true)}>
-            Get the code
-            <KitIcon name="download" />
+          <Button
+            variant="primary"
+            onClick={() => {
+              rollDice()
+              b.shuffle()
+            }}
+          >
+            Surprise me
+            <RollingDice roll={roll} />
           </Button>
         )}
       </div>

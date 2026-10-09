@@ -729,8 +729,35 @@ export function GenerativeArt({
     return () => { cancelled = true }
   }, [])
 
+  // The transition for every change the visitor makes. What was on the canvas
+  // is snapshotted here and turned over to the new composition by draw, tile
+  // by tile; see startMorph below. `morphOnly` narrows it to one tile, for a
+  // click on a panel.
+  const morphFrom = useRef<HTMLCanvasElement | null>(null)
+  const morphOnly = useRef<Cell | null>(null)
+  const morph = useRef<{ raf: number; w: number; h: number } | null>(null)
+  const snapshot = useCallback((only: Cell | null = null) => {
+    const canvas = canvasRef.current
+    if (!canvas || canvas.width === 0 || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const snap = document.createElement('canvas')
+    snap.width = canvas.width
+    snap.height = canvas.height
+    snap.getContext('2d')?.drawImage(canvas, 0, 0)
+    morphFrom.current = snap
+    morphOnly.current = only
+  }, [])
+  // The changes that turn the tiles: the color, Grid and Regenerate.
+  // Intensity and Mix only recolor, continuously as a slider moves, so they
+  // repaint in place. Columns and rows also change when the canvas is
+  // resized, and the images arriving rebuild too; neither is the visitor's
+  // doing, so neither animates.
+  const lastInputs = useRef<string | null>(null)
+
   // Rebuild the layout whenever the palette or nonce changes.
   useEffect(() => {
+    const inputs = [activeHex, grid, nonce].join()
+    if (lastInputs.current !== null && inputs !== lastInputs.current) snapshot()
+    lastInputs.current = inputs
     const prevRand = rand
     rand = mulberry32(nonce === 0 ? hexSeed(activeHex) : dealSeed.current)
     try {
@@ -741,7 +768,7 @@ export function GenerativeArt({
     } finally {
       rand = prevRand
     }
-  }, [activeHex, palette, assetsReady, nonce, cols, rows])
+  }, [activeHex, palette, assetsReady, nonce, cols, rows, grid, snapshot])
 
   // Paint `layout` into any 2D context at the given size.
   const paint = useCallback((ctx: CanvasRenderingContext2D, W: number, H: number) => {
@@ -791,6 +818,15 @@ export function GenerativeArt({
     const W = canvas.offsetWidth, H = canvas.offsetHeight
     if (W === 0 || H === 0) return
 
+    // Mid-turn, the turn owns the canvas and repaints when it ends. A new
+    // change takes over from the frame it was snapshotted at, and a resize,
+    // which the snapshot no longer fits, cuts it short.
+    if (morph.current) {
+      if (!morphFrom.current && morph.current.w === W && morph.current.h === H) return
+      cancelAnimationFrame(morph.current.raf)
+      morph.current = null
+    }
+
     const dpr = window.devicePixelRatio || 1
     canvas.width = W * dpr
     canvas.height = H * dpr
@@ -803,7 +839,109 @@ export function GenerativeArt({
     } finally {
       rand = prevRand
     }
+
+    const from = morphFrom.current
+    const only = morphOnly.current
+    morphFrom.current = null
+    morphOnly.current = null
+    if (from && from.width === canvas.width && from.height === canvas.height) {
+      startMorph(canvas, ctx, from, W, H, dpr, only)
+    }
   }, [paint, activeHex])
+
+  // The turn: every tile of the new deal (or just `only`) turns over in place, showing what
+  // the old deal had under it on its face, the companion color on its back
+  // mid-turn, and itself once it lands. A wide tile tips about its long
+  // horizontal axis and a tall one about its vertical, so neighbouring blocks
+  // move differently. A wave from a random point sets when each one goes,
+  // roughened per tile so the front reads organic rather than ruled. It ends
+  // by repainting, so a control moved mid-turn is honoured.
+  function startMorph(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    from: HTMLCanvasElement,
+    W: number,
+    H: number,
+    dpr: number,
+    only: Cell | null,
+  ) {
+    const layout = layoutRef.current
+    if (!layout) return
+    const to = document.createElement('canvas')
+    to.width = canvas.width
+    to.height = canvas.height
+    to.getContext('2d')?.drawImage(canvas, 0, 0)
+
+    const FLIP = 560, SPREAD = 760, JITTER = 140
+    const { cols, rows } = gridRef.current
+    const uW = W / cols, uH = H / rows
+    // A clicked panel turns from its own centre; anything else from anywhere.
+    const ox = only ? (only.col + only.colSpan / 2) * uW : Math.random() * W
+    const oy = only ? (only.row + only.rowSpan / 2) * uH : Math.random() * H
+    const reach = Math.max(
+      Math.hypot(ox, oy), Math.hypot(W - ox, oy), Math.hypot(ox, H - oy), Math.hypot(W - ox, H - oy),
+    )
+    const tiles = (only ? [only] : layout).map(({ col, row, colSpan, rowSpan }) => {
+      const x = col * uW, y = row * uH, w = colSpan * uW, h = rowSpan * uH
+      const d = Math.hypot(x + w / 2 - ox, y + h / 2 - oy) / reach
+      const delay = only ? 0 : d * SPREAD + Math.random() * JITTER
+      return { x, y, w, h, wide: w >= h, delay }
+    })
+    const back = palette.pop
+    const end = Math.max(...tiles.map((tile) => tile.delay)) + FLIP
+    const start = performance.now()
+
+    const frame = (now: number) => {
+      const t = now - start
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      ctx.fillStyle = seamColor
+      if (only) {
+        // The rest of the grid holds still; only the clicked panel's own
+        // space opens up under it.
+        ctx.drawImage(to, 0, 0, W, H)
+        ctx.fillRect(tiles[0].x, tiles[0].y, tiles[0].w, tiles[0].h)
+      } else {
+        ctx.fillRect(0, 0, W, H)
+      }
+      // Resting tiles first, so a turning one, lifted, draws over them.
+      const progress = (delay: number) => Math.min(1, Math.max(0, (t - delay) / FLIP))
+      const order = [...tiles].sort((a, b) => {
+        const pa = progress(a.delay), pb = progress(b.delay)
+        return Number(pa > 0 && pa < 1) - Number(pb > 0 && pb < 1)
+      })
+      for (const { x, y, w, h, wide, delay } of order) {
+        const p = progress(delay)
+        const turn = Math.cos(p * Math.PI)
+        const src = turn > 0 ? from : to
+        const lift = Math.sin(p * Math.PI)
+        // Foreshortened along the turn, and lifted a little off the grid.
+        const grow = 1 + 0.08 * lift
+        const dw = wide ? w * grow : w * Math.abs(turn)
+        const dh = wide ? h * Math.abs(turn) : h * grow
+        if (dw < 0.5 || dh < 0.5) continue
+        const dx = x + (w - dw) / 2, dy = y + (h - dh) / 2
+        ctx.drawImage(src, x * dpr, y * dpr, w * dpr, h * dpr, dx, dy, dw, dh)
+        if (lift > 0.01) {
+          ctx.globalAlpha = 0.65 * lift
+          ctx.fillStyle = back
+          ctx.fillRect(dx, dy, dw, dh)
+          ctx.globalAlpha = 1
+        }
+      }
+      if (t < end) {
+        morph.current = { raf: requestAnimationFrame(frame), w: W, h: H }
+      } else {
+        morph.current = null
+        draw()
+      }
+    }
+    if (morph.current) cancelAnimationFrame(morph.current.raf)
+    morph.current = { raf: requestAnimationFrame(frame), w: W, h: H }
+  }
+
+  useEffect(() => () => {
+    if (morph.current) cancelAnimationFrame(morph.current.raf)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -865,6 +1003,7 @@ export function GenerativeArt({
     )
     if (!hit) return
 
+    snapshot(hit)
     const prevRand = rand
     rand = mulberry32(Math.floor(Math.random() * 0xffffffff))
     try {
@@ -874,7 +1013,7 @@ export function GenerativeArt({
       rand = prevRand
     }
     draw()
-  }, [interactive, palette, draw])
+  }, [interactive, palette, draw, snapshot])
 
   return (
     <div className="art">

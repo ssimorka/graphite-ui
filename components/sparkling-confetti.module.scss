@@ -1,0 +1,65 @@
+// The glyph's first three paths are its stars, the other twelve its dots (see
+// 'confetti' in lib/kit-icons.ts). Each star turns a quarter, which a
+// four-pointed star survives, dipping small and overshooting on the way; the
+// dots dim and return in a wave from the top left. Transform and opacity only.
+.confetti {
+  overflow: visible;
+
+  > path {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .play,
+  :where(button, a):hover .confetti {
+    > path:nth-child(-n + 3) {
+      animation: twinkle 720ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    > path:nth-child(n + 4) {
+      animation: shimmer 600ms ease-in-out both;
+    }
+
+    // Top star first, then bottom left, then bottom right.
+    > path:nth-child(3) { animation-delay: 0ms; }
+    > path:nth-child(1) { animation-delay: 140ms; }
+    > path:nth-child(2) { animation-delay: 280ms; }
+
+    @for $i from 4 through 15 {
+      > path:nth-child(#{$i}) {
+        animation-delay: #{($i - 4) * 35}ms;
+      }
+    }
+  }
+}
+
+@keyframes twinkle {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+  35% {
+    transform: scale(0.35) rotate(45deg);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.35) rotate(90deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(90deg);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  45% {
+    opacity: 0.15;
+    transform: scale(0.5);
+  }
+}

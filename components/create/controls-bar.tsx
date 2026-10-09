@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useOverlay } from '@/components/ui/overlay'
 import { KitIcon } from '@/components/kit-icon'
 import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
+import { SparklingConfetti } from '@/components/sparkling-confetti'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import type { IconSet } from '@/lib/kit-icons'
@@ -159,8 +160,9 @@ function OptionSheet({
 
 /**
  * The compact controls below xl: a horizontally scrolling rail of pickers, and a
- * footer of Reset, Surprise me and Get the code. Surprise me here is the desktop's:
- * it randomises every setting.
+ * footer of Get the code, Reset and Surprise me (on the art tab, Export PNG,
+ * Reset and Regenerate). Surprise me here is the desktop's: it randomises every
+ * setting.
  */
 export function ControlsBar() {
   const b = useBuilder()
@@ -168,7 +170,9 @@ export function ControlsBar() {
   const [sheet, setSheet] = useState<ControlId | null>(null)
   const [codeOpen, setCodeOpen] = useState(false)
   const [roll, rollDice] = useDiceRoll()
+  const [sparkles, sparkle] = useDiceRoll()
   const active = controls.find((c) => c.id === sheet)
+  const art = b.view === 'art'
 
   return (
     <div className={styles.bar}>
@@ -193,48 +197,52 @@ export function ControlsBar() {
           </button>
         ))}
       </div>
+      {/* Below md the footer is too narrow for three labels, so the two quiet
+          actions drop to icons there. The label stays in the DOM as their
+          accessible name, and the title shows it on hover. Dealing takes the
+          corner on both tabs (Surprise me, or Regenerate on the art tab), and
+          taking the result (Get the code, Export PNG) leads the quiet pair, as
+          in the desktop panel. */}
       <div className={styles.barFooter}>
-        {/* Below md the footer is too narrow for three labels, so Reset and
-            Surprise me drop to icons there. The label stays in the DOM as their
-            accessible name, and the title shows it on hover. */}
-        <button
-          type="button"
-          className={`${styles.barQuiet} ${styles.barReset}`}
-          title="Reset"
-          onClick={b.reset}
-        >
-          <span className={styles.barLabel}>Reset</span>
-          <KitIcon name="redo-alt" size={16} aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className={`${styles.barQuiet} ${styles.barShuffle}`}
-          title={b.view === 'art' ? 'Regenerate' : 'Surprise me'}
-          onClick={() => {
-            if (b.view !== 'art') rollDice()
-            b.shuffle()
-          }}
-        >
-          <span className={styles.barLabel}>{b.view === 'art' ? 'Regenerate' : 'Surprise me'}</span>
-          {b.view === 'art' ? <KitIcon name="refresh" size={16} aria-hidden="true" /> : <RollingDice roll={roll} />}
-        </button>
-        {b.view === 'art' ? (
-          <Button
-            variant="primary"
-            size="lg"
-            className={styles.barCode}
+        {art ? (
+          <button
+            type="button"
+            className={`${styles.barQuiet} ${styles.barFirst}`}
+            title="Export PNG"
             onClick={() => b.artHandle?.exportPng()}
             disabled={!b.artHandle}
           >
-            Export PNG
-            <KitIcon name="arrow-small-down" />
-          </Button>
+            <span className={styles.barLabel}>Export PNG</span>
+            <KitIcon name="download" size={16} aria-hidden="true" />
+          </button>
         ) : (
-          <Button variant="primary" size="lg" className={styles.barCode} onClick={() => setCodeOpen(true)}>
-            Get the code
-            <KitIcon name="arrow-small-right" />
-          </Button>
+          <button
+            type="button"
+            className={`${styles.barQuiet} ${styles.barFirst}`}
+            title="Get the code"
+            onClick={() => setCodeOpen(true)}
+          >
+            <span className={styles.barLabel}>Get the code</span>
+            <KitIcon name="download" size={16} aria-hidden="true" />
+          </button>
         )}
+        <button type="button" className={`${styles.barQuiet} ${styles.barReset}`} title="Reset" onClick={b.reset}>
+          <span className={styles.barLabel}>Reset</span>
+          <KitIcon name="redo-alt" size={16} aria-hidden="true" />
+        </button>
+        <Button
+          variant="primary"
+          size="lg"
+          className={styles.barCorner}
+          onClick={() => {
+            if (art) sparkle()
+            else rollDice()
+            b.shuffle()
+          }}
+        >
+          {art ? 'Regenerate' : 'Surprise me'}
+          {art ? <SparklingConfetti play={sparkles} /> : <RollingDice roll={roll} />}
+        </Button>
       </div>
       {active ? <OptionSheet control={active} onClose={() => setSheet(null)} /> : null}
       <GetCodeDialog open={codeOpen} onClose={() => setCodeOpen(false)} />
