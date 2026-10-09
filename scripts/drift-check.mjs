@@ -126,6 +126,12 @@ async function readTokenModel() {
   for (const name of Object.keys(mod.LADDERS.light)) {
     bind(name.startsWith('outline-') ? 'outline' : 'elevation', `--graphite-${name}`)
   }
+  // primary-container's hover and active belong to that role, as a family's
+  // states belong to the family (#361).
+  for (const state of Object.keys(mod.CONTAINER_STATES.light))
+    bind('primaryContainer', `--graphite-primary-container-${state}`)
+  // The AI tints are declared as a group of their own, as elevation is (#361).
+  for (const name of Object.keys(mod.buildAi(ramps, 'light'))) bind('ai', `--graphite-${name}`)
   const statics = readStaticVars()
   for (const v of statics.spacing) bind('spacing', v)
   for (const v of statics.radius) bind('radius', v)
