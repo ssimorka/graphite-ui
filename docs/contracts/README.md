@@ -22,7 +22,7 @@ is a bug in the contract, not in Figma.
 3. Each contract is versioned (semver). A prohibition change is breaking. A new optional slot is minor. A copy/description edit is a patch.
 4. A drift check script reads each contract's declared token dependencies and verifies the component's actual code references those exact variable names, nothing else. Fails the build on mismatch.
 5. Figma components carry the contract version number in their description field, so anyone opening the file knows which spec they're looking at.
-6. Every component set in the kit is either **governed** — a contract declares it, and rule 5 puts that contract's version in its description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. #240 built the two buckets of ungoverned sets it scheduled, so they are governed now; three stay ungoverned permanently. See "Carbon-only sets in the kit" below.
+6. Every component set in the kit is either **governed** — a contract or a pattern doc declares it, and rule 5 puts its version in the set's description — or **ungoverned**, and says so in the same place. Nothing is unlabelled. #240 built the two buckets of ungoverned sets it scheduled, so they are governed now; on 2026-10-07 the remaining three were scheduled to build as wave G3 (#358). Once G3 lands, no public kit set is ungoverned. The label stays for sets that are scheduled and for any set the kit adds. See "Carbon-only sets in the kit" below.
 7. Where the kit and a contract disagree, the kit wins. Correct the contract, not the kit. Where **the kit disagrees with itself**, the more specific artefact wins; where the kit has **no opinion**, the code keeps its own. See "When the kit is not of one mind" below.
 8. Rules 6 and 7 say who wins; neither says what should **exist**. A governed component with no counterpart in the kit is kept only while something needs it, and the demand test decides. (The demand test no longer gates kit sets: #240 built them under rule 6. It still gates components the kit does not have.) See "When the kit has nothing" below.
 
@@ -139,7 +139,7 @@ only by the gallery, and that is not what keeps it.
 |---|---|---|---|
 | Separator, Avatar, Card | 3 | None; only the gallery composed them | **Removed** (#95, #97, #109) |
 | Label, Field | 2 | Answered on the form controls instead | **Absorbed** (#94, #107) |
-| Navigation Menu | 3 | `site-header.tsx`, and step 1 of `SHADCN-MIGRATION.md` | **Kept** (#113) |
+| Navigation Menu | 3, until 2026-10-08 | `site-header.tsx`, and step 1 of `SHADCN-MIGRATION.md` | **Kept** (#113); now question 1, inverted against the kit's Header menu sets (#360) |
 | Typography | 3 | Contained list's required title slot depends on it (Progress bar's remedy, the second, retired in #235) | **Kept** (#96) |
 
 Settled in #133. The five merges that preceded the rule were each right on
@@ -159,10 +159,16 @@ behind it, recorded once so it is not re-argued per component (#124).
 
 ### The rule
 
-A set is **governed** if a contract declares it, and **ungoverned** otherwise.
-Ungoverned sets stay in the file and say so in their description, where a
-governed set carries its contract version. Movement is one-way: an ungoverned
-set becomes governed by acquiring a contract, and nothing goes back.
+A set is **governed** if a contract or a pattern doc declares it, and
+**ungoverned** otherwise. Ungoverned sets stay in the file and say so in their
+description, where a governed set carries its contract version. Movement is
+one-way: an ungoverned set becomes governed by acquiring a contract, and nothing
+goes back.
+
+**A pattern doc** governs a kit set that lays out governed controls rather than
+being a control itself. It cites the set's node ids, as a contract does, and
+adds no component: Form is the case (#376, decided 2026-10-08). #135's reason
+for removing Field still stands, because a pattern is not a wrapper.
 
 ### Why labelling rather than deleting
 
@@ -252,42 +258,48 @@ them.
 
 ### Which bucket a set falls in
 
-**Out of scope by construction.** Graphite contracts govern component
-primitives. Three classes will never acquire one, so they are ungoverned
-permanently rather than pending:
+**Scheduled to build: wave G3 (decided 2026-10-07).** Until then these three
+classes were held to be outside what contracts govern, ungoverned permanently. #358
+reverses that: every remaining public set is built, ordered by dependency in
+waves G3.0 to G3.4, and is labelled *ungoverned, scheduled to build* until its
+contract or pattern doc lands.
 
-- *Application shells* — UI shell Header / Left panel / Right panel, Content
-  switcher. These compose an application; they are not primitives.
+- *Application shells* — UI shell Header / Left panel / Right panel. They were
+  filed as composing an application rather than being primitives. G3 governs
+  them as three contracts, one per page (#368, decided 2026-10-08).
+
+  **Content switcher was misfiled here.** It is a segmented control, a
+  primitive that switches between views of the same content, and it is built
+  as one (#366), beside Tabs rather than under the shells.
 
   **Tree view came off this list on 2026-10-04.** It was filed here because
   Carbon uses it to compose an application's file browser, but the kit draws
   it as a primitive: a node row, and a tree of those rows, with no layout of
   its own. It acquired a contract the way #240's buckets did, by decision:
   the docs sidebar is a hierarchy, and Tree view is the kit's hierarchical
-  navigation (`tree-view.md`). Movement stays one-way. The other four shells
-  are unchanged and still ungoverned permanently.
+  navigation (`tree-view.md`).
 
-  This bullet also settles **Navigation Menu** (#113), which is why that issue
-  is not an open Wave 4 item. The six UI shell sets are the kit's only
-  navigation counterpart, and placing them out of scope here leaves the kit
-  *silent* on `navigation-menu.md` rather than in disagreement with it. Rule
-  7's tie-break then applies unchanged — where the kit has no opinion, the code
-  keeps its own — so there was never an inversion to perform. The two halves of
-  that argument were written days apart, in #128 and #141, and neither one
-  mentioned the other. Recorded in full in `navigation-menu.md`. Tree view
-  leaving this list does not reopen it: Tree view answers the hierarchical
-  case, a docs sidebar, and the kit still draws nothing for the flat,
-  horizontal one that Navigation Menu keeps (the site header).
-- *Vendor features* — AI label, AI layer, AI explainability popover. Carbon's AI
-  affordances, tied to IBM product decisions Graphite does not make. Dropping
-  these also decides the fate of the `AI`, `AI presence` and `AI revert`
-  variable collections, which `scripts/figma-extract.js` already excludes from
-  the snapshot as "component-level state rather than a foundation token layer".
-- *Carbon idioms with no Graphite counterpart* — Structured list, Toggletip,
-  Tile, Code snippet, Loading, Progress indicator, Form, List. Form and List
-  were added by the Part B walk: Form is a control wrapper, the species Field
-  already was before #135 removed it, and List is the typographic sibling of the
-  governed Contained list.
+  **Navigation Menu is no longer settled by this bullet.** #113 settled it on
+  the grounds that the UI shell sets were out of scope, which left the kit
+  *silent* on `navigation-menu.md`. Bringing UI shell into scope removes that
+  ground, so rule 7 applies: the kit wins. Decided 2026-10-08 (#360): Navigation
+  Menu is inverted against the kit's Header menu sets and becomes the code for
+  them, and the UI shell Header composes it. Nothing is retired. The inversion
+  lands with the Header (#368). Recorded in full in `navigation-menu.md`.
+- *Vendor features* — AI label, AI layer, AI explainability popover. They were
+  filed as Carbon's AI affordances, tied to IBM product decisions Graphite does
+  not make. G3 builds them as Graphite's own (#369–#371): the whole AI family
+  tints from the secondary ramp, never Carbon blue, and an `ai` prop carries
+  them into the 12 governed hosts that instance them in the kit (#375). The
+  `AI`, `AI presence` and `AI revert` variable collections stay out of the
+  snapshot: they are visibility switches, which code carries as that prop, not
+  tokens.
+- *Carbon idioms* — Structured list, Toggletip, Tile, Code snippet, Loading,
+  Progress indicator, Form, List. Each is built as a component (#363–#367,
+  #372–#374), except Form. Form lays out governed controls on a page or in a
+  Modal, so it is governed by a pattern doc rather than a contract (#376), and
+  adds no wrapper: the reason #135 removed Field stands. List is the typographic
+  sibling of the governed Contained list.
 
   `Contained list` was on this list and has come off it. The component that
   used to be called `Item` was renamed to it when the code adopted the kit's
@@ -329,9 +341,9 @@ Accordion. Every #240 set has landed and carries its version.
 ### The demand test runs both ways (and now mostly one)
 
 The test decided whether an ungoverned kit set *acquires* a contract. #240
-retired that direction for the two build buckets: they acquired contracts by
-decision, and the permanent three never do, so for kit sets the test is no
-longer consulted. It still reads in the other direction, deciding whether a
+retired that direction for the two build buckets, and #358 for the remaining
+three: every kit set acquires a contract or pattern doc by decision, so for kit
+sets the test is no longer consulted. It still reads in the other direction, deciding whether a
 governed component with no kit counterpart *keeps* one. That is rule 8, and it
 is written up under "When the kit has nothing" in the governance model rather
 than restated here.
@@ -354,10 +366,23 @@ All 36 sets are stamped governed in the kit.
 
 Each one gets the full governed pipeline to #219's definition of done: a
 contract, the component at parity on every axis, a docs page, and its
-contract version stamped in the kit set's description. **Application shells,
-vendor AI features and Carbon idioms stay ungoverned permanently**, so the
-Navigation Menu settlement (#113) is unaffected: the UI shell sets remain out
-of scope, and the kit remains silent on `navigation-menu.md`.
+contract version stamped in the kit set's description.
+
+**#358 (opened 2026-10-07)** builds the rest, by dependency rather than by
+bucket:
+
+| Wave | What | Issues |
+|---|---|---|
+| G3.0 | Governance (this amendment), Navigation Menu, tokens, kit snapshot | #359–#362 |
+| G3.1 | Loading (pilot), List, Code snippet, Content switcher, Toggletip, UI shell, AI layer | #363–#369 |
+| G3.2 | AI explainability popover, AI label and Revert AI button, Progress indicator, Structured list | #370–#373 |
+| G3.3 | Tile, the AI slot in the 12 governed hosts | #374, #375 |
+| G3.4 | Form (a pattern doc), `/blocks` | #376, #377 |
+
+The same definition of done applies. Until each lands, its sets carry
+`Graphite: ungoverned, scheduled to build (#NNN)`, naming its issue. Radio
+button is not among them: `radio-button-group.md` already governs both sets on
+that page.
 
 ---
 
@@ -430,7 +455,7 @@ Text input, Text area, Checkbox, Radio button group, Toggle, Select
 None. This wave held Field, which wrapped Label, an input atom and help/error text. Both were removed when the code took the kit's shape: the kit ships no standalone label and no field wrapper, so every form control carries its own label and supporting text. See #94 and #107.
 
 **Wave 4 — Layout & navigation**
-Accordion, Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu is complete but was never inverted, because the kit is silent on it rather than in disagreement — see #113 and the application-shells bullet above.
+Accordion, Contained list, Tabs, Breadcrumb, Navigation Menu. Card was removed (#109); the kit has none. Navigation Menu was complete but never inverted, while the kit was silent on it (#113); with UI shell scheduled to build, it is inverted against the kit's Header menu sets (#360), landing with the Header (#368). See the application-shells bullet above.
 
 **Wave 5 — Overlays (share one elevation/surface + focus-trap pattern)**
 Overlay (internal: the shared pattern the others implement), Tooltip, Popover, Menu, Modal, and Notification. Notification ships in this wave but is inline, not an overlay: it traps nothing and does not use the Overlay hook (see its contract, 3.0.0).
