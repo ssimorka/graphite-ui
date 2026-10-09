@@ -220,9 +220,11 @@ before trusting a browser result.
   `var(--graphite-…)` naming a variable the engine generates or `globals.scss`
   declares, and fails if the file is missing. Rewritten in the kit 2026-10-06:
   Semantic carried the retired export prefix (and `error` for danger), Spacing
-  and Radius carried Carbon-style names; the 20 kit-only state variables
-  (warning/success/info states, primary-container hover/active) have no CSS
-  counterpart and carry no code syntax on purpose. Restamp after a kit rename.
+  and Radius carried Carbon-style names; the 18 kit-only state variables
+  (warning/success/info states) have no CSS counterpart and carry no code
+  syntax on purpose. `state/primary-container-hover`/`-active` were the other
+  two until #361 stamped them; their kit code syntax is still unset (a manual
+  Figma write), which token-drift allows. Restamp after a kit rename.
   Two gotchas if you touch it: a set counts as documented if the doc cites its
   node id **or** names it (dropdown.md documents all 8 sets by id in a matrix
   and names none of them), and `page.loadAsync()` is what lets one `use_figma`
@@ -307,17 +309,27 @@ a trace, which is what "no bypass" is meant to cost.
   Carbon's `white`/`g100` survive only as the zone class) and `level` (AA/AAA). (It used to
   hold `autoFix` too; the toggle was removed as a no-op, see above.) It
   computes `lightBundle`/`darkBundle` (tokens + contrast + states) via
-  `lib/color.js` and stamps 117 CSS vars onto `<html>` on every change: 58
+  `lib/color.js` and stamps 124 CSS vars onto `<html>` on every change: 65
   `--graphite-*` (32 token roles, 6 states each for the `primary`,
   `secondary` and `danger` families from `STATE_FAMILIES`, `--graphite-focus`,
-  `--graphite-scrim`, and the six ladder variables from `LADDERS`:
-  `elevation-00`–`03`, `outline-subtle`, `outline-strong`) and, on this site
+  `--graphite-scrim`, the six ladder variables from `LADDERS`:
+  `elevation-00`–`03`, `outline-subtle`, `outline-strong`, and since #361
+  `primary-container-hover`/`-active` and the five AI tints, below) and, on this site
   only, 59 `--cds-*` supplied through the provider's `extend` option by
   `components/carbon-compat.tsx`.
   The ladders are not roles (the kit files them beside its 32), so "thirty-two
   roles" in the site copy stays true; drift-check binds `outline-*` to the
-  `outline` role and `elevation-*` to a declarable `elevation`. Counts verified
-  2026-10-03 by reading `<html>`'s inline style. The choice (`sourceHex`, `theme`, `level`)
+  `outline` role and `elevation-*` to a declarable `elevation`, and since #361
+  `primary-container-hover`/`-active` to `primaryContainer` and the AI tints to
+  a declarable `ai`. Counts verified 2026-10-03 by reading `<html>`'s inline
+  style; the +7 of #361 counted from `buildGraphiteVars` on 2026-10-08.
+  **The AI tints (#361)** are `--graphite-ai`, `-ai-aura`, `-ai-border`,
+  `-ai-shadow` and `-ai-callout-shadow`: secondary's hue and chroma with a
+  chroma floor of 0.06 (`AI_CHROMA_FLOOR`), so AI stays distinct on a grey
+  source; a hueless source (chroma under 0.02) takes the default source's AI
+  hue. The floor was swept, not picked: see the comment in `lib/color.js`.
+  They replace the kit's AI aliases (primaryContainer, outline) and its Carbon
+  blue shadows by decision (#358). The choice (`sourceHex`, `theme`, `level`)
   persists in `localStorage`, because most site links are plain anchors and
   every click is a full load; an inline `<head>` script re-applies the last
   stamped vars before first paint so there is no flash of the default (keys
