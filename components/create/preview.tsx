@@ -25,6 +25,11 @@ const ONE_COLUMN_ORDER = [
   'usage', 'contributions', 'contributors', 'shortcuts', 'not-found',
 ]
 
+// Wide examples pulled up into the first row when they are shown, right after
+// the palette, so the page opens on something moving. The rest of the wide
+// ones follow the kit's order at the end.
+const LEAD_WIDE = ['live-audio-waveform']
+
 // Container widths, not viewport widths, so the Desktop / Tablet / Mobile
 // toolbar re-lays the examples out at any window size. Two columns need 600px
 // (two ~280px columns, the gap and the padding); the seven wide examples need the kit's
@@ -252,9 +257,13 @@ function Samples() {
   const shown = CARDS.filter((c) => wide || !c.desktopOnly)
 
   const byId = new Map(shown.map((c) => [c.id, c]))
+  const kitOrder = ONE_COLUMN_ORDER.filter((id) => byId.has(id))
+  const lead = LEAD_WIDE.filter((id) => byId.has(id))
   const order = [
-    ...ONE_COLUMN_ORDER.filter((id) => byId.has(id)),
-    ...shown.map((c) => c.id).filter((id) => !ONE_COLUMN_ORDER.includes(id)),
+    ...kitOrder.slice(0, 1),
+    ...lead,
+    ...kitOrder.slice(1),
+    ...shown.map((c) => c.id).filter((id) => !ONE_COLUMN_ORDER.includes(id) && !lead.includes(id)),
   ]
   const count = threeColumns ? 3 : twoColumns ? 2 : 1
   const { ref: dealRef, columns } = useBalancedColumns(order, count)
