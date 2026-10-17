@@ -1,6 +1,6 @@
 ---
 component: Modal
-version: 2.0.0
+version: 2.0.1
 wave: 5
 slots:
   - name: Label
@@ -53,7 +53,7 @@ composition_rules:
   - Always traps focus, always returns focus to the trigger on close.
   - The scrim click is the shared base's outside press, not a handler of the Modal's own. dismissible switches it off together with Escape.
   - Size caps the width at 320 (xs), 384 (sm), 512 (md) and 672 (lg). Large is the kit's 671 frame on the grid; the kit draws every size at that width.
-  - Footer follows Button's one-primary-action rule, wrapped in the same ButtonGroup that enforces it. One or two actions take two columns from the right; three, or a Cancel, take four. The buttons are the kit's Extra large, held to the 64px row.
+  - Footer follows Button's pairing rules (one filled button, last, partners from its family: outlined Back, ghost Cancel), wrapped in the same ButtonGroup that enforces them. One or two actions take two columns from the right; three, or a Cancel, take four. The buttons are the kit's Extra large, held to the 64px row.
 prohibitions:
   - No Modal opened from within another Modal — stack depth of one.
 ---
@@ -67,7 +67,7 @@ prohibitions:
 - **Props:** size (xs, sm, md, lg), dismissible (boolean), loading.
 - **Tokens:** `background` panel and `on-surface` text, as the Modal set binds them, over a full-screen `scrim`; the spacing scale for padding and size steps; the shared `motion` fade on entrance.
 - **Kit parity** (#237, 2.0.0, a major: the panel moves from `surface-elevated` to `background`, the footer loses its divider and becomes the kit's full-bleed row, and a dismissible Modal grows a close button). Recorded rather than copied: the kit draws every size 671 wide (the code steps the caps); its footer buttons measure 66 in a 64 row (held to 64); and Extra small sets the title with no clearance, under the close (given 44, as Small). The panel's binding replaces the #139 reading, which `overlay.md` 2.0.0 retired once the kit's sets and variables agreed.
-- **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's one-primary-action rule, wrapped in the same ButtonGroup that enforces it.
+- **Composition rules:** Always traps focus, always returns focus to the trigger on close. Footer follows Button's pairing rules, wrapped in the same ButtonGroup that enforces them.
 - **Prohibitions:** No Modal opened from within another Modal — stack depth of one.
 
 ### How `scrim` resolves in the kit (#92)

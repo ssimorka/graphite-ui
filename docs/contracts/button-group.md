@@ -1,6 +1,6 @@
 ---
 component: Button Group
-version: 1.0.1
+version: 2.0.0
 wave: 0
 slots:
   - name: Actions
@@ -13,11 +13,11 @@ tokens:
   - name: spacing
     usage: Gap between actions.
 composition_rules:
-  - "Enforces Button's one-primary-action rule by refusing to render: more than one child with `variant=\"primary\"` throws, naming the count and pointing at this contract. Fragments are unwrapped before counting, so a footer passed as `<>...</>` is checked button by button. Any other wrapper element is counted as itself and hides what is inside it, so Buttons go in as direct children or inside fragments. The rule is checked, not documented and hoped for."
+  - "Enforces Button's pairing rules by refusing to render. It throws, naming the problem and pointing at this contract, when a group holds more than one filled button (primary, secondary or danger), when it mixes the violet family (primary, outlined, ghost) with the green one (secondary, secondary-outlined, secondary-ghost), or when its filled button is not last. A Button with no variant counts as secondary, its default, because it renders filled. Fragments are unwrapped before checking, so a footer passed as `<>...</>` is checked button by button. Any other wrapper element is read as itself and hides what is inside it, so Buttons go in as direct children or inside fragments. The rules are checked, not documented and hoped for."
   - Modal wraps its footer in this rather than trusting each caller, so the rule holds wherever a footer is used instead of only where someone remembers it.
   - Horizontal by definition. A vertical stack of actions is a layout decision belonging to whatever contains the group.
 prohibitions:
-  - No second primary. The check is a throw rather than a warning, because a silently-wrong emphasis hierarchy is the failure this component exists to prevent.
+  - No second filled button, no mixed families, and no filled button anywhere but last. The check is a throw rather than a warning, because a silently-wrong emphasis hierarchy is the failure this component exists to prevent.
   - No orientation prop. See the note below — a vertical variant would make "which action is primary" a question of reading order rather than of emphasis.
   - No spacing override per instance. The gap is the scale's, so two footers in one product cannot disagree about how far apart their actions sit.
 ---
@@ -37,12 +37,16 @@ file.
 - **Tokens:** the spacing scale for the gap between actions. It introduces no
   color of its own: a group is an arrangement, and the buttons inside it carry
   every visual decision.
-- **Composition rules:** More than one child with `variant="primary"` throws.
-  Fragments are unwrapped before the count (Modal's callers pass their footer
+- **Composition rules:** A second filled button, a mixed family or a filled
+  button that is not last throws (2.0.0, 2026-10-17: it used to check
+  primaries only, so primary beside a filled secondary passed). A Button with
+  no variant counts as the filled secondary it renders. Fragments are unwrapped
+  before the check (Modal's callers pass their footer
   as one); any other wrapper element hides its contents from the check, so
   Buttons go in directly. Modal wraps its footer in this, so the rule holds wherever a
   footer is used. Horizontal by definition.
-- **Prohibitions:** No second primary. No orientation prop. No per-instance
+- **Prohibitions:** No second filled button, no mixed families, filled last. No
+  orientation prop. No per-instance
   spacing override.
 
 ### Two notes on what this deliberately does not have
