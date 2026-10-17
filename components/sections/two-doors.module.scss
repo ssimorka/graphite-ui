@@ -58,12 +58,18 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 19.875rem; // kit door is 318px
   padding: var(--graphite-space-06) var(--graphite-space-06) 0;
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // The artefact slides under the card's edge rather than escaping it.
   overflow: hidden;
   transition: --glow var(--graphite-motion-base) ease-out;
+
+  // Info Cards size=large from the kit's md stop (672px): the 318px door with
+  // its artefact bleeding off the right edge. Below it, size=small: the
+  // artefact drops into the flow under the copy (see .artefact).
+  @media (min-width: 672px) {
+    min-height: 19.875rem; // kit door is 318px
+  }
 }
 
 // Hover states .md: the glow climbs the door, and the artefact loses its own
@@ -91,8 +97,18 @@
   min-width: 10rem;
   padding-right: var(--graphite-space-05);
   gap: var(--graphite-space-05);
-  margin: auto 0 0 calc(var(--graphite-space-06) * -1);
+  // size=small: after the artefact and over its foot, pulled up by its own
+  // height (Button's lg is space-09 + 2px) so the artefact runs on behind it
+  // to the door's bottom edge. z-index works on a flex item without making it
+  // positioned, so the overlay below still resolves to the door.
+  margin: calc((var(--graphite-space-09) + 2px) * -1) 0 0 calc(var(--graphite-space-06) * -1);
+  order: 1;
+  z-index: 1;
   text-decoration: none;
+
+  @media (min-width: 672px) {
+    margin: auto 0 0 calc(var(--graphite-space-06) * -1);
+  }
 
   &:active:not(:disabled) {
     transform: none;
@@ -111,9 +127,11 @@
   transform: none;
 }
 
-.door:hover .artefact {
-  border-color: transparent;
-  transform: translate(-10px, -23px);
+@media (min-width: 672px) {
+  .door:hover .artefact {
+    border-color: transparent;
+    transform: translate(-10px, -23px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -133,12 +151,16 @@
   // Above the artefact for legibility, but the door's link is the press
   // target, so text here lets presses through to the action's overlay.
   pointer-events: none;
-  margin-bottom: var(--graphite-space-06);
+  margin-bottom: var(--graphite-space-05);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--graphite-space-04);
-  max-width: 16rem;
+
+  @media (min-width: 672px) {
+    margin-bottom: var(--graphite-space-06);
+    max-width: 16rem;
+  }
 
   a {
     text-decoration: none;
@@ -162,24 +184,25 @@
 
 // Decorative artefact, clipped by the door. Below the copy in stacking order
 // and inert to the pointer, so it can never take a click meant for the button.
+//
+// Info Cards size=small (below 672px): a slice in the flow under the copy,
+// bleeding off the door's right and bottom edges, with the action over its
+// foot. It used to be dropped below 30rem, which left a phone with a title, a
+// paragraph and an empty door above the button.
 .artefact {
-  position: absolute;
-  right: -8rem;
-  top: 7.5rem;
-  width: 20rem;
-  // The kit's Code content is a fixed 456px, positioned so it runs a long way
-  // past the door's bottom edge — 241px on the developers card. Left at its
-  // content height it stopped within a few pixels of that edge instead, which
-  // reads as an accidental crop rather than a deliberate bleed, and the hover
-  // shift only drew attention to it. Fixed height puts the cut well inside the
-  // panel again.
-  height: 28.5rem;
-  display: none;
+  position: relative;
+  // 160px clear of the action, plus the action's own height behind it.
+  height: calc(10rem + var(--graphite-space-09) + 2px);
+  margin: 0 calc(var(--graphite-space-06) * -1) 0 0;
+  display: flex;
   flex-direction: column;
   gap: var(--graphite-space-05);
-  padding: var(--graphite-space-07);
+  padding: var(--graphite-space-06) 0 var(--graphite-space-06) var(--graphite-space-06);
+  overflow: hidden;
   background: var(--graphite-surface-variant);
   border: 1px solid var(--graphite-outline);
+  border-right: 0;
+  border-bottom: 0;
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   pointer-events: none;
   z-index: 0;
@@ -187,11 +210,24 @@
     border-color var(--graphite-motion-base) ease-out,
     transform var(--graphite-motion-base) ease-out;
 
-  // token-drift-allow: content threshold, not a system breakpoint. Below
-  // 30rem the door is too narrow for the panel to bleed past its edge without
-  // landing on the copy, so the panel, being decoration, is dropped (#158).
-  @media (min-width: 30rem) {
-    display: flex;
+  // Info Cards size=large: positioned past the door's right edge.
+  @media (min-width: 672px) {
+    position: absolute;
+    right: -8rem;
+    top: 7.5rem;
+    width: 20rem;
+    // The kit's Code content is a fixed 456px, positioned so it runs a long
+    // way past the door's bottom edge — 241px on the developers card. Left at
+    // its content height it stopped within a few pixels of that edge instead,
+    // which reads as an accidental crop rather than a deliberate bleed, and
+    // the hover shift only drew attention to it. Fixed height puts the cut
+    // well inside the panel again.
+    height: 28.5rem;
+    margin: 0;
+    padding: var(--graphite-space-07);
+    overflow: visible;
+    border-right: 1px solid var(--graphite-outline);
+    border-bottom: 1px solid var(--graphite-outline);
   }
 }
 
