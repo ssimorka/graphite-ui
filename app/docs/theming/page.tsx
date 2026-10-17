@@ -101,7 +101,7 @@ const GROUPS: { title: string; note: string; match: (r: string) => boolean }[] =
   },
   {
     title: 'Primary and secondary actions',
-    note: 'The pairing rule is strict: onPrimary goes on primary, onPrimaryContainer on primaryContainer, and the same for secondary. Mixing them across containers breaks the contrast guarantee. One recorded exception: the kit’s Button labels its secondary and danger fills with onPrimary, to keep one label color across variants. The engine measures both pairs too.',
+    note: 'The pairing rule is strict: onPrimary goes on primary, onPrimaryContainer on primaryContainer, and the same for secondary. Mixing them across containers breaks the contrast guarantee. Two recorded exceptions, both Button’s: the kit labels its secondary and danger fills with onPrimary, to keep one label color across variants, and its outlined and ghost styles put primary or secondary straight on the page. The engine measures all four pairs too.',
     match: (r) => /^(on)?(Primary|primary|Secondary|secondary)(Container)?$/.test(r),
   },
   {
