@@ -13,8 +13,11 @@ const isIcon = (s: Size) => s === 'icon' || s.startsWith('icon-')
 
 const LABEL: Record<ButtonVariant, string> = {
   primary: 'Save changes',
-  secondary: 'Export',
+  outlined: 'Back',
   ghost: 'Cancel',
+  secondary: 'Export',
+  'secondary-outlined': 'Preview',
+  'secondary-ghost': 'Skip',
   danger: 'Delete project',
   'danger-ghost': 'Remove',
 }
@@ -52,8 +55,11 @@ export function ButtonPreview() {
             onChange={(v) => setVariant(v as ButtonVariant)}
             options={[
               { value: 'primary', label: 'Primary' },
-              { value: 'secondary', label: 'Secondary' },
+              { value: 'outlined', label: 'Outlined' },
               { value: 'ghost', label: 'Ghost' },
+              { value: 'secondary', label: 'Secondary' },
+              { value: 'secondary-outlined', label: 'Secondary outlined' },
+              { value: 'secondary-ghost', label: 'Secondary ghost' },
               { value: 'danger', label: 'Danger' },
               { value: 'danger-ghost', label: 'Danger ghost' },
             ]}

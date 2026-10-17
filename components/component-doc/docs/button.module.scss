@@ -7,9 +7,15 @@
 .forceHover {
   .isPrimary { background: var(--graphite-primary-hover); }
   .isSecondary { background: var(--graphite-secondary-hover); }
-  .isGhost {
+  .isGhost,
+  .isOutlined {
     background: var(--graphite-surface-variant);
     color: var(--graphite-primary-hover);
+  }
+  .isSecondaryGhost,
+  .isSecondaryOutlined {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-secondary-hover);
   }
   .isDanger { background: var(--graphite-danger-hover); }
   .isDangerGhost {
@@ -22,9 +28,15 @@
   [data-slot='button'] { transform: translateY(1px); }
   .isPrimary { background: var(--graphite-primary-pressed); }
   .isSecondary { background: var(--graphite-secondary-pressed); }
-  .isGhost {
+  .isGhost,
+  .isOutlined {
     background: var(--graphite-surface-variant);
     color: var(--graphite-primary-hover);
+  }
+  .isSecondaryGhost,
+  .isSecondaryOutlined {
+    background: var(--graphite-surface-variant);
+    color: var(--graphite-secondary-hover);
   }
   .isDanger { background: var(--graphite-danger-pressed); }
   .isDangerGhost {
@@ -34,9 +46,12 @@
 }
 
 .forceFocus {
-  .isPrimary { --ring: var(--graphite-primary-focus); }
-  .isSecondary { --ring: var(--graphite-secondary-focus); }
-  .isGhost { --ring: var(--graphite-primary-focus); }
+  .isPrimary,
+  .isOutlined,
+  .isGhost,
+  .isSecondary,
+  .isSecondaryOutlined,
+  .isSecondaryGhost { --ring: var(--graphite-primary-focus); }
   .isDanger,
   .isDangerGhost { --ring: var(--graphite-danger-focus); }
 
@@ -49,6 +64,9 @@
   }
 
   .isGhost,
+  .isOutlined,
+  .isSecondaryGhost,
+  .isSecondaryOutlined,
   .isDangerGhost { box-shadow: inset 0 0 0 2px var(--ring); }
 }
 

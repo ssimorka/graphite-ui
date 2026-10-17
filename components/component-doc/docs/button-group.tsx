@@ -9,10 +9,10 @@ export function buttonGroupDoc(): ComponentDocConfig {
     slug: 'button-group',
     name: 'Button Group',
     kitTitle: null,
-    lede: 'A row of related actions that allows at most one primary. A single button needs no group, and a set of choices between values is a radio button group, not this.',
+    lede: 'A row of related actions with at most one filled button, last, and partners from its colour family. A single button needs no group, and a set of choices between values is a radio button group, not this.',
     description:
-      'A row of related actions that allows at most one primary. Anatomy, API, tokens and accessibility, generated from the contract.',
-    tocNote: 'Contracted in #93, after three other contracts already named it as the thing that enforces one primary. Modal wraps its footer in it.',
+      'A row of related actions with at most one filled button. Anatomy, API, tokens and accessibility, generated from the contract.',
+    tocNote: 'Contracted in #93 to enforce one primary; since 2.0.0 it enforces Button’s pairing rules: one filled button, last, from one family. Modal wraps its footer in it.',
     livePreview: <ButtonGroupPreview />,
     install: "import { ButtonGroup } from '@/components/ui/button-group'",
     anatomy: (
@@ -26,14 +26,17 @@ export function buttonGroupDoc(): ComponentDocConfig {
     anatomyLede:
       'One slot, two or more Buttons. The group adds a gap from the spacing scale and no colour of its own: every visual decision belongs to the buttons inside it.',
     dos: [
-      'Wrap every footer or toolbar in a group, so the one-primary rule is checked instead of remembered.',
+      'Wrap every footer or toolbar in a group, so the pairing rules are checked instead of remembered.',
+      'Put the filled button last and give it partners from its own family: outlined or ghost beside a primary, secondary-outlined or secondary-ghost beside a secondary.',
       'Pass the Buttons as direct children or inside a fragment. Fragments are unwrapped before the count, so a footer passed as <>…</> is still checked.',
-      'Leave the group with no primary when no action is clearly the main one.',
+      'Leave the group with no filled button when no action is clearly the main one: make every action outlined or ghost.',
       'Stack actions vertically in the container’s own layout when a narrow space needs it.',
     ],
     donts: [
-      'Add a second primary. It throws at render, naming the count, and that is the intended outcome.',
-      'Wrap a Button in a div or span. The check does not look inside other elements, so a second primary in there slips past it and the rule is still broken.',
+      'Add a second filled button, of either family. It throws at render, naming them, and that is the intended outcome.',
+      'Mix families, or put the filled button anywhere but last. Both throw too.',
+      'Leave a partner without a variant. A bare Button is the filled secondary, so it counts as a second filled button.',
+      'Wrap a Button in a div or span. The check does not look inside other elements, so a second filled button in there slips past it and the rule is still broken.',
       'Override the gap on one instance. Two footers in one product should not disagree about spacing.',
       'Use a group for a single button. A group of one is just a Button.',
     ],
@@ -42,7 +45,7 @@ export function buttonGroupDoc(): ComponentDocConfig {
       ['Keyboard', 'Each Button stays a separate tab stop in source order. The group adds no arrow-key navigation and traps nothing.'],
       ['Order', 'The row never reverses, so the order a screen reader announces is the order a sighted reader sees.'],
       ['Focus', 'Each Button draws its own focus ring. The group draws nothing and clips nothing.'],
-      ['Emphasis', 'With at most one primary, a reader scanning by visual weight finds one main action, not two competing ones.'],
+      ['Emphasis', 'With at most one filled button, a reader scanning by visual weight finds one main action, not two competing ones, and it sits last, where the eye ends.'],
     ],
     related: [
       { href: '/docs/components/button', title: 'Button', why: 'what goes inside' },

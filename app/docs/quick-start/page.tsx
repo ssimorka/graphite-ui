@@ -375,8 +375,9 @@ export default function QuickStartPage() {
               </p>
               <DocSnippet code={shadcnAdd('button', 'button-group')} />
               <p className={styles.stepText}>
-                Button defaults to <code>secondary</code>, not the filled
-                primary, and ButtonGroup allows one primary.
+                Button defaults to <code>secondary</code>, not the primary,
+                and ButtonGroup allows one filled button, last, with partners
+                from its family: here an outlined Cancel before the primary.
               </p>
               <Surface label="Live">
                 <SaveActions />
