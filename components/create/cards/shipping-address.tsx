@@ -46,7 +46,7 @@ export function ShippingAddressCard() {
       </div>
       <Checkbox label="Save as default address" checked={isDefault} onChange={setIsDefault} />
       <div className={styles.footer}>
-        <Button variant="secondary">Cancel</Button>
+        <Button variant="outlined">Cancel</Button>
         <Button variant="primary">Save Address</Button>
       </div>
     </CardShell>

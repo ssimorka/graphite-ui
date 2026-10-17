@@ -53,7 +53,9 @@ export function InvoiceCard() {
         </tbody>
       </table>
       <footer className={styles.foot}>
-        <Button size="sm">Download PDF</Button>
+        <Button variant="outlined" size="sm">
+          Download PDF
+        </Button>
         <Button variant="primary" size="sm">
           Pay Now
         </Button>

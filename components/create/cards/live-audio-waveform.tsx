@@ -33,7 +33,12 @@ export function LiveAudioWaveformCard() {
         ))}
       </div>
       <div className={styles.actions}>
-        <Button size="sm" disabled={listening} onClick={() => setListening(true)}>
+        <Button
+          variant="outlined"
+          size="sm"
+          disabled={listening}
+          onClick={() => setListening(true)}
+        >
           Start Listening
         </Button>
         <Button

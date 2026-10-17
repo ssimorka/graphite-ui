@@ -21,7 +21,7 @@ export function EnvironmentVariablesCard() {
         ))}
       </ul>
       <div className={styles.footer}>
-        <Button variant="secondary">Edit</Button>
+        <Button variant="outlined">Edit</Button>
         <Button variant="primary">Deploy</Button>
       </div>
     </CardShell>

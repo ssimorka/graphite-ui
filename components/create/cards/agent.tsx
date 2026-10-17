@@ -45,7 +45,7 @@ export function AgentCard() {
         body="New teams get a 14-day free trial."
       />
       <div className={styles.footer}>
-        <Button variant="secondary">Cancel</Button>
+        <Button variant="outlined">Cancel</Button>
         <Button variant="primary">Start trial</Button>
       </div>
     </CardShell>
