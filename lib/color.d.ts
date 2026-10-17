@@ -35,6 +35,9 @@ export interface Ramp {
   tone: (tone: number) => string
   stops: RampStop[]
   sourceTone?: number
+  /** Secondary only: its hue (radians) and chroma, which the AI tints build on. */
+  hue?: number
+  chroma?: number
 }
 
 export type Ramps = Record<RampName, Ramp>
@@ -204,6 +207,20 @@ export type Ladders = Record<LadderName, { ramp: RampName; tone: number; hex: st
 export declare const LADDERS: Record<ThemeMode, Record<LadderName, { ramp: RampName; tone: number }>>
 export declare function buildLadders(ramps: Ramps, mode: ThemeMode): Ladders
 
+/** The kit's state/primary-container-hover and -active, on the accent ramp. */
+export type ContainerStateName = 'hover' | 'active'
+export declare const CONTAINER_STATES: Record<ThemeMode, Record<ContainerStateName, number>>
+export declare function buildContainerStates(
+  ramps: Ramps,
+  mode: ThemeMode,
+): Record<ContainerStateName, { ramp: 'accent'; tone: number; hex: string }>
+
+/** The AI tints: secondary's hue and chroma, with a chroma floor. */
+export type AiName = 'ai' | 'ai-aura' | 'ai-border' | 'ai-shadow' | 'ai-callout-shadow'
+export declare const AI_CHROMA_FLOOR: number
+export declare const AI_TONES: Record<ThemeMode, Record<'ai' | 'aura' | 'border' | 'shadow' | 'callout', number>>
+export declare function buildAi(ramps: Ramps, mode: ThemeMode): Record<AiName, { tone: number; value: string }>
+
 /** A role's CSS variable: `onSurfaceVariant` -> `--graphite-on-surface-variant`. */
 export declare function graphiteVarName(role: string): string
 /** Every generated --graphite-* variable for one mode, as name -> value. The
@@ -225,6 +242,7 @@ export interface ExportJson {
     contrast: unknown
     states: Record<string, unknown>
     ladders: Record<LadderName, { value: string; ramp: string; tone: number }>
+    ai: Record<AiName, { value: string; ramp: string; tone: number }>
   }>
 }
 

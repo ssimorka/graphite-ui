@@ -21,7 +21,7 @@ Named colors            32 jobs per theme (meaning, readability-checked)
       ↓
 States                  hover / pressed / selected / disabled / focus
       ↓
-Wired into components   58 --graphite-* variables the components read (on this site, plus 59 --cds-* for Carbon)
+Wired into components   65 --graphite-* variables the components read (on this site, plus 59 --cds-* for Carbon)
 ```
 
 ### 1. The source color
@@ -62,7 +62,7 @@ The `on` prefix is the system's core convention: **`onX` is the content color gu
 
 ### 4. Component bindings
 
-Semantic tokens are stamped onto 58 `--graphite-*` custom properties, which the governed components read. On this site the provider also stamps 59 `--cds-*` properties (from `components/carbon-compat.tsx`), a compatibility layer for the remaining Carbon pieces (`--cds-text-primary`, `--cds-button-primary`, and so on). This is the layer that makes a token change repaint real components.
+Semantic tokens are stamped onto 65 `--graphite-*` custom properties, which the governed components read. On this site the provider also stamps 59 `--cds-*` properties (from `components/carbon-compat.tsx`), a compatibility layer for the remaining Carbon pieces (`--cds-text-primary`, `--cds-button-primary`, and so on). This is the layer that makes a token change repaint real components.
 
 Designers do not usually touch this layer, but it explains an important constraint: several component variables share one semantic token. `--cds-text-primary` and `--cds-icon-primary` both resolve to `onBackground`, so **text and icons are the same color by construction.** If you need an icon that differs from body text, that is a system change, not a design choice you can make in a file.
 
