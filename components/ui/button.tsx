@@ -11,7 +11,7 @@ import { Slot } from './slot'
 import styles from './button.module.scss'
 
 /**
- * Contract: docs/contracts/button.md (2.5.0)
+ * Contract: docs/contracts/button.md (2.6.0)
  *
  * Structured after shadcn: a cva recipe, exported so siblings can borrow it,
  * with forwardRef-style ref, className passthrough, prop spread, a data-slot
@@ -21,9 +21,16 @@ import styles from './button.module.scss'
 export const buttonVariants = cva(styles.button, {
   variants: {
     variant: {
+      // Two colour families with the same three ranks: filled, outlined, text.
+      // Violet: primary, outlined, ghost. Green: secondary, secondary-outlined,
+      // secondary-ghost. A group's partners come from its filled button's
+      // family (ButtonGroup enforces it).
       primary: styles.primary,
-      secondary: styles.secondary,
+      outlined: styles.outlined,
       ghost: styles.ghost,
+      secondary: styles.secondary,
+      'secondary-outlined': styles.secondaryOutlined,
+      'secondary-ghost': styles.secondaryGhost,
       danger: styles.danger,
       'danger-ghost': styles.dangerGhost,
     },

@@ -101,7 +101,7 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   Button: () => <Button variant="primary">Button</Button>,
   'Button Group': () => (
     <ButtonGroup>
-      <Button size="sm">Cancel</Button>
+      <Button size="sm" variant="outlined">Cancel</Button>
       <Button size="sm" variant="primary">Save</Button>
     </ButtonGroup>
   ),

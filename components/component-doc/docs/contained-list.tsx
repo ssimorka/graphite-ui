@@ -49,7 +49,7 @@ export function containedListDoc(): ComponentDocConfig {
   const kit = readKitPage('Contained list')
 
   const rows: DemoRow[] = [
-    { id: 'button', tag: 'BT', title: 'Button', description: 'One primary action per group', status: 'Governed' },
+    { id: 'button', tag: 'BT', title: 'Button', description: 'One filled button per group', status: 'Governed' },
     { id: 'tabs', tag: 'TB', title: 'Tabs', description: 'Peer views of the same content', status: 'Governed' },
     { id: 'tag', tag: 'TG', title: 'Tag', description: 'A short label or count', status: 'Governed' },
   ]

@@ -20,7 +20,7 @@ const InsideDialog = createContext(false)
  */
 export const ModalInPlace = createContext(false)
 
-/** Contract: docs/contracts/modal.md (2.0.0) */
+/** Contract: docs/contracts/modal.md (2.0.1) */
 type ModalProps = {
   open: boolean
   onClose: () => void
@@ -33,7 +33,8 @@ type ModalProps = {
   /**
    * Buttons, laid out as the kit's footer: equal full-bleed columns 64 tall,
    * 1px apart, from the right. A ghost button first is the kit's Cancel,
-   * pinned to the left. Wrapped in a ButtonGroup, so one primary at most.
+   * pinned to the left. Wrapped in a ButtonGroup, so one filled button at
+   * most, last, with partners from its family (outlined Back, ghost Cancel).
    */
   footer?: ReactNode
   /**
@@ -119,7 +120,7 @@ export function Modal({
       )
     }
     // Cloned rather than wrapped, so ButtonGroup still sees each button and
-    // its one-primary check still reaches them.
+    // its pairing check still reaches them.
     return cloneElement(b, { key: i, size: b.props.size ?? 'xl', style })
   })
 

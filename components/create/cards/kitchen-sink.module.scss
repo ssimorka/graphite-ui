@@ -6,12 +6,6 @@
   min-width: 0;
 }
 
-// Delete is a danger label on a ghost ground in the kit.
-.delete {
-  background: transparent;
-  color: var(--graphite-danger);
-}
-
 .item {
   display: flex;
   align-items: center;

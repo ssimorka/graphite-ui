@@ -30,7 +30,7 @@ export function modalDoc(): ComponentDocConfig {
     ],
     dos: [
       'Write the title as the question the reader is answering. It is also what a screen reader announces when the dialog opens.',
-      'Put one primary action last in the footer. Pass a ghost Cancel first when there is one, and the footer pins it to the left as the kit does.',
+      'Put one filled action last in the footer, with outlined alternatives (Back, Save draft) before it. Pass a ghost Cancel first when there is one, and the footer pins it to the left as the kit does.',
       'Set dismissible to false only when an accidental close would lose work, and then make sure the footer offers a way out.',
       'Pick the smallest size that holds the body without scrolling.',
     ],
@@ -38,7 +38,7 @@ export function modalDoc(): ComponentDocConfig {
       'Open a Modal from inside another Modal. Stack depth is one, and the inner one throws when it opens.',
       'Use a Modal for a message the reader can act on later. A Notification on the page does that without stopping them.',
       'Leave out the footer on a Modal that is not dismissible. Escape, the scrim and the close button are all off, so the reader would be stuck.',
-      'Put a second primary action in the footer. The ButtonGroup around it throws rather than let the decision go unmade.',
+      'Put a second filled action in the footer, or leave Back without a variant (it would render as a filled secondary). The ButtonGroup around it throws rather than let the decision go unmade.',
     ],
     a11y: [
       ['Keyboard', 'Tab and Shift+Tab cycle through the dialog’s controls and wrap at either end. Escape closes it unless dismissible is false, and so does the close button, named “Close”.'],
@@ -62,7 +62,7 @@ export function modalDoc(): ComponentDocConfig {
     related: [
       { href: '/docs/components/overlay', title: 'Overlay', why: 'where its focus trap comes from' },
       { href: '/docs/components/popover', title: 'Popover', why: 'when the page can carry on' },
-      { href: '/docs/components/button-group', title: 'Button group', why: 'the footer’s one-primary rule' },
+      { href: '/docs/components/button-group', title: 'Button group', why: 'the footer’s pairing rules' },
       { href: '/docs/components/notification', title: 'Notification', why: 'when it should not interrupt' },
     ],
   }

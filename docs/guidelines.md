@@ -162,13 +162,14 @@ The `Breakpoint LG–XL` collection provides granular control (LG: 1056px, XL: 1
 
 - **Size**: Expressive → 2x large → Extra large → Large → Medium → Small
 - **State**: Enabled → Hover → Focus → Active → Disabled → Skeleton → Read-only
-- **Style** (buttons): Primary, Secondary, Ghost, Danger primary, Danger ghost
+- **Style** (buttons): Primary, Outlined, Ghost, Secondary, Secondary outlined, Secondary ghost, Danger primary, Danger ghost
 - **Type** (buttons): Text + Icon, Icon only
 
 ### Key Components
 
 **Button** — Primary CTA component
-- Styles: Primary (filled), Secondary (filled, `secondary`), Ghost (text-only), Danger primary/ghost
+- Styles: two families with three ranks. Violet: Primary (filled), Outlined, Ghost (text-only). Green: Secondary (filled, `secondary`), Secondary outlined, Secondary ghost. Plus Danger primary/ghost
+- Pairing: one filled button per group, last, with partners from its own family
 - Types: Text + Icon (default), Icon only (compact)
 - Sizes: Expressive → 2x large → Extra large → Large (default) → Medium → Small
 - Primary for main action, Secondary for alternatives, Ghost for tertiary

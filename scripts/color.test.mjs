@@ -23,6 +23,12 @@ const PAIRS = [
   { key: 'onPrimaryOnSecondary', fill: 'secondary' },
   { key: 'onPrimaryOnDanger', fill: 'danger' },
 ]
+// The unfilled styles: the family colour as the label on the page at rest,
+// and its hover step as the label on surface-variant under hover and press.
+const PAGE_PAIRS = [
+  { key: 'primaryOnBackground', on: 'primary' },
+  { key: 'secondaryOnBackground', on: 'secondary' },
+]
 const SATURATIONS = [
   [0.6, 0.7],
   [0.3, 0.8],
@@ -30,7 +36,7 @@ const SATURATIONS = [
 ]
 
 const errors = []
-const worst = Object.fromEntries(PAIRS.map((p) => [p.key, Infinity]))
+const worst = Object.fromEntries([...PAIRS, ...PAGE_PAIRS].map((p) => [p.key, Infinity]))
 let checked = 0
 
 for (const [s, v] of SATURATIONS) {
@@ -61,6 +67,28 @@ for (const [s, v] of SATURATIONS) {
           }
           if (!c.passes) errors.push(`${where}: the engine reports a failure`)
         }
+        for (const { key, on } of PAGE_PAIRS) {
+          const c = theme.contrast[key]
+          const where = `${key} at ${hex} ${mode} ${level}`
+          if (!c) {
+            errors.push(`${where}: not measured`)
+            continue
+          }
+          if (c.on !== on || c.against !== 'background') {
+            errors.push(`${where}: measures ${c.on} on ${c.against}`)
+          }
+          const checks = [
+            [theme.tokens[on].hex, theme.tokens.background.hex],
+            [states[on].hover.hex, theme.tokens.surfaceVariant.hex],
+          ]
+          for (const [fg, bg] of checks) {
+            const ratio = contrastRatio(fg, bg)
+            checked++
+            worst[key] = Math.min(worst[key], ratio)
+            if (ratio < c.target) errors.push(`${where}: ${ratio.toFixed(2)}:1 for ${fg} on ${bg}, under ${c.target}:1`)
+          }
+          if (!c.passes) errors.push(`${where}: the engine reports a failure`)
+        }
       }
     }
   }
@@ -71,5 +99,5 @@ if (errors.length) {
   for (const e of errors.slice(0, 20)) console.error(`  x ${e}`)
   process.exit(1)
 }
-const summary = PAIRS.map((p) => `${p.key} worst ${worst[p.key].toFixed(2)}:1`).join(', ')
+const summary = [...PAIRS, ...PAGE_PAIRS].map((p) => `${p.key} worst ${worst[p.key].toFixed(2)}:1`).join(', ')
 console.log(`OK — Button's label pairs hold across ${checked} measurements (${summary})`)

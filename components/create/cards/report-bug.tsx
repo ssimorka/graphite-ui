@@ -43,7 +43,9 @@ export function ReportBugCard() {
         rows={5}
       />
       <div className={styles.foot}>
-        <Button size="lg">Attach File</Button>
+        <Button variant="outlined" size="lg">
+          Attach File
+        </Button>
         <Button variant="primary" size="lg">
           Submit Bug
         </Button>

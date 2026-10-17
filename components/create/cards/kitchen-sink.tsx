@@ -26,13 +26,16 @@ export function KitchenSinkCard() {
 
   return (
     <CardShell id="kitchen-sink">
+      {/* A specimen row, so every style sits side by side on purpose: the
+          pairing rules exempt it. Grouped by family, as the kit's sample is. */}
       <div className={styles.row}>
         <Button variant="primary">Button</Button>
-        <Button>Secondary</Button>
+        <Button variant="outlined">Outlined</Button>
         <Button variant="ghost">Ghost</Button>
-        <Button variant="danger" className={styles.delete}>
-          Delete
-        </Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="secondary-outlined">Secondary outlined</Button>
+        <Button variant="secondary-ghost">Secondary ghost</Button>
+        <Button variant="danger-ghost">Delete</Button>
       </div>
 
       <div className={styles.item}>
@@ -113,8 +116,10 @@ export function KitchenSinkCard() {
       <div className={styles.actions}>
         <Button>Alert Dialog</Button>
         <ButtonGroup>
-          <Button className={styles.groupMain}>Button Group</Button>
-          <Button size="icon" aria-label="More options">
+          <Button variant="secondary-outlined" className={styles.groupMain}>
+            Button Group
+          </Button>
+          <Button variant="secondary-outlined" size="icon" aria-label="More options">
             <KitIcon name="angle-small-down" aria-hidden="true" />
           </Button>
         </ButtonGroup>

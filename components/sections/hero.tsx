@@ -97,16 +97,16 @@ export function Hero({ governed }: { governed: number }) {
               checking contrast as it goes.
             </p>
             <div className="hero__ctas">
+              <Button variant="outlined" size="lg" asChild>
+                <a href="/gallery">
+                  Browse components
+                  <KitIcon name="layout-fluid" />
+                </a>
+              </Button>
               <Button variant="primary" size="lg" asChild>
                 <a href="/docs#use-today">
                   Get started
                   <KitIcon name="arrow-right" />
-                </a>
-              </Button>
-              <Button variant="ghost" size="lg" asChild>
-                <a href="/gallery">
-                  Browse components
-                  <KitIcon name="layout-fluid" />
                 </a>
               </Button>
             </div>

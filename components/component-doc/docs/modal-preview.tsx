@@ -18,8 +18,8 @@ const BODY = 'Everyone on the library gets the new tokens on their next sync.'
 function codeFor(size: Size, dismissible: boolean, label: boolean, actions: Actions, loading: boolean) {
   const lines: Record<string, string> = {
     cancel: "    <Button key=\"cancel\" variant=\"ghost\" onClick={() => setOpen(false)}>Cancel</Button>,",
-    back: "    <Button key=\"back\" onClick={() => setOpen(false)}>Back</Button>,",
-    draft: "    <Button key=\"draft\" onClick={() => setOpen(false)}>Save draft</Button>,",
+    back: "    <Button key=\"back\" variant=\"outlined\" onClick={() => setOpen(false)}>Back</Button>,",
+    draft: "    <Button key=\"draft\" variant=\"outlined\" onClick={() => setOpen(false)}>Save draft</Button>,",
     publish: "    <Button key=\"publish\" variant=\"primary\" onClick={publish}>Publish</Button>,",
   }
   const keys = actions === 1 ? ['publish'] : actions === 2 ? ['back', 'publish'] : actions === 3 ? ['back', 'draft', 'publish'] : ['cancel', 'back', 'publish']
@@ -48,7 +48,7 @@ const footer = (close: () => void, actions: Actions = 2) => {
     </Button>
   )
   const back = (
-    <Button key="back" onClick={close}>
+    <Button key="back" variant="outlined" onClick={close}>
       Back
     </Button>
   )
@@ -56,7 +56,7 @@ const footer = (close: () => void, actions: Actions = 2) => {
   if (actions === 3)
     return [
       back,
-      <Button key="draft" onClick={close}>
+      <Button key="draft" variant="outlined" onClick={close}>
         Save draft
       </Button>,
       publish,

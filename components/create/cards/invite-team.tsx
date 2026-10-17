@@ -62,7 +62,7 @@ export function InviteTeamCard() {
         </div>
       ))}
       <Button
-        variant="secondary"
+        variant="ghost"
         className={styles.full}
         onClick={() => setInvitees((l) => [...l, { email: '', role: 'member' }])}
       >

@@ -45,14 +45,16 @@
   pointer-events: none;
 }
 
-// The kit's trailing icon on the filled styles: pinned 16px from the right
+// The kit's trailing icon on the filled and outlined styles: pinned 16px from the right
 // edge, inside the 64px inset that reserves its slot, so the label stays
 // left-aligned and the icon sits at the far end rather than against the text.
 // The kit has no leading icon, and CSS cannot tell one from a trailing icon
 // beside a bare text label anyway, so an icon in a labelled filled button is
 // the trailing one. The icon-only sizes (.square) keep their glyph centred.
 .primary:not(.square) > svg,
+.outlined:not(.square) > svg,
 .secondary:not(.square) > svg,
+.secondaryOutlined:not(.square) > svg,
 .danger:not(.square) > svg {
   position: absolute;
   // Centred by offset rather than a transform (every Button icon is 1rem, see
@@ -83,7 +85,13 @@
 }
 
 .ghost:focus-visible,
-.dangerGhost:focus-visible {
+.secondaryGhost:focus-visible,
+.dangerGhost:focus-visible,
+.outlined:focus-visible,
+.secondaryOutlined:focus-visible {
+  // The unfilled styles have no fill to separate the ring from, so no inner
+  // background line. On the outlined styles the ring replaces the 1px border,
+  // as the kit draws Focus.
   box-shadow: inset 0 0 0 2px var(--ring);
 }
 
@@ -109,10 +117,11 @@
 // The label stays `onPrimary` through hover and press — one label colour for
 // the variant, as the kit has it, rather than swapping to `onSecondary`.
 .secondary {
-  // The kit binds Secondary's ring to state/success-focus-ring, which reads as
-  // a slip: every other style uses its own family's ring, and secondary has
-  // one. The code takes secondary's.
-  --ring: var(--graphite-secondary-focus);
+  // Every style takes primary's ring, as the kit binds it since 2026-10-17.
+  // The kit used to bind Secondary's to state/success-focus-ring, which was a
+  // slip; the fix moved it to primary's, so the code follows (rule 7) rather
+  // than keeping secondary's own.
+  --ring: var(--graphite-primary-focus);
   background: var(--graphite-secondary);
   color: var(--graphite-on-primary);
 }
@@ -122,6 +131,7 @@
 // the filled styles' 64px inset: the kit pads it 16 on both sides and lets the
 // icon follow the label at an 8px gap.
 .ghost,
+.secondaryGhost,
 .dangerGhost {
   gap: var(--graphite-space-03);
   padding: 0 var(--graphite-space-05);
@@ -141,6 +151,55 @@
   background: var(--graphite-surface-variant);
   // The kit darkens the label a step too, on both.
   color: var(--graphite-primary-hover);
+}
+
+// Outlined: the middle rank of each family. The filled styles' geometry (the
+// 64px inset and the pinned trailing icon) on no fill, with a 1px border and
+// the label in the family colour. The border is an inset shadow rather than a
+// CSS border so it takes no space, which keeps the label 16px in, where the
+// filled styles have it. Hover and press are ghost's: a surface-variant fill
+// under a label one step darker. The kit binds the border to the family colour
+// itself (primary 9.28 / 9.39:1 on the page at the default source, secondary
+// 8.33 / 10.04:1), not to the neutral outline role.
+.outlined,
+.secondaryOutlined {
+  --ring: var(--graphite-primary-focus);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--edge);
+}
+
+.outlined {
+  --edge: var(--graphite-primary);
+  color: var(--graphite-primary);
+}
+
+.secondaryOutlined {
+  --edge: var(--graphite-secondary);
+  color: var(--graphite-secondary);
+}
+
+.outlined:hover:not(:disabled),
+.outlined:active:not(:disabled) {
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-primary-hover);
+}
+
+.secondaryOutlined:hover:not(:disabled),
+.secondaryOutlined:active:not(:disabled) {
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-secondary-hover);
+}
+
+// Secondary ghost: ghost in the green family, for the partner of a secondary.
+.secondaryGhost {
+  --ring: var(--graphite-primary-focus);
+  color: var(--graphite-secondary);
+}
+
+.secondaryGhost:hover:not(:disabled),
+.secondaryGhost:active:not(:disabled) {
+  background: var(--graphite-surface-variant);
+  color: var(--graphite-secondary-hover);
 }
 
 // The kit binds Danger primary's label to `onPrimary`, not `onDanger`.
@@ -174,12 +233,21 @@
   color: var(--graphite-on-primary);
 }
 
-// The ghost styles stay unfilled when disabled, as the kit draws them: only
-// the label dims, to the disabled fill's tone.
+// The ghost and outlined styles stay unfilled when disabled, as the kit draws
+// them: only the label dims, to the disabled fill's tone, and the outlined
+// border drops to the subtle outline.
 .ghost:disabled,
-.dangerGhost:disabled {
+.secondaryGhost:disabled,
+.dangerGhost:disabled,
+.outlined:disabled,
+.secondaryOutlined:disabled {
   background: transparent;
   color: var(--graphite-primary-disabled);
+}
+
+.outlined:disabled,
+.secondaryOutlined:disabled {
+  box-shadow: inset 0 0 0 1px var(--graphite-outline-subtle);
 }
 
 .sm { min-height: var(--graphite-space-07); font-size: 0.75rem; line-height: 1rem; }
@@ -203,10 +271,14 @@
 .xxl { min-height: calc(var(--graphite-space-11) + 2px); }
 
 .primary.xl > svg,
+.outlined.xl > svg,
 .secondary.xl > svg,
+.secondaryOutlined.xl > svg,
 .danger.xl > svg,
 .primary.xxl > svg,
+.outlined.xxl > svg,
 .secondary.xxl > svg,
+.secondaryOutlined.xxl > svg,
 .danger.xxl > svg {
   top: var(--graphite-space-05);
 }
@@ -218,6 +290,7 @@
 // 12px after the label where every other ghost size has 8. Built as drawn;
 // it reads like Carbon's old 20px expressive icon left in place.
 .ghost.expressive,
+.secondaryGhost.expressive,
 .dangerGhost.expressive { gap: var(--graphite-space-04); }
 
 // Square, for a button whose whole content is an icon, at every size the kit
