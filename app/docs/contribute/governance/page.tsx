@@ -69,7 +69,7 @@ const RULES: { n: number; text: ReactNode; href?: string }[] = [
   },
   {
     n: 6,
-    text: 'Every component set in the kit is either governed (a contract declares it, and its description carries that contract’s version) or ungoverned, and says so in the same place. Nothing is unlabelled.',
+    text: 'Every component set in the kit is either governed (a contract or a pattern doc declares it, and its description carries that version) or ungoverned, and says so in the same place. Nothing is unlabelled.',
     href: '#governed',
   },
   {
@@ -115,7 +115,7 @@ const CHECKS = [
 const SIX: [string, string, string, string][] = [
   ['Separator, Avatar, Card', '3', 'None; only the gallery composed them', 'Removed'],
   ['Label, Field', '2', 'Answered on the form controls instead', 'Absorbed'],
-  ['Navigation Menu', '3', 'site-header.tsx, and step 1 of the shadcn migration', 'Kept'],
+  ['Navigation Menu', '3, until 2026-10-08', 'site-header.tsx, and step 1 of the shadcn migration', 'Kept; now inverted against the kit’s Header menu sets'],
   ['Typography', '3', 'Two contracts depend on it, one in a prohibition', 'Kept'],
 ]
 
@@ -353,7 +353,7 @@ export default function GovernancePage() {
           <section id="governed" className={styles.block}>
             <SectionHeading
               title="Governed and ungoverned"
-              lede="Rule 6. A set is governed if a contract declares it, and ungoverned otherwise. Ungoverned sets stay in the kit and say so."
+              lede="Rule 6. A set is governed if a contract or a pattern doc declares it, and ungoverned otherwise. Ungoverned sets stay in the kit and say so."
             />
             <dl className={styles.stats}>
               <div className={styles.stat}>
@@ -403,17 +403,17 @@ export default function GovernancePage() {
                 [
                   'Application shells',
                   'UI shell, Content switcher',
-                  'Out of scope permanently. They compose an application; they are not primitives.',
+                  'Scheduled to build in wave G3 (decided 2026-10-07). UI shell as three contracts; Content switcher was misfiled here and is a segmented control.',
                 ],
                 [
                   'Vendor features',
                   'AI label, AI layer, AI explainability popover',
-                  'Out of scope permanently. Tied to IBM product decisions Graphite does not make.',
+                  'Scheduled to build in wave G3, as Graphite’s own: the AI family tints from the secondary ramp.',
                 ],
                 [
                   'Carbon idioms',
                   'Structured list, Toggletip, Tile, Code snippet, Loading, Progress indicator, Form, List',
-                  'Out of scope permanently. No Graphite counterpart.',
+                  'Scheduled to build in wave G3. Form is governed by a pattern doc, not a contract, and adds no wrapper.',
                 ],
                 [
                   'Built and governed',

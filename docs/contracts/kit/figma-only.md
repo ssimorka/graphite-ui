@@ -5,12 +5,17 @@ the kit's 27 unclaimed component pages, with its bucket under governance rule 6.
 
 **Dispositions amended 2026-10-04 (#240):** *In scope, awaiting demand* became
 **Build — wave G1**, *Already spoken for* became **Build — wave G2**, and two sets
-on governed pages were carried in from #219. The permanent three are unchanged,
-except that **Tree view left the application shells on 2026-10-04** and is governed
+on governed pages were carried in from #219. **Tree view left the application shells on 2026-10-04** and is governed
 by `tree-view.md`; see "Governed — Tree view" below. All of the G1, G2 and carried sets were then **built** under #240 and are stamped
 governed; the bucket headings below say so. The 73 counted here is the
 2026-08-28 walk; the gallery's no-contract tile is now summed from the snapshot.
 See "What the rule decides today" in `../README.md`.
+
+**Dispositions amended again 2026-10-07 (#358):** the three buckets that were
+*ungoverned, permanently* are **scheduled to build as wave G3**. Each page's
+issue is named in its heading below and in "The G3 restamp". Form is governed by
+a pattern doc rather than a contract; Content switcher was misfiled as a shell
+and is built as a segmented control.
 
 **Derived 2026-08-28** by walking the kit (`p2jyUgkFhJd6A5M7L39Ixo`) page by page
 through the Figma Plugin API, read-only. Regenerate the same way if the kit gains
@@ -30,10 +35,13 @@ its description, after the kit's own text:
 | Line | Sets | Means |
 |---|---|---|
 | `Graphite: governed — docs/contracts/<name>.md <version>` | 80 | A contract declares the set; the version is that contract's on `main` |
-| `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` | 35 | One of the three permanent buckets below, so the reader lands here |
+| `Graphite: ungoverned, scheduled to build (#NNN)` | 35 | Wave G3 (#358) builds it; `#NNN` is its page's issue. Listed under "The G3 restamp" below |
 
-Nothing carries the interim `Graphite: ungoverned, scheduled to build (#240)`
-any more: every set that held it has since acquired a contract. `_`-prefixed
+Until 2026-10-07 those 35 read `Graphite: ungoverned — see
+docs/contracts/kit/figma-only.md`, for the three permanent buckets. **The
+restamp is manual and pending**: until it is applied, the kit still shows the
+old line. The earlier interim form, `Graphite: ungoverned, scheduled to build
+(#240)`, is gone: every set that held it acquired a contract. `_`-prefixed
 sets carry no line, for the reason given under "Public and private sets" below.
 
 Six of the 35 are standalone public components rather than sets (`AI label
@@ -82,7 +90,7 @@ work for less clarity.
 
 ### Application shells — 4 pages, 11 public / 2 private
 
-*Ungoverned, permanently.*
+*Scheduled to build, G3: UI shell as three contracts (#368); Content switcher, a segmented control misfiled here, as its own (#366). Until 2026-10-07: ungoverned, permanently.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -93,7 +101,7 @@ work for less clarity.
 
 ### Vendor features (AI) — 3 pages, 9 public / 3 private
 
-*Ungoverned, permanently.*
+*Scheduled to build, G3: AI layer (#369), AI explainability popover (#370), AI label (#371); the AI slot in the governed hosts follows (#375). Until 2026-10-07: ungoverned, permanently.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -103,7 +111,7 @@ work for less clarity.
 
 ### Carbon idioms with no Graphite counterpart — 8 pages, 15 public / 17 private
 
-*Ungoverned, permanently.*
+*Scheduled to build, G3: Loading (#363), List (#364), Code snippet (#365), Toggletip (#367), Progress indicator (#372), Structured list (#373), Tile (#374); Form as a pattern doc (#376). Until 2026-10-07: ungoverned, permanently.*
 
 | Page | Public sets | Private | Variants |
 |---|---|---|---|
@@ -168,6 +176,56 @@ sidebar is the hierarchy it answers. See the application shells bullet in
 |---|---|---|---|
 | Accordion | 2 | 3 | 141 |
 
+## The G3 restamp
+
+The 35 public sets that change from `Graphite: ungoverned — see
+docs/contracts/kit/figma-only.md` to `Graphite: ungoverned, scheduled to build
+(#NNN)`, where `#NNN` is the issue below. Node ids are from the 2026-08-28
+snapshot. Applied by hand; nothing in CI checks it. When an issue lands, its
+sets take the governed line instead.
+
+| Page | Set | Node id | Issue |
+|---|---|---|---|
+| AI explainability popover | `AI explainability popover` | `57561:3508` | #370 |
+| AI explainability popover | `AI explainability popover actions footer` | `57561:3559` | #370 |
+| AI label | `AI label` | `51447:1916` | #371 |
+| AI label | `AI label - Inline` | `51447:2035` | #371 |
+| AI label | `AI label wrapper` | `82808:17` | #371 |
+| AI layer | `AI layer - Background` | `51447:122453` | #369 |
+| AI layer | `AI layer - Border` | `51447:122528` | #369 |
+| AI layer | `AI layer - Field` | `55928:174` | #369 |
+| AI layer | `AI layer - Shadow` | `51447:122527` | #369 |
+| Code snippet | `Code snippet - Inline` | `4266:104904` | #365 |
+| Code snippet | `Code snippet - Multi-line` | `4257:168802` | #365 |
+| Code snippet | `Code snippet - Single line` | `4266:103999` | #365 |
+| Content switcher | `Content switcher` | `10151:402486` | #366 |
+| Form | `Form modal - Default` | `4260:102550` | #376 |
+| Form | `Form modal - Fluid` | `16827:270697` | #376 |
+| Form | `Form on page` | `3897:51336` | #376 |
+| List | `List` | `3284:27553` | #364 |
+| List | `List item` | `3284:27542` | #364 |
+| Loading | `Inline loading` | `3238:28455` | #363 |
+| Loading | `Loading` | `78017:897920` | #363 |
+| Progress indicator | `Progress indicator` | `3925:58667` | #372 |
+| Structured list | `Structured list` | `11797:285083` | #373 |
+| Structured list | `Structured list - Selectable` | `61653:7458` | #373 |
+| Tile | `Tile` | `20125:279432` | #374 |
+| Toggletip | `Toggletip` | `9384:402406` | #367 |
+| UI shell - Header | `UI shell - Header` | `92123:1663` | #368 |
+| UI shell - Header | `UI shell - Header actions` | `2133:10716` | #368 |
+| UI shell - Header | `UI shell - Header menu` | `2213:15047` | #368 |
+| UI shell - Header | `UI shell - Header menu item` | `2133:9531` | #368 |
+| UI shell - Header | `UI shell - Header sub-menu` | `2133:9973` | #368 |
+| UI shell - Header | `UI shell - Header sub-menu item` | `2133:9888` | #368 |
+| UI shell - Left panel | `UI shell - Left panel` | `6227:297201` | #368 |
+| UI shell - Left panel | `UI shell - Left panel menu item` | `2346:16194` | #368 |
+| UI shell - Right panel | `UI shell - Right panel` | `2319:15100` | #368 |
+| UI shell - Right panel | `UI shell - Right panel item` | `2282:13907` | #368 |
+
+`Revert AI button` lives on the kit's `99 Utilities` page, outside the 45
+component pages this list and the snapshot cover, so it is not in the 35. It is
+built with AI label (#371), and takes that contract's line when it lands.
+
 ## Four pages the rule did not reach
 
 Rule 6 names five categories and reads as if it resolves all 27. Walking them
@@ -179,8 +237,8 @@ category in `README.md`. Bucketed here, with the reasoning recorded once:
 |---|---|---|
 | Menu buttons | Already spoken for (now governed) | `Menu button`, `Combo button` and `Overflow` are the three sets `#103` flagged as unaccounted Button neighbours. Graphite composed this as Button plus Menu; #286 gave it its own contract, menu-button.md. |
 | File uploader | Awaiting demand (now governed) | A Carbon primitive with no Graphite contract, same class as Date picker and Slider. Built under #240 (#270): file-uploader.md. |
-| Form | Carbon idiom | A wrapper around form controls, which is the species Graphite has already declined once: Field was removed in `#135` because the kit puts label and helper text on the control itself. Adopting Form would reintroduce the wrapper by another name. |
-| List | Carbon idiom | Carbon's plain ordered/unordered list, sibling to Structured list. Contained list is the governed member of this family; `List` and `List item` are the typographic ones and have no Graphite counterpart. |
+| Form | Carbon idiom (scheduled, G3) | A layout of form controls. Field was removed in `#135` because the kit puts label and helper text on the control itself, so Form was declined as a wrapper by another name. Since 2026-10-08 it is governed by a pattern doc that cites its node ids and adds no wrapper (#376), so #135's reasoning stands. |
+| List | Carbon idiom (scheduled, G3) | Carbon's plain ordered/unordered list, sibling to Structured list. Contained list is the governed member of this family; `List` and `List item` are the typographic ones, built as their own component (#364). |
 
 That the rule had gaps is not a defect in it. It is what Part B is for: Part A
 wrote the categories from five worked examples, and applying them to all 27
@@ -238,70 +296,70 @@ Variant counts in parentheses. `_`-prefixed sets are the kit's own internals.
 - Public: `Branch node item` (32), `Tree view` (2)
 - Private: `_Tree view spacer - Branch node` (8), `_Tree view spacer - Leaf node` (8)
 
-**Content switcher** — Application shells
+**Content switcher** — Scheduled, G3 (#366; was Application shells)
 
 - Public: `Content switcher` (24)
 - Private: `_Content switcher text item` (144), `_Content switcher icon item` (144)
 
-**UI shell - Left panel** — Application shells
+**UI shell - Left panel** — Scheduled, G3 (#368; was Application shells)
 
 - Public: `UI shell - Left panel menu item` (34), `UI shell - Left panel` (2)
 
-**UI shell - Header** — Application shells
+**UI shell - Header** — Scheduled, G3 (#368; was Application shells)
 
 - Public: `UI shell - Header menu item` (15), `UI shell - Header sub-menu item` (6), `UI shell - Header sub-menu` (1), `UI shell - Header actions` (10), `UI shell - Header menu` (9), `UI shell - Header` (2)
 
-**UI shell - Right panel** — Application shells
+**UI shell - Right panel** — Scheduled, G3 (#368; was Application shells)
 
 - Public: `UI shell - Right panel item` (7), `UI shell - Right panel` (1)
 
-**AI label** — Vendor features (AI)
+**AI label** — Scheduled, G3 (#371; was Vendor features)
 
 - Public: `AI label wrapper` (1), `AI label` (28), `AI label - Inline` (18)
 
-**AI layer** — Vendor features (AI)
+**AI layer** — Scheduled, G3 (#369; was Vendor features)
 
 - Public: `AI layer - Background` (15), `AI layer - Field` (6), `AI layer - Shadow` (1), `AI layer - Border` (1)
 
-**AI explainability popover** — Vendor features (AI)
+**AI explainability popover** — Scheduled, G3 (#370; was Vendor features)
 
 - Public: `AI explainability popover` (2), `AI explainability popover actions footer` (1)
 - Private: `_AI explainability popover/Test` (1), `_AI explainability popover/Test 2` (1), `_AI explainability popover/Test 3` (1)
 
-**Form** — Carbon idioms with no Graphite counterpart
+**Form** — Scheduled, G3 (#376, a pattern doc; was Carbon idioms)
 
 - Public: `Form on page` (2), `Form modal - Default` (2), `Form modal - Fluid` (1)
 - Private: `_Form modal base` (1)
 
-**Loading** — Carbon idioms with no Graphite counterpart
+**Loading** — Scheduled, G3 (#363; was Carbon idioms)
 
 - Public: `Inline loading` (4), `Loading` (2)
 - Private: `_Loading base` (2), `_Loading animation` (8)
 
-**Progress indicator** — Carbon idioms with no Graphite counterpart
+**Progress indicator** — Scheduled, G3 (#372; was Carbon idioms)
 
 - Public: `Progress indicator` (2)
 - Private: `_Progress indicator skeleton item` (2), `_Progress indicator item` (12), `_Progress indicator step label base` (6)
 
-**Toggletip** — Carbon idioms with no Graphite counterpart
+**Toggletip** — Scheduled, G3 (#367; was Carbon idioms)
 
 - Public: `Toggletip` (24)
 - Private: `_Toggletip body item` (12)
 
-**Structured list** — Carbon idioms with no Graphite counterpart
+**Structured list** — Scheduled, G3 (#373; was Carbon idioms)
 
 - Public: `Structured list` (4), `Structured list - Selectable` (4)
 - Private: `_Structured list header row item` (2), `_Structured list header row item` (2), `_Structured list row item` (8), `_Structured list row item - Selectable` (32), `_Structured list header cell base` (2), `_Structured list row cell base` (4), `_Structured list select cell base` (2)
 
-**List** — Carbon idioms with no Graphite counterpart
+**List** — Scheduled, G3 (#364; was Carbon idioms)
 
 - Public: `List item` (4), `List` (2)
 
-**Tile** — Carbon idioms with no Graphite counterpart
+**Tile** — Scheduled, G3 (#374; was Carbon idioms)
 
 - Public: `Tile` (65)
 
-**Code snippet** — Carbon idioms with no Graphite counterpart
+**Code snippet** — Scheduled, G3 (#365; was Carbon idioms)
 
 - Public: `Code snippet - Single line` (3), `Code snippet - Inline` (6), `Code snippet - Multi-line` (5)
 - Private: `_Code snippet tooltip` (7), `_Code snippet - Inline item` (5), `_Code snippet ghost button` (12)

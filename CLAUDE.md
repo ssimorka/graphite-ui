@@ -128,13 +128,15 @@ before trusting a browser result.
 - **Carbon-only sets in the kit are labelled, not deleted.** Governance
   rule 6 (`docs/contracts/README.md`, "Carbon-only sets in the kit") settles
   what happens to the 27 component pages no contract claims: a set is
-  *governed* if a contract declares it and *ungoverned* otherwise, ungoverned
+  *governed* if a contract (or, since 2026-10-08, a pattern doc) declares it
+  and *ungoverned* otherwise, ungoverned
   sets stay in the file and say so in their description, and movement is
   one-way. Deleting is off the table while the library is published, because
-  removal is a breaking change for consumers. Three classes are ungoverned
-  permanently rather than pending — application shells (UI shell, Content
-  switcher), Carbon's AI components, and Carbon idioms with no
-  Graphite counterpart. Don't re-argue any of this per component: that
+  removal is a breaking change for consumers. Three classes used to be
+  ungoverned permanently — application shells (UI shell, Content switcher),
+  Carbon's AI components, and Carbon idioms with no Graphite counterpart —
+  until **wave G3 (#358, decided 2026-10-07)** scheduled them to build; see
+  the G3 note below. Don't re-argue any of this per component: that
   piecemeal drift is exactly what #124 exists to stop.
   **Amended and done 2026-10-04 (#240, closed):** the other two buckets were
   built rather than left waiting for demand — G1 (Link, Search, Pagination,
@@ -142,30 +144,40 @@ before trusting a browser result.
   group carried from #219, and G2 (Password input, Number input, Menu buttons,
   Dropdown in four kinds), each splitting a fold off a governed contract.
   Every one met #219's definition of done, kit description stamp included;
-  only the permanent three stay ungoverned, so the Navigation Menu settlement
-  stands. That makes 36 contracts.
+  at the time only the permanent three stayed ungoverned. That made 36
+  contracts.
   **Tree view left the application shells on 2026-10-04** and is governed
   (`tree-view.md`, wave 4): the kit draws it as a primitive, and the docs
   sidebar is now one Tree view, groups as branches and pages as link leaves.
-  That makes 37 contracts. Navigation Menu keeps the header's flat case, so
-  its settlement (below) is unchanged. Contract `component:` names are display
+  That makes 37 contracts. Contract `component:` names are display
   names ("Checkbox group", "Menu buttons"), never PascalCase: the gallery
   keys its previews and kit-page matching on them (#296). The gallery's
   no-contract tile is summed from the snapshot (35), not read from
   figma-only.md's 73, which records the 2026-08-28 walk.
-- **Navigation Menu is deliberately un-inverted, and that is settled.** #113
-  looked like the last open Wave 4 item and was not: rule 6 (#128) puts
-  Carbon's six UI shell sets out of scope by construction as application
-  shells, which leaves the kit *silent* on `navigation-menu.md` rather than
-  disagreeing with it, and rule 7's tie-break (#141) then says the code keeps
-  its own. It is kept rather than removed because it passes rule 6's demand
-  test where Separator, Avatar and Card failed it: `site-header.tsx` renders
-  it (the header's flat links), having replaced Carbon's `Header` /
-  `HeaderNavigation` / `SideNav` with it and Tree view, which was step 1 of
-  `docs/SHADCN-MIGRATION.md`. Contract went to
-  2.0.0 for the added "not an application shell" prohibition; the only code
-  change is the version docblock, which `drift-check` verifies against the
-  contract. Don't re-open this as deferred work.
+  **Wave G3 (#358) reverses the permanent three, 2026-10-07.** Every remaining
+  public set is built, by dependency in waves G3.0–G3.4 (#359–#377); their 35
+  sets restamp to `Graphite: ungoverned, scheduled to build (#NNN)` until each
+  lands (list in figma-only.md, "The G3 restamp"). Decisions recorded on #358
+  (2026-10-08): Form is governed by a **pattern doc** citing node ids, not a
+  contract, so #135's no-wrapper reasoning stands; UI shell is three contracts
+  (Header, Left panel, Right panel), which match their page names without
+  `PAGE_ALIASES`; Content switcher was misfiled as a shell and is a segmented
+  control; Toggletip is its own contract on Overlay; the AI family tints from
+  the secondary ramp (never Carbon blue) and reaches the 12 governed hosts
+  through an `ai` prop. Radio button was never in the 14 for real:
+  `radio-button-group.md` governs both its sets.
+- **Navigation Menu is inverted against the kit's Header menu sets (#360).**
+  It was settled as un-inverted in #113: rule 6 (#128) put Carbon's six UI
+  shell sets out of scope as application shells, which left the kit *silent*
+  on `navigation-menu.md`, and rule 7's tie-break (#141) let the code keep its
+  own. G3 brings UI shell into scope, so the kit has a counterpart and rule 7
+  applies. Decided 2026-10-08: Navigation Menu becomes the code for `UI shell -
+  Header menu`, `menu item`, `sub-menu` and `sub-menu item`, and the UI shell
+  Header composes it; nothing is retired. The inversion itself lands with the
+  Header (#368). Contract 3.0.0, because its "not an application shell"
+  prohibition changed: the header bar and panels are now the UI shell
+  contracts, not site chrome outside `components/ui/`. drift-check verifies the
+  docblock version against the contract.
 - **Rule 8 settles whether a component with no kit counterpart exists.**
   Ratified in #133 and written up as "When the kit has nothing" in
   `docs/contracts/README.md`. Rules 6 and 7 answer *who wins a disagreement*;
@@ -177,7 +189,8 @@ before trusting a browser result.
   does the kit answer the same need inside something else it governs (absorb,
   as Label and Field were) → does it say nothing at all (rule 6's demand test
   decides). All six cases are sorted in the table there: Separator/Avatar/Card
-  removed, Label/Field absorbed, Navigation Menu and Typography kept.
+  removed, Label/Field absorbed, Navigation Menu and Typography kept
+  (Navigation Menu has since moved to question 1, #360).
   **The distinction that does the work is dependency versus illustration** — if
   the reference still reads correctly after substituting something else, it was
   an illustration. Avatar was named in Contained list's *optional* leading slot
@@ -233,10 +246,11 @@ before trusting a browser result.
   description with one line, after a blank line and the kit's own text:
   `Graphite: governed — docs/contracts/<name>.md <version>` (80) or
   `Graphite: ungoverned — see docs/contracts/kit/figma-only.md` (35, the
-  permanent three buckets). `_`-prefixed sets carry none. The interim
-  `Graphite: ungoverned, scheduled to build (#240)` form is retired; every set
-  that held it now has a contract. Recorded in "What the kit says" in
-  `docs/contracts/kit/figma-only.md`.
+  three buckets that were permanent). `_`-prefixed sets carry none. Since G3
+  (#358) those 35 are due to read `Graphite: ungoverned, scheduled to build
+  (#NNN)` with their page's issue; Steph applies that by hand, so until then
+  the kit still shows the old line. Recorded in "What the kit says" and "The
+  G3 restamp" in `docs/contracts/kit/figma-only.md`.
   **No check enforces the stamp**, so it lags every contract version bump until
   someone restamps, and consumers see it only after the library is republished.
   Read versions from the contract (the gallery badge does), never from the kit.

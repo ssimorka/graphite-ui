@@ -20,14 +20,12 @@ export type NavItem = {
 }
 
 /**
- * Contract: docs/contracts/navigation-menu.md (2.0.1)
+ * Contract: docs/contracts/navigation-menu.md (3.0.0)
  *
- * A list of links, and only that. The kit's counterpart is Carbon's six UI
- * shell sets, which rule 6 places out of scope as application shells, so the
- * kit is silent here and this geometry is the code's own (#113). The de-Carbon
- * pass in docs/SHADCN-MIGRATION.md replaces `site-header.tsx`, and the shell it
- * builds may compose this component but must not be folded into it — a header
- * bar, a global action rail or a collapsible side panel is site chrome.
+ * A list of links, and only that. Its kit counterpart is the UI shell Header
+ * menu sets (#360); until that inversion lands with UI shell - Header (#368),
+ * this geometry is the code's own. The UI shell contracts compose this
+ * component and must never be folded into it.
  */
 type NavigationMenuProps = {
   items: [NavItem, ...NavItem[]]
