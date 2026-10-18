@@ -3,8 +3,10 @@
 // The kit's Notification - Inline (Graphite UI Kit 4179:105911): the status
 // container with a 1px edge and a 3px stripe on the left, both in the status
 // role; the status icon 16 in; title (Title/5) and message (Body/3) in
-// on-surface, sharing one line while they fit; a 48px ghost close flush in
-// the top right. High contrast inverts the fill and drops the edge.
+// on-surface, sharing one line while they fit; an outlined action and a 48px
+// ghost close flush in the top right. High contrast inverts the fill and drops
+// the edge. Since 2026-10-17 the kit draws Inline and Callout as copies of
+// Toast, and so does this file: Toast shares the action, close and icons.
 //
 // Not elevated. The Wave 5 preamble groups Notification with the overlays, but
 // its own contract puts it inline and persistent.
@@ -33,7 +35,7 @@
 .warning { --status: var(--graphite-warning); background: var(--graphite-warning-container); }
 .success { --status: var(--graphite-success); background: var(--graphite-success-container); }
 
-// The icon, 16 down (14 for the 20px glyphs), 16 before the text.
+// The icon, 16 down (14 for the 20px warning triangle), 16 before the text.
 .icon {
   display: inline-flex;
   flex: none;
@@ -42,14 +44,16 @@
   color: var(--status);
 }
 
-.info .icon,
 .warning .icon { padding-block: 14px; }
 
+// The kit's triangle is one shape with the "!" cut out, so the mark takes
+// whatever fill it sits on: the warning container here, on-background in
+// high contrast. Toast sets the same --mark for its own fill.
 .warningGlyph {
   width: 20px;
   height: 20px;
   [data-part='glyph'] { fill: var(--graphite-warning); }
-  [data-part='mark'] { fill: var(--graphite-on-warning); }
+  [data-part='mark'] { fill: var(--mark, var(--graphite-warning-container)); }
 }
 
 .content {
@@ -65,16 +69,30 @@
 .title { font-weight: var(--graphite-text-weight-semibold); }
 .body { min-width: 0; }
 
-// The kit's action: a small ghost button in Body/3, centred in the top 48 row.
+// The kit's action: Notification action button item, a small ghost button in
+// Body/3 with a 1px edge, centred in the top 48 row and butting the close.
+// Label on-surface (Text/text-primary) and edge on-background
+// (Border/border-inverse). The edge is an inset shadow, as Button's outlined
+// styles draw theirs, so it takes no space. Hover is the item's: the
+// surface-variant fill, with the label kept on-surface rather than ghost's
+// darker primary.
 .action {
+  --edge: var(--graphite-on-background);
   flex: none;
   margin-block: var(--graphite-space-03);
+  box-shadow: inset 0 0 0 1px var(--edge);
   font-size: var(--graphite-text-body-3-size);
   line-height: var(--graphite-text-body-3-line-height);
 }
 
-.action + .close { margin-inline-start: var(--graphite-space-03); }
+// Prefixed with .alert so these outrank Button's ghost rules whatever order
+// the two stylesheets load in.
+.alert .action,
+.alert .action:hover:not(:disabled),
+.alert .close,
+.alert .close:hover:not(:disabled) { color: var(--graphite-on-surface); }
 
+// The close glyph is Icon/icon-primary, on-surface, as the label is.
 .close { flex: none; }
 
 // --------------------------------------------------------------- high contrast
@@ -82,6 +100,9 @@
 // take the status ramp's inverse stop, which the engine does not stamp; the
 // status container is the role that points the same way on this fill (light
 // on dark in Light, dark on light in Dark). Swept: 3:1 or better everywhere.
+// Two icons differ: Info's is onInfo, and Warning's triangle is
+// Support/support-error-inverse, danger's inverse stop, so it takes the
+// danger container, as the danger icon does.
 .highContrast {
   --stripe: var(--status-inverse);
   background: var(--graphite-on-background);
@@ -95,28 +116,37 @@
 .highContrast.success { --status-inverse: var(--graphite-success-container); }
 
 .highContrast .icon { color: var(--status-inverse); }
-.highContrast .warningGlyph [data-part='glyph'] { fill: var(--graphite-warning-container); }
-.highContrast .warningGlyph [data-part='mark'] { fill: var(--graphite-on-warning-container); }
+.highContrast.info .icon { color: var(--graphite-on-info); }
+.highContrast .warningGlyph {
+  --mark: var(--graphite-on-background);
+  [data-part='glyph'] { fill: var(--graphite-danger-container); }
+}
 
-// The kit keeps a primary close glyph and link label on the inverse fill.
-// The close glyph takes background, Carbon's icon-inverse, and the action the
-// primary container, the inverse link's direction.
-// Ghost's hover fill and darker label would be wrong on the inverse fill, so
-// hover keeps the colours and only underlines the action.
+// The close glyph takes background (Icon/icon-inverse). The action's label is
+// on-primary (Text/text-on-color) and its edge primary-disabled
+// (Border/border-disabled). Ghost's surface-variant hover would be a light
+// patch under a light label on this fill, so hover keeps the colours and only
+// underlines the action.
 .highContrast .close,
 .highContrast .close:hover:not(:disabled) {
   background: transparent;
   color: var(--graphite-background);
 }
 
+.highContrast .action { --edge: var(--graphite-primary-disabled); }
+
 .highContrast .action,
 .highContrast .action:hover:not(:disabled) {
   background: transparent;
-  color: var(--graphite-primary-container);
+  color: var(--graphite-on-primary);
 }
 
 .highContrast .action:hover:not(:disabled) { text-decoration: underline; }
 
+// The kit's focus on the inverse fill is a background ring, not primary's.
+.highContrast .action:focus-visible,
+.highContrast .close:focus-visible { box-shadow: inset 0 0 0 2px var(--graphite-background); }
+
 // ------------------------------------------------------------------- callout
-// The kit's Callout: the same container, no close, the icon 20 at 14.
-.callout .icon { padding-block: 14px; }
+// The kit's Callout: the same container, no close and no action, the icons
+// placed as Inline places them.

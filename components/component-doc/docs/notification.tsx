@@ -55,7 +55,7 @@ export function notificationDoc(): ComponentDocConfig {
     anatomyLede:
       'Only the body is required. The status icon comes with the variant, in its status colour, but it is decorative and hidden from assistive tech, so the title or body has to say the status in words. Title and message share a line while they fit and the message wraps under the title when they do not. Pass onClose for the 48px close in the top right.',
     variantsLede:
-      'Four statuses, each bound to a generated status role: its container for the fill, its base role for the edge, stripe and icon. Status hue is pinned per status and chroma follows the source, so danger still reads as danger whatever colour the header is set to. High contrast inverts the fill; Actionable adds a ghost action; Callout is the kit’s closeless form.',
+      'Four statuses, each bound to a generated status role: its container for the fill, its base role for the edge, stripe and icon. Status hue is pinned per status and chroma follows the source, so danger still reads as danger whatever colour the header is set to. High contrast inverts the fill; Actionable adds an outlined action; Callout is the kit’s closeless form.',
     variants: [
       { label: 'Status: Info', node: cell('info') },
       { label: 'Status: Success', node: cell('success') },
@@ -83,8 +83,8 @@ export function notificationDoc(): ComponentDocConfig {
     a11y: [
       ['Roles', <>Danger renders with <code>role=&quot;alert&quot;</code>, which interrupts. Info, success and warning render with <code>role=&quot;status&quot;</code>, which waits for a pause.</>],
       ['Icon', <>The status icon is wrapped in <code>aria-hidden</code> and coloured with the variant’s status role. It decorates the message and never carries it.</>],
-      ['Keyboard', <>Without <code>onClose</code> or <code>action</code>, nothing takes focus. The action and the close are each one tab stop; the close is named “Dismiss notification”, with Button’s ghost focus ring. Enter or Space dismisses. Escape does nothing: this is inline content, not an overlay, so there is no focus to trap or return. Once it closes, the button that held focus is gone, so move focus somewhere sensible in onClose.</>],
-      ['Contrast', 'Text is on-surface on each status container, as the kit binds it: swept across 288 sources in both modes, the worst pair is 9.78:1, clear of AAA. The action label is primary, which clears AA on every container but falls to 6.34:1 at AAA for some sources. High contrast is background on on-background.'],
+      ['Keyboard', <>Without <code>onClose</code> or <code>action</code>, nothing takes focus. The action and the close are each one tab stop; the close is named “Dismiss notification”. Both take Button’s ghost focus ring, which is background on the high-contrast fill. Enter or Space dismisses. Escape does nothing: this is inline content, not an overlay, so there is no focus to trap or return. Once it closes, the button that held focus is gone, so move focus somewhere sensible in onClose.</>],
+      ['Contrast', 'Text, the action label and the close glyph are on-surface on each status container, as the kit binds them: swept across 288 sources in both modes, the worst pair is 9.77:1, clear of AAA. High contrast is background on on-background, with the action label in on-primary (13.22:1 at worst).'],
       ['Colour', 'Status is shown three ways: the container with its edge and stripe, the icon, and the words. Colour is never the only signal.'],
       ['Motion', 'Nothing animates on entry or exit, so there is nothing for reduced motion to switch off.'],
     ],
@@ -92,11 +92,11 @@ export function notificationDoc(): ComponentDocConfig {
       'The kit files Inline, Callout and Toast as three sets on one page, plus a set for the action button. The code covers Inline and Callout on every axis; Toast is its own component.',
     parity: [
       ['Status', 'Success · Error · Warning · Info', 'variant', 'One to one, except that the kit’s Error is danger in code, the name every status role uses.'],
-      ['High contrast', 'True · False', 'highContrast', 'on-background fill, background text, no edge. The kit’s inverse stripe, icon and link stops are not engine roles; the status and primary containers stand in, swept at 3:1 or better. The close glyph is background, not the kit’s primary.'],
+      ['High contrast', 'True · False', 'highContrast', 'on-background fill, background text, no edge. The kit’s inverse stripe and icon stops are not engine roles; the status containers stand in, swept at 3:1 or better, and the warning triangle takes danger’s, as the kit has it. The info icon is on-info and the close glyph background, as drawn.'],
       ['Long message', 'False · True', '—', 'Layout, not a variant. Title and message share a line while they fit and wrap when they do not, which is what the kit’s two variants show.'],
-      ['Actionable', 'False · True', 'action', 'A small ghost button in Body/3, centred in the top 48 row, 8 before the close. Its states are Button’s.'],
-      ['Close', 'Boolean', 'onClose', 'A 48px ghost icon button flush in the top right, glyph in primary. The kit’s glyph is a plus, a slip; built as a cross.'],
-      ['Status icon', 'Built in', 'variant (icon overrides)', 'Failed and Succeeded status icons, the warning triangle and fi-rs-info, at 16 and 20 as drawn.'],
+      ['Actionable', 'False · True', 'action', 'The kit’s action button item: a small button in Body/3 with a 1px edge, centred in the top 48 row and butting the close. On-surface on an on-background edge; on-primary on a primary-disabled edge in high contrast. Hover fills surface-variant, or underlines on the high-contrast fill.'],
+      ['Close', 'Boolean', 'onClose', 'A 48px ghost icon button flush in the top right, glyph in on-surface (background in high contrast). The kit’s glyph is a plus, a slip; built as a cross.'],
+      ['Status icon', 'Built in', 'variant (icon overrides)', 'The Failed, Succeeded and Informative status icons at 16, and the warning triangle at 20, as drawn.'],
       ['Callout', 'Separate set', 'kind="callout"', 'Info and Warning, High contrast and Long message; no close and no action.'],
       ['Toast', 'Separate set', '—', 'Its own component, with its own timing; carried on the plan for the remaining sets.'],
     ],
