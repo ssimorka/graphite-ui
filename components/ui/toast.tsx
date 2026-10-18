@@ -8,7 +8,7 @@ import { StatusIcon } from './notification'
 import styles from './toast.module.scss'
 
 /**
- * Contract: docs/contracts/toast.md (1.0.0)
+ * Contract: docs/contracts/toast.md (1.1.0)
  *
  * The kit's Notification - Toast (84336:35011): Status × High contrast ×
  * Actionable, with Title, Message, Time and Close. It shares Notification's
@@ -27,7 +27,7 @@ export type ToastProps = {
   timestamp?: string
   /** The kit's High contrast. Off by default, as Notification's is. */
   highContrast?: boolean
-  /** The kit's Actionable: a small ghost button under the message. */
+  /** The kit's Actionable: a small outlined button under the message. */
   action?: { label: string; onClick: () => void }
   /** The kit's Close. When set, the 48px close button renders and calls it. */
   onClose?: () => void

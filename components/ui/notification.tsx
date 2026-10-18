@@ -4,7 +4,7 @@ import { Button } from './button'
 import { FieldStatusIcon } from './field-status'
 import styles from './notification.module.scss'
 
-/** Contract: docs/contracts/notification.md (3.0.1) */
+/** Contract: docs/contracts/notification.md (3.1.0) */
 type NotificationProps = {
   body: ReactNode
   title?: string
@@ -18,7 +18,7 @@ type NotificationProps = {
   kind?: 'inline' | 'callout'
   /** The kit's High contrast: an inverse fill with no edge. */
   highContrast?: boolean
-  /** The kit's Actionable: a ghost action before the close control. */
+  /** The kit's Actionable: a small outlined action before the close control. */
   action?: { label: string; onClick: () => void }
   /**
    * Renders a close button that calls this. Leave it out for a message that
@@ -29,8 +29,9 @@ type NotificationProps = {
 }
 
 // The kit's status icons. Failed and Succeeded are a circle with the mark cut
-// out, from the kit's Status icon set; Warning is the field status triangle;
-// Info is the kit's fi-rs-info.
+// out, from the kit's Status icon set; Info is its Informative, a square with
+// the "i" cut out (info-square); Warning is the field status triangle, the
+// kit's Caution minor.
 const KNOCKOUT = {
   danger:
     'M8 0A8 8 0 1 0 8 16A8 8 0 1 0 8 0ZM11.14 10.2L10.2 11.14L8 8.94L5.8 11.14L4.86 10.2L7.06 8L4.86 5.8L5.8 4.86L8 7.06L10.2 4.86L11.14 5.8L8.94 8L11.14 10.2Z',
@@ -40,7 +41,7 @@ const KNOCKOUT = {
 
 /** Shared with Toast, which draws the same status icons. */
 export function StatusIcon({ variant }: { variant: NonNullable<NotificationProps['variant']> }) {
-  if (variant === 'info') return <KitIcon name="info" size={20} />
+  if (variant === 'info') return <KitIcon name="info-square" />
   if (variant === 'warning') return <FieldStatusIcon className={styles.warningGlyph} />
   return (
     <svg width={16} height={16} viewBox="0 0 16 16" aria-hidden="true" focusable="false">
