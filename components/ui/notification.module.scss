@@ -102,8 +102,6 @@
 // on dark in Light, dark on light in Dark). Swept: 3:1 or better everywhere.
 // The kit's Info icon is infoContainer itself, and Warning's triangle
 // inverse/warning, the stop the warning container stands in for.
-// (Inline still draws the older Warning yellow icon, support-error-inverse
-// here; the code follows Toast and Callout, as the contract records.)
 .highContrast {
   --stripe: var(--status-inverse);
   background: var(--graphite-on-background);

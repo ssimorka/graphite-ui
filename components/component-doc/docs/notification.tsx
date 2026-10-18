@@ -96,7 +96,7 @@ export function notificationDoc(): ComponentDocConfig {
       ['Long message', 'False · True', '—', 'Layout, not a variant. Title and message share a line while they fit and wrap when they do not, which is what the kit’s two variants show.'],
       ['Actionable', 'False · True', 'action', 'The kit’s action button item: a small button in Body/3 with a 1px edge, centred in the top 48 row and butting the close. On-surface on an on-background edge; on-primary on a primary-disabled edge in high contrast. Hover fills surface-variant, or underlines on the high-contrast fill.'],
       ['Close', 'Boolean', 'onClose', 'A 48px ghost icon button flush in the top right, glyph in on-surface (background in high contrast). The kit’s glyph is a plus, a slip; built as a cross.'],
-      ['Status icon', 'Built in', 'variant (icon overrides)', 'The Failed, Succeeded and Informative status icons at 16, and Caution minor, the warning triangle, at 20, as Toast and Callout draw them. The kit’s Inline still draws the older Warning yellow icon.'],
+      ['Status icon', 'Built in', 'variant (icon overrides)', 'The Failed, Succeeded and Informative status icons at 16, and Caution minor, the warning triangle, at 20, as Inline, Callout and Toast all draw them.'],
       ['Callout', 'Separate set', 'kind="callout"', 'Info and Warning, High contrast and Long message; no close and no action.'],
       ['Toast', 'Separate set', '—', 'Its own component, with its own timing; carried on the plan for the remaining sets.'],
     ],
