@@ -48,15 +48,13 @@ tokens:
   - name: danger
     usage: Icon and stripe on the danger variant.
   - name: info-container
-    usage: Fill on the info variant; its stripe in high contrast.
+    usage: Fill on the info variant; its stripe and icon in high contrast.
   - name: success-container
     usage: Fill on the success variant; its stripe and icon in high contrast.
   - name: warning-container
-    usage: Fill on the warning variant; its stripe in high contrast.
+    usage: Fill on the warning variant; its stripe and triangle in high contrast (the kit's inverse/warning).
   - name: danger-container
-    usage: Fill on the danger variant; its stripe and icon in high contrast, and the warning triangle in high contrast (Support/support-error-inverse, as Notification's).
-  - name: on-info
-    usage: The info icon in high contrast.
+    usage: Fill on the danger variant; its stripe and icon in high contrast.
   - name: on-background
     usage: The high-contrast fill, the "!" cut out of the warning triangle on it, and the action's edge on the status containers (Border/border-inverse).
   - name: background
@@ -90,5 +88,5 @@ prohibitions:
 - **Tokens:** the status role and its container, as Notification's; `on-background` and `background` in high contrast; the overlay `shadow`.
 - **Composition rules:** One host, top right, polite; danger is an alert; Notification's colours; timing never hides what must be acted on.
 - **Prohibitions:** No toast as the only route to an action; no dismissing under the pointer or focus.
-- **Kit parity, 2026-10-17** (1.1.0, minor: token dependencies only). The action and close follow the kit's Toast, which the kit's Inline and Callout now copy, so the change is recorded once in Notification's 3.1.0: an outlined action (`on-surface` on an `on-background` edge; `on-primary` on a `primary-disabled` edge in high contrast) where it was a ghost `primary` (`primary-container`), an `on-surface` close glyph, the Informative status icon (`on-info` in high contrast), and the high-contrast warning triangle on `danger-container`. The action no longer pulls 16 left: with an edge, the kit puts the edge, not the label, at the text's edge. Not yet followed: the kit's Toast draws Warning as a 16px status icon, where the code shares Notification's 20px triangle.
+- **Kit parity, 2026-10-17** (1.1.0, minor: token dependencies only). The action and close follow the kit's Toast, which the kit's Inline and Callout now copy, so the change is recorded once in Notification's 3.1.0: an outlined action (`on-surface` on an `on-background` edge; `on-primary` on a `primary-disabled` edge in high contrast) where it was a ghost `primary` (`primary-container`), an `on-surface` close glyph, and the Informative status icon for info (`info`, `info-container` in high contrast). Warning is the kit's Caution minor, the same 20px triangle the code already shared, with its "!" now cut out to the fill (`on-background` in high contrast, was `on-warning-container`). The action no longer pulls 16 left: with an edge, the kit puts the edge, not the label, at the text's edge.
 - **Kit parity** (#272, 1.0.0): the one Toast set, Notification - Toast (`84336:35011`), on every axis. Recorded rather than copied: the set defaults High contrast on, where Notification - Inline defaults it off; the code keeps one default, off, for both.

@@ -29,11 +29,10 @@ type NotificationProps = {
 }
 
 // The kit's status icons. Failed and Succeeded are a circle with the mark cut
-// out, and Info a square with the "i" cut out (Informative), from the kit's
-// Status icon set; Warning is the field status triangle.
+// out, from the kit's Status icon set; Info is its Informative, a square with
+// the "i" cut out (info-square); Warning is the field status triangle, the
+// kit's Caution minor.
 const KNOCKOUT = {
-  info:
-    'M13 2H3C2.73 2 2.48 2.11 2.29 2.29C2.11 2.48 2 2.73 2 3V13C2 13.27 2.11 13.52 2.29 13.71C2.48 13.89 2.73 14 3 14H13C13.27 14 13.52 13.89 13.71 13.71C13.89 13.52 14 13.27 14 13V3C14 2.73 13.89 2.48 13.71 2.29C13.52 2.11 13.27 2 13 2ZM8 4C8.15 4 8.29 4.04 8.42 4.13C8.54 4.21 8.64 4.33 8.69 4.46C8.75 4.6 8.76 4.75 8.74 4.9C8.71 5.04 8.64 5.18 8.53 5.28C8.43 5.39 8.29 5.46 8.15 5.49C8 5.51 7.85 5.5 7.71 5.44C7.58 5.39 7.46 5.29 7.38 5.17C7.29 5.04 7.25 4.9 7.25 4.75C7.25 4.55 7.33 4.36 7.47 4.22C7.61 4.08 7.8 4 8 4ZM10 12.06H6V10.94H7.44V8.06H6.5V6.94H8.56V10.94H10V12.06Z',
   danger:
     'M8 0A8 8 0 1 0 8 16A8 8 0 1 0 8 0ZM11.14 10.2L10.2 11.14L8 8.94L5.8 11.14L4.86 10.2L7.06 8L4.86 5.8L5.8 4.86L8 7.06L10.2 4.86L11.14 5.8L8.94 8L11.14 10.2Z',
   success:
@@ -42,6 +41,7 @@ const KNOCKOUT = {
 
 /** Shared with Toast, which draws the same status icons. */
 export function StatusIcon({ variant }: { variant: NonNullable<NotificationProps['variant']> }) {
+  if (variant === 'info') return <KitIcon name="info-square" />
   if (variant === 'warning') return <FieldStatusIcon className={styles.warningGlyph} />
   return (
     <svg width={16} height={16} viewBox="0 0 16 16" aria-hidden="true" focusable="false">

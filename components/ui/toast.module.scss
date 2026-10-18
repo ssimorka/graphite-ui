@@ -78,9 +78,9 @@
 // --------------------------------------------------------------- high contrast
 // As Notification's: on-background with background text, the stripe and icon
 // on the status container (the stand-in for the inverse stops, swept at 3:1
-// or better in #260), Info's icon on-info, Warning's triangle on the danger
-// container (Support/support-error-inverse), the close in background, and the
-// action's label on-primary on a primary-disabled edge.
+// or better in #260), the close in background, and the action's label
+// on-primary on a primary-disabled edge. The warning triangle's "!" is cut
+// out, so it shows the inverse fill.
 .highContrast {
   --stripe: var(--status-inverse);
   background: var(--graphite-on-background);
@@ -93,10 +93,9 @@
 .highContrast.success { --status-inverse: var(--graphite-success-container); }
 
 .highContrast .icon { color: var(--status-inverse); }
-.highContrast.info .icon { color: var(--graphite-on-info); }
 .highContrast .icon {
   --mark: var(--graphite-on-background);
-  [data-part='glyph'] { fill: var(--graphite-danger-container); }
+  [data-part='glyph'] { fill: var(--graphite-warning-container); }
 }
 
 .highContrast .close,

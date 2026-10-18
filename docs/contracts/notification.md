@@ -38,15 +38,13 @@ tokens:
   - name: info
     usage: Icon, edge and stripe on the info variant.
   - name: danger-container
-    usage: Fill on the danger variant; the stripe and icon on it in high contrast; and the warning triangle in high contrast, which the kit colours Support/support-error-inverse, danger's inverse stop (10.49:1 at worst).
+    usage: Fill on the danger variant; the stripe and icon on it in high contrast.
   - name: warning-container
-    usage: Fill on the warning variant, and the "!" cut out of its triangle; the stripe on it in high contrast.
+    usage: Fill on the warning variant, and the "!" cut out of its triangle; the stripe and triangle on it in high contrast (the kit's inverse/warning).
   - name: success-container
     usage: Fill on the success variant; the stripe and icon on it in high contrast.
   - name: info-container
-    usage: Fill on the info variant; the stripe on it in high contrast.
-  - name: on-info
-    usage: The info icon in high contrast (the kit's onInfo).
+    usage: Fill on the info variant; the stripe and icon on it in high contrast (the kit binds infoContainer itself).
   - name: on-background
     usage: The high-contrast fill, and the action's 1px edge on the status containers (Border/border-inverse). Swept across 288 sources, the edge is 9.77:1 at worst.
   - name: background
@@ -83,9 +81,10 @@ prohibitions:
 - **Kit parity, 2026-10-17** (3.1.0, minor: the token dependencies changed, no prop or prohibition did). The kit corrected Inline and Callout to copy Notification - Toast, per Status and High contrast, and the code follows (rule 7). Was a ghost `primary` action (`primary-container` in high contrast) and a `primary` close glyph; now:
   - Action: the kit's Notification action button item, outlined. Light variants: label `on-surface` (Text/text-primary), edge `on-background` (Border/border-inverse). High contrast: label `on-primary` (Text/text-on-color), edge `primary-disabled` (Border/border-disabled). It butts the close, with no gap, as the kit draws it.
   - Close glyph: `on-surface` (Icon/icon-primary); `background` (Icon/icon-inverse) in high contrast, as before.
-  - Info icon: the kit's Status icon Informative, a square with the "i" cut out, at 16 and 16 down, in `info`; `on-info` in high contrast. Was fi-rs-info at 20.
-  - Warning in high contrast: the triangle is Support/support-error-inverse, danger's inverse stop; the engine stamps no inverse stops, so it takes `danger-container`, as the danger icon already does. The "!" is cut out of the kit's triangle, so the mark takes the fill under it: `warning-container`, or `on-background` in high contrast.
+  - Info icon: the kit's Status icon Informative (Information--square--filled, 49956:12553), a square with the "i" cut out, at 16 and 16 down, in `info`; `info-container` in high contrast. Was fi-rs-info at 20. It is `info-square` in `lib/kit-icons.ts`; `info` (fi-rs-info) stays for the Toggletip trigger. The kit uses Informative for every info status, so the icon is the same in Toast.
+  - Warning icon: the kit's Status icon Caution minor at 20, the same triangle as before, `warning`, and in high contrast inverse/warning, which `warning-container` stands in for. The "!" is cut out of the kit's triangle, so the mark takes the fill under it: `warning-container`, or `on-background` in high contrast (was `on-warning` and `on-warning-container`).
+  - Inline differs from the template: as of 2026-10-17 the kit's Inline still draws the older Warning yellow icon (Support/support-warning, and Support/support-error-inverse in high contrast), where Toast and Callout draw Caution minor. The code follows Toast and Callout; recorded here rather than copied.
   - Recorded rather than copied: the action's hover. The kit's item fills `surfaceVariant` on hover; that holds on the status containers (label kept `on-surface`, 9.99:1 at worst), but on the inverse fill it would put a light patch under a light label, so high contrast keeps the colours and underlines. The kit's high-contrast focus ring is `background`, and so is the code's. The Callout's long-message info icon sits at 14 in the kit and 16 in its short message; built at 16 for both.
-  - Swept across 288 sources, both modes, AA and AAA: every new pair holds at 9.77:1 or better, except the info icon on its container at 6.88:1 (a 3:1 graphic). The AAA shortfall the old ghost label had (6.34:1) is gone with it.
+  - Swept across 288 sources, both modes, AA and AAA: every new pair holds at 9.77:1 or better, except the info icon on its container at 6.88:1 (a 3:1 graphic); the high-contrast icons are the containers swept in #260. The AAA shortfall the old ghost label had (6.34:1) is gone with it.
 - **Composition rules:** Not an overlay: inline, with no focus trap and no Escape or click-outside dismissal. Not a toast — Notification is inline and persistent until dismissed (through `onClose`, when the caller provides it) or the condition changes. Toast is a Tier 2 component with its own timing contract.
 - **Prohibitions:** No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex. Same constraint as Tag.

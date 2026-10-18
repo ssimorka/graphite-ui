@@ -100,9 +100,10 @@
 // take the status ramp's inverse stop, which the engine does not stamp; the
 // status container is the role that points the same way on this fill (light
 // on dark in Light, dark on light in Dark). Swept: 3:1 or better everywhere.
-// Two icons differ: Info's is onInfo, and Warning's triangle is
-// Support/support-error-inverse, danger's inverse stop, so it takes the
-// danger container, as the danger icon does.
+// The kit's Info icon is infoContainer itself, and Warning's triangle
+// inverse/warning, the stop the warning container stands in for.
+// (Inline still draws the older Warning yellow icon, support-error-inverse
+// here; the code follows Toast and Callout, as the contract records.)
 .highContrast {
   --stripe: var(--status-inverse);
   background: var(--graphite-on-background);
@@ -116,10 +117,9 @@
 .highContrast.success { --status-inverse: var(--graphite-success-container); }
 
 .highContrast .icon { color: var(--status-inverse); }
-.highContrast.info .icon { color: var(--graphite-on-info); }
 .highContrast .warningGlyph {
   --mark: var(--graphite-on-background);
-  [data-part='glyph'] { fill: var(--graphite-danger-container); }
+  [data-part='glyph'] { fill: var(--graphite-warning-container); }
 }
 
 // The close glyph takes background (Icon/icon-inverse). The action's label is

@@ -92,11 +92,11 @@ export function notificationDoc(): ComponentDocConfig {
       'The kit files Inline, Callout and Toast as three sets on one page, plus a set for the action button. The code covers Inline and Callout on every axis; Toast is its own component.',
     parity: [
       ['Status', 'Success · Error · Warning · Info', 'variant', 'One to one, except that the kit’s Error is danger in code, the name every status role uses.'],
-      ['High contrast', 'True · False', 'highContrast', 'on-background fill, background text, no edge. The kit’s inverse stripe and icon stops are not engine roles; the status containers stand in, swept at 3:1 or better, and the warning triangle takes danger’s, as the kit has it. The info icon is on-info and the close glyph background, as drawn.'],
+      ['High contrast', 'True · False', 'highContrast', 'on-background fill, background text, no edge. The kit’s inverse stripe and icon stops are not engine roles; the status containers stand in, swept at 3:1 or better. The info icon is info-container and the close glyph background, as drawn.'],
       ['Long message', 'False · True', '—', 'Layout, not a variant. Title and message share a line while they fit and wrap when they do not, which is what the kit’s two variants show.'],
       ['Actionable', 'False · True', 'action', 'The kit’s action button item: a small button in Body/3 with a 1px edge, centred in the top 48 row and butting the close. On-surface on an on-background edge; on-primary on a primary-disabled edge in high contrast. Hover fills surface-variant, or underlines on the high-contrast fill.'],
       ['Close', 'Boolean', 'onClose', 'A 48px ghost icon button flush in the top right, glyph in on-surface (background in high contrast). The kit’s glyph is a plus, a slip; built as a cross.'],
-      ['Status icon', 'Built in', 'variant (icon overrides)', 'The Failed, Succeeded and Informative status icons at 16, and the warning triangle at 20, as drawn.'],
+      ['Status icon', 'Built in', 'variant (icon overrides)', 'The Failed, Succeeded and Informative status icons at 16, and Caution minor, the warning triangle, at 20, as Toast and Callout draw them. The kit’s Inline still draws the older Warning yellow icon.'],
       ['Callout', 'Separate set', 'kind="callout"', 'Info and Warning, High contrast and Long message; no close and no action.'],
       ['Toast', 'Separate set', '—', 'Its own component, with its own timing; carried on the plan for the remaining sets.'],
     ],
