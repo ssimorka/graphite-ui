@@ -67,7 +67,7 @@
 .error .fill { background: var(--graphite-danger); }
 
 .determinate {
-  transition: width var(--graphite-motion-base) var(--graphite-motion-ease);
+  transition: width var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 }
 
 // The kit's sweep: a quarter of the track, from just off its start to just
@@ -75,7 +75,7 @@
 .indeterminate {
   width: 25%;
   animation: graphite-progress-sweep var(--graphite-motion-indeterminate)
-    var(--graphite-motion-indeterminate-ease) infinite;
+    var(--graphite-motion-easing-linear) infinite;
 }
 
 @keyframes graphite-progress-sweep {
@@ -84,7 +84,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .indeterminate { animation-duration: 3s; }
+  .indeterminate { animation-duration: calc(var(--graphite-motion-indeterminate) * 2); }
   .determinate { transition: none; }
 }
 

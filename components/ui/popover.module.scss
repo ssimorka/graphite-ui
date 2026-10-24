@@ -23,7 +23,7 @@
   // The shared overlay entrance. Opacity only, matching Tooltip, and no exit:
   // the panel unmounts on close, which is what keeps the no-nesting throw off
   // the prerender path.
-  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 @keyframes overlay-in {

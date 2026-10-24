@@ -46,6 +46,7 @@ const EXPECTED = new Map([
   ['Breakpoint LG–XL', 4],
   ['Radius', 8],
   ['Spacing', 14],
+  ['Motion', 10],
 ])
 
 // ------------------------------------------------------------------ decoding

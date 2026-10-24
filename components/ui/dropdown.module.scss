@@ -76,7 +76,7 @@
 .chevron {
   flex: none;
   color: var(--graphite-on-surface);
-  transition: rotate var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: rotate var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 .open .chevron { rotate: 180deg; }
@@ -171,7 +171,7 @@
   list-style: none;
   background: var(--graphite-surface);
   box-shadow: var(--graphite-shadow-overlay);
-  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 // Drawn on <body> against its trigger (Dropdown and Select), so no clipping

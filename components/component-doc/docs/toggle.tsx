@@ -75,7 +75,7 @@ export function toggleDoc(): ComponentDocConfig {
       ['Keyboard', 'Tab reaches it and Space flips it, as with any native checkbox. Clicking the label flips it too.'],
       ['Labels', <>The label is a real <code>label</code> tied to the input. Help and error text are linked with <code>aria-describedby</code>, and error text is announced as it appears.</>],
       ['Focus', <>A 2px ring in <code>--graphite-primary-focus</code> around the track, on keyboard focus only. In error it sits outside the danger ring rather than replacing it.</>],
-      ['Motion', <>The track fill and the thumb travel run on <code>--graphite-motion-fast</code> and stop animating under prefers-reduced-motion.</>],
+      ['Motion', <>The track fill and the thumb travel run on <code>--graphite-motion-duration-fast</code>. Under reduced motion the thumb jumps and the fill still fades.</>],
       ['Target', 'The track is 48 by 24, or 32 by 16 at Small. The input under it is the full width and 32px tall at both sizes.'],
     ],
     parity: [

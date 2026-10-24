@@ -18,7 +18,7 @@
   background: var(--graphite-scrim);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: in var(--graphite-motion-base) var(--graphite-motion-ease) both;
+    animation: in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
   }
 }
 
@@ -41,7 +41,7 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+    animation: in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
   }
 
   // Hung from the trigger: placed by the component, which sets --top, --left
@@ -70,7 +70,7 @@
     // Full screen has no trigger to drop from: it fades, as before.
     &[data-anchored] {
       inset: 0;
-      animation: in var(--graphite-motion-fast) var(--graphite-motion-ease);
+      animation: in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
     }
 
     &[data-anchored]::before {
@@ -498,7 +498,7 @@
   border-radius: var(--graphite-radius-full);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: spin 690ms linear infinite;
+    animation: spin calc(var(--graphite-motion-indeterminate) / 2) var(--graphite-motion-easing-linear) infinite;
   }
 }
 

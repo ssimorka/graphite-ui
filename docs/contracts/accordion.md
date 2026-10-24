@@ -1,6 +1,6 @@
 ---
 component: Accordion
-version: 1.1.0
+version: 1.1.1
 wave: 4
 slots:
   - name: Trigger
@@ -53,7 +53,7 @@ tokens:
   - name: text
     usage: Trigger label and panel copy, both Body/3 at every size; size changes the trigger height only.
   - name: motion
-    usage: The panel's open and close transition, on the settle curve.
+    usage: The panel's open and close transition, at the base duration on the Out easing from the kit's Motion collection.
 composition_rules:
   - A trigger and its panel are one pair. The panel is labelled by its own trigger, so a screen reader announces the two together rather than an orphaned region.
   - Use `multiple` when the panels are independent of each other. Use `single` when opening one makes the others irrelevant.

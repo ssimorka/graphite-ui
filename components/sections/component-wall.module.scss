@@ -96,12 +96,12 @@
   container-type: inline-size;
   // Shadows/Menu
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
-  // Hover states .md gives this 300ms ease-out, moving the glow and preview
+  // Hover states .md gives this var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out), moving the glow and preview
   // together. 300ms is not a token: only fast (120), base (240) and
   // indeterminate (1400) are, so it is a literal here the way the other
   // one-off durations on this page are. --glow is a registered property, so
   // it eases like any other value.
-  transition: --glow 300ms ease-out;
+  transition: --glow var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out);
 }
 
 // The kit takes the rule from border-disabled to outline-strong. The engine
@@ -143,8 +143,8 @@
   // separates the specimen from its label. A field here only ever competed
   // with the components, which are the section's whole claim.
   transition:
-    transform 300ms ease-out,
-    filter 300ms ease-out;
+    transform var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out),
+    filter var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out);
 }
 
 // Specimens are sized for their own pages, so the narrow ones are held to the

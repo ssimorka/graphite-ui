@@ -139,7 +139,7 @@
 
 .slot {
   pointer-events: auto;
-  animation: toast-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+  animation: toast-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 @keyframes toast-in {

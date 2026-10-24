@@ -86,6 +86,38 @@ export function buildThemeFile({ bundle, level, foundations, overrides = {} }: T
       '}',
     )
   }
+  if (foundations.desktop.some((d) => d.name === '--graphite-motion-travel')) {
+    lines.push('', ...REDUCED_MOTION)
+  }
   lines.push('', '/* Colors, generated from the source. */', buildCss(bundle))
   return lines.join('\n')
 }
+
+// The reduced-motion layer from app/globals.scss (the `reduced-motion` mixin),
+// written out as plain CSS. Keep the two in step.
+const REDUCED_MOTION_BODY = [
+  '  --graphite-motion-travel: 0;',
+  '}',
+  '',
+  ':where(%s),',
+  ':where(%s) *,',
+  ':where(%s) *::before,',
+  ':where(%s) *::after {',
+  '  transition-property: opacity, color, background-color, border-color, outline-color, fill, stroke, box-shadow !important;',
+  '  scroll-behavior: auto !important;',
+]
+const reducedFor = (selector: string, indent = '') =>
+  [`${selector} {`, ...REDUCED_MOTION_BODY.map((l) => l.replaceAll('%s', selector)), '}'].map(
+    (l) => (l ? indent + l : l),
+  )
+const REDUCED_MOTION = [
+  '/* Reduced motion: movement becomes a fade or nothing; feedback stays.',
+  '   Distances collapse through --graphite-motion-travel, and transitions keep',
+  '   only properties that do not move anything. data-motion="reduce" applies',
+  '   the same to any subtree. */',
+  '@media (prefers-reduced-motion: reduce) {',
+  ...reducedFor(':root', '  '),
+  '}',
+  '',
+  ...reducedFor('[data-motion="reduce"]'),
+]

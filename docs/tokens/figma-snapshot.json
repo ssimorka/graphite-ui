@@ -8538,6 +8538,95 @@
         }
       }
     },
+    "Motion": {
+      "modes": [
+        "Value"
+      ],
+      "defaultMode": "Value",
+      "variableCount": 10,
+      "variables": {
+        "delay/tooltip": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 500
+            }
+          }
+        },
+        "duration/base": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 200
+            }
+          }
+        },
+        "duration/emphasis": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 400
+            }
+          }
+        },
+        "duration/fast": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 120
+            }
+          }
+        },
+        "duration/instant": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 0
+            }
+          }
+        },
+        "duration/slow": {
+          "type": "FLOAT",
+          "values": {
+            "Value": {
+              "value": 300
+            }
+          }
+        },
+        "easing/in-out": {
+          "type": "STRING",
+          "values": {
+            "Value": {
+              "value": "cubic-bezier(0.4, 0, 0.2, 1)"
+            }
+          }
+        },
+        "easing/linear": {
+          "type": "STRING",
+          "values": {
+            "Value": {
+              "value": "linear"
+            }
+          }
+        },
+        "easing/out": {
+          "type": "STRING",
+          "values": {
+            "Value": {
+              "value": "cubic-bezier(0.2, 0, 0, 1)"
+            }
+          }
+        },
+        "spring/sheet": {
+          "type": "STRING",
+          "values": {
+            "Value": {
+              "value": "linear(0, 0.015 2%, 0.054 4%, 0.107 6%, 0.169 8%, 0.236 10%, 0.338 13%, 0.435 16%, 0.551 20%, 0.649 24%, 0.73 28%, 0.808 33%, 0.865 38%, 0.913 44%, 0.944 50%, 0.968 57%, 0.983 65%, 0.992 75%, 0.997 87%, 1)"
+            }
+          }
+        }
+      }
+    },
     "Radius": {
       "modes": [
         "Mode 1"

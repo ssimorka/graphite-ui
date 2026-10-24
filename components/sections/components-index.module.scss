@@ -135,7 +135,7 @@
   min-height: 16.875rem;
   // Lets the foot ask how wide its own card is: see .meta.
   container-type: inline-size;
-  transition: --glow 300ms ease-out;
+  transition: --glow var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out);
   // The same lift as the Create page's samples: a tight contact shadow and a
   // wide soft one, black at low strength so it reads in both themes.
   box-shadow:
@@ -162,7 +162,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--graphite-space-04);
-  transition: transform 300ms ease-out;
+  transition: transform var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out);
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;

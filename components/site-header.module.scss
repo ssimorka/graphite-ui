@@ -123,14 +123,14 @@
   line-height: var(--graphite-text-body-2-line-height);
   color: var(--graphite-on-surface-variant);
   text-decoration: none;
-  transition: color var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: color var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 .navIndicator {
   height: 2px;
   width: 100%;
   background: transparent;
-  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 .navLink:hover {
@@ -191,8 +191,8 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
-  transition: border-color var(--graphite-motion-fast)
-    var(--graphite-motion-ease);
+  transition: border-color var(--graphite-motion-duration-fast)
+    var(--graphite-motion-easing-out);
 }
 
 .search:hover {
@@ -257,7 +257,7 @@
   color: var(--graphite-on-primary);
   border: 1px solid var(--graphite-primary);
   cursor: pointer;
-  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
   // The button is the horizon: DayNight's wheel turns below it, and only the
   // body that has risen shows.
   overflow: hidden;
@@ -333,13 +333,15 @@
 // -------------------------------------------------------------- mobile tray
 @include drop.defs;
 
-// Slides in from the left under the bar. The panel lands with a little
-// overshoot, then its groups cascade in behind it, one beat per group and a
-// shorter one per link. Out is a quick, plain slide: nobody wants to wait for
-// a menu they have finished with.
-$tray-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-// Hidden off the left edge, so the overshoot past zero shows more panel
-// rather than a sliver of page. The 12px left inset plus the links' own 8px
+// Slides in from the left under the bar on the sheet spring, then its groups
+// cascade in behind it, one beat per group and a shorter one per link. Out is
+// a quick slide at fast: nobody wants to wait for a menu they have finished
+// with. It used to land on an overshooting spring and leave on an ease-in;
+// Graphite neither bounces nor eases in.
+//
+// Hidden off the left edge, which the old overshoot needed to show more panel
+// rather than a sliver of page; the spring is critically damped now, so the
+// bleed only carries the inset. The 12px left inset plus the links' own 8px
 // puts their text on the bar's 20px gutter.
 $tray-bleed: 2rem;
 
@@ -356,11 +358,11 @@ $tray-bleed: 2rem;
   position: absolute;
   inset: 0;
   background: var(--graphite-scrim);
-  animation: tray-fade-in var(--graphite-motion-base) var(--graphite-motion-ease) both;
+  animation: tray-fade-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
 }
 
 .tray[data-state='closed'] .trayScrim {
-  animation: tray-fade-out 200ms ease-in both;
+  animation: tray-fade-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 .trayPanel {
@@ -378,8 +380,9 @@ $tray-bleed: 2rem;
   border-right: 1px solid transparent;
   // The glow waits for the slide to land, then rises.
   animation:
-    tray-in 560ms $tray-spring both,
-    glow 900ms var(--graphite-motion-ease) 380ms both;
+    tray-in var(--graphite-motion-duration-slow) var(--graphite-motion-spring-sheet) both,
+    glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+      var(--graphite-motion-duration-slow) both;
 }
 
 .trayPanel:focus-visible {
@@ -387,13 +390,16 @@ $tray-bleed: 2rem;
 }
 
 .tray[data-state='closed'] .trayPanel {
-  animation: tray-out 220ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: tray-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 // `--g` is the group's index, set inline; `--n` the link's within it.
 .trayGroup :where(li) {
-  animation: tray-item-in 420ms var(--graphite-motion-ease) both;
-  animation-delay: calc(140ms + var(--g, 0) * 70ms + var(--n, 0) * 30ms);
+  animation: tray-item-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
+  animation-delay: calc(
+    var(--graphite-motion-duration-fast) + var(--graphite-motion-duration-base) *
+      (var(--g, 0) * 0.15 + var(--n, 0) * 0.04)
+  );
 }
 
 @for $i from 1 through 12 {
@@ -404,20 +410,20 @@ $tray-bleed: 2rem;
 
 @keyframes tray-in {
   from {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--graphite-motion-travel)));
   }
 }
 
 @keyframes tray-out {
   to {
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% * var(--graphite-motion-travel)));
   }
 }
 
 @keyframes tray-item-in {
   from {
     opacity: 0;
-    transform: translateX(-1.5rem);
+    transform: translateX(calc(-1.5rem * var(--graphite-motion-travel)));
   }
 }
 
@@ -433,14 +439,15 @@ $tray-bleed: 2rem;
   }
 }
 
-// The menu glyph spins in on each swap: a quarter turn and a pop.
+// The menu glyph spins in on each swap: a quarter turn, growing in. No pop:
+// it used to overshoot.
 .menuIcon,
 .menuIconSpin {
   display: flex;
 }
 
 .menuIconSpin {
-  animation: menu-icon-in 360ms $tray-spring both;
+  animation: menu-icon-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
 }
 
 @keyframes menu-icon-in {
@@ -453,11 +460,11 @@ $tray-bleed: 2rem;
 // Reduced motion trades the slide and the cascade for a plain fade.
 @media (prefers-reduced-motion: reduce) {
   .trayPanel {
-    animation: tray-fade-in var(--graphite-motion-fast) linear both;
+    animation: tray-fade-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
   }
 
   .tray[data-state='closed'] .trayPanel {
-    animation: tray-fade-out var(--graphite-motion-fast) linear both;
+    animation: tray-fade-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
   }
 
   .trayGroup :where(li),

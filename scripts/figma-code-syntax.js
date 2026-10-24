@@ -31,6 +31,7 @@ const IN_SCOPE = [
   'Breakpoint LG–XL',
   'Radius',
   'Spacing',
+  'Motion',
 ]
 
 const byCodeUnit = (a, b) => (a < b ? -1 : a > b ? 1 : 0)

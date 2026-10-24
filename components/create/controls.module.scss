@@ -19,7 +19,7 @@
 @keyframes up {
   from {
     opacity: 0;
-    transform: translateY(calc(100% + 1rem));
+    transform: translateY(calc((100% + 1rem) * var(--graphite-motion-travel)));
   }
   30% {
     opacity: 1;
@@ -41,15 +41,16 @@
   @media (prefers-reduced-motion: no-preference) {
     transform-origin: 50% 0;
     animation:
-      drop 520ms drop.$spring backwards,
-      glow 900ms var(--graphite-motion-ease) 220ms both;
+      drop var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) backwards,
+      glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+        var(--graphite-motion-duration-fast) both;
   }
 
   // Sections and actions only, so the cascade reaches nothing else the
   // panel holds.
   > .section,
   > .actions {
-    @include drop.cascade($count: 12, $step: 40ms);
+    @include drop.cascade($count: 12);
   }
 }
 
@@ -345,14 +346,15 @@
 
   @media (prefers-reduced-motion: no-preference) {
     animation:
-      up 560ms drop.$spring backwards,
-      glow 900ms var(--graphite-motion-ease) 300ms both;
+      up var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) backwards,
+      glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+        var(--graphite-motion-duration-slow) both;
   }
 }
 
 // The pickers file in along the rail behind the bar.
 .rail > .picker {
-  @include drop.cascade($count: 9, $start: 200ms, $step: 40ms);
+  @include drop.cascade($count: 9, $start: var(--graphite-motion-duration-base));
 }
 
 .rail {
@@ -536,7 +538,7 @@
   background: var(--graphite-scrim);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: fade var(--graphite-motion-base) var(--graphite-motion-ease) both;
+    animation: fade var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
   }
 }
 
@@ -558,19 +560,19 @@
   border-radius: var(--graphite-radius-16) var(--graphite-radius-16) 0 0;
   outline: none;
 
-  // Sheets hold nothing fixed, so they can keep their transform: up with the
-  // spring, then the tint and the options. A 2rem hem below the screen edge
-  // means the overshoot lifts more sheet into view, not a gap under it.
+  // Sheets hold nothing fixed, so they can keep their transform: up from the
+  // bottom edge on the sheet spring, then the tint and the options. The spring
+  // is critically damped, so there is no overshoot and no hem below the edge
+  // to cover one, which the old bouncing curve needed.
   @media (prefers-reduced-motion: no-preference) {
-    bottom: -2rem;
-    padding-bottom: calc(1.25rem + 2rem);
     animation:
-      up 520ms drop.$spring both,
-      glow 900ms var(--graphite-motion-ease) 260ms both;
+      up var(--graphite-motion-duration-slow) var(--graphite-motion-spring-sheet) both,
+      glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+        var(--graphite-motion-duration-base) both;
   }
 
   > .option {
-    @include drop.cascade($count: 12, $start: 160ms, $step: 30ms);
+    @include drop.cascade($count: 12);
   }
 }
 
@@ -647,7 +649,7 @@
     border-color: var(--graphite-on-primary);
   }
 
-  @include drop.cascade($count: 14, $start: 160ms, $step: 30ms);
+  @include drop.cascade($count: 14);
 }
 
 .customHexValue {

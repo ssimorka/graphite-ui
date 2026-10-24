@@ -280,6 +280,23 @@ before trusting a browser result.
   2026-10-07 across 288 sources, both themes, AA and AAA, fill plus hover and
   pressed: zero failures, worst 8.20:1 (secondary) and 9.04:1 (danger).
   `pnpm color:test` reruns that sweep in CI.
+- **Motion has a kit collection now, and no raw timing survives it.** The kit's
+  `Motion` collection (2026-10-24, one mode, 10 variables: five durations,
+  `delay/tooltip`, three easings, `spring/sheet`) is snapshotted and checked by
+  token-drift like Spacing and Radius; durations are ms numbers in the kit and
+  must carry `ms` in `globals.scss`. They are foundations, declared in
+  `globals.scss`, not emitted by `buildGraphiteVars`: they are mode-less and do
+  not follow the source, and the foundations path already reaches the theme
+  file, the Tailwind bridge (`ease-graphite-*`, `duration-graphite-*`) and the
+  registry. naming-check fails on any raw duration, `cubic-bezier(` or keyword
+  easing in a stylesheet under `app/` or `components/` (90 when it landed, 0
+  now); an exception needs `motion-allow: <reason>` above it. Reduced motion is
+  one layer: `--graphite-motion-travel` (1, or 0) multiplies every distance, and
+  transitions narrow to non-moving properties; `[data-motion='reduce']` does the
+  same for a subtree. Rules in `docs/contracts/foundations/motion.md`. The
+  Motion page in the kit is `01 Foundations – Motion`. The snapshot was checked
+  against the live kit with a per-variable digest (resolved values, FNV-1a per
+  collection) rather than a full re-pull; all ten collections matched.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry

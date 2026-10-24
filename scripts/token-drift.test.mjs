@@ -142,6 +142,64 @@ const cases = [
       /--graphite-text-caption-1-size has a mobile override but the kit's modes are identical \(12px\)/,
   },
 
+  // Motion. Durations are ms numbers in the kit, easings and the spring CSS
+  // strings, and each family is checked in both directions.
+  {
+    name: 'a motion duration drifts',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-motion-duration-base: 200ms;',
+        '--graphite-motion-duration-base: 240ms;',
+      ),
+    expect: /motion: --graphite-motion-duration-base is 240ms, kit says 200ms/,
+  },
+  {
+    name: 'a motion duration loses its unit',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-motion-duration-fast: 120ms;',
+        '--graphite-motion-duration-fast: 0.12s;',
+      ),
+    expect: /motion: --graphite-motion-duration-fast is 0\.12s, kit says 120 \(ms\), which wants 120ms/,
+  },
+  {
+    name: 'a motion easing drifts',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-motion-easing-out: cubic-bezier(0.2, 0, 0, 1);',
+        '--graphite-motion-easing-out: cubic-bezier(0.16, 1, 0.3, 1);',
+      ),
+    expect: /motion: --graphite-motion-easing-out is cubic-bezier\(0\.16, 1, 0\.3, 1\), kit says cubic-bezier\(0\.2, 0, 0, 1\)/,
+  },
+  {
+    name: 'the sheet spring drifts',
+    mutate: (s) => s.replace('0.997 87%, 1);', '1.02 87%, 1);'),
+    expect: /motion: --graphite-motion-spring-sheet is linear\(.*1\.02 87%.*kit says linear\(/,
+  },
+  {
+    name: 'a motion token is deleted',
+    mutate: (s) => s.replace(/\n\s*--graphite-motion-delay-tooltip: 500ms;/, ''),
+    expect: /motion: --graphite-motion-delay-tooltip is not declared/,
+  },
+  {
+    name: 'a motion token with no kit counterpart is added',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-motion-duration-emphasis: 400ms;',
+        '--graphite-motion-duration-emphasis: 400ms;\n  --graphite-motion-duration-glacial: 900ms;',
+      ),
+    expect: /motion: --graphite-motion-duration-glacial has no counterpart in the kit/,
+  },
+  {
+    name: 'the motion contract count goes stale',
+    mutate: (s) =>
+      s.replace(
+        '--graphite-motion-travel: 1;',
+        '--graphite-motion-travel: 1;\n  --graphite-motion-stagger: 1;',
+      ),
+    expect: /foundations\/motion\.md says variable_count: 12, but .* declares 13/,
+  },
+
   // The three ways the Carbon breakpoint check can fail to read its config.
   // All three are fatal rather than advisory so that dropping @carbon/react
   // cannot leave the breakpoint.breakpoint() media queries unverified behind a

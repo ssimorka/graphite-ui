@@ -64,6 +64,18 @@
       "warning": "var(--graphite-warning)",
       "warningContainer": "var(--graphite-warning-container)"
     },
+    "Motion": {
+      "delay/tooltip": "var(--graphite-motion-delay-tooltip)",
+      "duration/base": "var(--graphite-motion-duration-base)",
+      "duration/emphasis": "var(--graphite-motion-duration-emphasis)",
+      "duration/fast": "var(--graphite-motion-duration-fast)",
+      "duration/instant": "var(--graphite-motion-duration-instant)",
+      "duration/slow": "var(--graphite-motion-duration-slow)",
+      "easing/in-out": "var(--graphite-motion-easing-in-out)",
+      "easing/linear": "var(--graphite-motion-easing-linear)",
+      "easing/out": "var(--graphite-motion-easing-out)",
+      "spring/sheet": "var(--graphite-motion-spring-sheet)"
+    },
     "Radius": {
       "2": "var(--graphite-radius-2)",
       "4": "var(--graphite-radius-4)",

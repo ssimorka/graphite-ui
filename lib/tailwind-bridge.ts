@@ -94,16 +94,35 @@ export function buildTailwindBridge({
     ]),
   )
 
-  section(
-    'Motion: ease-graphite',
-    names.includes('--graphite-motion-ease') ? ['  --ease-graphite: var(--graphite-motion-ease);'] : [],
-  )
+  // Easings are a Tailwind theme namespace; durations and delays are not, so
+  // those become utilities below. ease-graphite is the default curve, Out,
+  // under the name the bridge has always used.
+  const easings = of('motion').filter((n) => /^--graphite-motion-(easing|spring)-/.test(n))
+  section('Motion: ease-graphite-out, ease-graphite-in-out, ease-graphite-spring-sheet', [
+    ...(names.includes('--graphite-motion-easing-out')
+      ? ['  --ease-graphite: var(--graphite-motion-easing-out);']
+      : []),
+    ...easings.map(
+      (n) => `  --ease-graphite-${n.replace(/^--graphite-motion-(easing-)?/, '')}: var(${n});`,
+    ),
+  ])
   section(
     'Elevation: shadow-overlay',
     names.includes('--graphite-shadow-overlay')
       ? ['  --shadow-overlay: var(--graphite-shadow-overlay);']
       : [],
   )
+
+  // Durations and the tooltip delay: Tailwind has no theme namespace for
+  // either, so each is a utility, duration-graphite-fast or
+  // delay-graphite-tooltip. They set the transition's timing, as Tailwind's own
+  // duration-* and delay-* do.
+  const timing = of('motion').flatMap((n) => {
+    const m = /^--graphite-motion-(duration|delay)-([a-z]+)$/.exec(n)
+    if (!m) return []
+    const prop = m[1] === 'duration' ? 'transition-duration' : 'transition-delay'
+    return [`@utility ${m[1]}-graphite-${m[2]} {`, `  ${prop}: var(${n});`, '}', '']
+  })
 
   // Literal values: a media query cannot read a custom property.
   const bps = foundations.desktop.filter((d) => d.name.startsWith('--graphite-breakpoint-'))
@@ -129,6 +148,9 @@ export function buildTailwindBridge({
     ...lines.slice(1),
     '}',
     '',
+    ...(timing.length
+      ? ['/* Motion durations and delays: duration-graphite-fast, delay-graphite-tooltip */', ...timing]
+      : []),
     "/* The kit's breakpoints, off by default. Uncomment the block to replace",
     "   Tailwind's sm, md, lg and xl with the kit's (and add max). Literal because",
     '   Tailwind writes them into media queries.',
