@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motionMs } from '@/lib/motion'
+import type { MotionDuration } from '@/lib/motion'
 
-/** Contract: docs/contracts/overlay.md (2.0.0) — the shared Wave 5 base. */
+/** Contract: docs/contracts/overlay.md (2.1.0) — the shared Wave 5 base. */
 export type DismissOptions = {
   open: boolean
   /**
@@ -49,7 +51,16 @@ const FOCUSABLE =
 // and a key press clears it, so an overlay opened any other way falls back to
 // whatever holds focus rather than to a control pressed long before.
 let pressed: HTMLElement | null = null
+// Whether the last thing the reader did was a key press or a pointer press.
+// An overlay opened from the keyboard appears with no entrance (the kit's
+// rule for anything opened by keyboard), and its many open paths (Enter,
+// Space, an arrow, type-ahead) all leave the same trace here.
+let keyboard = false
+/** True when the gesture that is opening an overlay came from the keyboard. */
+export const openedByKeyboard = () => keyboard
 if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', () => (keyboard = false), true)
+  document.addEventListener('keydown', () => (keyboard = true), true)
   document.addEventListener(
     'pointerdown',
     (e) => {
@@ -60,6 +71,29 @@ if (typeof document !== 'undefined') {
   )
   document.addEventListener('click', () => setTimeout(() => (pressed = null)), true)
   document.addEventListener('keydown', () => (pressed = null), true)
+}
+
+/**
+ * Keeps a closing overlay mounted for its exit, then lets it go.
+ *
+ * `mounted` is what to render; `closing` is true for the exit, when the
+ * overlay should carry data-state="closed". It starts as `open`, so an overlay
+ * that renders closed is never mounted at all, on the server or the client.
+ * That keeps Popover's no-nesting throw off the prerender path: a closed
+ * overlay's content still does not exist until it has been opened once.
+ *
+ * Reopening during the exit cancels it. The exit reads its duration from the
+ * Motion token, so the timer and the CSS cannot disagree.
+ */
+export function usePresence(open: boolean, exit: MotionDuration = 'fast') {
+  const [mounted, setMounted] = useState(open)
+  if (open && !mounted) setMounted(true)
+  useEffect(() => {
+    if (open || !mounted) return
+    const t = setTimeout(() => setMounted(false), motionMs(exit, { fallback: 120 }))
+    return () => clearTimeout(t)
+  }, [open, mounted, exit])
+  return { mounted, closing: mounted && !open }
 }
 
 /**

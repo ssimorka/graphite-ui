@@ -75,6 +75,16 @@ const HELPERS: Record<string, { title: string; files: string[]; description: str
     files: ['components/ui/_field-shell.scss'],
     description: 'Shared Sass for the box around text fields.',
   },
+  'overlay-motion': {
+    title: 'Overlay motion',
+    files: ['components/ui/_overlay-motion.scss'],
+    description: 'Shared Sass for the overlays’ entrance and exit.',
+  },
+  motion: {
+    title: 'Motion',
+    files: ['lib/motion.ts'],
+    description: 'Reads the Motion tokens from script.',
+  },
 }
 
 // Bare imports that the project already has, so they are never declared.
@@ -94,6 +104,7 @@ function importsOf(rel: string) {
     else if (s === '@/lib/cn') items.add('cn')
     else if (s === '@/lib/field-message') items.add('field-message')
     else if (s === '@/lib/kit-icons') items.add('kit-icons')
+    else if (s === '@/lib/motion') items.add('motion')
     else if (s === '@/components/kit-icon') items.add('kit-icon')
     else if (s.startsWith('@/')) throw new Error(`registry: ${rel} imports ${s}, which no item provides`)
     else {

@@ -1,6 +1,6 @@
 ---
 component: Overlay
-version: 2.0.0
+version: 2.1.0
 wave: 5
 internal: true
 slots: []
@@ -14,8 +14,10 @@ props:
 tokens: []
 composition_rules:
   - The elevated surface is `elevation-01`, the kit's `Layer/layer-01`, and it is lifted by `shadow-overlay`, the kit's `Shadows/Menu` (0 2 6 at 30%), with no edge. Tooltip is the exception the kit draws: it is inverse, `on-background` fill with `background` text. Each overlay declares its surface in its own contract rather than inheriting it silently, so the drift check can hold it to it.
-  - Overlays enter on one shared fade — the fast motion step on the shared easing — and each overlay declares `motion` in its own contract for the same reason it declares its surface. The fade is opacity only: Tooltip carries its placement in `transform`, a different value per side, so an entrance that moved would overwrite the position it was moving to.
-  - There is no exit transition, deliberately. Every overlay unmounts its content on close, and Popover depends on that: its no-nesting prohibition is enforced by a throw that only fires because content does not exist until it is open. Holding a closed overlay mounted to animate it out would move that throw to prerender.
+  - "Overlays share one entrance and one exit, `components/ui/_overlay-motion.scss`: they grow out of their source (opacity, and the individual `scale` property from 0.96, with the origin on the caret or the trigger's corner) on Out, and leave at the fast step. Each overlay declares its own `motion:` block and duration, for the same reason it declares its surface. The entrance scales `scale`, never `transform`: Tooltip and Popover carry their placement in `transform`, and an animated transform would overwrite the position it grew from."
+  - Anything opened from the keyboard appears with no entrance, as the kit's motion rules require. The base records whether the gesture opening an overlay was a key press (`openedByKeyboard`), so every overlay can tell without threading a flag through each of its open paths.
+  - "An exit holds the overlay mounted for the fast step after it closes (`usePresence`), inert and marked data-state=closed, then unmounts it. Presence starts from `open`, so a closed overlay is never rendered at all, on the server or the client: Popover's no-nesting throw still only fires once the outer one has opened, and never at prerender."
+  - Under reduced motion the scale rides `--graphite-motion-travel`, so an overlay fades in and out without growing.
   - Focus returns to the element that opened the overlay when it closes, in every case, trapped or not.
   - Escape dismisses any overlay that is dismissible at all, and it is always the outermost open overlay that closes first.
   - Open overlays form a stack in the order they opened. Escape reaches only the most recently opened overlay that honours it or traps focus, so each press closes one layer. A trapping overlay that does not honour Escape (a Modal with dismissible off) still takes the press, so nothing beneath it closes.
@@ -84,3 +86,5 @@ Component-level parts of the model (Popover's 12×6 caret, its alignments,
 Menu's row heights) belong to those components' contracts, not this one. The
 overlays move to this model in #230 (Popover), #231 (Menu) and #232 (Tooltip).
 Until each lands, its own contract still describes what it renders.
+
+- **Motion** (2026-10-24, 2.1.0). The shared entrance grows from the overlay's source and the overlays gain an exit, held by usePresence; keyboard-opened overlays appear at once.
