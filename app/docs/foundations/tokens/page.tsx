@@ -48,7 +48,7 @@ const GROUP_NOTES: Record<string, string> = {
     'In px, and the suffix is the pixel value, deliberately unlike space. Graphite components take their corners from radius-none.',
   breakpoint:
     'Reference values. A custom property cannot be used in a media query, so these are for reading from script; the @media rules carry their numbers literally.',
-  motion: 'The site’s easing and durations, plus the indeterminate sweep Progress bar uses.',
+  motion: 'The kit’s Motion collection (durations, the tooltip delay, easings and the sheet spring), plus the loop period and the reduced-motion multiplier.',
   font: 'Three roles. font-1 and font-2 hold the same face today and have no fallback stack.',
   weight: 'The kit stores style names; the number is mapped once, here.',
   text: 'Desktop values. The Mobile block restates only the steps that change.',
@@ -60,6 +60,7 @@ const GROUP_LINKS: Record<string, string> = {
   density: '/docs/foundations/spacing',
   radius: '/docs/foundations/radius',
   breakpoint: '/docs/foundations/layout',
+  motion: '/docs/foundations/motion',
   font: '/docs/foundations/typography',
   weight: '/docs/foundations/typography',
   text: '/docs/foundations/typography',

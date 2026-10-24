@@ -30,6 +30,7 @@ export const DOCS_NAV: DocsNavGroup[] = [
       { href: '/docs/foundations/spacing', label: 'Spacing' },
       { href: '/docs/foundations/radius', label: 'Radius' },
       { href: '/docs/foundations/layout', label: 'Layout & grid' },
+      { href: '/docs/foundations/motion', label: 'Motion' },
       { href: '/docs/foundations/tokens', label: 'Tokens' },
     ],
   },
