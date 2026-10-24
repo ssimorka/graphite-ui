@@ -20,7 +20,7 @@
   // The shared overlay entrance, on the scrim so the panel fades in with it.
   // Opacity only and no exit, as the Overlay contract sets out: the Modal
   // unmounts on close.
-  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 @keyframes overlay-in {
@@ -161,7 +161,7 @@
 .spinner {
   flex: none;
   margin-top: 2px;
-  animation: modal-spin var(--graphite-motion-indeterminate) var(--graphite-motion-indeterminate-ease) infinite;
+  animation: modal-spin var(--graphite-motion-indeterminate) var(--graphite-motion-easing-linear) infinite;
 }
 
 @keyframes modal-spin {
@@ -169,5 +169,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spinner { animation-duration: 3s; }
+  .spinner { animation-duration: calc(var(--graphite-motion-indeterminate) * 2); }
 }

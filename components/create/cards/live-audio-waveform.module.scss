@@ -13,7 +13,10 @@
   border-radius: 1.5px;
   background: var(--graphite-primary);
   transform-origin: center;
-  animation: pulse 900ms ease-in-out infinite alternate;
+  // A loop, so the indeterminate period rather than a transition step: half
+  // of it each way.
+  animation: pulse calc(var(--graphite-motion-indeterminate) / 2) var(--graphite-motion-easing-in-out)
+    infinite alternate;
 }
 
 .paused .bar {

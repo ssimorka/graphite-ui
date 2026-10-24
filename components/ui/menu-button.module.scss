@@ -18,7 +18,7 @@
 .chevron path {
   transform-box: fill-box;
   transform-origin: center;
-  transition: rotate var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: rotate var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 [aria-expanded='true'] > .chevron path { rotate: 180deg; }

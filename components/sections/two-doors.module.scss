@@ -62,7 +62,7 @@
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // The artefact slides under the card's edge rather than escaping it.
   overflow: hidden;
-  transition: --glow var(--graphite-motion-base) ease-out;
+  transition: --glow var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 
   // Info Cards size=large from the kit's md stop (672px): the 318px door with
   // its artefact bleeding off the right edge. Below it, size=small: the
@@ -73,7 +73,7 @@
 }
 
 // Hover states .md: the glow climbs the door, and the artefact loses its own
-// rule and lifts toward the card edge, 240ms ease-out, --graphite-motion-base.
+// rule and lifts toward the card edge, 240ms ease-out, --graphite-motion-duration-base.
 .door:hover {
   --glow: 75%;
 
@@ -207,8 +207,8 @@
   pointer-events: none;
   z-index: 0;
   transition:
-    border-color var(--graphite-motion-base) ease-out,
-    transform var(--graphite-motion-base) ease-out;
+    border-color var(--graphite-motion-duration-base) var(--graphite-motion-easing-out),
+    transform var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 
   // Info Cards size=large: positioned past the door's right edge.
   @media (min-width: 672px) {

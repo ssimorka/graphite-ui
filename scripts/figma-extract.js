@@ -24,7 +24,8 @@
 // Collections in scope, sliced to fit the transport. Everything else in the
 // file (Modal, AI, AI presence, AI revert, Data table size, Content switcher)
 // is component-level state rather than a foundation token layer, and is
-// deliberately excluded.
+// deliberately excluded. Motion joined on 2026-10-24: ten small values, so it
+// rides in the last chunk.
 const CHUNKS = [
   { only: ['Graphite Theme'], offset: 0, limit: 61 },
   { only: ['Graphite Theme'], offset: 61, limit: 61 },
@@ -42,6 +43,7 @@ const CHUNKS = [
       'Breakpoint LG–XL',
       'Radius',
       'Spacing',
+      'Motion',
     ],
     offset: 0,
     limit: 40,

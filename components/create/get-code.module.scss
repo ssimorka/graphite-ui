@@ -16,7 +16,7 @@
   background: var(--graphite-scrim);
 
   @media (prefers-reduced-motion: no-preference) {
-    animation: fade var(--graphite-motion-base) var(--graphite-motion-ease) both;
+    animation: fade var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
   }
 }
 
@@ -40,8 +40,9 @@
   // it to drop from, and the centring lives in transform.
   @media (prefers-reduced-motion: no-preference) {
     animation:
-      fade var(--graphite-motion-fast) var(--graphite-motion-ease),
-      glow 900ms var(--graphite-motion-ease) 220ms both;
+      fade var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out),
+      glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+        var(--graphite-motion-duration-fast) both;
   }
 
   // Below md it takes the whole screen, as search does.

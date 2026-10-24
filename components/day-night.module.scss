@@ -22,9 +22,9 @@ $reach: 1.375rem;
 
 .moving {
   @media (prefers-reduced-motion: no-preference) {
-    // A slow start and a soft landing, as a body clears the horizon and
-    // settles at its height.
-    animation: turn 720ms cubic-bezier(0.65, 0, 0.35, 1);
+    // In-out: the wheel is already on screen and moves across it, so a slow
+    // start and a soft landing as a body clears the horizon. At the cap.
+    animation: turn var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-in-out);
   }
 }
 

@@ -105,7 +105,7 @@
   // than sitting in a panel, and line up with the toolbar and controls.
 
   // The frame's own size is what decides the layout inside it.
-  transition: max-width var(--graphite-motion-base) var(--graphite-motion-ease);
+  transition: max-width var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 
   // The chosen device width, from lg up only. Below it the toolbar is hidden,
   // so a size picked on a wide window must not strand the frame narrow.

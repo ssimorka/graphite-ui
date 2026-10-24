@@ -157,7 +157,7 @@
 }
 
 .spinner {
-  animation: uploader-spin var(--graphite-motion-indeterminate) var(--graphite-motion-indeterminate-ease) infinite;
+  animation: uploader-spin var(--graphite-motion-indeterminate) var(--graphite-motion-easing-linear) infinite;
 }
 
 @keyframes uploader-spin {
@@ -165,7 +165,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spinner { animation-duration: 3s; }
+  .spinner { animation-duration: calc(var(--graphite-motion-indeterminate) * 2); }
 }
 
 // Success: the kit binds the mark to support-info.

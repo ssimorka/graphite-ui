@@ -52,10 +52,10 @@
   // height means and it survives a size change.
   border-radius: var(--graphite-radius-full);
   background: var(--graphite-outline);
-  // Duration from the shared motion tokens; the easing stays a plain ease
-  // rather than the settle curve, because a switch is a short mechanical move
-  // and not something entering the viewport.
-  transition: background var(--graphite-motion-fast) ease;
+  // Fast and Out, from the kit's Motion collection. It used to be a plain
+  // `ease` kept apart from the site's settle curve; the kit has one Out now,
+  // and a switch is exactly the short local change fast is for.
+  transition: background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
   pointer-events: none;
 }
 
@@ -73,7 +73,7 @@
   height: calc(var(--h) - 6px);
   border-radius: 50%;
   background: var(--graphite-on-primary);
-  transition: transform var(--graphite-motion-fast) ease;
+  transition: transform var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 // The Small thumb's check, in on-surface as the kit draws it.

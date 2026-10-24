@@ -56,7 +56,7 @@
   line-height: var(--graphite-text-body-3-line-height);
   text-align: left;
   cursor: pointer;
-  transition: background var(--graphite-motion-fast) var(--graphite-motion-ease);
+  transition: background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 
   &:hover:not(:disabled) {
     background: var(--graphite-elevation-02);
@@ -82,7 +82,7 @@
 .indicator {
   flex: none;
   color: var(--graphite-on-surface);
-  transition: transform var(--graphite-motion-base) var(--graphite-motion-ease);
+  transition: transform var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 }
 
 .item[data-state='open'] .indicator {
@@ -108,8 +108,8 @@
 .panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--graphite-motion-base)
-    var(--graphite-motion-ease);
+  transition: grid-template-rows var(--graphite-motion-duration-base)
+    var(--graphite-motion-easing-out);
 }
 
 .panel[data-state='open'] {

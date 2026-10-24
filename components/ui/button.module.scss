@@ -31,8 +31,8 @@
   // padding is not needed — the size classes set an explicit height.
   padding: 0 var(--graphite-space-10) 0 var(--graphite-space-05);
   transition:
-    background var(--graphite-motion-fast) var(--graphite-motion-ease),
-    color var(--graphite-motion-fast) var(--graphite-motion-ease);
+    background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out),
+    color var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 // Icons are children rather than slots, the way shadcn has them, so they are

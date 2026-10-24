@@ -89,7 +89,7 @@
     line-height: var(--graphite-text-body-3-line-height);
     color: var(--graphite-on-surface-variant);
     text-decoration: none;
-    transition: color var(--graphite-motion-fast) var(--graphite-motion-ease);
+    transition: color var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 
     &:hover {
       color: var(--graphite-primary);

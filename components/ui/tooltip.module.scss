@@ -34,7 +34,7 @@
   // Opacity only. The centred placements carry a transform, and an animated
   // transform would overwrite it rather than offset from it. There is no
   // exit: the bubble unmounts on close.
-  animation: overlay-in var(--graphite-motion-fast) var(--graphite-motion-ease) both;
+  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
 }
 
 @keyframes overlay-in {

@@ -10,6 +10,7 @@ import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
 import { DayNight } from '@/components/day-night'
+import { motionMs } from '@/lib/motion'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { TreeView } from '@/components/ui/tree-view'
 import { useOverlay } from '@/components/ui/overlay'
@@ -54,10 +55,11 @@ function Tray({
   if (open && !mounted) setMounted(true)
 
   // A timer rather than animationend, which a background tab may never fire.
-  // Just past the 220ms slide-out in site-header.module.scss.
+  // Just past the slide-out in site-header.module.scss, which runs at the fast
+  // token: read from the variable, so the two cannot drift.
   useEffect(() => {
     if (open || !mounted) return
-    const t = setTimeout(() => setMounted(false), 260)
+    const t = setTimeout(() => setMounted(false), motionMs('fast', { fallback: 120 }) + 40)
     return () => clearTimeout(t)
   }, [open, mounted])
 

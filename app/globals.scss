@@ -155,19 +155,34 @@
   --graphite-density-default: var(--graphite-space-05);
   --graphite-density-spacious: var(--graphite-space-06);
 
-  // Motion. Progress's indeterminate sweep is specified here rather than in
-  // the component so Spinner (Tier 2) reuses the same value and the two cannot
-  // drift into different motion languages, as its contract requires. Linear,
-  // as the kit's indeterminate prototype runs it (#235).
-  --graphite-motion-indeterminate: 1400ms;
-  --graphite-motion-indeterminate-ease: linear;
+  // Motion, from the kit's `Motion` collection (one mode). token-drift checks
+  // every one against the snapshot: durations are ms numbers in the kit and
+  // carry the unit here, easings and the spring are strings the kit stores as
+  // the CSS they are. No bounce anywhere, and nothing past emphasis (400ms).
+  // The rules live in docs/contracts/foundations/motion.md.
+  --graphite-motion-duration-instant: 0ms;
+  --graphite-motion-duration-fast: 120ms;
+  --graphite-motion-duration-base: 200ms;
+  --graphite-motion-duration-slow: 300ms;
+  --graphite-motion-duration-emphasis: 400ms;
+  --graphite-motion-delay-tooltip: 500ms;
+  --graphite-motion-easing-out: cubic-bezier(0.2, 0, 0, 1);
+  --graphite-motion-easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --graphite-motion-easing-linear: linear;
+  // A critically damped spring (no overshoot) sampled as linear(). Code only:
+  // Figma prototypes cannot play it, and use duration-slow in its place.
+  --graphite-motion-spring-sheet: linear(0, 0.015 2%, 0.054 4%, 0.107 6%, 0.169 8%, 0.236 10%, 0.338 13%, 0.435 16%, 0.551 20%, 0.649 24%, 0.73 28%, 0.808 33%, 0.865 38%, 0.913 44%, 0.944 50%, 0.968 57%, 0.983 65%, 0.992 75%, 0.997 87%, 1);
 
-  // The site's own easing and durations, lifted out of the docs page so
-  // components move the way the pages around them already do rather than each
-  // picking its own curve.
-  --graphite-motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --graphite-motion-fast: 120ms;
-  --graphite-motion-base: 240ms;
+  // Two code-only values the kit has no counterpart for, outside the families
+  // token-drift checks. The indeterminate period is a loop, not a transition,
+  // so the 400ms cap does not apply: Progress bar's sweep and every spinner
+  // share it so they cannot drift into different rhythms (#235).
+  --graphite-motion-indeterminate: 1400ms;
+  // Multiplies every movement distance. 1 normally, 0 under reduced motion
+  // (below), which turns a rise or a drop into a plain fade. A keyframe or
+  // transform that travels writes its distance as
+  // calc(<distance> * var(--graphite-motion-travel)).
+  --graphite-motion-travel: 1;
 
   // Scrim. A veil is one of the few places the system uses alpha rather than a
   // tone step: it has to darken whatever happens to be behind it, which no
@@ -276,6 +291,39 @@
   --graphite-text-title-5-line-height: 1.25rem; // 20px
 }
 
+// ---------- Reduced motion ----------
+//
+// One layer for the whole site, so a component cannot forget. Movement goes;
+// feedback stays. Distances collapse through --graphite-motion-travel, so a
+// keyframe that rises and fades only fades. Transitions keep their durations
+// but only for properties that do not move anything, so a sliding thumb jumps
+// while its color still eases. `[data-motion='reduce']` applies the same to a
+// subtree, which is how the Motion page simulates the preference.
+//
+// lib/theme-file.ts writes the same block into the adopter's theme file. Keep
+// the two in step.
+@mixin reduced-motion {
+  --graphite-motion-travel: 0;
+
+  &,
+  & *,
+  & *::before,
+  & *::after {
+    transition-property: opacity, color, background-color, border-color, outline-color, fill, stroke, box-shadow !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    @include reduced-motion;
+  }
+}
+
+[data-motion='reduce'] {
+  @include reduced-motion;
+}
+
 // --band-pad steps up at the kit's md and lg stops.
 :root {
   @include breakpoint.breakpoint(md) {
@@ -349,8 +397,8 @@ body,
 .cds--white,
 .cds--g100 {
   transition:
-    background-color 180ms ease,
-    color 180ms ease;
+    background-color var(--graphite-motion-duration-base) var(--graphite-motion-easing-out),
+    color var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 }
 
 // Applied by ThemeProvider for one frame while token variables are rewritten.
@@ -410,8 +458,8 @@ body {
   font: inherit;
   cursor: pointer;
   transition:
-    background var(--graphite-motion-fast) var(--graphite-motion-ease),
-    border-color var(--graphite-motion-fast) var(--graphite-motion-ease);
+    background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out),
+    border-color var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 }
 
 // Hover is a tone step on the resting surface, matching the rule the kit's
@@ -474,7 +522,7 @@ body {
   background: none;
   cursor: pointer;
   display: block;
-  animation: cover-in 320ms ease both;
+  animation: cover-in var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) both;
 
   img {
     width: 100%;
@@ -501,7 +549,7 @@ body {
   position: absolute;
   left: 50%;
   bottom: var(--graphite-space-06);
-  transform: translate(-50%, var(--graphite-space-03));
+  transform: translate(-50%, calc(var(--graphite-space-03) * var(--graphite-motion-travel)));
   padding: var(--graphite-space-03) var(--graphite-space-05);
   @include text('caption-1', $letter-spacing: 0.32px);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
@@ -511,7 +559,9 @@ body {
   background: rgba(0, 0, 0, 0.72);
   backdrop-filter: blur(6px);
   opacity: 0;
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition:
+    opacity var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out),
+    transform var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
   pointer-events: none;
 }
 
@@ -529,16 +579,10 @@ body {
     animation: none;
   }
 
-  // transform does two jobs on the hint: -50% centres it against `left: 50%`,
-  // and the y value is the reveal travel. `transform: none` — the pattern used
-  // everywhere else in this file — would uncentre it, so pin it to the resting
-  // position and drop only the travel. The opacity fade stays: it carries no
-  // movement, and losing it would make the hint appear with no transition at
-  // all rather than simply without motion.
-  .art__cover-hint {
-    transform: translate(-50%, 0);
-    transition: opacity 160ms ease;
-  }
+  // The hint needs nothing here. Its travel is written through
+  // --graphite-motion-travel, which the reduced-motion layer sets to 0, so it
+  // keeps its -50% centring and only fades. `transform: none` would uncentre
+  // it, which is why it never used the pattern the rest of this file does.
 }
 
 // ---------------------------------------------------------------------------
@@ -546,10 +590,11 @@ body {
 // ---------------------------------------------------------------------------
 .reveal {
   opacity: 0;
-  transform: translateY(var(--graphite-space-06));
+  transform: translateY(calc(var(--graphite-space-06) * var(--graphite-motion-travel)));
+  // Emphasis, the cap: it was 700ms before the kit had a Motion collection.
   transition:
-    opacity 700ms var(--graphite-motion-ease),
-    transform 700ms var(--graphite-motion-ease);
+    opacity var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out),
+    transform var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out);
   will-change: opacity, transform;
 
   &.is-visible {
@@ -771,7 +816,8 @@ body {
   // Duration is the fast step; the easing stays linear on purpose. This
   // transition restarts on every pointermove, and an ease-out curve makes a
   // continuously-retargeted value rubber-band instead of tracking the cursor.
-  transition: background var(--graphite-motion-fast) linear;
+  // The one linear outside progress, and the reason it is one.
+  transition: background var(--graphite-motion-duration-fast) var(--graphite-motion-easing-linear);
   pointer-events: none;
   // Drifts up faster than the page for depth.
   transform: translate3d(
@@ -925,9 +971,11 @@ body {
 .hero__source-strip {
   position: relative;
   margin-top: var(--graphite-space-07);
+  // Rise at the cap, then the tint climbs and the ramps file in a beat later.
   animation:
-    hero-rise 900ms var(--graphite-motion-ease) both,
-    glow 900ms var(--graphite-motion-ease) 500ms both;
+    hero-rise var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out) both,
+    glow var(--graphite-motion-duration-emphasis) var(--graphite-motion-easing-out)
+      var(--graphite-motion-duration-base) both;
 
   @include breakpoint.breakpoint(md) {
     margin-top: var(--graphite-space-10);
@@ -951,7 +999,7 @@ body {
   // The four ramps, then the footer, each rising a beat after the last once
   // the strip itself has landed.
   .ramp-stack > * {
-    @include drop.cascade($count: 4, $start: 420ms, $step: 90ms);
+    @include drop.cascade($count: 4, $start: var(--graphite-motion-duration-base));
   }
 
   // The footer, ruled off like the search panel's: the hint at the left, the
@@ -964,7 +1012,9 @@ body {
     border-top: 1px solid var(--graphite-surface-variant);
 
     @media (prefers-reduced-motion: no-preference) {
-      animation: rise 420ms var(--graphite-motion-ease) 780ms both;
+      // After the last ramp has started: the cascade's start plus its span.
+      animation: rise var(--graphite-motion-duration-base) var(--graphite-motion-easing-out)
+        calc(var(--graphite-motion-duration-base) * 2) both;
     }
 
     // Below md the two cannot share a row without the hint wrapping into a
@@ -1017,7 +1067,8 @@ body {
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translateY(var(--graphite-space-07)) scale(0.98);
+    transform: translateY(calc(var(--graphite-space-07) * var(--graphite-motion-travel)))
+      scale(calc(1 - 0.02 * var(--graphite-motion-travel)));
   }
   to {
     opacity: 1;
@@ -1149,7 +1200,7 @@ body {
   // stops are grid columns — growing the box would reflow the whole row, and
   // the ramp has to stay aligned with the weight labels beneath it. The hex
   // label rides the scale, which resizing in Figma does not do to it.
-  transition: transform var(--graphite-motion-base) ease-out;
+  transition: transform var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 
   &:hover {
     transform: scale(1.1136); // 98 / 88
@@ -1444,8 +1495,8 @@ $cap-dwell: 500px;
   background: var(--cds-layer-01);
   border: 1px solid var(--cds-border-subtle-01);
   transition:
-    background var(--graphite-motion-base) ease,
-    border-color var(--graphite-motion-base) ease;
+    background var(--graphite-motion-duration-base) var(--graphite-motion-easing-out),
+    border-color var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
 
   &.is-active {
     background: var(--cds-layer-02);
@@ -1486,7 +1537,7 @@ $cap-dwell: 500px;
   text-align: left;
   cursor: pointer;
   color: var(--cds-text-secondary);
-  transition: color var(--graphite-motion-fast) ease;
+  transition: color var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
 
   &:hover {
     color: var(--cds-text-primary);
@@ -1508,7 +1559,7 @@ $cap-dwell: 500px;
 
 .cap-item__reveal {
   padding-top: var(--graphite-space-04);
-  animation: cap-reveal var(--graphite-motion-base) var(--graphite-motion-ease)
+  animation: cap-reveal var(--graphite-motion-duration-base) var(--graphite-motion-easing-out)
     both;
 }
 
@@ -1521,7 +1572,7 @@ $cap-dwell: 500px;
 @keyframes cap-reveal {
   from {
     opacity: 0;
-    transform: translateY(calc(-1 * var(--graphite-space-03)));
+    transform: translateY(calc(-1 * var(--graphite-space-03) * var(--graphite-motion-travel)));
   }
   to {
     opacity: 1;
@@ -1584,7 +1635,7 @@ $cap-dwell: 500px;
   box-shadow: 0 var(--graphite-space-08) var(--graphite-space-12)
     color-mix(in srgb, #000 45%, transparent);
   overflow: hidden;
-  animation: fade-swap 500ms var(--graphite-motion-ease) both;
+  animation: fade-swap var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) both;
 
   > * {
     width: 100%;
@@ -1990,7 +2041,7 @@ $cap-dwell: 500px;
 @keyframes fade-swap {
   from {
     opacity: 0;
-    transform: scale(0.99);
+    transform: scale(calc(1 - 0.01 * var(--graphite-motion-travel)));
   }
   to {
     opacity: 1;

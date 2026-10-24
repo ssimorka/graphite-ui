@@ -269,7 +269,7 @@ tbody > tr:first-child > .td { box-shadow: none; }
   outline-offset: 2px;
 }
 
-.chevron { transition: transform var(--graphite-motion-fast) var(--graphite-motion-ease); }
+.chevron { transition: transform var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out); }
 .open .chevron { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {

@@ -187,11 +187,11 @@
   padding: var(--pad) var(--pad) calc(var(--foot) + var(--graphite-space-04));
   box-shadow: 0 2px 6px color-mix(in srgb, #000 30%, transparent);
   // On hover the glow climbs the card and the contents drop 4px, over the
-  // home wall's 300ms ease-out. --glow is a registered property, so it eases
+  // home wall's var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out). --glow is a registered property, so it eases
   // like any other value.
   transition:
-    --glow 300ms ease-out,
-    padding 300ms ease-out;
+    --glow var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out),
+    padding var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out);
 
   &:hover {
     --glow: 75%;
