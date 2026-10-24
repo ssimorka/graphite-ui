@@ -119,7 +119,7 @@ export function buttonDoc(): ComponentDocConfig {
       ['Labels', 'The icon size changes the shape, never the naming requirement. The component does not check for an aria-label, so the caller must pass one.'],
       ['Disabled', 'Uses the native disabled attribute, which removes the button from the tab order. If a reader needs to learn why an action is unavailable, say so in text nearby.'],
       ['Contrast', 'Every filled style puts on-primary on its fill, and the outlined and ghost styles put primary or secondary on the page. All of those pairs are measured at the theme’s target, AA or AAA.'],
-      ['Motion', 'Colour transitions and the 1px press displacement both switch off under prefers-reduced-motion.'],
+      ['Motion', 'The press is instant. Hover and press colour ease at the fast step, and still do under reduced motion, which removes only the 1px press displacement.'],
     ],
     parityLede: `The kit's Button page ships ${kit?.variants ?? 'many'} variants in ${kit?.sets ?? 'one'} set. The code exposes ${props} props. This table is where those two facts are reconciled instead of quietly diverging.`,
     parity: [

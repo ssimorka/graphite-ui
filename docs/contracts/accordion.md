@@ -1,6 +1,6 @@
 ---
 component: Accordion
-version: 1.1.1
+version: 1.2.0
 wave: 4
 slots:
   - name: Trigger
@@ -53,7 +53,23 @@ tokens:
   - name: text
     usage: Trigger label and panel copy, both Body/3 at every size; size changes the trigger height only.
   - name: motion
-    usage: The panel's open and close transition, at the base duration on the Out easing from the kit's Motion collection.
+    usage: The panel's height and the indicator's turn, on one duration and curve; the trigger's hover fill.
+motion:
+  - trigger: An item opens or closes
+    property: Panel height, through grid-template-rows 0fr to 1fr
+    duration: duration-base
+    easing: easing-in-out
+    reduced: Snaps open or shut. The page below it moves, so nothing animates it.
+  - trigger: An item opens or closes
+    property: The indicator turns 180 degrees
+    duration: duration-base
+    easing: easing-in-out
+    reduced: Turns at once.
+  - trigger: Hover on a trigger
+    property: Background
+    duration: duration-fast
+    easing: easing-out
+    reduced: Unchanged. A color change is feedback, not movement.
 composition_rules:
   - A trigger and its panel are one pair. The panel is labelled by its own trigger, so a screen reader announces the two together rather than an orphaned region.
   - Use `multiple` when the panels are independent of each other. Use `single` when opening one makes the others irrelevant.
@@ -78,3 +94,5 @@ The kit gives the optional panel control the name of its instance-swap slot. Thi
 
 ### Where this came from
 Adopted under rule 6's demand test: the home page's FAQ used Carbon's Accordion, and it is the one new contract `docs/SHADCN-MIGRATION.md` budgets for. The shape is the kit's Site design (Graphite UI Site 11814:17, "Component page — Accordion"), which draws Size (Small, Medium, Large), Alignment (Right, Left), Flush and Expanded across 5 sets and 120 variants. The kit now has that set, `Accordion item` (`2154:8478`, 120 variants), so rule 8 question 1 applies and the kit wins (#222): title and copy are Body/3 on-surface, the indicator is the kit's `fi-rs-angle-small-down` on-surface, hover is elevation-02, the item is transparent, flush keeps each item's top rule and drops only the inset, and a disabled item dims its copy. One kit slip is recorded rather than copied: the kit leaves the disabled chevron at full strength, and the code dims it with the title.
+
+- **Motion** (2026-10-24, 1.2.0). The panel and the indicator move in-out, not Out: the panel is part of the page and its opening moves what is below. The hover fill now still eases under reduced motion.

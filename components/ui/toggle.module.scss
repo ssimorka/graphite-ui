@@ -128,12 +128,9 @@
     0 0 0 4px var(--graphite-primary-focus);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .track,
-  .thumb {
-    transition: none;
-  }
-}
+// Reduced motion needs nothing here: the global layer stops the thumb's
+// transform from transitioning, so it jumps, while the track's color, which is
+// feedback rather than movement, still eases.
 
 .label { @include parts.field-label; }
 

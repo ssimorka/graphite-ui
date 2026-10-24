@@ -67,7 +67,7 @@ export function progressBarDoc(): ComponentDocConfig {
       ['Labels', 'label is required, painted, and names the bar through aria-labelledby; hideLabel keeps it as the name while dropping it from view. The helper, success or error message is linked with aria-describedby.'],
       ['Outcome', 'Success and error set the value to 100 and announce their message as a status when it arrives. The status icon is decorative: the message carries the meaning.'],
       ['Values', 'Values outside 0 to 100 are clamped before they reach the width or ARIA, so the two always agree.'],
-      ['Motion', 'The sweep is a quarter of the track at a constant speed, as the kit runs it. Under prefers-reduced-motion the width stops animating and the sweep slows to 3 seconds rather than stopping, so the bar still reads as working.'],
+      ['Motion', 'The sweep is a quarter of the track at a constant speed, as the kit runs it. A determinate fill moves at a constant speed too, at the base step. Under reduced motion the width stops animating and the sweep slows to twice its period rather than stopping, so the bar still reads as working.'],
     ],
     parity: [
       ['Progress', '0% · 25% · 50% · 75% · Indeterminate · Success · Error', 'value · variant · status', 'The percentages are value, and any number from 0 to 100 works. Indeterminate is variant="indeterminate". Success and Error are status.'],

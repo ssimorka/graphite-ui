@@ -1,6 +1,6 @@
 ---
 component: Tabs
-version: 2.0.0
+version: 2.1.0
 wave: 4
 slots:
   - name: Tab list
@@ -51,6 +51,19 @@ tokens:
     usage: Labels at Body/3, SemiBold when selected; the 2nd label at 12/16.
   - name: spacing
     usage: Tab heights and padding, list gaps, and the badge inset.
+  - name: motion
+    usage: The selected indicator sliding between tabs. The panels swap at once.
+motion:
+  - trigger: The selection changes
+    property: The selected indicator slides to the new tab, its position and size
+    duration: duration-fast
+    easing: easing-in-out
+    reduced: Jumps.
+  - trigger: The selection changes
+    property: "None: the panel swaps at once"
+    duration: duration-instant
+    easing: none
+    reduced: The same.
 composition_rules:
   - The kit's Tabs set carries no orientation axis — its axes are Style (Contained, Line), Type and Alignment, and vertical tabs live in a separate internal `_Vertical tabs items` component. The `orientation` prop is kept anyway: the capability exists in the kit, only structured differently, and removing a prop is breaking. Worth revisiting if that set is ever rebuilt.
   - Active indicator position is always a tone-step-driven color change plus position, never color alone — same principle as the video's point about visuals over text, applied to state, not onboarding. The selected label also takes SemiBold, as the kit draws it.
@@ -66,3 +79,4 @@ prohibitions:
 - **Kit parity** (#234, 2.0.0, a major: the list no longer draws one rule under itself, each tab draws its own, and the vertical indicator moved to the left). Three kit slips are recorded rather than copied: the overflow buttons' glyph is a plus placeholder (built as a chevron), Line's overflow fade is a raw white (built from `background`), and Contained Auto-width items are 50 tall where Grid aware are 48 (built at 48, Carbon's).
 - **Composition rules:** Active indicator position is always a tone-step-driven color change plus position, never color alone — same principle as the video's point about visuals over text, applied to state, not onboarding.
 - **Prohibitions:** No tab content lazy-unmounts in a way that loses form state — if a form field lives inside a tab panel, switching tabs cannot silently clear it.
+- **Motion** (2026-10-24, 2.1.0). The selected indicator is one element that slides between tabs at fast, in-out; the panels swap at once.

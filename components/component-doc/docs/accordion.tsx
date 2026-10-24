@@ -126,7 +126,7 @@ export function accordionDoc(): ComponentDocConfig {
       ['Roles', 'Each trigger is a button carrying aria-expanded and aria-controls; each panel is labelled by its own trigger.'],
       ['Focus', <>The focus ring is <code>--graphite-focus</code> and is never removed, only moved.</>],
       ['Contrast', 'Trigger label against surface is measured at the theme’s target, AA or AAA, and the pairing is checked rather than reviewed.'],
-      ['Motion', 'The open transition respects prefers-reduced-motion and falls back to an instant change.'],
+      ['Motion', 'The panel opens and the indicator turns together at the base step, in-out, since the opening moves the page below. Under reduced motion both snap, and the hover fill still eases.'],
     ],
     parityLede: `The kit's Accordion page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets, and 120 of them are the one Accordion item set. The code exposes ${props} props. This table is where those two facts are reconciled instead of quietly diverging.`,
     parity: [

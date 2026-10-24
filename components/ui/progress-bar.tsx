@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import styles from './progress-bar.module.scss'
 
-/** Contract: docs/contracts/progress-bar.md (2.0.0) */
+/** Contract: docs/contracts/progress-bar.md (2.1.0) */
 type ProgressBarProps = {
   /** 0-100. Ignored, and omitted from ARIA, when indeterminate. */
   value?: number

@@ -82,7 +82,9 @@
 .indicator {
   flex: none;
   color: var(--graphite-on-surface);
-  transition: transform var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
+  // Turns with the panel, on the same duration and curve, so the two read as
+  // one movement.
+  transition: transform var(--graphite-motion-duration-base) var(--graphite-motion-easing-in-out);
 }
 
 .item[data-state='open'] .indicator {
@@ -104,12 +106,13 @@
 
 // ------------------------------------------------------------------- panel
 // Height animates through a grid track, 0fr to 1fr, which needs no measured
-// pixel value and so no script.
+// pixel value and so no script. In-out, not Out: the panel is part of the
+// page already on screen, and its opening moves everything below it.
 .panel {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--graphite-motion-duration-base)
-    var(--graphite-motion-easing-out);
+    var(--graphite-motion-easing-in-out);
 }
 
 .panel[data-state='open'] {
@@ -141,10 +144,6 @@
   padding-right: var(--graphite-space-05);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .panel,
-  .indicator,
-  .trigger {
-    transition: none;
-  }
-}
+// Under reduced motion the panel's height and the indicator's turn snap (the
+// global layer narrows transitions to properties that do not move), while the
+// trigger's hover fill still eases: feedback stays.

@@ -310,8 +310,9 @@
   .button { border: 1px solid ButtonText; }
 }
 
+// Under reduced motion the color still eases (it is feedback, and the global
+// layer keeps it); only the 1px press displacement goes.
 @media (prefers-reduced-motion: reduce) {
-  .button { transition: none; }
   .button:active:not(:disabled) { transform: none; }
 }
 

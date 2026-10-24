@@ -1,6 +1,6 @@
 ---
 component: File uploader
-version: 1.0.0
+version: 1.1.0
 wave: 2
 slots:
   - name: Label
@@ -54,7 +54,13 @@ tokens:
   - name: spacing
     usage: The 16 and 8 gaps, item padding and the drop box's padding.
   - name: motion
-    usage: The spinner's turn, through the indeterminate duration and its linear ease, as Modal's inline loading turns.
+    usage: The spinner's turn, through the indeterminate period, at a constant speed.
+motion:
+  - trigger: A file is uploading
+    property: The spinner turns, looping
+    duration: indeterminate
+    easing: easing-linear
+    reduced: Slows to twice the period rather than stopping, so it still reads as working.
 composition_rules:
   - The Default trigger is the governed Button, primary, at the uploader's size. File uploader does not restyle it.
   - The component picks and lists files. It never uploads or validates; the caller sets each file's status.
@@ -71,3 +77,4 @@ prohibitions:
 - **Composition rules:** Button for the Default trigger; the caller uploads and validates; remove buttons are named per file.
 - **Prohibitions:** No unlabelled uploader; no error without its message.
 - **Kit parity** (#270, 1.0.0): the one public set, File uploader (`5465:294860`), on every axis but Skeleton, which has no counterpart by rule, with its private file item and drop box states. Recorded rather than copied: the remove glyph and its wrapper carry a drop shadow, read as a stray and not drawn. The Disabled drop box colours its copy with the disabled fill tone (button-disabled), which all but vanishes on the page; the code uses the disabled content tone the kit gives every other disabled text. The Disabled variants hide the file list, which reads as the Files property switched off rather than a rule; the code keeps a disabled uploader's files in view, with their remove buttons disabled.
+- **Motion** (2026-10-24, 1.1.0). The spinner's loop recorded in a motion: block.

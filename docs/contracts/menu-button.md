@@ -1,6 +1,6 @@
 ---
 component: Menu buttons
-version: 1.0.1
+version: 1.1.0
 wave: 0
 slots:
   - name: Trigger
@@ -30,6 +30,12 @@ props:
 tokens:
   - name: motion
     usage: The chevron turning over while the menu is open.
+motion:
+  - trigger: The menu opens or closes
+    property: The chevron turns 180 degrees
+    duration: duration-fast
+    easing: easing-out
+    reduced: Turns at once.
 composition_rules:
   - The triggers are the governed Button and the menus the governed Menu. These forms fix the trigger and pass the rest to Menu; they restyle neither. Menu keeps its trigger render prop for anything else.
   - The trigger carries aria-haspopup and aria-expanded from Menu, and opens with Enter, Space or Arrow Down.
@@ -47,3 +53,4 @@ prohibitions:
 - **Prohibitions:** No unnamed icon trigger; no menu of one.
 - **Kit parity** (#286, 1.0.0): the three public sets on the Menu buttons page, Menu button (`31420:317548`), Combo button (`31753:68447`) and Overflow (`3717:45725`), on every axis. Recorded rather than copied: all three draw Button's default fi-rs-plus-small as their glyph, never swapped; the code draws the chevron (angle-small-down) the Menu and Combo buttons mean, and the menu dots for Overflow. Overflow's Hover, Focus and Active are Button's own pseudo-classes. The kit draws no open glyph; the chevron turns over while open, as Carbon's does (rule 7's tie-break).
 - **Wave** (1.0.1, a patch: classification only, nothing about the component changes): moved from wave 4, layout and navigation, to wave 0 beside Button and Button group. It is Button composed with Menu, an action rather than a way around the site, and the gallery files components by wave.
+- **Motion** (2026-10-24, 1.1.0). The chevron's turn recorded in a motion: block.

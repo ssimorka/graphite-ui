@@ -1,7 +1,7 @@
 'use client'
 
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { KitIcon } from '@/components/kit-icon'
 import type { KitIconName } from '@/lib/kit-icons'
 import styles from './tabs.module.scss'
@@ -21,7 +21,7 @@ export type Tab = {
   badge?: boolean
 }
 
-/** Contract: docs/contracts/tabs.md (2.0.0) */
+/** Contract: docs/contracts/tabs.md (2.1.0) */
 type TabsProps = {
   /** The tuple makes the contract's two-tab minimum a compile error. */
   tabs: [Tab, Tab, ...Tab[]]
@@ -93,6 +93,33 @@ export function Tabs({
     return () => ro.disconnect()
   }, [measure, tabs.length])
 
+  // The selected indicator: one element that slides to the active tab rather
+  // than a rule on each, so the eye follows the selection across. Measured
+  // from the tab's box; `ready` turns its transition on only after the first
+  // placement, so it never slides in from nowhere on load.
+  const [bar, setBar] = useState<{ x: number; y: number; w: number; h: number } | null>(null)
+  const [ready, setReady] = useState(false)
+  const place = useCallback(() => {
+    const el = refs.current.get(active)
+    if (!el) return
+    setBar({ x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight })
+  }, [active])
+  useLayoutEffect(() => {
+    place()
+  }, [place, tabs.length])
+  useEffect(() => {
+    if (!bar || ready) return
+    const raf = requestAnimationFrame(() => setReady(true))
+    return () => cancelAnimationFrame(raf)
+  }, [bar, ready])
+  useEffect(() => {
+    const el = list.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(place)
+    for (const tab of refs.current.values()) ro.observe(tab)
+    return () => ro.disconnect()
+  }, [place, tabs.length])
+
   const scrollBy = (dir: 1 | -1) => {
     const el = list.current
     if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' })
@@ -145,7 +172,7 @@ export function Tabs({
           ref={list}
           role="tablist"
           aria-orientation={orientation}
-          className={styles.list}
+          className={`${styles.list} ${bar ? styles.sliding : ''}`}
           onScroll={measure}
           onKeyDown={(e) => {
             const i = tabs.findIndex((t) => t.id === active)
@@ -211,6 +238,14 @@ export function Tabs({
               {tab.badge ? <span className={styles.badge} aria-hidden="true" /> : null}
             </button>
           ))}
+          {bar ? (
+            <span
+              className={styles.indicator}
+              aria-hidden="true"
+              data-ready={ready || undefined}
+              style={{ '--x': `${bar.x}px`, '--y': `${bar.y}px`, '--w': `${bar.w}px`, '--h': `${bar.h}px` } as CSSProperties}
+            />
+          ) : null}
         </div>
         {overflow.any ? (
           <button
