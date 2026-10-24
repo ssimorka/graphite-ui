@@ -33,6 +33,8 @@ import { metadata as spacingMeta } from '@/app/docs/foundations/spacing/page'
 import { TOC as spacingToc } from '@/app/docs/foundations/spacing/toc'
 import { metadata as radiusMeta } from '@/app/docs/foundations/radius/page'
 import { TOC as radiusToc } from '@/app/docs/foundations/radius/toc'
+import { metadata as motionMeta } from '@/app/docs/foundations/motion/page'
+import { TOC as motionToc } from '@/app/docs/foundations/motion/toc'
 import { metadata as layoutMeta } from '@/app/docs/foundations/layout/page'
 import { TOC as layoutToc } from '@/app/docs/foundations/layout/toc'
 import { metadata as tokensMeta } from '@/app/docs/foundations/tokens/page'
@@ -162,6 +164,7 @@ export function buildSearchIndex(): SearchEntry[] {
     ...docsPage('/docs/foundations/spacing', spacingMeta, spacingToc),
     ...docsPage('/docs/foundations/radius', radiusMeta, radiusToc),
     ...docsPage('/docs/foundations/layout', layoutMeta, layoutToc),
+    ...docsPage('/docs/foundations/motion', motionMeta, motionToc),
     ...docsPage('/docs/foundations/tokens', tokensMeta, tokensToc),
     ...docsPage('/gallery', galleryMeta, [], 'Docs'),
     ...docsPage('/create', createMeta, [], 'Tool', 'Create a theme'),

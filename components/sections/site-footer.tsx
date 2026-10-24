@@ -37,6 +37,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
       { label: 'Spacing', href: '/docs/foundations/spacing' },
       { label: 'Radius', href: '/docs/foundations/radius' },
       { label: 'Layout & grid', href: '/docs/foundations/layout' },
+      { label: 'Motion', href: '/docs/foundations/motion' },
     ],
   },
   {

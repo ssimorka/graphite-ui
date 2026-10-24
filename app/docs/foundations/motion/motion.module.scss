@@ -1,0 +1,638 @@
+// The Motion page. Page frame as the other foundations pages draw it; the
+// demos are this page's own, and every timing here reads a Motion token.
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-06);
+  scroll-margin-top: 5rem;
+}
+
+// ------------------------------------------------------------------ header
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-heading-4-size);
+  line-height: var(--graphite-text-heading-4-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.lede,
+.note {
+  margin: 0;
+  max-width: 44rem;
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: 0.9em;
+    color: var(--graphite-on-surface);
+  }
+}
+
+.lede {
+  font-size: var(--graphite-text-body-1-size);
+  line-height: var(--graphite-text-body-1-line-height);
+}
+
+.note {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-03);
+}
+
+// -------------------------------------------------------------- playground
+.playground {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-09);
+}
+
+// The simulate switch stays in reach while the reader scrolls through the
+// demos it changes. Below the site header, which is 64 tall.
+.stickyBar {
+  position: sticky;
+  top: var(--graphite-space-10);
+  z-index: 5;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: calc(-1 * var(--graphite-space-07));
+  padding: var(--graphite-space-03) var(--graphite-space-04);
+  align-self: flex-end;
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  padding: var(--graphite-space-05);
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline-subtle);
+  min-width: 0;
+}
+
+// The Don't side is drawn on the danger rule, so it reads as the wrong way
+// round before a word of it is read. The word Don't on its tab says it too.
+.dontFrame {
+  border-top: 3px solid var(--graphite-danger);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--graphite-space-05);
+}
+
+// The one control in a row that should take the spare width (the race's
+// slider); buttons and switches keep their own.
+.grow {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.readout,
+.counter,
+.caption {
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    color: var(--graphite-on-surface);
+  }
+
+  strong {
+    color: var(--graphite-on-surface);
+  }
+}
+
+.caption {
+  max-width: 44rem;
+}
+
+.counter {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+}
+
+.kbd {
+  margin-inline-start: var(--graphite-space-03);
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  opacity: 0.8;
+}
+
+// ---------------------------------------------------------------- easings
+// The curves the race and Feel it compare. Three are Graphite's; In is here
+// only to be seen losing.
+.curve-linear { --ease: var(--graphite-motion-easing-linear); }
+.curve-out { --ease: var(--graphite-motion-easing-out); }
+.curve-in-out { --ease: var(--graphite-motion-easing-in-out); }
+// motion-allow: the ease-in curve Graphite forbids, drawn so the reader can feel why
+.curve-in { --ease: cubic-bezier(0.4, 0, 1, 1); }
+
+// ------------------------------------------------------------------- race
+.lanes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+}
+
+.laneLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--graphite-space-03);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.laneNote {
+  color: var(--graphite-on-surface-variant);
+}
+
+.tagOk,
+.tagNo {
+  padding: 0 var(--graphite-space-03);
+  font-size: var(--graphite-text-caption-1-size);
+  line-height: var(--graphite-text-caption-1-line-height);
+  border: 1px solid currentColor;
+}
+
+.tagOk { color: var(--graphite-success); }
+.tagNo { color: var(--graphite-danger); }
+
+// The track is a query container, so a dot can travel exactly its width at
+// any screen size.
+.track {
+  position: relative;
+  container-type: inline-size;
+  display: block;
+  height: var(--graphite-space-05);
+  background: linear-gradient(var(--graphite-outline-subtle), var(--graphite-outline-subtle)) center / 100% 2px no-repeat;
+}
+
+.dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--graphite-space-05);
+  height: var(--graphite-space-05);
+  border-radius: 50%;
+  background: var(--graphite-primary);
+  translate: 0 0;
+  transition: translate var(--dur) var(--ease);
+
+  &[data-there] {
+    translate: calc(100cqw - var(--graphite-space-05)) 0;
+  }
+}
+
+.curve-in.dot { background: var(--graphite-danger); }
+
+// ------------------------------------------------------------------- feel
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--graphite-space-04);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.feelCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 6rem;
+  padding: var(--graphite-space-04);
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+
+  // Same duration, the cap, for all four. Only the curve differs.
+  &[data-run] {
+    animation: feel-in var(--graphite-motion-duration-emphasis) var(--ease) both;
+  }
+}
+
+@keyframes feel-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--graphite-space-07) * var(--graphite-motion-travel));
+  }
+}
+
+.feelLetter {
+  font-size: var(--graphite-text-heading-6-size);
+  line-height: var(--graphite-text-heading-6-line-height);
+  font-weight: 700;
+  color: var(--graphite-on-surface);
+}
+
+.feelEase {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  color: var(--graphite-on-surface-variant);
+}
+
+// -------------------------------------------------------------- hundredth
+.paletteStage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 15rem;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-background);
+}
+
+.paletteEmpty {
+  margin: auto 0;
+  color: var(--graphite-on-surface-variant);
+  font-size: var(--graphite-text-body-3-size);
+  text-align: center;
+}
+
+.palette {
+  width: min(24rem, 100%);
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+
+  // The animated open: a drop and a fade at slow. Lovely once.
+  &[data-animate] {
+    transform-origin: 50% 0;
+    animation: palette-in var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) both;
+  }
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--graphite-space-05) * var(--graphite-motion-travel));
+    scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+  }
+}
+
+.paletteHint {
+  margin: 0;
+  padding: var(--graphite-space-04) var(--graphite-space-05);
+  border-bottom: 1px solid var(--graphite-outline-subtle);
+  font-size: var(--graphite-text-caption-1-size);
+  color: var(--graphite-on-surface-variant);
+}
+
+.paletteList,
+.fakeMenu {
+  margin: 0;
+  padding: var(--graphite-space-02) 0;
+  list-style: none;
+}
+
+.paletteItem,
+.fakeItem {
+  appearance: none;
+  display: block;
+  width: 100%;
+  padding: var(--graphite-space-03) var(--graphite-space-05);
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  text-align: left;
+  color: var(--graphite-on-surface-variant);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--graphite-elevation-02);
+    color: var(--graphite-on-surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid transparent;
+    box-shadow: inset 0 0 0 2px var(--graphite-primary-focus);
+  }
+}
+
+// ----------------------------------------------------------------- origin
+.originStage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--graphite-space-05);
+  min-height: 12rem;
+}
+
+.anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.fakePanel,
+.fakeMenu {
+  position: absolute;
+  top: calc(100% + var(--graphite-space-03));
+  left: 0;
+  z-index: 20;
+  width: max-content;
+  max-width: 18rem;
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+  color: var(--graphite-on-surface);
+}
+
+.popText {
+  display: block;
+  width: min(16rem, 70vw);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+}
+
+.fakePanel {
+  width: min(16rem, 70vw);
+  padding: var(--graphite-space-05);
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+}
+
+.fakeMenu {
+  min-width: 10rem;
+}
+
+// ------------------------------------------------------------------ catch
+.sheetStage {
+  position: relative;
+  height: 18rem;
+  overflow: hidden;
+  background: var(--graphite-background);
+}
+
+.sheet {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--graphite-space-04);
+  height: 70%;
+  padding: var(--graphite-space-04) var(--graphite-space-05) var(--graphite-space-05);
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+  border-radius: var(--graphite-radius-16) var(--graphite-radius-16) 0 0;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.locked {
+  cursor: not-allowed;
+}
+
+.grabber {
+  width: 2.25rem;
+  height: 4px;
+  background: var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-2);
+}
+
+.sheetText {
+  margin: 0;
+  max-width: 20rem;
+  text-align: center;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface);
+}
+
+// --------------------------------------------------------------- tooltips
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--graphite-space-02);
+  padding-bottom: var(--graphite-space-08);
+}
+
+.slowTipWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+// The Don't: every label waits the full delay, every time.
+.slowTip {
+  position: absolute;
+  top: calc(100% + var(--graphite-space-02));
+  left: 50%;
+  translate: -50% 0;
+  z-index: 10;
+  padding: var(--graphite-space-01) var(--graphite-space-05);
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+  border-radius: var(--graphite-radius-2);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--graphite-motion-duration-instant) var(--graphite-motion-easing-out);
+}
+
+.slowTipWrap:hover .slowTip,
+.slowTipWrap:focus-within .slowTip {
+  opacity: 1;
+  transition-delay: var(--graphite-motion-delay-tooltip);
+}
+
+// ----------------------------------------------------------------- toasts
+// The Don't: five at once, stacked over the page at the top right.
+.pile {
+  position: fixed;
+  top: var(--graphite-space-10);
+  right: var(--graphite-space-05);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+
+.pileToast {
+  min-width: 14rem;
+  padding: var(--graphite-space-05);
+  background: var(--graphite-success-container);
+  color: var(--graphite-on-surface);
+  box-shadow: var(--graphite-shadow-overlay), inset 3px 0 0 var(--graphite-success);
+  font-size: var(--graphite-text-body-3-size);
+  animation: pile-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
+}
+
+@keyframes pile-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--graphite-space-03) * var(--graphite-motion-travel));
+  }
+}
+
+// ----------------------------------------------------------------- tokens
+.tokenList {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tokenRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-03);
+  padding: var(--graphite-space-05) 0;
+  border-bottom: 1px solid var(--graphite-outline-subtle);
+
+  @media (min-width: 1056px) {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--graphite-space-05);
+  }
+}
+
+.tokenName {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+    color: var(--graphite-on-surface);
+    overflow-wrap: anywhere;
+  }
+}
+
+.tokenValue {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  color: var(--graphite-on-surface-variant);
+  overflow-wrap: anywhere;
+}
+
+.miniTrack {
+  position: relative;
+  container-type: inline-size;
+  display: block;
+  height: var(--graphite-space-04);
+  background: linear-gradient(var(--graphite-outline-subtle), var(--graphite-outline-subtle)) center / 100% 1px no-repeat;
+}
+
+.miniDot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--graphite-space-04);
+  height: var(--graphite-space-04);
+  border-radius: 50%;
+  background: var(--graphite-primary);
+  translate: 0 0;
+  transition: translate var(--dur) var(--ease) var(--delay, var(--graphite-motion-duration-instant));
+
+  &[data-there] {
+    translate: calc(100cqw - var(--graphite-space-04)) 0;
+  }
+}
+
+.tokenCopy {
+  display: flex;
+  gap: var(--graphite-space-02);
+}
+
+.tokenUsers {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+// ------------------------------------------------------------------ rules
+.rules {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.side {
+  padding: 1.125rem;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-surface-variant);
+  border-top-width: 3px;
+}
+
+.do { border-top-color: var(--graphite-success); }
+.dont { border-top-color: var(--graphite-danger); }
+
+.sideLabel {
+  margin: 0 0 var(--graphite-space-04);
+  font-size: var(--graphite-text-caption-2-size);
+  line-height: var(--graphite-text-caption-2-line-height);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--graphite-on-surface-variant);
+}
+
+.sideList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  margin: 0;
+  padding: 0 0 0 var(--graphite-space-05);
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    font-size: var(--graphite-text-code-2-size);
+  }
+}

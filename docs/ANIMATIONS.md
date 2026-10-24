@@ -209,6 +209,18 @@ The search palette appears with no entrance at all: no scrim fade, no drop, no
 caret pop, no cascade. It is opened from the keyboard and many times a session,
 which is exactly what the kit's rules make instant.
 
+## The Motion page
+
+`/docs/foundations/motion` is the playground: ten demos (the race, Feel it, the
+hundredth open, origin, catching a sheet, the tooltip runway, confirmation, one
+toast at a time, reduced motion, and the token table with its component map),
+each running on the real tokens. Its "Simulate reduced motion" switch sets
+`data-motion="reduce"` on the demos' wrapper, which the global layer answers
+exactly as it answers the visitor's own setting. The race's "In" lane is the
+one place the site draws an ease-in curve, under a `motion-allow:` marker,
+because the point is to watch it lose. The token table's "Used by" column is
+read from the contracts' `motion:` blocks, so it moves when a contract does.
+
 ## Reduced motion
 
 One global layer in `globals.scss` now sits under everything below: it sets

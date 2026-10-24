@@ -315,6 +315,12 @@ before trusting a browser result.
   (2.0.0). Sheets (the mobile tray, Create's option sheets) are dragged and
   caught mid-flight through `components/use-sheet-drag.ts` (WAAPI). Command
   search has no entrance at all.
+- **The Motion page and the sitemap.** `/docs/foundations/motion` (2026-10-24)
+  demos every rule on the real tokens; its reduced-motion switch is
+  `data-motion="reduce"` on a wrapper, not a separate code path, and its one
+  ease-in curve carries the repo's only `motion-allow:` marker. `app/sitemap.ts`
+  is generated from `DOCS_NAV` plus the pages outside it, so a page added to the
+  nav reaches /sitemap.xml with no second edit. There was no sitemap before it.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
