@@ -15,7 +15,7 @@ import { KitIcon } from '@/components/kit-icon'
 import styles from './accordion.module.scss'
 
 /**
- * Contract: docs/contracts/accordion.md (1.1.0)
+ * Contract: docs/contracts/accordion.md (1.1.1)
  *
  * The recipe, the root, the item, and the two parts an item is made of. The
  * trigger is a real button that owns the expanded state; the panel is labelled
