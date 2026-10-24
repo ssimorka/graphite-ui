@@ -1,6 +1,6 @@
 ---
 component: Tooltip
-version: 2.0.0
+version: 2.1.0
 wave: 5
 slots:
   - name: Trigger
@@ -39,7 +39,18 @@ tokens:
   - name: radius
     usage: Bubble corner.
   - name: motion
-    usage: The entrance fade. Opacity only — the four placement classes each carry their own `transform`, so an animation that moved would overwrite the placement.
+    usage: The first hover's wait, then the shared entrance from the caret; instant from the keyboard and while one is already showing.
+motion:
+  - trigger: First hover
+    property: Waits delay-tooltip, then opacity and scale from 0.96, from the caret's tip
+    duration: delay-tooltip + duration-fast
+    easing: easing-out
+    reduced: A fade after the same wait.
+  - trigger: Keyboard focus, or a hover while one is showing or within 300ms of one closing
+    property: "None: it appears at once"
+    duration: duration-instant
+    easing: none
+    reduced: The same.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -62,3 +73,4 @@ prohibitions:
 - **Kit parity** (#232, 2.0.0, a major: the bubble is inverse with no edge, and Standard's padding grew from 2 by 16 to 16). The kit's Definition Top Center variant draws no bubble and its Top Start sits 26 off the trigger; both are slips, built from Bottom Center and Standard's Start rule. Max width 288 is the code's own: the kit's text runs to any width.
 - **Composition rules:** Never contains interactive content — a Tooltip you can click into is a Popover.
 - **Prohibitions:** No tooltip as the only source of critical information — it must be supplementary to visible content.
+- **Motion** (2026-10-24, 2.1.0). The first hover waits the kit's `delay/tooltip` (500ms, where the default delay was 150); keyboard focus and a hover while one is showing, or within 300ms of one closing, show at once. The entrance grows from the caret. A tooltip opened by code, as the docs' stills are, shows at once and does not warm the others.

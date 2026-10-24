@@ -86,7 +86,7 @@ export function notificationDoc(): ComponentDocConfig {
       ['Keyboard', <>Without <code>onClose</code> or <code>action</code>, nothing takes focus. The action and the close are each one tab stop; the close is named “Dismiss notification”. Both take Button’s ghost focus ring, which is background on the high-contrast fill. Enter or Space dismisses. Escape does nothing: this is inline content, not an overlay, so there is no focus to trap or return. Once it closes, the button that held focus is gone, so move focus somewhere sensible in onClose.</>],
       ['Contrast', 'Text, the action label and the close glyph are on-surface on each status container, as the kit binds them: swept across 288 sources in both modes, the worst pair is 9.77:1, clear of AAA. High contrast is background on on-background, with the action label in on-primary (13.22:1 at worst).'],
       ['Colour', 'Status is shown three ways: the container with its edge and stripe, the icon, and the words. Colour is never the only signal.'],
-      ['Motion', 'Nothing animates on entry or exit, so there is nothing for reduced motion to switch off.'],
+      ['Motion', <>With <code>appear</code>, for one shown in answer to something the reader did, it opens its height and fades in at the base step; without it, it is simply there. Closing it reverses that at fast before onClose is called. Under reduced motion only the fade plays, since a growing height pushes the page.</>],
     ],
     parityLede:
       'The kit files Inline, Callout and Toast as three sets on one page, plus a set for the action button. The code covers Inline and Callout on every axis; Toast is its own component.',

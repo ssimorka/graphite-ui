@@ -5,6 +5,10 @@
 // the shared shape and motion are in ../_drop-panel.scss. There is no kit frame
 // for results, so the rest borrows the kit's parts: the header's search field
 // and the elevated overlay surface.
+//
+// It appears at once, with no entrance. Command search is opened from the
+// keyboard and many times a session, which the kit's motion rules make
+// instant: a drop that is charming the first time is a wait the hundredth.
 // The chips borrow Tag - Dismissible and Tag - Selectable from the kit: the
 // governed Tag is a read-only badge, so the interactive forms are drawn here
 // on the same roles rather than invented.
@@ -16,10 +20,6 @@
   inset: 0;
   z-index: 9000;
   background: var(--graphite-scrim);
-
-  @media (prefers-reduced-motion: no-preference) {
-    animation: in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
-  }
 }
 
 .panel {
@@ -40,21 +40,16 @@
     outline: none;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation: in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
-  }
-
   // Hung from the trigger: placed by the component, which sets --top, --left
-  // and --caret. Centring no longer needs transform, so the drop can use it.
+  // and --caret.
   &[data-anchored] {
-    @include drop.motion(var(--caret));
     top: var(--top);
     left: var(--left);
     transform: none;
   }
 
   &[data-anchored]::before {
-    @include drop.caret(var(--caret));
+    @include drop.caret(var(--caret), $animate: false);
   }
 
   // Below md it takes the whole screen, the way search does on a phone: the
@@ -67,22 +62,13 @@
     border: 0;
     border-radius: 0;
 
-    // Full screen has no trigger to drop from: it fades, as before.
     &[data-anchored] {
       inset: 0;
-      animation: in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out);
     }
 
     &[data-anchored]::before {
       display: none;
     }
-  }
-}
-
-// Opacity only: the centred fallback carries its centring in transform.
-@keyframes in {
-  from {
-    opacity: 0;
   }
 }
 
@@ -313,12 +299,6 @@
   margin-top: var(--graphite-space-03);
   padding-top: var(--graphite-space-02);
   border-top: 1px solid var(--graphite-surface-variant);
-}
-
-// Groups cascade in behind the drop. Only on open: the panel remounts then,
-// and typing re-renders without restarting it.
-.panel[data-anchored] .group {
-  @include drop.cascade;
 }
 
 

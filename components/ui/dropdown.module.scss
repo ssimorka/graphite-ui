@@ -1,4 +1,7 @@
 @use './form-parts' as parts;
+@use './overlay-motion';
+
+@include overlay-motion.defs;
 
 // Dropdown — docs/contracts/dropdown.md
 //
@@ -171,7 +174,10 @@
   list-style: none;
   background: var(--graphite-surface);
   box-shadow: var(--graphite-shadow-overlay);
-  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+  // The shared overlay entrance at fast, grown from the trigger's edge; the
+  // floating list sets its origin inline when it flips above. No entrance
+  // when opened from the keyboard, and no exit: the list unmounts on choose.
+  @include overlay-motion.motion(50% 0, var(--graphite-motion-duration-fast));
 }
 
 // Drawn on <body> against its trigger (Dropdown and Select), so no clipping
@@ -183,13 +189,6 @@
   z-index: 9000;
 }
 
-@keyframes overlay-in {
-  from { opacity: 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .list { animation: none; }
-}
 
 .option {
   position: relative;

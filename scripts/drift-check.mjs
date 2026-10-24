@@ -23,7 +23,9 @@ import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const ROOT = process.cwd()
-const CONTRACTS_DIR = 'docs/contracts'
+// Overridable so the test suite can point the check at mutated copies.
+const CONTRACTS_DIR = process.env.DRIFT_CHECK_CONTRACTS || 'docs/contracts'
+const contractsAbs = path.resolve(ROOT, CONTRACTS_DIR)
 const ENGINE = 'lib/color.js'
 const STYLESHEET = 'app/globals.scss'
 const IMPL_DIRS = ['components/ui', 'components', 'app']
@@ -69,14 +71,31 @@ const block = (fm, key) => {
   return out
 }
 
+// A contract's `motion:` block: one entry per thing that moves, each with
+// trigger, property, duration, easing and reduced. Tokens are named without
+// the prefix (`duration-base`, `easing-out`); a value may name several,
+// joined by `+` or a comma.
+const MOTION_KEYS = ['trigger', 'property', 'duration', 'easing', 'reduced']
+
+const motionEntries = (lines) => {
+  const out = []
+  for (const line of lines) {
+    const m = /^\s*(-\s+)?([a-z]+):\s*(.*?)\s*$/.exec(line)
+    if (!m) continue
+    if (m[1]) out.push({})
+    if (out.length) out[out.length - 1][m[2]] = m[3].replace(/^"(.*)"$/, '$1')
+  }
+  return out
+}
+
 function readContracts() {
   return fs
-    .readdirSync(path.join(ROOT, CONTRACTS_DIR))
+    .readdirSync(contractsAbs)
     .filter((f) => f.endsWith('.md') && f !== 'README.md')
     .sort()
     .map((file) => {
       const fm = frontmatter(
-        fs.readFileSync(path.join(ROOT, CONTRACTS_DIR, file), 'utf8'),
+        fs.readFileSync(path.join(contractsAbs, file), 'utf8'),
       )
       const roles = []
       const inherits = []
@@ -96,6 +115,7 @@ function readContracts() {
         version: scalar(fm, 'version'),
         roles,
         inherits,
+        motion: block(fm, 'motion').length ? motionEntries(block(fm, 'motion')) : null,
       }
     })
 }
@@ -294,6 +314,7 @@ for (const c of contracts) {
       )
     }
   }
+  checkMotion(c, impl, used)
   for (const v of used.cds) {
     warnings.push(
       `${impl}: uses Carbon's ${v} — prefer the --graphite-* equivalent`,
@@ -306,6 +327,39 @@ for (const c of contracts) {
         `${c.file}: declares role "${r}" but ${impl} never references it`,
       )
     }
+  }
+}
+
+// ------------------------------------------------------------------ motion
+// Each moving component records its motion in a `motion:` block, and the
+// block has to agree with the code both ways: every token it names is one the
+// stylesheet declares, and every timing token the code reads is one it names.
+// The reduced-motion line is required, because "what happens under reduce" is
+// the part nobody writes down until someone asks.
+function checkMotion(c, impl, used) {
+  const timing = [...used.graphite].filter((v) =>
+    /^--graphite-motion-(duration|delay|easing|spring)-|^--graphite-motion-indeterminate$/.test(v),
+  )
+  if (!c.motion) {
+    if (timing.length)
+      errors.push(`${c.file}: ${impl} moves (${timing.join(', ')}) but the contract has no motion: block`)
+    return
+  }
+  const named = new Set()
+  c.motion.forEach((entry, i) => {
+    const where = `${c.file}: motion entry ${i + 1}${entry.trigger ? ` ("${entry.trigger}")` : ''}`
+    for (const k of MOTION_KEYS) if (!entry[k]) errors.push(`${where} has no ${k}`)
+    for (const k of ['duration', 'easing']) {
+      for (const t of (entry[k] || '').split(/\s*[+,]\s*/).filter(Boolean)) {
+        if (k === 'easing' && t === 'none' && /duration-instant/.test(entry.duration || '')) continue
+        const v = `--graphite-motion-${t}`
+        if (varToRole.get(v) !== 'motion') errors.push(`${where} names ${k} ${t}, which is not a declared motion token (${v})`)
+        else named.add(v)
+      }
+    }
+  })
+  for (const v of timing) {
+    if (!named.has(v)) errors.push(`${impl}: reads ${v}, which the motion: block in ${c.file} does not name`)
   }
 }
 
@@ -345,7 +399,7 @@ const exportedComponents = () => {
   )
   const seen = new Map()
   for (const c of contracts) {
-    const text = fs.readFileSync(path.join(ROOT, CONTRACTS_DIR, c.file), 'utf8')
+    const text = fs.readFileSync(path.join(contractsAbs, c.file), 'utf8')
     for (const m of text.matchAll(/\b[A-Z][A-Za-z0-9]+\b/g)) {
       const name = m[0]
       if (exported.has(name) && !declared.has(name) && !seen.has(name))

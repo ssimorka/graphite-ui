@@ -1,6 +1,6 @@
 ---
 component: Notification
-version: 3.1.0
+version: 3.2.0
 wave: 5
 slots:
   - name: Icon
@@ -26,6 +26,9 @@ props:
   - name: onClose
     type: "() => void"
     notes: Optional. When set, a close button labelled "Dismiss notification" renders at the trailing edge and calls it. Without it the notification has no close control and lasts until the caller stops rendering it.
+  - name: appear
+    values: boolean
+    notes: Off by default. Set it when the notification is shown in answer to something the reader did, and it opens its height and fades in as it mounts. A notification that is part of the page leaves it off and does not move.
 tokens:
   - name: on-surface
     usage: Title and message on every status container, as the kit binds them (D6 on #219), and since 3.1.0 the action label (Text/text-primary) and close glyph (Icon/icon-primary) too. Swept across 288 sources, both modes, AA and AAA, the worst pair is 9.77:1, and 9.99:1 on the action's surface-variant hover.
@@ -59,6 +62,19 @@ tokens:
     usage: The 16 inset and icon gap, the 48 row, and the action's margins.
   - name: radius
     usage: Container corner.
+  - name: motion
+    usage: Its height and opacity, when it arrives with appear set and when it is closed.
+motion:
+  - trigger: It mounts with appear set
+    property: Height, through grid-template-rows 0fr to 1fr, and opacity. Without appear it does not animate
+    duration: duration-base
+    easing: easing-out
+    reduced: A fade; the height snaps, since it moves the page.
+  - trigger: Its close is pressed
+    property: Height and opacity, before onClose is called
+    duration: duration-fast
+    easing: easing-out
+    reduced: A fade; the height snaps.
 composition_rules:
   - Not an overlay, though the source document lists it with them. It renders inline in the page flow, with nothing to trap focus in and no Escape or click-outside dismissal. Its one dismiss pattern is the explicit close control, present only when `onClose` is set.
   - Not a toast — Notification is inline and persistent until dismissed or the condition changes. The kit's Notification - Toast set is its own component with its own timing, docs/contracts/toast.md (#272).
@@ -75,7 +91,7 @@ prohibitions:
 
 ### Notification
 - **Slots:** Icon (drawn from the variant), title (optional), body (required).
-- **Props:** variant (info, danger, warning, success), kind (inline, callout), highContrast, action, `onClose` (optional), which renders a 48px ghost close labelled "Dismiss notification".
+- **Props:** variant (info, danger, warning, success), kind (inline, callout), highContrast, action, `onClose` (optional), which renders a 48px ghost close labelled "Dismiss notification"; `appear`, for one shown in answer to something the reader did.
 - **Tokens:** each status takes its `*-container` fill, its base role for the icon, 1px edge and 3px stripe, and `on-surface` text (D6); high contrast takes `on-background` with `background` text and the container for stripe and icon. The action is outlined: `on-surface` label on an `on-background` edge, and in high contrast an `on-primary` label on a `primary-disabled` edge. The close glyph is `on-surface`, and `background` in high contrast.
 - **Kit parity** (#236, 3.0.0, a major; its notes on the close, the action and the info icon are superseded by 3.1.0 below: info is a status container like the rest, text is on-surface rather than on-*-container, the icon is built in and the close is the kit's 48px ghost). Recorded rather than copied: the close glyph is a plus in the kit (built as a cross); the high-contrast close stays primary in the kit (built in background, Carbon's icon-inverse); the inverse stripe, icon and link stops are not roles in the engine, so the status and primary containers stand in, swept at 3:1 or better; the status icons mix Carbon and Flaticon at 16 and 20; the title-to-message gap is 2.75 (built at 4).
 - **Kit parity, 2026-10-17** (3.1.0, minor: the token dependencies changed, no prop or prohibition did). The kit corrected Inline and Callout to copy Notification - Toast, per Status and High contrast, and the code follows (rule 7). Was a ghost `primary` action (`primary-container` in high contrast) and a `primary` close glyph; now:
@@ -88,3 +104,4 @@ prohibitions:
   - Swept across 288 sources, both modes, AA and AAA: every new pair holds at 9.77:1 or better, except the info icon on its container at 6.88:1 (a 3:1 graphic); the high-contrast icons are the containers swept in #260. The AAA shortfall the old ghost label had (6.34:1) is gone with it.
 - **Composition rules:** Not an overlay: inline, with no focus trap and no Escape or click-outside dismissal. Not a toast — Notification is inline and persistent until dismissed (through `onClose`, when the caller provides it) or the condition changes. Toast is a Tier 2 component with its own timing contract.
 - **Prohibitions:** No status color invented ad hoc — a status variant uses its generated container role, never a hand-picked hex. Same constraint as Tag.
+- **Motion** (2026-10-24, 3.2.0). With `appear`, set by a caller showing it in answer to something the reader did, it opens its height and fades in at base; without it, it is simply there. Closing it plays the reverse at fast before onClose is called. Opt-in rather than inferred: a notification remounted by a layout (Create re-deals its cards) is not arriving, and animating it fed the very measurement that remounted it.

@@ -1,6 +1,6 @@
 ---
 component: Progress bar
-version: 2.0.0
+version: 2.1.0
 wave: 1
 slots:
   - name: Label
@@ -46,9 +46,20 @@ tokens:
   - name: spacing
     usage: Track height, the 8 between label, track and message, and the 16 indent and inline gap.
   - name: motion
-    usage: Indeterminate sweep duration and easing, defined once and shared with Spinner.
+    usage: The determinate fill and the indeterminate sweep, both at a constant speed, the sweep shared with every spinner.
   - name: radius
     usage: Track and indicator corner.
+motion:
+  - trigger: The value changes
+    property: The fill width
+    duration: duration-base
+    easing: easing-linear
+    reduced: Jumps to the new value.
+  - trigger: Indeterminate
+    property: A quarter of the track sweeps across, looping
+    duration: indeterminate
+    easing: easing-linear
+    reduced: Slows to twice the period rather than stopping.
 composition_rules:
   - Indeterminate variant uses a defined animation timing, not an arbitrary one — this should be specified once and reused by Spinner later (Tier 2) so the two don't drift into different motion languages.
 prohibitions:
@@ -63,3 +74,4 @@ prohibitions:
 - **Kit parity** (#235, 2.0.0, a major: the bar paints its own label and helper as the kit does, which retires the old "pair with Typography externally" remedy, and finished states may fill in `success` or `danger`). The indeterminate sweep is the kit's: a quarter of the track at a constant speed, so the shared easing token is now linear. The kit mixes a Carbon status icon set with Flaticon glyphs and Caption/1 with Helper Text for one 12/16 message; the code uses the kit's status icons for both outcomes and one message style.
 - **Composition rules:** Indeterminate variant uses a defined animation timing, not an arbitrary one — this should be specified once and reused by Spinner later (Tier 2) so the two don't drift into different motion languages.
 - **Prohibitions:** No fill color other than `primary` while the task runs. No text inside the track itself.
+- **Motion** (2026-10-24, 2.1.0). The determinate fill moves linearly: progress is the one thing that moves at a constant rate.

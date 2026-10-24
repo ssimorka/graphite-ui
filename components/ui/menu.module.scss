@@ -5,6 +5,10 @@
 // onSurfaceVariant, hover on the elevation ladder's next rung, focus as a
 // 2px ring inside the row. The rows run edge to edge, with 4 above the first
 // and below the last.
+@use './overlay-motion';
+
+@include overlay-motion.defs;
+
 .wrap {
   position: relative;
   display: inline-flex;
@@ -23,28 +27,17 @@
   background: var(--graphite-elevation-01);
   box-shadow: var(--graphite-shadow-overlay);
   border-radius: var(--graphite-radius-none);
-  // The shared overlay entrance, same as Popover and Tooltip. Opacity only,
-  // and no exit: the menu unmounts on close.
-  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+  // The shared overlay motion: in at base from the trigger's corner, out at
+  // fast, and no entrance at all when opened from the keyboard.
+  @include overlay-motion.motion(var(--ox, 0) var(--oy, 0), var(--graphite-motion-duration-base));
 }
 
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .menu {
-    animation: none;
-  }
-}
-
-.bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); }
-.top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); }
+// The origin is the trigger's corner the menu hangs from.
+.bottom { top: 100%; left: 0; margin-top: var(--graphite-space-02); --oy: 0; }
+.top { bottom: 100%; left: 0; margin-bottom: var(--graphite-space-02); --oy: 100%; }
 
 // Lined up with the trigger's end rather than its start.
-.end { left: auto; right: 0; }
+.end { left: auto; right: 0; --ox: 100%; }
 
 // On its trigger with no gap, as the kit's Menu buttons draw it.
 .flush { margin-block: 0; }
@@ -124,6 +117,39 @@
 }
 
 .destructive:hover:not(:disabled) .trail { color: var(--graphite-on-danger); }
+
+// The confirmation: the chosen row flashes to the pressed rung and eases back
+// over fast, then the menu closes. Color only, so it stays under reduced
+// motion: it is feedback, not movement.
+.picked {
+  animation: pick var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+}
+
+.destructive.picked {
+  animation-name: pick-danger;
+}
+
+@keyframes pick {
+  from {
+    background: var(--graphite-elevation-03);
+    color: var(--graphite-on-surface);
+  }
+  to {
+    background: var(--graphite-elevation-02);
+    color: var(--graphite-on-surface);
+  }
+}
+
+@keyframes pick-danger {
+  from {
+    background: var(--graphite-danger-pressed);
+    color: var(--graphite-on-danger);
+  }
+  to {
+    background: var(--graphite-danger);
+    color: var(--graphite-on-danger);
+  }
+}
 
 // The kit's Divider: a line on the next row's top edge, then that row's 4px
 // top spacer.

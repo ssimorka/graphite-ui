@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useOverlay } from '@/components/ui/overlay'
+import { useSheetDrag } from '@/components/use-sheet-drag'
 import { KitIcon } from '@/components/kit-icon'
 import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { SparklingConfetti } from '@/components/sparkling-confetti'
@@ -56,6 +57,9 @@ function OptionSheet({
   onClose: () => void
 }) {
   const ref = useOverlay<HTMLDivElement>({ open: true, onDismiss: onClose, trapFocus: true })
+  // Dragged down to dismiss, and caught mid-slide, from anywhere on it while
+  // its content is scrolled to the top.
+  const drag = useSheetDrag(ref, { edge: 'bottom', onDismiss: onClose })
   const { toast, copy } = useCopy()
   // The source's swatches copy rather than choose, as on the desktop panel:
   // each is derived from the source, so choosing one rebuilt every ramp and
@@ -72,6 +76,7 @@ function OptionSheet({
         aria-label={control.heading}
         tabIndex={-1}
         className={styles.sheet}
+        onPointerDown={drag.onPointerDown}
       >
         <span className={styles.grabber} aria-hidden="true" />
         <h2 className={styles.sheetTitle}>{control.heading}</h2>

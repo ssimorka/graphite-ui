@@ -52,7 +52,7 @@ export function tooltipDoc(): ComponentDocConfig {
       'Put the tooltip on something focusable, a Button or a link, so keyboard users get it as well as pointer users.',
       'Keep it to one short line that adds to a label the reader can already see.',
       'Give an icon-only button its own aria-label as well, and type="icon" for the kit’s tight bubble. The tooltip adds to the name; it does not supply it.',
-      'Raise the delay in a dense toolbar, where tooltips would otherwise flash as the pointer crosses it.',
+      'Leave the delay at the kit’s 500 ms. Only the first tooltip waits: once one is showing, the next along a toolbar appears at once.',
     ],
     donts: [
       'Put a link or a button in the content. A tooltip you can click into is a Popover.',
@@ -61,12 +61,12 @@ export function tooltipDoc(): ComponentDocConfig {
       'Place it where the bubble would cross the edge of the screen. It will not move itself back.',
     ],
     a11y: [
-      ['Keyboard', 'It opens when the trigger takes focus, after the same delay as hover, and closes on blur or Escape.'],
+      ['Keyboard', 'It opens the moment the trigger takes keyboard focus, with no delay and no entrance, and closes on blur or Escape.'],
       ['Roles', <>The bubble is <code>role=&quot;tooltip&quot;</code>. While it is open, the trigger itself carries <code>aria-describedby</code> pointing at it, alongside any description the trigger already had. It describes; it does not name, so keep the trigger’s own name complete.</>],
       ['Focus', 'It never takes focus and never traps it. The trigger keeps focus the whole time.'],
       ['Pointer', 'The pointer can move from the trigger onto the bubble and it stays open, so it can be read at any speed or magnified. It closes once the pointer leaves both.'],
       ['Contrast', <>Text is <code>background</code> on <code>on-background</code>: the kit draws the bubble inverse, so it stands off the page in either mode without an edge. A definition term is <code>on-surface-variant</code> over a <code>secondary</code> dotted rule.</>],
-      ['Motion', 'It fades in on the fast motion step, opacity only, and appears at once under prefers-reduced-motion.'],
+      ['Motion', <>The first tooltip waits <code>delay/tooltip</code> (500 ms), then grows from its caret at the fast step. While one is showing, or for 300 ms after, the next appears at once. Under reduced motion it fades without growing.</>],
     ],
     parityLede:
       'The kit’s Tooltip page has two public sets: Tooltip, and the Tooltip body item it is built from. Type, Position and Alignment map across; Visible is a state Figma draws because it has no other way to show it, and delay has no kit axis at all, since a frame cannot hold time.',

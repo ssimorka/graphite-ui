@@ -1,6 +1,6 @@
 ---
 component: Toggle
-version: 3.0.0
+version: 3.1.0
 wave: 2
 slots:
   - name: Label
@@ -57,7 +57,18 @@ tokens:
   - name: danger
     usage: Error ring around the track, and error text. One role for both, so the two cannot drift apart.
   - name: motion
-    usage: Duration for the track fill and the thumb travel. The easing stays a plain ease rather than the settle curve, because a switch is a short mechanical move and not something entering the viewport.
+    usage: The track fill and the thumb travel, at the fast step on Out.
+motion:
+  - trigger: It is switched
+    property: The track background
+    duration: duration-fast
+    easing: easing-out
+    reduced: "Unchanged: color is feedback."
+  - trigger: It is switched
+    property: The thumb slides across
+    duration: duration-fast
+    easing: easing-out
+    reduced: Jumps.
 composition_rules:
   - Label and supporting text are the control's own, not a wrapper's. Removing Field removed the only place they used to compose; the kit's shape is that each form control carries them, so the rule that error text and error state derive from one value is enforced inside the control instead.
   - Label text describes the setting being controlled ("Notifications"), not the state itself ("On/Off"). The state is the value text's job, beside the switch, and the switch position's.
@@ -72,3 +83,4 @@ prohibitions:
 - **Kit parity** (#233, 3.0.0, a major: on is `success` rather than `primary`, the label moved above the switch, and the value text is on by default). The kit's focus ring is an unbound Carbon blue and its disabled label and value bind the disabled fill step; neither is copied: the ring is `primary-focus` and dimmed text is disabled content, as on every other form control. The kit's Small label sits 17 above the track; built at 16, as Default. The motion tokens carry the duration of both the track fill and the thumb travel, so the switch moves at the same speed as the controls around it; the easing stays a plain ease, because a switch is a short mechanical move rather than something entering the viewport.
 - **Composition rules:** Label text describes the setting being controlled ("Notifications"), not the state itself ("On/Off"): that is the value text's job.
 - **Prohibitions:** No switch used for an action that isn't reversible immediately — that's a Button's job, not a Toggle's.
+- **Motion** (2026-10-24, 3.1.0). Out, from the kit's Motion collection, where it was a plain `ease`; the track's color still eases under reduced motion and the thumb jumps.

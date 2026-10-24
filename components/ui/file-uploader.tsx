@@ -8,7 +8,7 @@ import { FieldStatusIcon } from './field-status'
 import styles from './file-uploader.module.scss'
 
 /**
- * Contract: docs/contracts/file-uploader.md (1.0.0)
+ * Contract: docs/contracts/file-uploader.md (1.1.0)
  *
  * The kit's File uploader (5465:294860): Type (Default, Drag and drop) × Size,
  * with its file list drawn from the private _File uploader file item set. The

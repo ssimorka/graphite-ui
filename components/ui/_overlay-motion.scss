@@ -1,0 +1,52 @@
+// The overlays' motion — docs/contracts/overlay.md
+//
+// One entrance and one exit for Popover, Tooltip, Menu, Dropdown's list and
+// Modal's panel, so five components cannot drift into five ideas of how an
+// overlay arrives. Each module includes `defs` once at its root: keyframes
+// are scoped per CSS module.
+//
+// The entrance grows out of the overlay's source, a 0.96 scale and a fade,
+// with the origin on the caret or the trigger's corner. It animates the
+// individual `scale` property, never `transform`: Popover and Tooltip carry
+// their centring in `transform`, and an animated transform would overwrite the
+// position it was meant to grow from. The scale rides
+// --graphite-motion-travel, so under reduced motion it is a plain fade.
+
+@mixin defs {
+  @keyframes overlay-in {
+    from {
+      opacity: 0;
+      scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+    }
+  }
+
+  @keyframes overlay-out {
+    to {
+      opacity: 0;
+      scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+    }
+  }
+}
+
+// `$origin` is the point the overlay grows from: where its caret meets the
+// trigger, or the trigger's corner for an overlay with no caret. `$duration`
+// is a Motion duration, written out as its var() so the token is named in the
+// component's own stylesheet, where drift-check reads it. The exit is always
+// fast: nobody waits on something they have finished with.
+//
+// [data-state='closed'] is the exit, set while usePresence holds the overlay
+// for it; [data-instant] skips the entrance for anything opened from the
+// keyboard, which the kit's rules say appears at once.
+@mixin motion($origin, $duration) {
+  transform-origin: $origin;
+  animation: overlay-in $duration var(--graphite-motion-easing-out) both;
+
+  &[data-instant] {
+    animation: none;
+  }
+
+  &[data-state='closed'] {
+    animation: overlay-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+    pointer-events: none;
+  }
+}

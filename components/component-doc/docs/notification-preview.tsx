@@ -45,6 +45,8 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
   const [actionable, setActionable] = useState(false)
   const [close, setClose] = useState(true)
   const [open, setOpen] = useState(true)
+  // Brought back by the reader, so it arrives; the first one is part of the page.
+  const [again, setAgain] = useState(false)
   const m = messages[variant]
   const callout = kind === 'callout'
 
@@ -125,9 +127,16 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
             body={m.body}
             action={actionable ? { label: ACTION, onClick: () => {} } : undefined}
             onClose={close ? () => setOpen(false) : undefined}
+            appear={again}
           />
         ) : (
-          <Button size="sm" onClick={() => setOpen(true)}>
+          <Button
+            size="sm"
+            onClick={() => {
+              setAgain(true)
+              setOpen(true)
+            }}
+          >
             Show again
           </Button>
         )

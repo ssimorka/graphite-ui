@@ -10,6 +10,63 @@
 //
 // Not elevated. The Wave 5 preamble groups Notification with the overlays, but
 // its own contract puts it inline and persistent.
+
+// ------------------------------------------------------------------- motion
+// Height through a grid track, 0fr to 1fr, as Accordion's panel does: no
+// measured pixels, no script. In at base when it appears after load, out at
+// fast when it is closed. Under reduced motion the height snaps and only the
+// fade plays, since a height that grows pushes the page down.
+.presence {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.presence[data-appear] {
+  animation: notification-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
+}
+
+.presence[data-state='closed'] {
+  animation: notification-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+}
+
+.clip {
+  min-height: 0;
+  // Clip, with a margin so a focus ring that reaches past the box still
+  // shows. At 0fr the margin holds nothing visible: the fade is at zero.
+  overflow: clip;
+  overflow-clip-margin: var(--graphite-space-02);
+}
+
+@keyframes notification-in {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@keyframes notification-out {
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presence[data-appear] { animation-name: notification-fade-in; }
+  .presence[data-state='closed'] { animation-name: notification-fade-out; }
+}
+
+[data-motion='reduce'] .presence[data-appear] { animation-name: notification-fade-in; }
+[data-motion='reduce'] .presence[data-state='closed'] { animation-name: notification-fade-out; }
+
+@keyframes notification-fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes notification-fade-out {
+  to { opacity: 0; }
+}
+
 .alert {
   // The status role (edge, stripe, icon) and its container (fill), set per
   // variant below.

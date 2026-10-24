@@ -17,21 +17,35 @@
   justify-content: center;
   padding: var(--graphite-space-05);
   background: var(--graphite-scrim);
-  // The shared overlay entrance, on the scrim so the panel fades in with it.
-  // Opacity only and no exit, as the Overlay contract sets out: the Modal
-  // unmounts on close.
-  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+  // The scrim fades in at base; the panel rises inside it (below). Both
+  // leave together at fast, the scrim fading and taking the panel with it.
+  animation: modal-fade var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) both;
 }
 
-@keyframes overlay-in {
+.scrim[data-state='closed'] {
+  animation: modal-fade-out var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
+  pointer-events: none;
+}
+
+@keyframes modal-fade {
   from {
     opacity: 0;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .scrim {
-    animation: none;
+@keyframes modal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+// The panel rises 8px into place as it fades, at slow: the largest overlay
+// travels furthest. The rise rides --graphite-motion-travel, so under reduced
+// motion it only fades.
+@keyframes modal-rise {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--graphite-space-03) * var(--graphite-motion-travel));
   }
 }
 
@@ -49,6 +63,7 @@
   background: var(--graphite-background);
   color: var(--graphite-on-surface);
   border-radius: var(--graphite-radius-none);
+  animation: modal-rise var(--graphite-motion-duration-slow) var(--graphite-motion-easing-out) both;
 }
 
 .dialog:focus-visible {

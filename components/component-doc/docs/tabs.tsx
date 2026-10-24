@@ -153,7 +153,7 @@ export function tabsDoc(): ComponentDocConfig {
       ['Dismissing', <>Delete on a focused tab dismisses it, announced through <code>aria-keyshortcuts</code>; the close glyph is for the pointer. The overflow buttons are out of the Tab order: the arrow keys scroll the selected tab into view.</>],
       ['Contrast', 'The selected label is on-surface and SemiBold, and the rest are on-surface-variant, one tone step lower. Both are measured against surface at the theme’s target.'],
       ['Panels', 'Inactive panels are hidden with the hidden attribute, not unmounted, so assistive tech skips them and their state survives.'],
-      ['Motion', 'Nothing animates. The indicator moves instantly, so there is nothing for reduced motion to switch off.'],
+      ['Motion', 'The selected indicator slides to the new tab at the fast step, in-out; the panel swaps at once. Under reduced motion the indicator jumps.'],
     ],
     parityLede: `The kit's Tabs page ships ${kit?.variants ?? 'many'} variants across ${kit?.sets ?? 'several'} sets, most of them the private tab items the two public sets are built from. The code covers every axis of the public set and of the items it is built from, as props on Tabs and options on each tab.`,
     parity: [

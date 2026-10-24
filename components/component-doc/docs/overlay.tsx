@@ -40,12 +40,12 @@ export function overlayDoc(): ComponentDocConfig {
       'Call useOverlay from any new floating surface, and pass it switches rather than adding listeners of your own.',
       'Turn trapFocus on for anything that blocks the page, and leave it off for anything the reader can ignore.',
       'Declare elevation and shadow in the new overlay’s own contract: elevation-01 for the surface and shadow-overlay for the lift, with no edge, as the kit draws its overlays.',
-      'Unmount the content on close, as the four existing overlays do. Their no-nesting checks depend on it.',
+      'Use usePresence for an exit: it holds the overlay for the fast step after it closes, and never renders one that was not open. The no-nesting checks depend on that.',
     ],
     donts: [
       'Give one instance its own way of closing. An overlay that needs a different pattern is a different component, not a variant.',
-      'Keep closed content mounted to animate it out. That would move the nesting checks onto the prerender path.',
-      'Animate transform on the way in. Tooltip carries its placement in transform, so the shared entrance is opacity only.',
+      'Render a closed overlay just so it can animate in. Presence starts from open, which keeps the nesting checks off the prerender path.',
+      'Animate transform on the way in. Tooltip and Popover carry their placement in transform, so the shared entrance scales the separate scale property.',
       'Send focus somewhere new on close. It goes back to whatever held it when the overlay opened, every time.',
     ],
     a11y: [

@@ -5,7 +5,7 @@ import { fieldMessage } from '@/lib/field-message'
 import { KitIcon } from '@/components/kit-icon'
 import styles from './toggle.module.scss'
 
-/** Contract: docs/contracts/toggle.md (3.0.0) */
+/** Contract: docs/contracts/toggle.md (3.1.0) */
 type ToggleProps = {
   /** Generated when omitted, so the label and message can always associate. */
   id?: string

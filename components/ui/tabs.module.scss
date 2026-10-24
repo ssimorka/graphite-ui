@@ -18,6 +18,7 @@
 }
 
 .list {
+  position: relative;
   display: flex;
   min-width: 0;
   // Scrolls under the kit's Previous and Next rather than wrapping.
@@ -199,6 +200,48 @@
 }
 
 .flip { transform: scaleX(-1); }
+
+// --------------------------------------------------------------- indicator
+// The selected rule as one element that slides between tabs at fast, in-out:
+// it is already on screen and moves across it. The tab panels swap at once;
+// only the indicator moves, so the eye follows the selection without the
+// content making anyone wait. Once it is placed (.sliding), the active tab
+// drops its own primary rule back to the resting one and the indicator draws
+// it instead. Under reduced motion the transform is not transitioned, so it
+// jumps.
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background: var(--graphite-primary);
+  translate: var(--x) 0;
+  width: var(--w);
+  height: 2px;
+}
+
+.indicator[data-ready] {
+  transition:
+    translate var(--graphite-motion-duration-fast) var(--graphite-motion-easing-in-out),
+    width var(--graphite-motion-duration-fast) var(--graphite-motion-easing-in-out),
+    height var(--graphite-motion-duration-fast) var(--graphite-motion-easing-in-out);
+}
+
+// Line: on the tab's foot. Contained: across its top. Vertical: down its
+// left edge, 3 wide.
+.line .indicator { translate: var(--x) calc(var(--y) + var(--h) - 2px); }
+.line .sliding .active { box-shadow: inset 0 -2px 0 var(--graphite-outline); }
+
+.contained .indicator { translate: var(--x) var(--y); }
+.contained .sliding .active { box-shadow: none; }
+
+.vertical .indicator {
+  translate: var(--x) var(--y);
+  width: 3px;
+  height: var(--h);
+}
+
+.vertical .sliding .active { box-shadow: inset 3px 0 0 var(--graphite-outline); }
 
 // ------------------------------------------------------------------ vertical
 // The kit's separate vertical items: 64 tall, a surface fill, a 1px rule on

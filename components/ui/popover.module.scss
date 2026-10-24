@@ -4,6 +4,10 @@
 // item: an elevation-01 panel, square, padded 16, with no edge and the kit's
 // overlay shadow, and a 12×6 caret on the trigger's centre. The caret's base
 // is 4 from the trigger, so the panel starts 10 out.
+@use './overlay-motion';
+
+@include overlay-motion.defs;
+
 .wrap {
   position: relative;
   display: inline-flex;
@@ -20,22 +24,9 @@
   // A filter rather than a box-shadow, so the caret and the panel cast one
   // shadow between them instead of two that overlap at the joint.
   filter: drop-shadow(var(--graphite-shadow-overlay));
-  // The shared overlay entrance. Opacity only, matching Tooltip, and no exit:
-  // the panel unmounts on close, which is what keeps the no-nesting throw off
-  // the prerender path.
-  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
-}
-
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panel {
-    animation: none;
-  }
+  // The shared overlay motion: in at base from the caret, out at fast. The
+  // origin is the caret's tip, set per side and alignment below.
+  @include overlay-motion.motion(var(--ox, 50%) var(--oy, 0), var(--graphite-motion-duration-base));
 }
 
 .panel:focus-visible {
@@ -51,10 +42,11 @@
 
 // ------------------------------------------------------------------- sides
 // 10 out: the 4px gap and the 6px caret.
-.top { bottom: calc(100% + 10px); }
-.bottom { top: calc(100% + 10px); }
-.left { right: calc(100% + 10px); }
-.right { left: calc(100% + 10px); }
+// The origin sits on the caret's tip: the edge facing the trigger, 6 past it.
+.top { bottom: calc(100% + 10px); --oy: calc(100% + 6px); }
+.bottom { top: calc(100% + 10px); --oy: -6px; }
+.left { right: calc(100% + 10px); --ox: calc(100% + 6px); }
+.right { left: calc(100% + 10px); --ox: -6px; }
 
 .top::before,
 .bottom::before { width: 12px; height: 6px; }
@@ -70,18 +62,18 @@
 // Start and End put the caret 16 from that edge of the panel and the caret on
 // the trigger's centre, so the panel overhangs the trigger by 22 less than
 // half its size: 6 on the kit's 32px trigger.
-:is(.top, .bottom).start { left: calc(50% - 22px); }
+:is(.top, .bottom).start { left: calc(50% - 22px); --ox: 22px; }
 :is(.top, .bottom).start::before { left: 16px; }
 :is(.top, .bottom).center { left: 50%; transform: translateX(-50%); }
 :is(.top, .bottom).center::before { left: calc(50% - 6px); }
-:is(.top, .bottom).end { right: calc(50% - 22px); }
+:is(.top, .bottom).end { right: calc(50% - 22px); --ox: calc(100% - 22px); }
 :is(.top, .bottom).end::before { right: 16px; }
 
-:is(.left, .right).start { top: calc(50% - 22px); }
+:is(.left, .right).start { top: calc(50% - 22px); --oy: 22px; }
 :is(.left, .right).start::before { top: 16px; }
-:is(.left, .right).center { top: 50%; transform: translateY(-50%); }
+:is(.left, .right).center { top: 50%; transform: translateY(-50%); --oy: 50%; }
 :is(.left, .right).center::before { top: calc(50% - 6px); }
-:is(.left, .right).end { bottom: calc(50% - 22px); }
+:is(.left, .right).end { bottom: calc(50% - 22px); --oy: calc(100% - 22px); }
 :is(.left, .right).end::before { bottom: 16px; }
 
 // ----------------------------------------------------------------- tab tip
@@ -107,5 +99,8 @@
 }
 
 .tabTip .panel::before { content: none; }
-.tabTip .start { left: 0; }
-.tabTip .end { left: auto; right: 0; }
+.tabTip .start { left: 0; --ox: 0; }
+.tabTip .end { left: auto; right: 0; --ox: 100%; }
+
+// The tab tip grows out of its trigger's foot, the edge it hangs from.
+.tabTip .panel { --oy: 0; }

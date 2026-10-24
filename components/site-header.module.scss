@@ -378,6 +378,8 @@ $tray-bleed: 2rem;
   @include drop.layer;
   border: 0;
   border-right: 1px solid transparent;
+  // A horizontal swipe is the tray's, to close it; a vertical one scrolls.
+  touch-action: pan-y;
   // The glow waits for the slide to land, then rises.
   animation:
     tray-in var(--graphite-motion-duration-slow) var(--graphite-motion-spring-sheet) both,

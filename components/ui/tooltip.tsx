@@ -1,11 +1,21 @@
 'use client'
 
-import { cloneElement, useId, useRef, useState } from 'react'
-import type { ReactElement } from 'react'
+import { cloneElement, useEffect, useId, useRef, useState } from 'react'
+import type { FocusEvent, MouseEvent, ReactElement } from 'react'
+import { motionMs } from '@/lib/motion'
 import { useOverlay } from './overlay'
 import styles from './tooltip.module.scss'
 
-/** Contract: docs/contracts/tooltip.md (2.0.0) */
+// Shared by every Tooltip on the page. The first one a pointer reaches waits
+// (delay/tooltip); once one is showing, or one closed less than WARM_MS ago,
+// the next appears at once, so running the pointer along a toolbar reads each
+// label without paying the wait again. 300ms is the kit's window, stated in
+// delay/tooltip's description.
+const WARM_MS = 300
+let showing = 0
+let lastClosed = -Infinity
+
+/** Contract: docs/contracts/tooltip.md (2.1.0) */
 type TooltipProps = {
   /**
    * Any focusable element. Hover alone would strand keyboard users. With
@@ -31,6 +41,11 @@ type TooltipProps = {
    * small caret 4 away; Definition explains a term in running text.
    */
   type?: 'standard' | 'icon' | 'definition'
+  /**
+   * Milliseconds before the first tooltip shows on hover. The kit's
+   * delay/tooltip (500) when left out. Keyboard focus never waits, and nor
+   * does a tooltip reached while another is showing or has just closed.
+   */
   delay?: number
 }
 
@@ -40,11 +55,26 @@ export function Tooltip({
   placement = 'top',
   align = 'center',
   type = 'standard',
-  delay = 150,
+  delay,
 }: TooltipProps) {
   const id = useId()
   const [open, setOpen] = useState(false)
+  // Shown without its entrance: from the keyboard, or warm from a neighbour.
+  const [instant, setInstant] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  // Whether this opening was a person's. One opened by code (the docs' stills
+  // dispatch a synthetic hover) shows at once and does not warm the others,
+  // or a page of stills would make every real tooltip skip its wait.
+  const counted = useRef(true)
+
+  useEffect(() => {
+    if (!open || !counted.current) return
+    showing++
+    return () => {
+      showing--
+      lastClosed = performance.now()
+    }
+  }, [open])
 
   // Non-modal: no focus trap, and no click-outside — a tooltip is dismissed by
   // leaving it, not by clicking elsewhere. Escape still closes it. The bubble
@@ -56,9 +86,26 @@ export function Tooltip({
     outside: false,
   })
 
-  const show = () => {
+  const showNow = () => {
     if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(() => setOpen(true), delay)
+    setInstant(true)
+    setOpen(true)
+  }
+  const show = (e?: MouseEvent | FocusEvent) => {
+    if (timer.current) clearTimeout(timer.current)
+    counted.current = e?.nativeEvent.isTrusted !== false
+    if (!counted.current) return showNow()
+    if (showing > 0 || performance.now() - lastClosed < WARM_MS) return showNow()
+    setInstant(false)
+    timer.current = setTimeout(() => setOpen(true), delay ?? motionMs('delay-tooltip', { fallback: 500 }))
+  }
+  // Keyboard focus is opened by keyboard, so it shows at once. A focus that
+  // comes with a click is a pointer's, and waits like a hover.
+  const onFocus = (e: FocusEvent) => {
+    if ((e.target as Element).matches?.(':focus-visible')) {
+      counted.current = true
+      showNow()
+    } else show(e)
   }
   const hide = () => {
     if (timer.current) clearTimeout(timer.current)
@@ -84,7 +131,7 @@ export function Tooltip({
       className={styles.wrap}
       onMouseEnter={show}
       onMouseLeave={hide}
-      onFocusCapture={show}
+      onFocusCapture={onFocus}
       onBlurCapture={hide}
     >
       {/* describedby, not labelledby: the contract says a tooltip must be
@@ -102,6 +149,7 @@ export function Tooltip({
           ref={ref}
           id={id}
           role="tooltip"
+          data-instant={instant || undefined}
           className={[styles.tip, type === 'standard' ? '' : styles[type], styles[side], styles[edge]].join(' ')}
         >
           {content}

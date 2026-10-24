@@ -5,6 +5,10 @@
 // corner, Tooltip type (12/16 Medium), and a caret on the trigger. Its Type
 // sets the padding, the caret and the gap (overlay.md 2.0.0: Tooltip is the
 // overlay the kit draws inverse).
+@use './overlay-motion';
+
+@include overlay-motion.defs;
+
 .wrap {
   position: relative;
   display: inline-flex;
@@ -31,22 +35,11 @@
   line-height: 1rem;
   font-weight: var(--graphite-text-weight-medium);
   white-space: normal;
-  // Opacity only. The centred placements carry a transform, and an animated
-  // transform would overwrite it rather than offset from it. There is no
-  // exit: the bubble unmounts on close.
-  animation: overlay-in var(--graphite-motion-duration-fast) var(--graphite-motion-easing-out) both;
-}
-
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tip {
-    animation: none;
-  }
+  // The shared overlay entrance at fast, grown from the caret's tip. It scales
+  // the individual `scale` property, which leaves the centred placements'
+  // transform alone. No exit: the next tooltip along a toolbar appears at
+  // once, and a bubble fading out beside it would read as two.
+  @include overlay-motion.motion(var(--ox, 50%) var(--oy, 100%), var(--graphite-motion-duration-fast));
 }
 
 // --------------------------------------------------------------------- types
@@ -67,10 +60,11 @@
 }
 
 // --------------------------------------------------------------------- sides
-.top { bottom: calc(100% + var(--off)); }
-.bottom { top: calc(100% + var(--off)); }
-.left { right: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); }
-.right { left: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); }
+// The origin is the caret's tip, on the edge that faces the trigger.
+.top { bottom: calc(100% + var(--off)); --oy: calc(100% + var(--caret-h)); }
+.bottom { top: calc(100% + var(--off)); --oy: calc(-1 * var(--caret-h)); }
+.left { right: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); --ox: calc(100% + var(--caret-h)); --oy: 50%; }
+.right { left: calc(100% + var(--off)); top: 50%; transform: translateY(-50%); --ox: calc(-1 * var(--caret-h)); --oy: 50%; }
 
 // The caret, in the bubble's fill.
 .tip::before {
@@ -94,9 +88,9 @@
 // on the trigger's centre.
 :is(.top, .bottom).center { left: 50%; transform: translateX(-50%); }
 :is(.top, .bottom).center::before { left: calc(50% - var(--caret-w) / 2); }
-:is(.top, .bottom).start { left: calc(50% - 16px - var(--caret-w) / 2); }
+:is(.top, .bottom).start { left: calc(50% - 16px - var(--caret-w) / 2); --ox: calc(16px + var(--caret-w) / 2); }
 :is(.top, .bottom).start::before { left: 16px; }
-:is(.top, .bottom).end { right: calc(50% - 16px - var(--caret-w) / 2); }
+:is(.top, .bottom).end { right: calc(50% - 16px - var(--caret-w) / 2); --ox: calc(100% - 16px - var(--caret-w) / 2); }
 :is(.top, .bottom).end::before { right: 16px; }
 
 // The bubble takes the pointer (WCAG 1.4.13), and it sits inside the wrapper,

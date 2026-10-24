@@ -1,6 +1,6 @@
 ---
 component: Button
-version: 2.6.0
+version: 2.7.0
 wave: 0
 slots:
   - name: Children
@@ -39,9 +39,15 @@ tokens:
   - name: spacing
     usage: Padding, gap to icons, and the minimum touch target.
   - name: motion
-    usage: Transition duration and easing, shared with the pages so a button moves the way its surroundings do.
+    usage: The hover and press color, at the fast step. The press itself is instant.
   - name: radius
     usage: Corner. The kit is square-cornered, so this resolves to `radius-none`.
+motion:
+  - trigger: Hover, press
+    property: Background and label color
+    duration: duration-fast
+    easing: easing-out
+    reduced: "Unchanged: color is feedback. The 1px press displacement is removed."
 composition_rules:
   - "One filled button per group. A group of buttons (a Modal footer, a toolbar) holds at most one of primary, secondary and danger. ButtonGroup enforces this, and Modal wraps its footer in it."
   - "The filled button goes last: trailing in a row, at the bottom of a stack. Its partners come from its own family: primary pairs with outlined or ghost, secondary with secondary-outlined or secondary-ghost, danger with ghost. Outlined is for a real alternative (Cancel, Back, Not now), text for skipping a step or a tool (Skip, Learn more)."
@@ -121,3 +127,4 @@ the component API conventions in `README.md`.
   and "the dangerous action" never look alike. No button whose accessible name
   comes only from an icon; the `icon` size changes the shape, not the naming
   requirement.
+- **Motion** (2026-10-24, 2.7.0). The press stays instant; the hover color now still eases under reduced motion, which only removes the press displacement.

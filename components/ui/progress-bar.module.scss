@@ -67,7 +67,9 @@
 .error .fill { background: var(--graphite-danger); }
 
 .determinate {
-  transition: width var(--graphite-motion-duration-base) var(--graphite-motion-easing-out);
+  // Linear: progress is the one thing that moves at a constant rate, so an
+  // eased fill would misreport how far along the work is.
+  transition: width var(--graphite-motion-duration-base) var(--graphite-motion-easing-linear);
 }
 
 // The kit's sweep: a quarter of the track, from just off its start to just
