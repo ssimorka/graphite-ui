@@ -10,37 +10,52 @@ contract-governed, the contract is the authority and this file only describes it
 
 ## Tokens
 
-Five, all declared on `:root` in `app/globals.scss`.
+From the kit's `Motion` collection (2026-10-24), declared on `:root` in
+`app/globals.scss` and checked against the snapshot by `token-drift`. The rules
+and the reasons are in `docs/contracts/foundations/motion.md`.
 
-| Token | Value | Used by |
+| Token | Value | Use |
 |---|---|---|
-| `--graphite-motion-fast` | 120ms | Button, Toggle, the four overlay entrances, Accordion trigger, Data table's expand chevron, search palette, header nav and controls, footer links, hero spotlight |
-| `--graphite-motion-base` | 240ms | Accordion panel and chevron, Progress bar's determinate width, Capabilities carousel item state and body reveal, ramp swatch and Info card hovers, Create preview |
-| `--graphite-motion-indeterminate` | 1400ms | Progress bar's indeterminate sweep, Modal's inline-loading spinner |
-| `--graphite-motion-ease` | `cubic-bezier(0.16, 1, 0.3, 1)` | Everything on the settle curve |
-| `--graphite-motion-indeterminate-ease` | `linear` | Progress bar's sweep and Modal's inline-loading spinner |
+| `--graphite-motion-duration-instant` | 0ms | Keyboard-opened and frequent UI |
+| `--graphite-motion-duration-fast` | 120ms | Hover color, toggles, indicators, exits |
+| `--graphite-motion-duration-base` | 200ms | Popovers, toasts, scrims, panels; a cascade's span |
+| `--graphite-motion-duration-slow` | 300ms | Dialogs, drop panels, sheets |
+| `--graphite-motion-duration-emphasis` | 400ms | The cap: the hero rise, scroll reveal, the glow |
+| `--graphite-motion-delay-tooltip` | 500ms | First tooltip hover only |
+| `--graphite-motion-easing-out` | `cubic-bezier(0.2, 0, 0, 1)` | Enter and exit; the default |
+| `--graphite-motion-easing-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Moving across the screen: the day-night wheel, loops |
+| `--graphite-motion-easing-linear` | `linear` | Progress, spinners, and the hero spotlight's tracking |
+| `--graphite-motion-spring-sheet` | `linear()`, critically damped | Code only: the mobile nav tray and Create's sheets |
 
-**The Figma kit has no motion variables.** None of its sixteen collections covers
-duration or easing, so a designer cannot bind one and re-invents a number per
-frame. That gap is tracked in the site blueprint, not here.
+Two code-only values sit beside them: `--graphite-motion-indeterminate`
+(1400ms, the period of every loop, which the cap does not govern) and
+`--graphite-motion-travel` (1, or 0 under reduced motion, multiplying every
+movement distance).
+
+**No raw timing is left.** `naming-check` fails on a duration, `cubic-bezier(`
+or keyword easing in any stylesheet under `app/` or `components/`. There were
+ninety when the collection landed. An exception has to be argued with
+`motion-allow: <reason>` in the comment above it; there are none.
 
 ## Easing vocabulary
 
-**The settle curve, `--graphite-motion-ease`.** Anything entering the viewport or
-replacing content: scroll reveal, hero rise, view-switch fade, the overlay
-entrance, the carousel's body reveal.
+**Out, `--graphite-motion-easing-out`.** Everything that enters or leaves:
+scroll reveal, hero rise, view-switch fade, the overlay entrance, the carousel's
+body reveal, hovers, the tray's exit. It replaced both the site's old settle
+curve (`cubic-bezier(0.16, 1, 0.3, 1)`) and the plain `ease` that Toggle and the
+cover kept apart from it.
 
-**Plain `ease`.** Short mechanical moves that are not entrances: Toggle's track
-and thumb, the cover reveal, theme and link transitions.
-Toggle's contract records this explicitly so the curve is not "corrected" onto
-it later.
+**In-out.** Something already on screen moving across it: the day-night wheel,
+and the waveform and skeleton loops.
 
-**`linear`.** Two cases. `.hero__spotlight`, as a literal: its transition
-restarts on every `pointermove`, and an ease-out decelerates each hop so the
-light rubber-bands behind the cursor instead of tracking it. And the
-indeterminate sweep, through `--graphite-motion-indeterminate-ease`: a constant
-speed, as the kit's prototype runs it (#235). It was an ease-in-out that slowed
-at each end.
+**Linear.** Progress, spinners, and one exception: `.hero__spotlight`, whose
+transition restarts on every `pointermove`, where an ease-out decelerates each
+hop so the light rubber-bands behind the cursor instead of tracking it.
+
+**No springs that overshoot, no ease-in.** The drop panels, the tray, the
+Create bar, the menu glyph, the dice and the sparkle all overshot on
+`cubic-bezier(0.34, 1.56, 0.64, 1)`; the tray left on an ease-in. All of it now
+lands on Out, and the tray and Create's sheets slide on the sheet spring.
 
 ## Page-level motion
 
@@ -48,40 +63,41 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 
 | Motion | Selector | Duration | Easing | Trigger |
 |---|---|---|---|---|
-| Scroll reveal | `.reveal` | 700ms | settle | `IntersectionObserver`, once per element |
-| Hero entrance | `.hero__source-strip` / `hero-rise` | 900ms | settle | Mount, one-shot |
+| Scroll reveal | `.reveal` | `emphasis` | Out | `IntersectionObserver`, once per element |
+| Hero entrance | `.hero__source-strip` / `hero-rise` | `emphasis` | Out | Mount, one-shot |
 | Hero parallax | `.hero__spotlight`, `.hero__grid-lines` | continuous | — | `pointermove` + `scroll` via rAF |
 | Band grid parallax | `.page-bands__grid` | continuous | — | `scroll` via rAF, from `page-bands.tsx` |
-| Spotlight tracking | `.hero__spotlight` | `fast` | linear | Pointer position rewrite |
-| View-switch fade | `.cap-stage__frame` / `fade-swap` | 500ms | settle | Remount on `key={item.key}` |
-| Cover reveal | `.art__cover` / `cover-in` | 320ms | ease | Mount, one-shot |
-| Cover hint | `.art__cover-hint` | 160ms | ease | Hover / focus on the cover |
+| Spotlight tracking | `.hero__spotlight` | `fast` | Linear | Pointer position rewrite |
+| View-switch fade | `.cap-stage__frame` / `fade-swap` | `slow` | Out | Remount on `key={item.key}` |
+| Cover reveal | `.art__cover` / `cover-in` | `slow` | Out | Mount, one-shot |
+| Cover hint | `.art__cover-hint` | `fast` | Out | Hover / focus on the cover |
 | Carousel rail fill | `.cap-item__fill` | scroll-driven | — | `scroll` via rAF, the same reading that picks the panel |
-| Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | settle | Mount, when the item becomes active |
-| Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | ease | Selection change, hover |
-| Theme swap | `html`, `body`, `.cds--*` | 180ms | ease | Theme toggle |
-| Ramp swatch hover | `.ramp-swatch` | `base` | ease-out | Pointer over a swatch |
-| Wall card hover | `.card` glow, `.card .preview` | 300ms | ease-out | Pointer over a component card |
-| Info card hover | `.door` glow, `.door .artefact` | `base` | ease-out | Pointer over a door |
-| Header nav hover | `.navLink`, `.navIndicator` | `fast` | settle | Pointer over a nav item |
-| Drop panels | `_drop-panel.scss` / `drop`, `caret`, `glow`, `rise` | 520ms drop, 360ms caret, 900ms glow, 420ms rise | spring; settle | Open: search palette and color picker drop from their trigger, the caret pops, the tint rises, sections cascade |
-| Search palette (phone) | `search-palette.module.scss` / `in`, `spin` | `fast` fade; 690ms spinner | settle; linear | Open below 672px; while a query resolves |
-| Mobile nav tray | `.trayPanel` / `tray-in`, `tray-out`, `tray-item-in`, `glow` | 560ms in, 220ms out, 420ms items | spring; ease-in; settle | Menu button. Links cascade per group; the menu glyph spins on each swap (`menu-icon-in`, 360ms) |
-| Create controls | `controls.module.scss` / `up`, `drop`, `glow`, `rise` | 520 to 560ms | spring | Mount (bar, panel), open (sheets). Bar and sheets rise from the bottom; the panel drops |
-| Hero strip glow | `.hero__source-strip` / `glow`, `rise` | 900ms; 420ms | settle | Mount, after `hero-rise`; the four ramps and the footer cascade |
-| Card glow | `--glow` on cards | 300ms | ease-out | Hover on the docs next cards, wall cards, index cards and doors |
-| Next card drop | `.nextCard` padding | 300ms | ease-out | Hover, 4px |
-| Index card drop | `.previewInner` | 300ms | ease-out | Hover on a governed card, 4px |
-| Create preview cards | `live-audio-waveform` / `pulse`, `skeleton` / `sweep` | 900ms; 1.6s | — | Infinite, inside the Create preview |
+| Carousel body reveal | `.cap-item__reveal` / `cap-reveal` | `base` | Out | Mount, when the item becomes active |
+| Carousel item state | `.cap-item`, `.cap-item__trigger` | `base` / `fast` | Out | Selection change, hover |
+| Theme swap | `html`, `body`, `.cds--*` | `base` | Out | Theme toggle |
+| Ramp swatch hover | `.ramp-swatch` | `base` | Out | Pointer over a swatch |
+| Wall card hover | `.card` glow, `.card .preview` | `slow` | Out | Pointer over a component card |
+| Info card hover | `.door` glow, `.door .artefact` | `base` | Out | Pointer over a door |
+| Header nav hover | `.navLink`, `.navIndicator` | `fast` | Out | Pointer over a nav item |
+| Drop panels | `_drop-panel.scss` / `drop`, `caret`, `glow`, `rise` | `slow` drop, `base` caret, `emphasis` glow, `base` rise | Out | Open: search palette and color picker drop from their trigger, the caret grows, the tint rises, sections cascade inside one `base` span |
+| Search palette (phone) | `search-palette.module.scss` / `in`, `spin` | `fast` fade; half `indeterminate` spinner | Out; Linear | Open below 672px; while a query resolves |
+| Mobile nav tray | `.trayPanel` / `tray-in`, `tray-out`, `tray-item-in`, `glow` | `slow` in, `fast` out, `base` items | sheet spring; Out | Menu button. Links cascade per group; the menu glyph turns on each swap (`menu-icon-in`, `base`) |
+| Create controls | `controls.module.scss` / `up`, `drop`, `glow`, `rise` | `slow` | Out; sheet spring for the sheets | Mount (bar, panel), open (sheets). Bar and sheets rise from the bottom; the panel drops |
+| Hero strip glow | `.hero__source-strip` / `glow`, `rise` | `emphasis`; `base` | Out | Mount, after `hero-rise`; the four ramps and the footer cascade |
+| Card glow | `--glow` on cards | `slow` | Out | Hover on the docs next cards, wall cards, index cards and doors |
+| Next card drop | `.nextCard` padding | `slow` | Out | Hover, 4px |
+| Index card drop | `.previewInner` | `slow` | Out | Hover on a governed card, 4px |
+| Create preview cards | `live-audio-waveform` / `pulse`, `skeleton` / `sweep` | half `indeterminate`; `indeterminate` | In-out | Infinite, inside the Create preview |
 
-The 700ms, 900ms, 690ms, 500ms, 320ms, 300ms, 180ms and 160ms values,
-and the 1.6s sweep, are literals. They have no token, and minting one per call site would trade a
-readable number for an indirection that explains nothing.
+Every value above is a token. The literals this table used to list (700, 900,
+690, 500, 320, 300, 180 and 160ms, and the 1.6s sweep) each moved to the
+nearest step, and anything past the 400ms cap came down to `emphasis`.
 
 **The hover durations come from the kit, not from here.** `Read Me — Hover
 states` (13463:16977) documents the Home prototype's 195 hover reactions and
-fixes two durations: 240ms ease-out for the ramp swatch and the Info cards,
-300ms ease-out for the component card, which moves its border and its preview
+fixes two durations: 240ms ease-out for the ramp swatch and the Info cards
+(now `base`, 200ms, the nearest step of the Motion collection), 300ms ease-out
+for the component card (`slow`), which moves its border and its preview
 together. Those are the only two the prototype states; everything else it
 leaves without a transition object, which in code means the component's own
 timing governs, Button on `fast`.
@@ -99,10 +115,11 @@ everywhere. The drop panels, the tray and the Create bar cascade their own
 sections with `nth-child` delays (`drop.cascade` in `_drop-panel.scss`), on
 open only.
 
-**The spring, `cubic-bezier(0.34, 1.56, 0.64, 1)`.** A literal in
-`_drop-panel.scss` (`$spring`) and the tray. It overshoots, which is the point
-for a panel landing; it is not on the token list because nothing outside these
-entrances should use it.
+**The spring is the sheet spring.** `--graphite-motion-spring-sheet`, on the
+tray and Create's sheets. It used to be `cubic-bezier(0.34, 1.56, 0.64, 1)`, an
+overshoot, on every panel; the kit's rule is no bounce, so the drop panels land
+on Out and only the edge-anchored sheets keep a spring, a critically damped
+one.
 
 **Exits.** The tray is the one panel with an exit: it stays mounted and `inert`
 through its slide-out and a timer unmounts it, since it has no nesting throw to
@@ -130,22 +147,27 @@ the marketing page.
 
 | Component | Motion | Duration | Easing |
 |---|---|---|---|
-| Button | background, color on hover/active, plus a 1px press displacement | `fast` | settle |
-| Toggle | track background, thumb transform | `fast` | ease |
-| Tooltip | entrance fade, `overlay-in` | `fast` | settle |
-| Popover | entrance fade, `overlay-in` | `fast` | settle |
-| Menu | entrance fade, `overlay-in` | `fast` | settle |
-| Modal | entrance fade on the scrim, `overlay-in` | `fast` | settle |
-| Accordion | panel height via `grid-template-rows` 0fr → 1fr, chevron rotates 180° | `base` | settle |
-| Accordion trigger | background on hover | `fast` | settle |
-| Data table expand | chevron rotates 180° | `fast` | settle |
-| Progress, determinate | width | `base` | settle |
-| Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
-| Modal inline loading | `modal-spin`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
-| File uploader, uploading | `uploader-spin`, infinite | `indeterminate` | `indeterminate-ease` (linear) |
-| Toast | `toast-in`: fade and a 4px drop on arrival; none under reduced motion | `fast` | settle |
-| Dropdown list | entrance fade, `overlay-in`; the chevron turns 180° | `fast` | settle |
-| Menu buttons | the chevron turns 180° while the menu is open | `fast` | settle |
+| Button | background, color on hover/active, plus a 1px press displacement | `fast` | Out |
+| Toggle | track background, thumb transform | `fast` | Out |
+| Tooltip | entrance fade, `overlay-in` | `fast` | Out |
+| Popover | entrance fade, `overlay-in` | `fast` | Out |
+| Menu | entrance fade, `overlay-in` | `fast` | Out |
+| Modal | entrance fade on the scrim, `overlay-in` | `fast` | Out |
+| Accordion | panel height via `grid-template-rows` 0fr → 1fr, chevron rotates 180° | `base` | Out |
+| Accordion trigger | background on hover | `fast` | Out |
+| Data table expand | chevron rotates 180° | `fast` | Out |
+| Progress, determinate | width | `base` | Out |
+| Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | Linear |
+| Modal inline loading | `modal-spin`, infinite | `indeterminate` | Linear |
+| File uploader, uploading | `uploader-spin`, infinite | `indeterminate` | Linear |
+| Toast | `toast-in`: fade and a 4px drop on arrival; none under reduced motion | `fast` | Out |
+| Dropdown list | entrance fade, `overlay-in`; the chevron turns 180° | `fast` | Out |
+| Menu buttons | the chevron turns 180° while the menu is open | `fast` | Out |
+
+Phase 3 of the motion work applies the kit's rules to each of these (menus open
+instantly from the keyboard, Accordion and Tabs move in-out, Progress goes
+linear) and records the result in a `motion:` block per contract. Until then
+this table is the current state, not the target.
 
 ### The overlay entrance
 
@@ -169,6 +191,13 @@ so the four compile to distinct identifiers and cannot collide.
 
 ## Reduced motion
 
+One global layer in `globals.scss` now sits under everything below: it sets
+`--graphite-motion-travel: 0`, so any distance written through it collapses and
+a rise becomes a fade, and it narrows every transition to properties that do not
+move anything. `[data-motion='reduce']` applies the same to a subtree. The
+per-component blocks below predate it and still hold; a new component needs only
+to write its distances through `--graphite-motion-travel`.
+
 Everything that moves is covered. The table groups the blocks by what they
 neutralise rather than counting them.
 
@@ -191,9 +220,9 @@ neutralise rather than counting them.
 | Accordion | Panel opens without a transition |
 | Search palette (phone) | Fade and spinner removed |
 | Create preview, waveform, skeleton | Transitions and loops removed |
-| Progress | Determinate transition removed; the sweep stretches to 3s |
+| Progress | Determinate transition removed; the sweep stretches to twice `indeterminate` |
 | Data table | Expand chevron transition removed |
-| Modal | Inline-loading spinner stretches to 3s |
+| Modal | Inline-loading spinner stretches to twice `indeterminate` |
 
 Four are handled in JavaScript rather than CSS. `use-reveal.ts` reports visible immediately, so
 the observer never runs. `hero.tsx` and `page-bands.tsx` each return before
@@ -204,7 +233,8 @@ more than its smooth scroll switched off: the carousel is driven by the reader's
 own scrolling, so under reduced motion clicking a title jumps to its panel.
 
 **The progress sweep slows rather than stops.** A frozen indeterminate bar reads
-as a broken one, so it stretches to 3s and stays legible.
+as a broken one, so it stretches to twice `indeterminate` (2.8s) and stays
+legible.
 
 ### `transform: none` is usually the wrong reflex
 
@@ -212,9 +242,9 @@ It is the obvious neutraliser and it breaks layout wherever `transform` is also
 doing positioning, which in this codebase is common:
 
 - `.art__cover-hint` uses `-50%` to centre against `left: 50%`. Clearing the
-  transform shifts it about 83px right. The override pins
-  `translate(-50%, 0)` instead, keeping the centring and dropping only the
-  travel.
+  transform shifts it about 83px right. Its travel is written through
+  `--graphite-motion-travel` instead, so reduced motion drops only the travel
+  and the centring stays, with no override at all.
 - Tooltip's side placements and its centred alignment carry their position in a
   transform. This is why the overlay entrance animates opacity and nothing else.
 
@@ -245,4 +275,6 @@ a.finish(); a.play()
 
 ## Open
 
-- **The kit has no motion variables**, so none of this is bindable design-side.
+- **The kit has no distance scale.** Travels still borrow the spacing scale and
+  multiply it by `--graphite-motion-travel`; whether the kit wants `distance/*`
+  is open.
