@@ -297,6 +297,53 @@ function checkTypography() {
   }
 }
 
+// ------------------------------------------------------------------- motion
+// The kit's `Motion` collection, one mode. `duration/fast` is
+// --graphite-motion-duration-fast. Durations and the delay are ms numbers in
+// the kit and must carry `ms` here: a bare 120 is not a CSS time, and `0.12s`
+// would compare equal while reading differently from the kit. Easings and the
+// spring are strings the kit stores as the CSS they are, compared with
+// whitespace normalised.
+//
+// Only the kit's four families are checked both ways. The code-only motion
+// values (the indeterminate loop period, the reduced-motion travel multiplier)
+// sit outside them by name, so they cannot pass for kit tokens.
+const MOTION_FAMILY = /^(duration|delay|easing|spring)-/
+
+function checkMotion() {
+  const kit = collection('Motion')
+  const declared = declarations(desktop, /--graphite-motion-([a-z-]+)\s*:\s*([^;]+);/g)
+  const squash = (s) => String(s).replace(/\s+/g, ' ').trim()
+
+  for (const [name, v] of Object.entries(kit).sort(([a], [b]) => (a < b ? -1 : 1))) {
+    const key = name.replace(/\//g, '-')
+    const varName = `--graphite-motion-${key}`
+    const want = v.values.Value.value
+    if (!MOTION_FAMILY.test(key)) {
+      errors.push(`motion: kit variable "${name}" is outside the duration, delay, easing and spring families`)
+      continue
+    }
+    if (!declared.has(key)) {
+      errors.push(`motion: ${varName} is not declared`)
+      continue
+    }
+    const raw = declared.get(key)
+    if (v.type === 'FLOAT') {
+      const m = /^(-?\d*\.?\d+)ms$/.exec(raw)
+      if (!m) errors.push(`motion: ${varName} is ${raw}, kit says ${want} (ms), which wants ${want}ms`)
+      else if (Number(m[1]) !== want) errors.push(`motion: ${varName} is ${raw}, kit says ${want}ms`)
+    } else if (squash(raw) !== squash(want)) {
+      errors.push(`motion: ${varName} is ${raw}, kit says ${want}`)
+    }
+  }
+
+  const kitKeys = new Set(Object.keys(kit).map((n) => n.replace(/\//g, '-')))
+  for (const key of declared.keys()) {
+    if (MOTION_FAMILY.test(key) && !kitKeys.has(key))
+      errors.push(`motion: --graphite-motion-${key} has no counterpart in the kit`)
+  }
+}
+
 // Shared value comparison for the flat, single-mode foundations.
 function compare(label, kit, declared, varName) {
   for (const [key, want] of [...kit].sort()) {
@@ -601,6 +648,7 @@ const FOUNDATION_VARS = {
     /--graphite-font-[a-z0-9-]+(?=\s*:)/g,
     /--graphite-text-[a-z0-9-]+(?=\s*:)/g,
   ],
+  motion: [/--graphite-motion-[a-z-]+(?=\s*:)/g],
 }
 
 function checkFoundationContracts() {
@@ -684,6 +732,7 @@ checkSpacing()
 checkRadius()
 const kitBreakpoints = checkBreakpoints()
 checkTypography()
+checkMotion()
 checkFoundationContracts()
 checkMediaQueries(kitBreakpoints)
 checkCarbonBreakpoints(kitBreakpoints)
@@ -697,12 +746,13 @@ const counted = {
   radius: Object.keys(collection('Radius')).length,
   breakpoint: kitBreakpoints.size,
   typography: Object.keys(collection('Graphite Typography')).length,
+  motion: Object.keys(collection('Motion')).length,
 }
 const total = Object.values(counted).reduce((a, b) => a + b, 0)
 
 console.log(
   `token-drift: ${total} kit variables checked against ${STYLESHEET} ` +
-    `(${counted.spacing} spacing, ${counted.radius} radius, ${counted.breakpoint} breakpoint, ${counted.typography} typography); ` +
+    `(${counted.spacing} spacing, ${counted.radius} radius, ${counted.breakpoint} breakpoint, ${counted.typography} typography, ${counted.motion} motion); ` +
     `${codeSyntaxCount} Dev Mode code syntax names checked against the code`,
 )
 

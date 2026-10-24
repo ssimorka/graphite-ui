@@ -1,7 +1,8 @@
 # Foundation contracts
 
 The files beside this one are contracts for the four foundations that came out
-of the Figma sync (#67): spacing, radius, breakpoint and typography. They are
+of the Figma sync (#67): spacing, radius, breakpoint and typography. Motion
+joined them on 2026-10-24, when the kit gained a Motion collection. They are
 separated from the component contracts one directory up for two reasons.
 
 **They are not components.** A component contract answers "what is this thing,
