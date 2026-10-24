@@ -55,6 +55,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm drift-check
 
+      - name: Drift check self-test
+        if: ${{ !cancelled() }}
+        run: pnpm drift-check:test
+
       - name: "Token drift: foundations against the Figma snapshot"
         if: ${{ !cancelled() }}
         run: pnpm token-drift
