@@ -582,6 +582,20 @@
   height: 4px;
   background: var(--graphite-surface-variant);
   border-radius: var(--graphite-radius-2);
+  // A 24px target around the 4px bar, without moving it: the padding is
+  // clipped from the fill and the margin takes it back.
+  box-sizing: content-box;
+  padding: 10px var(--graphite-space-05);
+  margin: -10px 0;
+  background-clip: content-box;
+  // The grab and the title take the touch themselves; the rest of the sheet
+  // keeps its scroll.
+  touch-action: none;
+  cursor: grab;
+}
+
+.grabber + .sheetTitle {
+  touch-action: none;
 }
 
 .sheetTitle {

@@ -11,6 +11,7 @@ import { ColorPickerPopover } from '@/components/color-picker'
 import { Brand } from '@/components/brand'
 import { DayNight } from '@/components/day-night'
 import { motionMs } from '@/lib/motion'
+import { useSheetDrag } from '@/components/use-sheet-drag'
 import { NavigationMenu, type NavItem } from '@/components/ui/navigation-menu'
 import { TreeView } from '@/components/ui/tree-view'
 import { useOverlay } from '@/components/ui/overlay'
@@ -68,6 +69,8 @@ function Tray({
     onDismiss: () => onClose(),
     trapFocus: true,
   })
+  // Swiped back to the left to close, and caught mid-slide.
+  const drag = useSheetDrag(ref, { edge: 'left', onDismiss: onClose })
 
   if (!mounted) return null
 
@@ -81,6 +84,7 @@ function Tray({
         aria-label="Menu"
         tabIndex={-1}
         className={styles.trayPanel}
+        onPointerDown={drag.onPointerDown}
       >
         {children}
       </div>

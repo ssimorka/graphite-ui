@@ -106,7 +106,8 @@
 
 // The caret: a square turned to a point, wearing the panel's top edge. Include
 // inside `&::before`; `$x` is the caret's centre from the panel's left.
-@mixin caret($x) {
+// `$animate: false` for a panel that appears at once, as command search does.
+@mixin caret($x, $animate: true) {
   content: '';
   position: absolute;
   top: -7px;
@@ -119,9 +120,11 @@
   border-bottom: 0;
   transform: rotate(45deg);
 
-  @media (prefers-reduced-motion: no-preference) {
-    animation: caret var(--graphite-motion-duration-base) var(--graphite-motion-easing-out)
-      var(--graphite-motion-duration-fast) both;
+  @if $animate {
+    @media (prefers-reduced-motion: no-preference) {
+      animation: caret var(--graphite-motion-duration-base) var(--graphite-motion-easing-out)
+        var(--graphite-motion-duration-fast) both;
+    }
   }
 }
 
