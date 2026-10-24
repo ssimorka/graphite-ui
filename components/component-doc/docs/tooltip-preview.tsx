@@ -23,7 +23,7 @@ function codeFor(placement: Placement, align: Align, type: Type, delay: number) 
     ...(type === 'standard' ? [] : [`type="${type}"`]),
     ...(placement === 'top' ? [] : [`placement="${placement}"`]),
     ...(align === 'center' ? [] : [`align="${align}"`]),
-    ...(delay === 150 ? [] : [`delay={${delay}}`]),
+    ...(delay === 500 ? [] : [`delay={${delay}}`]),
   ]
   const child =
     type === 'definition'
@@ -55,7 +55,7 @@ export function TooltipPreview() {
   const [placement, setPlacement] = useState<Placement>('top')
   const [align, setAlign] = useState<Align>('center')
   const [type, setType] = useState<Type>('standard')
-  const [delay, setDelay] = useState(150)
+  const [delay, setDelay] = useState(500)
   const sideways = placement === 'left' || placement === 'right'
 
   return (
@@ -108,7 +108,7 @@ export function TooltipPreview() {
             options={[
               { value: '0', label: '0 ms' },
               { value: '150', label: '150 ms' },
-              { value: '500', label: '500 ms' },
+              { value: '500', label: '500 ms, the kit’s' },
             ]}
           />
         </>

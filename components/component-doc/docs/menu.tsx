@@ -99,7 +99,7 @@ export function menuDoc(): ComponentDocConfig {
       ['Focus', <>Opening the menu moves focus to an item. Every item is <code>tabindex=&quot;-1&quot;</code>, so the whole menu is one Tab stop and the arrow keys do the rest. A focused item takes a 2px <code>primary-focus</code> ring inside its edge. When the menu closes, focus goes back to the trigger.</>],
       ['Choosing', 'Choosing an item runs its onSelect and closes the menu. Disabled items are real disabled buttons, so the arrow keys skip them and they cannot be chosen.'],
       ['Contrast', <>Labels are <code>on-surface-variant</code> at rest and <code>on-surface</code> on hover, on <code>elevation-01</code>, lifted by <code>shadow-overlay</code> with no edge. A destructive row on hover is <code>on-danger</code> on <code>danger</code>.</>],
-      ['Motion', 'The list fades in on the fast motion step and appears at once under prefers-reduced-motion.'],
+      ['Motion', 'From a pointer it grows out of the trigger’s corner at the base step. From the keyboard it appears at once, as anything used many times a session should. A chosen item flashes, then the menu closes at the fast step. Under reduced motion it fades without growing.'],
     ],
     parityLede:
       'The kit’s Menu page has one public set, Menu, built from a private menu list item that carries the item states shown above. Size is a prop; Function is what the items hold.',

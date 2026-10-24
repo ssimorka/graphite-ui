@@ -2,12 +2,12 @@
 
 import { createContext, useContext, useId, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
-import { useOverlay } from './overlay'
+import { useOverlay, usePresence } from './overlay'
 import styles from './popover.module.scss'
 
 const InsidePopover = createContext(false)
 
-/** Contract: docs/contracts/popover.md (2.0.0) */
+/** Contract: docs/contracts/popover.md (2.1.0) */
 type PopoverProps = {
   trigger: (props: { onClick: () => void; 'aria-expanded': boolean; 'aria-controls': string }) => ReactNode
   /** May contain interactive elements — that is what separates it from Tooltip. */
@@ -77,6 +77,9 @@ export function Popover({
     },
     trapFocus: modal,
   })
+  // Held for its exit after it closes. It starts unmounted when closed, so
+  // the nesting check above still only fires once the outer one has opened.
+  const { mounted, closing } = usePresence(open)
 
   const tabTip = variant === 'tab-tip'
   const triggerEl = trigger({
@@ -98,11 +101,13 @@ export function Popover({
             read as one shape. The trigger is the caller's, so the fill sits
             on a span behind it. */}
         {tabTip ? <span className={styles.tip}>{triggerEl}</span> : triggerEl}
-        {open ? (
+        {mounted ? (
           <div
             ref={ref}
             id={id}
             className={[styles.panel, styles[side], styles[edge]].join(' ')}
+            data-state={closing ? 'closed' : 'open'}
+            inert={closing || undefined}
             role={modal ? 'dialog' : undefined}
             aria-modal={modal || undefined}
             aria-label={modal ? label : undefined}

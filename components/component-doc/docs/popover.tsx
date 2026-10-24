@@ -66,7 +66,7 @@ export function popoverDoc(): ComponentDocConfig {
       ['Focus', 'A modal Popover takes focus when it opens and keeps Tab inside it. A non-modal one leaves focus where it was. Either way, focus returns to the trigger when it closes. The content can be controlled from outside: a re-render while it is open leaves focus alone.'],
       ['Pointer', 'Pressing the trigger again closes it, and so does a press anywhere outside the panel. There is no close button of its own.'],
       ['Contrast', <>The panel is <code>elevation-01</code> lifted by <code>shadow-overlay</code>, with no edge, as the kit draws every overlay. The shadow is what separates it from the page in Light.</>],
-      ['Motion', 'It fades in on the fast motion step and appears at once under prefers-reduced-motion. It does not animate out.'],
+      ['Motion', 'It grows from its caret at the base step and leaves at fast. Under reduced motion it fades in and out without growing.'],
     ],
     parityLede:
       'The kit’s Popover page draws three public sets: the popover itself, a Tab tip, and the Popover item its variants are built from. Placement, align and variant cover the drawn axes; modal and label have no kit axis because behaviour and a name are not drawn.',

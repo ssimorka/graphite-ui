@@ -1,6 +1,6 @@
 ---
 component: Menu
-version: 2.1.0
+version: 2.2.0
 wave: 5
 slots:
   - name: Trigger
@@ -52,7 +52,28 @@ tokens:
   - name: radius
     usage: Panel corner, and the corner on each item.
   - name: motion
-    usage: The shared overlay entrance, inherited from Popover along with the surface. Declared here too so the drift check can hold this component to it rather than trusting the inheritance.
+    usage: "The shared overlay motion: in from the trigger's corner, instant from the keyboard, the chosen row's flash, and a fast exit."
+motion:
+  - trigger: Opened by a pointer
+    property: Opacity, and scale from 0.96, from the trigger's corner
+    duration: duration-base
+    easing: easing-out
+    reduced: A fade; the scale rides --graphite-motion-travel.
+  - trigger: Opened from the keyboard
+    property: "None: it appears at once"
+    duration: duration-instant
+    easing: none
+    reduced: The same.
+  - trigger: An item is chosen
+    property: The row flashes to the pressed rung and eases back, then the menu closes
+    duration: duration-fast
+    easing: easing-out
+    reduced: "Unchanged: the flash is confirmation, and color only."
+  - trigger: It closes
+    property: Opacity, and scale to 0.96
+    duration: duration-fast
+    easing: easing-out
+    reduced: A fade.
 composition_rules:
   - The kit's Menu buttons (Menu button, Combo button, Overflow) are their own contract, menu-button.md (#286), which fixes the trigger and passes the rest here.
   - inherited_from: Wave 5 shared Overlay base
@@ -74,3 +95,4 @@ prohibitions:
 - **Composition rules:** Contained list hover uses the same tone-step logic as Button hover, not a separate highlight convention; focus is a ring inside the row.
 - **Kit parity** (#231, 2.0.0, a major: focus is no longer a fill, and a destructive label is no longer red at rest). The kit's Caret trailing slot is a sub-menu trigger, still unbuilt (see Sub-menus).
 - **Prohibitions:** No destructive action (delete, remove) styled identically to a neutral action — destructive items need the status-role treatment once Wave 0 ships; until then, they get explicit confirmation via Modal rather than a one-click destructive menu item.
+- **Motion** (2026-10-24, 2.2.0). Opens from the trigger's corner at base, instantly from the keyboard; a chosen row flashes over fast before the menu closes, and the menu leaves at fast.

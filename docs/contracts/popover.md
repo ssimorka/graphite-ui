@@ -1,6 +1,6 @@
 ---
 component: Popover
-version: 2.0.0
+version: 2.1.0
 wave: 5
 slots:
   - name: Trigger
@@ -37,7 +37,18 @@ tokens:
   - name: radius
     usage: Panel corner.
   - name: motion
-    usage: The entrance fade, shared with the other overlays. No exit: content unmounts on close, which is what keeps the no-nesting throw off the prerender path.
+    usage: "The shared overlay motion: in from the caret, out at the fast step."
+motion:
+  - trigger: It opens
+    property: Opacity, and scale from 0.96, from the caret's tip
+    duration: duration-base
+    easing: easing-out
+    reduced: A fade; the scale rides --graphite-motion-travel.
+  - trigger: It closes
+    property: Opacity, and scale to 0.96
+    duration: duration-fast
+    easing: easing-out
+    reduced: A fade.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -59,3 +70,4 @@ prohibitions:
 - **Kit parity** (#230, 2.0.0, a major: the edge is gone and the default alignment moved from start to the kit's center): the caret, the three alignments and the Tab tip set. Popover item's Shadow=False and Zero radius=false are drawn by no Popover variant and stay unexposed.
 - **Composition rules:** Inherits the shared Overlay dismiss pattern exactly — no custom close behavior per instance.
 - **Prohibitions:** No Popover nested inside another Popover.
+- **Motion** (2026-10-24, 2.1.0). Grows from the caret at base and leaves at fast; it stays mounted for the exit only after it has been open, so the no-nesting throw is still off the prerender path.

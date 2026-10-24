@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import type { KeyboardEvent, ReactNode } from 'react'
 import { KitIcon } from '@/components/kit-icon'
-import { useOverlay } from './overlay'
+import { motionMs } from '@/lib/motion'
+import { useOverlay, usePresence } from './overlay'
 import styles from './menu.module.scss'
 
 export type MenuItem =
@@ -28,7 +29,7 @@ export type MenuItem =
     }
   | { kind: 'separator' }
 
-/** Contract: docs/contracts/menu.md (2.1.0) */
+/** Contract: docs/contracts/menu.md (2.2.0) */
 type MenuProps = {
   trigger: (props: {
     onClick: () => void
@@ -60,6 +61,27 @@ export function Menu({ trigger, items, placement = 'bottom', align = 'start', fl
   // render would re-run that effect, whose cleanup sends focus to the trigger.
   const close = useCallback(() => setOpen(false), [])
   const ref = useOverlay<HTMLDivElement>({ open, onDismiss: close })
+  // Held for a fast exit after it closes.
+  const { mounted, closing } = usePresence(open)
+  // Opened from the keyboard, so it appears with no entrance: a menu is used
+  // many times a session, and the kit's rules make that instant.
+  const [instant, setInstant] = useState(false)
+  // The item just chosen, which flashes once before the menu closes: the exit
+  // carries the confirmation, so the reader sees which row they hit.
+  const [picked, setPicked] = useState<string | null>(null)
+  const pickTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => {
+    if (pickTimer.current) clearTimeout(pickTimer.current)
+  }, [])
+  const pick = (label: string, onSelect: () => void) => {
+    if (picked) return
+    onSelect()
+    setPicked(label)
+    pickTimer.current = setTimeout(() => {
+      setPicked(null)
+      setOpen(false)
+    }, motionMs('fast', { fallback: 120 }))
+  }
 
   const enabledItems = () =>
     Array.from(
@@ -109,8 +131,12 @@ export function Menu({ trigger, items, placement = 'bottom', align = 'start', fl
       {trigger({
         // Called with an event when a person clicks or presses Enter or Space;
         // called bare when code opens the menu. Only the first moves focus in.
+        // A keyboard press reaches onClick as a click with no detail, which is
+        // how Enter and Space are told apart from the pointer.
         onClick: (...args: unknown[]) => {
           focusOnOpen.current = !open && args.length > 0 ? 'first' : null
+          const e = args[0] as { detail?: number } | undefined
+          setInstant(!!e && e.detail === 0)
           setOpen((v) => !v)
         },
         onKeyDown: (e) => {
@@ -121,18 +147,22 @@ export function Menu({ trigger, items, placement = 'bottom', align = 'start', fl
             const list = enabledItems()
             ;(e.key === 'ArrowUp' ? list[list.length - 1] : list[0])?.focus()
           } else {
+            setInstant(true)
             setOpen(true)
           }
         },
         'aria-expanded': open,
         'aria-haspopup': 'menu',
       })}
-      {open ? (
+      {mounted ? (
         <div
           ref={ref}
           id={id}
           role="menu"
           className={[styles.menu, styles[placement], styles[size], align === 'end' ? styles.end : '', flush ? styles.flush : ''].join(' ')}
+          data-state={closing ? 'closed' : 'open'}
+          data-instant={instant || undefined}
+          inert={closing || undefined}
           onKeyDown={onMenuKeyDown}
         >
           {items.map((item, i) =>
@@ -149,11 +179,8 @@ export function Menu({ trigger, items, placement = 'bottom', align = 'start', fl
                 // Destructive items are visually distinct. The contract's older
                 // requirement to route them through a confirmation Dialog was
                 // conditional on Wave 0, which has now shipped the status role.
-                className={`${styles.item} ${item.destructive ? styles.destructive : ''}`}
-                onClick={() => {
-                  item.onSelect()
-                  setOpen(false)
-                }}
+                className={`${styles.item} ${item.destructive ? styles.destructive : ''} ${picked === item.label ? styles.picked : ''}`}
+                onClick={() => pick(item.label, item.onSelect)}
               >
                 {indented ? (
                   <span className={styles.lead} aria-hidden="true">

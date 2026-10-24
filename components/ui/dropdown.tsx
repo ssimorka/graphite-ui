@@ -7,11 +7,12 @@ import { KitIcon } from '@/components/kit-icon'
 import { fieldMessage } from '@/lib/field-message'
 import { CheckboxGlyph } from './checkbox'
 import { FieldStatusIcon } from './field-status'
+import { openedByKeyboard } from './overlay'
 import { Tag } from './tag'
 import styles from './dropdown.module.scss'
 
 /**
- * Contract: docs/contracts/dropdown.md (1.2.2)
+ * Contract: docs/contracts/dropdown.md (1.3.0)
  *
  * The kit's Dropdown - Default (14032:290635) and - Fluid (14505:302528): a
  * single choice from a list the page draws itself. The ARIA select-only
@@ -90,6 +91,8 @@ export function OptionList({
   listRef?: RefObject<HTMLUListElement | null>
 }) {
   const place = useFloating(anchor, listRef)
+  // Read once, as the list mounts: opened by a key, it appears at once.
+  const [instant] = useState(openedByKeyboard)
   const list = (
     <ul
       ref={listRef}
@@ -98,6 +101,7 @@ export function OptionList({
       aria-labelledby={labelledBy}
       aria-multiselectable={multi || undefined}
       className={[styles.list, styles[size], anchor ? styles.floating : ''].join(' ')}
+      data-instant={instant || undefined}
       style={place}
     >
       {all ? (
@@ -160,7 +164,13 @@ function useFloating(
       if (!a) return
       const h = list?.current?.offsetHeight ?? 0
       const above = a.bottom + h > window.innerHeight && a.top - h >= 0
-      setPlace({ top: above ? a.top - h : a.bottom, left: a.left, minWidth: a.width })
+      // The list grows out of the trigger edge it hangs from.
+      setPlace({
+        top: above ? a.top - h : a.bottom,
+        left: a.left,
+        minWidth: a.width,
+        transformOrigin: above ? '50% 100%' : '50% 0',
+      })
     }
     update()
     window.addEventListener('scroll', update, true)
