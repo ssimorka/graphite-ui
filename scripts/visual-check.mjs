@@ -124,7 +124,7 @@ const TARGETS = [
     name: 'tabs-switch',
     url: '/docs/components/tabs',
     widths: [1440, 412],
-    act: (p) => p.locator(`${LIVE} [role=tab][aria-selected=false]:not(:disabled)`).first().click(),
+    act: (p) => p.locator(`${LIVE} [class*=previewInner] [role=tab][aria-selected=false]:not(:disabled)`).first().click(),
   },
   {
     name: 'toggle-switch',
