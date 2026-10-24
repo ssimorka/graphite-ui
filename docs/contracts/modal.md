@@ -1,6 +1,6 @@
 ---
 component: Modal
-version: 2.0.1
+version: 2.1.0
 wave: 5
 slots:
   - name: Label
@@ -46,7 +46,28 @@ tokens:
   - name: radius
     usage: Panel corner.
   - name: motion
-    usage: The entrance fade on the scrim, shared with the other overlays. Opacity only, and no exit, since the Modal unmounts on close.
+    usage: The scrim fading, the panel rising into place, a fast exit, and the inline-loading spinner.
+motion:
+  - trigger: It opens
+    property: The scrim fades in
+    duration: duration-base
+    easing: easing-out
+    reduced: "Unchanged: a fade."
+  - trigger: It opens
+    property: The panel rises 8px into place as it fades
+    duration: duration-slow
+    easing: easing-out
+    reduced: A fade; the rise rides --graphite-motion-travel.
+  - trigger: It closes
+    property: The scrim and the panel fade out together
+    duration: duration-fast
+    easing: easing-out
+    reduced: Unchanged.
+  - trigger: The primary action is loading
+    property: The spinner turns, looping
+    duration: indeterminate
+    easing: easing-linear
+    reduced: Slows to twice the period.
 composition_rules:
   - inherited_from: Wave 5 shared Overlay base
     rule: A `surface` token at an elevated tone-step, a defined focus-trap behavior, and a defined dismiss pattern (Escape key, click-outside, or explicit close control depending on the component).
@@ -98,3 +119,5 @@ fallback, at the dark alpha because `layout.tsx` first-paints `cds--g100`.
 
 The kit variable's description has been updated to match and is awaiting a
 library republish.
+
+- **Motion** (2026-10-24, 2.1.0). The scrim fades at base, the panel rises 8px at slow, and both leave at fast.

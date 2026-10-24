@@ -47,7 +47,7 @@ export function modalDoc(): ComponentDocConfig {
       ['Pointer', 'A press on the scrim closes a dismissible Modal, and focus goes back to the trigger. A press inside the panel never does. The scrim press is the Overlay base’s outside press, so dismissible turns it off together with Escape.'],
       ['Contrast', <>Title and body are <code>on-surface</code> on <code>background</code>, as the kit binds them, a pairing the engine checks at the theme’s target, AA or AAA. The label is <code>on-surface-variant</code>.</>],
       ['Loading', 'Inline loading replaces the primary button with its text and a spinner, announced as a status, so the action cannot be pressed twice while it runs.'],
-      ['Motion', 'The scrim and panel fade in together on the fast motion step, opacity only. Under prefers-reduced-motion it appears at once. It does not animate out.'],
+      ['Motion', 'The scrim fades in at the base step and the panel rises 8px at slow; both leave at fast. Under reduced motion the panel fades without rising.'],
     ],
     parityLede:
       'The kit’s Modal set has one axis, Size, and six booleans; its footer is a private set with three more axes. dismissible has no kit counterpart: whether Escape and the scrim close the dialog is behaviour, which a frame cannot show.',

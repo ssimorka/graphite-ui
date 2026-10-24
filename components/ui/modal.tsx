@@ -6,7 +6,7 @@ import type { CSSProperties, ReactElement, ReactNode } from 'react'
 import { KitIcon } from '@/components/kit-icon'
 import { Button } from './button'
 import { ButtonGroup } from './button-group'
-import { useOverlay } from './overlay'
+import { useOverlay, usePresence } from './overlay'
 import styles from './modal.module.scss'
 
 const InsideDialog = createContext(false)
@@ -20,7 +20,7 @@ const InsideDialog = createContext(false)
  */
 export const ModalInPlace = createContext(false)
 
-/** Contract: docs/contracts/modal.md (2.0.1) */
+/** Contract: docs/contracts/modal.md (2.1.0) */
 type ModalProps = {
   open: boolean
   onClose: () => void
@@ -98,8 +98,10 @@ export function Modal({
     escape: dismissible,
     outside: dismissible,
   })
+  // Held for a fast exit after it closes; never rendered closed.
+  const { mounted, closing } = usePresence(open)
 
-  if (!open) return null
+  if (!mounted) return null
 
   // The kit's footer: one or two actions fill two columns from the right;
   // three, or a Cancel, take four, with the Cancel pinned to the first.
@@ -126,7 +128,7 @@ export function Modal({
 
   const modal = (
     <InsideDialog.Provider value={true}>
-      <div className={styles.scrim}>
+      <div className={styles.scrim} data-state={closing ? 'closed' : 'open'} inert={closing || undefined}>
         <div
           ref={ref}
           role="dialog"

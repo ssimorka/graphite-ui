@@ -9,14 +9,14 @@ export function toastDoc(): ComponentDocConfig {
     figmaNode: '84336:35011',
     lede: 'Says, briefly, what just happened (“Changes saved”), then leaves on its own. For anything the reader must act on or must not miss, use a Notification, which stays.',
     description:
-      'A timed notification at the top right, in four statuses, standard or high contrast, with an optional action and time stamp. Anatomy, variants, states, API, tokens and accessibility, generated from the contract.',
+      'A timed notification at the bottom of the window, one at a time, in four statuses, standard or high contrast, with an optional action and time stamp. Anatomy, variants, states, API, tokens and accessibility, generated from the contract.',
     tocNote: 'Carried into #240 from #219. Notification’s colours and icons, with timing added.',
     livePreview: <ToastPreview />,
     install:
       "import { ToastProvider, useToast } from '@/components/ui/toast'",
     anatomy: <ToastStill variant="success" />,
     anatomyLede:
-      'The status icon and the stripe in the status colour; the title over the message; a time stamp, or an action, under them; and the close at the top right. It arrives at the top right of the window over everything else, with the overlay shadow.',
+      'The status icon and the stripe in the status colour; the title over the message; a time stamp, or an action, under them; and the close at the top right. It rises from the bottom of the window over everything else, with the overlay shadow. Only one shows at a time; the next waits its turn.',
     variantsLede:
       'Status sets the colours and the icon, as Notification’s does. High contrast inverts the fill. Actionable puts a small button where the time stamp would be.',
     variants: [
@@ -33,7 +33,7 @@ export function toastDoc(): ComponentDocConfig {
       'Confirm something the reader just did, in a few words.',
       'Offer Undo as the action where an action can be undone.',
       'Let errors stay until they are closed; they do by default.',
-      'Show one at a time where you can. They stack, but a pile is noise.',
+      'Show a toast and move on. The host queues them, so a second one waits until the first has gone rather than piling up.',
     ],
     donts: [
       'Put the only route to something in a toast. It leaves.',
@@ -46,9 +46,10 @@ export function toastDoc(): ComponentDocConfig {
       ['Timing', 'Six seconds by default. The countdown holds while the pointer or keyboard focus is on the toast, and resumes where it stopped. Errors stay until closed.'],
       ['Close', <>A button named “Dismiss notification”. The action and close are reachable with Tab, as anything else on the page.</>],
       ['Contrast', 'Text is on-surface on every status container, Notification’s swept pairs; high contrast is background on on-background.'],
+      ['Motion', 'It rises from the bottom at the base step and leaves at fast. Under reduced motion it fades in and out in place.'],
     ],
     parityLede:
-      'The kit’s Toast is one set on the Notification page, Notification - Toast. The code is Toast, drawn, and a host that times and stacks it.',
+      'The kit’s Toast is one set on the Notification page, Notification - Toast. The code is Toast, drawn, and a host that times and queues it.',
     parity: [
       ['Status', 'Info · Success · Warning · Error', 'variant', 'info, success, warning and danger, as Notification.'],
       ['High contrast', 'False · True', 'highContrast', 'The kit’s set defaults it on; the code keeps Notification’s default, off.'],

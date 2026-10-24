@@ -3,12 +3,13 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { KitIcon } from '@/components/kit-icon'
+import { motionMs } from '@/lib/motion'
 import { Button } from './button'
 import { StatusIcon } from './notification'
 import styles from './toast.module.scss'
 
 /**
- * Contract: docs/contracts/toast.md (1.1.0)
+ * Contract: docs/contracts/toast.md (2.0.0)
  *
  * The kit's Notification - Toast (84336:35011): Status × High contrast ×
  * Actionable, with Title, Message, Time and Close. It shares Notification's
@@ -88,7 +89,7 @@ export function useToast() {
 }
 
 /** A toast that counts down, and stops counting while it is hovered or focused. */
-function Timed({ item, onDone }: { item: Queued; onDone: (id: number) => void }) {
+function Timed({ item, leaving, onDone }: { item: Queued; leaving: boolean; onDone: (id: number) => void }) {
   const [held, setHeld] = useState(false)
   const left = useRef(item.duration)
   useEffect(() => {
@@ -105,6 +106,7 @@ function Timed({ item, onDone }: { item: Queued; onDone: (id: number) => void })
   return (
     <li
       className={styles.slot}
+      data-state={leaving ? 'closed' : 'open'}
       onPointerEnter={() => setHeld(true)}
       onPointerLeave={() => setHeld(false)}
       onFocus={() => setHeld(true)}
@@ -118,26 +120,45 @@ function Timed({ item, onDone }: { item: Queued; onDone: (id: number) => void })
 }
 
 /**
- * The toaster host: wrap the app once. Toasts stack at the top right, newest
- * on top, in a polite live region, so each is announced as it arrives.
+ * The toaster host: wrap the app once. One toast at a time, at the bottom, in
+ * a polite live region, so each is announced as it arrives. Toasts shown while
+ * one is up wait their turn in order; the next rises once the last has gone.
+ * A stack of toasts over the page is exactly what the kit's rules forbid.
  */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Queued[]>([])
+  // The toast on screen while it plays its exit, before the next takes its place.
+  const [leaving, setLeaving] = useState<number | null>(null)
   const next = useRef(0)
   const show = useCallback((o: ToastOptions) => {
     const duration = o.duration ?? (o.variant === 'danger' ? 0 : 6000)
-    setItems((list) => [{ ...o, id: next.current++, duration }, ...list])
+    setItems((list) => [...list, { ...o, id: next.current++, duration }])
   }, [])
-  const done = useCallback((id: number) => setItems((list) => list.filter((t) => t.id !== id)), [])
+  const done = useCallback((id: number) => {
+    setItems((list) => {
+      // One still waiting in the queue just leaves it. The one on screen
+      // plays its exit first.
+      if (list[0]?.id !== id) return list.filter((t) => t.id !== id)
+      setLeaving(id)
+      return list
+    })
+  }, [])
+  useEffect(() => {
+    if (leaving === null) return
+    const t = window.setTimeout(() => {
+      setItems((list) => list.filter((x) => x.id !== leaving))
+      setLeaving(null)
+    }, motionMs('fast', { fallback: 120 }))
+    return () => window.clearTimeout(t)
+  }, [leaving])
+  const current = items[0]
 
   return (
     <ToastContext.Provider value={show}>
       {children}
       <section className={styles.region} aria-label="Notifications" aria-live="polite">
         <ol className={styles.stack}>
-          {items.map((t) => (
-            <Timed key={t.id} item={t} onDone={done} />
-          ))}
+          {current ? <Timed key={current.id} item={current} leaving={leaving === current.id} onDone={done} /> : null}
         </ol>
       </section>
     </ToastContext.Provider>

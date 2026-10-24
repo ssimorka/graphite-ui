@@ -50,7 +50,7 @@ function Trigger({ variant, highContrast, actionable }: { variant: ToastVariant;
 
 /**
  * Status, High contrast and Actionable, live. The button shows a real toast
- * at the top right of the window: it leaves after six seconds (an error stays
+ * at the bottom of the window, one at a time: it leaves after six seconds (an error stays
  * until closed), and holds while the pointer or focus is on it.
  */
 export function ToastPreview() {

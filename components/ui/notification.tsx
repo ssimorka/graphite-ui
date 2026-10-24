@@ -1,10 +1,14 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { KitIcon } from '@/components/kit-icon'
+import { motionMs } from '@/lib/motion'
 import { Button } from './button'
 import { FieldStatusIcon } from './field-status'
 import styles from './notification.module.scss'
 
-/** Contract: docs/contracts/notification.md (3.1.0) */
+/** Contract: docs/contracts/notification.md (3.2.0) */
 type NotificationProps = {
   body: ReactNode
   title?: string
@@ -26,6 +30,13 @@ type NotificationProps = {
    * it when the condition changes. Callouts never close.
    */
   onClose?: () => void
+  /**
+   * Opens its height and fades in as it mounts. Set it when the notification
+   * is shown in answer to something the reader did (a save that failed, a
+   * form that came back), so it arrives rather than being simply there. Leave
+   * it off for one that is part of the page: that should not move.
+   */
+  appear?: boolean
 }
 
 // The kit's status icons. Failed and Succeeded are a circle with the mark cut
@@ -67,9 +78,30 @@ export function Notification({
   highContrast = false,
   action,
   onClose,
+  appear = false,
 }: NotificationProps) {
   const callout = kind === 'callout'
+  // The close plays a fast exit, closing the height, before the caller hears
+  // about it and stops rendering it. A notification removed because its
+  // condition changed has no exit: it was never the reader's to close.
+  const [closing, setClosing] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => {
+    if (timer.current) clearTimeout(timer.current)
+  }, [])
+  const close = () => {
+    if (closing || !onClose) return
+    setClosing(true)
+    timer.current = setTimeout(onClose, motionMs('fast', { fallback: 120 }))
+  }
   return (
+    <div
+      className={styles.presence}
+      data-state={closing ? 'closed' : 'open'}
+      data-appear={appear || undefined}
+      inert={closing || undefined}
+    >
+    <div className={styles.clip}>
     <div
       className={[
         styles.alert,
@@ -100,11 +132,13 @@ export function Notification({
           size="icon-lg"
           className={styles.close}
           aria-label="Dismiss notification"
-          onClick={onClose}
+          onClick={close}
         >
           <KitIcon name="cross-small" />
         </Button>
       ) : null}
+    </div>
+    </div>
     </div>
   )
 }
