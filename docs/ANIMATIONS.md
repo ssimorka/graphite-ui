@@ -79,8 +79,8 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Wall card hover | `.card` glow, `.card .preview` | `slow` | Out | Pointer over a component card |
 | Info card hover | `.door` glow, `.door .artefact` | `base` | Out | Pointer over a door |
 | Header nav hover | `.navLink`, `.navIndicator` | `fast` | Out | Pointer over a nav item |
-| Drop panels | `_drop-panel.scss` / `drop`, `caret`, `glow`, `rise` | `slow` drop, `base` caret, `emphasis` glow, `base` rise | Out | Open: search palette and color picker drop from their trigger, the caret grows, the tint rises, sections cascade inside one `base` span |
-| Search palette (phone) | `search-palette.module.scss` / `in`, `spin` | `fast` fade; half `indeterminate` spinner | Out; Linear | Open below 672px; while a query resolves |
+| Drop panels | `_drop-panel.scss` / `drop`, `caret`, `glow`, `rise` | `slow` drop, `base` caret, `emphasis` glow, `base` rise | Out | Open: the color picker drops from its trigger, the caret grows, the tint rises, sections cascade inside one `base` span. Search no longer drops: it appears at once |
+| Search palette | `search-palette.module.scss` / `spin` | half `indeterminate` spinner | Linear | While a query resolves. The palette itself has no entrance |
 | Mobile nav tray | `.trayPanel` / `tray-in`, `tray-out`, `tray-item-in`, `glow` | `slow` in, `fast` out, `base` items | sheet spring; Out | Menu button. Links cascade per group; the menu glyph turns on each swap (`menu-icon-in`, `base`) |
 | Create controls | `controls.module.scss` / `up`, `drop`, `glow`, `rise` | `slow` | Out; sheet spring for the sheets | Mount (bar, panel), open (sheets). Bar and sheets rise from the bottom; the panel drops |
 | Hero strip glow | `.hero__source-strip` / `glow`, `rise` | `emphasis`; `base` | Out | Mount, after `hero-rise`; the four ramps and the footer cascade |
@@ -143,51 +143,71 @@ and open, with no rail, count or selection.
 ## Component motion
 
 Contract-governed, so it ships wherever the component renders rather than only on
-the marketing page.
+the marketing page. Each moving component records its motion in a `motion:`
+block in its contract (trigger, property, duration token, easing token,
+reduced-motion behaviour), and `drift-check` holds the block and the code to
+each other both ways.
 
 | Component | Motion | Duration | Easing |
 |---|---|---|---|
-| Button | background, color on hover/active, plus a 1px press displacement | `fast` | Out |
-| Toggle | track background, thumb transform | `fast` | Out |
-| Tooltip | entrance fade, `overlay-in` | `fast` | Out |
-| Popover | entrance fade, `overlay-in` | `fast` | Out |
-| Menu | entrance fade, `overlay-in` | `fast` | Out |
-| Modal | entrance fade on the scrim, `overlay-in` | `fast` | Out |
-| Accordion | panel height via `grid-template-rows` 0fr → 1fr, chevron rotates 180° | `base` | Out |
+| Button | background and color on hover and press; the press is instant | `fast` | Out |
+| Toggle | track background, thumb slide | `fast` | Out |
+| Tooltip | first hover waits `delay-tooltip`, then grows from the caret; instant from the keyboard and while one is showing or within 300ms of one closing | `fast` | Out |
+| Popover | grows from the caret; fast exit | `base` in, `fast` out | Out |
+| Menu | grows from the trigger's corner; instant from the keyboard; the chosen row flashes, then a fast exit | `base` in, `fast` flash and out | Out |
+| Dropdown list | grows from the trigger edge; instant from the keyboard; the chevron turns | `fast` | Out |
+| Modal | scrim fades, panel rises 8px; both leave together | `base` scrim, `slow` panel, `fast` out | Out |
+| Toast | bottom only, one at a time, queued; rises 16px, drops 8px on the way out | `base` in, `fast` out | Out |
+| Notification | height and opacity, with `appear`; the reverse when closed | `base` in, `fast` out | Out |
+| Accordion | panel height via `grid-template-rows`, chevron turns 180° | `base` | In-out |
 | Accordion trigger | background on hover | `fast` | Out |
-| Data table expand | chevron rotates 180° | `fast` | Out |
-| Progress, determinate | width | `base` | Out |
+| Tabs | the selected indicator slides between tabs; the panel swaps at once | `fast` | In-out |
+| Data table expand | chevron turns 180° | `fast` | Out |
+| Menu buttons | the chevron turns 180° while the menu is open | `fast` | Out |
+| Progress, determinate | width | `base` | Linear |
 | Progress, indeterminate | `graphite-progress-sweep`, infinite | `indeterminate` | Linear |
 | Modal inline loading | `modal-spin`, infinite | `indeterminate` | Linear |
 | File uploader, uploading | `uploader-spin`, infinite | `indeterminate` | Linear |
-| Toast | `toast-in`: fade and a 4px drop on arrival; none under reduced motion | `fast` | Out |
-| Dropdown list | entrance fade, `overlay-in`; the chevron turns 180° | `fast` | Out |
-| Menu buttons | the chevron turns 180° while the menu is open | `fast` | Out |
 
-Phase 3 of the motion work applies the kit's rules to each of these (menus open
-instantly from the keyboard, Accordion and Tabs move in-out, Progress goes
-linear) and records the result in a `motion:` block per contract. Until then
-this table is the current state, not the target.
+### The overlay motion
 
-### The overlay entrance
+One partial, `components/ui/_overlay-motion.scss`, gives Popover, Tooltip, Menu
+and Dropdown's list one entrance and one exit; Modal has its own (a scrim and a
+rising panel), on the same tokens.
 
-Stated once in `docs/contracts/overlay.md`; Tooltip, Popover, Menu and Modal each
-declare `motion` in their own contract so `drift-check` can hold them to it,
-exactly as they each declare their own surface rather than inheriting it
-silently.
+**It grows from the source.** Opacity, and the individual `scale` property from
+0.96, with the origin on the caret's tip or the trigger's corner. It never
+animates `transform`: Tooltip and Popover carry their placement in `transform`,
+and an animated transform would overwrite the position it grew from.
 
-**Opacity only.** Tooltip carries its side placements and its centred alignment
-in `transform`, so an animation that moved would overwrite the position it was
-moving to — animations beat regular declarations.
+**It has an exit now.** `usePresence` (in `overlay.tsx`) holds a closing overlay
+mounted, inert, with `data-state="closed"`, for the fast step, then unmounts
+it. Presence starts from `open`, so a closed overlay is never rendered at all,
+and Popover's no-nesting throw still only fires once its parent has opened.
+Tooltip has no exit on purpose: the next one along a toolbar appears at once,
+and one fading out beside it would read as two.
 
-**No exit.** All four unmount their content on close, so an exit is not
-reachable from CSS. It is also not free: Popover's no-nesting prohibition is a
-throw that stays off the prerender path only because content does not exist until
-the Popover is open. Holding a closed overlay mounted to animate it out would
-move that throw to build time.
+**From the keyboard it is instant.** `overlay.tsx` records whether the last
+gesture was a key press (`openedByKeyboard`), and an overlay opened by one
+carries `data-instant`, which drops the entrance.
 
-Each stylesheet defines its own `overlay-in`. CSS Modules scopes keyframe names,
-so the four compile to distinct identifiers and cannot collide.
+**Under reduced motion it fades.** The scale rides `--graphite-motion-travel`.
+
+### Sheets you can catch
+
+`components/use-sheet-drag.ts` drags the mobile nav tray (to the left) and
+Create's option sheets (down) toward the edge they came from. A press while the
+sheet moves (its entrance, a spring back, a fling away) reads where it is right
+now through the Web Animations API, cancels the movement there, and hands it to
+the pointer. On release it springs home on `--graphite-motion-spring-sheet`, or
+leaves if it has travelled past a third of its size or is flung faster than
+0.5px/ms. Under reduced motion the pointer still moves it; the release jumps.
+
+### Command search is instant
+
+The search palette appears with no entrance at all: no scrim fade, no drop, no
+caret pop, no cascade. It is opened from the keyboard and many times a session,
+which is exactly what the kit's rules make instant.
 
 ## Reduced motion
 
@@ -218,7 +238,7 @@ neutralise rather than counting them.
 | Toggle | Transitions removed |
 | Tooltip, Popover, Menu, Modal | `animation: none` |
 | Accordion | Panel opens without a transition |
-| Search palette (phone) | Fade and spinner removed |
+| Search palette | Spinner removed |
 | Create preview, waveform, skeleton | Transitions and loops removed |
 | Progress | Determinate transition removed; the sweep stretches to twice `indeterminate` |
 | Data table | Expand chevron transition removed |

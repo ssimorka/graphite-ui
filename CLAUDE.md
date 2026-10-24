@@ -297,6 +297,24 @@ before trusting a browser result.
   Motion page in the kit is `01 Foundations – Motion`. The snapshot was checked
   against the live kit with a per-variable digest (resolved values, FNV-1a per
   collection) rather than a full re-pull; all ten collections matched.
+- **Components record their motion, and drift-check holds them to it.** Since
+  2026-10-24 every moving component's contract has a `motion:` block (trigger,
+  property, duration, easing, reduced), and drift-check fails if a block names
+  a token that is not declared, if code reads a motion token its block does not
+  name, or if a component moves with no block (`pnpm drift-check:test`). The
+  overlays share `components/ui/_overlay-motion.scss` (grow from the source on
+  the separate `scale` property, never `transform`, which carries placement)
+  and two helpers in `overlay.tsx`: `usePresence` holds a closing overlay for
+  its fast exit and never renders one that was not open (Popover's no-nesting
+  throw stays off the prerender path), and `openedByKeyboard` lets anything
+  opened by a key skip its entrance. Tooltip's warm window ignores tooltips
+  opened by code (the docs stills dispatch synthetic hovers). Notification's
+  entrance is opt-in (`appear`): inferring it from "mounted after hydration"
+  looped on Create, where re-dealing the cards remounts them and the growing
+  height re-triggered the deal. Toast is bottom only, one at a time, queued
+  (2.0.0). Sheets (the mobile tray, Create's option sheets) are dragged and
+  caught mid-flight through `components/use-sheet-drag.ts` (WAAPI). Command
+  search has no entrance at all.
 - **A source color on a status hue collapses the two.** A red source
   resolves `primary` and `danger` to nearly the same value. Inherent to
   pinning hue; don't treat it as a bug, and never let color alone carry
