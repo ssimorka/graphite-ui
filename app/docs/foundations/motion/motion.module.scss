@@ -147,11 +147,11 @@
 // ---------------------------------------------------------------- easings
 // The curves the race and Feel it compare. Three are Graphite's; In is here
 // only to be seen losing.
-.ease-linear { --ease: var(--graphite-motion-easing-linear); }
-.ease-out { --ease: var(--graphite-motion-easing-out); }
-.ease-in-out { --ease: var(--graphite-motion-easing-in-out); }
+.curve-linear { --ease: var(--graphite-motion-easing-linear); }
+.curve-out { --ease: var(--graphite-motion-easing-out); }
+.curve-in-out { --ease: var(--graphite-motion-easing-in-out); }
 // motion-allow: the ease-in curve Graphite forbids, drawn so the reader can feel why
-.ease-in { --ease: cubic-bezier(0.4, 0, 1, 1); }
+.curve-in { --ease: cubic-bezier(0.4, 0, 1, 1); }
 
 // ------------------------------------------------------------------- race
 .lanes {
@@ -220,7 +220,7 @@
   }
 }
 
-.ease-in.dot { background: var(--graphite-danger); }
+.curve-in.dot { background: var(--graphite-danger); }
 
 // ------------------------------------------------------------------- feel
 .cards {

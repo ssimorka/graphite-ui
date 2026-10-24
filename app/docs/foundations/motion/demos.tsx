@@ -102,7 +102,7 @@ export function RaceDemo({ values }: { values: Record<string, string> }) {
             </span>
             <span className={styles.track}>
               <span
-                className={`${styles.dot} ${styles[`ease-${l.id}`]}`}
+                className={`${styles.dot} ${styles[`curve-${l.id}`]}`}
                 data-there={there || undefined}
                 style={{ '--dur': durVar(d) } as CSSProperties}
               />
@@ -145,7 +145,7 @@ export function FeelDemo() {
       </div>
       <div className={styles.cards} key={run}>
         {order.map((e, i) => (
-          <div key={e} className={`${styles.feelCard} ${styles[`ease-${e}`]}`} data-run={run > 0 || undefined}>
+          <div key={e} className={`${styles.feelCard} ${styles[`curve-${e}`]}`} data-run={run > 0 || undefined}>
             <span className={styles.feelLetter}>{LETTERS[i]}</span>
             {revealed ? <span className={styles.feelEase}>{e === 'in' ? 'In (never)' : e}</span> : null}
           </div>
