@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { FREE_KIT_PAGES, KIT_FREE_URL, KIT_PRO_URL } from './kit-links'
+import { FREE_KIT_PAGES, KIT_FREE_FILE_URL, KIT_PRO_URL } from './kit-links'
 
 export type KitPage = {
   /** The page's node id in the kit file. */
@@ -45,7 +45,7 @@ export function readKitPage(title: string): KitPage | null {
   return {
     id: page.id,
     ...(FREE_KIT_PAGES.has(title)
-      ? { url: `${KIT_FREE_URL}?node-id=${page.id.replace(':', '-')}`, edition: 'free' as const }
+      ? { url: `${KIT_FREE_FILE_URL}?node-id=${page.id.replace(':', '-')}`, edition: 'free' as const }
       : { url: KIT_PRO_URL, edition: 'pro' as const }),
     sets: page.sets.length,
     variants: page.sets.reduce((n, s) => n + s.variants, 0),
