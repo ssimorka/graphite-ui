@@ -4,24 +4,9 @@ import { useState } from 'react'
 import { Search } from '@/components/ui/search'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { exampleFor, LABEL } from './search-code'
+import type { Layout, Size } from './search-code'
 import styles from './search.module.scss'
-
-type Size = 'sm' | 'md' | 'lg'
-type Layout = 'default' | 'fluid'
-
-const LABEL = 'Search components'
-
-function codeFor(size: Size, layout: Layout, expandable: boolean) {
-  const props = [
-    `  label="${LABEL}"`,
-    '  placeholder="Search components"',
-    ...(layout === 'fluid' ? ['  layout="fluid"'] : size === 'lg' ? [] : [`  size="${size}"`]),
-    ...(expandable && layout === 'default' ? ['  expandable'] : []),
-    '  value={query}',
-    '  onChange={setQuery}',
-  ]
-  return `const [query, setQuery] = useState('')\n\n<Search\n${props.join('\n')}\n/>`
-}
 
 /**
  * The kit's axes: Size, the two sets (Default and Fluid) and Expandable. The
@@ -87,7 +72,7 @@ export function SearchPreview() {
           />
         </div>
       }
-      code={codeFor(size, layout, expandable)}
+      example={exampleFor({ size, layout, expandable })}
     />
   )
 }

@@ -5,23 +5,8 @@ import type { FieldSize } from '@/components/ui/text-input'
 import { Dropdown } from '@/components/ui/dropdown'
 import { useState } from 'react'
 import { DemoFrame } from '../demo-frame'
-
-type DemoState = 'default' | 'disabled' | 'error' | 'invalid'
-
-const LABEL = 'Email address'
-const HELP = 'We only use it to send the receipt.'
-const ERROR = 'Enter an email address with an @ in it.'
-
-function codeFor(size: FieldSize, state: DemoState) {
-  const lines = [`  label="${LABEL}"`, '  type="email"']
-  if (size !== 'md') lines.push(`  size="${size}"`)
-  if (state === 'disabled' || state === 'invalid') lines.push(`  state="${state}"`)
-  lines.push(`  helpText="${HELP}"`)
-  // Error is shown the way the component wants it shown: by passing the
-  // message, which resolves the state. state="error" alone is not the idiom.
-  if (state === 'error') lines.push(`  errorText="${ERROR}"`)
-  return `<TextInput\n${lines.join('\n')}\n/>`
-}
+import { ERROR, exampleFor, HELP, LABEL } from './text-input-code'
+import type { DemoState } from './text-input-code'
 
 /**
  * Size and State: the two props the contract gives values for. `type` is a
@@ -71,7 +56,7 @@ export function TextInputPreview() {
           errorText={state === 'error' ? ERROR : undefined}
         />
       }
-      code={codeFor(size, state)}
+      example={exampleFor({ size, state })}
     />
   )
 }

@@ -1,36 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Select, type SelectOption } from '@/components/ui/select'
+import { Select } from '@/components/ui/select'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { ERROR, exampleFor, HELP, OPTIONS } from './select-code'
+import type { Size, State } from './select-code'
 import styles from './select.module.scss'
-
-type Size = 'sm' | 'md' | 'lg'
-type State = 'default' | 'disabled' | 'error'
-
-const OPTIONS: [SelectOption, SelectOption, ...SelectOption[]] = [
-  { value: 'eu', label: 'Europe' },
-  { value: 'na', label: 'North America' },
-  { value: 'sa', label: 'South America' },
-  { value: 'apac', label: 'Asia Pacific' },
-]
-const HELP = 'Where your data is stored.'
-const ERROR = 'This region is full. Choose another.'
-
-function codeFor(size: Size, state: State, value: string) {
-  const options = OPTIONS.map((o) => `    { value: '${o.value}', label: '${o.label}' },`).join('\n')
-  const lines = [
-    '  label="Region"',
-    `  options={[\n${options}\n  ]}`,
-    `  value="${value}"`,
-  ]
-  if (size !== 'md') lines.push(`  size="${size}"`)
-  if (state !== 'default') lines.push(`  state="${state}"`)
-  lines.push(state === 'error' ? `  errorText="${ERROR}"` : `  helpText="${HELP}"`)
-  lines.push('  onChange={setRegion}')
-  return `<Select\n${lines.join('\n')}\n/>`
-}
 
 /**
  * Size and State are the contract's two props, and the kit's two main axes.
@@ -84,7 +60,7 @@ export function SelectPreview() {
           />
         </div>
       }
-      code={codeFor(size, state, value)}
+      example={exampleFor({ size, state, value })}
     />
   )
 }

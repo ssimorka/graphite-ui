@@ -6,32 +6,10 @@ import type { FieldSize } from '@/components/ui/text-input'
 import { TimePicker } from '@/components/ui/time-picker'
 import type { TimeValue } from '@/components/ui/time-picker'
 import { DemoFrame } from '../demo-frame'
+import { ERROR, exampleFor, TIMEZONES, WARNING } from './time-picker-code'
+import type { Status } from './time-picker-code'
 
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const TIMEZONES: [{ value: string; label: string }, { value: string; label: string }, ...{ value: string; label: string }[]] = [
-  { value: 'ET', label: 'Eastern time (ET)' },
-  { value: 'CT', label: 'Central time (CT)' },
-  { value: 'MT', label: 'Mountain time (MT)' },
-  { value: 'PT', label: 'Pacific time (PT)' },
-]
-
-const ERROR = 'Enter a time as hh:mm'
-const WARNING = 'This is outside office hours'
 const VALID = /^(0?[1-9]|1[0-2]):[0-5]\d$/
-
-function codeFor(layout: 'fixed' | 'fluid', size: FieldSize, zones: boolean, status: Status) {
-  const props = [
-    layout === 'fixed' ? '' : '\n  layout="fluid"',
-    layout === 'fluid' || size === 'lg' ? '' : `\n  size="${size}"`,
-    zones ? '\n  timezones={TIMEZONES}' : '',
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `const [value, setValue] = useState<TimeValue>({ time: '', period: 'AM', timezone: 'ET' })\n\n<TimePicker${props}\n  label="Choose a time"\n  value={value}\n  onChange={setValue}\n/>`
-}
 
 /** Both sets, the sizes, the two- and three-input forms and the states, live. */
 export function TimePickerPreview() {
@@ -107,7 +85,7 @@ export function TimePickerPreview() {
           onChange={setValue}
         />
       }
-      code={codeFor(layout, size, zones, status)}
+      example={exampleFor({ layout, size, zones, status })}
     />
   )
 }

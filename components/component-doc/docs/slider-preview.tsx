@@ -4,25 +4,9 @@ import { useState } from 'react'
 import { Dropdown } from '@/components/ui/dropdown'
 import { Slider } from '@/components/ui/slider'
 import { DemoFrame } from '../demo-frame'
+import { ERROR, exampleFor, WARNING } from './slider-code'
+import type { Kind, Status } from './slider-code'
 import styles from './slider.module.scss'
-
-type Kind = 'single' | 'range'
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const ERROR = 'Enter a value from 0 to 100'
-const WARNING = 'Values above 80 may slow the preview'
-
-function codeFor(kind: Kind, inputs: boolean, status: Status) {
-  const value = kind === 'range' ? '[20, 60]' : '40'
-  const props = [
-    !inputs ? '\n  showInputs={false}' : '',
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `const [value, setValue] = useState(${value})\n\n<Slider\n  label="${kind === 'range' ? 'Price range' : 'Opacity'}"\n  value={value}\n  onChange={setValue}${props}\n/>`
-}
 
 /** Both sets, the Inputs property and the status states, all live. */
 export function SliderPreview() {
@@ -88,7 +72,7 @@ export function SliderPreview() {
           )}
         </div>
       }
-      code={codeFor(kind, inputs, status)}
+      example={exampleFor({ kind, inputs, status })}
     />
   )
 }

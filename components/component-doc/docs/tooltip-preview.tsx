@@ -6,33 +6,9 @@ import { KitIcon } from '@/components/kit-icon'
 import { Dropdown } from '@/components/ui/dropdown'
 import { Tooltip } from '@/components/ui/tooltip'
 import { DemoFrame } from '../demo-frame'
+import { CONTENT, DEFINITION, exampleFor, LABEL, TERM } from './tooltip-code'
+import type { Align, Placement, Type } from './tooltip-code'
 import styles from './tooltip.module.scss'
-
-type Placement = 'top' | 'bottom' | 'left' | 'right'
-type Align = 'start' | 'center' | 'end'
-type Type = 'standard' | 'icon' | 'definition'
-
-const LABEL = 'Copy'
-const CONTENT = 'Copies the hex value to the clipboard'
-const TERM = 'Source color'
-const DEFINITION = 'The one hex every role is derived from'
-
-function codeFor(placement: Placement, align: Align, type: Type, delay: number) {
-  const props = [
-    `content="${type === 'definition' ? DEFINITION : CONTENT}"`,
-    ...(type === 'standard' ? [] : [`type="${type}"`]),
-    ...(placement === 'top' ? [] : [`placement="${placement}"`]),
-    ...(align === 'center' ? [] : [`align="${align}"`]),
-    ...(delay === 500 ? [] : [`delay={${delay}}`]),
-  ]
-  const child =
-    type === 'definition'
-      ? TERM
-      : type === 'icon'
-        ? `<Button variant="ghost" size="icon-sm" aria-label="${LABEL}">\n    <KitIcon name="copy" />\n  </Button>`
-        : `<Button>${LABEL}</Button>`
-  return `<Tooltip\n  ${props.join('\n  ')}\n>\n  ${child}\n</Tooltip>`
-}
 
 /** The trigger each Type is drawn on in the kit. */
 const triggerFor = (type: Type) =>
@@ -126,7 +102,7 @@ export function TooltipPreview() {
           </Tooltip>
         </div>
       }
-      code={codeFor(placement, align, type, delay)}
+      example={exampleFor({ placement, align, type, delay })}
     />
   )
 }
