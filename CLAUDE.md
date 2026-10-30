@@ -214,6 +214,22 @@ before trusting a browser result.
   is not self-contained; and `_Structured list header row item` exists **twice**
   as two distinct sets, which defeats the name-based lookup the gallery badge
   and #134/#136 failures depend on.
+- **Every Code tab is a complete file, and `code-tab-check` compiles them.**
+  Until 2026-10-30 the Code tabs printed fragments: JSX naming state, setters
+  and handlers it never declared, no imports. Now each page has a pure
+  `components/component-doc/docs/<slug>-code.ts` exporting `controls` (every
+  value each control can take) and `exampleFor(values)`, which returns an
+  `Example` (imports, module code, body, jsx); `example-file.ts` turns it into
+  source with `'use client'` where needed. `DemoFrame` takes `example`, not a
+  string, so a page cannot fall back to a fragment. `pnpm code-tab-check`
+  builds every combination, dedupes, and runs tsc on them with
+  `noUnusedLocals`. Two rules: examples import only `react`,
+  `@/components/ui/*` and `@/components/kit-icon` (what the registry installs;
+  never Carbon icons or site helpers), and every name they use is declared in
+  the file. The check writes to `.code-tab-check-*` in the repo root so `@/`
+  resolves; the root tsconfig excludes those folders, so the check's own
+  tsconfig must set `exclude: []` or it silently checks nothing (it did, once).
+  `CODE_TAB_KEEP=1` keeps the files.
 - **There are four governance checks now.** `naming-check.mjs` (below, in
   Architecture notes) joined the three described here on 2026-10-05.
   `component-doc-drift.mjs` joins `drift-check.mjs` (components vs contracts)

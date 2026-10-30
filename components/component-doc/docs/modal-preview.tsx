@@ -6,38 +6,9 @@ import { Modal, ModalInPlace } from '@/components/ui/modal'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { BODY, exampleFor, LABEL, TITLE } from './modal-code'
+import type { Actions, Size } from './modal-code'
 import styles from './modal.module.scss'
-
-type Size = 'xs' | 'sm' | 'md' | 'lg'
-export type Actions = 1 | 2 | 3 | 'cancel'
-
-const TITLE = 'Publish this theme?'
-const LABEL = 'Library'
-const BODY = 'Everyone on the library gets the new tokens on their next sync.'
-
-function codeFor(size: Size, dismissible: boolean, label: boolean, actions: Actions, loading: boolean) {
-  const lines: Record<string, string> = {
-    cancel: "    <Button key=\"cancel\" variant=\"ghost\" onClick={() => setOpen(false)}>Cancel</Button>,",
-    back: "    <Button key=\"back\" variant=\"outlined\" onClick={() => setOpen(false)}>Back</Button>,",
-    draft: "    <Button key=\"draft\" variant=\"outlined\" onClick={() => setOpen(false)}>Save draft</Button>,",
-    publish: "    <Button key=\"publish\" variant=\"primary\" onClick={publish}>Publish</Button>,",
-  }
-  const keys = actions === 1 ? ['publish'] : actions === 2 ? ['back', 'publish'] : actions === 3 ? ['back', 'draft', 'publish'] : ['cancel', 'back', 'publish']
-  const props = [
-    '  open={open}',
-    '  onClose={() => setOpen(false)}',
-    ...(label ? [`  label="${LABEL}"`] : []),
-    `  title="${TITLE}"`,
-    `  body="${BODY}"`,
-    ...(size === 'md' ? [] : [`  size="${size}"`]),
-    ...(dismissible ? [] : ['  dismissible={false}']),
-    ...(loading ? ['  loading="Publishing…"'] : []),
-    '  footer={[',
-    ...keys.map((k) => lines[k]),
-    '  ]}',
-  ]
-  return `const [open, setOpen] = useState(false)\n\n<Button onClick={() => setOpen(true)}>Open modal</Button>\n<Modal\n${props.join('\n')}\n/>`
-}
 
 // An array rather than a fragment, which ButtonGroup and the footer layout
 // also unwrap, but an array is what the printed code shows.
@@ -162,7 +133,7 @@ export function ModalPreview() {
           />
         </div>
       }
-      code={codeFor(size, dismissible, label, actions, loading)}
+      example={exampleFor({ size, dismissible, label, actions, loading })}
     />
   )
 }

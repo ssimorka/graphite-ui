@@ -95,3 +95,10 @@ jobs:
       - name: "Registry check: every item builds and its dependencies resolve"
         if: ${{ !cancelled() }}
         run: pnpm registry-check
+
+      # Each component page's Code tab is a complete file built from its
+      # controls. This builds every combination and type-checks them, so an
+      # example that would not run when pasted fails here.
+      - name: "Code tab check: every example compiles as a file"
+        if: ${{ !cancelled() }}
+        run: pnpm code-tab-check
