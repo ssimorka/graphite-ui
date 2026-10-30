@@ -16,9 +16,13 @@ const nextConfig = {
   },
   // Baseline security headers on every response, the registry included:
   // people run what /r serves in their own projects, so the site should at
-  // least not be frameable, sniffable or downgradable. The CSP sets only
-  // frame-ancestors. A full script policy would have to allow the inline
-  // <head> theme script (lib/theme-storage.ts) by hash or nonce, so it is a
+  // least not be sniffable or downgradable, nor framed by strangers. Framing
+  // is allowed for this origin and simorkadesigns.com, which embeds the site;
+  // X-Frame-Options is left out because it has no allow-list (SAMEORIGIN broke
+  // that embed) and frame-ancestors supersedes it in every current browser.
+  // scripts/frame-check.mjs guards both, here and on the live site. The CSP
+  // sets only frame-ancestors. A full script policy would have to allow the
+  // inline <head> theme script (lib/theme-storage.ts) by hash or nonce, so it is a
   // separate piece of work. HSTS leaves out includeSubDomains and preload,
   // which commit every subdomain and are hard to undo.
   poweredByHeader: false,
@@ -29,8 +33,10 @@ const nextConfig = {
         headers: [
           { key: 'Strict-Transport-Security', value: 'max-age=63072000' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
-          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://simorkadesigns.com https://www.simorkadesigns.com",
+          },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
         ],

@@ -18,6 +18,8 @@
     "component-doc-drift:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/component-doc-drift.test.mjs",
     "color:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/color.test.mjs",
     "naming-check": "node scripts/naming-check.mjs",
+    "frame-check": "node scripts/frame-check.mjs",
+    "frame-check:live": "node scripts/frame-check.mjs --live",
     "visual-check": "node scripts/visual-check.mjs",
     "registry-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/registry-check.mjs",
     "code-tab-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/code-tab-check.mjs"

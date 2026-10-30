@@ -342,6 +342,14 @@ before trusting a browser result.
   pinning hue; don't treat it as a bug, and never let color alone carry
   status meaning in the UI.
 
+- **simorkadesigns.com/graphite-ui embeds the site, so framing is an
+  allow-list.** #407's `X-Frame-Options: SAMEORIGIN` and `frame-ancestors
+  'self'` blanked that embed. The CSP in `next.config.mjs` now allows `'self'`
+  plus both simorkadesigns.com origins, and X-Frame-Options is gone for good:
+  it has no allow-list, so any value blocks the embed. `pnpm frame-check`
+  (governance) checks the config; `.github/workflows/live-headers.yml` runs it
+  with `--live` against production after each production deploy and nightly.
+
 ## Landing changes
 
 **`main` is protected and you cannot push to it.** Enabled 2026-08-29 after a
