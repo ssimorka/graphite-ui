@@ -8,6 +8,7 @@ export const TOC: TocItem[] = [
   { href: '#fonts', label: 'Load the fonts' },
   { href: '#add-it', label: 'Import the theme' },
   { href: '#tailwind', label: 'Use Tailwind (optional)' },
+  { href: '#css-modules', label: 'Keep CSS modules scoped' },
   { href: '#style', label: 'Style with the roles' },
   { href: '#switch-theme', label: 'Switch theme' },
   { href: '#add-a-component', label: 'Add a component' },
