@@ -19,7 +19,8 @@
 //             class="", build green, console silent).
 //
 // Checks, in Chromium, light and dark: no rendered element has an empty class;
-// Button paints from --graphite-primary; every --graphite-* a matching rule
+// the page is painted --graphite-surface / --graphite-on-surface by the theme
+// file; Button paints from --graphite-primary; every --graphite-* a matching rule
 // reads (with no fallback) resolves; IBM Plex Sans loads; the page has a
 // <title>; axe finds no WCAG A/AA violation; Popover and Modal open.
 //
@@ -221,12 +222,11 @@ function writeSmokePage(app) {
   fs.writeFileSync(path.join(app, 'app/smoke.tsx'), SMOKE)
   fs.writeFileSync(
     path.join(app, 'app/page.tsx'),
-    // The page paints its own surface, as a real app does. The theme file
-    // paints no page background, so a bare page in dark is the browser's
-    // canvas under Graphite's light text, and axe reads that as 1.3:1. That
-    // is a gap in the theme file (cold-start P3), tracked on its own, not
-    // what this check is for.
-    "import { Smoke } from './smoke'\n\nexport default function Page() {\n  return (\n    <main className=\"bg-surface text-on-surface min-h-screen\">\n      <Smoke />\n    </main>\n  )\n}\n",
+    // A bare page, on purpose: no background or text color of its own, so
+    // the page check and axe see what the theme file paints. Until the theme
+    // painted body (P3, 2026-10-30) this page carried bg-surface, and a bare
+    // page in dark measured 1.3:1.
+    "import { Smoke } from './smoke'\n\nexport default function Page() {\n  return (\n    <main>\n      <Smoke />\n    </main>\n  )\n}\n",
   )
 }
 
@@ -274,12 +274,27 @@ function pageChecks() {
   const empty = all.filter((el) => el.hasAttribute('class') && el.getAttribute('class').trim() === '')
   if (empty.length) failures.push(`empty class on ${empty.length} element(s): ${empty.slice(0, 5).map((e) => e.id ? `#${e.id}` : e.tagName.toLowerCase()).join(', ')}`)
 
+  const resolve = (name, prop = 'background-color') => {
+    const probe = document.createElement('div')
+    probe.style.setProperty(prop, `var(${name})`)
+    document.body.append(probe)
+    const value = getComputedStyle(probe).getPropertyValue(prop)
+    probe.remove()
+    return value
+  }
+
+  // The theme file paints the page (its :where(body) base). The smoke page
+  // sets no background of its own, so this is the theme's rule or nothing.
+  const bodyStyle = getComputedStyle(document.body)
+  info.bodyBackground = bodyStyle.backgroundColor
+  info.bodyColor = bodyStyle.color
+  const surface = resolve('--graphite-surface')
+  const onSurface = resolve('--graphite-on-surface', 'color')
+  if (info.bodyBackground !== surface) failures.push(`page background ${info.bodyBackground}, expected --graphite-surface ${surface}`)
+  if (info.bodyColor !== onSurface) failures.push(`page text ${info.bodyColor}, expected --graphite-on-surface ${onSurface}`)
+
   const btn = document.getElementById('smoke-button')
-  const probe = document.createElement('div')
-  probe.style.background = 'var(--graphite-primary)'
-  document.body.append(probe)
-  const want = getComputedStyle(probe).backgroundColor
-  probe.remove()
+  const want = resolve('--graphite-primary')
   const got = btn ? getComputedStyle(btn).backgroundColor : 'missing'
   info.buttonBackground = got
   info.buttonHeight = btn ? Math.round(btn.getBoundingClientRect().height) : 0

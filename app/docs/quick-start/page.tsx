@@ -296,6 +296,11 @@ export default function QuickStartPage() {
                 <code>body</code> rules from <code>globals.css</code>: they
                 override the theme.
               </p>
+              <p className={styles.stepText}>
+                The theme paints the page with Graphite&rsquo;s surface and text
+                colors, so dark works with nothing else set. Any{' '}
+                <code>body</code> rule or class of yours wins over it.
+              </p>
               <DocSnippet code={LAYOUT} />
             </Step>
           </section>
