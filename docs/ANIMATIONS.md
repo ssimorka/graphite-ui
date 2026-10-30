@@ -305,6 +305,29 @@ getComputedStyle(el).opacity   // the value at 120ms
 a.finish(); a.play()
 ```
 
+### The visual check
+
+`pnpm visual-check` shoots the Motion page and every moving component in light
+and dark, at 1440 and 412 where the component behaves differently on a phone.
+It never shoots mid-motion: after each trigger it pauses every finite
+animation at 0 for the start frame and finishes them for the end frame.
+Infinite loops are held at 0 in both, and the clock is pinned so the toast's
+timestamp agrees between runs. Two runs of the same build match pixel for
+pixel.
+
+```
+pnpm build && npx next start -p 3105
+pnpm visual-check --base http://localhost:3105 --out .visual/main
+# ...switch branch, rebuild, restart...
+pnpm visual-check --base http://localhost:3105 --out .visual/branch
+pnpm visual-check --compare .visual/main .visual/branch
+```
+
+`--reduce` adds the reduced-motion preference, `--only <name>` runs one
+target, and `--compare` writes a `.diff.png` beside every frame over the
+tolerance. It is local, not a CI job: CI has no browser and nowhere to keep a
+baseline. Frames go to `.visual/`, which git ignores.
+
 ## Open
 
 - **The kit has no distance scale.** Travels still borrow the spacing scale and
