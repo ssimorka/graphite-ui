@@ -8,19 +8,7 @@ import { DemoFrame } from '../demo-frame'
 import { ThemeOptions } from './popover-preview'
 import type { Themes } from './popover-preview'
 import styles from './overlay.module.scss'
-
-const TRIGGER = 'Open panel'
-
-function codeFor(trap: boolean) {
-  const modal = trap ? '\n  modal' : ''
-  const label = trap ? '\n  label="Theme filter"' : ''
-  return `// Popover calls useOverlay({ open, onDismiss, trapFocus: ${trap} })
-<Popover${modal}${label}
-  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}
->
-  <ThemeOptions value={themes} onChange={setThemes} />
-</Popover>`
-}
+import { exampleFor, TRIGGER } from './overlay-code'
 
 /** Names the focused element in words, for the readout under the demo. */
 function describe(el: Element | null, root: HTMLElement | null): string {
@@ -100,7 +88,7 @@ export function OverlayPreview() {
           <FocusReadout root={root} />
         </div>
       }
-      code={codeFor(trap)}
+      example={exampleFor({ trap })}
     />
   )
 }

@@ -4,33 +4,8 @@ import { useState } from 'react'
 import { ProgressBar } from '@/components/ui/progress-bar'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Variant = 'determinate' | 'indeterminate'
-type Status = 'active' | 'success' | 'error'
-type Size = 'sm' | 'lg'
-type Alignment = 'default' | 'inline' | 'indent'
-
-const TASK = 'Uploading report.pdf'
-const HELP = 'About a minute left'
-const SUCCESS = 'Upload complete'
-const ERROR = 'The upload failed. Try again.'
-
-function codeFor(variant: Variant, value: number, status: Status, size: Size, alignment: Alignment) {
-  const props = [
-    `  label="${TASK}"`,
-    ...(status === 'active'
-      ? variant === 'determinate'
-        ? [`  value={${value}}`]
-        : ['  variant="indeterminate"']
-      : [`  status="${status}"`]),
-    ...(size === 'sm' ? [] : [`  size="${size}"`]),
-    ...(alignment === 'default' ? [] : [`  alignment="${alignment}"`]),
-    ...(alignment === 'inline' ? [] : [`  helperText="${HELP}"`]),
-    ...(status === 'success' ? [`  successText="${SUCCESS}"`] : []),
-    ...(status === 'error' ? [`  errorText="${ERROR}"`] : []),
-  ]
-  return `<ProgressBar\n${props.join('\n')}\n/>`
-}
+import { ERROR, exampleFor, HELP, SUCCESS, TASK } from './progress-bar-code'
+import type { Alignment, Size, Status, Variant } from './progress-bar-code'
 
 /**
  * Every kit axis: Progress (variant and value), State, Size and Alignment.
@@ -120,7 +95,7 @@ export function ProgressBarPreview() {
           errorText={ERROR}
         />
       }
-      code={codeFor(variant, value, status, size, alignment)}
+      example={exampleFor({ variant, value, status, size, alignment })}
     />
   )
 }

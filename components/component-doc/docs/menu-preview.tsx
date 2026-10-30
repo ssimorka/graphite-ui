@@ -8,38 +8,8 @@ import type { MenuItem } from '@/components/ui/menu'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './menu.module.scss'
-
-type Placement = 'bottom' | 'top'
-type Size = 'lg' | 'md' | 'sm' | 'xs'
-type Fn = 'simple' | 'complex'
-
-const TRIGGER = 'Theme actions'
-
-function codeFor(placement: Placement, size: Size, fn: Fn) {
-  const props = [
-    ...(placement === 'bottom' ? [] : [`  placement="${placement}"`]),
-    ...(size === 'md' ? [] : [`  size="${size}"`]),
-  ]
-  const head = props.length ? `\n${props.join('\n')}` : ''
-  const items =
-    fn === 'complex'
-      ? `    { label: 'Rename', onSelect: rename, shortcut: 'R' },
-    { label: 'Duplicate', onSelect: duplicate, shortcut: 'D' },
-    { label: 'Pinned', onSelect: togglePin, selected: pinned },
-    { kind: 'separator' },
-    { label: 'Delete', onSelect: remove, destructive: true },`
-      : `    { label: 'Rename', onSelect: rename },
-    { label: 'Duplicate', onSelect: duplicate },
-    { label: 'Export', onSelect: exportTheme, disabled: true },
-    { kind: 'separator' },
-    { label: 'Delete', onSelect: remove, destructive: true },`
-  return `<Menu${head}
-  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}
-  items={[
-${items}
-  ]}
-/>`
-}
+import { exampleFor, TRIGGER } from './menu-code'
+import type { Fn, Placement, Size } from './menu-code'
 
 /**
  * Placement, Size and Function. The readout under the trigger shows that
@@ -120,7 +90,7 @@ export function MenuPreview() {
           </p>
         </div>
       }
-      code={codeFor(placement, size, fn)}
+      example={exampleFor({ placement, size, fn })}
     />
   )
 }

@@ -5,25 +5,8 @@ import { NumberInput } from '@/components/ui/number-input'
 import { Dropdown } from '@/components/ui/dropdown'
 import type { FieldLayout, FieldSize } from '@/components/ui/text-input'
 import { DemoFrame } from '../demo-frame'
-
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const MIN = 0
-const MAX = 10
-const ERROR = `Enter a number from ${MIN} to ${MAX}`
-const WARNING = 'More than 8 may take a while'
-
-function codeFor(layout: 'fixed' | 'fluid', size: FieldSize, status: Status) {
-  const props = [
-    layout === 'fixed' ? '' : '\n  layout="fluid"',
-    layout === 'fluid' || size === 'md' ? '' : `\n  size="${size}"`,
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `const [value, setValue] = useState<number | null>(4)\n\n<NumberInput\n  label="Guests"\n  min={${MIN}}\n  max={${MAX}}${props}\n  value={value}\n  onChange={setValue}\n/>`
-}
+import { ERROR, exampleFor, MAX, MIN, WARNING } from './number-input-code'
+import type { Status } from './number-input-code'
 
 /** Both sets, the sizes and the states, live. A typed number out of range shows the error. */
 export function NumberInputPreview() {
@@ -91,7 +74,7 @@ export function NumberInputPreview() {
           />
         </div>
       }
-      code={codeFor(layout, size, status)}
+      example={exampleFor({ layout, size, status })}
     />
   )
 }

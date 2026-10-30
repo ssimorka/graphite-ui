@@ -5,19 +5,8 @@ import { Pagination, PaginationNav } from '@/components/ui/pagination'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './pagination.module.scss'
-
-type Size = 'sm' | 'md' | 'lg'
-type Form = 'nav' | 'advanced' | 'simple' | 'unbound'
-
-function codeFor(form: Form, size: Size) {
-  const sizeProp = size === 'lg' ? '' : `\n  size="${size}"`
-  if (form === 'nav') {
-    return `const [page, setPage] = useState(1)\n\n<PaginationNav${sizeProp}\n  page={page}\n  totalPages={30}\n  onChange={setPage}\n/>`
-  }
-  const typeProp = form === 'advanced' ? '' : `\n  type="${form}"`
-  const total = form === 'unbound' ? '\n  hasNext={page < 5}' : '\n  totalItems={243}'
-  return `const [{ page, pageSize }, set] = useState({ page: 1, pageSize: 20 })\n\n<Pagination${typeProp}${sizeProp}\n  page={page}\n  pageSize={pageSize}${total}\n  onChange={set}\n/>`
-}
+import { exampleFor } from './pagination-code'
+import type { Form, Size } from './pagination-code'
 
 /** The kit's two sets, the bar's three types, and Size, all live. */
 export function PaginationPreview() {
@@ -72,7 +61,7 @@ export function PaginationPreview() {
           )}
         </div>
       }
-      code={codeFor(form, size)}
+      example={exampleFor({ form, size })}
     />
   )
 }

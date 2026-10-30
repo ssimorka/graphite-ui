@@ -8,31 +8,10 @@ import { Popover } from '@/components/ui/popover'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './popover.module.scss'
+import { exampleFor, TRIGGER } from './popover-code'
+import type { Align, Placement, Themes, Variant } from './popover-code'
 
-type Placement = 'top' | 'bottom' | 'left' | 'right'
-type Align = 'start' | 'center' | 'end'
-type Variant = 'default' | 'tab-tip'
-
-const TRIGGER = 'Filter themes'
-
-function codeFor(placement: Placement, align: Align, variant: Variant, modal: boolean) {
-  const tabTip = variant === 'tab-tip'
-  const props = [
-    ...(tabTip ? ['  variant="tab-tip"'] : placement === 'bottom' ? [] : [`  placement="${placement}"`]),
-    ...(align === 'center' ? [] : [`  align="${align}"`]),
-    ...(modal ? ['  modal', '  label="Theme filter"'] : []),
-    tabTip
-      ? `  trigger={(props) => (
-    <Button {...props} variant="ghost" size="icon-lg" aria-label="${TRIGGER}">
-      <KitIcon name="settings" />
-    </Button>
-  )}`
-      : `  trigger={(props) => <Button {...props}>${TRIGGER}</Button>}`,
-  ]
-  return `const [themes, setThemes] = useState({ light: true, dark: false })\n\n<Popover\n${props.join('\n')}\n>\n  <ThemeOptions value={themes} onChange={setThemes} />\n</Popover>`
-}
-
-export type Themes = { light: boolean; dark: boolean }
+export type { Themes } from './popover-code'
 
 /**
  * Controlled from outside, so ticking a box re-renders the component that owns
@@ -135,7 +114,7 @@ export function PopoverPreview() {
           </Popover>
         </div>
       }
-      code={codeFor(placement, align, variant, modal)}
+      example={exampleFor({ placement, align, variant, modal })}
     />
   )
 }

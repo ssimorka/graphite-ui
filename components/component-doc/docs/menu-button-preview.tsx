@@ -6,9 +6,8 @@ import type { MenuItem } from '@/components/ui/menu'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './menu-button.module.scss'
-
-type Form = 'menu' | 'combo' | 'overflow'
-type Size = 'sm' | 'md' | 'lg'
+import { exampleFor } from './menu-button-code'
+import type { Form, Size } from './menu-button-code'
 
 const noop = () => {}
 const ITEMS: [MenuItem, ...MenuItem[]] = [
@@ -18,17 +17,6 @@ const ITEMS: [MenuItem, ...MenuItem[]] = [
   { kind: 'separator' },
   { label: 'Delete', onSelect: noop, destructive: true },
 ]
-
-function codeFor(form: Form, size: Size, placement: 'bottom' | 'top', align: 'start' | 'end') {
-  const props = [
-    size === 'lg' ? '' : `\n  size="${size}"`,
-    placement === 'bottom' ? '' : '\n  placement="top"',
-    form === 'overflow' && align === 'end' ? '\n  align="end"' : '',
-  ].join('')
-  if (form === 'menu') return `<MenuButton\n  label="Actions"${props}\n  items={items}\n/>`
-  if (form === 'combo') return `<ComboButton\n  label="Save"\n  onClick={save}${props}\n  items={items}\n/>`
-  return `<OverflowMenu${props}\n  items={items}\n/>`
-}
 
 /** The three sets, Size, Position and Alignment, live. */
 export function MenuButtonPreview() {
@@ -96,7 +84,7 @@ export function MenuButtonPreview() {
           )}
         </div>
       }
-      code={codeFor(form, size, placement, align)}
+      example={exampleFor({ form, size, placement, align })}
     />
   )
 }
