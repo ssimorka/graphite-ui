@@ -199,7 +199,11 @@ export default function RunLocallyPage() {
               <>
               <code>--webpack</code> is baked into both the <code>dev</code> and{' '}
               <code>build</code> scripts, so <code>pnpm dev</code> is safe. If
-              you invoke Next directly, pass the flag yourself.
+              you invoke Next directly, pass the flag yourself. This is about
+              Carbon&rsquo;s Sass in this repo only. A project that installs
+              Graphite&rsquo;s components runs on Turbopack, with one line in{' '}
+              <code>next.config.ts</code> (<a href="/docs/quick-start#css-modules">Quick
+              start, step 5</a>).
               </>
             </Callout>
           </section>
