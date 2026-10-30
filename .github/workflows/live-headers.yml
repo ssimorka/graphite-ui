@@ -1,0 +1,40 @@
+# Live headers: does production still let simorkadesigns.com embed the site?
+#
+# Governance runs scripts/frame-check.mjs against next.config.mjs, which proves
+# what the code asks for. This runs the same rule against what
+# https://www.graphite-ui.com actually sends, so a header added outside the
+# code (a Vercel project setting, a proxy, a platform default) shows up too.
+#
+# It runs when Vercel reports a successful production deployment, nightly, and
+# on demand. Not a required check: it tests the site as deployed, not a PR,
+# and it reaches the network.
+name: live-headers
+
+on:
+  deployment_status:
+  schedule:
+    # 07:47 UTC, half an hour after cold-start's live run. Off the hour.
+    - cron: '47 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frame-check:
+    # Vercel posts a status for every preview too; only production is live.
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # The script imports nothing outside Node, so there is no install.
+      - name: "Frame check: production headers allow simorkadesigns.com"
+        run: node scripts/frame-check.mjs --live

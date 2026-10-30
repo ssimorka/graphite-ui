@@ -89,6 +89,12 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm naming-check
 
+      # simorkadesigns.com/graphite-ui embeds the site. This reads headers() in
+      # next.config.mjs; live-headers.yml checks what production sends.
+      - name: "Frame check: simorkadesigns.com may embed the site"
+        if: ${{ !cancelled() }}
+        run: pnpm frame-check
+
       # The registry behind `npx shadcn add` is built from the repo on request,
       # so a component importing something no item provides would only fail
       # when someone installs it. This builds every item in CI instead.
