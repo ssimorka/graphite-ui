@@ -11,11 +11,11 @@ import { CARBON_VAR_COUNT } from '@/components/carbon-compat'
 const faqs = (governed: number) => [
   {
     q: 'Is Graphite UI production ready?',
-    a: `Yes, for the theme and the ${governed} components: they install today with the shadcn CLI, and automated checks compare each one to its contract on every change. The Figma kit is a published library. Graphite is at v0.1.0, so expect changes. There is no npm package.`,
+    a: `Yes, for the theme and the ${governed} components: they install today with the shadcn CLI, and automated checks compare each one to its contract on every change. The Figma kit comes in a free edition and a paid Pro edition. Graphite is at v0.1.0, so expect changes. There is no npm package.`,
   },
   {
     q: 'Is it free, and what is it built with?',
-    a: 'Yes. The code is MIT licensed and free for personal and commercial use. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI and Simorka Designs names and logos, including the SD System mark in the footer, are not covered by the licence.',
+    a: 'The code is MIT licensed and free for personal and commercial use. The Figma kit has a free edition with the foundations and 18 core components, and a paid Pro edition with every component and all three icon weights. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI and Simorka Designs names and logos, including the SD System mark in the footer, are not covered by the licence.',
   },
   {
     q: 'Does it require Carbon?',
