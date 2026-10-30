@@ -1,0 +1,113 @@
+# Cold-start smoke test: does Quick start still work for a stranger?
+#
+# Builds the site from the code under test, then has scripts/cold-start/run.mjs
+# follow Quick start in a fresh `create-next-app@latest`, with the snippets read
+# from the rendered page and the registry pointed at this build. See the script
+# for what it checks and why it also runs a negative case.
+#
+# It exists because of 2026-10-30: Next 16.4's scaffold started running CSS
+# modules through Tailwind, and every Graphite component rendered with
+# class="", build green, nothing in the console. No PR of ours caused it, so
+# a PR-only check would not have seen it. Hence the nightly run.
+#
+# Not a required check. It installs whatever npm calls @latest that day and
+# reaches the network, so it can go red for reasons outside this repo. Decide
+# on requiring it after a run of stable results.
+name: cold-start
+
+on:
+  pull_request:
+    paths:
+      - 'components/ui/**'
+      - 'lib/registry*.ts'
+      - 'lib/tailwind-bridge.ts'
+      - 'lib/color.js'
+      - 'app/r/**'
+      - 'app/globals.scss'
+      - 'app/docs/quick-start/**'
+      - 'scripts/cold-start/**'
+      - '.github/workflows/cold-start.yml'
+  schedule:
+    # 07:17 UTC, about 3am in New York. Off the hour, where runs queue.
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cold-start-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cold-start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # The registry routes build items from the repo on request, so the
+      # production build serves exactly this commit's components.
+      - name: Build the site
+        run: pnpm build
+
+      - name: Serve the site
+        run: |
+          npx next start -p 3000 > site.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:3000/docs/quick-start > /dev/null && exit 0
+            sleep 2
+          done
+          cat site.log
+          exit 1
+
+      - name: Follow Quick start in a fresh app
+        run: node scripts/cold-start/run.mjs --origin http://localhost:3000 --out .cold-start --install-browser
+
+      - name: Upload screenshots and report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: cold-start
+          path: |
+            .cold-start/shots
+            .cold-start/report.json
+            .cold-start/summary.md
+            .cold-start/steps.log
+          if-no-files-found: warn
+
+  # A nightly failure has no pull request to show up on, so it opens one issue
+  # labelled cold-start, or comments on the one already open.
+  report:
+    needs: cold-start
+    if: ${{ failure() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create cold-start --color B60205 --description "Cold-start smoke test" --force
+          body="The nightly cold-start smoke test failed: $RUN
+
+          Quick start may no longer work in a fresh create-next-app. The run's summary and the cold-start artifact (screenshots, report.json, steps.log) say which check failed."
+          open=$(gh issue list --label cold-start --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body "Failed again: $RUN"
+          else
+            gh issue create --title "Cold-start smoke test failing" --label cold-start --body "$body"
+          fi
