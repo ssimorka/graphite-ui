@@ -9,6 +9,10 @@
 // are pointed at --origin, so a pull request is tested against itself and a
 // docs change that breaks the walkthrough breaks this test.
 //
+// Pointed at https://www.graphite-ui.com, nothing needs building: the URLs
+// already match, and the run tests exactly what a developer gets (the
+// workflow's `live` job).
+//
 // Two apps are built from one fresh `create-next-app@latest`:
 //
 //   positive  follows every step. Must pass every check below.
@@ -477,7 +481,7 @@ async function main() {
 
   const lt = pos.themes.light ?? {}
   const md = [
-    `## Cold-start smoke test: ${report.passed ? 'passed' : 'FAILED'}`,
+    `## Cold-start smoke test, ${ORIGIN}: ${report.passed ? 'passed' : 'FAILED'}`,
     '',
     `Scaffold: create-next-app@latest, Next ${report.scaffold.next}, Tailwind ${report.scaffold.tailwind}, Tailwind rule ${report.scaffold.tailwindRule ? 'present' : 'absent'}. ${report.seconds}s.`,
     '',
@@ -499,7 +503,7 @@ async function main() {
 
 main().catch((e) => {
   log(`ERROR: ${e.message}`)
-  fs.writeFileSync(path.join(OUT, 'summary.md'), `## Cold-start smoke test: FAILED\n\n${e.message}\n`)
-  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Cold-start smoke test: FAILED\n\n${e.message}\n`)
+  fs.writeFileSync(path.join(OUT, 'summary.md'), `## Cold-start smoke test, ${ORIGIN}: FAILED\n\n${e.message}\n`)
+  if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Cold-start smoke test, ${ORIGIN}: FAILED\n\n${e.message}\n`)
   process.exit(1)
 })
