@@ -10,6 +10,14 @@
 # class="", build green, nothing in the console. No PR of ours caused it, so
 # a PR-only check would not have seen it. Hence the nightly run.
 #
+# Two jobs. `cold-start` tests the code: it builds this commit and points the
+# walkthrough at that build. `live` tests what a developer actually gets: the
+# same walkthrough against https://www.graphite-ui.com, its Quick start and its
+# registry, with nothing built. Main passing and live failing means the code
+# is fine and the deploy is not; both failing means a tool outside this repo
+# changed. `live` runs nightly and on demand only: on a pull request it would
+# test the site as it is, not the change.
+#
 # Not a required check. It installs whatever npm calls @latest that day and
 # reaches the network, so it can go red for reasons outside this repo. Decide
 # on requiring it after a run of stable results.
@@ -87,10 +95,39 @@ jobs:
             .cold-start/steps.log
           if-no-files-found: warn
 
+  # Quick start as a stranger meets it today: the live site's docs and
+  # registry, nothing built from this commit.
+  live:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Follow the live Quick start in a fresh app
+        run: node scripts/cold-start/run.mjs --origin https://www.graphite-ui.com --out .cold-start-live --install-browser
+
+      - name: Upload screenshots and report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: cold-start-live
+          path: |
+            .cold-start-live/shots
+            .cold-start-live/report.json
+            .cold-start-live/summary.md
+            .cold-start-live/steps.log
+          if-no-files-found: warn
+
   # A nightly failure has no pull request to show up on, so it opens one issue
-  # labelled cold-start, or comments on the one already open.
+  # labelled cold-start, or comments on the one already open, naming which
+  # job failed.
   report:
-    needs: cold-start
+    needs: [cold-start, live]
     if: ${{ failure() && github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     permissions:
@@ -100,14 +137,25 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          MAIN: ${{ needs.cold-start.result }}
+          LIVE: ${{ needs.live.result }}
         run: |
+          if [ "$MAIN" = success ]; then
+            what="The code on main passes, but the live site fails: graphite-ui.com may not be serving main (a failed or stale deploy)."
+          elif [ "$LIVE" = success ]; then
+            what="The code on main fails, but the live site passes: something on main would break Quick start once it deploys."
+          else
+            what="Both the code on main and the live site fail: most likely a tool outside this repo changed (create-next-app, Next, Tailwind, shadcn)."
+          fi
           gh label create cold-start --color B60205 --description "Cold-start smoke test" --force
           body="The nightly cold-start smoke test failed: $RUN
 
-          Quick start may no longer work in a fresh create-next-app. The run's summary and the cold-start artifact (screenshots, report.json, steps.log) say which check failed."
+          $what
+
+          Main: $MAIN. Live site: $LIVE. The run's summary and the cold-start / cold-start-live artifacts (screenshots, report.json, steps.log) say which check failed."
           open=$(gh issue list --label cold-start --state open --json number --jq '.[0].number')
           if [ -n "$open" ]; then
-            gh issue comment "$open" --body "Failed again: $RUN"
+            gh issue comment "$open" --body "Failed again: $RUN (main: $MAIN, live: $LIVE)"
           else
             gh issue create --title "Cold-start smoke test failing" --label cold-start --body "$body"
           fi
