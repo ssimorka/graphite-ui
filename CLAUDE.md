@@ -425,6 +425,14 @@ a trace, which is what "no bypass" is meant to cost.
   theme never matches it), and the starter's `globals.css` rules override the
   theme. Next's default ESLint flags setState-in-effect, hence the scoped
   disable in the provider's restore effect.
+  **The theme file paints the page** (since 2026-10-30, cold-start P3): a
+  `:where(body)` base with `--graphite-surface` / `--graphite-on-surface`,
+  inside `@layer base`. Both halves matter. Unlayered, it beats Tailwind's
+  `@layer utilities` whatever its specificity, so `<body className="bg-...">`
+  would lose to it; in `base` it merges into Tailwind's own base layer and
+  any adopter rule or utility wins. Before it, a bare page in dark was white
+  under light text (1.3:1). The smoke page is bare on purpose so the test
+  checks this rule.
 - **The registry is built from the repo on request** (`lib/registry.ts`,
   routes in `app/r`). Items: `init` (a minimal `components.json`, so adopters
   skip `shadcn init`, which would write shadcn's theme into `globals.css` and

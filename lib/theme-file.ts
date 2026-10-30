@@ -90,8 +90,30 @@ export function buildThemeFile({ bundle, level, foundations, overrides = {} }: T
     lines.push('', ...REDUCED_MOTION)
   }
   lines.push('', '/* Colors, generated from the source. */', buildCss(bundle))
+  lines.push('', ...PAGE_BASE)
   return lines.join('\n')
 }
+
+// The page itself. Without it the variables switch but nothing paints the
+// page, so in dark the components' light text sits on the browser's white
+// canvas (axe measured 1.3:1 in the cold-start test, 2026-10-30, P3).
+//
+// It has to lose to anything the adopter writes, which takes two things.
+// :where keeps it at zero specificity. @layer base keeps it below every
+// unlayered rule and, on Tailwind v4, merges it into Tailwind's own base
+// layer, so a utility on <body> (bg-*, text-*) still wins. Unlayered, it would
+// beat @layer utilities whatever the specificity.
+const PAGE_BASE = [
+  "/* The page: Graphite's surface and text. In the base layer at zero",
+  '   specificity, so any body rule or utility class of yours wins. */',
+  '@layer base {',
+  '  :where(body) {',
+  '    background-color: var(--graphite-surface);',
+  '    color: var(--graphite-on-surface);',
+  '  }',
+  '}',
+  '',
+]
 
 // The reduced-motion layer from app/globals.scss (the `reduced-motion` mixin),
 // written out as plain CSS. Keep the two in step.
