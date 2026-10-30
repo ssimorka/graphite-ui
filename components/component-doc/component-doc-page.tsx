@@ -53,8 +53,10 @@ export function componentToc(c: ComponentDocConfig) {
 export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) {
   const contract = readContractDoc(c.slug)
   const kit = c.kitTitle ? readKitPage(c.kitTitle) : null
+  // Free components open their page in the free kit; Pro-only ones link to
+  // the Pro listing, since their page is not in any file a visitor can open.
   const figmaUrl = kit
-    ? c.figmaNode
+    ? kit.edition === 'free' && c.figmaNode
       ? kit.url.replace(/node-id=[^&]+/, `node-id=${c.figmaNode.replace(':', '-')}`)
       : kit.url
     : null
@@ -109,7 +111,7 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Open in Figma
+                  {kit?.edition === 'pro' ? 'Get it in Kit Pro' : 'Open in Figma'}
                 </Link>
               ) : null}
             </div>
