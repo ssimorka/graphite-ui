@@ -26,6 +26,7 @@ import {
 import { IntroductionSpecimen } from './introduction-specimen'
 import { TOC } from './toc'
 import styles from './introduction.module.scss'
+import { KIT_FREE_URL, KIT_PRO_URL } from '@/lib/kit-links'
 
 export const metadata: Metadata = {
   title: 'Introduction · Graphite UI',
@@ -35,7 +36,6 @@ export const metadata: Metadata = {
 
 const lower = (n: number) => spell(n).toLowerCase()
 
-const KIT_URL = 'https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo'
 
 /**
  * What the engine produces from one colour, counted rather than stated. The
@@ -54,20 +54,10 @@ function engineShape() {
   }
 }
 
-function readKitFile() {
-  const snap = JSON.parse(
-    fs.readFileSync(
-      path.join(process.cwd(), 'docs', 'tokens', 'figma-components.json'),
-      'utf8',
-    ),
-  ) as { source: { file: string } }
-  return `https://www.figma.com/design/${snap.source.file}/Graphite-UI-Kit`
-}
 
 export default function IntroductionPage() {
   const kit = readKitStats()
   const e = engineShape()
-  const kitUrl = readKitFile()
 
   return (
     <main id="main-content" className="page-main">
@@ -133,10 +123,13 @@ export default function IntroductionPage() {
                   Figma kit <StatusBadge tone="success">Usable today</StatusBadge>
                 </h3>
                 <p>
-                  Every component, drawn in light and dark, as a published
-                  library. <a href={KIT_URL}>Open the kit</a> and add it to your
-                  team libraries. It is drawn in the default color: there is no
-                  way yet to bring a theme from Create into it.
+                  Two editions, both drawn in light and dark.{' '}
+                  <a href={KIT_FREE_URL}>The free kit</a> has the foundations,
+                  the Regular icons and 18 core components.{' '}
+                  <a href={KIT_PRO_URL}>Pro</a> adds every other component and
+                  the Bold and Solid icons. Duplicate either one and publish it
+                  to your team libraries. Both are drawn in the default color:
+                  there is no way yet to bring a theme from Create into them.
                 </p>
               </div>
               <div className={styles.path}>
@@ -213,9 +206,10 @@ export default function IntroductionPage() {
                 <tr>
                   <th scope="row">Figma kit</th>
                   <td>
-                    <a href={kitUrl}>The Graphite UI Kit</a>, and it is canonical:
-                    where the kit and a contract disagree, the kit wins and the
-                    contract is corrected.
+                    The Graphite UI Kit, and it is canonical: where the kit and
+                    a contract disagree, the kit wins and the contract is
+                    corrected. The public editions, <a href={KIT_FREE_URL}>Free</a>{' '}
+                    and <a href={KIT_PRO_URL}>Pro</a>, are built from it.
                   </td>
                 </tr>
                 <tr>

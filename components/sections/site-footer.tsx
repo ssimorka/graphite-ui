@@ -2,6 +2,7 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Brand } from '@/components/brand'
+import { KIT_FREE_URL, KIT_PRO_URL } from '@/lib/kit-links'
 import styles from './site-footer.module.scss'
 
 // The kit's four link columns. Targets point at what exists today: the docs
@@ -43,6 +44,8 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: 'Resources',
     links: [
+      { label: 'Figma kit, free', href: KIT_FREE_URL },
+      { label: 'Figma kit Pro', href: KIT_PRO_URL },
       { label: 'GitHub', href: REPO },
       { label: 'Governance rules', href: '/docs/contribute/governance' },
       { label: 'Licence', href: `${REPO}/blob/main/LICENSE` },

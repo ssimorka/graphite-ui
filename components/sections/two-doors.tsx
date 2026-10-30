@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
 import styles from './two-doors.module.scss'
+import { KIT_FREE_URL } from '@/lib/kit-links'
 
 // The token rows the designers' door shows behind its copy. The kit's own
 // note on this component says it is "populated from the contract tokens list,
@@ -69,9 +70,10 @@ export function TwoDoors() {
                 <div className={styles.doorBody}>
                   <h3 className={styles.doorTitle}>For designers</h3>
                   <p className={styles.doorCopy}>
-                    Design in the Figma kit, a published library with the same
-                    tokens as the code. Shown: the Accordion&apos;s color tokens,
-                    live.
+                    Design in the Figma kit, with the same tokens as the code.
+                    Start with the free kit; Pro adds every component and all
+                    three icon weights. Shown: the
+                    Accordion&apos;s color tokens, live.
                   </p>
                 </div>
                 {/* The door's action, the corner action the other cards end
@@ -79,11 +81,11 @@ export function TwoDoors() {
                     whole door the link. */}
                 <Button asChild variant="primary" size="lg" className={styles.cta}>
                   <a
-                    href="https://www.figma.com/design/p2jyUgkFhJd6A5M7L39Ixo"
+                    href={KIT_FREE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Open the Figma Kit
+                    Get the free Figma kit
                     <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
                   </a>
                 </Button>
