@@ -20,3 +20,6 @@ dist/
 # TypeScript incremental build cache
 *.tsbuildinfo
 .visual/
+
+# Cold-start smoke test output (scripts/cold-start/run.mjs)
+/.cold-start
