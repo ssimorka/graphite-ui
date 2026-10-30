@@ -4,20 +4,10 @@ import { useState } from 'react'
 import { Accordion, AccordionItem } from '@/components/ui/accordion'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { exampleFor } from './accordion-code'
+import type { DemoItem, Size } from './accordion-code'
 
-type Size = 'sm' | 'md' | 'lg'
-export type DemoItem = { value: string; title: string; body: string }
-
-function codeFor(size: Size, items: DemoItem[]) {
-  const sizeProp = size === 'md' ? '' : ` size="${size}"`
-  const body = items
-    .map(
-      (i) =>
-        `  <AccordionItem value="${i.value}" title="${i.title}">\n    ${i.body}\n  </AccordionItem>`,
-    )
-    .join('\n')
-  return `<Accordion type="single" collapsible${sizeProp} defaultValue="${items[0].value}">\n${body}\n</Accordion>`
-}
+export type { DemoItem }
 
 /**
  * The one control the kit puts on the pane, Size. The kit's pane also has a
@@ -51,7 +41,7 @@ export function AccordionPreview({ items }: { items: DemoItem[] }) {
           ))}
         </Accordion>
       }
-      code={codeFor(size, items)}
+      example={exampleFor({ size, items })}
     />
   )
 }

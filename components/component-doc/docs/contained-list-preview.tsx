@@ -8,17 +8,10 @@ import { Tag } from '@/components/ui/tag'
 import { KitIcon } from '@/components/kit-icon'
 import { DemoFrame } from '../demo-frame'
 import styles from './contained-list.module.scss'
+import { exampleFor, ICON_SIZE } from './contained-list-code'
+import type { DemoRow, Kind, Size } from './contained-list-code'
 
-type Size = 'sm' | 'md' | 'lg' | 'xl'
-type Kind = 'on-page' | 'disclosed'
-export type DemoRow = { id: string; tag: string; title: string; description: string; status: string }
-
-const ICON_SIZE: Record<Size, 'icon-sm' | 'icon' | 'icon-lg'> = {
-  sm: 'icon-sm',
-  md: 'icon',
-  lg: 'icon-lg',
-  xl: 'icon-lg',
-}
+export type { DemoRow }
 
 /** The kit's trailing action: a ghost icon button as tall as the row. */
 const rowAction = (size: Size, label: string) => (
@@ -26,19 +19,6 @@ const rowAction = (size: Size, label: string) => (
     <KitIcon name="menu-dots" />
   </Button>
 )
-
-function codeFor(size: Size, kind: Kind, interactive: boolean, rows: DemoRow[]) {
-  const sizeProp = size === 'lg' ? '' : `\n  size="${size}"`
-  const interactiveProp = interactive ? '\n  interactive' : ''
-  const header = `<ContainedListHeader${kind === 'on-page' ? '' : ' variant="disclosed"'}${size === 'lg' ? '' : ` size="${size}"`} title="Components" />`
-  return [
-    header,
-    ...rows.map(
-      (r) =>
-        `<ContainedList${sizeProp}${interactiveProp}\n  leading={<Tag>${r.tag}</Tag>}\n  title="${r.title}"\n  trailing={<Button variant="ghost" size="${ICON_SIZE[size]}" aria-label="${r.title} actions">…</Button>}\n/>`,
-    ),
-  ].join('\n')
-}
 
 /**
  * The kit's axes: the list's Type, the row's Size, and interactive, which
@@ -103,7 +83,7 @@ export function ContainedListPreview({ rows }: { rows: DemoRow[] }) {
           ))}
         </div>
       }
-      code={codeFor(size, kind, interactive, rows)}
+      example={exampleFor({ size, kind, interactive, rows })}
     />
   )
 }

@@ -2,38 +2,10 @@
 
 import { useState } from 'react'
 import { ComboBox, Dropdown, MultiSelect } from '@/components/ui/dropdown'
-import type { DropdownOption } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './dropdown.module.scss'
-
-type Kind = 'dropdown' | 'combo' | 'multi' | 'filterable'
-type Layout = 'fixed' | 'inline' | 'fluid'
-type Size = 'sm' | 'md' | 'lg'
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const OPTIONS: DropdownOption[] = [
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
-  { value: 'system', label: 'Match the system' },
-  { value: 'contrast', label: 'High contrast' },
-  { value: 'sepia', label: 'Sepia', disabled: true },
-  { value: 'print', label: 'Print' },
-]
-
-const ERROR = 'Choose a theme'
-const WARNING = 'High contrast overrides your source colour'
-
-function codeFor(kind: Kind, layout: Layout, size: Size, status: Status) {
-  const props = [
-    layout === 'fixed' ? '' : `\n  layout="${layout}"`,
-    layout === 'fluid' || size === 'lg' ? '' : `\n  size="${size}"`,
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `const [value, setValue] = ${kind === 'multi' || kind === 'filterable' ? 'useState<string[]>([])' : 'useState<string | null>(null)'}\n\n<${kind === 'combo' ? 'ComboBox' : kind === 'dropdown' ? 'Dropdown' : 'MultiSelect'}${kind === 'filterable' ? '\n  filterable' : ''}${kind === 'multi' || kind === 'filterable' ? '\n  selectAll' : ''}\n  label="Theme"\n  options={options}${props}\n  value={value}\n  onChange={setValue}\n/>`
-}
+import { ERROR, exampleFor, HELP, layoutFor, OPTIONS, WARNING } from './dropdown-code'
+import type { Kind, Layout, Size, Status } from './dropdown-code'
 
 /** Style, Size and the states, live. */
 export function DropdownPreview() {
@@ -106,9 +78,9 @@ export function DropdownPreview() {
               onChange={setValues}
               filterable={kind === 'filterable'}
               selectAll
-              layout={kind === 'filterable' && layout === 'inline' ? 'fixed' : layout}
+              layout={layoutFor(kind, layout)}
               size={size}
-              helpText="Choose any number"
+              helpText={HELP[kind]}
               errorText={status === 'error' ? ERROR : undefined}
               warningText={status === 'warning' ? WARNING : undefined}
               disabled={status === 'disabled'}
@@ -120,9 +92,9 @@ export function DropdownPreview() {
               options={OPTIONS}
               value={value}
               onChange={setValue}
-              layout={layout === 'inline' ? 'fixed' : layout}
+              layout={layoutFor(kind, layout)}
               size={size}
-              helpText="Type to filter"
+              helpText={HELP[kind]}
               errorText={status === 'error' ? ERROR : undefined}
               warningText={status === 'warning' ? WARNING : undefined}
               disabled={status === 'disabled'}
@@ -136,7 +108,7 @@ export function DropdownPreview() {
             onChange={setValue}
             layout={layout}
             size={size}
-            helpText="Applies to every page"
+            helpText={HELP[kind]}
             errorText={status === 'error' ? ERROR : undefined}
             warningText={status === 'warning' ? WARNING : undefined}
             disabled={status === 'disabled'}
@@ -145,7 +117,7 @@ export function DropdownPreview() {
           )}
         </div>
       }
-      code={codeFor(kind, layout, size, status)}
+      example={exampleFor({ kind, layout, size, status })}
     />
   )
 }
@@ -176,9 +148,9 @@ export function DropdownStill({
             onChange={setValues}
             filterable={kind === 'filterable'}
             selectAll
-            layout={kind === 'filterable' && layout === 'inline' ? 'fixed' : layout}
+            layout={layoutFor(kind, layout)}
             size={size}
-            helpText="Choose any number"
+            helpText={HELP[kind]}
             errorText={status === 'error' ? ERROR : undefined}
             warningText={status === 'warning' ? WARNING : undefined}
             disabled={status === 'disabled'}
@@ -190,9 +162,9 @@ export function DropdownStill({
             options={OPTIONS}
             value={value}
             onChange={setValue}
-            layout={layout === 'inline' ? 'fixed' : layout}
+            layout={layoutFor(kind, layout)}
             size={size}
-            helpText="Type to filter"
+            helpText={HELP[kind]}
             errorText={status === 'error' ? ERROR : undefined}
             warningText={status === 'warning' ? WARNING : undefined}
             disabled={status === 'disabled'}
@@ -206,7 +178,7 @@ export function DropdownStill({
         onChange={setValue}
         layout={layout}
         size={size}
-        helpText="Applies to every page"
+        helpText={HELP[kind]}
         errorText={status === 'error' ? ERROR : undefined}
         warningText={status === 'warning' ? WARNING : undefined}
         disabled={status === 'disabled'}

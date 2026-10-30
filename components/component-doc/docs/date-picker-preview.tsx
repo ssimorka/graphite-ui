@@ -6,27 +6,8 @@ import type { FieldSize } from '@/components/ui/text-input'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './date-picker.module.scss'
-
-type Mode = 'simple' | 'single' | 'range'
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const ERROR = 'Enter a date in mm/dd/yyyy'
-const WARNING = 'This date falls on a weekend'
-
-function codeFor(mode: Mode, layout: 'fixed' | 'fluid', size: FieldSize, status: Status) {
-  const props = [
-    mode === 'single' ? '' : `\n  mode="${mode}"`,
-    layout === 'fixed' ? '' : '\n  layout="fluid"',
-    layout === 'fluid' || size === 'lg' ? '' : `\n  size="${size}"`,
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  const value = mode === 'range' ? 'useState<[Date | null, Date | null]>([null, null])' : 'useState<Date | null>(null)'
-  const label = mode === 'range' ? 'Start date"\n  endLabel="End date' : mode === 'simple' ? 'Date (mm/dd/yyyy)' : 'Date'
-  return `const [value, setValue] = ${value}\n\n<DatePicker${props}\n  label="${label}"\n  value={value}\n  onChange={setValue}\n/>`
-}
+import { ERROR, exampleFor, WARNING } from './date-picker-code'
+import type { Mode, Status } from './date-picker-code'
 
 /** Every set, both layouts, the sizes and the status states, live. */
 export function DatePickerPreview() {
@@ -112,7 +93,7 @@ export function DatePickerPreview() {
           )}
         </div>
       }
-      code={codeFor(mode, layout, size, status)}
+      example={exampleFor({ mode, layout, size, status })}
     />
   )
 }

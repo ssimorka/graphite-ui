@@ -4,25 +4,8 @@ import { useState } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Selection = 'unchecked' | 'checked' | 'indeterminate'
-type State = 'enabled' | 'disabled' | 'read-only' | 'warning' | 'error'
-
-const LABEL = 'Save as default address'
-const ERROR = 'Choose whether to keep this address.'
-const WARNING = 'This address has not been confirmed.'
-
-function codeFor(selection: Selection, state: State) {
-  const lines = [`  label="${LABEL}"`]
-  if (selection === 'checked') lines.push('  checked')
-  if (selection === 'indeterminate') lines.push('  indeterminate')
-  if (state === 'disabled') lines.push('  disabled')
-  if (state === 'read-only') lines.push('  readOnly')
-  if (state === 'warning') lines.push(`  warningText="${WARNING}"`)
-  if (state === 'error') lines.push(`  errorText="${ERROR}"`)
-  lines.push('  onChange={setChecked}')
-  return `<Checkbox\n${lines.join('\n')}\n/>`
-}
+import { ERROR, exampleFor, LABEL, WARNING } from './checkbox-code'
+import type { Selection, State } from './checkbox-code'
 
 /**
  * Selection and State are the kit's two axes on the Checkbox set, cut down to
@@ -75,7 +58,7 @@ export function CheckboxPreview() {
           onChange={(c) => setSelection(c ? 'checked' : 'unchecked')}
         />
       }
-      code={codeFor(selection, state)}
+      example={exampleFor({ selection, state })}
     />
   )
 }

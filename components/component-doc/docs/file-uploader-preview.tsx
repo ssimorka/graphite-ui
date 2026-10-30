@@ -5,20 +5,8 @@ import { FileUploader } from '@/components/ui/file-uploader'
 import type { FileUploaderSize, UploaderFile } from '@/components/ui/file-uploader'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Type = 'button' | 'dropzone'
-
-const LIMIT = 500 * 1024
-const DESCRIPTION = 'Max file size is 500kb. Supported file types are .jpg and .png.'
-
-function codeFor(type: Type, size: FileUploaderSize, disabled: boolean) {
-  const props = [
-    type === 'button' ? '' : '\n  type="dropzone"',
-    size === 'lg' ? '' : `\n  size="${size}"`,
-    disabled ? '\n  disabled' : '',
-  ].join('')
-  return `const [files, setFiles] = useState<UploaderFile[]>([])\n\n<FileUploader${props}\n  label="Upload files"\n  description="${DESCRIPTION}"\n  accept=".jpg,.png"\n  files={files}\n  onAdd={(picked) => upload(picked)} // sets each file's status\n  onRemove={(id) => setFiles((f) => f.filter((x) => x.id !== id))}\n/>`
-}
+import { DESCRIPTION, exampleFor, LIMIT, OVER_LIMIT } from './file-uploader-code'
+import type { Type } from './file-uploader-code'
 
 /**
  * Both types and every size, live. Picked files are not sent anywhere: each
@@ -43,7 +31,7 @@ export function FileUploaderPreview() {
             const f = fresh.find((x) => x.id === p.id)
             if (!f) return p
             return f.size > LIMIT
-              ? { ...p, status: 'error', error: 'File exceeds size limit.', errorDetail: '500kb max file size. Select a new file and try again.' }
+              ? { ...p, status: 'error', ...OVER_LIMIT }
               : { ...p, status: 'complete' }
           }),
         )
@@ -101,7 +89,7 @@ export function FileUploaderPreview() {
           onRemove={(id) => setFiles((f) => f.filter((x) => x.id !== id))}
         />
       }
-      code={codeFor(type, size, disabled)}
+      example={exampleFor({ type, size, disabled })}
     />
   )
 }
