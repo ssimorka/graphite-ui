@@ -15,7 +15,7 @@ const faqs = (governed: number) => [
   },
   {
     q: 'Is it free, and what is it built with?',
-    a: 'The code is MIT licensed and free for personal and commercial use. The Figma kit has a free edition with the foundations and 18 core components, and a paid Pro edition with every component and all three icon weights. Built with React 19, Next.js 16 and SCSS modules. The Graphite UI and Simorka Designs names and logos, including the SD System mark in the footer, are not covered by the licence.',
+    a: 'The code is MIT licensed and free for personal and commercial use. The Figma kit has a free edition with the foundations and 18 core components, and a paid Pro edition with every component and all three icon weights. Built with React 19, Next.js 16 and SCSS modules, which work on Turbopack and webpack. A new create-next-app project with Tailwind needs one line in next.config.ts first: Quick start, step 5. The Graphite UI and Simorka Designs names and logos, including the SD System mark in the footer, are not covered by the licence.',
   },
   {
     q: 'Does it require Carbon?',

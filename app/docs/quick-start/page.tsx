@@ -115,12 +115,15 @@ const FONT_INSTALL = 'npm i @fontsource/ibm-plex-sans @fontsource/ibm-plex-mono'
 // The root layout of a project without the Tailwind bridge: fonts, then the
 // theme, once.
 const LAYOUT = `// app/layout.tsx
+import type { Metadata } from 'next'
 import '@fontsource/ibm-plex-sans/400.css'
 import '@fontsource/ibm-plex-sans/500.css'
 import '@fontsource/ibm-plex-sans/600.css'
 import '@fontsource/ibm-plex-sans/700.css'
 import '@fontsource/ibm-plex-mono/400.css'
-import './graphite-theme.css' // with Tailwind, in globals.css instead
+import './graphite-theme.css' // with Tailwind: import './globals.css' here instead
+
+export const metadata: Metadata = { title: 'My app' }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -140,6 +143,22 @@ const TAILWIND_USAGE = `/* app/globals.css */
 <div className="bg-surface text-on-surface p-space-05 rounded-none">
   <h2 className="font-1 text-heading-5">Graphite on Tailwind</h2>
 </div>`
+
+// The one-line fix for create-next-app's Tailwind rule, which otherwise runs
+// CSS modules through Tailwind's loader under Turbopack and strips their
+// scoping: every component renders with class="", build green, no error.
+// Found by the cold-start test on 2026-10-30 (Next 16.4.3). Kept in the
+// scaffold's own quote style so the added line is easy to spot.
+const NEXT_CONFIG = `// next.config.ts, inside nextConfig
+turbopack: {
+  rules: {
+    "*.css": {
+      condition: { not: { path: /\\.module\\.css$/ } }, // add this line
+      loaders: ["@tailwindcss/turbopack"],
+      as: "*.css",
+    },
+  },
+},`
 
 // Switching theme is one attribute; the theme file does the rest.
 const THEME_SWITCH = `'use client'
@@ -299,11 +318,32 @@ export default function QuickStartPage() {
             </Step>
           </section>
 
+          <section id="css-modules" className={styles.block}>
+            <Step n={5} title="Keep CSS modules scoped">
+              <p className={styles.stepText}>
+                Graphite&rsquo;s components style themselves with CSS modules.
+                A new <code>create-next-app</code> project with Tailwind adds a
+                Turbopack rule to <code>next.config.ts</code> that runs every
+                stylesheet through Tailwind, modules included. Modules then lose
+                their scoping, and every component renders unstyled with a green
+                build and no error. Keep the rule and let modules through: add
+                the <code>condition</code> line.
+              </p>
+              <DocSnippet code={NEXT_CONFIG} />
+              <p className={styles.stepText}>
+                It covers <code>.module.scss</code> too, and Tailwind keeps
+                working. The tell, if you skip it: a Graphite button whose{' '}
+                <code>class</code> is empty in the browser. No Tailwind, or no{' '}
+                <code>turbopack.rules</code> in your config? Skip this step.
+              </p>
+            </Step>
+          </section>
+
           <section id="style" className={styles.block}>
-            <Step n={5} title="Style with the roles">
+            <Step n={6} title="Style with the roles">
               <p className={styles.stepText}>
                 CSS modules in <code>.module.scss</code> need{' '}
-                <code>sass</code>: run <code>npm i -D sass</code> first. Step 7
+                <code>sass</code>: run <code>npm i -D sass</code> first. Step 8
                 adds it too, but your own module comes before that.
               </p>
               <p className={styles.stepText}>
@@ -355,7 +395,7 @@ export default function QuickStartPage() {
           </section>
 
           <section id="switch-theme" className={styles.block}>
-            <Step n={6} title="Switch theme">
+            <Step n={7} title="Switch theme">
               <p className={styles.stepText}>
                 Set <code>data-theme</code> to <code>light</code> or{' '}
                 <code>dark</code> on <code>&lt;html&gt;</code>, or on any element
@@ -366,7 +406,7 @@ export default function QuickStartPage() {
           </section>
 
           <section id="add-a-component" className={styles.block}>
-            <Step n={7} title="Add a component">
+            <Step n={8} title="Add a component">
               <p className={styles.stepText}>
                 {`Button follows its contract at ${button?.version ?? 'an unversioned state'}, and ButtonGroup at ${group?.version ?? 'an unversioned state'}.`}{' '}
                 The CLI adds their files to <code>components/ui</code>, the
@@ -378,6 +418,7 @@ export default function QuickStartPage() {
                 Button defaults to <code>secondary</code>, not the primary,
                 and ButtonGroup allows one filled button, last, with partners
                 from its family: here an outlined Cancel before the primary.
+                If the button renders unstyled, go back to step 5.
               </p>
               <Surface label="Live">
                 <SaveActions />

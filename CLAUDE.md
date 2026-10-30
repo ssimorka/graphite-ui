@@ -408,7 +408,18 @@ a trace, which is what "no bypass" is meant to cost.
   Tailwind 4.3.3, Turbopack): Button, Text input and Modal render correctly in
   both themes beside Tailwind's preflight with zero edits to the copied files.
   Turbopack compiles the SCSS modules fine; `--webpack` is only needed here for
-  Carbon's Sass. Three traps an adopter hits: the theme file is required even
+  Carbon's Sass. **That stopped being true with create-next-app 16.4.x**
+  (cold-start test, 2026-10-30, Next 16.4.3): the scaffold's `next.config.ts`
+  now adds `turbopack.rules['*.css']` with the `@tailwindcss/turbopack` loader,
+  which runs CSS modules through Tailwind and strips their scoping. Every
+  component then renders with `class=""`, build green, console silent. Deleting
+  the rule fixes modules but kills Tailwind (no utilities, no preflight);
+  `--webpack` works but needs `@tailwindcss/postcss` and a PostCSS config the
+  scaffold no longer ships. The fix in Quick start step 5 keeps the rule and adds
+  `condition: { not: { path: /\.module\.css$/ } }`, which also covers
+  `.module.scss`. Checked against `next build` and `next dev`. A new scaffold
+  default can break this again with no PR of ours, which is what the cold-start
+  smoke test is for. Three traps an adopter hits: the theme file is required even
   with the provider (the provider stamps colors only), Plex must be loaded under
   its real name (Fontsource works; `next/font` hashes the family name, so the
   theme never matches it), and the starter's `globals.css` rules override the
