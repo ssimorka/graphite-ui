@@ -14,6 +14,29 @@ const nextConfig = {
       { source: '/docs/get-started', destination: '/docs#use-today', permanent: true },
     ]
   },
+  // Baseline security headers on every response, the registry included:
+  // people run what /r serves in their own projects, so the site should at
+  // least not be frameable, sniffable or downgradable. The CSP sets only
+  // frame-ancestors. A full script policy would have to allow the inline
+  // <head> theme script (lib/theme-storage.ts) by hash or nonce, so it is a
+  // separate piece of work. HSTS leaves out includeSubDomains and preload,
+  // which commit every subdomain and are hard to undo.
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
+        ],
+      },
+    ]
+  },
   // The registry routes (app/r) read components, lib and the stylesheet's
   // foundations at request time, so the deployment has to carry those files.
   outputFileTracingIncludes: {
