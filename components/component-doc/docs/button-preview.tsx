@@ -1,39 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Add } from '@carbon/icons-react'
 import { Button } from '@/components/ui/button'
 import type { ButtonVariant } from '@/components/ui/button'
 import { Dropdown } from '@/components/ui/dropdown'
+import { KitIcon } from '@/components/kit-icon'
 import { DemoFrame } from '../demo-frame'
-
-type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'expressive' | 'icon-sm' | 'icon' | 'icon-lg' | 'icon-xl' | 'icon-expressive'
-
-const isIcon = (s: Size) => s === 'icon' || s.startsWith('icon-')
-
-const LABEL: Record<ButtonVariant, string> = {
-  primary: 'Save changes',
-  outlined: 'Back',
-  ghost: 'Cancel',
-  secondary: 'Export',
-  'secondary-outlined': 'Preview',
-  'secondary-ghost': 'Skip',
-  danger: 'Delete project',
-  'danger-ghost': 'Remove',
-}
-
-function codeFor(variant: ButtonVariant, size: Size) {
-  // Defaults are left off, the way a caller would write it.
-  const variantProp = variant === 'secondary' ? '' : ` variant="${variant}"`
-  const sizeProp = size === 'md' ? '' : ` size="${size}"`
-  if (isIcon(size)) {
-    return `<Button${variantProp}${sizeProp} aria-label="Add">\n  <Add />\n</Button>`
-  }
-  return `<Button${variantProp}${sizeProp}>
-  ${LABEL[variant]}
-  <Add />
-</Button>`
-}
+import { exampleFor, isIcon, LABEL } from './button-code'
+import type { Size } from './button-code'
 
 /**
  * The two props the kit also draws as axes, Style and Size. The icon size
@@ -88,17 +62,17 @@ export function ButtonPreview() {
       preview={
         isIcon(size) ? (
           <Button variant={variant} size={size} aria-label="Add">
-            <Add />
+            <KitIcon name="plus" />
           </Button>
         ) : (
           // With the kit's trailing icon, so the preview shows where it sits.
           <Button variant={variant} size={size}>
             {LABEL[variant]}
-            <Add />
+            <KitIcon name="plus" />
           </Button>
         )
       }
-      code={codeFor(variant, size)}
+      example={exampleFor({ variant, size })}
     />
   )
 }

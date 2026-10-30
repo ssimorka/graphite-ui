@@ -4,27 +4,8 @@ import { useState } from 'react'
 import { Toggle } from '@/components/ui/toggle'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type State = 'enabled' | 'disabled' | 'read-only'
-type Size = 'default' | 'sm'
-type Message = 'none' | 'help' | 'error'
-
-const LABEL = 'Email notifications'
-const HELP = 'A summary of new comments, once a day.'
-const ERROR = 'Add an email address to turn this on.'
-
-function codeFor(checked: boolean, state: State, message: Message, size: Size, only: boolean) {
-  const lines = [`  label="${LABEL}"`]
-  if (checked) lines.push('  checked')
-  if (size === 'sm') lines.push('  size="sm"')
-  if (only) lines.push('  hideLabel')
-  if (state === 'disabled') lines.push('  disabled')
-  if (state === 'read-only') lines.push('  readOnly')
-  if (message === 'help') lines.push(`  helpText="${HELP}"`)
-  if (message === 'error') lines.push(`  errorText="${ERROR}"`)
-  lines.push('  onChange={setNotify}')
-  return `<Toggle\n${lines.join('\n')}\n/>`
-}
+import { ERROR, exampleFor, HELP, LABEL } from './toggle-code'
+import type { Message, Size, State } from './toggle-code'
 
 /**
  * The switch itself is the on/off control, so there is no Toggled selector
@@ -99,7 +80,7 @@ export function TogglePreview() {
           onChange={setChecked}
         />
       }
-      code={codeFor(checked, state, message, size, only)}
+      example={exampleFor({ checked, state, message, size, only })}
     />
   )
 }

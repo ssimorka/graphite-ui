@@ -4,24 +4,8 @@ import { useState } from 'react'
 import { Typography } from '@/components/ui/typography'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Variant =
-  | 'display'
-  | 'heading-1'
-  | 'heading-2'
-  | 'heading-3'
-  | 'heading-4'
-  | 'body'
-  | 'caption'
-type Weight = 'regular' | 'medium' | 'semibold'
-
-const TEXT = 'One source color becomes every ramp and role.'
-
-function codeFor(variant: Variant, weight: Weight) {
-  const variantProp = variant === 'body' ? '' : ` variant="${variant}"`
-  const weightProp = weight === 'regular' ? '' : ` weight="${weight}"`
-  return `<Typography${variantProp}${weightProp}>\n  ${TEXT}\n</Typography>`
-}
+import { exampleFor, TEXT } from './typography-code'
+import type { Variant, Weight } from './typography-code'
 
 /**
  * Variant and weight, the two props that change the text itself. Inverted
@@ -74,7 +58,7 @@ export function TypographyPreview() {
           </Typography>
         </div>
       }
-      code={codeFor(variant, weight)}
+      example={exampleFor({ variant, weight })}
     />
   )
 }

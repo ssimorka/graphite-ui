@@ -23,3 +23,6 @@ dist/
 
 # Cold-start smoke test output (scripts/cold-start/run.mjs)
 /.cold-start
+
+# Code tab check scratch (scripts/code-tab-check.mjs; kept with CODE_TAB_KEEP=1)
+/.code-tab-check-*

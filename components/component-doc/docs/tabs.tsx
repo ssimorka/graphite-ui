@@ -4,7 +4,7 @@ import { readKitPage } from '@/lib/kit-page'
 import type { ComponentDocConfig } from '../types'
 import styles from './tabs.module.scss'
 import { DismissibleTabs, TabsPreview } from './tabs-preview'
-import type { DemoTab } from './tabs-preview'
+import { TABS } from './tabs-code'
 
 const three = (orientation: 'horizontal' | 'vertical' = 'horizontal') => (
   <div className={styles.full}>
@@ -55,26 +55,6 @@ const variant = (props: Partial<Parameters<typeof Tabs>[0]>, tabs?: [Tab, Tab, .
 
 export function tabsDoc(): ComponentDocConfig {
   const kit = readKitPage('Tabs')
-  const tabs: [DemoTab, DemoTab, ...DemoTab[]] = [
-    {
-      id: 'source',
-      label: 'Source',
-      icon: 'settings',
-      body: 'One hex value. Everything else on the page is derived from it.',
-    },
-    {
-      id: 'ramps',
-      label: 'Ramps',
-      icon: 'database',
-      body: 'Tonal ramps sampled from the source, one for each colour family.',
-    },
-    {
-      id: 'roles',
-      label: 'Roles',
-      icon: 'user',
-      body: 'The named colours components bind to, checked for contrast at AA or AAA.',
-    },
-  ]
 
   return {
     slug: 'tabs',
@@ -85,7 +65,7 @@ export function tabsDoc(): ComponentDocConfig {
     description:
       'A row of labels that switches between peer views of the same content. Anatomy, variants, states, API, tokens and accessibility, generated from the contract.',
     tocNote: 'Used by every page in these docs: the Preview and Code switch above each live preview is this component.',
-    livePreview: <TabsPreview tabs={tabs} />,
+    livePreview: <TabsPreview tabs={TABS} />,
     install: "import { Tabs } from '@/components/ui/tabs'\nimport type { Tab } from '@/components/ui/tabs'",
     anatomy: three(),
     anatomyLede:

@@ -1,34 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { RadioButtonGroup, type RadioOption } from '@/components/ui/radio-button-group'
+import { RadioButtonGroup } from '@/components/ui/radio-button-group'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Orientation = 'vertical' | 'horizontal'
-type State = 'enabled' | 'disabled' | 'error'
-
-const OPTIONS: RadioOption[] = [
-  { value: 'standard', label: 'Standard' },
-  { value: 'express', label: 'Express' },
-  { value: 'overnight', label: 'Overnight' },
-]
-const ERROR = 'Overnight is not available for this address.'
-
-function codeFor(orientation: Orientation, state: State, value: string) {
-  const options = OPTIONS.map((o) => `    { value: '${o.value}', label: '${o.label}' },`).join('\n')
-  const lines = [
-    '  name="shipping"',
-    '  label="Shipping speed"',
-    `  options={[\n${options}\n  ]}`,
-    `  value="${value}"`,
-  ]
-  if (orientation === 'horizontal') lines.push('  orientation="horizontal"')
-  if (state === 'disabled') lines.push('  disabled')
-  if (state === 'error') lines.push(`  errorText="${ERROR}"`)
-  lines.push('  onChange={setSpeed}')
-  return `<RadioButtonGroup\n${lines.join('\n')}\n/>`
-}
+import { ERROR, exampleFor, OPTIONS } from './radio-button-group-code'
+import type { Orientation, State } from './radio-button-group-code'
 
 /**
  * Orientation is the contract's one variant prop. State covers the group-level
@@ -79,7 +56,7 @@ export function RadioButtonGroupPreview() {
           onChange={setValue}
         />
       }
-      code={codeFor(orientation, state, value)}
+      example={exampleFor({ orientation, state, value })}
     />
   )
 }

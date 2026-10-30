@@ -5,21 +5,8 @@ import { Link } from '@/components/ui/link'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './link.module.scss'
-
-type Size = 'sm' | 'md' | 'lg'
-type Kind = 'standalone' | 'icon' | 'inline'
-
-function codeFor(kind: Kind, size: Size, inverse: boolean, disabled: boolean) {
-  const props = [
-    size === 'lg' || kind === 'inline' ? '' : ` size="${size}"`,
-    kind === 'icon' ? ' icon="arrow-right"' : '',
-    kind === 'inline' ? ' inline' : '',
-    inverse ? ' inverse' : '',
-    disabled ? ' disabled' : '',
-  ].join('')
-  const link = `<Link href="/docs/components"${props}>\n  ${kind === 'inline' ? 'every component' : 'View all components'}\n</Link>`
-  return kind === 'inline' ? `<p>\n  Read about ${link.replace(/\n/g, '\n  ')} in the gallery.\n</p>` : link
-}
+import { exampleFor } from './link-code'
+import type { Kind, Size } from './link-code'
 
 /** Standalone, with its glyph, or inline; Size, Inverse and Disabled, all live. */
 export function LinkPreview() {
@@ -100,7 +87,7 @@ export function LinkPreview() {
           )}
         </div>
       }
-      code={codeFor(kind, size, inverse, disabled)}
+      example={exampleFor({ kind, size, inverse, disabled })}
     />
   )
 }

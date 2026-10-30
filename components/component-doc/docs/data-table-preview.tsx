@@ -13,17 +13,10 @@ import type { Column, Sort } from '@/components/ui/data-table'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
 import styles from './data-table.module.scss'
+import { CAPTION, DESCRIPTION, DETAIL, exampleFor, HEADERS, PAGE_SIZES } from './data-table-code'
+import type { DemoRow, Kind, Size } from './data-table-code'
 
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-type Kind = 'default' | 'checkbox' | 'radio' | 'expandable' | 'expandable-select' | 'batch'
-export type DemoRow = { component: string; wave: string; version: string }
-
-const CAPTION = 'Governed components'
-const HEADERS: [keyof DemoRow, string][] = [
-  ['component', 'Component'],
-  ['wave', 'Wave'],
-  ['version', 'Contract'],
-]
+export type { DemoRow }
 
 function sorted(rows: DemoRow[], sort: Sort | undefined) {
   if (!sort) return rows
@@ -31,35 +24,6 @@ function sorted(rows: DemoRow[], sort: Sort | undefined) {
   const out = [...rows].sort((a, b) => a[key].localeCompare(b[key], undefined, { numeric: true }))
   return sort.direction === 'asc' ? out : out.reverse()
 }
-
-function codeFor(size: Size, kind: Kind, sortable: boolean, sort: Sort) {
-  const sizeProp = size === 'lg' ? '' : `\n  size="${size}"`
-  const kindProps =
-    kind === 'checkbox' || kind === 'batch'
-      ? '\n  selectable="checkbox"'
-      : kind === 'radio'
-        ? '\n  selectable="radio"'
-        : kind === 'expandable'
-          ? '\n  expandable={(row) => <p>…</p>}'
-          : kind === 'expandable-select'
-            ? '\n  selectable="checkbox"\n  expandable={(row) => <p>…</p>}'
-            : ''
-  const batchProp = kind === 'batch' ? '\n  batchActions={(keys) => <Button variant="primary">Archive</Button>}' : ''
-  const densityProp = `${sizeProp}${kindProps}${batchProp}`
-  const cols = HEADERS.map(
-    ([key, header]) =>
-      `    { key: '${key}', header: '${header}'${sortable ? ', sortable: true' : ''} },`,
-  ).join('\n')
-  const state = sortable
-    ? `// The table renders rows in the order it is given. sortRows is yours.\nconst [sort, setSort] = useState<Sort>({ key: '${sort.key}', direction: '${sort.direction}' })\n\n`
-    : ''
-  const sortProps = sortable
-    ? `\n  sort={sort}\n  onSortChange={(key) =>\n    setSort((s) => ({\n      key,\n      direction: s.key === key && s.direction === 'asc' ? 'desc' : 'asc',\n    }))\n  }`
-    : ''
-  return `${state}<DataTable\n  caption="${CAPTION}"${densityProp}\n  columns={[\n${cols}\n  ]}\n  rows={${sortable ? 'sortRows(rows, sort)' : 'rows'}}\n  getRowKey={(row) => row.component}${sortProps}\n/>`
-}
-
-const DETAIL = (row: DemoRow) => `${row.component} is on contract ${row.version}, wave ${row.wave}.`
 
 /**
  * The kit's Type and Size, and sortable columns. Sorting itself is the
@@ -128,7 +92,7 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
         <DataTable
           key={kind}
           caption={CAPTION}
-          description="Read from each component's own contract."
+          description={DESCRIPTION}
           size={size}
           selectable={kind === 'checkbox' || kind === 'batch' || kind === 'expandable-select' ? 'checkbox' : kind === 'radio' ? 'radio' : undefined}
           expandable={kind === 'expandable' || kind === 'expandable-select' ? (row) => <p style={{ margin: 0 }}>{DETAIL(row)}</p> : undefined}
@@ -158,14 +122,14 @@ export function DataTablePreview({ rows }: { rows: DemoRow[] }) {
             <Pagination
               page={paging.page}
               pageSize={paging.pageSize}
-              pageSizes={[5, 10, 20]}
+              pageSizes={PAGE_SIZES}
               totalItems={rows.length}
               onChange={setPaging}
             />
           }
         />
       }
-      code={codeFor(size, kind, sortable, sort)}
+      example={exampleFor({ size, kind, sortable, sort, rows })}
     />
   )
 }
@@ -260,7 +224,7 @@ export function DataTablePager({ totalItems }: { totalItems: number }) {
     <Pagination
       page={paging.page}
       pageSize={paging.pageSize}
-      pageSizes={[5, 10, 20]}
+      pageSizes={PAGE_SIZES}
       totalItems={totalItems}
       onChange={setPaging}
     />

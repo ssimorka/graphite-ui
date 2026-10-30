@@ -5,32 +5,10 @@ import { Button } from '@/components/ui/button'
 import { Notification } from '@/components/ui/notification'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { ACTION, exampleFor } from './notification-code'
+import type { DemoMessage, Kind, Variant } from './notification-code'
 
-export type Variant = 'info' | 'danger' | 'warning' | 'success'
-export type DemoMessage = { title: string; body: string }
-type Kind = 'inline' | 'callout'
-
-const ACTION = 'View details'
-
-function codeFor(
-  variant: Variant,
-  kind: Kind,
-  highContrast: boolean,
-  actionable: boolean,
-  close: boolean,
-  m: DemoMessage,
-) {
-  const props = [
-    ...(variant === 'info' ? [] : [`  variant="${variant}"`]),
-    ...(kind === 'inline' ? [] : ['  kind="callout"']),
-    ...(highContrast ? ['  highContrast'] : []),
-    `  title="${m.title}"`,
-    `  body="${m.body}"`,
-    ...(actionable && kind === 'inline' ? [`  action={{ label: '${ACTION}', onClick: openDetails }}`] : []),
-    ...(close && kind === 'inline' ? ['  onClose={() => setOpen(false)}'] : []),
-  ]
-  return `<Notification\n${props.join('\n')}\n/>`
-}
+export type { DemoMessage, Variant } from './notification-code'
 
 /**
  * The kit's axes: Status, its Inline and Callout sets, High contrast and
@@ -141,7 +119,7 @@ export function NotificationPreview({ messages }: { messages: Record<Variant, De
           </Button>
         )
       }
-      code={codeFor(variant, kind, highContrast, actionable, close, m)}
+      example={exampleFor({ variant, kind, highContrast, actionable, close })}
     />
   )
 }

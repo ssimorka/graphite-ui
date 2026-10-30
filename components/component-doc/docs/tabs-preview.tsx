@@ -3,30 +3,10 @@
 import { useState } from 'react'
 import { Tabs } from '@/components/ui/tabs'
 import type { Tab } from '@/components/ui/tabs'
-import type { KitIconName } from '@/lib/kit-icons'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Orientation = 'horizontal' | 'vertical'
-type Variant = 'line' | 'contained'
-type Kind = 'text' | 'icon'
-export type DemoTab = { id: string; label: string; body: string; icon: KitIconName }
-
-function codeFor(orientation: Orientation, variant: Variant, kind: Kind, tabs: DemoTab[]) {
-  const props = [
-    ...(orientation === 'horizontal' ? [] : [`  orientation="${orientation}"`]),
-    ...(variant === 'line' || orientation === 'vertical' ? [] : [`  variant="${variant}"`]),
-    ...(kind === 'icon' && orientation === 'horizontal' ? ['  iconOnly'] : []),
-  ]
-  const body = tabs
-    .map(
-      (t) =>
-        `    { id: '${t.id}', label: '${t.label}',${kind === 'icon' ? ` icon: '${t.icon}',` : ''} panel: <p>${t.body}</p> },`,
-    )
-    .join('\n')
-  const head = props.length ? `\n${props.join('\n')}` : ''
-  return `<Tabs${head}\n  tabs={[\n${body}\n  ]}\n/>`
-}
+import { exampleFor } from './tabs-code'
+import type { DemoTab, Kind, Orientation, Variant } from './tabs-code'
 
 /**
  * Orientation, Style and Type. The selected tab is runtime state, so it is
@@ -93,7 +73,7 @@ export function TabsPreview({ tabs }: { tabs: [DemoTab, DemoTab, ...DemoTab[]] }
           tabs={[first, second, ...rest]}
         />
       }
-      code={codeFor(orientation, variant, kind, tabs)}
+      example={exampleFor({ orientation, variant, kind, tabs })}
     />
   )
 }

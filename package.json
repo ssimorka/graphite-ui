@@ -19,7 +19,8 @@
     "color:test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/color.test.mjs",
     "naming-check": "node scripts/naming-check.mjs",
     "visual-check": "node scripts/visual-check.mjs",
-    "registry-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/registry-check.mjs"
+    "registry-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/registry-check.mjs",
+    "code-tab-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/code-tab-check.mjs"
   },
   "dependencies": {
     "@carbon/icons-react": "^11.91.0",

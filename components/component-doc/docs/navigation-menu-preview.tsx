@@ -3,52 +3,10 @@
 import { useState } from 'react'
 import type { MouseEvent } from 'react'
 import { NavigationMenu } from '@/components/ui/navigation-menu'
-import type { NavItem } from '@/components/ui/navigation-menu'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Orientation = 'horizontal' | 'vertical'
-
-const TOP = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Foundations', href: '#foundations' },
-  { label: 'Components', href: '#components' },
-]
-const NESTED = [
-  { label: 'Button', href: '#button' },
-  { label: 'Tabs', href: '#tabs' },
-]
-
-function build(nested: boolean, current: string): [NavItem, ...NavItem[]] {
-  return TOP.map((item) => ({
-    ...item,
-    ...(item.href === current ? { current: true } : {}),
-    ...(nested && item.label === 'Components'
-      ? {
-          items: NESTED.map((c) => ({
-            ...c,
-            ...(c.href === current ? { current: true } : {}),
-          })),
-        }
-      : {}),
-  })) as [NavItem, ...NavItem[]]
-}
-
-function line(i: { label: string; href: string; current?: boolean }) {
-  return `label: '${i.label}', href: '${i.href}'${i.current ? ', current: true' : ''}`
-}
-
-function codeFor(items: NavItem[], orientation: Orientation) {
-  const rows = items
-    .map((i) => {
-      if (!i.items) return `    { ${line(i)} },`
-      const kids = i.items.map((c) => `        { ${line(c)} },`).join('\n')
-      return `    {\n      ${line(i)},\n      items: [\n${kids}\n      ],\n    },`
-    })
-    .join('\n')
-  const o = orientation === 'horizontal' ? '' : `\n  orientation="${orientation}"`
-  return `<NavigationMenu\n  label="Docs"${o}\n  items={[\n${rows}\n  ]}\n/>`
-}
+import { build, exampleFor, NESTED } from './navigation-menu-code'
+import type { Orientation } from './navigation-menu-code'
 
 /**
  * Orientation, the contract's one prop, and Nested, its optional slot. The
@@ -104,7 +62,7 @@ export function NavigationMenuPreview() {
           <NavigationMenu label="Docs" orientation={orientation} items={items} />
         </div>
       }
-      code={codeFor(items, orientation)}
+      example={exampleFor({ orientation, nested, current })}
     />
   )
 }

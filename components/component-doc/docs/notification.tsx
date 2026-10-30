@@ -1,26 +1,8 @@
 import type { ComponentDocConfig } from '../types'
 import styles from './notification.module.scss'
 import { NotificationPreview, NotificationStill } from './notification-preview'
-import type { DemoMessage, Variant } from './notification-preview'
-
-const MESSAGES: Record<Variant, DemoMessage> = {
-  info: {
-    title: 'Contract updated',
-    body: 'Tabs moved to a new minor version. Nothing in your code needs to change.',
-  },
-  success: {
-    title: 'Snapshot matches',
-    body: 'Every component page agrees with the kit snapshot.',
-  },
-  warning: {
-    title: 'Snapshot may be stale',
-    body: 'Re-extract it from Figma before trusting a drift result.',
-  },
-  danger: {
-    title: 'Drift check failed',
-    body: 'Two component pages name a set the kit no longer has.',
-  },
-}
+import { MESSAGES } from './notification-code'
+import type { Variant } from './notification-code'
 
 const cell = (
   variant: Variant,

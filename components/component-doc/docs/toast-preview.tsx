@@ -6,27 +6,10 @@ import { Dropdown } from '@/components/ui/dropdown'
 import { Toast, ToastProvider, useToast } from '@/components/ui/toast'
 import type { ToastVariant } from '@/components/ui/toast'
 import { DemoFrame } from '../demo-frame'
+import { COPY, exampleFor } from './toast-code'
 import styles from './toast.module.scss'
 
-const COPY: Record<ToastVariant, { title: string; body: string }> = {
-  info: { title: 'Export started', body: 'We will email you when the file is ready.' },
-  success: { title: 'Changes saved', body: 'Your theme is live for everyone.' },
-  warning: { title: 'Storage almost full', body: 'You have used 90% of your space.' },
-  danger: { title: 'Upload failed', body: 'The file is larger than 500kb.' },
-}
-
 const now = () => new Date().toTimeString().slice(0, 8)
-
-function codeFor(variant: ToastVariant, highContrast: boolean, actionable: boolean) {
-  const props = [
-    variant === 'info' ? '' : `\n  variant: '${variant}',`,
-    `\n  title: '${COPY[variant].title}',`,
-    `\n  body: '${COPY[variant].body}',`,
-    actionable ? "\n  action: { label: 'Undo', onClick: undo }," : "\n  timestamp: 'Time stamp [12:04:31]',",
-    highContrast ? '\n  highContrast: true,' : '',
-  ].join('')
-  return `// Once, around the app:\n<ToastProvider>{children}</ToastProvider>\n\n// Anywhere under it:\nconst toast = useToast()\ntoast({${props}\n})`
-}
 
 function Trigger({ variant, highContrast, actionable }: { variant: ToastVariant; highContrast: boolean; actionable: boolean }) {
   const toast = useToast()
@@ -109,7 +92,7 @@ export function ToastPreview() {
             />
           </div>
         }
-        code={codeFor(variant, highContrast, actionable)}
+        example={exampleFor({ variant, highContrast, actionable })}
       />
     </ToastProvider>
   )

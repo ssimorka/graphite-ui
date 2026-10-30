@@ -5,17 +5,9 @@ import { TreeView } from '@/components/ui/tree-view'
 import type { TreeNode } from '@/components/ui/tree-view'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
+import { exampleFor } from './tree-view-code'
+import type { Size } from './tree-view-code'
 import styles from './tree-view.module.scss'
-
-type Size = 'sm' | 'xs'
-
-function codeFor(size: Size, icons: boolean) {
-  const lines = ['  label="Project files"', '  nodes={nodes}']
-  if (size !== 'sm') lines.push(`  size="${size}"`)
-  if (!icons) lines.push('  icons={false}')
-  lines.push('  selected={selected}', '  onSelect={setSelected}')
-  return `<TreeView\n${lines.join('\n')}\n/>`
-}
 
 /** The kit's pane: Size and Icon. Selection is live, so the code tracks it. */
 export function TreeViewPreview({ nodes }: { nodes: TreeNode[] }) {
@@ -62,7 +54,7 @@ export function TreeViewPreview({ nodes }: { nodes: TreeNode[] }) {
           />
         </div>
       }
-      code={codeFor(size, icons === 'on')}
+      example={exampleFor({ size, icons: icons === 'on', selected })}
     />
   )
 }

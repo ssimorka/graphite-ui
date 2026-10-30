@@ -5,23 +5,8 @@ import { PasswordInput } from '@/components/ui/password-input'
 import { Dropdown } from '@/components/ui/dropdown'
 import type { FieldLayout, FieldSize } from '@/components/ui/text-input'
 import { DemoFrame } from '../demo-frame'
-
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const ERROR = 'Use at least 12 characters'
-const WARNING = 'Caps Lock is on'
-
-function codeFor(layout: FieldLayout, size: FieldSize, status: Status) {
-  const props = [
-    layout === 'fixed' ? '' : `\n  layout="${layout}"`,
-    layout === 'fluid' || size === 'md' ? '' : `\n  size="${size}"`,
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `<PasswordInput\n  label="Password"${props}\n  helpText="At least 12 characters"\n  value={value}\n  onChange={(e) => setValue(e.target.value)}\n/>`
-}
+import { ERROR, exampleFor, WARNING } from './password-input-code'
+import type { Status } from './password-input-code'
 
 /** Every layout, size and state, live. The eye shows what was typed. */
 export function PasswordInputPreview() {
@@ -88,7 +73,7 @@ export function PasswordInputPreview() {
           />
         </div>
       }
-      code={codeFor(layout, size, status)}
+      example={exampleFor({ layout, size, status })}
     />
   )
 }

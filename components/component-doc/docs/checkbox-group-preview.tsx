@@ -4,28 +4,8 @@ import { useState } from 'react'
 import { CheckboxGroup } from '@/components/ui/checkbox-group'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Status = 'enabled' | 'error' | 'warning' | 'disabled' | 'read-only'
-
-const OPTIONS = [
-  { value: 'email', label: 'Email' },
-  { value: 'sms', label: 'Text message' },
-  { value: 'push', label: 'Push notification' },
-]
-
-const ERROR = 'Choose at least one way to reach you'
-const WARNING = 'Text messages may cost extra'
-
-function codeFor(orientation: 'vertical' | 'horizontal', status: Status) {
-  const props = [
-    orientation === 'vertical' ? '' : '\n  orientation="horizontal"',
-    status === 'error' ? `\n  errorText="${ERROR}"` : '',
-    status === 'warning' ? `\n  warningText="${WARNING}"` : '',
-    status === 'disabled' ? '\n  disabled' : '',
-    status === 'read-only' ? '\n  readOnly' : '',
-  ].join('')
-  return `const [value, setValue] = useState<string[]>(['email'])\n\n<CheckboxGroup\n  label="Notify me by"\n  options={[\n    { value: 'email', label: 'Email' },\n    { value: 'sms', label: 'Text message' },\n    { value: 'push', label: 'Push notification' },\n  ]}${props}\n  value={value}\n  onChange={setValue}\n/>`
-}
+import { ERROR, exampleFor, OPTIONS, WARNING } from './checkbox-group-code'
+import type { Status } from './checkbox-group-code'
 
 /** Horizontal and every state, live. Clearing every box shows the error, as a page would. */
 export function CheckboxGroupPreview() {
@@ -76,7 +56,7 @@ export function CheckboxGroupPreview() {
           readOnly={status === 'read-only'}
         />
       }
-      code={codeFor(orientation, status)}
+      example={exampleFor({ orientation, status })}
     />
   )
 }

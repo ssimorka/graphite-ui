@@ -2,30 +2,9 @@
 
 import { useState } from 'react'
 import { Breadcrumb } from '@/components/ui/breadcrumb'
-import type { Crumb } from '@/components/ui/breadcrumb'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-// Six levels of a plausible product, deepest last. The trail takes the first
-// n of them, so the last one shown is always the page "you are on".
-const LEVELS = ['Home', 'Projects', 'Graphite', 'Settings', 'Members', 'Invitations']
-
-function trail(length: number): [Crumb, ...Crumb[]] {
-  const labels = LEVELS.slice(0, length)
-  return labels.map((label, i) =>
-    i === labels.length - 1 ? { label } : { label, href: '#' },
-  ) as [Crumb, ...Crumb[]]
-}
-
-function codeFor(items: Crumb[], maxItems: number) {
-  const rows = items
-    .map((c) =>
-      c.href ? `    { label: '${c.label}', href: '${c.href}' },` : `    { label: '${c.label}' },`,
-    )
-    .join('\n')
-  const max = maxItems === 4 ? '' : `\n  maxItems={${maxItems}}`
-  return `<Breadcrumb\n  items={[\n${rows}\n  ]}${max}\n/>`
-}
+import { exampleFor, trail } from './breadcrumb-code'
 
 /**
  * Length and Max items. The contract's one prop, separator style, is fixed by
@@ -66,7 +45,7 @@ export function BreadcrumbPreview() {
         </>
       }
       preview={<Breadcrumb items={items} maxItems={maxItems} />}
-      code={codeFor(items, maxItems)}
+      example={exampleFor({ length, maxItems })}
     />
   )
 }

@@ -1,36 +1,12 @@
 import { TreeView } from '@/components/ui/tree-view'
-import type { TreeNode } from '@/components/ui/tree-view'
 import { readKitPage } from '@/lib/kit-page'
 import type { ComponentDocConfig } from '../types'
 import styles from './tree-view.module.scss'
 import { TreeViewPreview } from './tree-view-preview'
+import { NODES } from './tree-view-code'
 
 // Four levels, as the kit's own Tree view draws: a branch at each depth and a
 // leaf under each.
-const NODES: TreeNode[] = [
-  {
-    id: 'components',
-    label: 'components',
-    children: [
-      {
-        id: 'ui',
-        label: 'ui',
-        children: [
-          { id: 'button', label: 'button.tsx' },
-          { id: 'tree-view', label: 'tree-view.tsx' },
-          {
-            id: 'parts',
-            label: 'parts',
-            children: [{ id: 'field-shell', label: '_field-shell.scss' }],
-          },
-        ],
-      },
-      { id: 'kit-icon', label: 'kit-icon.tsx' },
-    ],
-  },
-  { id: 'docs', label: 'docs', children: [{ id: 'readme', label: 'README.md' }] },
-  { id: 'package', label: 'package.json' },
-]
 
 // One short tree for the static sections: a branch open on a leaf.
 const tree = (

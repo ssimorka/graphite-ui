@@ -5,40 +5,15 @@ import { Tag } from '@/components/ui/tag'
 import type { TagSize, TagVariant } from '@/components/ui/tag'
 import { Dropdown } from '@/components/ui/dropdown'
 import { DemoFrame } from '../demo-frame'
-
-type Variant = TagVariant
-type Content = 'text' | 'count' | 'overflow'
-
-const TEXT: Record<Variant, string> = {
-  neutral: 'Draft',
-  primary: 'New',
-  danger: 'Failed',
-  warning: 'Expiring',
-  success: 'Paid',
-  secondary: 'Design',
-  info: 'Beta',
-  'high-contrast': 'Pinned',
-  outline: 'Archived',
-}
-
-// A number is passed as a number, not a string: only a number is capped.
-const value = (variant: Variant, content: Content) =>
-  content === 'text' ? TEXT[variant] : content === 'count' ? 42 : 128
-
-function codeFor(variant: Variant, content: Content, size: TagSize) {
-  const variantProp = variant === 'neutral' ? '' : ` variant="${variant}"`
-  const sizeProp = size === 'md' ? '' : ` size="${size}"`
-  const v = value(variant, content)
-  const child = typeof v === 'number' ? `{${v}}` : v
-  return `<Tag${variantProp}${sizeProp}>${child}</Tag>`
-}
+import { exampleFor, value } from './tag-code'
+import type { Content } from './tag-code'
 
 /**
  * Variant is the contract prop worth a control. The Label control shows what
  * the other one, max, does at its default: a large count caps at 99+.
  */
 export function TagPreview() {
-  const [variant, setVariant] = useState<Variant>('primary')
+  const [variant, setVariant] = useState<TagVariant>('primary')
   const [content, setContent] = useState<Content>('text')
   const [size, setSize] = useState<TagSize>('md')
 
@@ -50,7 +25,7 @@ export function TagPreview() {
             label="Variant"
             size="sm"
             value={variant}
-            onChange={(v) => setVariant(v as Variant)}
+            onChange={(v) => setVariant(v as TagVariant)}
             options={[
               { value: 'neutral', label: 'Neutral (Gray)' },
               { value: 'primary', label: 'Primary (Purple)' },
@@ -88,7 +63,7 @@ export function TagPreview() {
         </>
       }
       preview={<Tag variant={variant} size={size}>{value(variant, content)}</Tag>}
-      code={codeFor(variant, content, size)}
+      example={exampleFor({ variant, content, size })}
     />
   )
 }
