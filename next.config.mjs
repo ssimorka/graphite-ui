@@ -5,8 +5,10 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/system/color', destination: '/docs', permanent: true },
-      // Moved under Contribute when the docs split Use from Contribute.
-      { source: '/docs/installation', destination: '/docs/contribute/run-locally', permanent: true },
+      // Someone guessing this URL wants to install Graphite in their project,
+      // not run this repo. It pointed at Contribute's Run locally until the
+      // cold-start test (2026-10-30) found it sending adopters to a clone.
+      { source: '/docs/installation', destination: '/docs/quick-start', permanent: true },
       { source: '/docs/governance', destination: '/docs/contribute/governance', permanent: true },
       // Get started was folded into the top of the Introduction.
       { source: '/docs/get-started', destination: '/docs#use-today', permanent: true },
