@@ -13,7 +13,7 @@ importers:
         version: 11.91.0(react@19.3.1)
       '@carbon/react':
         specifier: ^1.119.0
-        version: 1.119.0(react-dom@19.3.1(react@19.3.1))(react-is@19.3.1)(react@19.3.1)(sass@1.106.1)
+        version: 1.119.0(react-dom@19.3.1(react@19.3.1))(react-is@19.3.1)(react@19.3.1)(sass@1.107.1)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -22,7 +22,7 @@ importers:
         version: 2.1.1
       next:
         specifier: ^16.4.3
-        version: 16.4.3(@types/node@25.9.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.106.1)
+        version: 16.4.3(@types/node@25.9.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.107.1)
       react:
         specifier: ^19.3.1
         version: 19.3.1
@@ -43,8 +43,8 @@ importers:
         specifier: ^19.3.0
         version: 19.3.0(@types/react@19.3.0)
       sass:
-        specifier: ^1.106.1
-        version: 1.106.1
+        specifier: ^1.107.1
+        version: 1.107.1
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -674,8 +674,8 @@ packages:
     resolution: {integrity: sha512-9u/XQ1pvrQtYyMpZe7DXKv2p5CNvyVwzUB6uhLAnQwHMSgKMBR62lc7AHljaeteeHXn11XTAaLLUVZYVZyuRBQ==}
     engines: {node: '>= 20.19.0'}
 
-  sass@1.106.1:
-    resolution: {integrity: sha512-kD+Gi66vycZcbJt+42NC4z4PXNMcCajVrJPhqoKKXy5cOBMmJQt052CxIBcRjwYXeImHYOpu/ydWWGZQIenl7A==}
+  sass@1.107.1:
+    resolution: {integrity: sha512-aJ1/LvxOOb04YhmiBjzZn3jVwdHKol+OVhoMV6fFl02fF9T3i+5Mg9l/CnzqtM+NX5Jn5o3lAbs/ZJivTCLHfQ==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -777,14 +777,14 @@ snapshots:
     dependencies:
       '@ibm/telemetry-js': 1.11.0
 
-  '@carbon/react@1.119.0(react-dom@19.3.1(react@19.3.1))(react-is@19.3.1)(react@19.3.1)(sass@1.106.1)':
+  '@carbon/react@1.119.0(react-dom@19.3.1(react@19.3.1))(react-is@19.3.1)(react@19.3.1)(sass@1.107.1)':
     dependencies:
       '@babel/runtime': 8.0.5
       '@carbon/feature-flags': 1.11.0
       '@carbon/icons-react': 11.91.0(react@19.3.1)
       '@carbon/layout': 11.62.0
       '@carbon/motion': 11.55.0
-      '@carbon/styles': 1.118.0(sass@1.106.1)
+      '@carbon/styles': 1.118.0(sass@1.107.1)
       '@carbon/utilities': 0.28.0
       '@floating-ui/react': 0.27.19(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@ibm/telemetry-js': 1.11.0
@@ -802,9 +802,9 @@ snapshots:
       react-is: 19.3.1
       tabbable: 6.4.0
     optionalDependencies:
-      sass: 1.106.1
+      sass: 1.107.1
 
-  '@carbon/styles@1.118.0(sass@1.106.1)':
+  '@carbon/styles@1.118.0(sass@1.107.1)':
     dependencies:
       '@carbon/colors': 11.61.0
       '@carbon/feature-flags': 1.11.0
@@ -824,7 +824,7 @@ snapshots:
       '@ibm/plex-serif': 2.0.0
       '@ibm/telemetry-js': 1.11.0
     optionalDependencies:
-      sass: 1.106.1
+      sass: 1.107.1
 
   '@carbon/themes@11.84.0':
     dependencies:
@@ -1231,7 +1231,7 @@ snapshots:
 
   nanoid@3.3.19: {}
 
-  next@16.4.3(@types/node@25.9.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.106.1):
+  next@16.4.3(@types/node@25.9.9)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.107.1):
     dependencies:
       '@next/env': 16.4.3
       '@swc/helpers': 0.5.23
@@ -1250,7 +1250,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.4.3
       '@next/swc-win32-arm64-msvc': 16.4.3
       '@next/swc-win32-x64-msvc': 16.4.3
-      sass: 1.106.1
+      sass: 1.107.1
       sharp: 0.35.5(@types/node@25.9.9)
     transitivePeerDependencies:
       - '@babel/core'
@@ -1296,7 +1296,7 @@ snapshots:
 
   readdirp@5.0.0: {}
 
-  sass@1.106.1:
+  sass@1.107.1:
     dependencies:
       chokidar: 5.0.0
       immutable: 5.1.6
