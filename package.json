@@ -25,11 +25,11 @@
     "code-tab-check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --disable-warning=ExperimentalWarning --import ./scripts/lib/register-alias.mjs scripts/code-tab-check.mjs"
   },
   "dependencies": {
-    "@carbon/icons-react": "^11.91.0",
-    "@carbon/react": "^1.119.0",
+    "@carbon/icons-react": "^11.92.0",
+    "@carbon/react": "^1.120.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "next": "^16.4.3",
+    "next": "^16.4.5",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-is": "^19.3.1"
@@ -38,7 +38,7 @@
     "@types/node": "^25.9.9",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "sass": "^1.106.1",
+    "sass": "^1.108.1",
     "typescript": "^6.0.3"
   }
 }
