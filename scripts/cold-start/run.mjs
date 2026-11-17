@@ -71,14 +71,30 @@ const log = (msg) => {
   console.log(line)
   fs.appendFileSync(LOG, line + '\n')
 }
+// npm answers ETARGET when a dependency names a version the registry does not
+// serve yet: a run that lands while another project is mid-release (as
+// typescript-eslint 8.73.0 was on 2026-11-16, publishing package by package
+// over seven minutes) fails on nothing Graphite did. Those are waited out and
+// retried; any other failure, or ETARGET that outlasts the waits, still fails.
+const ETARGET_WAITS_S = (process.env.COLD_START_ETARGET_WAITS ?? '60,120,180').split(',').map(Number)
+const sleep = (s) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, s * 1000)
 const sh = (cmd, cwd) => {
   fs.appendFileSync(LOG, `$ (${path.relative(OUT, cwd) || '.'}) ${cmd}\n`)
-  try {
-    const out = execSync(cmd, { cwd, stdio: 'pipe', env: { ...process.env, CI: '1' }, maxBuffer: 64 << 20 })
-    fs.appendFileSync(LOG, out)
-  } catch (e) {
-    fs.appendFileSync(LOG, `${e.stdout ?? ''}${e.stderr ?? ''}`)
-    throw new Error(`Command failed: ${cmd} (see steps.log)`)
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const out = execSync(cmd, { cwd, stdio: 'pipe', env: { ...process.env, CI: '1' }, maxBuffer: 64 << 20 })
+      fs.appendFileSync(LOG, out)
+      return
+    } catch (e) {
+      const output = `${e.stdout ?? ''}${e.stderr ?? ''}`
+      fs.appendFileSync(LOG, output)
+      const wait = ETARGET_WAITS_S[attempt]
+      if (!/\bETARGET\b/.test(output) || wait === undefined) {
+        throw new Error(`Command failed: ${cmd} (see steps.log)`)
+      }
+      log(`npm ETARGET: a dependency version is not on the registry yet; retrying in ${wait}s (${attempt + 1}/${ETARGET_WAITS_S.length})`)
+      sleep(wait)
+    }
   }
 }
 const local = (s) => s.replaceAll(PUBLISHED, ORIGIN)
