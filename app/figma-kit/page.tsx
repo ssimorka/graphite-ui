@@ -5,6 +5,7 @@ import { ButtonGroup } from '@/components/ui/button-group'
 import { Link } from '@/components/ui/link'
 import { kitLink } from '@/lib/kit-links'
 import { KitCompare } from './compare'
+import { PLANS } from './plans'
 import styles from './figma-kit.module.scss'
 
 export const metadata: Metadata = {
@@ -24,6 +25,11 @@ export const metadata: Metadata = {
  *   on Gumroad.
  */
 export default function FigmaKitPage() {
+  // Below 672px the plan columns are too narrow for buttons, so the same three
+  // actions sit under the table instead: ghosts first, the one filled button
+  // last, as ButtonGroup requires.
+  const [free, solo, team] = PLANS
+
   return (
     <main id="main-content" className="page-main">
       <div className={styles.page}>
@@ -35,13 +41,15 @@ export default function FigmaKitPage() {
         <KitCompare />
 
         <div className={styles.actions}>
-          {/* One filled button, last, as ButtonGroup requires. */}
-          <ButtonGroup>
+          <ButtonGroup className={styles.mobileActions}>
             <Button asChild variant="ghost" size="lg" className={styles.button}>
-              <a {...kitLink('free', 'gumroad', 'kit-page')}>Get the free kit</a>
+              <a {...free.link}>{free.action.label}</a>
+            </Button>
+            <Button asChild variant="ghost" size="lg" className={styles.button}>
+              <a {...team.link}>{team.action.label}</a>
             </Button>
             <Button asChild variant="primary" size="lg" className={styles.button}>
-              <a {...kitLink('pro', 'gumroad', 'kit-page')}>Get Pro</a>
+              <a {...solo.link}>{solo.action.label}</a>
             </Button>
           </ButtonGroup>
           <Link size="sm" {...kitLink('free', 'community', 'kit-page')}>

@@ -1,12 +1,12 @@
-// The Figma kit page. Same frame as Create's head (create-page.module.scss):
-// the page gutters, the heading steps and the lede's measure, so the two
-// marketing routes outside the docs line up.
+// The Figma kit page. Create's gutters and heading steps
+// (create-page.module.scss), centred over the comparison card.
 
 .page {
   display: flex;
   flex-direction: column;
   gap: var(--graphite-space-07);
-  max-width: 60rem;
+  max-width: 68rem;
+  margin: 0 auto;
   padding: 1.25rem var(--graphite-space-05) var(--graphite-space-10);
 
   @media (min-width: 672px) {
@@ -21,7 +21,9 @@
 .head {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--graphite-space-05);
+  text-align: center;
 }
 
 .title {
@@ -47,16 +49,29 @@
 
 .actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  gap: var(--graphite-space-05) var(--graphite-space-06);
+  gap: var(--graphite-space-05);
+}
+
+// The plan buttons live in the card's header from 672px; below it they sit
+// here instead, full width, one per row.
+.mobileActions.mobileActions {
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+
+  @media (min-width: 672px) {
+    display: none;
+  }
 }
 
 .smallPrint {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--graphite-space-02);
-  max-width: 47.5rem;
+  text-align: center;
   color: var(--graphite-on-surface-variant);
 
   // On the p itself: the site's base p rule sets its own size.
