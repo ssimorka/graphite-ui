@@ -195,6 +195,30 @@ async function capture() {
             localStorage.setItem('graphite-theme-choice', JSON.stringify({ sourceHex: '#5e44aa', theme: th, level: 'AA' }))
           } catch {}
         }, theme)
+        // A page that loops (the Motion page's figures) queues its next
+        // cycle on a timer. __visualHold() clears every pending timer and
+        // ignores new ones, so nothing restarts between the last freeze and
+        // the last shot. Called only then: until that point, the page's own
+        // timers (a toast queue, a tooltip's wait) are part of what is shot.
+        await ctx.addInitScript(() => {
+          const real = window.setTimeout.bind(window)
+          const pending = new Set()
+          let held = false
+          window.setTimeout = (fn, ms, ...rest) => {
+            if (held) return 0
+            const id = real((...a) => {
+              pending.delete(id)
+              if (typeof fn === 'function') fn(...a)
+            }, ms, ...rest)
+            pending.add(id)
+            return id
+          }
+          window.__visualHold = () => {
+            held = true
+            for (const id of pending) clearTimeout(id)
+            pending.clear()
+          }
+        })
         const page = await ctx.newPage()
         // Toasts print the time; hold the clock so two runs agree.
         await page.clock.setFixedTime(new Date('2026-10-24T12:00:00'))
@@ -215,6 +239,13 @@ async function capture() {
             await page.screenshot({ path: path.join(out, `${stem}-start.png`) })
             shots++
           }
+          await page.evaluate(() => window.__visualHold?.())
+          await freeze(page, 'end')
+          // Anything re-rendered as the first freeze lands (the tray's links
+          // are) starts a fresh animation; give it a moment and finish that
+          // too. The wait is Playwright's: the page's own timers are held now,
+          // and the fixed clock's requestAnimationFrame runs on them.
+          await page.waitForTimeout(100)
           await freeze(page, 'end')
           await page.screenshot({ path: path.join(out, `${stem}-end.png`), fullPage: !!t.fullPage })
           shots++
