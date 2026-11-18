@@ -76,7 +76,7 @@ Foundations, Resources), a stats line, and the Built by credit.
 | `/` | The landing page | `app/page.tsx`, `components/sections/` |
 | `/create` | The theme builder | `components/create/` |
 | `/create/generative-art` | The rules behind Create's generative art: the tile library, the 60 / 30 / 10 color rhythm and the spans | `app/create/generative-art/`, `app/docs/theming/live.tsx` |
-| `/figma-kit` | Both kit editions: the Free and Pro table, Get the free kit (ghost) and Get Pro (primary) in one `ButtonGroup`, the Community link, and the small print | `app/figma-kit/` |
+| `/figma-kit` | Free, Pro Solo and Pro Team side by side: plan headers (name, price, button; only Pro Solo's is filled) over feature groups in the governed `Accordion`, each panel a real table. Below 672px the buttons move under the card. Then the Community link and the small print | `app/figma-kit/` (`plans.ts` holds the plan data) |
 | `/gallery` | Components index: every kit component A to Z | `components/sections/components-index.tsx` |
 | `/docs` | Introduction | `app/docs/page.tsx` |
 | `/docs/contribute/run-locally` | Running the project and the governance checks; `/docs/installation` redirects here (`next.config.mjs`) | `app/docs/contribute/run-locally/` |
