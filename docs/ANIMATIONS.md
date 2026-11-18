@@ -87,6 +87,7 @@ Marketing and docs surfaces, all in `app/globals.scss`.
 | Card glow | `--glow` on cards | `slow` | Out | Hover on the docs next cards, wall cards, index cards and doors |
 | Next card drop | `.nextCard` padding | `slow` | Out | Hover, 4px |
 | Index card drop | `.previewInner` | `slow` | Out | Hover on a governed card, 4px |
+| Create kit panel | `kit-cta.module.scss` / `kit-cta-in` | `base` | Out | Mount, once, when a color is first chosen. The rise rides `--graphite-motion-travel`, so reduced motion only fades |
 | Create preview cards | `live-audio-waveform` / `pulse`, `skeleton` / `sweep` | half `indeterminate`; `indeterminate` | In-out | Infinite, inside the Create preview |
 
 Every value above is a token. The literals this table used to list (700, 900,

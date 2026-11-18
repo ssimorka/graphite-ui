@@ -1,0 +1,50 @@
+// Create's "Take this theme into Figma" panel. A quiet band in the flow under
+// the preview: the first elevation step with the subtle outline, square like
+// the rest of Create's chrome. It never floats, so it cannot cover the builder.
+
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-05) var(--graphite-space-06);
+  padding: var(--graphite-space-06);
+  background: var(--graphite-elevation-01);
+  border: 1px solid var(--graphite-outline-subtle);
+  // Rises in once, when it first appears. The distance rides
+  // --graphite-motion-travel, so under reduced motion it only fades.
+  animation: kit-cta-in var(--graphite-motion-duration-base) var(--graphite-motion-easing-out) backwards;
+}
+
+@keyframes kit-cta-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--graphite-space-03) * var(--graphite-motion-travel));
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-02);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--graphite-text-title-3-size);
+  line-height: var(--graphite-text-title-3-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
+.action {
+  text-decoration: none;
+}

@@ -2,7 +2,7 @@
 
 import { Grid, Column } from '@carbon/react'
 import { Brand } from '@/components/brand'
-import { KIT_FREE_URL, KIT_PRO_URL } from '@/lib/kit-links'
+import { kitLink } from '@/lib/kit-links'
 import styles from './site-footer.module.scss'
 
 // The kit's four link columns. Targets point at what exists today: the docs
@@ -11,7 +11,13 @@ import styles from './site-footer.module.scss'
 // rather than to a 404.
 const REPO = 'https://github.com/ssimorka/graphite-ui'
 
-const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] = [
+// Kit links carry their UTM tags and analytics attributes (lib/kit-links.ts).
+const FREE_KIT = kitLink('free', 'gumroad', 'footer')
+const PRO_KIT_LINK = kitLink('pro', 'gumroad', 'footer')
+
+type FooterLink = { label: string; href: string; kit?: ReturnType<typeof kitLink> }
+
+const COLUMNS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'Docs',
     links: [
@@ -44,8 +50,9 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: 'Resources',
     links: [
-      { label: 'Figma kit, free', href: KIT_FREE_URL },
-      { label: 'Figma kit Pro', href: KIT_PRO_URL },
+      { label: 'Figma kit', href: '/figma-kit' },
+      { label: 'Free kit', href: FREE_KIT.href, kit: FREE_KIT },
+      { label: 'Pro kit', href: PRO_KIT_LINK.href, kit: PRO_KIT_LINK },
       { label: 'GitHub', href: REPO },
       { label: 'Governance rules', href: '/docs/contribute/governance' },
       { label: 'Licence', href: `${REPO}/blob/main/LICENSE` },
@@ -84,6 +91,7 @@ export function SiteFooter() {
                           {...(isExternal(link.href)
                             ? { target: '_blank', rel: 'noopener noreferrer' }
                             : {})}
+                          {...link.kit}
                         >
                           {link.label}
                         </a>

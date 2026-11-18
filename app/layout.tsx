@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import { SiteTheme } from '@/components/site-theme'
 import { SiteHeader } from '@/components/site-header'
+import { Analytics } from '@/components/analytics'
 import { THEME_RESTORE_SCRIPT } from '@/lib/theme-storage'
 import './globals.scss'
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <SiteHeader />
           {children}
         </SiteTheme>
+        <Analytics />
       </body>
     </html>
   )

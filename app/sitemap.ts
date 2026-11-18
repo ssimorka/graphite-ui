@@ -7,7 +7,7 @@ import { DOCS_NAV } from '@/components/docs-nav'
  * /sitemap.xml; the origin comes from the layout's metadataBase.
  */
 const ORIGIN = 'https://www.graphite-ui.com'
-const OUTSIDE_NAV = ['/', '/create', '/create/generative-art']
+const OUTSIDE_NAV = ['/', '/create', '/create/generative-art', '/figma-kit']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const paths = new Set([...OUTSIDE_NAV, ...DOCS_NAV.flatMap((g) => g.items.map((i) => i.href))])

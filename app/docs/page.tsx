@@ -26,7 +26,7 @@ import {
 import { IntroductionSpecimen } from './introduction-specimen'
 import { TOC } from './toc'
 import styles from './introduction.module.scss'
-import { KIT_FREE_URL, KIT_PRO_URL } from '@/lib/kit-links'
+import { kitLink } from '@/lib/kit-links'
 
 export const metadata: Metadata = {
   title: 'Introduction · Graphite UI',
@@ -124,9 +124,9 @@ export default function IntroductionPage() {
                 </h3>
                 <p>
                   Two editions, both drawn in light and dark.{' '}
-                  <a href={KIT_FREE_URL}>The free kit</a> has the foundations,
+                  <a {...kitLink('free', 'gumroad', 'docs')}>The free kit</a> has the foundations,
                   the Regular icons and 18 core components.{' '}
-                  <a href={KIT_PRO_URL}>Pro</a> adds every other component and
+                  <a {...kitLink('pro', 'gumroad', 'docs')}>Pro</a> adds every other component and
                   the Bold and Solid icons. Duplicate either one and publish it
                   to your team libraries. Both are drawn in the default color:
                   there is no way yet to bring a theme from Create into them.
@@ -208,8 +208,8 @@ export default function IntroductionPage() {
                   <td>
                     The Graphite UI Kit, and it is canonical: where the kit and
                     a contract disagree, the kit wins and the contract is
-                    corrected. The public editions, <a href={KIT_FREE_URL}>Free</a>{' '}
-                    and <a href={KIT_PRO_URL}>Pro</a>, are built from it.
+                    corrected. The public editions, <a {...kitLink('free', 'gumroad', 'docs')}>Free</a>{' '}
+                    and <a {...kitLink('pro', 'gumroad', 'docs')}>Pro</a>, are built from it.
                   </td>
                 </tr>
                 <tr>
