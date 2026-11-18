@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { FREE_KIT_PAGES, KIT_FREE_FILE_URL, KIT_PRO_URL } from './kit-links'
+import { FREE_KIT_PAGES, KIT_FREE_FILE_URL, PRO_KIT } from './kit-links'
 
 export type KitPage = {
   /** The page's node id in the kit file. */
@@ -8,6 +8,7 @@ export type KitPage = {
   /**
    * Where a designer gets this component: the page in the free kit, or the
    * Pro listing when the component is Pro only. Never the working file.
+   * Untagged: pass it through `kitLink` to link to it.
    */
   url: string
   /** Which public edition carries the component. */
@@ -46,7 +47,7 @@ export function readKitPage(title: string): KitPage | null {
     id: page.id,
     ...(FREE_KIT_PAGES.has(title)
       ? { url: `${KIT_FREE_FILE_URL}?node-id=${page.id.replace(':', '-')}`, edition: 'free' as const }
-      : { url: KIT_PRO_URL, edition: 'pro' as const }),
+      : { url: PRO_KIT, edition: 'pro' as const }),
     sets: page.sets.length,
     variants: page.sets.reduce((n, s) => n + s.variants, 0),
     publicSets: page.sets.filter((s) => !s.private).length,

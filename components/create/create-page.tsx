@@ -6,6 +6,7 @@ import type { ThemeFileFoundations } from '@/lib/theme-file'
 import { ControlsBar } from './controls-bar'
 import { ControlsPanel } from './controls'
 import { Preview } from './preview'
+import { KitCta } from './kit-cta'
 import styles from './create-page.module.scss'
 
 /**
@@ -40,6 +41,9 @@ export function CreatePage({ foundations }: { foundations: ThemeFileFoundations 
                 <div className={styles.bar}>
                   <ControlsBar />
                 </div>
+                {/* After the bar, so the bar settles above it and nothing
+                    here sits over the builder. */}
+                <KitCta />
               </div>
             </div>
           </div>

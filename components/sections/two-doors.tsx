@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { useTheme, COVER_SOURCE_HEX } from '@/components/theme-provider'
 import { makeRamps, buildTheme } from '@/lib/color.js'
 import styles from './two-doors.module.scss'
-import { KIT_FREE_URL } from '@/lib/kit-links'
+import { Link } from '@/components/ui/link'
+import { kitLink } from '@/lib/kit-links'
 
 // The token rows the designers' door shows behind its copy. The kit's own
 // note on this component says it is "populated from the contract tokens list,
@@ -76,15 +77,16 @@ export function TwoDoors() {
                     Accordion&apos;s color tokens, live.
                   </p>
                 </div>
+                {/* The quiet way to the same free file. Above the action's
+                    overlay, so it is its own target. */}
+                <Link size="sm" className={styles.altLink} {...kitLink('free', 'community', 'home')}>
+                  Also on Figma Community
+                </Link>
                 {/* The door's action, the corner action the other cards end
                     in, here in the bottom-left corner. Its overlay makes the
                     whole door the link. */}
                 <Button asChild variant="primary" size="lg" className={styles.cta}>
-                  <a
-                    href={KIT_FREE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a {...kitLink('free', 'gumroad', 'home')}>
                     Get the free Figma kit
                     <KitIcon name="arrow-small-right" className={styles.ctaIcon} />
                   </a>

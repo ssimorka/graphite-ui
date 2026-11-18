@@ -145,6 +145,15 @@
   }
 }
 
+// The free door's Community link: positioned over the action's overlay (the
+// .cta's z-index 1 context), so a press here is this link's, not the door's.
+.altLink {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin-bottom: var(--graphite-space-05);
+}
+
 .doorBody {
   position: relative;
   z-index: 1;

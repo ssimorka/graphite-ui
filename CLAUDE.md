@@ -350,6 +350,20 @@ before trusting a browser result.
   (governance) checks the config; `.github/workflows/live-headers.yml` runs it
   with `--live` against production after each production deploy and nightly.
 
+- **Kit links go through `kitLink`, and analytics is key-gated.** Since
+  2026-11-18 every outbound kit link is `kitLink(edition, destination,
+  placement)` from `lib/kit-links.ts`: free actions go to Gumroad's $0 listing
+  (it collects the email), Figma Community is the quiet second link, and each
+  carries UTM tags plus `data-kit-*` attributes that `components/analytics.tsx`
+  turns into `kit_link_clicked`. PostHog (`lib/analytics.ts`) loads only with
+  `NEXT_PUBLIC_POSTHOG_KEY` set; no autocapture, no session recording. Headless
+  Chrome is dropped as a bot, so a test must clear `navigator.webdriver` and
+  `navigator.userAgentData` to see events. Two lines are deliberately missing
+  until confirmed: `/figma-kit`'s "your work carries over" line (nothing in the
+  repo says how a Free file moves to Pro) and a refund line (comment in
+  `app/figma-kit/page.tsx`). Create's panel says "Design with Graphite in Figma"
+  because the docs say a Create theme cannot yet be brought into the kit.
+
 ## Landing changes
 
 **`main` is protected and you cannot push to it.** Enabled 2026-08-29 after a

@@ -20,11 +20,12 @@ import { SearchPalette } from '@/components/search/search-palette'
 import styles from './site-header.module.scss'
 
 // The kit's header nav, with every label pointed at something that exists:
-// Create is the theme builder.
+// Create is the theme builder, Figma kit the page for both editions.
 const NAV_ITEMS: [NavItem, ...NavItem[]] = [
   { href: '/docs', label: 'Docs' },
   { href: '/gallery', label: 'Components' },
   { href: '/create', label: 'Create' },
+  { href: '/figma-kit', label: 'Figma kit' },
 ]
 
 function withCurrent(pathname: string): [NavItem, ...NavItem[]] {

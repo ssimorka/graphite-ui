@@ -23,7 +23,8 @@ CLAUDE.md keeps the current counts.
 **`SiteHeader`** ([`components/site-header.tsx`](../components/site-header.tsx)),
 64px tall and fixed:
 - **Brand**, linking to `/`. Below 672px only the wordmark shows.
-- **Nav**: Docs (`/docs`), Components (`/gallery`), Create (`/create`). Inline
+- **Nav**: Docs (`/docs`), Components (`/gallery`), Create (`/create`), Figma
+  kit (`/figma-kit`). Inline
   from 1056px. Below that a Menu button opens a tray, sliding in from the left
   under the bar, holding the same links as a vertical `NavigationMenu`, plus the
   docs sidebar groups on docs pages. The tray wears the drop panel's layer (see
@@ -75,6 +76,7 @@ Foundations, Resources), a stats line, and the Built by credit.
 | `/` | The landing page | `app/page.tsx`, `components/sections/` |
 | `/create` | The theme builder | `components/create/` |
 | `/create/generative-art` | The rules behind Create's generative art: the tile library, the 60 / 30 / 10 color rhythm and the spans | `app/create/generative-art/`, `app/docs/theming/live.tsx` |
+| `/figma-kit` | Both kit editions: the Free and Pro table, Get the free kit (ghost) and Get Pro (primary) in one `ButtonGroup`, the Community link, and the small print | `app/figma-kit/` |
 | `/gallery` | Components index: every kit component A to Z | `components/sections/components-index.tsx` |
 | `/docs` | Introduction | `app/docs/page.tsx` |
 | `/docs/contribute/run-locally` | Running the project and the governance checks; `/docs/installation` redirects here (`next.config.mjs`) | `app/docs/contribute/run-locally/` |
@@ -115,10 +117,11 @@ Seven sections in the kit's order, one file each in `components/sections/`:
    the panel and fills its rail. There is no timer. Below 1056px all six stack.
 4. **Theme** (`theme-cta.tsx`): Open the theme builder (`/create`) and Read how
    theming works (`/docs/theming`), on an accent mesh gradient.
-5. **Two doors** (`two-doors.tsx`): For designers opens the Figma kit; For
-   developers goes to `/gallery`. Each door follows the card pattern with its
-   action in the bottom-left corner (Open the Figma Kit ↗, Browse the components →), and
-   the whole door is the link.
+5. **Two doors** (`two-doors.tsx`): For designers opens the free kit's Gumroad
+   listing, with "Also on Figma Community" as a quiet second link above the
+   door's overlay; For developers goes to `/gallery`. Each door follows the card
+   pattern with its action in the bottom-left corner (Get the free Figma kit →,
+   Browse the components →), and the whole door is the link.
 6. **FAQ** (`faq.tsx`): six questions in the governed `Accordion`.
 7. **Footer**.
 
@@ -148,6 +151,11 @@ sheets rise from the bottom, the panel drops in.
     wears the kit's disabled field colors and its sheet says why. The Source
     color sheet lists the ramp stops to copy and ends in a filled Pick color
     action, which opens the header's color picker.
+- **Take this theme into Figma** (`kit-cta.tsx`): a panel in the flow after
+  the preview and the bar, never over them. Hidden until a color is chosen
+  (picked this visit, or a stored source that is not the default), then it
+  stays. It links to the free kit on Gumroad and sends `theme_created` on the
+  first pick of the visit.
 - **Preview**: two tabs, Components and Generative Art, in the governed
   `Tabs`. Both panels stay mounted; the art panel tells the controls which tab
   is showing from its tab panel's `hidden` attribute.
@@ -178,6 +186,25 @@ sheets rise from the bottom, the panel drops in.
   bridge that names those variables as Tailwind v4 tokens (`buildTailwindBridge`
   in `lib/tailwind-bridge.ts`); JSON is the engine's audit format (`buildJson`
   in `lib/color.js`).
+
+## Kit links and analytics
+
+Every outbound kit link is built by `kitLink(edition, destination, placement)`
+in [`lib/kit-links.ts`](../lib/kit-links.ts): the URL from one of three
+constants (`FREE_KIT_GUMROAD`, `FREE_KIT_COMMUNITY`, `PRO_KIT`), UTM tags with
+the placement as the campaign (home, kit-page, create, footer, docs), a new tab,
+and `data-kit-*` attributes. Free actions go to Gumroad, whose $0 checkout
+collects an email.
+
+[`components/analytics.tsx`](../components/analytics.tsx), mounted in the
+layout, sends pageviews (client route changes included) and one
+`kit_link_clicked` per kit link, read from those attributes by a single
+delegated listener. [`lib/analytics.ts`](../lib/analytics.ts) starts PostHog only
+when `NEXT_PUBLIC_POSTHOG_KEY` is set (host from `NEXT_PUBLIC_POSTHOG_HOST`,
+default `https://us.i.posthog.com`), with autocapture and session recording off.
+Without the key nothing loads. PostHog drops headless browsers as bots, so an
+automated test has to clear `navigator.webdriver` and `userAgentData` to see
+events.
 
 ## Search
 

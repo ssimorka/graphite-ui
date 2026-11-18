@@ -15,6 +15,7 @@ import {
 } from '@/components/component-page'
 import { readContractDoc } from '@/lib/contract-doc'
 import { readKitPage } from '@/lib/kit-page'
+import { kitLink } from '@/lib/kit-links'
 import { shadcnAdd } from '@/lib/registry-url'
 import type { ComponentDocConfig } from './types'
 import styles from './component-doc.module.scss'
@@ -107,9 +108,12 @@ export function ComponentDocPage({ config: c }: { config: ComponentDocConfig }) 
                 <Link
                   size="md"
                   icon="arrow-right"
-                  href={figmaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...kitLink(
+                    kit?.edition ?? 'free',
+                    kit?.edition === 'pro' ? 'gumroad' : 'community',
+                    'docs',
+                    figmaUrl,
+                  )}
                 >
                   {kit?.edition === 'pro' ? 'Get it in Kit Pro' : 'Open in Figma'}
                 </Link>
