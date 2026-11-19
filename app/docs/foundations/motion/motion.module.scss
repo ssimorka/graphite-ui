@@ -144,14 +144,97 @@
   opacity: 0.8;
 }
 
+// ------------------------------------------------------------- principles
+.principles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-08);
+}
+
+// Media first, as Material lays it out: the figure leads and the words sit
+// beside it, or under it on a phone.
+.principle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: center;
+  }
+}
+
+.principleText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-03);
+
+  p {
+    margin: 0;
+    font-size: var(--graphite-text-body-2-size);
+    line-height: var(--graphite-text-body-2-line-height);
+    color: var(--graphite-on-surface-variant);
+  }
+}
+
+.principleText .principleKicker {
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: var(--graphite-text-code-3-size);
+  color: var(--graphite-primary);
+}
+
+.subTitle {
+  margin: 0;
+  font-size: var(--graphite-text-title-4-size);
+  line-height: var(--graphite-text-title-4-line-height);
+  font-weight: 600;
+  color: var(--graphite-on-surface);
+}
+
+// ---------------------------------------------------------------- patterns
+.pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--graphite-space-06) var(--graphite-space-05);
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pattern {
+  display: flex;
+  flex-direction: column;
+  gap: var(--graphite-space-04);
+  scroll-margin-top: 5rem;
+
+  & + & {
+    margin-top: var(--graphite-space-06);
+  }
+}
+
+.patternText {
+  margin: 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  color: var(--graphite-on-surface-variant);
+}
+
 // ---------------------------------------------------------------- easings
 // The curves the race and Feel it compare. Three are Graphite's; In is here
 // only to be seen losing.
 .curve-linear { --ease: var(--graphite-motion-easing-linear); }
 .curve-out { --ease: var(--graphite-motion-easing-out); }
 .curve-in-out { --ease: var(--graphite-motion-easing-in-out); }
-// motion-allow: the ease-in curve Graphite forbids, drawn so the reader can feel why
-.curve-in { --ease: cubic-bezier(0.4, 0, 1, 1); }
+// The ease-in curve Graphite forbids, held once on the page for the race,
+// Feel it and the easing figures to draw, so the reader can feel why.
+.playground {
+  // motion-allow: the ease-in curve Graphite forbids, drawn so the reader can feel why
+  --motion-forbidden-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.curve-in { --ease: var(--motion-forbidden-in); }
 
 // ------------------------------------------------------------------- race
 .lanes {

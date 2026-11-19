@@ -1,0 +1,602 @@
+// The Motion page's figures: scenes that loop on their own. Every timing is a
+// Motion token. A scene runs in beats of duration-emphasis (--beat); each
+// part names its start in beats (--at), its duration token (--dur) and its
+// easing (--ease), set inline by figures.tsx. Every distance runs through
+// --graphite-motion-travel, so under reduced motion a scene only fades.
+
+// ------------------------------------------------------------------ figure
+.figure {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+}
+
+// A size container, so a scene can place and move its parts in percent of
+// the stage (cqw, cqh) at any width.
+.stage {
+  position: relative;
+  container-type: size;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--graphite-background);
+  border: 1px solid var(--graphite-outline-subtle);
+}
+
+.tall {
+  aspect-ratio: 16 / 12;
+}
+
+.scene {
+  --beat: var(--graphite-motion-duration-emphasis);
+  position: absolute;
+  inset: 0;
+  font-size: clamp(0.625rem, 2.6cqw, 0.875rem);
+  line-height: 1.2;
+  color: var(--graphite-on-surface);
+}
+
+// The verdict rule under the stage, as Material draws it: green for Do, red
+// for Don't, amber for Caution, a plain rule for a figure that only shows.
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--graphite-space-03);
+  padding-top: var(--graphite-space-02);
+  border-top: 3px solid var(--graphite-outline-subtle);
+}
+
+.figure[data-verdict='do'] .bar { border-top-color: var(--graphite-success); }
+.figure[data-verdict='dont'] .bar { border-top-color: var(--graphite-danger); }
+.figure[data-verdict='caution'] .bar { border-top-color: var(--graphite-warning); }
+
+.verdict {
+  font-size: var(--graphite-text-body-2-size);
+  line-height: var(--graphite-text-body-2-line-height);
+  font-weight: 600;
+}
+
+.figure[data-verdict='do'] .verdict { color: var(--graphite-success); }
+.figure[data-verdict='dont'] .verdict { color: var(--graphite-danger); }
+.figure[data-verdict='caution'] .verdict { color: var(--graphite-warning); }
+
+.buttons {
+  display: flex;
+  gap: var(--graphite-space-01);
+}
+
+.caption {
+  margin: var(--graphite-space-02) 0 0;
+  max-width: 44rem;
+  font-size: var(--graphite-text-body-3-size);
+  line-height: var(--graphite-text-body-3-line-height);
+  color: var(--graphite-on-surface-variant);
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+    color: var(--graphite-on-surface);
+  }
+}
+
+// -------------------------------------------------------------- timing
+// A stage-sized layer that carries one animation; nested layers add up.
+.layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.t {
+  animation-duration: var(--dur);
+  animation-timing-function: var(--ease);
+  animation-delay: calc(var(--beat) * var(--at) + var(--wait, var(--graphite-motion-duration-instant)));
+  animation-fill-mode: both;
+}
+
+.move { animation-name: move; }
+.fade { animation-name: fade; }
+.grow { animation-name: grow; }
+.burst { animation-name: burst; }
+.rise { animation-name: rise; }
+.drop { animation-name: drop; }
+.sheetUp { animation-name: sheet-up; }
+.press { animation-name: press; }
+
+// Exits hold their end, but must not apply before they start.
+.leave,
+.sink,
+.gone,
+.flash {
+  animation-fill-mode: forwards;
+}
+
+.leave { animation-name: leave; }
+.sink { animation-name: sink; }
+.gone { animation-name: leave; }
+.flash { animation-name: flash; }
+
+@keyframes move {
+  from { translate: 0 0; }
+  to {
+    translate:
+      calc(var(--dx) * 1cqw * var(--graphite-motion-travel))
+      calc(var(--dy) * 1cqh * var(--graphite-motion-travel));
+  }
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+
+// Popover, Menu and Tooltip: opacity, and scale from 0.96, from the source.
+@keyframes grow {
+  from {
+    opacity: 0;
+    scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+  }
+}
+
+// The wrong origin: a long way from the trigger, so the scale is large.
+@keyframes burst {
+  from {
+    opacity: 0;
+    scale: calc(1 - 0.8 * var(--graphite-motion-travel));
+  }
+}
+
+// Toast: opacity, and a 16px rise.
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 calc(16px * var(--graphite-motion-travel));
+  }
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    translate: 0 calc(-12px * var(--graphite-motion-travel));
+    scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+  }
+}
+
+@keyframes sheet-up {
+  from { translate: 0 calc(70cqh * var(--graphite-motion-travel)); }
+}
+
+@keyframes press {
+  50% { scale: 0.8; }
+}
+
+@keyframes leave {
+  to {
+    opacity: 0;
+    scale: calc(1 - 0.04 * var(--graphite-motion-travel));
+  }
+}
+
+// Toast leaving: opacity, and an 8px drop.
+@keyframes sink {
+  to {
+    opacity: 0;
+    translate: 0 calc(8px * var(--graphite-motion-travel));
+  }
+}
+
+// Menu: the chosen row flashes to the pressed rung and eases back.
+@keyframes flash {
+  from { background: var(--graphite-primary-container); }
+}
+
+// ------------------------------------------------------------- the props
+.button,
+.keycap {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--graphite-primary);
+  color: var(--graphite-primary);
+  font-weight: 500;
+}
+
+.keycap {
+  border-color: var(--graphite-outline-strong);
+  border-bottom-width: 3px;
+  border-radius: var(--graphite-radius-4);
+  color: var(--graphite-on-surface);
+  background: var(--graphite-surface);
+}
+
+.keyFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--graphite-font-mono), monospace;
+}
+
+.panel,
+.palette,
+.menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+}
+
+.panel,
+.palette {
+  gap: 0.6em;
+  padding: 0.9em;
+}
+
+.panelLine {
+  display: block;
+  width: 80%;
+  height: 0.5em;
+  background: var(--graphite-on-surface-variant);
+  opacity: 0.3;
+
+  &:nth-child(2n) { width: 60%; }
+  &:nth-child(3n) { width: 70%; }
+}
+
+.paletteField {
+  display: block;
+  height: 1.8em;
+  border: 1px solid var(--graphite-outline-strong);
+}
+
+.menu {
+  padding: 0.3em 0;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 0 0.9em;
+}
+
+.sheet {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.6em 1em;
+  background: var(--graphite-elevation-01);
+  box-shadow: var(--graphite-shadow-overlay);
+  border-radius: var(--graphite-radius-16) var(--graphite-radius-16) 0 0;
+
+  .panelLine {
+    align-self: stretch;
+  }
+}
+
+.grabber {
+  display: block;
+  width: 2.5em;
+  height: 0.3em;
+  background: var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-2);
+}
+
+.rest {
+  position: absolute;
+  height: 0;
+  border-top: 1px dashed var(--graphite-outline-strong);
+}
+
+.restLabel {
+  position: absolute;
+  right: 0;
+  bottom: 0.2em;
+  font-family: var(--graphite-font-mono), monospace;
+  font-size: 0.85em;
+  color: var(--graphite-on-surface-variant);
+}
+
+.toolbar {
+  position: absolute;
+  background: var(--graphite-surface);
+  border: 1px solid var(--graphite-outline-subtle);
+}
+
+.icon {
+  position: absolute;
+  background: var(--graphite-surface-variant);
+  border-radius: var(--graphite-radius-2);
+}
+
+.tip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--graphite-on-background);
+  color: var(--graphite-background);
+  border-radius: var(--graphite-radius-2);
+  font-size: 0.85em;
+}
+
+.toast {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 0 1em;
+  background: var(--graphite-success-container);
+  box-shadow: var(--graphite-shadow-overlay), inset 3px 0 0 var(--graphite-success);
+
+  .panelLine {
+    background: var(--graphite-success);
+    opacity: 0.4;
+  }
+}
+
+.lines {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+
+  span {
+    display: block;
+    height: 0.6em;
+    background: var(--graphite-outline-subtle);
+    opacity: 0.6;
+
+    &:nth-child(2) { width: 85%; }
+    &:nth-child(3) { width: 65%; }
+  }
+}
+
+// The reader's pointer: a touch ring, pressed by scale.
+.pointer {
+  position: absolute;
+  z-index: 3;
+  width: 0;
+  height: 0;
+}
+
+.pressLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.pointerDot {
+  position: absolute;
+  top: -0.75em;
+  left: -0.75em;
+  width: 1.5em;
+  height: 1.5em;
+  border: 2px solid var(--graphite-primary);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--graphite-primary) 25%, transparent);
+}
+
+// The grab that did nothing: the ring turns to danger.
+.pointerDeny {
+  position: absolute;
+  inset: -0.35em;
+  border: 2px solid var(--graphite-danger);
+  border-radius: 50%;
+}
+
+// ---------------------------------------------------------- duration scale
+.scale {
+  position: absolute;
+  inset: 6% 5%;
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+}
+
+.scaleRow {
+  display: grid;
+  grid-template-columns: 40% minmax(0, 1fr);
+  align-items: center;
+}
+
+.scaleLabel {
+  display: flex;
+  flex-direction: column;
+  padding-right: 1em;
+
+  code {
+    font-family: var(--graphite-font-mono), monospace;
+  }
+}
+
+.scaleWhat {
+  color: var(--graphite-on-surface-variant);
+  font-size: 0.85em;
+}
+
+.scaleTrack {
+  position: relative;
+  height: 60%;
+  background: linear-gradient(var(--graphite-outline-subtle), var(--graphite-outline-subtle)) center / 100% 1px no-repeat;
+}
+
+// How long the token is, against the cap: drawn, not animated.
+.scaleSpan {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--graphite-primary-container);
+  opacity: 0.6;
+}
+
+// Its own inline-size container, so a dot's travel is a share of the lane.
+.scaleLane {
+  position: absolute;
+  inset: 0;
+  container-type: inline-size;
+}
+
+.scaleDot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0.9em;
+  height: 0.9em;
+  margin-top: -0.45em;
+  border-radius: 50%;
+  background: var(--graphite-primary);
+}
+
+.scaleHeadTrack {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 40%;
+  container-type: inline-size;
+  pointer-events: none;
+}
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: var(--graphite-on-surface-variant);
+  animation-name: playhead;
+}
+
+@keyframes playhead {
+  from { translate: 0 0; }
+  to { translate: 100cqw 0; }
+}
+
+// ----------------------------------------------------------------- curves
+.curve {
+  position: absolute;
+  inset: 10% 8%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: 100%;
+  align-items: center;
+  gap: 10%;
+}
+
+.graph {
+  position: relative;
+  container-type: size;
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.axis,
+.diagonal,
+.path {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.axis {
+  stroke: var(--graphite-outline-strong);
+  stroke-width: 1;
+}
+
+.diagonal {
+  stroke: var(--graphite-outline-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.path {
+  stroke: var(--graphite-primary);
+  stroke-width: 2.5;
+}
+
+.figure[data-verdict='dont'] .path { stroke: var(--graphite-danger); }
+
+// The dot rides the curve: time runs across at a constant rate, progress up
+// on the easing, each on its own layer.
+.ride {
+  position: absolute;
+  inset: 0;
+}
+
+.rideX,
+.rideY {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.rideX {
+  bottom: 0;
+  left: 0;
+  animation-name: ride-x;
+}
+
+.rideY {
+  top: 0;
+  left: 0;
+  animation-name: ride-y;
+}
+
+@keyframes ride-x {
+  from { translate: 0 0; }
+  to { translate: 100cqw 0; }
+}
+
+@keyframes ride-y {
+  from { translate: 0 0; }
+  to { translate: 0 -100cqh; }
+}
+
+.rideDot {
+  position: absolute;
+  top: -0.45em;
+  left: -0.45em;
+  width: 0.9em;
+  height: 0.9em;
+  border-radius: 50%;
+  background: var(--graphite-primary);
+}
+
+.figure[data-verdict='dont'] .rideDot,
+.figure[data-verdict='dont'] .runner {
+  background: var(--graphite-danger);
+}
+
+.runway {
+  position: relative;
+  container-type: inline-size;
+  height: 2.4em;
+  background: linear-gradient(var(--graphite-outline-subtle), var(--graphite-outline-subtle)) center / 100% 1px no-repeat;
+}
+
+.runner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.4em;
+  height: 2.4em;
+  background: var(--graphite-primary);
+  animation-name: runner;
+}
+
+@keyframes runner {
+  from { translate: 0 0; }
+  to { translate: calc(100cqw - 2.4em) 0; }
+}

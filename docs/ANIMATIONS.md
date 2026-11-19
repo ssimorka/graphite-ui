@@ -212,15 +212,35 @@ which is exactly what the kit's rules make instant.
 
 ## The Motion page
 
-`/docs/foundations/motion` is the playground: ten demos (the race, Feel it, the
-hundredth open, origin, catching a sheet, the tooltip runway, confirmation, one
-toast at a time, reduced motion, and the token table with its component map),
-each running on the real tokens. Its "Simulate reduced motion" switch sets
-`data-motion="reduce"` on the demos' wrapper, which the global layer answers
-exactly as it answers the visitor's own setting. The race's "In" lane is the
-one place the site draws an ease-in curve, under a `motion-allow:` marker,
-because the point is to watch it lose. The token table's "Used by" column is
-read from the contracts' `motion:` blocks, so it moves when a contract does.
+`/docs/foundations/motion` is laid out the way Material 2 documents motion:
+principles first, then duration, easing and patterns, each led by a figure.
+
+- **Figures** (`figures.tsx`) are small live scenes that loop on their own,
+  like Material's videos, but drawn in markup so every timing is a token and
+  the theme follows. A scene runs in beats of `duration-emphasis`; each part
+  names its start in beats and the duration and easing tokens it takes, so a
+  figure shows the real motion at its real speed. A figure pauses offscreen,
+  has Pause, Replay and a quarter-speed Slow, and carries a Do, Don't or
+  Caution rule under its stage. Under reduced motion it holds its last frame
+  and Replay plays it once as fades.
+- **Principles**: Informative (things come from their source), Focused (the
+  hundredth time is instant), Calm (no bounce; what you drag is yours).
+- **Duration**: the five steps against the cap, each dot travelling the
+  distance its token is for.
+- **Easing**: each curve drawn from its token value, with a dot riding it and
+  a block crossing a track on the same easing. The forbidden ease-in is drawn
+  as a Don't.
+- **Patterns**: six moments as Do and Don't pairs (enter from the source,
+  instant on repeat, yours to drag, tooltip runway, confirm on the way out,
+  one at a time). The earlier interactive demos sit under each as "Try it".
+
+Its "Simulate reduced motion" switch sets `data-motion="reduce"` on the
+page's wrapper, which the global layer answers exactly as it answers the
+visitor's own setting. The ease-in curve is held once, as
+`--motion-forbidden-in` under a `motion-allow:` marker in
+`motion.module.scss`, because the point is to watch it lose. The token
+table's "Used by" column is read from the contracts' `motion:` blocks, so it
+moves when a contract does.
 
 ## Reduced motion
 

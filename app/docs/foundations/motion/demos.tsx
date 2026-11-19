@@ -36,6 +36,9 @@ const ReduceContext = createContext<{ simulated: boolean; set: (v: boolean) => v
   os: false,
 })
 
+/** The page's reduced-motion state: the simulation switch and the visitor's own setting. */
+export const useReduce = () => useContext(ReduceContext)
+
 function ReduceSwitch({ id }: { id: string }) {
   const { simulated, set } = useContext(ReduceContext)
   return (
@@ -582,8 +585,9 @@ export function ReducedDemo() {
       <ReduceSwitch id="reduce-section" />
       <p className={styles.caption}>
         Your system setting is <strong>{os ? 'reduce' : 'no preference'}</strong>
-        {simulated ? ', and the simulation is on.' : '.'} With either, every demo above keeps its feedback and
-        drops its movement: rises become fades, the race dots jump, the tabs indicator jumps, and color changes
+        {simulated ? ', and the simulation is on.' : '.'} With either, every figure and demo above keeps its
+        feedback and drops its movement. The figures stop looping and hold their last frame, and Replay plays
+        them once as fades. Rises become fades, the race dots jump, the tabs indicator jumps, and color changes
         still ease. Nothing here needed its own code for it. It is one layer in the stylesheet, and a
         multiplier, <code>--graphite-motion-travel</code>, that every distance is written through.
       </p>

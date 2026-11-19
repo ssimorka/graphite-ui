@@ -334,7 +334,14 @@ before trusting a browser result.
 - **The Motion page and the sitemap.** `/docs/foundations/motion` (2026-10-24)
   demos every rule on the real tokens; its reduced-motion switch is
   `data-motion="reduce"` on a wrapper, not a separate code path, and its one
-  ease-in curve carries the repo's only `motion-allow:` marker. `app/sitemap.ts`
+  ease-in curve carries the repo's only `motion-allow:` marker. Restructured
+  2026-11-18 after Material 2's motion pages: principles, duration, easing,
+  patterns, each led by a looping figure (`figures.tsx`, live markup timed in
+  beats of `duration-emphasis`, not video), with the old demos kept under
+  "Try it". The visual check holds page timers before its last shot
+  (`__visualHold`), so a looping figure cannot restart mid-capture; a wait
+  after that must be Playwright's, because the fixed clock's
+  requestAnimationFrame runs on the held timers. `app/sitemap.ts`
   is generated from `DOCS_NAV` plus the pages outside it, so a page added to the
   nav reaches /sitemap.xml with no second edit. There was no sitemap before it.
 - **A source color on a status hue collapses the two.** A red source
