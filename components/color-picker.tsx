@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import type { CSSProperties } from 'react'
 import { hexToHsv, hsvToHex, normalizeHex } from '@/lib/color.js'
 import { useTheme, COVER_SOURCE_HEX, type ContrastLevel } from '@/components/theme-provider'
+import { noteColorMethod } from '@/lib/color-intent'
 import { KitIcon } from '@/components/kit-icon'
 import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { Button } from '@/components/ui/button'
@@ -214,13 +215,17 @@ export function ColorPickerPopover({
 
   const handleHsvChange = (hex: string) => {
     setInput(hex)
+    noteColorMethod('picker')
     onChange(hex)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value
     setInput(raw)
-    if (HEX_RE.test(raw.trim())) onChange(normalizeHex(raw))
+    if (HEX_RE.test(raw.trim())) {
+      noteColorMethod('hex')
+      onChange(normalizeHex(raw))
+    }
   }
 
   const swatchColor = value || '#0f62fe'
@@ -318,6 +323,7 @@ export function ColorPickerPopover({
               disabled={normalizeHex(value) === COVER_SOURCE_HEX && level === 'AA'}
               onClick={() => {
                 setInput(COVER_SOURCE_HEX)
+                noteColorMethod('reset')
                 onChange(COVER_SOURCE_HEX)
                 setLevel('AA')
               }}
@@ -332,6 +338,7 @@ export function ColorPickerPopover({
               onClick={() => {
                 const hex = nextSurpriseHex()
                 setInput(hex)
+                noteColorMethod('surprise')
                 onChange(hex)
                 rollDice()
               }}

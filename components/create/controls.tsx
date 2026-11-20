@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { noteColorMethod } from '@/lib/color-intent'
 import { KitIcon } from '@/components/kit-icon'
 import { RollingDice, useDiceRoll } from '@/components/rolling-dice'
 import { SparklingConfetti } from '@/components/sparkling-confetti'
@@ -133,7 +134,10 @@ function HexField({ value, onChange }: { value: string; onChange: (hex: string) 
   const valid = HEX_RE.test(draft.trim())
   const commit = (raw: string) => {
     const hex = normalizeHex(raw.trim().startsWith('#') ? raw.trim() : `#${raw.trim()}`)
-    if (hex.toUpperCase() !== value.toUpperCase()) onChange(hex)
+    if (hex.toUpperCase() !== value.toUpperCase()) {
+      noteColorMethod('hex')
+      onChange(hex)
+    }
   }
 
   return (
@@ -171,7 +175,10 @@ function HexField({ value, onChange }: { value: string; onChange: (hex: string) 
           }
         }}
       />
-      <Button variant="ghost" size="sm" className={styles.pick} onClick={() => onChange(nextSurpriseHex())}>
+      <Button variant="ghost" size="sm" className={styles.pick} onClick={() => {
+          noteColorMethod('surprise')
+          onChange(nextSurpriseHex())
+        }}>
         Pick
       </Button>
     </div>
