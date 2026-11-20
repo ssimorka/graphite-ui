@@ -7,6 +7,7 @@ import { KitIcon } from '@/components/kit-icon'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { kitLink } from '@/lib/kit-links'
 import { track } from '@/lib/analytics'
+import { takeColorMethod } from '@/lib/color-intent'
 import styles from './kit-cta.module.scss'
 
 /**
@@ -33,18 +34,26 @@ export function KitCta() {
   useEffect(() => {
     const t = setTimeout(() => {
       baseline.current = latest.current
+      // A note left by a pick on another page (a client-side route change)
+      // belongs to that page, not to this visit.
+      takeColorMethod()
       if (latest.current.toLowerCase() !== COVER_SOURCE_HEX) setShown(true)
     }, 0)
     return () => clearTimeout(t)
   }, [])
 
+  // `theme_created`, once per visit: the first time the color is set here.
+  // It says how (picker, hex, surprise), never which color. Reset is not a
+  // choice, so it neither sends the event nor uses up the visit's one send.
   const created = useRef(false)
   useEffect(() => {
     if (baseline.current === null || sourceHex === baseline.current) return
+    const method = takeColorMethod()
+    if (method === 'reset') return
     setShown(true)
     if (!created.current) {
       created.current = true
-      track('theme_created', { source_hex: sourceHex })
+      track('theme_created', { method: method ?? 'other' })
     }
   }, [sourceHex])
 

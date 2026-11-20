@@ -11,6 +11,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import { hsvToHex } from '@/lib/color.js'
 import { COVER_SOURCE_HEX } from '@/lib/cover-source'
 import { useTheme } from '@/components/theme-provider'
+import { noteColorMethod } from '@/lib/color-intent'
 import { ART_DEFAULTS } from '@/components/generative-art'
 import type { ArtSettings, GenerativeArtHandle } from '@/components/generative-art'
 import type { IconSet } from '@/lib/kit-icons'
@@ -172,6 +173,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     }
     // A saturated, mid-value colour: a random hex is mostly muddy, and the
     // builder is there to show what a good source does.
+    noteColorMethod('surprise')
     setSourceHex(hsvToHex({ h: Math.random() * 360, s: 0.55 + Math.random() * 0.35, v: 0.6 + Math.random() * 0.3 }))
     setTheme(pick(['light', 'dark'] as const))
     setLevel(pick(['AA', 'AAA'] as const))
@@ -187,6 +189,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   // and the art's.
   const reset = useCallback(() => {
     setArt(ART_DEFAULTS)
+    noteColorMethod('reset')
     setSourceHex(COVER_SOURCE_HEX)
     setTheme('dark')
     setLevel('AA')

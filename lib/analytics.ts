@@ -1,6 +1,7 @@
 'use client'
 
 import posthog from 'posthog-js'
+import type { ColorMethod } from './color-intent'
 import type { KitDestination, KitEdition, KitPlacement } from './kit-links'
 
 // Product analytics, through PostHog. Off unless NEXT_PUBLIC_POSTHOG_KEY is
@@ -42,7 +43,8 @@ type Events = {
     destination: KitDestination
     placement: KitPlacement
   }
-  theme_created: { source_hex: string }
+  // How, never which: the color itself is not sent.
+  theme_created: { method: Exclude<ColorMethod, 'reset'> | 'other' }
 }
 
 /** Sends one event. A no-op until `initAnalytics` has run with a key. */

@@ -155,7 +155,10 @@ sheets rise from the bottom, the panel drops in.
   the preview and the bar, never over them. Hidden until a color is chosen
   (picked this visit, or a stored source that is not the default), then it
   stays. It links to the free kit on Gumroad and sends `theme_created` on the
-  first pick of the visit.
+  first pick of the visit, with `method` (`picker`, `hex`, `surprise`, or
+  `other`) and never the color. Each control that sets the source notes its
+  method first (`lib/color-intent.ts`); Reset notes `reset`, which sends
+  nothing and does not show the panel.
 - **Preview**: two tabs, Components and Generative Art, in the governed
   `Tabs`. Both panels stay mounted; the art panel tells the controls which tab
   is showing from its tab panel's `hidden` attribute.
@@ -204,7 +207,10 @@ when `NEXT_PUBLIC_POSTHOG_KEY` is set (host from `NEXT_PUBLIC_POSTHOG_HOST`,
 default `https://us.i.posthog.com`), with autocapture and session recording off.
 Without the key nothing loads. PostHog drops headless browsers as bots, so an
 automated test has to clear `navigator.webdriver` and `userAgentData` to see
-events.
+events. To watch what is sent, set `localStorage.ph_debug = 'true'` and reload:
+PostHog logs each `send` to the console. The key is inlined at build time, so a
+Vercel Preview deployment sends events only if the variable is also set for
+Preview.
 
 ## Search
 
